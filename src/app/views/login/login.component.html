@@ -1,0 +1,78 @@
+<div class="app-body">
+  <main class="main d-flex align-items-center">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-8 mx-auto">
+          <div class="card-group">
+            <div class="card p-4">
+              <img src="assets/logo.svg" width="30%">
+              <div class="card-body">
+                <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+                  <h1>Login</h1>
+                  <p class="text-muted">Sign In to your account</p>
+                  <div class="input-group mb-3">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="icon-user"></i></span>
+                    </div>
+                    <input type="text"  placeholder="NRP" formControlName="username" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.username.errors }" required/>
+                    <div *ngIf="submitted && f.username.errors" class="invalid-feedback">
+                        <div *ngIf="f.username.errors.required">Username is required</div>
+                    </div>
+                  </div>
+                  <div class="input-group mb-4">
+                    <div class="input-group-prepend">
+                      <span class="input-group-text"><i class="icon-lock"></i></span>
+                    </div>
+                    <input type="password" placeholder="PIN" formControlName="pin" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.pin.errors }" required/>
+                    <div *ngIf="submitted && f.pin.errors" class="invalid-feedback">
+                        <div *ngIf="f.pin.errors.required">Pin is required</div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-6">
+                      <button [disabled]="loading" class="btn btn-primary px-4">
+                        <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+                        Log In
+                      </button>
+                      <div *ngIf="error" class="alert alert-danger mt-3 mb-0">{{error}}</div>
+                    </div>
+                    <div class="col-6 text-right">
+                      <button type="button" class="btn btn-link px-0" data-toggle="modal" (click)="resetPinModal.show()">Forgot pin?</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </div>
+            <div class="card text-white bg-success py-5 d-md-down-none" style="width:44%">
+              <div class="card-body text-center">
+                <div class="col-md-12">
+                  <img src="assets/logo.svg" width="100%">
+                  <h5><u>Put Your Apps Name Here!</u></h5>
+                  <h5>PT. Suryaraya Rubberindo Industries</h5>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+<div bsModal #resetPinModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Forgot Pin?</h4>
+        <button type="button" class="close" (click)="resetPinModal.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>Silahkan hubungi IT untuk reset pin Anda.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="resetPinModal.hide()">Close</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
