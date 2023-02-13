@@ -150,6 +150,13 @@
           <i class="fa fa-align-justify"></i> Striped Table Pagination
         </div>
         <div class="card-body">
+          
+          <div class="row">
+            <div class='col-md-3 col-sm-3' align="left">
+              <input type="text" class="form-control" (input)="onSearchChange($event.target.value)" placeholder="Find here...">
+            </div>
+          </div>
+          <br>
           <div class="table-responsive">
             <table class="table table-striped">
               <thead>
