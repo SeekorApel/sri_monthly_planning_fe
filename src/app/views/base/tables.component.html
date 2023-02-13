@@ -144,6 +144,45 @@
       </div>
     </div>
     <!--/.col-->
+    <div class="col-lg-6">
+      <div class="card">
+        <div class="card-header">
+          <i class="fa fa-align-justify"></i> Striped Table Pagination
+        </div>
+        <div class="card-body">
+          <div class="table-responsive">
+            <table class="table table-striped">
+              <thead>
+                <tr>
+                  <th>No</th>
+                  <th>Name</th>
+                  <th>Descr</th>
+                </tr>
+              </thead>
+              <tbody *ngIf='dataSizing == 0'>
+                <tr><td colspan='3'>Data is not found.</td></tr>
+              </tbody>
+              <tbody *ngIf='dataSizing > 0'>
+                  <tr *ngFor="let dt of pageOfItems">
+                      <td align="left">{{dt.id == null ? '-' : dt.id }}</td>
+                      <td align="left">{{dt.name == null ? '-' : dt.name }}</td>
+                      <td align="left">{{dt.descr == null ? '-' : dt.descr }}</td>
+                  </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="card-body">
+          <nav>
+            Total : {{ dataSizing }} Data
+            <ul class="pagination">
+                <jw-pagination [items]="items" (changePage)="onChangePage($event)"></jw-pagination>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </div>
+    <!--/.col-->
   </div>
   <!--/.row-->
   <div class="row">

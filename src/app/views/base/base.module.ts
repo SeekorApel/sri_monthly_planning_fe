@@ -48,6 +48,9 @@ import { NavbarsComponent } from './navbars/navbars.component';
 // Components Routing
 import { BaseRoutingModule } from './base-routing.module';
 
+import { NgSelect2Module } from 'ng-select2';
+import { JwPaginationModule } from 'jw-angular-pagination';
+
 @NgModule({
   imports: [
     CommonModule,
@@ -60,7 +63,8 @@ import { BaseRoutingModule } from './base-routing.module';
     PaginationModule.forRoot(),
     PopoverModule.forRoot(),
     ProgressbarModule.forRoot(),
-    TooltipModule.forRoot()
+    TooltipModule.forRoot(),
+    NgSelect2Module,JwPaginationModule,
   ],
   declarations: [
     CardsComponent,

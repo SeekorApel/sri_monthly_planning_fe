@@ -49,6 +49,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { JwtInterceptor } from './services/jwt.interceptor';
 import { ErrorInterceptor } from './services/error.interceptor';
 import { NgxSpinnerModule } from "ngx-spinner";
+import { JwPaginationModule } from 'jw-angular-pagination';
 
 @NgModule({
   imports: [
@@ -71,7 +72,8 @@ import { NgxSpinnerModule } from "ngx-spinner";
     FormsModule,  
     ModalModule.forRoot(),
     ToastrModule.forRoot(),
-    NgxSpinnerModule
+    NgxSpinnerModule,
+    JwPaginationModule
   ],
   declarations: [
     AppComponent,

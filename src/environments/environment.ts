@@ -4,9 +4,9 @@
 
 export const environment = {
   production: false,
-  apiUrlWebAdmin: 'http://server-wlsdev:7005/web_admin',
-  apiUrlLocalAdmin: 'http://server-wlsdev:7003/local_admin',
-  apiUrl: 'http://server-wlsdev:7005'
+  apiUrlWebAdmin: 'http://server-wlsdev:7002/web_admin',
+  apiUrlLocalAdmin: 'http://server-wlsdev:7002/local_admin',
+  // apiUrl: 'http://server-wlsdev:7005'
 };
 
 /*
