@@ -4,6 +4,159 @@ export const navItems: INavData[] = [
   {
     name: 'Dashboard',
     url: '/dashboard',
+    icon: 'cil-home'
+  },
+  {
+    name: 'Master Data',
+    url: '/dashboard',
+    icon: 'cil-folder',
+    children:[
+      {
+        name: 'Plant',
+        url: '/base/cards',
+        icon: 'cil-minus'
+      },
+      {
+        name: 'Building',
+        url: '/base/cards',
+        icon: 'cil-minus'
+      },
+      {
+        name: 'Building Distance',
+        url: '/base/cards',
+        icon: 'cil-minus'
+      },
+      {
+        name: 'Quadrant',
+        url: '/base/cards',
+        icon: 'cil-minus'
+      },
+      {
+        name: 'Tass Machine',
+        url: '/base/cards',
+        icon: 'cil-minus'
+      },
+      {
+        name: 'Quadrant Distance',
+        url: '/base/cards',
+        icon: 'cil-minus'
+      },
+      {
+        name: 'Curing Machine',
+        url: '/base/cards',
+        icon: 'cil-minus'
+      },
+      {
+        name: 'Tass Machine',
+        url: '/base/cards',
+        icon: 'cil-minus'
+      },
+      {
+        name: 'Curing Type',
+        url: '/base/cards',
+        icon: 'cil-minus'
+      },
+      {
+        name: 'Curing Capacity',
+        url: '/base/cards',
+        icon: 'cil-minus'
+      },
+      {
+        name: 'Max Capacity',
+        url: '/base/cards',
+        icon: 'cil-minus'
+      },
+      {
+        name: 'Curing Size',
+        url: '/base/cards',
+        icon: 'cil-minus'
+      },
+      {
+        name: 'Size',
+        url: '/base/cards',
+        icon: 'cil-minus'
+      },
+      {
+        name: 'Pattern',
+        url: '/base/cards',
+        icon: 'cil-minus'
+      },
+      {
+        name: 'Product Type',
+        url: '/base/cards',
+        icon: 'cil-minus'
+      },
+      {
+        name: 'Product',
+        url: '/base/cards',
+        icon: 'cil-minus'
+      },
+      {
+        name: 'Item Curing',
+        url: '/base/cards',
+        icon: 'cil-minus'
+      },
+    ]
+  },
+  {
+    name: 'Transaksi',
+    url: '/dashboard',
+    icon: 'cil-home',
+    children:[
+      {
+        name: 'H Marketing Order',
+        url: '/base/cards',
+        icon: 'cil-minus'
+      },
+      {
+        name: 'Transaksi Marketing Order',
+        url: '/base/cards',
+        icon: 'cil-minus'
+      },
+      {
+        name: 'Detail Marketing Order',
+        url: '/base/cards',
+        icon: 'cil-minus'
+      },
+      {
+        name: 'Transaksi Monthly Plan',
+        url: '/base/cards',
+        icon: 'cil-minus'
+      },
+      {
+        name: 'Detail Monthly Plan',
+        url: '/base/cards',
+        icon: 'cil-minus'
+      },
+      {
+        name: 'Detail Daily Monthly Plan',
+        url: '/base/cards',
+        icon: 'cil-minus'
+      },
+      {
+        name: 'Detail Shift Monthly Plan',
+        url: '/base/cards',
+        icon: 'cil-minus'
+      },
+      {
+        name: 'Master Delivery Schedule',
+        url: '/base/cards',
+        icon: 'cil-minus'
+      },
+      {
+        name: 'Detail Delivery Schedule',
+        url: '/base/cards',
+        icon: 'cil-minus'
+      },
+    ]
+  },
+  {
+    title: true,
+    name: 'Batas Template'
+  },
+  {
+    name: 'Benet Admin',
+    url: '/dashboard',
     icon: 'icon-speedometer',
     badge: {
       variant: 'info',
