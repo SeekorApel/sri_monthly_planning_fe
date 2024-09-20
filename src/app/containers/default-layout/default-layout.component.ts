@@ -17,8 +17,10 @@ export class DefaultLayoutComponent {
     //PERSONAL INFORMATION
     let currentUserSubject = JSON.parse(localStorage.getItem('currentUser'));
     console.log('ISI currentUser', currentUserSubject)
-    this.nrp = currentUserSubject.userName;
-    this.name = currentUserSubject.personal[0].nama;
+    // this.nrp = currentUserSubject.userName;
+    // this.name = currentUserSubject.personal[0].nama;
+    this.nrp = 123;
+    this.name = "benetAdmin";
   }
 
   toggleMinimize(e) {

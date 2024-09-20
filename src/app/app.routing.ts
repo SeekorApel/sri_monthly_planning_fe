@@ -15,7 +15,7 @@ export const routes: Routes = [
   {
     path: '',
     redirectTo: 'dashboard',
-    pathMatch: 'full', 
+    pathMatch: 'full',
     data: {
       title: 'Dashboard'
     }
@@ -51,7 +51,7 @@ export const routes: Routes = [
   {
     path: '',
     component: DefaultLayoutComponent,
-    canActivate: [AuthGuard], 
+    canActivate: [],
     data: {
       title: 'Home'
     },

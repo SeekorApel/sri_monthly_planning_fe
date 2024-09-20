@@ -1,15 +1,13 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AuthenticationService } from '../../services/authentication.service';
-import { first } from 'rxjs/operators';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: 'login.component.html'
 })
-export class LoginComponent implements OnInit { 
+export class LoginComponent implements OnInit {
   @ViewChild('resetPinModal') public resetPinModal: ModalDirective;
   loginForm: FormGroup;
   loading = false;
@@ -20,14 +18,8 @@ export class LoginComponent implements OnInit {
   constructor(
       private formBuilder: FormBuilder,
       private route: ActivatedRoute,
-      private router: Router,
-      private authenticationService: AuthenticationService
-  ) { 
-      // redirect to home if already logged in
-      if (this.authenticationService.currentUserValue) { 
-          this.router.navigate(['/dashboard']);
-      }
-  }
+      private router: Router
+  ) { }
 
   ngOnInit() {
       this.loginForm = this.formBuilder.group({
@@ -36,7 +28,7 @@ export class LoginComponent implements OnInit {
       });
 
       // get return url from route parameters or default to '/'
-      this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+      this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/dashboard';
   }
 
   // convenience getter for easy access to form fields
@@ -50,17 +42,8 @@ export class LoginComponent implements OnInit {
           return;
       }
 
-      this.loading = true;
-      
-      this.authenticationService.login(this.f.username.value, this.f.pin.value)
-          .pipe(first())
-          .subscribe(
-              () => {
-              this.router.navigate([this.returnUrl]);
-            },
-              error => {
-                  this.error = error;
-                  this.loading = false;
-              });
+      // Directly navigate to the dashboard after form submission
+      this.router.navigate([this.returnUrl]);
+
   }
 }
