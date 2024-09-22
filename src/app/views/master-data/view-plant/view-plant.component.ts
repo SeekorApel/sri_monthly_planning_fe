@@ -9,8 +9,10 @@ import { ModalDirective } from 'ngx-bootstrap/modal';
 export class ViewPlantComponent implements OnInit {
   @ViewChild('addModal') public addModal: ModalDirective;
   @ViewChild('updateModal') public updateModal: ModalDirective;
+  dataSizing: any;
 
-  constructor() { }
+  constructor() { 
+  }
 
   ngOnInit(): void {
   }

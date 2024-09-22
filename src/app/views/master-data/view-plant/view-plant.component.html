@@ -1,1 +1,33 @@
-<p>view-plant works!</p>
+<div class="animated fadeIn">
+    <div class="row">
+        <div class="card">
+            <div class="card-header">
+                <strong><i class="fa fa-bars"></i>&nbsp;Master Plant</strong>
+            </div>
+            <div class="card-body">
+                <div class="form-group row">
+
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped table-sm">
+                        <thead>
+                            <tr align="center">
+                                <th class="align-middle">Nomer Plant</th>
+                                <th class="align-middle">Nama Plant</th>
+                                <th class="align-middle">Status</th>
+                                <th class="align-middle">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody *ngIf="dataSizing == 0">
+                            <tr><td colspan="6">Data is not found.</td>
+                            </tr>
+                        </tbody>
+                        <tbody *ngIf="dataSizing > 0">
+                            
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
