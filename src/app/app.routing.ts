@@ -10,6 +10,7 @@ import { LoginComponent } from './views/login/login.component';
 import { RegisterComponent } from './views/register/register.component';
 import { AuthGuard } from './services/auth.guard';
 import { DashboardComponent } from './views/dashboard/dashboard.component';
+import { ViewPlantComponent } from './views/master-data/view-plant/view-plant.component';
 
 export const routes: Routes = [
   {
@@ -57,6 +58,13 @@ export const routes: Routes = [
     },
     children: [
       {
+        path: 'master-data/view-plant',
+        component: ViewPlantComponent,
+        data: {
+          title: 'Master Data / View Plant',
+        }
+      },
+      {
         path: 'base',
         loadChildren: () => import('./views/base/base.module').then(m => m.BaseModule)
       },
@@ -87,6 +95,10 @@ export const routes: Routes = [
       {
         path: 'widgets',
         loadChildren: () => import('./views/widgets/widgets.module').then(m => m.WidgetsModule)
+      },
+      {
+        path: 'master-data',
+        loadChildren: () => import('./views/master-data/master-data.module').then(m => m.MasterDataModule)
       }
     ]
   },
@@ -94,7 +106,7 @@ export const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [ RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy' }) ],
-  exports: [ RouterModule ]
+  imports: [RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy' })],
+  exports: [RouterModule]
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }

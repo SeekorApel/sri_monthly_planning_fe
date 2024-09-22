@@ -50,6 +50,7 @@ import { JwtInterceptor } from './services/jwt.interceptor';
 import { ErrorInterceptor } from './services/error.interceptor';
 import { NgxSpinnerModule } from "ngx-spinner";
 import { JwPaginationModule } from 'jw-angular-pagination';
+import { ViewPlantComponent } from './views/master-data/view-plant/view-plant.component';
 
 @NgModule({
   imports: [

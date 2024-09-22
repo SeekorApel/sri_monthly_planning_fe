@@ -8,94 +8,94 @@ export const navItems: INavData[] = [
   },
   {
     name: 'Master Data',
-    url: '/dashboard',
+    url: '/master-data',
     icon: 'cil-folder',
     children:[
-      {
-        name: 'Plant',
-        url: '/base/cards',
-        icon: 'cil-minus'
-      },
-      {
-        name: 'Building',
-        url: '/base/cards',
-        icon: 'cil-minus'
-      },
-      {
-        name: 'Building Distance',
-        url: '/base/cards',
-        icon: 'cil-minus'
-      },
-      {
-        name: 'Quadrant',
-        url: '/base/cards',
-        icon: 'cil-minus'
-      },
-      {
-        name: 'Tass Machine',
-        url: '/base/cards',
-        icon: 'cil-minus'
-      },
-      {
-        name: 'Quadrant Distance',
-        url: '/base/cards',
-        icon: 'cil-minus'
-      },
-      {
-        name: 'Curing Machine',
-        url: '/base/cards',
-        icon: 'cil-minus'
-      },
-      {
-        name: 'Tass Machine',
-        url: '/base/cards',
-        icon: 'cil-minus'
-      },
-      {
-        name: 'Curing Type',
-        url: '/base/cards',
-        icon: 'cil-minus'
-      },
-      {
-        name: 'Curing Capacity',
-        url: '/base/cards',
-        icon: 'cil-minus'
-      },
-      {
-        name: 'Max Capacity',
-        url: '/base/cards',
-        icon: 'cil-minus'
-      },
-      {
-        name: 'Curing Size',
-        url: '/base/cards',
-        icon: 'cil-minus'
-      },
-      {
-        name: 'Size',
-        url: '/base/cards',
-        icon: 'cil-minus'
-      },
-      {
-        name: 'Pattern',
-        url: '/base/cards',
-        icon: 'cil-minus'
-      },
-      {
-        name: 'Product Type',
-        url: '/base/cards',
-        icon: 'cil-minus'
-      },
-      {
-        name: 'Product',
-        url: '/base/cards',
-        icon: 'cil-minus'
-      },
-      {
-        name: 'Item Curing',
-        url: '/base/cards',
-        icon: 'cil-minus'
-      },
+      // {
+      //   name: 'Plant',
+      //   url: 'master-data/view-plant',
+      //   icon: 'cil-minus'
+      // },
+      // {
+      //   name: 'Building',
+      //   url: '/base/cards',
+      //   icon: 'cil-minus'
+      // },
+      // {
+      //   name: 'Building Distance',
+      //   url: '/base/cards',
+      //   icon: 'cil-minus'
+      // },
+      // {
+      //   name: 'Quadrant',
+      //   url: '/base/cards',
+      //   icon: 'cil-minus'
+      // },
+      // {
+      //   name: 'Tass Machine',
+      //   url: '/base/cards',
+      //   icon: 'cil-minus'
+      // },
+      // {
+      //   name: 'Quadrant Distance',
+      //   url: '/base/cards',
+      //   icon: 'cil-minus'
+      // },
+      // {
+      //   name: 'Curing Machine',
+      //   url: '/base/cards',
+      //   icon: 'cil-minus'
+      // },
+      // {
+      //   name: 'Tass Machine',
+      //   url: '/base/cards',
+      //   icon: 'cil-minus'
+      // },
+      // {
+      //   name: 'Curing Type',
+      //   url: '/base/cards',
+      //   icon: 'cil-minus'
+      // },
+      // {
+      //   name: 'Curing Capacity',
+      //   url: '/base/cards',
+      //   icon: 'cil-minus'
+      // },
+      // {
+      //   name: 'Max Capacity',
+      //   url: '/base/cards',
+      //   icon: 'cil-minus'
+      // },
+      // {
+      //   name: 'Curing Size',
+      //   url: '/base/cards',
+      //   icon: 'cil-minus'
+      // },
+      // {
+      //   name: 'Size',
+      //   url: '/base/cards',
+      //   icon: 'cil-minus'
+      // },
+      // {
+      //   name: 'Pattern',
+      //   url: '/base/cards',
+      //   icon: 'cil-minus'
+      // },
+      // {
+      //   name: 'Product Type',
+      //   url: '/base/cards',
+      //   icon: 'cil-minus'
+      // },
+      // {
+      //   name: 'Product',
+      //   url: '/base/cards',
+      //   icon: 'cil-minus'
+      // },
+      // {
+      //   name: 'Item Curing',
+      //   url: '/base/cards',
+      //   icon: 'cil-minus'
+      // },
     ]
   },
   {
@@ -103,51 +103,51 @@ export const navItems: INavData[] = [
     url: '/dashboard',
     icon: 'cil-home',
     children:[
-      {
-        name: 'H Marketing Order',
-        url: '/base/cards',
-        icon: 'cil-minus'
-      },
-      {
-        name: 'Transaksi Marketing Order',
-        url: '/base/cards',
-        icon: 'cil-minus'
-      },
-      {
-        name: 'Detail Marketing Order',
-        url: '/base/cards',
-        icon: 'cil-minus'
-      },
-      {
-        name: 'Transaksi Monthly Plan',
-        url: '/base/cards',
-        icon: 'cil-minus'
-      },
-      {
-        name: 'Detail Monthly Plan',
-        url: '/base/cards',
-        icon: 'cil-minus'
-      },
-      {
-        name: 'Detail Daily Monthly Plan',
-        url: '/base/cards',
-        icon: 'cil-minus'
-      },
-      {
-        name: 'Detail Shift Monthly Plan',
-        url: '/base/cards',
-        icon: 'cil-minus'
-      },
-      {
-        name: 'Master Delivery Schedule',
-        url: '/base/cards',
-        icon: 'cil-minus'
-      },
-      {
-        name: 'Detail Delivery Schedule',
-        url: '/base/cards',
-        icon: 'cil-minus'
-      },
+      // {
+      //   name: 'Header Marketing Order',
+      //   url: '/base/cards',
+      //   icon: 'cil-minus'
+      // },
+      // {
+      //   name: 'Transaksi Marketing Order',
+      //   url: '/base/cards',
+      //   icon: 'cil-minus'
+      // },
+      // {
+      //   name: 'Detail Marketing Order',
+      //   url: '/base/cards',
+      //   icon: 'cil-minus'
+      // },
+      // {
+      //   name: 'Transaksi Monthly Plan',
+      //   url: '/base/cards',
+      //   icon: 'cil-minus'
+      // },
+      // {
+      //   name: 'Detail Monthly Plan',
+      //   url: '/base/cards',
+      //   icon: 'cil-minus'
+      // },
+      // {
+      //   name: 'Detail Daily Monthly Plan',
+      //   url: '/base/cards',
+      //   icon: 'cil-minus'
+      // },
+      // {
+      //   name: 'Detail Shift Monthly Plan',
+      //   url: '/base/cards',
+      //   icon: 'cil-minus'
+      // },
+      // {
+      //   name: 'Master Delivery Schedule',
+      //   url: '/base/cards',
+      //   icon: 'cil-minus'
+      // },
+      // {
+      //   name: 'Detail Delivery Schedule',
+      //   url: '/base/cards',
+      //   icon: 'cil-minus'
+      // },
     ]
   },
   {
