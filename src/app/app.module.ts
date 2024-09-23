@@ -70,7 +70,7 @@ import { ViewPlantComponent } from './views/master-data/view-plant/view-plant.co
     IconSetModule.forRoot(),
     HttpClientModule,
     ReactiveFormsModule,
-    FormsModule,  
+    FormsModule,
     ModalModule.forRoot(),
     ToastrModule.forRoot(),
     NgxSpinnerModule,
