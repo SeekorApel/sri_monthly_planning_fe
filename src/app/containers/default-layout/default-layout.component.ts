@@ -31,6 +31,11 @@ export class DefaultLayoutComponent {
     this.csMd = [
       { name: 'Plant', url: '/master-data/view-plant', icon: 'cil-minus' }
     ];
+
+    this.csTrx = [
+      { name: 'Header Monthly Planning', url: '/transaksi/view-header-mo', icon: 'cil-minus' },
+      { name: 'Dagang duren', url: '/transaksi/duren-affan', icon: 'cil-minus' }
+    ];
   }
 
   ngOnInit(): void{
@@ -39,6 +44,10 @@ export class DefaultLayoutComponent {
 
     this.csMd.forEach(item => {
       this.navItems[1].children.push(item);
+    });
+
+    this.csTrx.forEach(item => {
+        this.navItems[2].children.push(item);
     });
   }
 

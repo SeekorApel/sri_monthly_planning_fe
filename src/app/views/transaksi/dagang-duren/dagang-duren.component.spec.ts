@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { HeaderMoComponent } from './header-mo.component';
+import { DagangDurenComponent } from './dagang-duren.component';
 
-describe('HeaderMoComponent', () => {
-  let component: HeaderMoComponent;
-  let fixture: ComponentFixture<HeaderMoComponent>;
+describe('DagangDurenComponent', () => {
+  let component: DagangDurenComponent;
+  let fixture: ComponentFixture<DagangDurenComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ HeaderMoComponent ]
+      declarations: [ DagangDurenComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(HeaderMoComponent);
+    fixture = TestBed.createComponent(DagangDurenComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
