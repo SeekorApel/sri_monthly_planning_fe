@@ -16,6 +16,7 @@
   <meta name="author" content="Łukasz Holeczek">
   <meta name="keyword" content="Bootstrap,Admin,Template,Free,Angular,Dashboard,Typescript">
 	<link rel="shortcut icon" href="assets/mockup.png">
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
 	<title>SRI - Web Template</title>
   <!-- Global site tag (gtag.js) - Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=UA-118965717-3"></script>
@@ -28,6 +29,83 @@
     // Angular ID
     gtag('config', 'UA-118965717-4');
   </script>
+    <!-- jQuery -->
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+  <!-- Bootstrap JS -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+  <!-- JavaScript for drag-and-drop functionality -->
+  <script>
+    const dropZone = document.getElementById('drop-zone');
+    const fileInput = document.getElementById('fileInput');
+  
+    // Handle drag over event
+    dropZone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dropZone.classList.add('dragover');
+    });
+  
+    // Handle drag leave event
+    dropZone.addEventListener('dragleave', () => {
+      dropZone.classList.remove('dragover');
+    });
+  
+    // Handle drop event
+    dropZone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropZone.classList.remove('dragover');
+  
+      // Get the files dropped
+      const files = e.dataTransfer.files;
+      if (files.length) {
+        fileInput.files = files; // Assign the dropped files to the file input
+        alert(`Selected file: ${files[0].name}`);
+      }
+    });
+  
+    // Allow click on drop zone to trigger file input click
+    dropZone.addEventListener('click', () => {
+      fileInput.click(); // Explicitly trigger the file input click
+    });
+  
+    // Handle file input change (manual file selection)
+    fileInput.addEventListener('change', () => {
+      const files = fileInput.files;
+      if (files.length) {
+        alert(`Selected file: ${files[0].name}`);
+      }
+    });
+  
+    // Handle upload button click
+    document.getElementById('uploadButton').addEventListener('click', () => {
+      const files = fileInput.files;
+      if (files.length) {
+        alert(`Uploading: ${files[0].name}`);
+        // Add your upload logic here (e.g., upload to server)
+      } else {
+        alert('No file selected.');
+      }
+    });
+  </script>
+
+<style>
+  .drop-zone {
+    border: 2px dashed #007bff;
+    padding: 30px;
+    text-align: center;
+    color: #007bff;
+    border-radius: 10px;
+    transition: background-color 0.2s ease;
+    cursor: pointer; /* Menambahkan pointer kursor */
+  }
+  .drop-zone.dragover {
+    background-color: #e9ecef;
+  }
+  .drop-zone input {
+    display: none;
+  }
+</style>
 </head>
 <body class="app">
   <!-- App Loading... -->
