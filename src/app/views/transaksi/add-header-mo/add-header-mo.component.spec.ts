@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { HeaderMoComponent } from './header-mo.component';
+import { AddHeaderMoComponent } from './add-header-mo.component';
 
-describe('HeaderMoComponent', () => {
-  let component: HeaderMoComponent;
-  let fixture: ComponentFixture<HeaderMoComponent>;
+describe('AddHeaderMoComponent', () => {
+  let component: AddHeaderMoComponent;
+  let fixture: ComponentFixture<AddHeaderMoComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ HeaderMoComponent ]
+      declarations: [ AddHeaderMoComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(HeaderMoComponent);
+    fixture = TestBed.createComponent(AddHeaderMoComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

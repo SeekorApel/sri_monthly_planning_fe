@@ -11,7 +11,8 @@ import { RegisterComponent } from './views/register/register.component';
 import { AuthGuard } from './services/auth.guard';
 import { DashboardComponent } from './views/dashboard/dashboard.component';
 import { ViewPlantComponent } from './views/master-data/view-plant/view-plant.component';
-import { HeaderMoComponent } from './views/transaksi/header-mo/header-mo.component';
+import { ViewHeaderMoComponent } from './views/transaksi/view-header-mo/view-header-mo.component';
+import { AddHeaderMoComponent } from './views/transaksi/add-header-mo/add-header-mo.component';
 
 export const routes: Routes = [
   {
@@ -66,10 +67,17 @@ export const routes: Routes = [
         }
       },
       {
-        path: 'transaksi/header-mo',
-        component: HeaderMoComponent,
+        path: 'transaksi/view-header-mo',
+        component: ViewHeaderMoComponent,
         data: {
-          title: 'Transaksi / Header Montly Planning',
+          title: 'Transaksi / View Header Montly Planning',
+        }
+      },
+      {
+        path: 'transaksi/add-header-mo',
+        component: AddHeaderMoComponent,
+        data: {
+          title: 'Transaksi / Add Header Montly Planning',
         }
       },
       {
