@@ -33,7 +33,7 @@ export class DefaultLayoutComponent {
     ];
 
     this.csTrx = [
-      { name: 'Header Monthly Planning', url: '/transaksi/view-header-mo', icon: 'cil-minus' }
+      { name: 'Marketing Order', url: '/transaksi/view-header-mo', icon: 'cil-minus' }
     ];
   }
 
