@@ -33,7 +33,8 @@ export class DefaultLayoutComponent {
     ];
 
     this.csTrx = [
-      { name: 'Header Monthly Planning', url: '/transaksi/view-header-mo', icon: 'cil-minus' }
+      { name: 'Header Monthly Planning', url: '/transaksi/view-header-mo', icon: 'cil-minus' },
+      { name: 'Dagang duren', url: '/transaksi/duren-affan', icon: 'cil-minus' }
     ];
   }
 
