@@ -9,15 +9,13 @@ import { ToastrModule } from 'ngx-toastr';
 import { TransaksiRoutingModule } from './transaksi-routing.module';
 import { ViewHeaderMoComponent } from './view-header-mo/view-header-mo.component';
 import { AddHeaderMoComponent } from './add-header-mo/add-header-mo.component';
-import { DagangDurenComponent } from './dagang-duren/dagang-duren.component'
 
 
 
 @NgModule({
   declarations: [
     ViewHeaderMoComponent,
-    AddHeaderMoComponent,
-    DagangDurenComponent
+    AddHeaderMoComponent
   ],
   imports: [
     CommonModule,
