@@ -29,7 +29,11 @@ export class DefaultLayoutComponent {
     this.navItems[2].children = [];
 
     this.csMd = [
-      { name: 'Plant', url: '/master-data/view-plant', icon: 'cil-minus' }
+      { name: 'Plant', url: '/master-data/view-plant', icon: 'cil-minus' },
+      { name: 'Building', url: '/master-data/view-building', icon: 'cil-minus' },
+      { name: 'Building Distance', url: '/master-data/view-bdistance', icon: 'cil-minus' },
+      { name: 'Quadrant Distance', url: '/master-data/view-qdistance', icon: 'cil-minus' },
+      { name: 'Size', url: '/master-data/view-size', icon: 'cil-minus' }
     ];
 
     this.csTrx = [

@@ -1,0 +1,77 @@
+<div class="col-lg-12">
+    <div class="card">
+      <div class="card-header">
+        <strong><i class="fa fa-bars"></i>&nbsp;Master Data Size</strong>
+    </div>
+      <div class="card-footer text-right">
+                 
+        <button type="submit" class="btn btn-sm btn-primary ml-2">
+          <i class="fa fa-download fa-lg"></i> Download Template
+        </button>
+        <!-- Button to trigger modal -->
+        <button type="button" class="btn btn-sm btn-success ml-2" data-toggle="modal" data-target="#uploadModal">
+          <i class="fa fa-file-excel-o fa-lg"></i> Export Excel
+        </button>
+      </div>
+  
+      <div class="card-body">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Building Distance ID</th>
+              <th>Distance</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let bdistance of bDistanceList; let i = index">
+                <td>{{ bdistance.bdistance_ID }}</td>
+                <td>{{ bdistance.building_Distance }}</td>
+                <td>{{ bdistance.status }}</td>
+                <td>
+                    <button type="button" class="btn btn-sm btn-primary" >
+                        <i class="fa fa-plus fa-lg"></i> Update
+                    </button> 
+                    <button class="btn btn-danger btn-sm ml-2" >Delete</button>
+                  </td>
+              </tr>
+          </tbody>
+          
+        </table>
+      </div>
+    </div>
+  </div>
+  
+ <!-- Modal for Upload Excel -->
+<div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="uploadModalLabel">Upload Excel File</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="uploadForm">
+                    <!-- Drop Zone -->
+                    <div class="drop-zone" id="drop-zone" (dragover)="onDragOver($event)" (drop)="onDrop($event)">
+                        <p>Drag & Drop your Excel file here or click to browse</p>
+                        <input type="file" id="fileInput" accept=".xls,.xlsx" (change)="ReadExcel($event)">
+                    </div>
+
+                    <!-- Manual File Input -->
+                    <div class="form-group mt-3">
+                        <label for="manualFileInput">Choose File Manually</label>
+                        <input type="file" class="form-control-file" id="manualFileInput" accept=".xls,.xlsx" (change)="ReadExcel($event)">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="uploadButton" (click)="uploadExcelFile()">Upload</button>
+            </div>
+        </div>
+    </div>
+</div>
