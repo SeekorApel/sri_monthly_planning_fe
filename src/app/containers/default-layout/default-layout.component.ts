@@ -29,7 +29,9 @@ export class DefaultLayoutComponent {
     this.navItems[2].children = [];
 
     this.csMd = [
-      { name: 'Plant', url: '/master-data/view-plant', icon: 'cil-minus' }
+      { name: 'Plant', url: '/master-data/view-plant', icon: 'cil-minus' },
+      { name: 'Setting', url: '/master-data/view-setting', icon: 'cil-minus' },
+      { name: 'Quadrant', url: '/master-data/view-quadrant', icon: 'cil-minus' }
     ];
 
     this.csTrx = [

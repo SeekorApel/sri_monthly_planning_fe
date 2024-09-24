@@ -13,6 +13,8 @@ import { DashboardComponent } from './views/dashboard/dashboard.component';
 import { ViewPlantComponent } from './views/master-data/view-plant/view-plant.component';
 import { ViewHeaderMoComponent } from './views/transaksi/view-header-mo/view-header-mo.component';
 import { AddHeaderMoComponent } from './views/transaksi/add-header-mo/add-header-mo.component';
+import { ViewSettingComponent } from './views/master-data/view-setting/view-setting.component';
+import { ViewQuadrantComponent } from './views/master-data/view-quadrant/view-quadrant.component';
 
 export const routes: Routes = [
   {
@@ -64,6 +66,20 @@ export const routes: Routes = [
         component: ViewPlantComponent,
         data: {
           title: 'Master Data / View Plant',
+        }
+      },
+      {
+        path: 'master-data/view-setting',
+        component: ViewSettingComponent,
+        data: {
+          title: 'Master Data / View Setting',
+        }
+      },
+      {
+        path: 'master-data/view-quadrant',
+        component: ViewQuadrantComponent,
+        data: {
+          title: 'Master Data / View Quadrant',
         }
       },
       {
