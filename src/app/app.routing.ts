@@ -70,14 +70,14 @@ export const routes: Routes = [
         path: 'transaksi/view-header-mo',
         component: ViewHeaderMoComponent,
         data: {
-          title: 'Transaksi / View Header Montly Planning',
+          title: 'Transaksi / View Marketing Order',
         }
       },
       {
         path: 'transaksi/add-header-mo',
         component: AddHeaderMoComponent,
         data: {
-          title: 'Transaksi / Add Header Montly Planning',
+          title: 'Transaksi / Add Marketing Order',
         }
       },
       {
