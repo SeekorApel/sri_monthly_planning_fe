@@ -1,15 +1,15 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
-import { PlantService } from 'src/app/services/master-data/plant/plant.service';
+import { ProductService } from 'src/app/services/master-data/product/product.service';
 import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-view-plant',
-  templateUrl: './view-plant.component.html',
-  styleUrls: ['./view-plant.component.scss']
+  templateUrl: './view-product.component.html',
+  styleUrls: ['./view-product.component.scss']
 })
-export class ViewPlantComponent implements OnInit {
+export class ViewProductComponent implements OnInit {
   loginForm: FormGroup;
   loading = false;
   plantList: any[] = [];
@@ -18,7 +18,7 @@ export class ViewPlantComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
-    private plantService: PlantService // Inject PlantService
+    private productService: ProductService // Inject PlantService
   ) { }
 
   ngOnInit() {
@@ -39,7 +39,7 @@ export class ViewPlantComponent implements OnInit {
     }
 
   loadPlant() {
-    this.plantService.getAllPlant().subscribe(
+    this.productService.getAllPlant().subscribe(
       (response) => {
         this.plantList = response.data; // Simpan data plant ke dalam variabel
       },
@@ -68,12 +68,12 @@ export class ViewPlantComponent implements OnInit {
       const formData = new FormData();
       formData.append('file', this.file);
   
-      this.plantService.signIn('Aurel', 'polman').subscribe(
+      this.productService.signIn('Aurel', 'polman').subscribe(
         (signinResponse) => {
             const token = signinResponse.data; 
   
           // Now upload the Excel file
-          this.plantService.savePlantsExcelFile(formData).subscribe(
+          this.productService.savePlantsExcelFile(formData).subscribe(
             (response) => {
               console.log('File uploaded successfully', response);
             },
@@ -89,5 +89,7 @@ export class ViewPlantComponent implements OnInit {
     } else {
       console.error('No file selected');
     }
-  } 
+  }
+  
+  
 }

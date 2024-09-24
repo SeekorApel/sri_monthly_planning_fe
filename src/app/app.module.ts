@@ -83,7 +83,7 @@ import { ViewPlantComponent } from './views/master-data/view-plant/view-plant.co
     P500Component,
     LoginComponent,
     RegisterComponent
-  ],
+    ],
   providers: [
     {
       provide: LocationStrategy,

@@ -3,14 +3,12 @@ export interface ApiResponse<T> {
   data: T;
 }
 
-export interface IPlant {
-  plant_ID?: number;        
-  plant_NAME: string;
+export interface IPattern {
+  pattern_id?: number;        
+  patrern_name: string;
   status: number;           
   creation_DATE: Date;     
   created_BY: string;       
-  last_UPDATE_DATE: Date;  
-  last_UPDATED_BY: string;
 }
-  
+
 
