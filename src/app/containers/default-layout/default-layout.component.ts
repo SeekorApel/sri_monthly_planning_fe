@@ -33,10 +33,14 @@ export class DefaultLayoutComponent {
       { name: 'Setting', url: '/master-data/view-setting', icon: 'cil-minus' },
       { name: 'Quadrant', url: '/master-data/view-quadrant', icon: 'cil-minus' },
       { name: 'ProductType', url: '/master-data/view-product-type', icon: 'cil-minus' }
+      { name: 'Building', url: '/master-data/view-building', icon: 'cil-minus' },
+      { name: 'Building Distance', url: '/master-data/view-bdistance', icon: 'cil-minus' },
+      { name: 'Quadrant Distance', url: '/master-data/view-qdistance', icon: 'cil-minus' },
+      { name: 'Size', url: '/master-data/view-size', icon: 'cil-minus' }
     ];
 
     this.csTrx = [
-      { name: 'Header Monthly Planning', url: '/transaksi/view-header-mo', icon: 'cil-minus' }
+      { name: 'Marketing Order', url: '/transaksi/view-header-mo', icon: 'cil-minus' }
     ];
   }
 

@@ -2,103 +2,199 @@
     <div class="col-md-12">
         <div class="card">
             <div class="card-header">
-                <strong>Add Header Monthly Planning Bulan 1</strong>
+                <strong>Add Header Marketing Order</strong>
             </div>
             <div class="card-body">
                 <form id="bulan-1" action="" class="form form-horizontal">
                     <div class="form-group row">
-                        <label class="col-md-3 col-form-label" for="date-input">Date Input</label>
-                        <div class="col-md-9">
+                        <label class="col-md-3 col-form-label" for="date-input">Input Tanggal dan Bulan</label>
+                        <div class="col-md-3">
+                          <input class="form-control" id="bulan-1" type="date" name="date-input" placeholder="date">
+                        </div>
+                        <div class="col-md-3">
+                          <input class="form-control" id="bulan-1" type="date" name="date-input" placeholder="date">
+                        </div>
+                        <div class="col-md-3">
                           <input class="form-control" id="bulan-1" type="date" name="date-input" placeholder="date">
                         </div>
                       </div>
                     <div class="form-group row">
                         <label class="col-md-3 col-form-label" for="text-input">Hari Kerja Normal</label>
-                        <div class="col-md-9">
+                        <div class="col-md-3">
+                          <input type="number" id="hkn-1" name="text-input" class="form-control" placeholder="0,00">
+                        </div>
+                        <div class="col-md-3">
+                          <input type="number" id="hkn-1" name="text-input" class="form-control" placeholder="0,00">
+                        </div>
+                        <div class="col-md-3">
                           <input type="number" id="hkn-1" name="text-input" class="form-control" placeholder="0,00">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-md-3 col-form-label" for="text-input">Hari Kerja Overtime TL</label>
-                        <div class="col-md-9">
+                        <div class="col-md-3">
+                          <input type="number" id="hkn-1" name="text-input" class="form-control" placeholder="0,00">
+                        </div>
+                        <div class="col-md-3">
+                          <input type="number" id="hkn-1" name="text-input" class="form-control" placeholder="0,00">
+                        </div>
+                        <div class="col-md-3">
                           <input type="number" id="hkn-1" name="text-input" class="form-control" placeholder="0,00">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-md-3 col-form-label" for="text-input">Hari Kerja Overtime TT</label>
-                        <div class="col-md-9">
+                        <div class="col-md-3">
+                          <input type="number" id="hkn-1" name="text-input" class="form-control" placeholder="0,00">
+                        </div>
+                        <div class="col-md-3">
+                          <input type="number" id="hkn-1" name="text-input" class="form-control" placeholder="0,00">
+                        </div>
+                        <div class="col-md-3">
                           <input type="number" id="hkn-1" name="text-input" class="form-control" placeholder="0,00">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-md-3 col-form-label" for="text-input">Total Hari Kerja Tire TL</label>
-                        <div class="col-md-9">
+                        <div class="col-md-3">
+                          <input [disabled]="isDisable" type="number" id="hkn-1" name="text-input" class="form-control" placeholder="0,00">
+                        </div>
+                        <div class="col-md-3">
+                          <input [disabled]="isDisable" type="number" id="hkn-1" name="text-input" class="form-control" placeholder="0,00">
+                        </div>
+                        <div class="col-md-3">
                           <input [disabled]="isDisable" type="number" id="hkn-1" name="text-input" class="form-control" placeholder="0,00">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-md-3 col-form-label" for="text-input">Total Hari Kerja Tire TT</label>
-                        <div class="col-md-9">
+                        <div class="col-md-3">
+                          <input [disabled]="isDisable" type="number" id="hkn-1" name="text-input" class="form-control" placeholder="0,00">
+                        </div>
+                        <div class="col-md-3">
+                          <input [disabled]="isDisable" type="number" id="hkn-1" name="text-input" class="form-control" placeholder="0,00">
+                        </div>
+                        <div class="col-md-3">
                           <input [disabled]="isDisable" type="number" id="hkn-1" name="text-input" class="form-control" placeholder="0,00">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-md-3 col-form-label" for="text-input">Kapasitas MaksTube</label>
-                        <div class="col-md-9">
+                        <div class="col-md-3">
+                          <input type="number" id="hkn-1" name="text-input" class="form-control" placeholder="0,00">
+                        </div>
+                        <div class="col-md-3">
+                          <input type="number" id="hkn-1" name="text-input" class="form-control" placeholder="0,00">
+                        </div>
+                        <div class="col-md-3">
                           <input type="number" id="hkn-1" name="text-input" class="form-control" placeholder="0,00">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-md-3 col-form-label" for="text-input">Kapasitas Maks Tire TL</label>
-                        <div class="col-md-9">
+                        <div class="col-md-3">
+                          <input type="number" id="hkn-1" name="text-input" class="form-control" placeholder="0,00">
+                        </div>
+                        <div class="col-md-3">
+                          <input type="number" id="hkn-1" name="text-input" class="form-control" placeholder="0,00">
+                        </div>
+                        <div class="col-md-3">
                           <input type="number" id="hkn-1" name="text-input" class="form-control" placeholder="0,00">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-md-3 col-form-label" for="text-input">Kapasitas Maks Tire TT</label>
-                        <div class="col-md-9">
+                        <div class="col-md-3">
+                          <input type="number" id="hkn-1" name="text-input" class="form-control" placeholder="0,00">
+                        </div>
+                        <div class="col-md-3">
+                          <input type="number" id="hkn-1" name="text-input" class="form-control" placeholder="0,00">
+                        </div>
+                        <div class="col-md-3">
                           <input type="number" id="hkn-1" name="text-input" class="form-control" placeholder="0,00">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-md-3 col-form-label" for="text-input">Looping</label>
-                        <div class="col-md-9">
+                        <div class="col-md-3">
+                          <input type="number" id="hkn-1" name="text-input" class="form-control" placeholder="0,00">
+                        </div>
+                        <div class="col-md-3">
+                          <input type="number" id="hkn-1" name="text-input" class="form-control" placeholder="0,00">
+                        </div>
+                        <div class="col-md-3">
                           <input type="number" id="hkn-1" name="text-input" class="form-control" placeholder="0,00">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-md-3 col-form-label" for="text-input">Mesin Airbag</label>
-                        <div class="col-md-9">
+                        <div class="col-md-3">
+                          <input type="number" id="hkn-1" name="text-input" class="form-control" placeholder="0,00">
+                        </div>
+                        <div class="col-md-3">
+                          <input type="number" id="hkn-1" name="text-input" class="form-control" placeholder="0,00">
+                        </div>
+                        <div class="col-md-3">
                           <input type="number" id="hkn-1" name="text-input" class="form-control" placeholder="0,00">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-md-3 col-form-label" for="text-input">FDR TR TL</label>
-                        <div class="col-md-9">
+                        <div class="col-md-3">
+                          <input type="number" id="hkn-1" name="text-input" class="form-control" placeholder="0,00">
+                        </div>
+                        <div class="col-md-3">
+                          <input type="number" id="hkn-1" name="text-input" class="form-control" placeholder="0,00">
+                        </div>
+                        <div class="col-md-3">
                           <input type="number" id="hkn-1" name="text-input" class="form-control" placeholder="0,00">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-md-3 col-form-label" for="text-input">FDR TR TT</label>
-                        <div class="col-md-9">
+                        <div class="col-md-3">
+                          <input type="number" id="hkn-1" name="text-input" class="form-control" placeholder="0,00">
+                        </div>
+                        <div class="col-md-3">
+                          <input type="number" id="hkn-1" name="text-input" class="form-control" placeholder="0,00">
+                        </div>
+                        <div class="col-md-3">
                           <input type="number" id="hkn-1" name="text-input" class="form-control" placeholder="0,00">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-md-3 col-form-label" for="text-input">Total Marketing Order</label>
-                        <div class="col-md-9">
+                        <div class="col-md-3">
+                          <input type="number" id="hkn-1" name="text-input" class="form-control" placeholder="0,00">
+                        </div>
+                        <div class="col-md-3">
+                          <input type="number" id="hkn-1" name="text-input" class="form-control" placeholder="0,00">
+                        </div>
+                        <div class="col-md-3">
                           <input type="number" id="hkn-1" name="text-input" class="form-control" placeholder="0,00">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-md-3 col-form-label" for="text-input">% FDR TL</label>
-                        <div class="col-md-9">
+                        <div class="col-md-3">
+                          <input type="number" id="hkn-1" name="text-input" class="form-control" placeholder="0,00">
+                        </div>
+                        <div class="col-md-3">
+                          <input type="number" id="hkn-1" name="text-input" class="form-control" placeholder="0,00">
+                        </div>
+                        <div class="col-md-3">
                           <input type="number" id="hkn-1" name="text-input" class="form-control" placeholder="0,00">
                         </div>
                     </div>
                     <div class="form-group row">
                         <label class="col-md-3 col-form-label" for="text-input">% FDR TT</label>
-                        <div class="col-md-9">
+                        <div class="col-md-3">
+                          <input type="number" id="hkn-1" name="text-input" class="form-control" placeholder="0,00">
+                        </div>
+                        <div class="col-md-3">
+                          <input type="number" id="hkn-1" name="text-input" class="form-control" placeholder="0,00">
+                        </div>
+                        <div class="col-md-3">
                           <input type="number" id="hkn-1" name="text-input" class="form-control" placeholder="0,00">
                         </div>
                     </div>
@@ -108,15 +204,108 @@
     </div>
 
     <div class="col-md-12">
-        <div class="card">
-            <div class="card-header">
-                <strong>Add Monthly Planning</strong>
+      <div class="card">
+          <div class="card-header">
+              <strong>Add Marketing Order</strong>
+          </div>
+          <div class="card-body d-flex justify-content-start">
+              <button class="btn btn-primary" (click)="addRow()">Add Row</button>
+          </div>
+          <div class="container col-lg-12 col-md-12">
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped table-sm">
+                  <thead>
+                    <tr align="center">
+                        <th style="min-width: 110px;" rowspan="2" class="align-middle">Kategori</th>
+                        <th style="min-width: 150px;" rowspan="2" class="align-middle">Item</th>
+                        <th style="min-width: 310px;" rowspan="2" class="align-middle">Deskripsi</th>
+                        <th rowspan="2" class="align-middle text-nowrap">Type Mesin</th>
+                        <th rowspan="2" class="align-middle text-nowrap">Kapasitas 99,5%</th>
+                        <th rowspan="2" class="align-middle text-nowrap">Qty Mould</th>
+                        <th rowspan="2" class="align-middle text-nowrap">Qty Per Rak</th>
+                        <th rowspan="2" class="align-middle text-nowrap">Minimal Order</th>
+
+                        <!-- Header Kapasitas Maksimum -->
+                        <th style="min-width: 350px;" colspan="3" class="align-middle text-nowrap">Kapasitas Maksimum</th>
+
+                        <!-- Header Sales Forecast -->
+                        <th style="min-width: 350px;" colspan="3" class="align-middle text-nowrap">Sales Forecast</th>
+
+                        <!-- Header Marketing Order -->
+                        <th style="min-width: 350px;" colspan="3" class="align-middle text-nowrap">Marketing Order</th>
+
+                        <th style="min-width: 70px;" rowspan="2" class="align-middle">Aksi</th>
+                    </tr>
+                    <tr align="center">
+                        <th class="align-middle">AUG</th>
+                        <th class="align-middle">SEP</th>
+                        <th class="align-middle">OCT</th>
+
+                        <th class="align-middle">AUG</th>
+                        <th class="align-middle">SEP</th>
+                        <th class="align-middle">OCT</th>
+
+                        <th class="align-middle">AUG</th>
+                        <th class="align-middle">SEP</th>
+                        <th class="align-middle">OCT</th>
+                    </tr>
+                </thead>
+                    <tbody>
+                        <tr *ngFor="let row of rows; let i = index">
+                            <td><input type="text" [(ngModel)]="row.kategori" class="form-control custom-height"></td>
+                            <td>
+                              <ng-select2
+                                name="uom"
+                                [(ngModel)]="row.item"
+                                [data]="itemOptions"
+                                [options]="options"
+                                [placeholder]="'Please Select'"
+                                (change)="onItemChange(row, $event.value)">
+                              </ng-select2>
+                            </td>
+                            <td><input type="text" [(ngModel)]="row.deskripsi" class="form-control custom-height"></td>
+                            <td><input type="text" [(ngModel)]="row.typeMesin" class="form-control custom-height"></td>
+                            <td><input type="text" [(ngModel)]="row.kapasitas" class="form-control custom-height"></td>
+                            <td><input type="text" [(ngModel)]="row.qtyMould" class="form-control custom-height"></td>
+                            <td><input type="text" [(ngModel)]="row.qtyPerRak" class="form-control custom-height"></td>
+                            <td><input type="text" [(ngModel)]="row.minimalOrder" class="form-control custom-height"></td>
+
+                            <!-- Input untuk Kapasitas Maksimum berdasarkan bulan -->
+                            <td><input type="text" [(ngModel)]="row.kapasitasAUG" class="form-control custom-height"></td>
+                            <td><input type="text" [(ngModel)]="row.kapasitasSEP" class="form-control custom-height"></td>
+                            <td><input type="text" [(ngModel)]="row.kapasitasOCT" class="form-control custom-height"></td>
+
+                            <!-- Input untuk Sales Forecast berdasarkan bulan -->
+                            <td><input type="text" [(ngModel)]="row.salesForecastAUG" class="form-control custom-height"></td>
+                            <td><input type="text" [(ngModel)]="row.salesForecastSEP" class="form-control custom-height"></td>
+                            <td><input type="text" [(ngModel)]="row.salesForecastOCT" class="form-control custom-height"></td>
+
+                            <!-- Input untuk Marketing Order berdasarkan bulan -->
+                            <td><input type="text" [(ngModel)]="row.marketingOrderAUG" class="form-control custom-height"></td>
+                            <td><input type="text" [(ngModel)]="row.marketingOrderSEP" class="form-control custom-height"></td>
+                            <td><input type="text" [(ngModel)]="row.marketingOrderOCT" class="form-control custom-height"></td>
+
+                            <td align="center">
+                                <button class="btn btn-danger btn-sm" (click)="deleteRow(i)">
+                                    <i class="cil-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
-            <div class="card-body d-flex justify-content-end">
-                <button class="btn btn-primary" id="addRow">Add Row</button>
-            </div>
-        </div>
+          </div>
+      </div>
     </div>
+
+    <div class="col-md-12 pb-4">
+      <button class="btn btn-primary justify-content-start mr-2">Kembali</button>
+      <button class="btn btn-success">Submit</button>
+    </div>
+
+
+
+
 
 
 </div>

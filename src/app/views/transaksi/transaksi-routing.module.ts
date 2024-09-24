@@ -17,7 +17,7 @@ const routes: Routes = [{
       path: 'transaksi/view-header-mo',
       component: ViewHeaderMoComponent,
       data: {
-        title: 'View Header Monthly Planning'
+        title: 'View Marketing Order'
       }
     }
   ]
