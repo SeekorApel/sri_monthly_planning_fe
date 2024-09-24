@@ -11,10 +11,7 @@ import { cilUser } from '@coreui/icons';
   providers: [IconSetService],
 })
 export class AppComponent implements OnInit {
-  constructor(
-    private router: Router,
-    public iconSet: IconSetService
-  ) {
+  constructor(private router: Router, public iconSet: IconSetService) {
     // iconSet singleton
     iconSet.icons = { cilUser };
   }

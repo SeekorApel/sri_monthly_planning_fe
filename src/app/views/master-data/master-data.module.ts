@@ -8,12 +8,17 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { ToastrModule } from 'ngx-toastr';
 import { MasterDataRoutingModule } from './master-data-routing.module'
 import { ViewPlantComponent } from './view-plant/view-plant.component';
-
+import { ViewProductComponent } from './view-product/view-product.component';
+import { ViewPatternComponent } from './view-pattern/view-pattern.component';
+import { ViewTassMachine } from './view-tassmachine/view-tassmachine.component';
 
 
 @NgModule({
   declarations: [
-    ViewPlantComponent
+    ViewPlantComponent,
+    ViewProductComponent,
+    ViewPatternComponent,
+    ViewTassMachine,
   ],
   imports: [
     CommonModule,

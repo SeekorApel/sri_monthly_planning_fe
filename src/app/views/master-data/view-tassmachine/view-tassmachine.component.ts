@@ -6,10 +6,10 @@ import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-view-plant',
-  templateUrl: './view-plant.component.html',
-  styleUrls: ['./view-plant.component.scss']
+  templateUrl: './view-tassmachine.component.html',
+  styleUrls: ['./view-tassmachine.component.scss']
 })
-export class ViewPlantComponent implements OnInit {
+export class ViewTassMachine implements OnInit {
   loginForm: FormGroup;
   loading = false;
   plantList: any[] = [];
@@ -89,5 +89,7 @@ export class ViewPlantComponent implements OnInit {
     } else {
       console.error('No file selected');
     }
-  } 
+  }
+  
+  
 }
