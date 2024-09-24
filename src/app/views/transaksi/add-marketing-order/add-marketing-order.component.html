@@ -1,23 +1,53 @@
 <div class="animated fadeIn">
+  <div class="col-md-12">
+    <div class="card">
+        <div class="card-header">
+            <strong>Add Header Marketing Order</strong>
+        </div>
+        <div class="card-body">
+            <form id="bulan-1" action="" class="form form-horizontal">
+                <div class="form-group row">
+                    <label class="col-md-3 col-form-label" for="date-input">Tanggal</label>
+                    <div class="col-md-9">
+                      <input class="form-control" id="bulan-1" type="date" name="date-input" placeholder="date">
+                    </div>
+                  </div>
+                <div class="form-group row">
+                    <label class="col-md-3 col-form-label" for="text-input">Name</label>
+                    <div class="col-md-9">
+                      <input type="text" id="hkn-1" name="text-input" class="form-control" placeholder="FED, FDR ....">
+                    </div>
+                </div>
+                <div class="form-group row">
+                  <label class="col-md-3 col-form-label" for="text-input">Revision</label>
+                  <div class="col-md-9">
+                    <input type="text" id="hkn-1" name="text-input" class="form-control" placeholder="1,2,3.....">
+                  </div>
+              </div>
+            </form>
+        </div>
+    </div>
+</div>
+
     <div class="col-md-12">
         <div class="card">
             <div class="card-header">
-                <strong>Add Header Marketing Order</strong>
+                <strong>&nbsp;</strong>
             </div>
             <div class="card-body">
                 <form id="bulan-1" action="" class="form form-horizontal">
                     <div class="form-group row">
-                        <label class="col-md-3 col-form-label" for="date-input">Input Tanggal dan Bulan</label>
-                        <div class="col-md-3">
-                          <input class="form-control" id="bulan-1" type="date" name="date-input" placeholder="date">
-                        </div>
-                        <div class="col-md-3">
-                          <input class="form-control" id="bulan-1" type="date" name="date-input" placeholder="date">
-                        </div>
-                        <div class="col-md-3">
-                          <input class="form-control" id="bulan-1" type="date" name="date-input" placeholder="date">
-                        </div>
-                      </div>
+                      <label class="col-md-3 col-form-label" for="month-input">Input Bulan dan Tahun</label>
+                      <div class="col-md-3">
+                        <input class="form-control" id="bulan-1" type="month" [formControl]="monthControl" (change)="onMonthChange($event, 1)">
+                      </div>                      
+                      <div class="col-md-3">
+                        <input [disabled]="isDisable" class="form-control" id="bulan-2" type="month" [formControl]="monthControl2" (change)="onMonthChange($event, 2)">
+                      </div>  
+                      <div class="col-md-3">
+                        <input [disabled]="isDisable" class="form-control" id="bulan-3" type="month" [formControl]="monthControl3" (change)="onMonthChange($event, 3)">
+                      </div>                       
+                    </div>
                     <div class="form-group row">
                         <label class="col-md-3 col-form-label" for="text-input">Hari Kerja Normal</label>
                         <div class="col-md-3">
@@ -299,7 +329,7 @@
     </div>
 
     <div class="col-md-12 pb-4">
-      <button class="btn btn-primary justify-content-start mr-2">Kembali</button>
+      <button (click)="navigateToViewMo()" class="btn btn-primary justify-content-start mr-2">Kembali</button>
       <button class="btn btn-success">Submit</button>
     </div>
 

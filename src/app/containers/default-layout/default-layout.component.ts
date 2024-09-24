@@ -43,7 +43,7 @@ export class DefaultLayoutComponent {
     ];
 
     this.csTrx = [
-      { name: 'Marketing Order', url: '/transaksi/view-header-mo', icon: 'cil-minus' }
+      { name: 'Marketing Order', url: '/transaksi/view-marketing-order', icon: 'cil-minus' }
     ];
   }
 
