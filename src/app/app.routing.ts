@@ -15,6 +15,7 @@ import { ViewHeaderMoComponent } from './views/transaksi/view-header-mo/view-hea
 import { AddHeaderMoComponent } from './views/transaksi/add-header-mo/add-header-mo.component';
 import { ViewSettingComponent } from './views/master-data/view-setting/view-setting.component';
 import { ViewQuadrantComponent } from './views/master-data/view-quadrant/view-quadrant.component';
+import { ViewProductTypeComponent } from './views/master-data/view-product-type/view-product-type.component';
 
 export const routes: Routes = [
   {
@@ -80,6 +81,13 @@ export const routes: Routes = [
         component: ViewQuadrantComponent,
         data: {
           title: 'Master Data / View Quadrant',
+        }
+      },
+      {
+        path: 'master-data/view-product-type',
+        component: ViewProductTypeComponent,
+        data: {
+          title: 'Master Data / View Product Type',
         }
       },
       {

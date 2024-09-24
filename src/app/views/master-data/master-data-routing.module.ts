@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { ViewPlantComponent } from './view-plant/view-plant.component';
 import { ViewSettingComponent } from './view-setting/view-setting.component';
 import { ViewQuadrantComponent } from './view-quadrant/view-quadrant.component';
+import { ViewProductTypeComponent } from './view-product-type/view-product-type.component';
 
 
 const routes: Routes = [{
@@ -35,6 +36,13 @@ const routes: Routes = [{
       component: ViewQuadrantComponent,
       data: {
         title: 'Master Quadrant'
+      }
+    },
+    {
+      path: 'master-data/view-product-type',
+      component: ViewProductTypeComponent,
+      data: {
+        title: 'Master Product Type'
       }
     }
   ]

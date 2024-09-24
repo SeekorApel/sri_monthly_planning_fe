@@ -10,6 +10,7 @@ import { MasterDataRoutingModule } from './master-data-routing.module'
 import { ViewPlantComponent } from './view-plant/view-plant.component';
 import { ViewSettingComponent } from './view-setting/view-setting.component';
 import { ViewQuadrantComponent } from './view-quadrant/view-quadrant.component';
+import { ViewProductTypeComponent } from './view-product-type/view-product-type.component';
 
 
 
@@ -17,7 +18,8 @@ import { ViewQuadrantComponent } from './view-quadrant/view-quadrant.component';
   declarations: [
     ViewPlantComponent,
     ViewSettingComponent,
-    ViewQuadrantComponent
+    ViewQuadrantComponent,
+    ViewProductTypeComponent
   ],
   imports: [
     CommonModule,
