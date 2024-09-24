@@ -23,7 +23,7 @@ import { ViewQDistanceComponent } from './view-qdistance/view-qdistance.componen
     ViewPlantComponent,
     ViewSettingComponent,
     ViewQuadrantComponent,
-    ViewProductTypeComponent
+    ViewProductTypeComponent,
     ViewSizeComponent,
     ViewBuildingComponent,
     ViewBDistanceComponent,

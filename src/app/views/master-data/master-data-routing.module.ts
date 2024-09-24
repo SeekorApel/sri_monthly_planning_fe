@@ -45,7 +45,10 @@ const routes: Routes = [{
       path: 'master-data/view-product-type',
       component: ViewProductTypeComponent,
       data: {
-        title: 'Master Product Type'
+        title: 'Master Product Type',
+      }
+    },
+    {
       path: 'master-data/view-bdistance',
       component: ViewBDistanceComponent,
       data: {

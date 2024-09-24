@@ -93,7 +93,9 @@ export const routes: Routes = [
         component: ViewProductTypeComponent,
         data: {
           title: 'Master Data / View Product Type',
-       }
+        }
+       },
+      {
         path: 'master-data/view-size',
         component: ViewSizeComponent,
         data: {
