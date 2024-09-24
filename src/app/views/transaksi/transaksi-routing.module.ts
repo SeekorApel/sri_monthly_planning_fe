@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ViewHeaderMoComponent } from './view-header-mo/view-header-mo.component';
+import { ViewMarketingOrderComponent } from './view-marketing-order/view-marketing-order.component';
 
 const routes: Routes = [{
 
@@ -14,8 +14,8 @@ const routes: Routes = [{
       redirectTo: ''
     },
     {
-      path: 'transaksi/view-header-mo',
-      component: ViewHeaderMoComponent,
+      path: 'transaksi/view-marketing-order',
+      component: ViewMarketingOrderComponent,
       data: {
         title: 'View Marketing Order'
       }

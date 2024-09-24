@@ -11,8 +11,8 @@ import { RegisterComponent } from './views/register/register.component';
 import { AuthGuard } from './services/auth.guard';
 import { DashboardComponent } from './views/dashboard/dashboard.component';
 import { ViewPlantComponent } from './views/master-data/view-plant/view-plant.component';
-import { ViewHeaderMoComponent } from './views/transaksi/view-header-mo/view-header-mo.component';
-import { AddHeaderMoComponent } from './views/transaksi/add-header-mo/add-header-mo.component';
+import { ViewMarketingOrderComponent } from './views/transaksi/view-marketing-order/view-marketing-order.component';
+import { AddMarketingOrderComponent } from './views/transaksi/add-marketing-order/add-marketing-order.component';
 import { ViewSettingComponent } from './views/master-data/view-setting/view-setting.component';
 import { ViewQuadrantComponent } from './views/master-data/view-quadrant/view-quadrant.component';
 import { ViewProductTypeComponent } from './views/master-data/view-product-type/view-product-type.component';
@@ -154,28 +154,28 @@ export const routes: Routes = [
       },
       {
         path: 'transaksi/view-header-mo',
-        component: ViewHeaderMoComponent,
+        component: ViewMarketingOrderComponent,
         data: {
           title: 'Transaksi / View Marketing Order',
         },
       },
       {
         path: 'transaksi/add-header-mo',
-        component: AddHeaderMoComponent,
+        component: AddMarketingOrderComponent,
         data: {
           title: 'Transaksi / Add Marketing Order',
         },
       },
       {
-        path: 'transaksi/view-header-mo',
-        component: ViewHeaderMoComponent,
+        path: 'transaksi/view-marketing-order',
+        component: ViewMarketingOrderComponent,
         data: {
           title: 'Transaksi / View Marketing Order',
         },
       },
       {
-        path: 'transaksi/add-header-mo',
-        component: AddHeaderMoComponent,
+        path: 'transaksi/add-marketing-order',
+        component: AddMarketingOrderComponent,
         data: {
           title: 'Transaksi / Add Marketing Order',
         },
