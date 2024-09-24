@@ -10,7 +10,7 @@ export interface ApiResponse<T> {
     creation_DATE: Date;     
     created_BY: string;       
     last_UPDATE_DATE: Date;  
-    last_UPDATED_BY: string;   r
+    last_UPDATED_BY: string;
   }
   
   

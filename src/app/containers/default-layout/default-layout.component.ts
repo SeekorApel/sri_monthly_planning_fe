@@ -29,7 +29,17 @@ export class DefaultLayoutComponent {
     this.navItems[2].children = [];
 
     this.csMd = [
-      { name: 'Plant', url: '/master-data/view-plant', icon: 'cil-minus' }
+      { name: 'Plant', url: '/master-data/view-plant', icon: 'cil-minus' },
+      { name: 'Product', url: '/master-data/view-product', icon: 'cil-minus' },
+      { name: 'Pattern', url: '/master-data/view-pattern', icon: 'cil-minus' },
+      { name: 'Tass Machine', url: '/master-data/view-tassMachine', icon: 'cil-minus' },
+      { name: 'Setting', url: '/master-data/view-setting', icon: 'cil-minus' },
+      { name: 'Quadrant', url: '/master-data/view-quadrant', icon: 'cil-minus' },
+      { name: 'ProductType', url: '/master-data/view-product-type', icon: 'cil-minus' },
+      { name: 'Building', url: '/master-data/view-building', icon: 'cil-minus' },
+      { name: 'Building Distance', url: '/master-data/view-bdistance', icon: 'cil-minus' },
+      { name: 'Quadrant Distance', url: '/master-data/view-qdistance', icon: 'cil-minus' },
+      { name: 'Size', url: '/master-data/view-size', icon: 'cil-minus' }
     ];
 
     this.csTrx = [

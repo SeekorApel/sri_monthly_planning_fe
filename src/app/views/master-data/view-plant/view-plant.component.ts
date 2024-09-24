@@ -89,7 +89,5 @@ export class ViewPlantComponent implements OnInit {
     } else {
       console.error('No file selected');
     }
-  }
-  
-  
+  } 
 }

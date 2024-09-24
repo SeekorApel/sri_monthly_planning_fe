@@ -8,12 +8,32 @@ import { ModalModule } from 'ngx-bootstrap/modal';
 import { ToastrModule } from 'ngx-toastr';
 import { MasterDataRoutingModule } from './master-data-routing.module'
 import { ViewPlantComponent } from './view-plant/view-plant.component';
+import { ViewProductComponent } from './view-product/view-product.component';
+import { ViewPatternComponent } from './view-pattern/view-pattern.component';
+import { ViewTassMachine } from './view-tassmachine/view-tassmachine.component';
+import { ViewSettingComponent } from './view-setting/view-setting.component';
+import { ViewQuadrantComponent } from './view-quadrant/view-quadrant.component';
+import { ViewProductTypeComponent } from './view-product-type/view-product-type.component';
+import { ViewSizeComponent } from './view-size/view-size.component';
+import { ViewBuildingComponent } from './view-building/view-building.component';
+import { ViewBDistanceComponent } from './view-bdistance/view-bdistance.component';
+import { ViewQDistanceComponent } from './view-qdistance/view-qdistance.component';
 
 
 
 @NgModule({
   declarations: [
-    ViewPlantComponent
+    ViewPlantComponent,
+    ViewProductComponent,
+    ViewPatternComponent,
+    ViewTassMachine,
+    ViewSettingComponent,
+    ViewQuadrantComponent,
+    ViewProductTypeComponent,
+    ViewSizeComponent,
+    ViewBuildingComponent,
+    ViewBDistanceComponent,
+    ViewQDistanceComponent
   ],
   imports: [
     CommonModule,
