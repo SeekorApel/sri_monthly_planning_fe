@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { IBuilding } from 'src/app/response/Building';
+import { IBuilding } from 'src/app/models/Building';
 import { ApiResponse } from 'src/app/response/ApiResponse';
 import { tap } from 'rxjs/operators'; 
 import { throwError } from 'rxjs';
@@ -10,8 +10,8 @@ import { throwError } from 'rxjs';
   providedIn: 'root'
 })
 export class BuildingService {
-  private baseUrl = 'http://localhost:8080';
-  private apiUrl = 'http://localhost:8080'; 
+  private baseUrl = 'http://10.1.23.59:8080';
+  private apiUrl = 'http://10.1.23.59:8080'; 
 
 
   constructor(private http: HttpClient) {}

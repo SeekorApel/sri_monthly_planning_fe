@@ -10,8 +10,8 @@ import { throwError } from 'rxjs';
   providedIn: 'root'
 })
 export class PlantService {
-  private baseUrl = 'http://localhost:8080';
-  private apiUrl = 'http://localhost:8080'; 
+  private baseUrl = 'http://10.1.23.59:8080';
+  private apiUrl = 'http://10.1.23.59:8080'; 
 
 
   constructor(private http: HttpClient) {}
