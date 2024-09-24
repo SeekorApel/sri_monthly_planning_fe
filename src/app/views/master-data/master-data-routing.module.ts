@@ -50,10 +50,7 @@ const routes: Routes = [
         data: {
           title: 'Master Tass Machine',
         },
-      },
-    ],
-  },
-];
+      }, 
     {
       path: 'master-data/view-plant',
       component: ViewPlantComponent,
@@ -109,7 +106,7 @@ const routes: Routes = [
       data: {
         title: 'Master Building'
       }
-    }
+    },
   ]
 
 }]
