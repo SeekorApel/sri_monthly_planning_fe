@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { IPlant } from 'src/app/response/Plant';
+import { IBuilding } from 'src/app/models/Building';
 import { ApiResponse } from 'src/app/response/ApiResponse';
 import { tap } from 'rxjs/operators'; 
 import { throwError } from 'rxjs';
@@ -9,15 +9,15 @@ import { throwError } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class PlantService {
+export class BuildingService {
   private baseUrl = 'http://10.1.23.59:8080';
   private apiUrl = 'http://10.1.23.59:8080'; 
 
 
   constructor(private http: HttpClient) {}
 
-  getAllPlant(): Observable<ApiResponse<IPlant[]>> {
-    return this.http.get<ApiResponse<IPlant[]>>(`${this.baseUrl}/getAllPlant`);
+  getAllBuilding(): Observable<ApiResponse<IBuilding[]>> {
+    return this.http.get<ApiResponse<IBuilding[]>>(`${this.baseUrl}/getAllBuilding`);
   }
   
 //   getPlantById(id: number): Observable<DtoResponse> {

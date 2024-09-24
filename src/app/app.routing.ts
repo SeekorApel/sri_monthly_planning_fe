@@ -13,6 +13,10 @@ import { DashboardComponent } from './views/dashboard/dashboard.component';
 import { ViewPlantComponent } from './views/master-data/view-plant/view-plant.component';
 import { ViewHeaderMoComponent } from './views/transaksi/view-header-mo/view-header-mo.component';
 import { AddHeaderMoComponent } from './views/transaksi/add-header-mo/add-header-mo.component';
+import { ViewSizeComponent } from './views/master-data/view-size/view-size.component';
+import { ViewBuildingComponent } from './views/master-data/view-building/view-building.component';
+import { ViewBDistanceComponent } from './views/master-data/view-bdistance/view-bdistance.component';
+import { ViewQDistanceComponent } from './views/master-data/view-qdistance/view-qdistance.component';
 
 export const routes: Routes = [
   {
@@ -64,6 +68,34 @@ export const routes: Routes = [
         component: ViewPlantComponent,
         data: {
           title: 'Master Data / View Plant',
+        }
+      },
+      {
+        path: 'master-data/view-size',
+        component: ViewSizeComponent,
+        data: {
+          title: 'Master Data / View Size',
+        }
+      },
+      {
+        path: 'master-data/view-bdistance',
+        component: ViewBDistanceComponent,
+        data: {
+          title: 'Master Data / View Building Distance',
+        }
+      },
+      {
+        path: 'master-data/view-qdistance',
+        component: ViewQDistanceComponent,
+        data: {
+          title: 'Master Data / View Quadrant Distance',
+        }
+      },
+      {
+        path: 'master-data/view-building',
+        component: ViewBuildingComponent,
+        data: {
+          title: 'Master Data / View Building',
         }
       },
       {

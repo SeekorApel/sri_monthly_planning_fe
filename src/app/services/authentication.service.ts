@@ -17,6 +17,7 @@ export class AuthenticationService {
   private userDetail : UserDetails
   public token: string
   private data: any
+  
 
 
   constructor(private http: HttpClient, private rest: RestService) {
