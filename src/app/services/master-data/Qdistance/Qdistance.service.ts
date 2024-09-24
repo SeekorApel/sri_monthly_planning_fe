@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { IPlant } from 'src/app/response/Plant';
+import { IQDistance } from 'src/app/response/QDistance';
 import { ApiResponse } from 'src/app/response/ApiResponse';
 import { tap } from 'rxjs/operators'; 
 import { throwError } from 'rxjs';
@@ -16,8 +16,8 @@ export class  QDistanceService {
 
   constructor(private http: HttpClient) {}
 
-  getAllQDistance(): Observable<ApiResponse<IPlant[]>> {
-    return this.http.get<ApiResponse<IPlant[]>>(`${this.baseUrl}/getAllQDistance`);
+  getAllQDistance(): Observable<ApiResponse<IQDistance[]>> {
+    return this.http.get<ApiResponse<IQDistance[]>>(`${this.baseUrl}/getAllQDistance`);
   }
   
 //   getPlantById(id: number): Observable<DtoResponse> {

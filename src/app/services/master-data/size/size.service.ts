@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { IPlant } from 'src/app/response/Plant';
+import { ISize } from 'src/app/response/Size';
 import { ApiResponse } from 'src/app/response/ApiResponse';
 import { tap } from 'rxjs/operators'; 
 import { throwError } from 'rxjs';
@@ -16,8 +16,8 @@ export class SizeService {
 
   constructor(private http: HttpClient) {}
 
-  getAllSize(): Observable<ApiResponse<IPlant[]>> {
-    return this.http.get<ApiResponse<IPlant[]>>(`${this.baseUrl}/getAllSize`);
+  getAllSize(): Observable<ApiResponse<ISize[]>> {
+    return this.http.get<ApiResponse<ISize[]>>(`${this.baseUrl}/getAllSize`);
   }
   
 //   getPlantById(id: number): Observable<DtoResponse> {

@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { IPlant } from 'src/app/response/Plant';
+import { IBDistance } from 'src/app/response/BDistance';
 import { ApiResponse } from 'src/app/response/ApiResponse';
 import { tap } from 'rxjs/operators'; 
 import { throwError } from 'rxjs';
@@ -16,8 +16,8 @@ export class BDistanceService {
 
   constructor(private http: HttpClient) {}
 
-  getAllBDistance(): Observable<ApiResponse<IPlant[]>> {
-    return this.http.get<ApiResponse<IPlant[]>>(`${this.baseUrl}/getAllBDistance`);
+  getAllBDistance(): Observable<ApiResponse<IBDistance[]>> {
+    return this.http.get<ApiResponse<IBDistance[]>>(`${this.baseUrl}/getAllBDistance`);
   }
   
 //   getPlantById(id: number): Observable<DtoResponse> {

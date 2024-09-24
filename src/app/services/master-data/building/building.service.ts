@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { IPlant } from 'src/app/response/Plant';
+import { IBuilding } from 'src/app/response/Building';
 import { ApiResponse } from 'src/app/response/ApiResponse';
 import { tap } from 'rxjs/operators'; 
 import { throwError } from 'rxjs';
@@ -16,8 +16,8 @@ export class BuildingService {
 
   constructor(private http: HttpClient) {}
 
-  getAllBuilding(): Observable<ApiResponse<IPlant[]>> {
-    return this.http.get<ApiResponse<IPlant[]>>(`${this.baseUrl}/getAllBuilding`);
+  getAllBuilding(): Observable<ApiResponse<IBuilding[]>> {
+    return this.http.get<ApiResponse<IBuilding[]>>(`${this.baseUrl}/getAllBuilding`);
   }
   
 //   getPlantById(id: number): Observable<DtoResponse> {
