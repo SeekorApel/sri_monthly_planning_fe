@@ -258,6 +258,8 @@
                         <!-- Header Kapasitas Maksimum -->
                         <th style="min-width: 350px;" colspan="3" class="align-middle text-nowrap">Kapasitas Maksimum</th>
 
+                        <th rowspan="2" class="align-middle text-nowrap">Stock Awal</th>
+
                         <!-- Header Sales Forecast -->
                         <th style="min-width: 350px;" colspan="3" class="align-middle text-nowrap">Sales Forecast</th>
 
@@ -304,6 +306,8 @@
                             <td><input type="text" [(ngModel)]="row.kapasitasAUG" class="form-control custom-height"></td>
                             <td><input type="text" [(ngModel)]="row.kapasitasSEP" class="form-control custom-height"></td>
                             <td><input type="text" [(ngModel)]="row.kapasitasOCT" class="form-control custom-height"></td>
+
+                            <td><input type="text" [(ngModel)]="row.stockAwal" class="form-control custom-height"></td>
 
                             <!-- Input untuk Sales Forecast berdasarkan bulan -->
                             <td><input type="text" [(ngModel)]="row.salesForecastAUG" class="form-control custom-height"></td>
