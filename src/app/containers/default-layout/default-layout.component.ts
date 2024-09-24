@@ -30,6 +30,9 @@ export class DefaultLayoutComponent {
 
     this.csMd = [
       { name: 'Plant', url: '/master-data/view-plant', icon: 'cil-minus' },
+      { name: 'Setting', url: '/master-data/view-setting', icon: 'cil-minus' },
+      { name: 'Quadrant', url: '/master-data/view-quadrant', icon: 'cil-minus' },
+      { name: 'ProductType', url: '/master-data/view-product-type', icon: 'cil-minus' }
       { name: 'Building', url: '/master-data/view-building', icon: 'cil-minus' },
       { name: 'Building Distance', url: '/master-data/view-bdistance', icon: 'cil-minus' },
       { name: 'Quadrant Distance', url: '/master-data/view-qdistance', icon: 'cil-minus' },

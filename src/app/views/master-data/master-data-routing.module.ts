@@ -1,6 +1,9 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ViewPlantComponent } from './view-plant/view-plant.component';
+import { ViewSettingComponent } from './view-setting/view-setting.component';
+import { ViewQuadrantComponent } from './view-quadrant/view-quadrant.component';
+import { ViewProductTypeComponent } from './view-product-type/view-product-type.component';
 import { ViewSizeComponent } from './view-size/view-size.component';
 import { ViewBuildingComponent } from './view-building/view-building.component';
 import { ViewBDistanceComponent } from './view-bdistance/view-bdistance.component';
@@ -25,6 +28,24 @@ const routes: Routes = [{
       }
     },
     {
+      path: 'master-data/view-setting',
+      component: ViewSettingComponent,
+      data: {
+        title: 'Master Setting'
+      }
+    },
+    {
+      path: 'master-data/view-quadrant',
+      component: ViewQuadrantComponent,
+      data: {
+        title: 'Master Quadrant'
+      }
+    },
+    {
+      path: 'master-data/view-product-type',
+      component: ViewProductTypeComponent,
+      data: {
+        title: 'Master Product Type'
       path: 'master-data/view-bdistance',
       component: ViewBDistanceComponent,
       data: {
