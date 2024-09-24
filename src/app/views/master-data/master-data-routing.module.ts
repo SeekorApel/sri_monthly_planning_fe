@@ -11,6 +11,11 @@ import { ViewSizeComponent } from './view-size/view-size.component';
 import { ViewBuildingComponent } from './view-building/view-building.component';
 import { ViewBDistanceComponent } from './view-bdistance/view-bdistance.component';
 import { ViewQDistanceComponent } from './view-qdistance/view-qdistance.component';
+import { ViewCuringMachineComponent } from './view-curing-machine/view-curing-machine.component';
+import { ViewTassMachineTypeComponent } from './view-tass-machine-type/view-tass-machine-type.component';
+import { ViewMaxCapacityComponent } from './view-max-capacity/view-max-capacity.component';
+import { ViewItemCuringComponent } from './view-item-curing/view-item-curing.component';
+import { ViewTassSizeComponent } from './view-tass-size/view-tass-size.component';
 
 const routes: Routes = [
   {
@@ -94,10 +99,31 @@ const routes: Routes = [
       }
     },
     {
-      path: 'master-data/view-size',
-      component: ViewSizeComponent,
+      path: 'master-data/view-product-type',
+      component: ViewProductTypeComponent,
       data: {
-        title: 'Master View'
+        title: 'Master Product Type',
+      }
+    },
+    {
+      path: 'master-dataview-curing-machine',
+      component: ViewCuringMachineComponent,
+      data: {
+        title: 'Master Curing Machine'
+      }
+    },
+    {
+      path: 'master-data/view-tass-machine-type',
+      component: ViewTassMachineTypeComponent,
+      data: {
+        title: 'Master Tass Machine Type'
+      }
+    },
+    {
+      path: 'master-data/view-max-capacity',
+      component: ViewMaxCapacityComponent,
+      data: {
+        title: 'Master View Max Capacity'
       }
     },
     {
@@ -106,7 +132,20 @@ const routes: Routes = [
       data: {
         title: 'Master Building'
       }
+    },    {
+      path: 'master-data/view-item-curing',
+      component: ViewItemCuringComponent,
+      data: {
+        title: 'Master View Item Curing'
+      }
     },
+    {
+      path: 'master-data/view-tass-size',
+      component: ViewTassSizeComponent,
+      data: {
+        title: 'Master Tass Size'
+      }
+    }
   ]
 
 }]

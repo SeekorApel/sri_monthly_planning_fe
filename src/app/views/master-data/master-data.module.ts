@@ -18,6 +18,11 @@ import { ViewSizeComponent } from './view-size/view-size.component';
 import { ViewBuildingComponent } from './view-building/view-building.component';
 import { ViewBDistanceComponent } from './view-bdistance/view-bdistance.component';
 import { ViewQDistanceComponent } from './view-qdistance/view-qdistance.component';
+import { ViewCuringMachineComponent } from './view-curing-machine/view-curing-machine.component';
+import { ViewMaxCapacityComponent } from './view-max-capacity/view-max-capacity.component';
+import { ViewTassMachineTypeComponent } from './view-tass-machine-type/view-tass-machine-type.component';
+import { ViewTassSizeComponent } from './view-tass-size/view-tass-size.component';
+import { ViewItemCuringComponent } from './view-item-curing/view-item-curing.component';
 
 
 
@@ -33,7 +38,12 @@ import { ViewQDistanceComponent } from './view-qdistance/view-qdistance.componen
     ViewSizeComponent,
     ViewBuildingComponent,
     ViewBDistanceComponent,
-    ViewQDistanceComponent
+    ViewQDistanceComponent,
+    ViewCuringMachineComponent,
+    ViewMaxCapacityComponent,
+    ViewTassMachineTypeComponent,
+    ViewTassSizeComponent,
+    ViewItemCuringComponent
   ],
   imports: [
     CommonModule,
