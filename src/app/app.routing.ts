@@ -13,9 +13,6 @@ import { DashboardComponent } from './views/dashboard/dashboard.component';
 import { ViewPlantComponent } from './views/master-data/view-plant/view-plant.component';
 import { ViewHeaderMoComponent } from './views/transaksi/view-header-mo/view-header-mo.component';
 import { AddHeaderMoComponent } from './views/transaksi/add-header-mo/add-header-mo.component';
-import { ViewProductComponent } from './views/master-data/view-product/view-product.component';
-import { ViewPatternComponent } from './views/master-data/view-pattern/view-pattern.component';
-import { ViewTassMachine } from './views/master-data/view-tassmachine/view-tassmachine.component';
 
 export const routes: Routes = [
   {
@@ -70,38 +67,17 @@ export const routes: Routes = [
         }
       },
       {
-        path: 'master-data/view-product',
-        component: ViewProductComponent,
-        data: {
-          title: 'Master Data / View Product',
-        }
-      },
-      {
-        path: 'master-data/view-pattern',
-        component: ViewPatternComponent,
-        data: {
-          title: 'Master Data / View Pattern',
-        }
-      },
-      {
-        path: 'master-data/view-tassMachine',
-        component: ViewTassMachine,
-        data: {
-          title: 'Master Data / View Tass Machine',
-        }
-      },
-      {
         path: 'transaksi/view-header-mo',
         component: ViewHeaderMoComponent,
         data: {
-          title: 'Transaksi / View Header Montly Planning',
+          title: 'Transaksi / View Marketing Order',
         }
       },
       {
         path: 'transaksi/add-header-mo',
         component: AddHeaderMoComponent,
         data: {
-          title: 'Transaksi / Add Header Montly Planning',
+          title: 'Transaksi / Add Marketing Order',
         }
       },
       {

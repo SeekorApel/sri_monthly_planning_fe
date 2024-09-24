@@ -1,25 +1,25 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { IPlant } from 'src/app/response/Plant';
+import { IBuilding } from 'src/app/models/Building';
 import { ApiResponse } from 'src/app/response/ApiResponse';
-import { tap } from 'rxjs/operators';
+import { tap } from 'rxjs/operators'; 
 import { throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class PlantService {
-  private baseUrl = 'http://localhost:8080';
-  private apiUrl = 'http://localhost:8080';
+export class BuildingService {
+  private baseUrl = 'http://10.1.23.59:8080';
+  private apiUrl = 'http://10.1.23.59:8080'; 
 
 
   constructor(private http: HttpClient) {}
 
-  getAllPlant(): Observable<ApiResponse<IPlant[]>> {
-    return this.http.get<ApiResponse<IPlant[]>>(`${this.baseUrl}/getAllPlant`);
+  getAllBuilding(): Observable<ApiResponse<IBuilding[]>> {
+    return this.http.get<ApiResponse<IBuilding[]>>(`${this.baseUrl}/getAllBuilding`);
   }
-
+  
 //   getPlantById(id: number): Observable<DtoResponse> {
 //     return this.http.get<DtoResponse>(`${this.baseUrl}/getObatById/${id}`);
 //   }
@@ -32,12 +32,12 @@ export class PlantService {
 //     const updatedData = { ...data, idObat: id }; // Menambahkan idObat ke dalam body
 //     return this.http.post<any>(`${this.apiUrl}/updateObat`, updatedData);
 //   }
-
+   
 
 //   deletePlant(obat: { idObat: number }): Observable<ApiResponse<any>> {
 //     const url = `${this.apiUrl}/deleteObats`;
 //     return this.http.post<ApiResponse<any>>(url, obat);
-//   }
+//   }  
 
 signIn(userName: string, password: string): Observable<{ data: string }> {
     return this.http.post<{ data: string }>(`${this.baseUrl}/signin`, {
@@ -50,7 +50,7 @@ signIn(userName: string, password: string): Observable<{ data: string }> {
       })
     );
   }
-
+  
   savePlantsExcelFile(formData: FormData): Observable<any> {
     const token = localStorage.getItem('token'); // Retrieve the token
     if (!token) {
@@ -58,11 +58,11 @@ signIn(userName: string, password: string): Observable<{ data: string }> {
       // Return an observable that emits an error
       return throwError('Token is not available'); // Make sure to import throwError from 'rxjs'
     }
-
+  
     const headers = new HttpHeaders({
       Authorization: `Bearer ${token}`
     });
-
+  
     return this.http.post(`${this.baseUrl}/savePlantsExcel`, formData, { headers });
   }
 }
