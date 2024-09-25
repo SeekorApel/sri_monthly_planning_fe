@@ -25,7 +25,6 @@ import { ViewMachineCuringTypeCavityComponent } from './view-machine-curing-type
 import { ViewMachineTassTypeComponent } from './view-machine-tass-type/view-machine-tass-type.component';
 import { ViewCuringMachineComponent } from './view-curing-machine/view-curing-machine.component';
 import { ViewMaxCapacityComponent } from './view-max-capacity/view-max-capacity.component';
-import { ViewTassMachineTypeComponent } from './view-tass-machine-type/view-tass-machine-type.component';
 import { ViewTassSizeComponent } from './view-tass-size/view-tass-size.component';
 import { ViewItemCuringComponent } from './view-item-curing/view-item-curing.component';
 
@@ -52,7 +51,6 @@ import { ViewItemCuringComponent } from './view-item-curing/view-item-curing.com
     ViewMachineTassTypeComponent,
     ViewCuringMachineComponent,
     ViewMaxCapacityComponent,
-    ViewTassMachineTypeComponent,
     ViewTassSizeComponent,
     ViewItemCuringComponent
   ],
