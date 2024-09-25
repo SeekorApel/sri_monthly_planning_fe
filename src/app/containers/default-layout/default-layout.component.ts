@@ -39,7 +39,9 @@ export class DefaultLayoutComponent {
       { name: 'Building', url: '/master-data/view-building', icon: 'cil-minus' },
       { name: 'Building Distance', url: '/master-data/view-bdistance', icon: 'cil-minus' },
       { name: 'Quadrant Distance', url: '/master-data/view-qdistance', icon: 'cil-minus' },
-      { name: 'Size', url: '/master-data/view-size', icon: 'cil-minus' }
+      { name: 'Size', url: '/master-data/view-size', icon: 'cil-minus' },
+      { name: 'Routing Machine', url: '/master-data/view-routing-machine', icon: 'cil-minus' },
+      { name: 'Delivery Schedule', url: '/master-data/view-delivery-schedule', icon: 'cil-minus' }
     ];
 
     this.csTrx = [

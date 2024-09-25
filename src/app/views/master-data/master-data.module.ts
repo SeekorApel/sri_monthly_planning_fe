@@ -18,6 +18,8 @@ import { ViewSizeComponent } from './view-size/view-size.component';
 import { ViewBuildingComponent } from './view-building/view-building.component';
 import { ViewBDistanceComponent } from './view-bdistance/view-bdistance.component';
 import { ViewQDistanceComponent } from './view-qdistance/view-qdistance.component';
+import { ViewRoutingMachineComponent } from './view-routing-machine/view-routing-machine.component';
+import { ViewDeliveryScheduleComponent } from './view-delivery-schedule/view-delivery-schedule.component';
 
 
 
@@ -33,7 +35,9 @@ import { ViewQDistanceComponent } from './view-qdistance/view-qdistance.componen
     ViewSizeComponent,
     ViewBuildingComponent,
     ViewBDistanceComponent,
-    ViewQDistanceComponent
+    ViewQDistanceComponent,
+    ViewRoutingMachineComponent,
+    ViewDeliveryScheduleComponent
   ],
   imports: [
     CommonModule,
