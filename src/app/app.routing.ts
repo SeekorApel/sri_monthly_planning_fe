@@ -23,6 +23,8 @@ import { ViewQDistanceComponent } from './views/master-data/view-qdistance/view-
 import { ViewPatternComponent } from './views/master-data/view-pattern/view-pattern.component';
 import { ViewProductComponent } from './views/master-data/view-product/view-product.component';
 import { ViewTassMachine } from './views/master-data/view-tassmachine/view-tassmachine.component';
+import { ViewRoutingMachineComponent } from './views/master-data/view-routing-machine/view-routing-machine.component';
+import { ViewDeliveryScheduleComponent } from './views/master-data/view-delivery-schedule/view-delivery-schedule.component';
 import { ViewMachineCuringTypeComponent } from './views/master-data/view-machine-curing-type/view-machine-curing-type.component';
 import { ViewMachineCuringTypeCavityComponent } from './views/master-data/view-machine-curing-type-cavity/view-machine-curing-type-cavity.component';
 import { ViewMachineTassTypeComponent } from './views/master-data/view-machine-tass-type/view-machine-tass-type.component';
@@ -31,7 +33,6 @@ import { ViewTassMachineTypeComponent } from './views/master-data/view-tass-mach
 import { ViewCuringMachineComponent } from './views/master-data/view-curing-machine/view-curing-machine.component';
 import { ViewItemCuringComponent } from './views/master-data/view-item-curing/view-item-curing.component';
 import { ViewTassSizeComponent } from './views/master-data/view-tass-size/view-tass-size.component';
-
 export const routes: Routes = [
   {
     path: '',
@@ -243,6 +244,20 @@ export const routes: Routes = [
         component: AddMarketingOrderComponent,
         data: {
           title: 'Transaksi / Add Marketing Order',
+        },
+      },
+      {
+        path: 'master-data/view-routing-machine',
+        component: ViewRoutingMachineComponent,
+        data: {
+          title: 'Master Data / View Routing Machine',
+        },
+      },
+      {
+        path: 'master-data/view-delivery-schedule',
+        component: ViewDeliveryScheduleComponent,
+        data: {
+          title: 'Master Data / View Delivery Schedule',
         },
       },
       {

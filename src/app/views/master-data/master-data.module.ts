@@ -18,6 +18,8 @@ import { ViewSizeComponent } from './view-size/view-size.component';
 import { ViewBuildingComponent } from './view-building/view-building.component';
 import { ViewBDistanceComponent } from './view-bdistance/view-bdistance.component';
 import { ViewQDistanceComponent } from './view-qdistance/view-qdistance.component';
+import { ViewRoutingMachineComponent } from './view-routing-machine/view-routing-machine.component';
+import { ViewDeliveryScheduleComponent } from './view-delivery-schedule/view-delivery-schedule.component';
 import { ViewMachineCuringTypeComponent } from './view-machine-curing-type/view-machine-curing-type.component';
 import { ViewMachineCuringTypeCavityComponent } from './view-machine-curing-type-cavity/view-machine-curing-type-cavity.component';
 import { ViewMachineTassTypeComponent } from './view-machine-tass-type/view-machine-tass-type.component';
@@ -26,6 +28,7 @@ import { ViewMaxCapacityComponent } from './view-max-capacity/view-max-capacity.
 import { ViewTassMachineTypeComponent } from './view-tass-machine-type/view-tass-machine-type.component';
 import { ViewTassSizeComponent } from './view-tass-size/view-tass-size.component';
 import { ViewItemCuringComponent } from './view-item-curing/view-item-curing.component';
+
 
 
 
@@ -42,6 +45,8 @@ import { ViewItemCuringComponent } from './view-item-curing/view-item-curing.com
     ViewBuildingComponent,
     ViewBDistanceComponent,
     ViewQDistanceComponent,
+    ViewRoutingMachineComponent,
+    ViewDeliveryScheduleComponent,
     ViewMachineCuringTypeComponent,
     ViewMachineCuringTypeCavityComponent,
     ViewMachineTassTypeComponent,

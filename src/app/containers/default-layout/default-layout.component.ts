@@ -43,6 +43,8 @@ export class DefaultLayoutComponent {
       { name: 'Building Distance', url: '/master-data/view-bdistance', icon: 'cil-minus' },
       { name: 'Quadrant Distance', url: '/master-data/view-qdistance', icon: 'cil-minus' },
       { name: 'Size', url: '/master-data/view-size', icon: 'cil-minus' },
+      { name: 'Routing Machine', url: '/master-data/view-routing-machine', icon: 'cil-minus' },
+      { name: 'Delivery Schedule', url: '/master-data/view-delivery-schedule', icon: 'cil-minus' },
       { name: 'Machine Curing Type', url: '/master-data/view-machine-curing-type', icon: 'cil-minus' },
       { name: 'Machine Curing Type Cavity', url: '/master-data/view-machine-curing-type-cavity', icon: 'cil-minus' },
       { name: 'Machine Tass Type', url: '/master-data/view-machine-tass-type', icon: 'cil-minus' },
