@@ -23,11 +23,15 @@ import { ViewQDistanceComponent } from './views/master-data/view-qdistance/view-
 import { ViewPatternComponent } from './views/master-data/view-pattern/view-pattern.component';
 import { ViewProductComponent } from './views/master-data/view-product/view-product.component';
 import { ViewTassMachine } from './views/master-data/view-tassmachine/view-tassmachine.component';
+import { ViewMachineCuringTypeComponent } from './views/master-data/view-machine-curing-type/view-machine-curing-type.component';
+import { ViewMachineCuringTypeCavityComponent } from './views/master-data/view-machine-curing-type-cavity/view-machine-curing-type-cavity.component';
+import { ViewMachineTassTypeComponent } from './views/master-data/view-machine-tass-type/view-machine-tass-type.component';
 import { ViewMaxCapacityComponent } from './views/master-data/view-max-capacity/view-max-capacity.component';
 import { ViewTassMachineTypeComponent } from './views/master-data/view-tass-machine-type/view-tass-machine-type.component';
 import { ViewCuringMachineComponent } from './views/master-data/view-curing-machine/view-curing-machine.component';
 import { ViewItemCuringComponent } from './views/master-data/view-item-curing/view-item-curing.component';
 import { ViewTassSizeComponent } from './views/master-data/view-tass-size/view-tass-size.component';
+
 export const routes: Routes = [
   {
     path: '',
@@ -148,6 +152,27 @@ export const routes: Routes = [
         component: ViewProductComponent,
         data: {
           title: 'Master Data / View Product',
+        },
+      },
+      {
+        path: 'master-data/view-machine-curing-type',
+        component: ViewMachineCuringTypeComponent,
+        data: {
+          title: 'Master Data / View Machine Curing Type',
+        },
+      },
+      {
+        path: 'master-data/view-machine-tass-type',
+        component: ViewMachineTassTypeComponent,
+        data: {
+          title: 'Master Data / View Machine Tass Type',
+        },
+      },
+      {
+        path: 'master-data/view-machine-curing-type-cavity',
+        component: ViewMachineCuringTypeCavityComponent,
+        data: {
+          title: 'Master Data / View Machine Curing Type Cavity',
         },
       },
       {

@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ISetting } from 'src/app/response/Setting';
+import { ISetting } from 'src/app/models/Setting';
 import { ApiResponse } from 'src/app/response/ApiResponse';
 import { tap } from 'rxjs/operators'; 
 import { throwError } from 'rxjs';
