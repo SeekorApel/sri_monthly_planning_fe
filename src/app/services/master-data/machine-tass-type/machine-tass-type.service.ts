@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { IPlant } from 'src/app/response/Plant';
+import { IMachineTassType } from 'src/app/models/machine-tass-type';
 import { ApiResponse } from 'src/app/response/ApiResponse';
 import { tap } from 'rxjs/operators';
 import { throwError } from 'rxjs';
@@ -16,8 +16,8 @@ export class MachineTassTypeService {
 
   constructor(private http: HttpClient) {}
 
-  getAllPlant(): Observable<ApiResponse<IPlant[]>> {
-    return this.http.get<ApiResponse<IPlant[]>>(`${this.baseUrl}/getAllPlant`);
+  getAllPlant(): Observable<ApiResponse<IMachineTassType[]>> {
+    return this.http.get<ApiResponse<IMachineTassType[]>>(`${this.baseUrl}/getAllPlant`);
   }
 
 //   getPlantById(id: number): Observable<DtoResponse> {

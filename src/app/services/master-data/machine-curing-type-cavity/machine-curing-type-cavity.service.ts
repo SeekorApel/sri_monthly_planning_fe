@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { IPlant } from 'src/app/response/Plant';
+import { IMachineCuringTypeCavity } from 'src/app/models/machine-curing-type-cavity';
 import { ApiResponse } from 'src/app/response/ApiResponse';
 import { tap } from 'rxjs/operators';
 import { throwError } from 'rxjs';
@@ -16,8 +16,8 @@ export class MachineCuringTypeCavityService {
 
   constructor(private http: HttpClient) {}
 
-  getAllPlant(): Observable<ApiResponse<IPlant[]>> {
-    return this.http.get<ApiResponse<IPlant[]>>(`${this.baseUrl}/getAllPlant`);
+  getAllPlant(): Observable<ApiResponse<IMachineCuringTypeCavity[]>> {
+    return this.http.get<ApiResponse<IMachineCuringTypeCavity[]>>(`${this.baseUrl}/getAllPlant`);
   }
 
 //   getPlantById(id: number): Observable<DtoResponse> {

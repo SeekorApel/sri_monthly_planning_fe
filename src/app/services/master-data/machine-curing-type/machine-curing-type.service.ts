@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { IPlant } from 'src/app/response/Plant';
+import { IMachineCuringType } from 'src/app/models/machine-curing-type';
 import { ApiResponse } from 'src/app/response/ApiResponse';
 import { tap } from 'rxjs/operators';
 import { throwError } from 'rxjs';
@@ -16,8 +16,8 @@ export class MachineCuringTypeService {
 
   constructor(private http: HttpClient) {}
 
-  getAllPlant(): Observable<ApiResponse<IPlant[]>> {
-    return this.http.get<ApiResponse<IPlant[]>>(`${this.baseUrl}/getAllPlant`);
+  getAllPlant(): Observable<ApiResponse<IMachineCuringType[]>> {
+    return this.http.get<ApiResponse<IMachineCuringType[]>>(`${this.baseUrl}/getAllPlant`);
   }
 
 //   getPlantById(id: number): Observable<DtoResponse> {
