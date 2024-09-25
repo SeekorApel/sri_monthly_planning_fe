@@ -90,6 +90,21 @@ export class DefaultLayoutComponent {
         url: '/transaksi/view-header-mo',
         icon: 'cil-minus',
       },
+      { name: 'Quadrant', url: '/master-data/view-quadrant', icon: 'cil-minus' },
+      { name: 'ProductType', url: '/master-data/view-product-type', icon: 'cil-minus' },
+      { name: 'Building', url: '/master-data/view-building', icon: 'cil-minus' },
+      { name: 'Building Distance', url: '/master-data/view-bdistance', icon: 'cil-minus' },
+      { name: 'Quadrant Distance', url: '/master-data/view-qdistance', icon: 'cil-minus' },
+      { name: 'Curing Machine', url: '/master-data/view-curing-machine', icon: 'cil-minus' },
+      { name: 'Tass Machine Type', url: '/master-data/view-tass-machine-type', icon: 'cil-minus' },
+      { name: 'Max Capacity', url: '/master-data/view-max-capacity', icon: 'cil-minus' },
+      { name: 'Item Curing', url: '/master-data/view-item-curing', icon: 'cil-minus' },
+      { name: 'Tass Size', url: '/master-data/view-tass-size', icon: 'cil-minus' },
+      { name: 'Size', url: '/master-data/view-size', icon: 'cil-minus' }
+    ];
+
+    this.csTrx = [
+      { name: 'Marketing Order', url: '/transaksi/view-marketing-order', icon: 'cil-minus' }
     ];
   }
 

@@ -14,6 +14,12 @@ import { ViewQDistanceComponent } from './view-qdistance/view-qdistance.componen
 import { ViewMachineCuringTypeComponent } from './view-machine-curing-type/view-machine-curing-type.component';
 import { ViewMachineCuringTypeCavityComponent } from './view-machine-curing-type-cavity/view-machine-curing-type-cavity.component';
 import { ViewMachineTassTypeComponent } from './view-machine-tass-type/view-machine-tass-type.component';
+import { ViewCuringMachineComponent } from './view-curing-machine/view-curing-machine.component';
+import { ViewTassMachineTypeComponent } from './view-tass-machine-type/view-tass-machine-type.component';
+import { ViewMaxCapacityComponent } from './view-max-capacity/view-max-capacity.component';
+import { ViewItemCuringComponent } from './view-item-curing/view-item-curing.component';
+import { ViewTassSizeComponent } from './view-tass-size/view-tass-size.component';
+
 
 const routes: Routes = [
   {
@@ -134,6 +140,99 @@ const routes: Routes = [
     ],
   },
 ];
+      }, 
+    {
+      path: 'master-data/view-plant',
+      component: ViewPlantComponent,
+      data: {
+        title: 'Master Plant'
+      }
+    },
+    {
+      path: 'master-data/view-setting',
+      component: ViewSettingComponent,
+      data: {
+        title: 'Master Setting'
+      }
+    },
+    {
+      path: 'master-data/view-quadrant',
+      component: ViewQuadrantComponent,
+      data: {
+        title: 'Master Quadrant'
+      }
+    },
+    {
+      path: 'master-data/view-product-type',
+      component: ViewProductTypeComponent,
+      data: {
+        title: 'Master Product Type',
+      }
+    },
+    {
+      path: 'master-data/view-bdistance',
+      component: ViewBDistanceComponent,
+      data: {
+        title: 'Master Building Distance'
+      }
+    },
+    {
+      path: 'master-data/view-qdistance',
+      component: ViewQDistanceComponent,
+      data: {
+        title: 'Master Quadrant Distance'
+      }
+    },
+    {
+      path: 'master-data/view-product-type',
+      component: ViewProductTypeComponent,
+      data: {
+        title: 'Master Product Type',
+      }
+    },
+    {
+      path: 'master-dataview-curing-machine',
+      component: ViewCuringMachineComponent,
+      data: {
+        title: 'Master Curing Machine'
+      }
+    },
+    {
+      path: 'master-data/view-tass-machine-type',
+      component: ViewTassMachineTypeComponent,
+      data: {
+        title: 'Master Tass Machine Type'
+      }
+    },
+    {
+      path: 'master-data/view-max-capacity',
+      component: ViewMaxCapacityComponent,
+      data: {
+        title: 'Master View Max Capacity'
+      }
+    },
+    {
+      path: 'master-data/view-building',
+      component: ViewBuildingComponent,
+      data: {
+        title: 'Master Building'
+      }
+    },    {
+      path: 'master-data/view-item-curing',
+      component: ViewItemCuringComponent,
+      data: {
+        title: 'Master View Item Curing'
+      }
+    },
+    {
+      path: 'master-data/view-tass-size',
+      component: ViewTassSizeComponent,
+      data: {
+        title: 'Master Tass Size'
+      }
+    }
+  ]
+}]
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
