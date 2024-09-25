@@ -3,14 +3,15 @@ export interface ApiResponse<T> {
   data: T;
 }
 
-export interface IPlant {
-  plant_ID?: number;        
-  plant_NAME: string;
+export interface ICuring_Machine {
+  curing_ID?: number;        
+  quadrant_ID?: number;        
+  type_CODE: string;
   status: number;           
   creation_DATE: Date;     
   created_BY: string;       
   last_UPDATE_DATE: Date;  
-  last_UPDATED_BY: string;
+  last_UPDATED_BY: string;   
 }
-  
+
 

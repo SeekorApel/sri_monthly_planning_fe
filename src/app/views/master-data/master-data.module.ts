@@ -6,7 +6,7 @@ import { NgSelect2Module } from 'ng-select2';
 import { JwPaginationModule } from 'jw-angular-pagination';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { ToastrModule } from 'ngx-toastr';
-import { MasterDataRoutingModule } from './master-data-routing.module'
+import { MasterDataRoutingModule } from './master-data-routing.module';
 import { ViewPlantComponent } from './view-plant/view-plant.component';
 import { ViewProductComponent } from './view-product/view-product.component';
 import { ViewPatternComponent } from './view-pattern/view-pattern.component';
@@ -20,6 +20,15 @@ import { ViewBDistanceComponent } from './view-bdistance/view-bdistance.componen
 import { ViewQDistanceComponent } from './view-qdistance/view-qdistance.component';
 import { ViewRoutingMachineComponent } from './view-routing-machine/view-routing-machine.component';
 import { ViewDeliveryScheduleComponent } from './view-delivery-schedule/view-delivery-schedule.component';
+import { ViewMachineCuringTypeComponent } from './view-machine-curing-type/view-machine-curing-type.component';
+import { ViewMachineCuringTypeCavityComponent } from './view-machine-curing-type-cavity/view-machine-curing-type-cavity.component';
+import { ViewMachineTassTypeComponent } from './view-machine-tass-type/view-machine-tass-type.component';
+import { ViewCuringMachineComponent } from './view-curing-machine/view-curing-machine.component';
+import { ViewMaxCapacityComponent } from './view-max-capacity/view-max-capacity.component';
+import { ViewTassMachineTypeComponent } from './view-tass-machine-type/view-tass-machine-type.component';
+import { ViewTassSizeComponent } from './view-tass-size/view-tass-size.component';
+import { ViewItemCuringComponent } from './view-item-curing/view-item-curing.component';
+
 
 
 
@@ -37,7 +46,15 @@ import { ViewDeliveryScheduleComponent } from './view-delivery-schedule/view-del
     ViewBDistanceComponent,
     ViewQDistanceComponent,
     ViewRoutingMachineComponent,
-    ViewDeliveryScheduleComponent
+    ViewDeliveryScheduleComponent,
+    ViewMachineCuringTypeComponent,
+    ViewMachineCuringTypeCavityComponent,
+    ViewMachineTassTypeComponent,
+    ViewCuringMachineComponent,
+    ViewMaxCapacityComponent,
+    ViewTassMachineTypeComponent,
+    ViewTassSizeComponent,
+    ViewItemCuringComponent
   ],
   imports: [
     CommonModule,
@@ -48,7 +65,7 @@ import { ViewDeliveryScheduleComponent } from './view-delivery-schedule/view-del
     JwPaginationModule,
     MasterDataRoutingModule,
     ModalModule.forRoot(),
-    ToastrModule.forRoot()
-  ]
+    ToastrModule.forRoot(),
+  ],
 })
-export class MasterDataModule { }
+export class MasterDataModule {}

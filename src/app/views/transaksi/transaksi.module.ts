@@ -7,15 +7,15 @@ import { JwPaginationModule } from 'jw-angular-pagination';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { ToastrModule } from 'ngx-toastr';
 import { TransaksiRoutingModule } from './transaksi-routing.module';
-import { ViewHeaderMoComponent } from './view-header-mo/view-header-mo.component';
-import { AddHeaderMoComponent } from './add-header-mo/add-header-mo.component';
+import { ViewMarketingOrderComponent } from './view-marketing-order/view-marketing-order.component';
+import { AddMarketingOrderComponent } from './add-marketing-order/add-marketing-order.component';
 
 
 
 @NgModule({
   declarations: [
-    ViewHeaderMoComponent,
-    AddHeaderMoComponent
+    ViewMarketingOrderComponent,
+    AddMarketingOrderComponent
   ],
   imports: [
     CommonModule,

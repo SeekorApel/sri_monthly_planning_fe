@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ViewHeaderMoComponent } from './view-header-mo.component';
+import { ViewTassSizeComponent } from './view-tass-size.component';
 
-describe('ViewHeaderMoComponent', () => {
-  let component: ViewHeaderMoComponent;
-  let fixture: ComponentFixture<ViewHeaderMoComponent>;
+describe('ViewTassSizeComponent', () => {
+  let component: ViewTassSizeComponent;
+  let fixture: ComponentFixture<ViewTassSizeComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ViewHeaderMoComponent ]
+      declarations: [ ViewTassSizeComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ViewHeaderMoComponent);
+    fixture = TestBed.createComponent(ViewTassSizeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

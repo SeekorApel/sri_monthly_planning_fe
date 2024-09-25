@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { IProductType } from 'src/app/models/ProductType';
+import { ICuring_Machine } from 'src/app/models/Curing_Machine';
 import { ApiResponse } from 'src/app/response/ApiResponse';
 import { tap } from 'rxjs/operators'; 
 import { throwError } from 'rxjs';
@@ -9,15 +9,15 @@ import { throwError } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class ProductTypeService {
+export class CuringMachineService {
   private baseUrl = 'http://localhost:8080';
   private apiUrl = 'http://localhost:8080'; 
 
 
   constructor(private http: HttpClient) {}
 
-  getAllProductType(): Observable<ApiResponse<IProductType[]>> {
-    return this.http.get<ApiResponse<IProductType[]>>(`${this.baseUrl}/getAllProductType`);
+  getAllCuringMachine(): Observable<ApiResponse<ICuring_Machine[]>> {
+    return this.http.get<ApiResponse<ICuring_Machine[]>>(`${this.baseUrl}/getAllCuringMachine`);
   }
   
 //   getPlantById(id: number): Observable<DtoResponse> {

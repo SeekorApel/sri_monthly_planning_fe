@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { IProductType } from 'src/app/models/ProductType';
+import { IMax_Capacity } from 'src/app/models/Max_Capacity';
 import { ApiResponse } from 'src/app/response/ApiResponse';
 import { tap } from 'rxjs/operators'; 
 import { throwError } from 'rxjs';
@@ -9,15 +9,15 @@ import { throwError } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class ProductTypeService {
+export class MaxCapacityService {
   private baseUrl = 'http://localhost:8080';
   private apiUrl = 'http://localhost:8080'; 
 
 
   constructor(private http: HttpClient) {}
 
-  getAllProductType(): Observable<ApiResponse<IProductType[]>> {
-    return this.http.get<ApiResponse<IProductType[]>>(`${this.baseUrl}/getAllProductType`);
+  getAllMaxCapacity(): Observable<ApiResponse<IMax_Capacity[]>> {
+    return this.http.get<ApiResponse<IMax_Capacity[]>>(`${this.baseUrl}/getAllMaxCapacity`);
   }
   
 //   getPlantById(id: number): Observable<DtoResponse> {

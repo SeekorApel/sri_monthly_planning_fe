@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AddHeaderMoComponent } from './add-header-mo.component';
+import { ViewCuringMachineComponent } from './view-curing-machine.component';
 
-describe('AddHeaderMoComponent', () => {
-  let component: AddHeaderMoComponent;
-  let fixture: ComponentFixture<AddHeaderMoComponent>;
+describe('ViewCuringMachineComponent', () => {
+  let component: ViewCuringMachineComponent;
+  let fixture: ComponentFixture<ViewCuringMachineComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AddHeaderMoComponent ]
+      declarations: [ ViewCuringMachineComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(AddHeaderMoComponent);
+    fixture = TestBed.createComponent(ViewCuringMachineComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { IProductType } from 'src/app/models/ProductType';
+import { ITass_Machine_Type } from 'src/app/models/Tass_Machine_Type';
 import { ApiResponse } from 'src/app/response/ApiResponse';
 import { tap } from 'rxjs/operators'; 
 import { throwError } from 'rxjs';
@@ -9,15 +9,15 @@ import { throwError } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class ProductTypeService {
+export class TassMachineTypeService {
   private baseUrl = 'http://localhost:8080';
   private apiUrl = 'http://localhost:8080'; 
 
 
   constructor(private http: HttpClient) {}
 
-  getAllProductType(): Observable<ApiResponse<IProductType[]>> {
-    return this.http.get<ApiResponse<IProductType[]>>(`${this.baseUrl}/getAllProductType`);
+  getAllTassMachineType(): Observable<ApiResponse<ITass_Machine_Type[]>> {
+    return this.http.get<ApiResponse<ITass_Machine_Type[]>>(`${this.baseUrl}/getAllTassMachineType`);
   }
   
 //   getPlantById(id: number): Observable<DtoResponse> {

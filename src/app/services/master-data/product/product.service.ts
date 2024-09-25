@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { IPattern } from 'src/app/response/Pattern';
+import { IProduct } from 'src/app/models/Product';
 import { ApiResponse } from 'src/app/response/ApiResponse';
 import { tap } from 'rxjs/operators'; 
 import { throwError } from 'rxjs';
@@ -16,8 +16,8 @@ export class ProductService {
 
   constructor(private http: HttpClient) {}
 
-  getAllPlant(): Observable<ApiResponse<IPattern[]>> {
-    return this.http.get<ApiResponse<IPattern[]>>(`${this.baseUrl}/getAllPlant`);
+  getAllPlant(): Observable<ApiResponse<IProduct[]>> {
+    return this.http.get<ApiResponse<IProduct[]>>(`${this.baseUrl}/getAllPlant`);
   }
   
 //   getPlantById(id: number): Observable<DtoResponse> {
