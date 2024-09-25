@@ -4,9 +4,10 @@ export interface ApiResponse<T> {
 }
 
 export interface ITass_Size {
-  item_Curing_ID?: string;        
-  kapa_Per_Mould?: number;        
-  number_Of_Mould: number;                    
+  type_CODE?: string;        
+  size_ID?: string;        
+  capacity: number;                   
+  setting_ID: number;                   
   creation_DATE: Date;     
   created_BY: string;       
   last_UPDATE_DATE: Date;  

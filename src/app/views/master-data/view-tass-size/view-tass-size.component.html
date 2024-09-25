@@ -18,18 +18,20 @@
         <table class="table table-striped">
           <thead>
             <tr>
-              <th>Item Curing ID</th>
-              <th>Kapa Per Mould</th>
-              <th>Number Of Mould</th>
+              <th>Type Code</th>
+              <th>Size ID</th>
+              <th>Capacity</th>
+              <th>Setting ID</th>
               <th>Status</th>
               <th>Action</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let tassSize of tassSizeList; let i = index">
-                <td>{{ tassSize.item_Curing_ID }}</td>
-                <td>{{ tassSize.kapa_Per_Mould }}</td>
-                <td>{{ tassSize.number_Of_Mould }}</td>
+                <td>{{ tassSize.type_CODE }}</td>
+                <td>{{ tassSize.size_ID }}</td>
+                <td>{{ tassSize.capacity }}</td>
+                <td>{{ tassSize.setting_ID }}</td>
                 <td>{{ tassSize.status }}</td>
                 <td>
                     <button type="button" class="btn btn-sm btn-primary" >

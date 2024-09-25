@@ -4,9 +4,9 @@ export interface ApiResponse<T> {
 }
 
 export interface IItem_Curing {
-  curing_ID?: number;        
-  quadrant_ID?: number;        
-  type_CODE: string;
+  item_Curing_ID?: string;        
+  kapa_Per_Mould?: number;        
+  number_Of_Mould: number;  
   status: number;           
   creation_DATE: Date;     
   created_BY: string;       

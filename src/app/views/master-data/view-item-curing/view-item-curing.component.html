@@ -18,19 +18,18 @@
         <table class="table table-striped">
           <thead>
             <tr>
-              <th>Type ID</th>
-              <th>Size ID</th>
-              <th>Capacity</th>
-              <th>Setting ID</th>
+              <th>Item Curing ID</th>
+              <th>Kapa Per Mould</th>
+              <th>Number Of Mould</th>
               <th>Status</th>
               <th>Action</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let itemCuring of itemCuringList; let i = index">
-                <td>{{ itemCuring.type_ID }}</td>
-                <td>{{ itemCuring.size_ID }}</td>
-                <td>{{ itemCuring.capacity }}</td>
+                <td>{{ itemCuring.item_Curing_ID }}</td>
+                <td>{{ itemCuring.kapa_Per_Mould }}</td>
+                <td>{{ itemCuring.number_Of_Mould }}</td>
                 <td>{{ itemCuring.setting_ID }}</td>
                 <td>{{ itemCuring.status }}</td>
                 <td>
