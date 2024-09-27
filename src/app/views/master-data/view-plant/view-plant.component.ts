@@ -25,9 +25,7 @@ export class ViewPlantComponent implements OnInit {
   pageSize: number = 5;
   totalPages: number = 5;
 
-  constructor(
-    private plantService: PlantService // Inject PlantService
-  ) {}
+  constructor(private plantService: PlantService) {}
 
   ngOnInit(): void {
     this.getAllPlant();
