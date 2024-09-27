@@ -14,6 +14,7 @@ export class ViewTassMachine implements OnInit {
   loading = false;
   plantList: any[] = [];
   file: File | null = null;
+  
 
   constructor(
     private formBuilder: FormBuilder,
@@ -67,29 +68,29 @@ export class ViewTassMachine implements OnInit {
     if (this.file) {
       const formData = new FormData();
       formData.append('file', this.file);
-  
-      this.plantService.signIn('Aurel', 'polman').subscribe(
-        (signinResponse) => {
-            const token = signinResponse.data; 
-  
-          // Now upload the Excel file
-          this.plantService.savePlantsExcelFile(formData).subscribe(
-            (response) => {
-              console.log('File uploaded successfully', response);
-            },
-            (error) => {
-              console.error('Error uploading file', error);
-            }
-          );
-        },
-        (error) => {
-          console.error('Error signing in', error);
-        }
-      );
+
+      // this.plantService.signIn('Aurel', 'polman').subscribe(
+      //   (signinResponse) => {
+      //       const token = signinResponse.data;
+
+      //     // Now upload the Excel file
+      //     this.plantService.savePlantsExcelFile(formData).subscribe(
+      //       (response) => {
+      //         console.log('File uploaded successfully', response);
+      //       },
+      //       (error) => {
+      //         console.error('Error uploading file', error);
+      //       }
+      //     );
+      //   },
+      //   (error) => {
+      //     console.error('Error signing in', error);
+      //   }
+      // );
     } else {
       console.error('No file selected');
     }
   }
-  
-  
+
+
 }

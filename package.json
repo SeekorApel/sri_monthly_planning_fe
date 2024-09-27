@@ -57,6 +57,7 @@
     "rxjs": "^6.6.7",
     "select2": "^4.1.0-rc.0",
     "simple-line-icons": "^2.5.5",
+    "sweetalert2": "^11.10.6",
     "ts-helpers": "^1.1.2",
     "tslib": "^2.3.1",
     "xlsx": "^0.18.5",

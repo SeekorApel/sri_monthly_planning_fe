@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  apiUrlWebAdmin: 'http://server-wlsdev:7002/web_admin',
+  apiUrlWebAdmin: 'http://localhost:8080',
   apiUrlLocalAdmin: 'http://localhost:8080',
   //apiUrlLocalAdmin: 'http://server-wlsdev:7002/local_admin',
   // apiUrl: 'http://server-wlsdev:7005'

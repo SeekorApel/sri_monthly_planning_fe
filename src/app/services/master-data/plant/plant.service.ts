@@ -1,68 +1,92 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { IPlant } from 'src/app/models/Plant';
+import { Plant } from 'src/app/models/Plant';
 import { ApiResponse } from 'src/app/response/ApiResponse';
-import { tap } from 'rxjs/operators';
 import { throwError } from 'rxjs';
+import { environment } from 'src/environments/environment';
+import { map, catchError } from 'rxjs/operators';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class PlantService {
-  private baseUrl = 'http://localhost:8080';
-  private apiUrl = 'http://localhost:8080';
-
+  //Isi tokenya
+  token: String =
+    'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBdXJlbCIsImV4cCI6MTcyNzUwODEyMn0.S9gOlmvhNhzTRGIRlqWp-5GOQGofv7iS-9RS6H5Z2FLXrknKXHAT19JUqEpvCd0s8GozNzyDK4rc-e5fPkizAA';
 
   constructor(private http: HttpClient) {}
 
-  getAllPlant(): Observable<ApiResponse<IPlant[]>> {
-    return this.http.get<ApiResponse<IPlant[]>>(`${this.baseUrl}/getAllPlant`);
+  // Method untuk menambahkan header Authorization dengan token
+  private getHeaders() {
+    return new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+    });
   }
 
-//   getPlantById(id: number): Observable<DtoResponse> {
-//     return this.http.get<DtoResponse>(`${this.baseUrl}/getObatById/${id}`);
-//   }
-
-//   savePlant(obat: IObat): Observable<DtoResponse> {
-//     return this.http.post<DtoResponse>(`${this.baseUrl}/saveObat`, obat);
-//   }
-
-//   updatePlant(id: number, data: IObat): Observable<any> {
-//     const updatedData = { ...data, idObat: id }; // Menambahkan idObat ke dalam body
-//     return this.http.post<any>(`${this.apiUrl}/updateObat`, updatedData);
-//   }
-
-
-//   deletePlant(obat: { idObat: number }): Observable<ApiResponse<any>> {
-//     const url = `${this.apiUrl}/deleteObats`;
-//     return this.http.post<ApiResponse<any>>(url, obat);
-//   }
-
-signIn(userName: string, password: string): Observable<{ data: string }> {
-    return this.http.post<{ data: string }>(`${this.baseUrl}/signin`, {
-      userName,
-      password
-    }).pipe(
-      tap(response => {
-        // Store the token from the 'data' field in localStorage
-        localStorage.setItem('token', response.data);
-      })
+  getPlantById(idPlant: number): Observable<ApiResponse<Plant>> {
+    return this.http.get<ApiResponse<Plant>>(
+      environment.apiUrlWebAdmin + '/getPlantById/' + idPlant,
+      { headers: this.getHeaders() }
     );
   }
 
-  savePlantsExcelFile(formData: FormData): Observable<any> {
-    const token = localStorage.getItem('token'); // Retrieve the token
-    if (!token) {
-      console.error('Token is not available');
-      // Return an observable that emits an error
-      return throwError('Token is not available'); // Make sure to import throwError from 'rxjs'
-    }
+  getAllPlant(): Observable<ApiResponse<Plant[]>> {
+    return this.http.get<ApiResponse<Plant[]>>(
+      environment.apiUrlWebAdmin + '/getAllPlant',
+      { headers: this.getHeaders() }
+    );
+  }
 
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`
-    });
+  //Method Update plant
+  updatePlant(plant: Plant): Observable<ApiResponse<Plant>> {
+    return this.http
+      .post<ApiResponse<Plant>>(
+        environment.apiUrlWebAdmin + '/updatePlant',
+        plant,
+        { headers: this.getHeaders() } // Menyertakan header
+      )
+      .pipe(
+        map((response) => {
+          return response;
+        }),
+        catchError((err) => {
+          return throwError(err);
+        })
+      );
+  }
 
-    return this.http.post(`${this.baseUrl}/savePlantsExcel`, formData, { headers });
+  deletePlant(plant: Plant): Observable<ApiResponse<Plant>> {
+    return this.http
+      .post<ApiResponse<Plant>>(
+        environment.apiUrlWebAdmin + '/deletePlant',
+        plant,
+        { headers: this.getHeaders() }
+      )
+      .pipe(
+        map((response) => {
+          return response;
+        }),
+        catchError((err) => {
+          return throwError(err);
+        })
+      );
+  }
+
+  uploadFileExcel(file: FormData): Observable<ApiResponse<Plant>> {
+    return this.http
+      .post<ApiResponse<Plant>>(
+        environment.apiUrlWebAdmin + '/savePlantsExcel',
+        file,
+        { headers: this.getHeaders() }
+      )
+      .pipe(
+        map((response) => {
+          return response;
+        }),
+        catchError((err) => {
+          return throwError(err);
+        })
+      );
   }
 }
