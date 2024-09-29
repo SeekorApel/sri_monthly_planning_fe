@@ -140,7 +140,7 @@
             <div class="form-group row">
               <label class="col-md-3 col-form-label" for="month-input">Month And Year</label>
               <div class="col-md-9">
-                <input [disabled]="isDisable" class="form-control" id="may-2" type="month" [formControl]="monthControl2" (change)="onMonthChange($event, 2)"/>
+                <input [disabled]="isDisable" class="form-control" id="may-2" type="month" [formControl]="monthControl2" (change)="onMonthChange($event, 2)" />
               </div>
             </div>
             <div class="form-group row">
@@ -335,6 +335,11 @@
             </div>
           </form>
         </tab>
+        <div class="form-group row">
+          <div class="col-md-12 d-flex justify-content-end pr-5 pb-3">
+            <button type="submit" class="btn btn-success"><i class="cil-save"></i> Save</button>
+          </div>
+        </div>
       </tabset>
     </div>
   </div>
