@@ -9,6 +9,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { TransaksiRoutingModule } from './transaksi-routing.module';
 import { ViewMarketingOrderComponent } from './view-marketing-order/view-marketing-order.component';
 import { AddMarketingOrderComponent } from './add-marketing-order/add-marketing-order.component';
+import { TabsModule } from 'ngx-bootstrap/tabs';
 
 
 
@@ -25,6 +26,7 @@ import { AddMarketingOrderComponent } from './add-marketing-order/add-marketing-
     NgSelect2Module,
     JwPaginationModule,
     TransaksiRoutingModule,
+    TabsModule,
     ModalModule.forRoot(),
     ToastrModule.forRoot()
   ]

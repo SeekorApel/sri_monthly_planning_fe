@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Plant } from 'src/app/models/Plant';
 import { ApiResponse } from 'src/app/response/Response';
 import { PlantService } from 'src/app/services/master-data/plant/plant.service';
@@ -20,13 +21,18 @@ export class ViewPlantComponent implements OnInit {
   edtPlantObject: Plant = new Plant();
   isEditMode: boolean = false;
   file: File | null = null;
+  editPlantForm: FormGroup;
 
   // Pagination
   pageOfItems: Array<any>;
   pageSize: number = 5;
   totalPages: number = 5;
 
-  constructor(private plantService: PlantService) { }
+  constructor(private plantService: PlantService, private fb: FormBuilder) { 
+    this.editPlantForm = this.fb.group({
+      plantName: ['', Validators.required],
+    });
+  }
 
   ngOnInit(): void {
     this.getAllPlant();
@@ -68,6 +74,7 @@ export class ViewPlantComponent implements OnInit {
   }
 
   updatePlant(): void {
+    
     this.plantService.updatePlant(this.edtPlantObject).subscribe(
       (response) => {
         // SweetAlert setelah update berhasil

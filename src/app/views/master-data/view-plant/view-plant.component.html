@@ -64,20 +64,20 @@
         </button>
       </div>
       <div class="modal-body">
-        <!-- Form with validation -->
-        <form #addPlantForm="ngForm">
+        <!-- Form with Reactive Forms -->
+        <form [formGroup]="editPlantForm">
           <div class="form-group">
             <label for="plantName">Plant Name</label>
-            <input type="text" class="form-control" id="plantName" name="plantName" required [(ngModel)]="edtPlantObject.plant_NAME" #plantName="ngModel" [ngClass]="{ 'is-invalid': plantName.invalid && plantName.touched }" />
+            <input [(ngModel)]="edtPlantObject.plant_NAME" type="text" class="form-control" id="plantName" formControlName="plantName" [ngClass]="{ 'is-invalid': editPlantForm.get('plantName').invalid && editPlantForm.get('plantName').touched }" />
             <!-- Error message if plantName is empty -->
-            <div *ngIf="plantName.invalid && plantName.touched" class="invalid-feedback">Plant name is required.</div>
+            <div *ngIf="editPlantForm.get('plantName').invalid && editPlantForm.get('plantName').touched" class="invalid-feedback">Plant name is required.</div>
           </div>
         </form>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         <!-- Disable Update button if form is invalid -->
-        <button type="button" class="btn btn-primary" [disabled]="addPlantForm.invalid" (click)="updatePlant()">Update Plant</button>
+        <button type="button" class="btn btn-primary" [disabled]="editPlantForm.invalid" (click)="updatePlant()">Update Plant</button>
       </div>
     </div>
   </div>
