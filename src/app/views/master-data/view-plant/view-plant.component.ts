@@ -12,6 +12,7 @@ import * as XLSX from 'xlsx';
   styleUrls: ['./view-plant.component.scss'],
 })
 export class ViewPlantComponent implements OnInit {
+
   //Variable Declaration
   plants: Plant[] = [];
   searchText: string = '';
@@ -25,7 +26,7 @@ export class ViewPlantComponent implements OnInit {
   pageSize: number = 5;
   totalPages: number = 5;
 
-  constructor(private plantService: PlantService) {}
+  constructor(private plantService: PlantService) { }
 
   ngOnInit(): void {
     this.getAllPlant();
@@ -72,25 +73,18 @@ export class ViewPlantComponent implements OnInit {
         // SweetAlert setelah update berhasil
         Swal.fire({
           title: 'Success!',
-          text: 'Data Plant Berhasil di Update.',
+          text: 'Data plant successfully updated.',
           icon: 'success',
           confirmButtonText: 'OK',
         }).then((result) => {
           if (result.isConfirmed) {
-            // Refresh data plant setelah update
-            this.getAllPlant();
-            $('#editModal').modal('hide'); // Sembunyikan modal setelah update
+            $('#editModal').modal('hide');
+            window.location.reload();
           }
         });
       },
       (err) => {
-        // SweetAlert ketika gagal
-        Swal.fire(
-          'Error!',
-          'Terjadi Kesalahan dalam mengupdate data.',
-          'error'
-        );
-        console.error('Error updating plant:', err);
+        Swal.fire('Error!', 'Error updating data.', 'error');
       }
     );
   }
@@ -114,20 +108,21 @@ export class ViewPlantComponent implements OnInit {
 
   deleteData(plant: Plant): void {
     Swal.fire({
-      title: 'Apakah Anda yakin?',
-      text: 'Data plant ini akan dihapus!',
+      title: 'Are you sure?',
+      text: 'This data plant will be deleted!',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Ya',
-      cancelButtonText: 'Batal',
+      confirmButtonText: 'Yes',
+      cancelButtonText: 'No',
     }).then((result) => {
       if (result.isConfirmed) {
         this.plantService.deletePlant(plant).subscribe(
           (response) => {
-            Swal.fire('Terhapus!', 'Data plant telah dihapus.', 'success');
-            this.getAllPlant();
+            Swal.fire('Deleted!', 'Data plant has been deleted', 'success').then(() => {
+              window.location.reload();
+            });
           },
           (err) => {
             Swal.fire('Error!', 'Failed to delete the plant.', 'error');
@@ -136,6 +131,7 @@ export class ViewPlantComponent implements OnInit {
       }
     });
   }
+
 
   openModalUpload(): void {
     $('#uploadModal').modal('show');
@@ -148,23 +144,30 @@ export class ViewPlantComponent implements OnInit {
     link.click();
   }
 
-  ReadExcel(event: any) {
-    this.file = event.target.files[0];
-    let fileReader = new FileReader();
-    fileReader.readAsBinaryString(this.file as File);
-    fileReader.onload = (e) => {
-      var workbook = XLSX.read(fileReader.result, { type: 'binary' });
-      var sheetName = workbook.SheetNames[0];
-      var excelData = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
-    };
-  }
 
   onFileChange(event: Event) {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
-      this.file = input.files[0]; // Simpan file yang dipilih
+      const file = input.files[0];
+      const fileName = file.name.toLowerCase();
+
+      // Validasi ekstensi file
+      if (fileName.endsWith('.xls') || fileName.endsWith('.xlsx')) {
+        this.file = file; // Hanya simpan file jika ekstensi valid
+      } else {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Invalid File Type',
+          text: 'Please upload a valid Excel file (.xls or .xlsx).',
+          confirmButtonText: 'OK',
+        });
+        // Kosongkan file jika ekstensi tidak valid
+        this.file = null;
+        input.value = '';
+      }
     }
   }
+
 
   uploadFileExcel() {
     if (this.file) {
@@ -175,19 +178,20 @@ export class ViewPlantComponent implements OnInit {
         (response) => {
           Swal.fire({
             icon: 'success',
-            title: 'Berhasil!',
-            text: 'File Excel berhasil diunggah.',
+            title: 'Success!',
+            text: 'Excel file uploaded successfully.',
             confirmButtonText: 'OK',
           }).then(() => {
-            this.getAllPlant();
+            $('#editModal').modal('hide');
+            window.location.reload();
           });
         },
         (error) => {
           console.error('Error uploading file', error);
           Swal.fire({
             icon: 'error',
-            title: 'Gagal!',
-            text: 'Terjadi kesalahan saat mengunggah file.',
+            title: 'Failed!',
+            text: 'An error occurred while uploading the file.',
             confirmButtonText: 'OK',
           });
         }
@@ -195,8 +199,8 @@ export class ViewPlantComponent implements OnInit {
     } else {
       Swal.fire({
         icon: 'warning',
-        title: 'Peringatan!',
-        text: 'Silakan pilih file untuk diunggah.',
+        title: 'Warning!',
+        text: 'Please select a file to upload.',
         confirmButtonText: 'OK',
       });
     }

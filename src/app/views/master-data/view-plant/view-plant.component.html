@@ -19,7 +19,7 @@
             <i class="fa fa-download fa-lg"></i> Download Template
           </button>
           <button type="button" class="btn btn-success ml-2" data-toggle="modal" data-target="#uploadModal">
-            <i class="fa fa-file-excel-o fa-lg"></i> Export Excel
+            <i class="fa fa-file-excel-o fa-lg"></i> Upload Excel
           </button>
         </div>
       </div>
@@ -40,7 +40,7 @@
                       <td>{{ i + 1 }}</td>
                       <td>{{ plant.plant_ID }}</td>
                       <td>{{ plant.plant_NAME }}</td>
-                      <td>{{ plant.status }}</td>
+                      <td>{{ plant.status === 1 ? 'Active' : 'Deactive' }}</td>
                       <td>
                           <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(plant.plant_ID)">Update</button>
                           <button type="button" class="btn btn-md btn-danger ml-2" (click)="deleteData(plant)">Delete</button>
@@ -48,7 +48,6 @@
                   </tr>
               </tbody>
         </table>
-
           <!-- Pagination -->
           <nav>
               <ul class="pagination">
@@ -71,20 +70,43 @@
         </button>
       </div>
       <div class="modal-body">
+        <!-- Form with validation -->
         <form #addPlantForm="ngForm">
           <div class="form-group">
-            <label for="plantName">Nama Plant</label>
-            <input type="text" class="form-control" id="plantName" name="plantName" required [(ngModel)]="edtPlanObject.plant_NAME">
+            <label for="plantName">Plant Name</label>
+            <input 
+              type="text" 
+              class="form-control" 
+              id="plantName" 
+              name="plantName" 
+              required 
+              [(ngModel)]="edtPlanObject.plant_NAME" 
+              #plantName="ngModel"
+              [ngClass]="{'is-invalid': plantName.invalid && plantName.touched}">
+            
+            <!-- Error message if plantName is empty -->
+            <div *ngIf="plantName.invalid && plantName.touched" class="invalid-feedback">
+              Plant name is required.
+            </div>
           </div>
         </form>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" (click)="updatePlant()">Update Plant</button>
+        <!-- Disable Update button if form is invalid -->
+        <button 
+          type="button" 
+          class="btn btn-primary" 
+          [disabled]="addPlantForm.invalid" 
+          (click)="updatePlant()">
+          Update Plant
+        </button>
       </div>
     </div>
   </div>
 </div>
+
+
 
 <!-- Modal for Upload Excel -->
 <div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel" aria-hidden="true">
@@ -98,16 +120,9 @@
           </div>
           <div class="modal-body">
               <form id="uploadForm">
-                  <!-- Drop Zone -->
-                  <div class="drop-zone" id="drop-zone">
-                      <p>Drag & Drop your Excel file here or click to browse</p>
-                      <input type="file" id="fileInput" accept=".xls,.xlsx">
-                  </div>
-
                   <!-- Manual File Input -->
                   <div class="form-group mt-3">
-                      <label for="manualFileInput">Choose File Manually</label>
-                      <input type="file" class="form-control-file" id="manualFileInput" accept=".xls,.xlsx" (change)="ReadExcel($event)">
+                      <input type="file" class="form-control-file" id="manualFileInput" accept=".xls,.xlsx" (change)="onFileChange($event)">
                   </div>
               </form>
           </div>
