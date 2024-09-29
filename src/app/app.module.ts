@@ -50,7 +50,7 @@ import { JwtInterceptor } from './services/jwt.interceptor';
 import { ErrorInterceptor } from './services/error.interceptor';
 import { NgxSpinnerModule } from "ngx-spinner";
 import { JwPaginationModule } from 'jw-angular-pagination';
-import { ViewPlantComponent } from './views/master-data/view-plant/view-plant.component';
+import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 
 @NgModule({
   imports: [
@@ -74,7 +74,7 @@ import { ViewPlantComponent } from './views/master-data/view-plant/view-plant.co
     ModalModule.forRoot(),
     ToastrModule.forRoot(),
     NgxSpinnerModule,
-    JwPaginationModule
+    JwPaginationModule,
   ],
   declarations: [
     AppComponent,
