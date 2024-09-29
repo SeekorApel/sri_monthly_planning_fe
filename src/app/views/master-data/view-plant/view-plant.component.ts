@@ -17,7 +17,7 @@ export class ViewPlantComponent implements OnInit {
   plants: Plant[] = [];
   searchText: string = '';
   errorMessage: string | null = null;
-  edtPlanObject: Plant = new Plant();
+  edtPlantObject: Plant = new Plant();
   isEditMode: boolean = false;
   file: File | null = null;
 
@@ -68,7 +68,7 @@ export class ViewPlantComponent implements OnInit {
   }
 
   updatePlant(): void {
-    this.plantService.updatePlant(this.edtPlanObject).subscribe(
+    this.plantService.updatePlant(this.edtPlantObject).subscribe(
       (response) => {
         // SweetAlert setelah update berhasil
         Swal.fire({
@@ -98,7 +98,7 @@ export class ViewPlantComponent implements OnInit {
   getPlantById(idPlant: number): void {
     this.plantService.getPlantById(idPlant).subscribe(
       (response: ApiResponse<Plant>) => {
-        this.edtPlanObject = response.data;
+        this.edtPlantObject = response.data;
       },
       (error) => {
         this.errorMessage = 'Failed to load plants: ' + error.message;
