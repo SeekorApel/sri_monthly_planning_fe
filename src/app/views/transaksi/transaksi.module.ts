@@ -10,13 +10,17 @@ import { TransaksiRoutingModule } from './transaksi-routing.module';
 import { ViewMarketingOrderComponent } from './view-marketing-order/view-marketing-order.component';
 import { AddMarketingOrderComponent } from './add-marketing-order/add-marketing-order.component';
 import { TabsModule } from 'ngx-bootstrap/tabs';
+import { ViewMonthlyPlanningComponent } from './view-monthly-planning/view-monthly-planning.component';
+import { AddMonthlyPlanningComponent } from './add-monthly-planning/add-monthly-planning.component';
 
 
 
 @NgModule({
   declarations: [
     ViewMarketingOrderComponent,
-    AddMarketingOrderComponent
+    AddMarketingOrderComponent,
+    ViewMonthlyPlanningComponent,
+    AddMonthlyPlanningComponent
   ],
   imports: [
     CommonModule,

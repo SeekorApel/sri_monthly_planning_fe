@@ -32,6 +32,8 @@ import { ViewMaxCapacityComponent } from './views/master-data/view-max-capacity/
 import { ViewCuringMachineComponent } from './views/master-data/view-curing-machine/view-curing-machine.component';
 import { ViewItemCuringComponent } from './views/master-data/view-item-curing/view-item-curing.component';
 import { ViewTassSizeComponent } from './views/master-data/view-tass-size/view-tass-size.component';
+import { ViewMonthlyPlanningComponent } from './views/transaksi/view-monthly-planning/view-monthly-planning.component';
+import { AddMonthlyPlanningComponent } from './views/transaksi/add-monthly-planning/add-monthly-planning.component';
 export const routes: Routes = [
   {
     path: '',
@@ -250,6 +252,20 @@ export const routes: Routes = [
         component: ViewDeliveryScheduleComponent,
         data: {
           title: 'Master Data / View Delivery Schedule',
+        },
+      },
+      {
+        path: 'transaksi/view-monthly-planning',
+        component: ViewMonthlyPlanningComponent,
+        data: {
+          title: 'Transaksi / View Monthly Planning',
+        },
+      },
+      {
+        path: 'transaksi/add-monthly-planning',
+        component: AddMonthlyPlanningComponent,
+        data: {
+          title: 'Transaksi / Add Monthly Planning',
         },
       },
       {

@@ -56,7 +56,8 @@ export class DefaultLayoutComponent {
 
 
     this.csTrx = [
-      { name: 'Marketing Order', url: '/transaksi/view-marketing-order', icon: 'cil-minus' }
+      { name: 'Marketing Order', url: '/transaksi/view-marketing-order', icon: 'cil-minus' },
+      { name: 'Monthly Planning', url: '/transaksi/view-monthly-planning', icon: 'cil-minus' },
     ];
   }
 

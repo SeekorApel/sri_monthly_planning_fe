@@ -1,0 +1,209 @@
+<div class="animated fadeIn">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-header">
+        <strong>Add Header Monthly Palnning</strong>
+      </div>
+      <div class="card-body">
+        <form id="formHeaderMp" class="form form-horizontal">
+          <div class="form-group row">
+            <label class="col-md-3 col-form-label" for="month-input">Month</label>
+            <div class="col-md-9">
+              <input class="form-control" id="month_1" type="month" />
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-md-3 col-form-label" for="text-input">Revision</label>
+            <div class="col-md-9">
+              <input type="number" id="revision" name="text-input" class="form-control" placeholder="1,2,3..." />
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-md-3 col-form-label" for="text-input">Kadept</label>
+            <div class="col-md-9">
+              <input type="text" id="kadept" maxlength="5" name="text-input" class="form-control" />
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-md-3 col-form-label" for="text-input">Kassie pp</label>
+            <div class="col-md-9">
+              <input type="text" id="kassie-pp" maxlength="5" name="text-input" class="form-control" />
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-md-3 col-form-label" for="text-input">Workday</label>
+            <div class="col-md-9">
+              <input type="number" id="workday" name="text-input" class="form-control" placeholder="1,2,3..." />
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-md-3 col-form-label" for="text-input">Overtime</label>
+            <div class="col-md-9">
+              <input type="number" id="overtime" name="text-input" class="form-control" placeholder="1,2,3..." />
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-md-3 col-form-label">Month of</label>
+            <div class="col-md-9">
+              <input class="form-control" id="month-of" type="month" placeholder="month" />
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-md-3 col-form-label" for="text-input">Section</label>
+            <div class="col-md-9">
+              <input type="text" id="section" maxlength="10" name="text-input" class="form-control" />
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-md-3 col-form-label">Issue Date</label>
+            <div class="col-md-9">
+              <input class="form-control" id="issue-date" type="date" placeholder="date" />
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Table Marketing Order -->
+    <div class="card">
+      <div class="card-header">
+        <strong>&nbsp;Marketing Order</strong>
+      </div>
+      <div class="card-body">
+        <div class="d-flex justify-content-between mb-3">
+          <div class="d-flex">
+            <input type="text" id="searchInput" placeholder="Search..." class="form-control" style="width: 250px; display: inline" />
+            <button class="btn btn-primary ml-2" id="searchButton">Search</button>
+          </div>
+        </div>
+        <div class="table-responsive">
+          <table class="table table-bordered table-striped table-sm">
+            <thead>
+              <tr align="center">
+                <th class="align-middle">
+                  <!-- Checkbox untuk Select All -->
+                  <input type="checkbox" (change)="selectAll($event)" />
+                </th>
+                <th class="align-middle">No</th>
+                <th class="align-middle">Marketing Order ID</th>
+                <th class="align-middle">Type</th>
+                <th class="align-middle">Date</th>
+                <th class="align-middle">Revision</th>
+                <th class="align-middle">Month 1</th>
+                <th class="align-middle">Month 2</th>
+                <th class="align-middle">Month 3</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let order of marketingOrders; let i = index" align="center">
+                <td>
+                  <!-- Checkbox di setiap baris -->
+                  <input type="checkbox" [(ngModel)]="order.selected" />
+                </td>
+                <td>{{ order.no }}</td>
+                <td>{{ order.orderId }}</td>
+                <td>{{ order.type }}</td>
+                <td>{{ order.date }}</td>
+                <td>{{ order.revision }}</td>
+                <td>{{ order.month1 }}</td>
+                <td>{{ order.month2 }}</td>
+                <td>{{ order.month3 }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <strong>Table Detail Monthly Palnning</strong>
+      </div>
+      <div class="card-body">
+        <tabset>
+          <tab heading="TASS">
+            <div class="table-responsive">
+              <table class="table table-bordered table-striped table-sm">
+                <thead>
+                  <tr align="center">
+                    <th class="align-middle">
+                      <!-- Checkbox untuk Select All -->
+                      <input type="checkbox" (change)="selectAll($event)" />
+                    </th>
+                    <th class="align-middle">No</th>
+                    <th class="align-middle">Marketing Order ID</th>
+                    <th class="align-middle">Type</th>
+                    <th class="align-middle">Date</th>
+                    <th class="align-middle">Revision</th>
+                    <th class="align-middle">Month 1</th>
+                    <th class="align-middle">Month 2</th>
+                    <th class="align-middle">Month 3</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let order of marketingOrders; let i = index" align="center">
+                    <td>
+                      <!-- Checkbox di setiap baris -->
+                      <input type="checkbox" [(ngModel)]="order.selected" />
+                    </td>
+                    <td>{{ order.no }}</td>
+                    <td>{{ order.orderId }}</td>
+                    <td>{{ order.type }}</td>
+                    <td>{{ order.date }}</td>
+                    <td>{{ order.revision }}</td>
+                    <td>{{ order.month1 }}</td>
+                    <td>{{ order.month2 }}</td>
+                    <td>{{ order.month3 }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </tab>
+          <tab heading="CURRING">
+            <div class="table-responsive">
+              <table class="table table-bordered table-striped table-sm">
+                <thead>
+                  <tr align="center">
+                    <th class="align-middle">
+                      <!-- Checkbox untuk Select All -->
+                      <input type="checkbox" (change)="selectAll($event)" />
+                    </th>
+                    <th class="align-middle">No</th>
+                    <th class="align-middle">Marketing Order ID</th>
+                    <th class="align-middle">Type</th>
+                    <th class="align-middle">Date</th>
+                    <th class="align-middle">Revision</th>
+                    <th class="align-middle">Month 1</th>
+                    <th class="align-middle">Month 2</th>
+                    <th class="align-middle">Month 3</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let order of marketingOrders; let i = index" align="center">
+                    <td>
+                      <!-- Checkbox di setiap baris -->
+                      <input type="checkbox" [(ngModel)]="order.selected" />
+                    </td>
+                    <td>{{ order.no }}</td>
+                    <td>{{ order.orderId }}</td>
+                    <td>{{ order.type }}</td>
+                    <td>{{ order.date }}</td>
+                    <td>{{ order.revision }}</td>
+                    <td>{{ order.month1 }}</td>
+                    <td>{{ order.month2 }}</td>
+                    <td>{{ order.month3 }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </tab>
+        </tabset>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-12 pb-4">
+    <button (click)="navigateToViewMp()" class="btn btn-primary justify-content-start mr-2">Kembali</button>
+    <button type="submit" class="btn btn-success">Submit</button>
+  </div>
+</div>
