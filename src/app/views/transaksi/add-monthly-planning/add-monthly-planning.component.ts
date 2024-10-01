@@ -7,7 +7,10 @@ import { Router } from '@angular/router';
   styleUrls: ['./add-monthly-planning.component.scss'],
 })
 export class AddMonthlyPlanningComponent implements OnInit {
-  monthlyPlannings: any[] = [];
+  // Variable declaration
+  currentMonthDays: { date: number; isSunday: boolean; isOvertime: boolean; randomNumber: number }[] = [];
+  monthlyPlanningsTass: any[] = [];
+  monthlyPlanningsCurring: any[] = [];
   marketingOrders: any[] = [];
 
   constructor(private router: Router) {}
@@ -21,16 +24,51 @@ export class AddMonthlyPlanningComponent implements OnInit {
       { no: 5, orderId: 'MO-005', type: 'FED', date: '2024-09-10', revision: 1, month1: 'AUG', month2: 'SEP', month3: 'OCT' },
     ];
 
-    console.log(this.marketingOrders);
+    this.monthlyPlanningsTass = [{ no: 1, partNumber: 1030304034035, size: 'FED TR TT 2.50-17', pattern: 'FF 135F' }];
+
+    this.generateCurrentMonthDays();
   }
 
   selectAll(event: any) {
     const checked = event.target.checked;
-    this.marketingOrders.forEach(order => {
+    this.marketingOrders.forEach((order) => {
       order.selected = checked;
     });
   }
 
+  // Method untuk mendapatkan hari dalam bulan ini dan menandai hari Minggu serta hari lembur
+  generateCurrentMonthDays() {
+    const date = new Date();
+    const year = date.getFullYear();
+    const month = date.getMonth(); // Bulan saat ini (0 = Januari, 11 = Desember)
+    const daysInMonth = new Date(year, month + 1, 0).getDate(); // Dapatkan jumlah hari dalam bulan
+
+    this.currentMonthDays = [];
+
+    for (let i = 1; i <= daysInMonth; i++) {
+      const currentDay = new Date(year, month, i);
+      const isSunday = currentDay.getDay() === 0; // 0 berarti Minggu
+      const randomNumber = Math.floor(Math.random() * 100); // Angka acak antara 0 dan 99
+      this.currentMonthDays.push({ date: i, isSunday, isOvertime: false, randomNumber });
+    }
+
+    // Pilih 5 hari acak untuk lembur
+    this.assignRandomOvertimeDays();
+  }
+
+  // Method untuk memilih 5 hari lembur secara acak
+  assignRandomOvertimeDays() {
+    const selectedDays = new Set<number>();
+    while (selectedDays.size < 5) {
+      const randomDay = Math.floor(Math.random() * this.currentMonthDays.length);
+      selectedDays.add(randomDay);
+    }
+
+    // Tandai hari lembur
+    selectedDays.forEach((dayIndex) => {
+      this.currentMonthDays[dayIndex].isOvertime = true; // Tandai hari lembur
+    });
+  }
 
   navigateToViewMp() {
     this.router.navigate(['/transaksi/view-monthly-planning']);
