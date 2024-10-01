@@ -1,4 +1,4 @@
-.sunday-header {
+.off-header {
   background-color: red;
   color: white;
 }
@@ -6,5 +6,13 @@
 .overtime-header {
   background-color: green;
   color: white;
+}
+
+.hoverable {
+  cursor: pointer; /* Mengubah kursor menjadi pointer */
+}
+
+.hoverable:hover {
+  background-color: #f0f0f0; /* Mengubah warna latar belakang saat hover */
 }
 
