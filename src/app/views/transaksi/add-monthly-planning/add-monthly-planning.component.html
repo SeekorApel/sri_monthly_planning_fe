@@ -236,7 +236,7 @@
   </div>
 </div>
 
-<!-- Modal edit -->
+<!-- Modal Detail Daily -->
 <div class="modal fade" id="dmpModal" tabindex="-1" role="dialog" aria-labelledby="Detail Daily Monthly Planning" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -248,9 +248,25 @@
       </div>
       <div class="modal-body">
         <form>
-          <div class="form-group">
+          <!-- <div class="form-group">
             <label for="idDetailDaily">ID Detail Daily:</label>
             <input type="text" id="idDetailDaily" class="form-control" [value]="selectedDetail?.idDetailDaily" readonly />
+          </div> -->
+          <div class="form-group">
+            <label for="countProduction">Shift 1:</label>
+            <input type="text" id="countProduction" class="form-control" [value]="10" readonly />
+          </div>
+          <div class="form-group">
+            <label for="countProduction">Shift 2:</label>
+            <input type="text" id="countProduction" class="form-control" [value]="90" readonly />
+          </div>
+          <div class="form-group">
+            <label for="countProduction">Shift 3:</label>
+            <input type="text" id="countProduction" class="form-control" [value]="800" readonly />
+          </div>
+          <div class="form-group">
+            <label for="countProduction">Machine:</label>
+            <input type="text" id="countProduction" class="form-control" value="CURING AB 4 ST CHOP GD B NO.004" readonly />
           </div>
           <div class="form-group">
             <label for="countProduction">Count Production:</label>

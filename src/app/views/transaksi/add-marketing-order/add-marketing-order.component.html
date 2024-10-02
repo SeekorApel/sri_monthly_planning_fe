@@ -1,5 +1,5 @@
 <div class="animated fadeIn">
-  <!-- Name Header -->
+  <!-- Header Mo -->
   <div class="col-md-12">
     <div class="card">
       <div class="card-header">
@@ -30,8 +30,7 @@
           <div class="form-group row">
             <label class="col-md-3 col-form-label" for="text-input">Revision</label>
             <div class="col-md-9">
-              <input type="number" id="revision" formControlName="revision" class="form-control" [ngClass]="{ 'is-invalid': formHeaderMo.get('revision')?.invalid && formHeaderMo.get('revision')?.touched }" placeholder="1,2,3....." />
-              <div *ngIf="formHeaderMo.get('revision')?.invalid && formHeaderMo.get('revision')?.touched" class="invalid-feedback">Revision is required.</div>
+              <input type="number" id="revision" formControlName="revision" class="form-control" placeholder="1,2,3....." />
             </div>
           </div>
 
@@ -336,6 +335,51 @@
       </div>
       <div class="col-md-12 d-flex justify-content-end pb-4">
         <button (click)="saveHeaderMo()" type="submit" class="btn btn-success"><i class="fa fa-save"></i> Save</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-header">
+        <strong>Marketing Order</strong>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-bordered table-striped table-sm">
+            <thead>
+              <!-- Head Header -->
+              <tr align="center">
+                <th rowspan="2" class="align-middle">No</th>
+                <th rowspan="2" style="min-width: 150px" class="align-middle">Category</th>
+                <th rowspan="2" style="min-width: 150px" class="align-middle">Item</th>
+                <th rowspan="2" style="min-width: 350px" class="align-middle">Description</th>
+                <th rowspan="2" style="min-width: 120px" class="align-middle">Type Machine</th>
+                <th rowspan="2" style="min-width: 150px" class="align-middle">Capacity 99,5%</th>
+                <th rowspan="2" style="min-width: 150px" class="align-middle">Quantity Mould</th>
+                <th rowspan="2" style="min-width: 150px" class="align-middle">Quantity Per Rak</th>
+                <th rowspan="2" style="min-width: 150px" class="align-middle">Minimal Order</th>
+                <th colspan="3" style="min-width: 300px" class="align-middle">Maximum Capacity</th>
+                <th rowspan="2" style="min-width: 150px" class="align-middle">Initial Stock</th>
+                <th colspan="3" style="min-width: 300px" class="align-middle">Sales Forcast</th>
+                <th colspan="3" style="min-width: 300px" class="align-middle">Marketing Order</th>
+              </tr>
+
+              <!-- Child Header -->
+              <tr align="center">
+                <th class="align-middle">AUG</th>
+                <th class="align-middle">SEP</th>
+                <th class="align-middle">OCT</th>
+                <th class="align-middle">AUG</th>
+                <th class="align-middle">SEP</th>
+                <th class="align-middle">OCT</th>
+                <th class="align-middle">AUG</th>
+                <th class="align-middle">SEP</th>
+                <th class="align-middle">OCT</th>
+              </tr>
+            </thead>
+          </table>
+        </div>
       </div>
     </div>
   </div>

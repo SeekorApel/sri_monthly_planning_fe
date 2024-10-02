@@ -24,7 +24,7 @@ export class AddMarketingOrderComponent implements OnInit {
     this.formHeaderMo = this.fb.group({
       date: ['', Validators.required],
       type: ['', Validators.required],
-      revision: ['', Validators.required],
+      revision: ['', []],
       month_1: ['', Validators.required],
       month_2: ['', []],
       month_3: ['', []],
@@ -98,16 +98,16 @@ export class AddMarketingOrderComponent implements OnInit {
     const nwd = this.formHeaderMo.get(`nwd_${month}`)?.value || 0;
     const tlOtWd = this.formHeaderMo.get(`tl_ot_wd_${month}`)?.value || 0;
     const ttOtWd = this.formHeaderMo.get(`tt_ot_wd_${month}`)?.value || 0;
-  
+
     // Hitung total
     const totalTlWd = parseFloat(nwd) + parseFloat(tlOtWd);
     const totalTtWd = parseFloat(nwd) + parseFloat(ttOtWd);
-  
+
     // Mengatur nilai dengan dua angka di belakang koma
     this.formHeaderMo.patchValue({ [`total_tlwd_${month}`]: totalTlWd.toFixed(2) });
     this.formHeaderMo.patchValue({ [`total_ttwd_${month}`]: totalTtWd.toFixed(2) });
   }
-  
+
 
   disabledField() {
     this.formHeaderMo.get('month_2').disable();
