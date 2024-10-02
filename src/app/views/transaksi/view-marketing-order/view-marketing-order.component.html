@@ -1,51 +1,59 @@
 <div class="animated fadeIn">
-    <div class="col-md-12">
-      <div class="card">
-        <div class="card-header">
-          <strong>&nbsp;Marketing Order</strong>
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-header">
+        <strong>&nbsp;Marketing Order</strong>
+      </div>
+      <div class="card-body">
+        <div class="d-flex justify-content-between mb-3">
+          <div class="d-flex align-items-center">
+            <input type="text" class="form-control col-md-12 col-lg-12" [(ngModel)]="searchText" (input)="onSearchChange()" placeholder="Find here..." />
+            <button type="submit" class="btn btn-primary ml-2" (click)="resetSearch()">Reset</button>
+          </div>
+          <button class="btn btn-success" (click)="navigateToAdd()" id="addButton">Add</button>
         </div>
-        <div class="card-body">
-          <div class="d-flex justify-content-between mb-3">
-            <div class="d-flex">
-              <input type="text" id="searchInput" placeholder="Search..." class="form-control" style="width: auto; display: inline;">
-              <button class="btn btn-primary ml-2" id="searchButton">Search</button>
-            </div>
-            <button class="btn btn-success" (click)="navigateToAdd()" id="addButton">Add</button>
-          </div>
-          <div class="table-responsive">
-            <table class="table table-bordered table-striped table-sm">
-              <thead>
-                <tr align="center">
-                  <th class="align-middle">No</th>
-                  <th class="align-middle">Marketing Order ID</th>
-                  <th class="align-middle">Type</th>
-                  <th class="align-middle">Date</th>
-                  <th class="align-middle">Revision</th>
-                  <th class="align-middle">Month 1</th>
-                  <th class="align-middle">Month 2</th>
-                  <th class="align-middle">Month 3</th>
-                  <th class="align-middle">Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr *ngFor="let order of marketingOrders; let i = index" align="center">
-                  <td>{{ order.no }}</td>
-                  <td>{{ order.orderId }}</td>
-                  <td>{{ order.type }}</td>
-                  <td>{{ order.date }}</td>
-                  <td>{{ order.revision }}</td>
-                  <td>{{ order.month1 }}</td>
-                  <td>{{ order.month2 }}</td>
-                  <td>{{ order.month3 }}</td>
-                  <td>
-                    <button class="btn btn-warning btn-sm">Detail</button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+
+        <!-- Table -->
+        <div class="table-responsive">
+          <table class="table table-bordered table-striped table-sm">
+            <thead>
+              <tr align="center">
+                <th class="align-middle">No</th>
+                <th class="align-middle">Marketing Order ID</th>
+                <th class="align-middle">Type</th>
+                <th class="align-middle">Date</th>
+                <th class="align-middle">Revision</th>
+                <th class="align-middle">Month 1</th>
+                <th class="align-middle">Month 2</th>
+                <th class="align-middle">Month 3</th>
+                <th class="align-middle">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let mo of marketingOrders; let i = index" align="center">
+                <td>{{ i + 1 }}</td>
+                <td>{{ mo.mo_ID }}</td>
+                <td>{{ mo.type }}</td>
+                <td>{{ dateUtil.parseFullDate(mo.date) }}</td>
+                <td>{{ mo.revision }}</td>
+                <td>{{ dateUtil.parseMonthYear(mo.month_0) }}</td>
+                <td>{{ dateUtil.parseMonthYear(mo.month_1) }}</td>
+                <td>{{ dateUtil.parseMonthYear(mo.month_2) }}</td>
+                <td>
+                  <button class="btn btn-warning btn-sm">Detail</button>
+                </td>
+              </tr>
+            </tbody>
+
+          </table>
+          <!-- Pagination -->
+          <nav>
+            <ul class="pagination">
+              <jw-pagination [items]="marketingOrders" [pageSize]="pageSize" [maxPages]="totalPages" (changePage)="onChangePage($event)"> </jw-pagination>
+            </ul>
+          </nav>
         </div>
       </div>
     </div>
+  </div>
 </div>
-  

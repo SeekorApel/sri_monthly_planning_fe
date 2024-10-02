@@ -40,7 +40,7 @@
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="month-input">Month And Year</label>
                 <div class="col-md-9">
-                  <input class="form-control" formControlName="month_1" type="month" [formControl]="monthControl" (change)="onMonthChange($event, 1)" />
+                  <input class="form-control" formControlName="month_1" type="month" />
                 </div>
               </div>
               <div class="form-group row">
@@ -64,13 +64,13 @@
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="text-input">Total TL Tire Working Day</label>
                 <div class="col-md-9">
-                  <input [disabled]="isDisable" formControlName="total_tlwd_1" type="number" name="text-input" class="form-control" placeholder="0,00" />
+                  <input formControlName="total_tlwd_1" type="number" name="text-input" class="form-control" placeholder="0,00" />
                 </div>
               </div>
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="text-input">Total TT Tire Working Day</label>
                 <div class="col-md-9">
-                  <input [disabled]="isDisable" formControlName="total_ttwd_1" type="number" name="text-input" class="form-control" placeholder="0,00" />
+                  <input formControlName="total_ttwd_1" type="number" name="text-input" class="form-control" placeholder="0,00" />
                 </div>
               </div>
               <div class="form-group row">
@@ -91,54 +91,12 @@
                   <input type="number" formControlName="max_capa_tt_1" name="text-input" class="form-control" placeholder="0,00" />
                 </div>
               </div>
-              <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="text-input">Looping</label>
-                <div class="col-md-9">
-                  <input type="number" formControlName="looping_1" name="text-input" class="form-control" placeholder="0,00" />
-                </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="text-input">Airbag Machine</label>
-                <div class="col-md-9">
-                  <input type="number" formControlName="m_airbag_1" name="text-input" class="form-control" placeholder="0,00" />
-                </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="text-input">FDR TR TL</label>
-                <div class="col-md-9">
-                  <input type="number" formControlName="fdr_tl_1" name="text-input" class="form-control" placeholder="0,00" />
-                </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="text-input">FDR TR TT</label>
-                <div class="col-md-9">
-                  <input type="number" formControlName="fdr_tt_1" name="text-input" class="form-control" placeholder="0,00" />
-                </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="text-input">Total Marketing Order</label>
-                <div class="col-md-9">
-                  <input type="number" formControlName="total_mo_1" name="text-input" class="form-control" placeholder="0,00" />
-                </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="text-input">% FDR TL</label>
-                <div class="col-md-9">
-                  <input type="number" formControlName="p_fdr_tl_1" name="text-input" class="form-control" placeholder="0,00" />
-                </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="text-input">% FDR TT</label>
-                <div class="col-md-9">
-                  <input type="number" formControlName="p_fdr_tt_1" name="text-input" class="form-control" placeholder="0,00" />
-                </div>
-              </div>
             </tab>
             <tab heading="Month 2">
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="month-input">Month And Year</label>
                 <div class="col-md-9">
-                  <input class="form-control" formControlName="month_2" type="month" [formControl]="monthControl2" (change)="onMonthChange($event, 2)" />
+                  <input class="form-control" formControlName="month_2" type="month" />
                 </div>
               </div>
               <div class="form-group row">
@@ -162,13 +120,13 @@
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="text-input">Total TL Tire Working Day</label>
                 <div class="col-md-9">
-                  <input [disabled]="isDisable" formControlName="total_tlwd_2" type="number" name="text-input" class="form-control" placeholder="0,00" />
+                  <input formControlName="total_tlwd_2" type="number" name="text-input" class="form-control" placeholder="0,00" />
                 </div>
               </div>
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="text-input">Total TT Tire Working Day</label>
                 <div class="col-md-9">
-                  <input [disabled]="isDisable" formControlName="total_ttwd_2" type="number" name="text-input" class="form-control" placeholder="0,00" />
+                  <input formControlName="total_ttwd_2" type="number" name="text-input" class="form-control" placeholder="0,00" />
                 </div>
               </div>
               <div class="form-group row">
@@ -189,54 +147,12 @@
                   <input type="number" formControlName="max_capa_tt_2" name="text-input" class="form-control" placeholder="0,00" />
                 </div>
               </div>
-              <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="text-input">Looping</label>
-                <div class="col-md-9">
-                  <input type="number" formControlName="looping_2" name="text-input" class="form-control" placeholder="0,00" />
-                </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="text-input">Airbag Machine</label>
-                <div class="col-md-9">
-                  <input type="number" formControlName="m_airbag_2" name="text-input" class="form-control" placeholder="0,00" />
-                </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="text-input">FDR TR TL</label>
-                <div class="col-md-9">
-                  <input type="number" formControlName="fdr_tl_2" name="text-input" class="form-control" placeholder="0,00" />
-                </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="text-input">FDR TR TT</label>
-                <div class="col-md-9">
-                  <input type="number" formControlName="fdr_tt_2" name="text-input" class="form-control" placeholder="0,00" />
-                </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="text-input">Total Marketing Order</label>
-                <div class="col-md-9">
-                  <input type="number" formControlName="total_mo_2" name="text-input" class="form-control" placeholder="0,00" />
-                </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="text-input">% FDR TL</label>
-                <div class="col-md-9">
-                  <input type="number" formControlName="p_fdr_tl_2" name="text-input" class="form-control" placeholder="0,00" />
-                </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="text-input">% FDR TT</label>
-                <div class="col-md-9">
-                  <input type="number" formControlName="p_fdr_tt_2" name="text-input" class="form-control" placeholder="0,00" />
-                </div>
-              </div>
             </tab>
             <tab heading="Month 3">
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="month-input">Month And Year</label>
                 <div class="col-md-9">
-                  <input class="form-control" formControlName="month_3" type="month" [formControl]="monthControl3" (change)="onMonthChange($event, 3)" />
+                  <input class="form-control" formControlName="month_3" type="month" />
                 </div>
               </div>
               <div class="form-group row">
@@ -260,13 +176,13 @@
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="text-input">Total TL Tire Working Day</label>
                 <div class="col-md-9">
-                  <input [disabled]="isDisable" formControlName="total_tlwd_3" type="number" name="text-input" class="form-control" placeholder="0,00" />
+                  <input formControlName="total_tlwd_3" type="number" name="text-input" class="form-control" placeholder="0,00" />
                 </div>
               </div>
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="text-input">Total TT Tire Working Day</label>
                 <div class="col-md-9">
-                  <input [disabled]="isDisable" formControlName="total_ttwd_3" type="number" name="text-input" class="form-control" placeholder="0,00" />
+                  <input formControlName="total_ttwd_3" type="number" name="text-input" class="form-control" placeholder="0,00" />
                 </div>
               </div>
               <div class="form-group row">
@@ -285,48 +201,6 @@
                 <label class="col-md-3 col-form-label" for="text-input">Maximum Capacity Tire TT</label>
                 <div class="col-md-9">
                   <input type="number" formControlName="max_capa_tt_3" name="text-input" class="form-control" placeholder="0,00" />
-                </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="text-input">Looping</label>
-                <div class="col-md-9">
-                  <input type="number" formControlName="looping_3" name="text-input" class="form-control" placeholder="0,00" />
-                </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="text-input">Airbag Machine</label>
-                <div class="col-md-9">
-                  <input type="number" formControlName="m_airbag_3" name="text-input" class="form-control" placeholder="0,00" />
-                </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="text-input">FDR TR TL</label>
-                <div class="col-md-9">
-                  <input type="number" formControlName="fdr_tl_3" name="text-input" class="form-control" placeholder="0,00" />
-                </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="text-input">FDR TR TT</label>
-                <div class="col-md-9">
-                  <input type="number" formControlName="fdr_tt_3" name="text-input" class="form-control" placeholder="0,00" />
-                </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="text-input">Total Marketing Order</label>
-                <div class="col-md-9">
-                  <input type="number" formControlName="total_mo_3" name="text-input" class="form-control" placeholder="0,00" />
-                </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="text-input">% FDR TL</label>
-                <div class="col-md-9">
-                  <input type="number" formControlName="p_fdr_tl_3" name="text-input" class="form-control" placeholder="0,00" />
-                </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="text-input">% FDR TT</label>
-                <div class="col-md-9">
-                  <input type="number" formControlName="p_fdr_tt_3" name="text-input" class="form-control" placeholder="0,00" />
                 </div>
               </div>
             </tab>
