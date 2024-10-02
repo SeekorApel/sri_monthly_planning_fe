@@ -1,10 +1,5 @@
-export interface ApiResponse<T> {
-  message?: string;
-  data: T;
-}
-
-export interface IProduct {
-  part_number?: number;
+export class IProduct {
+  part_number: number;
   item: string;
   patrern_id: string;
   size: number;
