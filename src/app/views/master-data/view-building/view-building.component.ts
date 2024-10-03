@@ -1,90 +1,216 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Building } from 'src/app/models/Building';
+import { ApiResponse } from 'src/app/response/Response';
 import { BuildingService } from 'src/app/services/master-data/building/building.service';
+import Swal from 'sweetalert2';
+declare var $: any;
 import * as XLSX from 'xlsx';
+
 @Component({
   selector: 'app-view-building',
   templateUrl: './view-building.component.html',
-  styleUrls: ['./view-building.component.scss']
+  styleUrls: ['./view-building.component.scss'],
 })
 export class ViewBuildingComponent implements OnInit {
-  loginForm: FormGroup;
-  loading = false;
-  buildingList: any[] = [];
+
+  //Variable Declaration
+  buildings: Building[] = [];
+  searchText: string = '';
+  errorMessage: string | null = null;
+  edtBuildingObject: Building = new Building();
+  isEditMode: boolean = false;
   file: File | null = null;
-  constructor(
-    private formBuilder: FormBuilder,
-    private router: Router,
-    private buildingService: BuildingService // Inject PlantService
-  ) { }
+  editBuildingForm: FormGroup;
+
+  // Pagination
+  pageOfItems: Array<any>;
+  pageSize: number = 5;
+  totalPages: number = 5;
+
+  constructor(private buildingService: BuildingService, private fb: FormBuilder) { 
+    this.editBuildingForm = this.fb.group({
+      plantID: ['', Validators.required],
+      buildingName: ['', Validators.required],
+    });
+  }
+
   ngOnInit(): void {
+    this.getAllBuilding();
   }
-  onDragOver(event: DragEvent) {
-    event.preventDefault(); // Mencegah default behavior
-}
 
-onDrop(event: DragEvent) {
-    event.preventDefault();
-    const files = event.dataTransfer?.files;
-    if (files.length > 0) {
-        this.file = files[0];
-        this.ReadExcel({ target: { files } }); // Panggil ReadExcel dengan file yang di-drop
+  getAllBuilding(): void {
+    this.buildingService.getAllBuilding().subscribe(
+      (response: ApiResponse<Building[]>) => {
+        this.buildings = response.data;
+        this.onChangePage(this.buildings.slice(0, this.pageSize));
+      },
+      (error) => {
+        this.errorMessage = 'Failed to load buildings: ' + error.message;
+      }
+    );
+  }
+
+  onChangePage(pageOfItems: Array<any>) {
+    this.pageOfItems = pageOfItems;
+  }
+
+  onSearchChange(): void {
+    // Lakukan filter berdasarkan nama plant yang mengandung text pencarian (case-insensitive)
+    const filteredBuildings = this.buildings.filter(
+      (building) =>
+        building.plant_ID.toString()
+          .toLowerCase()
+          .includes(this.searchText.toLowerCase()) ||
+        building.building_NAME.toString().includes(this.searchText)
+    );
+
+    // Tampilkan hasil filter pada halaman pertama
+    this.onChangePage(filteredBuildings.slice(0, this.pageSize));
+  }
+
+  resetSearch(): void {
+    this.searchText = '';
+    this.onChangePage(this.buildings.slice(0, this.pageSize));
+  }
+
+  updateBuilding(): void {
+    
+    this.buildingService.updateBuilding(this.edtBuildingObject).subscribe(
+      (response) => {
+        // SweetAlert setelah update berhasil
+        Swal.fire({
+          title: 'Success!',
+          text: 'Data building successfully updated.',
+          icon: 'success',
+          confirmButtonText: 'OK',
+        }).then((result) => {
+          if (result.isConfirmed) {
+            $('#editModal').modal('hide');
+            window.location.reload();
+          }
+        });
+      },
+      (err) => {
+        Swal.fire('Error!', 'Error updating data.', 'error');
+      }
+    );
+  }
+
+  openModalEdit(idBuilding: number): void {
+    this.isEditMode = true;
+    this.getBuildingById(idBuilding);
+    $('#editModal').modal('show');
+  }
+
+  getBuildingById(idBuilding: number): void {
+    this.buildingService.getBuildingById(idBuilding).subscribe(
+      (response: ApiResponse<Building>) => {
+        this.edtBuildingObject = response.data;
+      },
+      (error) => {
+        this.errorMessage = 'Failed to load buildings: ' + error.message;
+      }
+    );
+  }
+
+  deleteData(building: Building): void {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'This data building will be deleted!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes',
+      cancelButtonText: 'No',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.buildingService.deleteBuilding(building).subscribe(
+          (response) => {
+            Swal.fire('Deleted!', 'Data building has been deleted', 'success').then(() => {
+              window.location.reload();
+            });
+          },
+          (err) => {
+            Swal.fire('Error!', 'Failed to delete the building.', 'error');
+          }
+        );
+      }
+    });
+  }
+
+
+  openModalUpload(): void {
+    $('#uploadModal').modal('show');
+  }
+
+  downloadTemplate() {
+    const link = document.createElement('a');
+    link.href = 'assets/Template Excel/Layout_Master_Building.xlsx';
+    link.download = 'Layout_Master_Building.xlsx';
+    link.click();
+  }
+
+
+  onFileChange(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      const file = input.files[0];
+      const fileName = file.name.toLowerCase();
+
+      // Validasi ekstensi file
+      if (fileName.endsWith('.xls') || fileName.endsWith('.xlsx')) {
+        this.file = file; // Hanya simpan file jika ekstensi valid
+      } else {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Invalid File Type',
+          text: 'Please upload a valid Excel file (.xls or .xlsx).',
+          confirmButtonText: 'OK',
+        });
+        // Kosongkan file jika ekstensi tidak valid
+        this.file = null;
+        input.value = '';
+      }
     }
-}
-
-loadBuilding() {
-this.buildingService.getAllBuilding().subscribe(
-  (response) => {
-    this.buildingList = response.data; // Simpan data plant ke dalam variabel
-  },
-  (error) => {
-    console.error('Error fetching plants:', error); // Tangani error
   }
-);
-}
 
 
-ReadExcel(event: any) {
-this.file = event.target.files[0];
-let fileReader = new FileReader();
-fileReader.readAsBinaryString(this.file as File);
-fileReader.onload = (e) => {
-  var workbook = XLSX.read(fileReader.result, { type: 'binary' });
-  var sheetName = workbook.SheetNames[0];
-  var excelData = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
-  console.log(excelData); // Tampilkan data Excel yang terbaca di console
-}
-}
-
-
-uploadExcelFile() {
-if (this.file) {
-  const formData = new FormData();
-  formData.append('file', this.file);
-
-  this.buildingService.signIn('Aurel', 'polman').subscribe(
-    (signinResponse) => {
-        const token = signinResponse.data; 
-
-      // Now upload the Excel file
-      this.buildingService.savePlantsExcelFile(formData).subscribe(
+  uploadFileExcel() {
+    if (this.file) {
+      const formData = new FormData();
+      formData.append('file', this.file);
+      // unggah file Excel
+      this.buildingService.uploadFileExcel(formData).subscribe(
         (response) => {
-          console.log('File uploaded successfully', response);
+          Swal.fire({
+            icon: 'success',
+            title: 'Success!',
+            text: 'Excel file uploaded successfully.',
+            confirmButtonText: 'OK',
+          }).then(() => {
+            $('#editModal').modal('hide');
+            window.location.reload();
+          });
         },
         (error) => {
           console.error('Error uploading file', error);
+          Swal.fire({
+            icon: 'error',
+            title: 'Failed!',
+            text: 'An error occurred while uploading the file.',
+            confirmButtonText: 'OK',
+          });
         }
       );
-    },
-    (error) => {
-      console.error('Error signing in', error);
+    } else {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Warning!',
+        text: 'Please select a file to upload.',
+        confirmButtonText: 'OK',
+      });
     }
-  );
-} else {
-  console.error('No file selected');
-}
-}
-
-
+  }
 }
