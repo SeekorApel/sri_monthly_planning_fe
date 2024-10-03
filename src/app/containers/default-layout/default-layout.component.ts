@@ -15,10 +15,7 @@ export class DefaultLayoutComponent {
   public csMd: any;
   public csTrx: any;
 
-  constructor(
-    private authenticationService: AuthenticationService,
-    private router: Router
-  ) {
+  constructor(private authenticationService: AuthenticationService, private router: Router) {
     //PERSONAL INFORMATION
     let currentUserSubject = JSON.parse(localStorage.getItem('currentUser'));
     console.log('ISI currentUser', currentUserSubject);
@@ -52,8 +49,8 @@ export class DefaultLayoutComponent {
       { name: 'Item Curing', url: '/master-data/view-item-curing', icon: 'cil-minus' },
       { name: 'Max Capacity', url: '/master-data/view-max-capacity', icon: 'cil-minus' },
       { name: 'Curing Machine', url: '/master-data/view-curing-machine', icon: 'cil-minus' },
+      { name: 'CT Kapa', url: '/master-data/view-ct-kapa', icon: 'cil-minus' },
     ];
-
 
     this.csTrx = [
       { name: 'Marketing Order', url: '/transaksi/view-marketing-order', icon: 'cil-minus' },

@@ -1,51 +1,58 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Pattern } from 'src/app/models/Pattern';
+import { CtKapa } from 'src/app/models/ct-kapa';
 import { ApiResponse } from 'src/app/response/Response';
-import { PatternService } from 'src/app/services/master-data/pattern/pattern.service';
+import { CtKapaService } from 'src/app/services/master-data/ct-kapa/ctkapa.service';
 import Swal from 'sweetalert2';
 declare var $: any;
 import * as XLSX from 'xlsx';
 
 @Component({
-  selector: 'app-view-pattern',
-  templateUrl: './view-pattern.component.html',
-  styleUrls: ['./view-pattern.component.scss'],
+  selector: 'app-view-ct-kapa',
+  templateUrl: './view-ct-kapa.component.html',
+  styleUrls: ['./view-ct-kapa.component.scss'],
 })
-export class ViewPatternComponent implements OnInit {
+export class ViewCtKapaComponent implements OnInit {
   //Variable Declaration
-  patterns: Pattern[] = [];
+  ctkapas: CtKapa[] = [];
   searchText: string = '';
   errorMessage: string | null = null;
-  edtPatternObject: Pattern = new Pattern();
+  editCtKapaObject: CtKapa = new CtKapa();
   isEditMode: boolean = false;
   file: File | null = null;
-  editPatternForm: FormGroup;
+  editCtKapaForm: FormGroup;
 
   // Pagination
   pageOfItems: Array<any>;
   pageSize: number = 5;
   totalPages: number = 5;
 
-  constructor(private patternService: PatternService, private fb: FormBuilder) {
-    this.editPatternForm = this.fb.group({
-      patternName: ['', Validators.required],
+  constructor(private ctkapaService: CtKapaService, private fb: FormBuilder) {
+    this.editCtKapaForm = this.fb.group({
+      itemCuring: ['', Validators.required],
+      typeCuring: ['', Validators.required],
+      deskripsi: ['', Validators.required],
+      cycleTime: ['', Validators.required],
+      shift: ['', Validators.required],
+      kapaPershift: ['', Validators.required],
+      lastUpdateData: ['', Validators.required],
+      machine: ['', Validators.required],
     });
   }
 
   ngOnInit(): void {
-    this.getAllPattern();
+    this.getAllCtKapa();
   }
 
-  getAllPattern(): void {
-    this.patternService.getAllPattern().subscribe(
-      (response: ApiResponse<Pattern[]>) => {
-        this.patterns = response.data;
-        console.log(this.patterns);
-        this.onChangePage(this.patterns.slice(0, this.pageSize));
+  getAllCtKapa(): void {
+    this.ctkapaService.getAllCtKapa().subscribe(
+      (response: ApiResponse<CtKapa[]>) => {
+        this.ctkapas = response.data;
+        console.log(this.ctkapas);
+        this.onChangePage(this.ctkapas.slice(0, this.pageSize));
       },
       (error) => {
-        this.errorMessage = 'Failed to load plants: ' + error.message;
+        this.errorMessage = 'Failed to load Ct Kapa: ' + error.message;
       }
     );
   }
@@ -56,7 +63,7 @@ export class ViewPatternComponent implements OnInit {
 
   onSearchChange(): void {
     // Lakukan filter berdasarkan nama plant yang mengandung text pencarian (case-insensitive)
-    const filteredPlants = this.patterns.filter((pattern) => pattern.pattern_NAME.toLowerCase().includes(this.searchText.toLowerCase()) || pattern.pattern_ID.toString().includes(this.searchText));
+    const filteredPlants = this.ctkapas.filter((ctkapa) => ctkapa.machine.toLowerCase().includes(this.searchText.toLowerCase()) || ctkapa.part_NUMBER.toString().includes(this.searchText));
 
     // Tampilkan hasil filter pada halaman pertama
     this.onChangePage(filteredPlants.slice(0, this.pageSize));
@@ -64,16 +71,16 @@ export class ViewPatternComponent implements OnInit {
 
   resetSearch(): void {
     this.searchText = '';
-    this.onChangePage(this.patterns.slice(0, this.pageSize));
+    this.onChangePage(this.ctkapas.slice(0, this.pageSize));
   }
 
   updatePattern(): void {
-    this.patternService.updatePattern(this.edtPatternObject).subscribe(
+    this.ctkapaService.updateCtKapa(this.editCtKapaObject).subscribe(
       (response) => {
         // SweetAlert setelah update berhasil
         Swal.fire({
           title: 'Success!',
-          text: 'Data Pattern successfully updated.',
+          text: 'Data CT Kapa successfully updated.',
           icon: 'success',
           confirmButtonText: 'OK',
         }).then((result) => {
@@ -89,16 +96,16 @@ export class ViewPatternComponent implements OnInit {
     );
   }
 
-  openModalEdit(idPattern: number): void {
+  openModalEdit(idCtkapa: number): void {
     this.isEditMode = true;
-    this.getPlantById(idPattern);
+    this.getCtKapaByID(idCtkapa);
     $('#editModal').modal('show');
   }
 
-  getPlantById(idPattern: number): void {
-    this.patternService.getPatternById(idPattern).subscribe(
-      (response: ApiResponse<Pattern>) => {
-        this.edtPatternObject = response.data;
+  getCtKapaByID(idCtkapa: number): void {
+    this.ctkapaService.getCtKapaById(idCtkapa).subscribe(
+      (response: ApiResponse<CtKapa>) => {
+        this.editCtKapaObject = response.data;
       },
       (error) => {
         this.errorMessage = 'Failed to load plants: ' + error.message;
@@ -106,10 +113,10 @@ export class ViewPatternComponent implements OnInit {
     );
   }
 
-  deleteData(pattern: Pattern): void {
+  deleteData(ctkapa: CtKapa): void {
     Swal.fire({
       title: 'Are you sure?',
-      text: 'This data plant will be deleted!',
+      text: 'This data CT Kapa will be deleted!',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -118,9 +125,9 @@ export class ViewPatternComponent implements OnInit {
       cancelButtonText: 'No',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.patternService.deletePattern(pattern).subscribe(
+        this.ctkapaService.deleteCtKapa(ctkapa).subscribe(
           (response) => {
-            Swal.fire('Deleted!', 'Data pattern has been deleted', 'success').then(() => {
+            Swal.fire('Deleted!', 'Data CT Kapa has been deleted', 'success').then(() => {
               window.location.reload();
             });
           },
@@ -138,8 +145,8 @@ export class ViewPatternComponent implements OnInit {
 
   downloadTemplate() {
     const link = document.createElement('a');
-    link.href = 'assets/Template Excel/Layout_Master_Pattern.xlsx';
-    link.download = 'Layout_Master_Pattern.xlsx';
+    link.href = 'assets/Template Excel/Layout_Master_CT_KAPA.xlsx';
+    link.download = 'Layout_Master_CT_KAPA.xlsx';
     link.click();
   }
 
@@ -171,7 +178,7 @@ export class ViewPatternComponent implements OnInit {
       const formData = new FormData();
       formData.append('file', this.file);
       // unggah file Excel
-      this.patternService.uploadFileExcel(formData).subscribe(
+      this.ctkapaService.uploadFileExcel(formData).subscribe(
         (response) => {
           Swal.fire({
             icon: 'success',

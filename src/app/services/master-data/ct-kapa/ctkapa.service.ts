@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { MachineTass } from 'src/app/models/tass-machine';
+import { CtKapa } from 'src/app/models/ct-kapa';
 import { ApiResponse } from 'src/app/response/Response';
 import { throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -10,10 +10,10 @@ import { map, catchError } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root',
 })
-export class MachineTassService {
+export class CtKapaService {
   //Isi tokenya
   token: String =
-  'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBdXJlbCIsImV4cCI6MTcyODA1MzEwMn0.TvtFLNBN9DKENLYA3wSw_BfTWES-lA0rbNKTveGiIB43vyKDSa6Tktxwrm0a6xJdb6CoPYhku4f5z-TODQGAwA';  
+    'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBdXJlbCIsImV4cCI6MTcyODA1Nzk5Mn0.aVJTkZq5E2y3TC0z1tDAbvsDln1IeWm36cN5IvtibIydnEw4wfEpsxaP5dY6nt1l2N0Wl42XgdCC-sRZ1sytmw';
   constructor(private http: HttpClient) {}
 
   // Method untuk menambahkan header Authorization dengan token
@@ -23,26 +23,26 @@ export class MachineTassService {
     });
   }
 
-  getMachineTassByID(idMachineTass: number): Observable<ApiResponse<MachineTass>> {
-    return this.http.get<ApiResponse<MachineTass>>(
-      environment.apiUrlWebAdmin + '/getMachineTassById/' + idMachineTass,
+  getCtKapaById(idCtkapa: number): Observable<ApiResponse<CtKapa>> {
+    return this.http.get<ApiResponse<CtKapa>>(
+      environment.apiUrlWebAdmin + '/getCtKapaById/' + idCtkapa,
       { headers: this.getHeaders() }
     );
   }
 
-  getAllMachineTass(): Observable<ApiResponse<MachineTass[]>> {
-    return this.http.get<ApiResponse<MachineTass[]>>(
-      environment.apiUrlWebAdmin + '/getAllMachineTass',
+  getAllCtKapa(): Observable<ApiResponse<CtKapa[]>> {
+    return this.http.get<ApiResponse<CtKapa[]>>(
+      environment.apiUrlWebAdmin + '/getAllCtKapa',
       { headers: this.getHeaders() }
     );
   }
 
   //Method Update plant
-  updateMachineTass(machinetass: MachineTass): Observable<ApiResponse<MachineTass>> {
+  updateCtKapa(ctkapa: CtKapa): Observable<ApiResponse<CtKapa>> {
     return this.http
-      .post<ApiResponse<MachineTass>>(
-        environment.apiUrlWebAdmin + '/updateMachineTass',
-        machinetass,
+      .post<ApiResponse<CtKapa>>(
+        environment.apiUrlWebAdmin + '/updateCtKapa',
+        ctkapa,
         { headers: this.getHeaders() } // Menyertakan header
       )
       .pipe(
@@ -55,11 +55,11 @@ export class MachineTassService {
       );
   }
 
-  deleteMachineTass(machinetass: MachineTass): Observable<ApiResponse<MachineTass>> {
+  deleteCtKapa(ctkapa: CtKapa): Observable<ApiResponse<CtKapa>> {
     return this.http
-      .post<ApiResponse<MachineTass>>(
-        environment.apiUrlWebAdmin + '/deleteMachineTass',
-        machinetass,
+      .post<ApiResponse<CtKapa>>(
+        environment.apiUrlWebAdmin + '/deleteCtKapa',
+        ctkapa,
         { headers: this.getHeaders() }
       )
       .pipe(
@@ -72,10 +72,10 @@ export class MachineTassService {
       );
   }
 
-  uploadFileExcel(file: FormData): Observable<ApiResponse<MachineTass>> {
+  uploadFileExcel(file: FormData): Observable<ApiResponse<CtKapa>> {
     return this.http
-      .post<ApiResponse<MachineTass>>(
-        environment.apiUrlWebAdmin + '/saveMachineTassExcel',
+      .post<ApiResponse<CtKapa>>(
+        environment.apiUrlWebAdmin + '/saveCtKapasExcel',
         file,
         { headers: this.getHeaders() }
       )

@@ -30,6 +30,7 @@ export class ViewMachineCuringTypeComponent implements OnInit {
   constructor(private machineCuringTypeService: MachineCuringTypeService, private fb: FormBuilder) {
     this.editMCTForm = this.fb.group({
       description: ['', Validators.required],
+      setting: ['', Validators.required],
       cavity: ['', Validators.required],
     });
   }

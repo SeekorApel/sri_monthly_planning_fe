@@ -22,7 +22,7 @@ import { ViewBDistanceComponent } from './views/master-data/view-bdistance/view-
 import { ViewQDistanceComponent } from './views/master-data/view-qdistance/view-qdistance.component';
 import { ViewPatternComponent } from './views/master-data/view-pattern/view-pattern.component';
 import { ViewProductComponent } from './views/master-data/view-product/view-product.component';
-import { ViewTassMachine } from './views/master-data/view-tassmachine/view-tassmachine.component';
+import { ViewMachineTassComponent } from './views/master-data/view-tassmachine/view-tassmachine.component';
 import { ViewRoutingMachineComponent } from './views/master-data/view-routing-machine/view-routing-machine.component';
 import { ViewDeliveryScheduleComponent } from './views/master-data/view-delivery-schedule/view-delivery-schedule.component';
 import { ViewMachineCuringTypeComponent } from './views/master-data/view-machine-curing-type/view-machine-curing-type.component';
@@ -34,6 +34,7 @@ import { ViewItemCuringComponent } from './views/master-data/view-item-curing/vi
 import { ViewTassSizeComponent } from './views/master-data/view-tass-size/view-tass-size.component';
 import { ViewMonthlyPlanningComponent } from './views/transaksi/view-monthly-planning/view-monthly-planning.component';
 import { AddMonthlyPlanningComponent } from './views/transaksi/add-monthly-planning/add-monthly-planning.component';
+import { ViewCtKapaComponent } from './views/master-data/view-ct-kapa/view-ct-kapa.component';
 export const routes: Routes = [
   {
     path: '',
@@ -157,6 +158,13 @@ export const routes: Routes = [
         },
       },
       {
+        path: 'master-data/view-ct-kapa',
+        component: ViewCtKapaComponent,
+        data: {
+          title: 'Master Data / View CT Kapa',
+        },
+      },
+      {
         path: 'master-data/view-machine-curing-type',
         component: ViewMachineCuringTypeComponent,
         data: {
@@ -179,7 +187,7 @@ export const routes: Routes = [
       },
       {
         path: 'master-data/view-tassMachine',
-        component: ViewTassMachine,
+        component: ViewMachineTassComponent,
         data: {
           title: 'Master Data / View Machine',
         },

@@ -30,6 +30,7 @@ export class ViewMachineTassTypeComponent implements OnInit {
   constructor(private mttService: MachineTassTypeService, private fb: FormBuilder) {
     this.editMachineTassTypeForm = this.fb.group({
       description: ['', Validators.required],
+      setting: ['', Validators.required],
     });
   }
 

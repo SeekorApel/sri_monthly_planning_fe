@@ -71,9 +71,11 @@
         <!-- Form with Reactive Forms -->
         <form [formGroup]="editMCTForm">
           <div class="form-group">
-            <label for="patternName">Description</label>
+            <label for="setting">Setting</label>
+            <input [(ngModel)]="edtMCTObject.description" type="text" class="form-control" id="setting" formControlName="setting" [ngClass]="{ 'is-invalid': editMCTForm.get('setting').invalid && editMCTForm.get('setting').touched }" />
+            <label for="description">Description</label>
             <input [(ngModel)]="edtMCTObject.description" type="text" class="form-control" id="description" formControlName="description" [ngClass]="{ 'is-invalid': editMCTForm.get('description').invalid && editMCTForm.get('description').touched }" />
-            <label for="patternName">Cavity</label>
+            <label for="cavity">Cavity</label>
             <input [(ngModel)]="edtMCTObject.cavity" type="text" class="form-control" id="cavity" formControlName="cavity" [ngClass]="{ 'is-invalid': editMCTForm.get('cavity').invalid && editMCTForm.get('cavity').touched }" />
             <!-- Error message if description is empty -->
             <div *ngIf="editMCTForm.get('description').invalid && editMCTForm.get('description').touched" class="invalid-feedback">Machine Curing Type description is required.</div>

@@ -69,7 +69,13 @@
         <!-- Form with Reactive Forms -->
         <form [formGroup]="editMachineTassTypeForm">
           <div class="form-group">
-            <label for="patternName">Pattern Name</label>
+            <label for="setting">Setting</label>
+            <input [(ngModel)]="edtMachineTassTypeObject.setting_ID" type="text" class="form-control" id="setting" formControlName="setting" [ngClass]="{ 'is-invalid': editMachineTassTypeForm.get('setting').invalid && editMachineTassTypeForm.get('setting').touched }" />
+            <!-- Error message if plantName is empty -->
+            <div *ngIf="editMachineTassTypeForm.get('setting').invalid && editMachineTassTypeForm.get('setting').touched" class="invalid-feedback">Machine Tass Type Description name is required.</div>
+          </div>
+          <div class="form-group">
+            <label for="description">Description</label>
             <input [(ngModel)]="edtMachineTassTypeObject.description" type="text" class="form-control" id="description" formControlName="description" [ngClass]="{ 'is-invalid': editMachineTassTypeForm.get('description').invalid && editMachineTassTypeForm.get('description').touched }" />
             <!-- Error message if plantName is empty -->
             <div *ngIf="editMachineTassTypeForm.get('description').invalid && editMachineTassTypeForm.get('description').touched" class="invalid-feedback">Machine Tass Type Description name is required.</div>
