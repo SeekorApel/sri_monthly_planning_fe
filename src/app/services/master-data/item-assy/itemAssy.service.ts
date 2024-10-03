@@ -13,7 +13,7 @@ import { map, catchError } from 'rxjs/operators';
 export class ItemAssyService {
   //Isi tokenya
   token: String =
-    'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBdXJlbCIsImV4cCI6MTcyODA0MzU5OX0.pwxxKwvvqirwgloPRo26rf2lJEjjzBoQ-eREftyce41rassjEIcZo47weWFQuJc9PVhw-aF9ZlGp3YEfVvTYZA';
+    'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBdXJlbCIsImV4cCI6MTcyODA1NzkxNH0.qHBI0ZWHANVJQuK_D_9TVU6M1kr8KlOpTJICLnnIUv845qIappPTvjFzKd6ol6qKKQkCS3XXXmi5bt515XYq8A';
 
   constructor(private http: HttpClient) {}
 
@@ -24,14 +24,14 @@ export class ItemAssyService {
     });
   }
 
-  getQuadrantById(idItemAssy: number): Observable<ApiResponse<Item_Assy>> {
+  getItemAssyById(idItemAssy: number): Observable<ApiResponse<Item_Assy>> {
     return this.http.get<ApiResponse<Item_Assy>>(
       environment.apiUrlWebAdmin + '/getItemAssyById/' + idItemAssy,
       { headers: this.getHeaders() }
     );
   }
 
-  getAllQuadrant(): Observable<ApiResponse<Item_Assy[]>> {
+  getAllItemAssy(): Observable<ApiResponse<Item_Assy[]>> {
     return this.http.get<ApiResponse<Item_Assy[]>>(
       environment.apiUrlWebAdmin + '/getAllItemAssy',
       { headers: this.getHeaders() }
@@ -39,11 +39,11 @@ export class ItemAssyService {
   }
 
   //Method Update plant
-  updateQuadrant(quadrant: Item_Assy): Observable<ApiResponse<Item_Assy>> {
+  updateItemAssy(itemAssy: Item_Assy): Observable<ApiResponse<Item_Assy>> {
     return this.http
       .post<ApiResponse<Item_Assy>>(
         environment.apiUrlWebAdmin + '/updateItemAssy',
-        quadrant,
+        itemAssy,
         { headers: this.getHeaders() } // Menyertakan header
       )
       .pipe(
@@ -56,7 +56,7 @@ export class ItemAssyService {
       );
   }
 
-  deleteQuadrant(item_Assy: Item_Assy): Observable<ApiResponse<Item_Assy>> {
+  deleteItemAssy(item_Assy: Item_Assy): Observable<ApiResponse<Item_Assy>> {
     return this.http
       .post<ApiResponse<Item_Assy>>(
         environment.apiUrlWebAdmin + '/deleteItemAssy',

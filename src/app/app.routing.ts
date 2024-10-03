@@ -35,6 +35,7 @@ import { ViewTassSizeComponent } from './views/master-data/view-tass-size/view-t
 import { ViewMonthlyPlanningComponent } from './views/transaksi/view-monthly-planning/view-monthly-planning.component';
 import { AddMonthlyPlanningComponent } from './views/transaksi/add-monthly-planning/add-monthly-planning.component';
 import { ViewMachineAllowanceComponent } from './views/master-data/view-machine-allowance/view-machine-allowance.component';
+import { ViewItemAssyComponent } from './views/master-data/view-item-assy/view-item-assy.component';
 export const routes: Routes = [
   {
     path: '',
@@ -260,6 +261,13 @@ export const routes: Routes = [
         component: ViewMachineAllowanceComponent,
         data: {
           title: 'Master Data / View Machine Allowance',
+        },
+      },
+      {
+        path: 'master-data/view-item-assy',
+        component: ViewItemAssyComponent,
+        data: {
+          title: 'Master Data / View Item Assy',
         },
       },
       {
