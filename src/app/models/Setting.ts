@@ -1,16 +1,14 @@
-export interface ApiResponse<T> {
-  message?: string;
-  data: T;
-}
 
-export interface ISetting {
-  plant_ID?: number;        
-  plant_NAME: string;
-  status: number;           
-  creation_DATE: Date;     
-  created_BY: string;       
+export class Setting {
+  setting_ID: number;        
+  setting_KEY: string;
+  setting_VALUE: string;           
+  description: string;     
+  status: number;       
+  creation_DATE: Date;  
+  created_BY: string;  
   last_UPDATE_DATE: Date;  
-  last_UPDATED_BY: string;   r
+  last_UPDATED_BY: string;   
 }
 
 

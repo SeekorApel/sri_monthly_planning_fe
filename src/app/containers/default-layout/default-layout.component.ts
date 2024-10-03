@@ -52,6 +52,7 @@ export class DefaultLayoutComponent {
       { name: 'Item Curing', url: '/master-data/view-item-curing', icon: 'cil-minus' },
       { name: 'Max Capacity', url: '/master-data/view-max-capacity', icon: 'cil-minus' },
       { name: 'Curing Machine', url: '/master-data/view-curing-machine', icon: 'cil-minus' },
+      { name: 'Machine Allowance', url: '/master-data/view-machine-allowance', icon: 'cil-minus' }
     ];
 
 
