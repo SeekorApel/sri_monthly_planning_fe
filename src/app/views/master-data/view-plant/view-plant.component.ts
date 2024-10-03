@@ -13,7 +13,6 @@ import * as XLSX from 'xlsx';
   styleUrls: ['./view-plant.component.scss'],
 })
 export class ViewPlantComponent implements OnInit {
-
   //Variable Declaration
   plants: Plant[] = [];
   searchText: string = '';
@@ -28,7 +27,7 @@ export class ViewPlantComponent implements OnInit {
   pageSize: number = 5;
   totalPages: number = 5;
 
-  constructor(private plantService: PlantService, private fb: FormBuilder) { 
+  constructor(private plantService: PlantService, private fb: FormBuilder) {
     this.editPlantForm = this.fb.group({
       plantName: ['', Validators.required],
     });
@@ -56,13 +55,7 @@ export class ViewPlantComponent implements OnInit {
 
   onSearchChange(): void {
     // Lakukan filter berdasarkan nama plant yang mengandung text pencarian (case-insensitive)
-    const filteredPlants = this.plants.filter(
-      (plant) =>
-        plant.plant_NAME
-          .toLowerCase()
-          .includes(this.searchText.toLowerCase()) ||
-        plant.plant_ID.toString().includes(this.searchText)
-    );
+    const filteredPlants = this.plants.filter((plant) => plant.plant_NAME.toLowerCase().includes(this.searchText.toLowerCase()) || plant.plant_ID.toString().includes(this.searchText));
 
     // Tampilkan hasil filter pada halaman pertama
     this.onChangePage(filteredPlants.slice(0, this.pageSize));
@@ -74,7 +67,6 @@ export class ViewPlantComponent implements OnInit {
   }
 
   updatePlant(): void {
-    
     this.plantService.updatePlant(this.edtPlantObject).subscribe(
       (response) => {
         // SweetAlert setelah update berhasil
@@ -139,7 +131,6 @@ export class ViewPlantComponent implements OnInit {
     });
   }
 
-
   openModalUpload(): void {
     $('#uploadModal').modal('show');
   }
@@ -150,7 +141,6 @@ export class ViewPlantComponent implements OnInit {
     link.download = 'Layout_Master_Plant.xlsx';
     link.click();
   }
-
 
   onFileChange(event: Event) {
     const input = event.target as HTMLInputElement;
@@ -174,7 +164,6 @@ export class ViewPlantComponent implements OnInit {
       }
     }
   }
-
 
   uploadFileExcel() {
     if (this.file) {

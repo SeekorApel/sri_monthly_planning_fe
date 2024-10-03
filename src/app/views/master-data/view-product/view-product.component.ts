@@ -7,7 +7,7 @@ import * as XLSX from 'xlsx';
 @Component({
   selector: 'app-view-plant',
   templateUrl: './view-product.component.html',
-  styleUrls: ['./view-product.component.scss']
+  styleUrls: ['./view-product.component.scss'],
 })
 export class ViewProductComponent implements OnInit {
   loginForm: FormGroup;
@@ -19,24 +19,24 @@ export class ViewProductComponent implements OnInit {
     private formBuilder: FormBuilder,
     private router: Router,
     private productService: ProductService // Inject PlantService
-  ) { }
+  ) {}
 
   ngOnInit() {
     this.loadPlant(); // Panggil metode untuk memuat data plant
   }
 
   onDragOver(event: DragEvent) {
-        event.preventDefault(); // Mencegah default behavior
-    }
+    event.preventDefault(); // Mencegah default behavior
+  }
 
-    onDrop(event: DragEvent) {
-        event.preventDefault();
-        const files = event.dataTransfer?.files;
-        if (files.length > 0) {
-            this.file = files[0];
-            this.ReadExcel({ target: { files } }); // Panggil ReadExcel dengan file yang di-drop
-        }
+  onDrop(event: DragEvent) {
+    event.preventDefault();
+    const files = event.dataTransfer?.files;
+    if (files.length > 0) {
+      this.file = files[0];
+      this.ReadExcel({ target: { files } }); // Panggil ReadExcel dengan file yang di-drop
     }
+  }
 
   loadPlant() {
     this.productService.getAllPlant().subscribe(
@@ -49,7 +49,6 @@ export class ViewProductComponent implements OnInit {
     );
   }
 
-
   ReadExcel(event: any) {
     this.file = event.target.files[0];
     let fileReader = new FileReader();
@@ -59,19 +58,18 @@ export class ViewProductComponent implements OnInit {
       var sheetName = workbook.SheetNames[0];
       var excelData = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
       console.log(excelData); // Tampilkan data Excel yang terbaca di console
-    }
+    };
   }
-
 
   uploadExcelFile() {
     if (this.file) {
       const formData = new FormData();
       formData.append('file', this.file);
-  
+
       this.productService.signIn('Aurel', 'polman').subscribe(
         (signinResponse) => {
-            const token = signinResponse.data; 
-  
+          const token = signinResponse.data;
+
           // Now upload the Excel file
           this.productService.savePlantsExcelFile(formData).subscribe(
             (response) => {
@@ -90,6 +88,4 @@ export class ViewProductComponent implements OnInit {
       console.error('No file selected');
     }
   }
-  
-  
 }

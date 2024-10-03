@@ -11,7 +11,7 @@ import { catchError, map } from 'rxjs/operators';
 })
 export class MarketingOrderService {
   //Isi tokenya
-  token: String = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBdXJlbCIsImV4cCI6MTcyNzkzODEwNX0.8svTHy24AGVTgDVNvFbsmugd1QKqNL526mikQPQ3Ho36KGzYEeinhuD_4Zq_FWXYzt2_I-Ty-g464kXVTC_bmw';
+  token: String = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBdXJlbCIsImV4cCI6MTcyODAzMjAxM30.d6SmCPIDgB_evYFe4JD6AEATgxmOn99knfM8HJDaVVPHNARiluaw35r9dctUAFMRMjgJz4T2QVsrdI94nWp6sQ';
 
   constructor(private http: HttpClient) {}
 
@@ -27,6 +27,7 @@ export class MarketingOrderService {
   }
 
   saveMarketingOrder(mo: MarketingOrder): Observable<ApiResponse<MarketingOrder>> {
+    console.log(mo);
     return this.http
       .post<ApiResponse<MarketingOrder>>(
         environment.apiUrlWebAdmin + '/saveMarketingOrder',
