@@ -1,68 +1,93 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { IItem_Curing } from 'src/app/models/Item_Curing';
-import { ApiResponse } from 'src/app/response/ApiResponse';
-import { tap } from 'rxjs/operators'; 
+import { Item_Curing } from 'src/app/models/Item_Curing';
+import { ApiResponse } from 'src/app/response/Response';
 import { throwError } from 'rxjs';
+import { environment } from 'src/environments/environment';
+import { map, catchError } from 'rxjs/operators';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ItemCuringService {
-  private baseUrl = 'http://localhost:8080';
-  private apiUrl = 'http://localhost:8080'; 
-
+  //Isi tokenya
+  token: String =
+    'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBdXJlbCIsImV4cCI6MTcyODA0MjAzNH0.j_HYWCIoDutMP1jk2VbfOJOlbMpUEKkpaP_S4uPOu4Ajds66XOpxxA7t0nFi7zgG7YgC0KVmKPhv2wpb4XQLPA';
 
   constructor(private http: HttpClient) {}
 
-  getAllItemCuring(): Observable<ApiResponse<IItem_Curing[]>> {
-    return this.http.get<ApiResponse<IItem_Curing[]>>(`${this.baseUrl}/getAllCuringMachine`);
+  // Method untuk menambahkan header Authorization dengan token
+  private getHeaders() {
+    return new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+    });
   }
-  
-//   getPlantById(id: number): Observable<DtoResponse> {
-//     return this.http.get<DtoResponse>(`${this.baseUrl}/getObatById/${id}`);
-//   }
 
-//   savePlant(obat: IObat): Observable<DtoResponse> {
-//     return this.http.post<DtoResponse>(`${this.baseUrl}/saveObat`, obat);
-//   }
-
-//   updatePlant(id: number, data: IObat): Observable<any> {
-//     const updatedData = { ...data, idObat: id }; // Menambahkan idObat ke dalam body
-//     return this.http.post<any>(`${this.apiUrl}/updateObat`, updatedData);
-//   }
-   
-
-//   deletePlant(obat: { idObat: number }): Observable<ApiResponse<any>> {
-//     const url = `${this.apiUrl}/deleteObats`;
-//     return this.http.post<ApiResponse<any>>(url, obat);
-//   }  
-
-signIn(userName: string, password: string): Observable<{ data: string }> {
-    return this.http.post<{ data: string }>(`${this.baseUrl}/signin`, {
-      userName,
-      password
-    }).pipe(
-      tap(response => {
-        // Store the token from the 'data' field in localStorage
-        localStorage.setItem('token', response.data);
-      })
+  getItemCuringById(idItemCuring: string): Observable<ApiResponse<Item_Curing>> {
+    return this.http.get<ApiResponse<Item_Curing>>(
+      environment.apiUrlWebAdmin + '/getItemCuringById/' + idItemCuring,
+      { headers: this.getHeaders() }
     );
   }
-  
-  savePlantsExcelFile(formData: FormData): Observable<any> {
-    const token = localStorage.getItem('token'); // Retrieve the token
-    if (!token) {
-      console.error('Token is not available');
-      // Return an observable that emits an error
-      return throwError('Token is not available'); // Make sure to import throwError from 'rxjs'
-    }
-  
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`
-    });
-  
-    return this.http.post(`${this.baseUrl}/savePlantsExcel`, formData, { headers });
+
+  getAllItemCuring(): Observable<ApiResponse<Item_Curing[]>> {
+    return this.http.get<ApiResponse<Item_Curing[]>>(
+      environment.apiUrlWebAdmin + '/getAllItemCuring',
+      { headers: this.getHeaders() }
+    );
+  }
+
+  //Method Update plant
+  updateItemCuring(itemcuring: Item_Curing): Observable<ApiResponse<Item_Curing>> {
+    console.log(itemcuring);
+    return this.http
+      .post<ApiResponse<Item_Curing>>(
+        environment.apiUrlWebAdmin + '/updateItemCuring',
+        itemcuring,
+        { headers: this.getHeaders() } // Menyertakan header
+      )
+      .pipe(
+        map((response) => {
+          return response;
+        }),
+        catchError((err) => {
+          return throwError(err);
+        })
+      );
+  }
+
+  deleteItemCuring(itemcuring: Item_Curing): Observable<ApiResponse<Item_Curing>> {
+    return this.http
+      .post<ApiResponse<Item_Curing>>(
+        environment.apiUrlWebAdmin + '/deleteItemCuring',
+        itemcuring,
+        { headers: this.getHeaders() }
+      )
+      .pipe(
+        map((response) => {
+          return response;
+        }),
+        catchError((err) => {
+          return throwError(err);
+        })
+      );
+  }
+
+  uploadFileExcel(file: FormData): Observable<ApiResponse<Item_Curing>> {
+    return this.http
+      .post<ApiResponse<Item_Curing>>(
+        environment.apiUrlWebAdmin + '/saveItemCuringsExcel',
+        file,
+        { headers: this.getHeaders() }
+      )
+      .pipe(
+        map((response) => {
+          return response;
+        }),
+        catchError((err) => {
+          return throwError(err);
+        })
+      );
   }
 }

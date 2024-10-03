@@ -1,11 +1,7 @@
-export interface ApiResponse<T> {
-  message?: string;
-  data: T;
-}
-
-export interface IBDistance {
-  building_ID_1?: number;        
-  building_ID_2?: number;        
+export class BDistance {
+  id_B_DISTANCE: number;
+  building_ID_1: number;        
+  building_ID_2: number;        
   distance: number;
   status: number;           
   creation_DATE: Date;     
