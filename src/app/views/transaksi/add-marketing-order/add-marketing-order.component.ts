@@ -6,6 +6,7 @@ import { Options } from 'select2';
 import { MarketingOrder } from 'src/app/models/MarketingOrder';
 import { MarketingOrderService } from 'src/app/services/transaksi/marketing order/marketing-order.service';
 import Swal from 'sweetalert2';
+import * as XLSX from 'xlsx';
 declare var $: any;
 
 @Component({
@@ -69,6 +70,32 @@ export class AddMarketingOrderComponent implements OnInit {
     this.formHeaderMo.get('month_0')?.valueChanges.subscribe((value) => {
       this.calculateNextMonths(value);
     });
+  }
+
+  downloadTemplate() {
+    // Data yang akan ditulis ke Excel
+    const worksheetData = [
+      ['Tanggal'], // A1
+      ['Shift 3'], // A2
+      ['Shift 2'], // A3
+      ['Shift 1'], // A4
+      ['Shift 1'], // A5
+      ['Shift 1'], // A6
+      ['Shift 1'], // A7
+      ['Shift 1'], // A8
+      ['Shift 1'], // A9
+      ['OFF'], // A10
+    ];
+
+    // Buat worksheet dari data
+    const ws: XLSX.WorkSheet = XLSX.utils.aoa_to_sheet(worksheetData);
+
+    // Buat workbook baru
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Shift Template');
+
+    // Ekspor workbook sebagai file Excel
+    XLSX.writeFile(wb, 'shift_template.xlsx');
   }
 
   // Fungsi untuk memperbarui array nama bulan
@@ -221,7 +248,7 @@ export class AddMarketingOrderComponent implements OnInit {
     //   };
     // });
     this.dataTableMo = this.getMarketingOrderData();
-    console.log("Table Data: ", JSON.stringify(this.dataTableMo, null, 2));
+    console.log('Table Data: ', JSON.stringify(this.dataTableMo, null, 2));
     console.log('Marketing order : ', this.marketingOrder);
     console.log('Header Mo : ', this.headerMo);
   }

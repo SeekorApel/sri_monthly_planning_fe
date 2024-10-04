@@ -39,8 +39,9 @@
             <tab heading="Month 1">
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="month-input">Month And Year</label>
-                <div class="col-md-9">
+                <div class="col-md-9 d-flex align-items-center">
                   <input class="form-control" formControlName="month_0" type="month" />
+                  <button (click)="downloadTemplate()" type="button" class="btn btn-primary ml-2"><i class="fa fa-download fa-lg"></i> Download Template</button>
                 </div>
               </div>
               <div class="form-group row">
@@ -96,7 +97,7 @@
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="month-input">Month And Year</label>
                 <div class="col-md-9">
-                  <input class="form-control" formControlName="month_1" type="month" [readOnly]="true"/>
+                  <input class="form-control" formControlName="month_1" type="month" [readOnly]="true" />
                 </div>
               </div>
               <div class="form-group row">
@@ -152,7 +153,7 @@
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="month-input">Month And Year</label>
                 <div class="col-md-9">
-                  <input class="form-control" formControlName="month_2" type="month" [readOnly]="true"/>
+                  <input class="form-control" formControlName="month_2" type="month" [readOnly]="true" />
                 </div>
               </div>
               <div class="form-group row">
@@ -267,25 +268,25 @@
                 <td>{{ mo.kpm_m2 }}</td>
                 <td>{{ mo.kpm_m3 }}</td>
                 <td>
-                  <input type="number" class="form-control" [(ngModel)]="mo.inputSalesForecastMonth1"/>
+                  <input type="number" class="form-control" [(ngModel)]="mo.inputSalesForecastMonth1" />
                 </td>
                 <td>
-                  <input type="number" class="form-control" [(ngModel)]="mo.inputSalesForecastMonth2"/>
+                  <input type="number" class="form-control" [(ngModel)]="mo.inputSalesForecastMonth2" />
                 </td>
                 <td>
-                  <input type="number" class="form-control" [(ngModel)]="mo.inputSalesForecastMonth3"/>
+                  <input type="number" class="form-control" [(ngModel)]="mo.inputSalesForecastMonth3" />
                 </td>
                 <td>
-                  <input type="number" class="form-control" [(ngModel)]="mo.inputMarketingOrderMonth1"/>
+                  <input type="number" class="form-control" [(ngModel)]="mo.inputMarketingOrderMonth1" />
                 </td>
                 <td>
-                  <input type="number" class="form-control" [(ngModel)]="mo.inputMarketingOrderMonth2"/>
+                  <input type="number" class="form-control" [(ngModel)]="mo.inputMarketingOrderMonth2" />
                 </td>
                 <td>
-                  <input type="number" class="form-control" [(ngModel)]="mo.inputMarketingOrderMonth3"/>
+                  <input type="number" class="form-control" [(ngModel)]="mo.inputMarketingOrderMonth3" />
                 </td>
                 <td>
-                  <input type="number" class="form-control" [(ngModel)]="mo.inputInitialStock"/>
+                  <input type="number" class="form-control" [(ngModel)]="mo.inputInitialStock" />
                 </td>
               </tr>
             </tbody>
