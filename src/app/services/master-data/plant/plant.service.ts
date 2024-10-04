@@ -12,8 +12,7 @@ import { map, catchError } from 'rxjs/operators';
 })
 export class PlantService {
   //Isi tokenya
-  token: String =
-    'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsImV4cCI6MTcyNzY2Njk1Nn0.FW2yrTEhqfuqY4FMLCdcQ-RWODKU8jtj3uZ9BuStX91EKafxmkXmMYUi1Gg45q00fsA0TmMsC8AXF1lasnBrOA';
+  token: String = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBdXJlbCIsImV4cCI6MTcyODEwOTQzNn0.q9O5e6nCas_CjMo9s2psfFKgEu4A7JKN5o13Po1GHlwP7Ytg0Cx5GsUaPwWwa0TV5Pzv0OSv06YS_OVjPaLNfg';
 
   constructor(private http: HttpClient) {}
 
@@ -25,17 +24,11 @@ export class PlantService {
   }
 
   getPlantById(idPlant: number): Observable<ApiResponse<Plant>> {
-    return this.http.get<ApiResponse<Plant>>(
-      environment.apiUrlWebAdmin + '/getPlantById/' + idPlant,
-      { headers: this.getHeaders() }
-    );
+    return this.http.get<ApiResponse<Plant>>(environment.apiUrlWebAdmin + '/getPlantById/' + idPlant, { headers: this.getHeaders() });
   }
 
   getAllPlant(): Observable<ApiResponse<Plant[]>> {
-    return this.http.get<ApiResponse<Plant[]>>(
-      environment.apiUrlWebAdmin + '/getAllPlant',
-      { headers: this.getHeaders() }
-    );
+    return this.http.get<ApiResponse<Plant[]>>(environment.apiUrlWebAdmin + '/getAllPlant', { headers: this.getHeaders() });
   }
 
   //Method Update plant
@@ -57,36 +50,35 @@ export class PlantService {
   }
 
   deletePlant(plant: Plant): Observable<ApiResponse<Plant>> {
-    return this.http
-      .post<ApiResponse<Plant>>(
-        environment.apiUrlWebAdmin + '/deletePlant',
-        plant,
-        { headers: this.getHeaders() }
-      )
-      .pipe(
-        map((response) => {
-          return response;
-        }),
-        catchError((err) => {
-          return throwError(err);
-        })
-      );
+    return this.http.post<ApiResponse<Plant>>(environment.apiUrlWebAdmin + '/deletePlant', plant, { headers: this.getHeaders() }).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((err) => {
+        return throwError(err);
+      })
+    );
+  }
+
+  activatePlant(plant: Plant): Observable<ApiResponse<Plant>> {
+    return this.http.post<ApiResponse<Plant>>(environment.apiUrlWebAdmin + '/activePlant', plant, { headers: this.getHeaders() }).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((err) => {
+        return throwError(err);
+      })
+    );
   }
 
   uploadFileExcel(file: FormData): Observable<ApiResponse<Plant>> {
-    return this.http
-      .post<ApiResponse<Plant>>(
-        environment.apiUrlWebAdmin + '/savePlantsExcel',
-        file,
-        { headers: this.getHeaders() }
-      )
-      .pipe(
-        map((response) => {
-          return response;
-        }),
-        catchError((err) => {
-          return throwError(err);
-        })
-      );
+    return this.http.post<ApiResponse<Plant>>(environment.apiUrlWebAdmin + '/savePlantsExcel', file, { headers: this.getHeaders() }).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((err) => {
+        return throwError(err);
+      })
+    );
   }
 }

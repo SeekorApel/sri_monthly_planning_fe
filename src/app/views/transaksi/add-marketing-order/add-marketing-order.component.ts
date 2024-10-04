@@ -15,10 +15,16 @@ declare var $: any;
 })
 export class AddMarketingOrderComponent implements OnInit {
   //Variable Declaration
+  marketingOrder: MarketingOrder = new MarketingOrder();
+  headerMo: any[] = [];
+  dataTableMo: any[] = [];
   public isDisable: boolean = true;
   formHeaderMo: FormGroup;
+  isTableVisible: boolean = false;
+  monthNames: string[] = ['', '', ''];
+  marketingOrderTable: any[] = [];
 
-  constructor(private router: Router, private fb: FormBuilder, private marketingOrder: MarketingOrderService) {
+  constructor(private router: Router, private fb: FormBuilder, private moService: MarketingOrderService) {
     this.formHeaderMo = this.fb.group({
       date: ['', Validators.required],
       type: ['', Validators.required],
@@ -26,39 +32,59 @@ export class AddMarketingOrderComponent implements OnInit {
       month_0: ['', Validators.required],
       month_1: ['', []],
       month_2: ['', []],
+      nwd_0: ['', Validators.required],
       nwd_1: ['', Validators.required],
       nwd_2: ['', Validators.required],
-      nwd_3: ['', Validators.required],
+      tl_ot_wd_0: ['', [Validators.required, Validators.min(0)]],
+      tt_ot_wd_0: ['', [Validators.required, Validators.min(0)]],
       tl_ot_wd_1: ['', [Validators.required, Validators.min(0)]],
       tt_ot_wd_1: ['', [Validators.required, Validators.min(0)]],
       tl_ot_wd_2: ['', [Validators.required, Validators.min(0)]],
       tt_ot_wd_2: ['', [Validators.required, Validators.min(0)]],
-      tl_ot_wd_3: ['', [Validators.required, Validators.min(0)]],
-      tt_ot_wd_3: ['', [Validators.required, Validators.min(0)]],
+      total_tlwd_0: ['', []],
+      total_ttwd_0: ['', []],
       total_tlwd_1: ['', []],
       total_ttwd_1: ['', []],
       total_tlwd_2: ['', []],
       total_ttwd_2: ['', []],
-      total_tlwd_3: ['', []],
-      total_ttwd_3: ['', []],
+      max_tube_capa_0: ['', [Validators.required, Validators.min(0)]],
       max_tube_capa_1: ['', [Validators.required, Validators.min(0)]],
       max_tube_capa_2: ['', [Validators.required, Validators.min(0)]],
-      max_tube_capa_3: ['', [Validators.required, Validators.min(0)]],
+      max_capa_tl_0: ['', [Validators.required, Validators.min(0)]],
+      max_capa_tt_0: ['', [Validators.required, Validators.min(0)]],
       max_capa_tl_1: ['', [Validators.required, Validators.min(0)]],
       max_capa_tt_1: ['', [Validators.required, Validators.min(0)]],
       max_capa_tl_2: ['', [Validators.required, Validators.min(0)]],
       max_capa_tt_2: ['', [Validators.required, Validators.min(0)]],
-      max_capa_tl_3: ['', [Validators.required, Validators.min(0)]],
-      max_capa_tt_3: ['', [Validators.required, Validators.min(0)]],
+    });
+
+    // Memonitor perubahan setiap input bulan dengan memantau formHeaderMo, bukan fb
+    this.formHeaderMo.valueChanges.subscribe((values) => {
+      this.updateMonthNames();
     });
   }
 
   ngOnInit(): void {
-    this.disabledField();
     this.loadValueTotal();
     this.formHeaderMo.get('month_0')?.valueChanges.subscribe((value) => {
       this.calculateNextMonths(value);
     });
+  }
+
+  // Fungsi untuk memperbarui array nama bulan
+  updateMonthNames(): void {
+    this.monthNames[0] = this.getMonthName(this.formHeaderMo.get('month_0')?.value);
+    this.monthNames[1] = this.getMonthName(this.formHeaderMo.get('month_1')?.value);
+    this.monthNames[2] = this.getMonthName(this.formHeaderMo.get('month_2')?.value);
+  }
+
+  // Fungsi untuk mengambil nama bulan dari inputan month
+  getMonthName(monthValue: string): string {
+    if (monthValue) {
+      const date = new Date(monthValue + '-01'); // Format input 'yyyy-MM'
+      return date.toLocaleString('default', { month: 'short' }).toUpperCase(); // Nama bulan singkat
+    }
+    return '';
   }
 
   // Fungsi untuk mengatur bulan berikutnya
@@ -88,7 +114,7 @@ export class AddMarketingOrderComponent implements OnInit {
   }
 
   loadValueTotal() {
-    const months = [1, 2, 3];
+    const months = [0, 1, 2];
 
     months.forEach((month) => {
       this.formHeaderMo.get(`nwd_${month}`)?.valueChanges.subscribe(() => this.calculateTotal(month));
@@ -111,46 +137,126 @@ export class AddMarketingOrderComponent implements OnInit {
     this.formHeaderMo.patchValue({ [`total_ttwd_${month}`]: totalTtWd.toFixed(2) });
   }
 
-  disabledField() {
-    this.formHeaderMo.get('total_tlwd_1').disable();
-    this.formHeaderMo.get('total_ttwd_1').disable();
-    this.formHeaderMo.get('total_tlwd_2').disable();
-    this.formHeaderMo.get('total_ttwd_2').disable();
-    this.formHeaderMo.get('total_tlwd_3').disable();
-    this.formHeaderMo.get('total_ttwd_3').disable();
+  saveHeaderMo() {
+    //Save MO
+    this.marketingOrder.revision = this.formHeaderMo.get('revision')?.value;
+    this.marketingOrder.date = this.formHeaderMo.get('date')?.value;
+    this.marketingOrder.type = this.formHeaderMo.get('type')?.value;
+    this.marketingOrder.month_0 = new Date(this.formHeaderMo.get('month_0')?.value);
+    this.marketingOrder.month_1 = new Date(this.formHeaderMo.get('month_1')?.value);
+    this.marketingOrder.month_2 = new Date(this.formHeaderMo.get('month_2')?.value);
+
+    for (let i = 0; i < 3; i++) {
+      this.headerMo.push({
+        mo_id: this.getLastIdMo(),
+        month: new Date(this.formHeaderMo.get(`month_${i}`)?.value),
+        nwd: this.formHeaderMo.get(`nwd_${i}`)?.value,
+        tl_ot_wd: this.formHeaderMo.get(`tl_ot_wd_${i}`)?.value,
+        tt_ot_wd: this.formHeaderMo.get(`tt_ot_wd_${i}`)?.value,
+        total_tlwd: this.formHeaderMo.get(`total_tlwd_${i}`)?.value,
+        total_ttwd: this.formHeaderMo.get(`total_ttwd_${i}`)?.value,
+        max_tube_capa: this.formHeaderMo.get(`max_tube_capa_${i}`)?.value,
+        max_capa_tl: this.formHeaderMo.get(`max_capa_tl_${i}`)?.value,
+        max_capa_tt: this.formHeaderMo.get(`max_capa_tt_${i}`)?.value,
+      });
+    }
+
+    this.fillTheTableMo();
+    this.isTableVisible = true;
   }
 
-  saveHeaderMo() {
-    // Buat instance baru dari MarketingOrder
-    const marketingOrder: MarketingOrder = new MarketingOrder();
-
-    // Isi propertinya dengan nilai dari form
-    marketingOrder.revision = this.formHeaderMo.get('revision')?.value;
-    marketingOrder.date = this.formHeaderMo.get('date')?.value;
-    marketingOrder.type = this.formHeaderMo.get('type')?.value;
-    marketingOrder.month_0 = new Date(this.formHeaderMo.get('month_0')?.value);
-    marketingOrder.month_1 = new Date(this.formHeaderMo.get('month_1')?.value);
-    marketingOrder.month_2 = new Date(this.formHeaderMo.get('month_2')?.value);
-
-    this.marketingOrder.saveMarketingOrder(marketingOrder).subscribe(
-      (response) => {
-        // SweetAlert setelah update berhasil
-        Swal.fire({
-          title: 'Success!',
-          text: 'Data plant successfully updated.',
-          icon: 'success',
-          confirmButtonText: 'OK',
-        }).then((result) => {
-          if (result.isConfirmed) {
-            console.log(response.data);
-            window.location.reload();
-          }
-        });
+  fillTheTableMo(): void {
+    // Inisialisasi data tabel marketing order
+    this.marketingOrderTable = [
+      {
+        category: 'FED TB NR',
+        item: 1060204000038,
+        description: 'FED TB NR 2.25-17 H',
+        type: 'A/B',
+        kapasitas: 447,
+        qtyMould: 64,
+        qtyPerRak: 1200,
+        minOrder: 1200,
+        kpm_m1: 613.2,
+        kpm_m2: 540.0,
+        kpm_m3: 631.2,
       },
-      (err) => {
-        Swal.fire('Error!', 'Error updating data.', 'error');
-      }
-    );
+      {
+        category: 'OEM TT',
+        item: 1110904064059,
+        description: 'FED SET-R 70/90-17 FT 138',
+        type: 'A/B',
+        kapasitas: 447,
+        qtyMould: 80,
+        qtyPerRak: 1200,
+        minOrder: 1200,
+        kpm_m1: 93.04,
+        kpm_m2: 91.76,
+        kpm_m3: 103.2,
+      },
+    ];
+  }
+
+  saveAllMo() {
+    // this.dataTableMo = this.marketingOrderTable.map((mo) => {
+    //   return {
+    //     category: mo.category,
+    //     item: mo.item,
+    //     description: mo.description,
+    //     type: mo.type,
+    //     kapasitas: mo.kapasitas,
+    //     qtyMould: mo.qtyMould,
+    //     qtyPerRak: mo.qtyPerRak,
+    //     minOrder: mo.minOrder,
+    //     kpm_m1: mo.kpm_m1,
+    //     kpm_m2: mo.kpm_m2,
+    //     kpm_m3: mo.kpm_m3,
+    //     inputSalesForecastMonth1: mo.inputSalesForecastMonth1,
+    //     inputSalesForecastMonth2: mo.inputSalesForecastMonth2,
+    //     inputSalesForecastMonth3: mo.inputSalesForecastMonth3,
+    //     inputMarketingOrderMonth1: mo.inputMarketingOrderMonth1,
+    //     inputMarketingOrderMonth2: mo.inputMarketingOrderMonth2,
+    //     inputMarketingOrderMonth3: mo.inputMarketingOrderMonth3,
+    //     inputInitialStock: mo.inputInitialStock,
+    //   };
+    // });
+    this.dataTableMo = this.getMarketingOrderData();
+    console.log("Table Data: ", JSON.stringify(this.dataTableMo, null, 2));
+    console.log('Marketing order : ', this.marketingOrder);
+    console.log('Header Mo : ', this.headerMo);
+  }
+
+  // Tambahkan fungsi ini ke dalam komponen Anda
+  getMarketingOrderData() {
+    const dataTableMo = this.marketingOrderTable.map((mo) => {
+      return {
+        category: mo.category,
+        item: mo.item,
+        description: mo.description,
+        type: mo.type,
+        kapasitas: mo.kapasitas,
+        qtyMould: mo.qtyMould,
+        qtyPerRak: mo.qtyPerRak,
+        minOrder: mo.minOrder,
+        kpm_m1: mo.kpm_m1,
+        kpm_m2: mo.kpm_m2,
+        kpm_m3: mo.kpm_m3,
+        inputSalesForecastMonth1: mo.inputSalesForecastMonth1,
+        inputSalesForecastMonth2: mo.inputSalesForecastMonth2,
+        inputSalesForecastMonth3: mo.inputSalesForecastMonth3,
+        inputMarketingOrderMonth1: mo.inputMarketingOrderMonth1,
+        inputMarketingOrderMonth2: mo.inputMarketingOrderMonth2,
+        inputMarketingOrderMonth3: mo.inputMarketingOrderMonth3,
+        inputInitialStock: mo.inputInitialStock,
+      };
+    });
+
+    return dataTableMo; // Kembalikan data sebagai array objek
+  }
+
+  getLastIdMo() {
+    let number = 1;
+    return number;
   }
 
   navigateToViewMo() {

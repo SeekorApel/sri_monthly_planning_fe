@@ -131,6 +131,32 @@ export class ViewPlantComponent implements OnInit {
     });
   }
 
+  activateData(plant: Plant): void {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'This data plant will be Activated!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes',
+      cancelButtonText: 'No',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.plantService.activatePlant(plant).subscribe(
+          (response) => {
+            Swal.fire('Activated!', 'Data plant has been Activated', 'success').then(() => {
+              window.location.reload();
+            });
+          },
+          (err) => {
+            Swal.fire('Error!', 'Failed to Activated the plant.', 'error');
+          }
+        );
+      }
+    });
+  }
+
   openModalUpload(): void {
     $('#uploadModal').modal('show');
   }

@@ -20,29 +20,35 @@
       </div>
 
       <!-- Table -->
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th>No</th>
-            <th>Plant ID</th>
-            <th>Plant Name</th>
-            <th>Status</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let plant of pageOfItems; let i = index">
-            <td>{{ i + 1 }}</td>
-            <td>{{ plant.plant_ID }}</td>
-            <td>{{ plant.plant_NAME }}</td>
-            <td>{{ plant.status === 1 ? 'Active' : 'Deactive' }}</td>
-            <td>
-              <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(plant.plant_ID)">Update</button>
-              <button type="button" class="btn btn-md btn-danger ml-2" (click)="deleteData(plant)">Delete</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="table-responsive">
+        <table class="table table-bordered table-striped table-sm">
+          <thead align="center">
+            <tr>
+              <th>No</th>
+              <th>Plant ID</th>
+              <th>Plant Name</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr align="center" *ngFor="let plant of pageOfItems; let i = index">
+              <td>{{ i + 1 }}</td>
+              <td>{{ plant.plant_ID }}</td>
+              <td>{{ plant.plant_NAME }}</td>
+              <td [ngClass]="{ 'bg-success': plant.status === 1, 'bg-danger': plant.status !== 1 }">
+                {{ plant.status === 1 ? 'Active' : 'Deactive' }}
+              </td>
+              <td>
+                <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(plant.plant_ID)">Update</button>
+                <button type="button" class="btn btn-md ml-2"[ngClass]="{'btn-danger': plant.status === 1, 'btn-success': plant.status !== 1}" (click)="plant.status === 1 ? deleteData(plant) : activateData(plant)">
+                  {{ plant.status === 1 ? 'Delete' : 'Active' }}
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
       <!-- Pagination -->
       <nav>
         <ul class="pagination">
