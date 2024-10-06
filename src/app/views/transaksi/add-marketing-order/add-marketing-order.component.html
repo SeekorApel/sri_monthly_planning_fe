@@ -40,8 +40,14 @@
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="month-input">Month And Year</label>
                 <div class="col-md-9 d-flex align-items-center">
-                  <input class="form-control" formControlName="month_0" type="month" />
+                  <input class="form-control" formControlName="month_0" type="month" style="width: 550px; height: 36px" />
                   <button (click)="downloadTemplate()" type="button" class="btn btn-primary ml-2"><i class="fa fa-download fa-lg"></i> Download Template</button>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-3 col-form-label" for="file-input">Upload File</label>
+                <div class="col-md-9 d-flex align-items-center">
+                  <input class="form-control-file" formControlName="upload_file_m1" type="file" id="file-input" (change)="uploadFile($event)" />
                 </div>
               </div>
               <div class="form-group row">
