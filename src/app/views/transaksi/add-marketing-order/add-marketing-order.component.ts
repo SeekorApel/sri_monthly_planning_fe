@@ -111,9 +111,35 @@ export class AddMarketingOrderComponent implements OnInit {
     const shiftData = [['Shift 3'], ['Shift 2'], ['Shift 1'], ['OT TL 3'], ['OT TL 2'], ['OT TL 1'], ['OT TT 3'], ['OT TT 2'], ['OT TT 1'], ['OFF']];
 
     // Menambahkan header tanggal ke worksheet
+    // const headerRow = Array.from({ length: lastDay }, (_, i) => {
+    //   const day = i + 1;
+    //   return `${day < 10 ? '0' + day : day}/${month + 1 < 10 ? '0' + (month + 1) : month + 1}/${year}`; // Format dd/mm/yyyy
+    // });
+
+    // Menambahkan header tanggal ke worksheet
+    // const headerRow = Array.from({ length: lastDay }, (_, i) => {
+    //   const day = new Date(year, month, i + 1); // Buat tanggal untuk setiap hari
+    //   // Format tanggal menjadi "Mon, 05 October 2024"
+    //   return day.toLocaleDateString('en-US', {
+    //     weekday: 'short', // Nama hari singkat (Mon, Tue, dst.)
+    //     day: '2-digit', // Tanggal dua digit (05, 06, dst.)
+    //     month: 'long', // Nama bulan penuh (October, November, dst.)
+    //     year: 'numeric', // Tahun (2024)
+    //   });
+    // });
+
     const headerRow = Array.from({ length: lastDay }, (_, i) => {
-      const day = i + 1;
-      return `${day < 10 ? '0' + day : day}/${month + 1 < 10 ? '0' + (month + 1) : month + 1}/${year}`; // Format dd/mm/yyyy
+      const day = new Date(year, month, i + 1); // Buat tanggal untuk setiap hari
+      // Format tanggal menjadi "Tue, 26 November 2024"
+      return day
+        .toLocaleDateString('en-US', {
+          weekday: 'short', // Nama hari singkat (Tue, Wed, dst.)
+          day: '2-digit', // Tanggal dua digit (26, 27, dst.)
+          month: 'long', // Nama bulan penuh (November, Desember, dst.)
+          year: 'numeric', // Tahun (2024)
+        })
+        .replace(',', '')
+        .replace(/^(\D+)\s(\d+)\s(\D+)\s(\d+)$/, '$1, $2 $3 $4');
     });
 
     // Menambahkan header tanggal di B1
@@ -135,6 +161,18 @@ export class AddMarketingOrderComponent implements OnInit {
           type: 'pattern',
           pattern: 'solid',
           fgColor: { argb: 'FF0000' }, // Warna merah
+        };
+        cell.font = {
+          color: { argb: 'FFFFFFFF' }, // Font berwarna putih
+        };
+      }
+
+      // Jika hari Jumat, warnai sel dengan hijau
+      if (dateValue.getDay() === 5) {
+        cell.fill = {
+          type: 'pattern',
+          pattern: 'solid',
+          fgColor: { argb: '008000' }, // Warna hijau
         };
         cell.font = {
           color: { argb: 'FFFFFFFF' }, // Font berwarna putih
@@ -217,10 +255,18 @@ export class AddMarketingOrderComponent implements OnInit {
       horizontal: 'center',
     };
 
+    // Menyesuaikan waktu ke zona WIB (UTC+7)
+    const now = new Date();
+    const indonesiaTime = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Jakarta' }));
+    const monthFn = date.toLocaleDateString('en-US', { month: 'long' });
+    // Format jam dan menit (contoh: 18:59)
+    const timestamp = indonesiaTime.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }).replace(':', '');
+    // Format nama file dengan bulan, tahun, dan timestamp
+    const fileName = `workday_${monthFn}_${year}_${timestamp}.xlsx`;
     // Ekspor workbook sebagai file Excel
     workbook.xlsx.writeBuffer().then((buffer) => {
       const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-      saveAs(blob, 'shift_template.xlsx');
+      saveAs(blob, fileName); // Menggunakan nama file yang diformat
     });
   }
 
@@ -237,10 +283,45 @@ export class AddMarketingOrderComponent implements OnInit {
       const worksheet = workbook.Sheets[workbook.SheetNames[0]];
       const jsonData: any[] = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
 
-      console.log(jsonData);
+      // Ambil array tanggal dari baris pertama (kolom 1 hingga akhir)
+      const tanggal = jsonData[0].slice(1); // Baris tanggal mulai dari kolom ke-1 (index 1)
 
-      // Konversi data ke format yang diinginkan
-      this.excelData = this.formatData(jsonData);
+      const hasilFilter: any[] = [];
+
+      // Iterasi melalui setiap kolom tanggal
+      for (let i = 0; i < tanggal.length; i++) {
+        const shift1 = jsonData[3][i] === '☑' ? 1 : 0;
+        const shift2 = jsonData[2][i] === '☑' ? 1 : 0;
+        const shift3 = jsonData[1][i] === '☑' ? 1 : 0;
+        const ot_tl_1 = jsonData[6][i] === '☑' ? 1 : 0;
+        const ot_tl_2 = jsonData[5][i] === '☑' ? 1 : 0;
+        const ot_tl_3 = jsonData[4][i] === '☑' ? 1 : 0;
+        const ot_tt_1 = jsonData[9][i] === '☑' ? 1 : 0;
+        const ot_tt_2 = jsonData[8][i] === '☑' ? 1 : 0;
+        const ot_tt_3 = jsonData[7][i] === '☑' ? 1 : 0;
+        const off = jsonData[10][i] === 'OFF' ? 1 : 0;
+
+        // Buat objek dengan format JSON yang diinginkan untuk setiap tanggal
+        const sampleData = {
+          tanggal: tanggal[i - 0], // Tanggal pada kolom yang sesuai
+          shift1: shift1,
+          shift2: shift2,
+          shift3: shift3,
+          ot_tl_3: ot_tl_3,
+          ot_tl_2: ot_tl_2,
+          ot_tl_1: ot_tl_1,
+          ot_tt_3: ot_tt_3,
+          ot_tt_2: ot_tt_2,
+          ot_tt_1: ot_tt_1,
+          off: off,
+        };
+
+        // Tambahkan setiap hasil ke array
+        hasilFilter.push(sampleData);
+      }
+
+      // Cetak hasil yang sudah difilter sepanjang length tanggal
+      console.log(hasilFilter);
     };
 
     reader.readAsArrayBuffer(file);
