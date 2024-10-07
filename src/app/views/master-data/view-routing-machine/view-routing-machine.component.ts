@@ -30,8 +30,43 @@ export class ViewRoutingMachineComponent implements OnInit {
 
   constructor(private RoutingMachineService: RoutingService, private fb: FormBuilder) { 
     this.editRoutingMachineForm = this.fb.group({
-      CT_assy_ID: ['', Validators.required],
-      WIP: ['', Validators.required]
+      CtAssyID: ['', Validators.required],
+      wip: ['', Validators.required],
+      description: ['', Validators.required],
+      group_counter: ['', Validators.required],
+      var_group_counter: ['', Validators.required],
+      sequence: ['', Validators.required],
+      wct: ['', Validators.required],
+      operation_short_text: ['', Validators.required],
+      operation_unit: ['', Validators.required],
+      base_quantity: ['', Validators.required],
+      standard_value_unit: ['', Validators.required],
+      CT_sec_1: ['', Validators.required],
+      CT_hr_1000: ['', Validators.required],
+      WH_normal_shift_1: ['', Validators.required],
+      WH_normal_shift_2: ['', Validators.required],
+      WH_normal_shift_3: ['', Validators.required],
+      WH_shift_jumat: ['', Validators.required],
+      WH_total_normal_shift: ['', Validators.required],
+      WH_total_shift_jumat: ['', Validators.required],
+      allow_normal_shift_1: ['', Validators.required],
+      allow_normal_shift_2: ['', Validators.required],
+      allow_normal_shift_3: ['', Validators.required],
+      allow_total: ['', Validators.required],
+      OP_time_normal_shift_1: ['', Validators.required],
+      OP_time_normal_shift_2: ['', Validators.required],
+      OP_time_normal_shift_3: ['', Validators.required],
+      OP_time_shift_jumat: ['', Validators.required],
+      OP_time_total_normal_shift: ['', Validators.required],
+      OP_time_total_shift_jumat: ['', Validators.required],
+      kaps_normal_shift_1: ['', Validators.required],
+      kaps_normal_shift_2: ['', Validators.required],
+      kaps_normal_shift_3: ['', Validators.required],
+      kaps_shift_jumat: ['', Validators.required],
+      kaps_total_normal_shift: ['', Validators.required],
+      kaps_total_shift_jumat: ['', Validators.required],
+      waktu_total_CT_normal: ['', Validators.required],
+      waktu_total_CT_jumat: ['', Validators.required]
     });
   }
 

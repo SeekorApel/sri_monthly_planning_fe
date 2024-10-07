@@ -20,94 +20,96 @@
       </div>
       <link rel="stylesheet" href="view-routing-machine.component.scss">
       <!-- Table -->
-      <table class="table table-striped">
-        <thead>
-          <tr class="table-wrapper">
-            <th>CT ID</th>
-            <th>WIP</th>
-            <th>Description</th>
-            <th>Group Counter</th>
-            <th>Var Group Counter</th>
-            <th>Sequence</th>
-            <th>Operation Short Text</th>
-            <th>Operation Unit</th>
-            <th>Base Quantity</th>
-            <th>Standard Value Unit</th>
-            <th>CT SEC/1</th>
-            <th>WH Normal Shift 1</th>
-            <th>WH Normal Shift 2</th>
-            <th>WH Normal Shift 3</th>
-            <th>Wh Shift Jumat</th>
-            <th>Wh Total Normal Shift</th>
-            <th>Wh Total Shift Jumat</th>
-            <th>Allow Normal Shift 1</th>
-            <th>Allow Normal Shift 2</th>
-            <th>Allow Normal Shift 3</th>
-            <th>Allow Total</th>
-            <th>OP Time Normal Shift 1</th>
-            <th>OP Time Normal Shift 2</th>
-            <th>OP Time Normal Shift 3</th>
-            <th>OP Time Shift Jumat</th>
-            <th>OP Time Total Normal Shift</th>
-            <th>OP Time Total Shift Jumat</th>
-            <th>Kapasitas Normal Shift 1</th>
-            <th>Kapasitas Normal Shift 2</th>
-            <th>Kapasitas Normal Shift 3</th>
-            <th>Kapasitas Shift Jumat</th>
-            <th>Kapasitas Total Normal Shift</th>
-            <th>Kapasitas Total Shift Jumat</th>
-            <th>Waktu Total CT Normal</th>
-            <th>Waktu Total CT Jumat</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let routingMachine of pageOfItems; let i = index">
-            <td>{{ i + 1 }}</td>
-            <td>{{ routingMachine.CT_assy_ID }}</td>
-            <td>{{ routingMachine.wip }}</td>
-            <td>{{ routingMachine.description }}</td>
-            <td>{{ routingMachine.group_counter }}</td>
-            <td>{{ routingMachine.var_group_counter }}</td>
-            <td>{{ routingMachine.sequence }}</td>
-            <td>{{ routingMachine.wct }}</td>
-            <td>{{ routingMachine.operation_short_text }}</td>
-            <td>{{ routingMachine.operation_unit }}</td>
-            <td>{{ routingMachine.base_quantity }}</td>
-            <td>{{ routingMachine.standard_value_unit }}</td>
-            <td>{{ routingMachine.CT_sec_1 }}</td>
-            <td>{{ routingMachine.CT_hr_1000 }}</td>
-            <td>{{ routingMachine.WH_normal_shift_1 }}</td>
-            <td>{{ routingMachine.WH_normal_shift_2 }}</td>
-            <td>{{ routingMachine.WH_normal_shift_3 }}</td>
-            <td>{{ routingMachine.WH_shift_jumat }}</td>
-            <td>{{ routingMachine.WH_total_normal_shift }}</td>
-            <td>{{ routingMachine.WH_total_shift_jumat }}</td>
-            <td>{{ routingMachine.allow_normal_shift_1 }}</td>
-            <td>{{ routingMachine.allow_normal_shift_2 }}</td>
-            <td>{{ routingMachine.allow_normal_shift_3 }}</td>
-            <td>{{ routingMachine.allow_total }}</td>
-            <td>{{ routingMachine.OP_time_normal_shift_1 }}</td>
-            <td>{{ routingMachine.OP_time_normal_shift_2 }}</td>
-            <td>{{ routingMachine.OP_time_normal_shift_3 }}</td>
-            <td>{{ routingMachine.OP_time_shift_jumat }}</td>
-            <td>{{ routingMachine.OP_time_total_normal_shift }}</td>
-            <td>{{ routingMachine.OP_time_total_shift_jumat }}</td>
-            <td>{{ routingMachine.kaps_normal_shift_1 }}</td>
-            <td>{{ routingMachine.kaps_normal_shift_2 }}</td>
-            <td>{{ routingMachine.kaps_normal_shift_3 }}</td>
-            <td>{{ routingMachine.kaps_shift_jumat }}</td>
-            <td>{{ routingMachine.kaps_total_normal_shift }}</td>
-            <td>{{ routingMachine.kaps_total_shift_jumat }}</td>
-            <td>{{ routingMachine.waktu_total_CT_normal }}</td>
-            <td>{{ routingMachine.waktu_total_CT_jumat }}</td>
-            <td>{{ routingMachine.status === 1 ? 'Active' : 'Deactive' }}</td>
-            <td>
-              <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(setting.setting_ID)">Update</button>
-              <button type="button" class="btn btn-md btn-danger ml-2" (click)="deleteData(setting)">Delete</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="table-wrapper">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th style="min-width: 80px">CT ID</th>
+              <th style="min-width: 80px">WIP</th>
+              <th style="min-width: 150px">Description</th>
+              <th style="min-width: 150px">Group Counter</th>
+              <th style="min-width: 150px">Var Group Counter</th>
+              <th style="min-width: 150px">Sequence</th>
+              <th style="min-width: 150px">Operation Short Text</th>
+              <th style="min-width: 150px">Operation Unit</th>
+              <th style="min-width: 150px">Base Quantity</th>
+              <th style="min-width: 150px">Standard Value Unit</th>
+              <th style="min-width: 150px">CT SEC/1</th>
+              <th>WH Normal Shift 1</th>
+              <th>WH Normal Shift 2</th>
+              <th>WH Normal Shift 3</th>
+              <th>Wh Shift Jumat</th>
+              <th>Wh Total Normal Shift</th>
+              <th>Wh Total Shift Jumat</th>
+              <th>Allow Normal Shift 1</th>
+              <th>Allow Normal Shift 2</th>
+              <th>Allow Normal Shift 3</th>
+              <th>Allow Total</th>
+              <th>OP Time Normal Shift 1</th>
+              <th>OP Time Normal Shift 2</th>
+              <th>OP Time Normal Shift 3</th>
+              <th>OP Time Shift Jumat</th>
+              <th>OP Time Total Normal Shift</th>
+              <th>OP Time Total Shift Jumat</th>
+              <th>Kapasitas Normal Shift 1</th>
+              <th>Kapasitas Normal Shift 2</th>
+              <th>Kapasitas Normal Shift 3</th>
+              <th>Kapasitas Shift Jumat</th>
+              <th>Kapasitas Total Normal Shift</th>
+              <th>Kapasitas Total Shift Jumat</th>
+              <th>Waktu Total CT Normal</th>
+              <th>Waktu Total CT Jumat</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let routingMachine of pageOfItems; let i = index">
+              <td>{{ i + 1 }}</td>
+              <td>{{ routingMachine.CT_assy_ID }}</td>
+              <td>{{ routingMachine.wip }}</td>
+              <td>{{ routingMachine.description }}</td>
+              <td>{{ routingMachine.group_counter }}</td>
+              <td>{{ routingMachine.var_group_counter }}</td>
+              <td>{{ routingMachine.sequence }}</td>
+              <td>{{ routingMachine.wct }}</td>
+              <td>{{ routingMachine.operation_short_text }}</td>
+              <td>{{ routingMachine.operation_unit }}</td>
+              <td>{{ routingMachine.base_quantity }}</td>
+              <td>{{ routingMachine.standard_value_unit }}</td>
+              <td>{{ routingMachine.CT_sec_1 }}</td>
+              <td>{{ routingMachine.CT_hr_1000 }}</td>
+              <td>{{ routingMachine.WH_normal_shift_1 }}</td>
+              <td>{{ routingMachine.WH_normal_shift_2 }}</td>
+              <td>{{ routingMachine.WH_normal_shift_3 }}</td>
+              <td>{{ routingMachine.WH_shift_jumat }}</td>
+              <td>{{ routingMachine.WH_total_normal_shift }}</td>
+              <td>{{ routingMachine.WH_total_shift_jumat }}</td>
+              <td>{{ routingMachine.allow_normal_shift_1 }}</td>
+              <td>{{ routingMachine.allow_normal_shift_2 }}</td>
+              <td>{{ routingMachine.allow_normal_shift_3 }}</td>
+              <td>{{ routingMachine.allow_total }}</td>
+              <td>{{ routingMachine.OP_time_normal_shift_1 }}</td>
+              <td>{{ routingMachine.OP_time_normal_shift_2 }}</td>
+              <td>{{ routingMachine.OP_time_normal_shift_3 }}</td>
+              <td>{{ routingMachine.OP_time_shift_jumat }}</td>
+              <td>{{ routingMachine.OP_time_total_normal_shift }}</td>
+              <td>{{ routingMachine.OP_time_total_shift_jumat }}</td>
+              <td>{{ routingMachine.kaps_normal_shift_1 }}</td>
+              <td>{{ routingMachine.kaps_normal_shift_2 }}</td>
+              <td>{{ routingMachine.kaps_normal_shift_3 }}</td>
+              <td>{{ routingMachine.kaps_shift_jumat }}</td>
+              <td>{{ routingMachine.kaps_total_normal_shift }}</td>
+              <td>{{ routingMachine.kaps_total_shift_jumat }}</td>
+              <td>{{ routingMachine.waktu_total_CT_normal }}</td>
+              <td>{{ routingMachine.waktu_total_CT_jumat }}</td>
+              <td>{{ routingMachine.status === 1 ? 'Active' : 'Deactive' }}</td>
+              <td>
+                <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(setting.setting_ID)">Update</button>
+                <button type="button" class="btn btn-md btn-danger ml-2" (click)="deleteData(setting)">Delete</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
       <!-- Pagination -->
       <nav>
         <ul class="pagination">
@@ -243,7 +245,7 @@
             <div *ngIf="editRoutingMachineForm.get('allow_normal_shift_3').invalid && editRoutingMachineForm.get('allow_normal_shift_3')touched" class="invalid-feedback">allow normal shift 3 value is required.</div>
           
             <label for="allow_total">Allow Total</label>
-            <input [(ngModel)]="edtRoutingMachineObject.allow_total" type="text" class="form-control" id="allow_total" formControlName="WH_total_normal_shift" [ngClass]="{ 'is-invalid': editRoutingMachineForm.get('allow_total').invalid && editRoutingMachineForm.get('allow_total').touched }" />
+            <input [(ngModel)]="edtRoutingMachineObject.allow_total" type="text" class="form-control" id="allow_total" formControlName="allow_total" [ngClass]="{ 'is-invalid': editRoutingMachineForm.get('allow_total').invalid && editRoutingMachineForm.get('allow_total').touched }" />
             <!-- Error message if plantName is empty -->
             <div *ngIf="editRoutingMachineForm.get('allow_total').invalid && editRoutingMachineForm.get('allow_total')touched" class="invalid-feedback">allow total value is required.</div>
           
