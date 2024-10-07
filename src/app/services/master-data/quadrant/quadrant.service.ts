@@ -13,7 +13,7 @@ import { map, catchError } from 'rxjs/operators';
 export class QuadrantService {
   //Isi tokenya
   token: String =
-    'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBdXJlbCIsImV4cCI6MTcyODA0MzU5OX0.pwxxKwvvqirwgloPRo26rf2lJEjjzBoQ-eREftyce41rassjEIcZo47weWFQuJc9PVhw-aF9ZlGp3YEfVvTYZA';
+    'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBdXJlbCIsImV4cCI6MTcyODMwODA4M30.y03EN8mmoDGrL7FzHc5W7QDPLuAoVmD21CNXz4OrBMyci5OSMFW8urH69vONuD8YW87911-NUE2BvkFrpFYWhA';
 
   constructor(private http: HttpClient) {}
 

@@ -13,7 +13,7 @@ import { map, catchError } from 'rxjs/operators';
 export class ItemAssyService {
   //Isi tokenya
   token: String =
-    'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBdXJlbCIsImV4cCI6MTcyODA1NzkxNH0.qHBI0ZWHANVJQuK_D_9TVU6M1kr8KlOpTJICLnnIUv845qIappPTvjFzKd6ol6qKKQkCS3XXXmi5bt515XYq8A';
+    'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBdXJlbCIsImV4cCI6MTcyODMwODA4M30.y03EN8mmoDGrL7FzHc5W7QDPLuAoVmD21CNXz4OrBMyci5OSMFW8urH69vONuD8YW87911-NUE2BvkFrpFYWhA';
 
   constructor(private http: HttpClient) {}
 
@@ -40,6 +40,7 @@ export class ItemAssyService {
 
   //Method Update plant
   updateItemAssy(itemAssy: Item_Assy): Observable<ApiResponse<Item_Assy>> {
+    console.log(itemAssy);
     return this.http
       .post<ApiResponse<Item_Assy>>(
         environment.apiUrlWebAdmin + '/updateItemAssy',
