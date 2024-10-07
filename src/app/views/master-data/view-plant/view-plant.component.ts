@@ -6,6 +6,7 @@ import { PlantService } from 'src/app/services/master-data/plant/plant.service';
 import Swal from 'sweetalert2';
 declare var $: any;
 import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-view-plant',
@@ -227,4 +228,38 @@ export class ViewPlantComponent implements OnInit {
       });
     }
   }
+
+  downloadExcel(): void {
+    // Mengonversi data plants menjadi worksheet Excel
+    const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.plants);
+    const workbook: XLSX.WorkBook = { Sheets: { Plants: worksheet }, SheetNames: ['Plants'] };
+
+    // Mengonversi workbook ke dalam buffer
+    const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+
+    // Mengunduh file Excel
+    this.saveAsExcelFile(excelBuffer, 'PlantData');
+  }
+
+  saveAsExcelFile(buffer: any, fileName: string): void {
+    const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+    const data: Blob = new Blob([buffer], { type: EXCEL_TYPE });
+    saveAs(data, `${fileName}_export_${new Date().getTime()}.xlsx`);
+  }
+
+  // downloadExcel(): void {
+  //   this.plantService.downloadPlantsExcel().subscribe(
+  //     (response: Blob) => {
+  //       const blobUrl = window.URL.createObjectURL(response);
+  //       const a = document.createElement('a');
+  //       a.href = blobUrl;
+  //       a.download = 'MASTER_PLANT.xlsx';
+  //       a.click();
+  //       window.URL.revokeObjectURL(blobUrl);
+  //     },
+  //     (error) => {
+  //       this.errorMessage = 'Failed to download Excel: ' + error.message;
+  //     }
+  //   );
+  // }
 }

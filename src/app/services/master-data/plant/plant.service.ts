@@ -12,7 +12,7 @@ import { map, catchError } from 'rxjs/operators';
 })
 export class PlantService {
   //Isi tokenya
-  token: String = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBdXJlbCIsImV4cCI6MTcyODEwOTQzNn0.q9O5e6nCas_CjMo9s2psfFKgEu4A7JKN5o13Po1GHlwP7Ytg0Cx5GsUaPwWwa0TV5Pzv0OSv06YS_OVjPaLNfg';
+  token: String = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBdXJlbCIsImV4cCI6MTcyODM0OTg1NX0.wAf4xGwS_kJRxyx8Q5qMlH6tqtJRxYCAEI9qBtWOaJfOKxLJ7PHDFryxnBrXRDRem0-kMT7gT8efCeV2tRpxnA';
 
   constructor(private http: HttpClient) {}
 
@@ -22,6 +22,13 @@ export class PlantService {
       Authorization: `Bearer ${this.token}`,
     });
   }
+
+  // downloadPlantsExcel(): Observable<Blob> {
+  //   return this.http.get(environment.apiUrlWebAdmin + '/exportPlantsExcel', {
+  //     headers: this.getHeaders(),
+  //     responseType: 'blob',
+  //   });
+  // }
 
   getPlantById(idPlant: number): Observable<ApiResponse<Plant>> {
     return this.http.get<ApiResponse<Plant>>(environment.apiUrlWebAdmin + '/getPlantById/' + idPlant, { headers: this.getHeaders() });

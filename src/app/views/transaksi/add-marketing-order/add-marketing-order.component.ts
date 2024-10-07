@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { Select2OptionData } from 'ng-select2';
-import { Options } from 'select2';
 import { MarketingOrder } from 'src/app/models/MarketingOrder';
 import { MarketingOrderService } from 'src/app/services/transaksi/marketing order/marketing-order.service';
 import Swal from 'sweetalert2';
@@ -22,6 +20,7 @@ export class AddMarketingOrderComponent implements OnInit {
   headerMo: any[] = [];
   dataTableMo: any[] = [];
   isDisable: boolean = true;
+  isReadOnly: boolean = true;
   formHeaderMo: FormGroup;
   isTableVisible: boolean = false;
   monthNames: string[] = ['', '', ''];
@@ -60,7 +59,9 @@ export class AddMarketingOrderComponent implements OnInit {
       max_capa_tt_1: ['', [Validators.required, Validators.min(0)]],
       max_capa_tl_2: ['', [Validators.required, Validators.min(0)]],
       max_capa_tt_2: ['', [Validators.required, Validators.min(0)]],
-      upload_file_m1: [null, Validators.required]
+      upload_file_m1: [null, Validators.required],
+      upload_file_m2: [null, Validators.required],
+      upload_file_m3: [null, Validators.required],
     });
 
     // Memonitor perubahan setiap input bulan dengan memantau formHeaderMo, bukan fb
@@ -76,9 +77,25 @@ export class AddMarketingOrderComponent implements OnInit {
     });
   }
 
+  // generateExcel() {
+  //   this.moService.generateExcelWithCheckbox();
+  // }
+
   downloadTemplate() {
     // Ambil bulan dan tahun dari input
     const monthControl = this.formHeaderMo.get('month_0').value;
+
+    // Cek apakah bulan sudah dipilih
+    if (!monthControl) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Month not selected',
+        text: 'Please select a month first!',
+        confirmButtonText: 'OK',
+      });
+      return; // Stop execution if no month is selected
+    }
+
     const date = new Date(monthControl); // Mengubah ke objek Date
     const year = date.getFullYear();
     const month = date.getMonth(); // Mengambil bulan (0-11)
@@ -91,18 +108,7 @@ export class AddMarketingOrderComponent implements OnInit {
     const worksheet = workbook.addWorksheet('Shift Template');
 
     // Data untuk shift yang akan ditulis ke Excel
-    const shiftData = [
-      ['Shift 3'],
-      ['Shift 2'],
-      ['Shift 1'],
-      ['OT TL 3'],
-      ['OT TL 2'],
-      ['OT TL 1'],
-      ['OT TT 3'],
-      ['OT TT 2'],
-      ['OT TT 1'],
-      ['OFF'],
-    ];
+    const shiftData = [['Shift 3'], ['Shift 2'], ['Shift 1'], ['OT TL 3'], ['OT TL 2'], ['OT TL 1'], ['OT TT 3'], ['OT TT 2'], ['OT TT 1'], ['OFF']];
 
     // Menambahkan header tanggal ke worksheet
     const headerRow = Array.from({ length: lastDay }, (_, i) => {
@@ -123,14 +129,15 @@ export class AddMarketingOrderComponent implements OnInit {
       const dateValue = new Date(year, month, colNumber - 1); // Mendapatkan tanggal
 
       // Jika hari Minggu, warnai sel
-      if (dateValue.getDay() === 0) { // 0 = Minggu
+      if (dateValue.getDay() === 0) {
+        // 0 = Minggu
         cell.fill = {
           type: 'pattern',
           pattern: 'solid',
-          fgColor: { argb: 'FF0000' } // Warna merah
+          fgColor: { argb: 'FF0000' }, // Warna merah
         };
         cell.font = {
-          color: { argb: 'FFFFFFFF' } // Font berwarna putih
+          color: { argb: 'FFFFFFFF' }, // Font berwarna putih
         };
       }
 
@@ -139,13 +146,13 @@ export class AddMarketingOrderComponent implements OnInit {
         top: { style: 'thin' },
         left: { style: 'thin' },
         bottom: { style: 'thin' },
-        right: { style: 'thin' }
+        right: { style: 'thin' },
       };
 
       // Mengatur alignment (center dan middle)
       cell.alignment = {
         vertical: 'middle',
-        horizontal: 'center'
+        horizontal: 'center',
       };
 
       // Sesuaikan lebar kolom berdasarkan isi
@@ -156,19 +163,20 @@ export class AddMarketingOrderComponent implements OnInit {
     const totalRows = shiftData.length + 1; // +1 untuk baris header
 
     for (let rowNumber = 1; rowNumber <= totalRows; rowNumber++) {
-      for (let colNumber = 1; colNumber <= lastDay + 1; colNumber++) { // +1 untuk kolom A
+      for (let colNumber = 1; colNumber <= lastDay + 1; colNumber++) {
+        // +1 untuk kolom A
         const cell = worksheet.getCell(rowNumber, colNumber);
         cell.border = {
           top: { style: 'thin' },
           left: { style: 'thin' },
           bottom: { style: 'thin' },
-          right: { style: 'thin' }
+          right: { style: 'thin' },
         };
 
         // Mengatur alignment untuk semua sel
         cell.alignment = {
           vertical: 'middle',
-          horizontal: 'center'
+          horizontal: 'center',
         };
       }
     }
@@ -179,24 +187,25 @@ export class AddMarketingOrderComponent implements OnInit {
     instructionCell.fill = {
       type: 'pattern',
       pattern: 'solid',
-      fgColor: { argb: 'FFFF00' } // Warna kuning
+      fgColor: { argb: 'FFFF00' }, // Warna kuning
     };
     instructionCell.alignment = {
       vertical: 'middle',
-      horizontal: 'left'
+      horizontal: 'left',
     };
 
     // Mengatur warna kuning untuk sel B9 sampai D9
-    for (let col = 2; col <= 4; col++) { // B14 (2) sampai D14 (4)
+    for (let col = 2; col <= 4; col++) {
+      // B14 (2) sampai D14 (4)
       const cell = worksheet.getCell(14, col);
       cell.fill = {
         type: 'pattern',
         pattern: 'solid',
-        fgColor: { argb: 'FFFF00' } // Warna kuning
+        fgColor: { argb: 'FFFF00' }, // Warna kuning
       };
       cell.alignment = {
         vertical: 'middle',
-        horizontal: 'center'
+        horizontal: 'center',
       };
     }
 
@@ -205,7 +214,7 @@ export class AddMarketingOrderComponent implements OnInit {
     checkBoxCell.value = '☑'; // Simbol checkbox yang dicentang
     checkBoxCell.alignment = {
       vertical: 'middle',
-      horizontal: 'center'
+      horizontal: 'center',
     };
 
     // Ekspor workbook sebagai file Excel
@@ -240,7 +249,8 @@ export class AddMarketingOrderComponent implements OnInit {
   formatData(data: any[]): any[] {
     const result: any[] = [];
 
-    for (let i = 1; i < data.length; i++) { // Mulai dari 1 untuk melewatkan header
+    for (let i = 1; i < data.length; i++) {
+      // Mulai dari 1 untuk melewatkan header
       const row = data[i];
       const dateValue = row[0] || ''; // Ambil nilai tanggal dari kolom pertama
 
@@ -256,7 +266,7 @@ export class AddMarketingOrderComponent implements OnInit {
         ot_tt_3: row[7] || '',
         ot_tt_2: row[8] || '',
         ot_tt_1: row[9] || '',
-        off: row[10] || ''
+        off: row[10] || '',
       };
 
       // Masukkan objek ke dalam array result
