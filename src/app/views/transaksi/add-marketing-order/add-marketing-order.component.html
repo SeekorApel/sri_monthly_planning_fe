@@ -41,13 +41,14 @@
                 <label class="col-md-3 col-form-label" for="month-input">Month And Year</label>
                 <div class="col-md-9 d-flex align-items-center">
                   <input class="form-control input-month-year" formControlName="month_0" type="month" />
-                  <button (click)="downloadTemplate()" type="button" class="btn btn-primary ml-2"><i class="fa fa-download fa-lg"></i> Download Template</button>
+                  <button (click)="downloadTemplate_M1()" type="button" class="btn btn-primary ml-2"><i class="fa fa-download fa-lg"></i> Download Template</button>
                 </div>
               </div>
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="file-input">Upload File</label>
                 <div class="col-md-9 d-flex align-items-center">
-                  <input class="form-control-file" formControlName="upload_file_m1" type="file" id="file-input" (change)="uploadFile($event)" />
+                  <input class="form-control-file" [ngClass]="{ 'is-invalid': formHeaderMo.get('upload_file_m0')?.invalid && formHeaderMo.get('upload_file_m0')?.touched }" formControlName="upload_file_m0" type="file" id="file-input" (change)="readExcel_M1($event)" />
+                  <div *ngIf="formHeaderMo.get('upload_file_m0')?.invalid && formHeaderMo.get('upload_file_m0')?.touched" class="invalid-feedback">Upload File is required.</div>
                 </div>
               </div>
               <div class="form-group row">
@@ -83,19 +84,22 @@
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="text-input">Maximum Tube Capacity</label>
                 <div class="col-md-9">
-                  <input type="number" formControlName="max_tube_capa_0" name="text-input" class="form-control" placeholder="0,00" />
+                  <input type="number" [ngClass]="{ 'is-invalid': formHeaderMo.get('max_tube_capa_0')?.invalid && formHeaderMo.get('max_tube_capa_0')?.touched }" formControlName="max_tube_capa_0" name="text-input" class="form-control" placeholder="0,00" />
+                  <div *ngIf="formHeaderMo.get('max_tube_capa_0')?.invalid && formHeaderMo.get('max_tube_capa_0')?.touched" class="invalid-feedback">Maximum Tube Capacity is required.</div>
                 </div>
               </div>
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="text-input">Maximum Capacity Tire TL</label>
                 <div class="col-md-9">
-                  <input type="number" formControlName="max_capa_tl_0" name="text-input" class="form-control" placeholder="0,00" />
+                  <input type="number" [ngClass]="{ 'is-invalid': formHeaderMo.get('max_capa_tl_0')?.invalid && formHeaderMo.get('max_capa_tl_0')?.touched }" formControlName="max_capa_tl_0" name="text-input" class="form-control" placeholder="0,00" />
+                  <div *ngIf="formHeaderMo.get('max_capa_tl_0')?.invalid && formHeaderMo.get('max_capa_tl_0')?.touched" class="invalid-feedback">Maximum Capacity Tire TL is required.</div>
                 </div>
               </div>
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="text-input">Maximum Capacity Tire TT</label>
                 <div class="col-md-9">
-                  <input type="number" formControlName="max_capa_tt_0" name="text-input" class="form-control" placeholder="0,00" />
+                  <input type="number" [ngClass]="{ 'is-invalid': formHeaderMo.get('max_capa_tt_0')?.invalid && formHeaderMo.get('max_capa_tt_0')?.touched }" formControlName="max_capa_tt_0" name="text-input" class="form-control" placeholder="0,00" />
+                  <div *ngIf="formHeaderMo.get('max_capa_tt_0')?.invalid && formHeaderMo.get('max_capa_tt_0')?.touched" class="invalid-feedback">Maximum Capacity Tire TT is required.</div>
                 </div>
               </div>
             </tab>
@@ -104,13 +108,14 @@
                 <label class="col-md-3 col-form-label" for="month-input">Month And Year</label>
                 <div class="col-md-9 d-flex align-items-center">
                   <input class="form-control input-month-year" formControlName="month_1" type="month" [readOnly]="true" />
-                  <button (click)="downloadTemplate()" type="button" class="btn btn-primary ml-2"><i class="fa fa-download fa-lg"></i> Download Template</button>
+                  <button (click)="downloadTemplate_M2()" type="button" class="btn btn-primary ml-2"><i class="fa fa-download fa-lg"></i> Download Template</button>
                 </div>
               </div>
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="file-input">Upload File</label>
                 <div class="col-md-9 d-flex align-items-center">
-                  <input class="form-control-file" formControlName="upload_file_m2" type="file" id="file-input" (change)="uploadFile($event)" />
+                  <input class="form-control-file" [ngClass]="{ 'is-invalid': formHeaderMo.get('upload_file_m1')?.invalid && formHeaderMo.get('upload_file_m1')?.touched }" formControlName="upload_file_m1" type="file" id="file-input" (change)="readExcel_M2($event)" />
+                  <div *ngIf="formHeaderMo.get('upload_file_m1')?.invalid && formHeaderMo.get('upload_file_m1')?.touched" class="invalid-feedback">Upload File is required.</div>
                 </div>
               </div>
               <div class="form-group row">
@@ -146,19 +151,22 @@
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="text-input">Maximum Tube Capacity</label>
                 <div class="col-md-9">
-                  <input type="number" formControlName="max_tube_capa_1" name="text-input" class="form-control" placeholder="0,00" />
+                  <input type="number" [ngClass]="{ 'is-invalid': formHeaderMo.get('max_tube_capa_1')?.invalid && formHeaderMo.get('max_tube_capa_1')?.touched }" formControlName="max_tube_capa_1" name="text-input" class="form-control" placeholder="0,00" />
+                  <div *ngIf="formHeaderMo.get('max_tube_capa_1')?.invalid && formHeaderMo.get('max_tube_capa_1')?.touched" class="invalid-feedback">Maximum Tube Capacity is required.</div>
                 </div>
               </div>
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="text-input">Maximum Capacity Tire TL</label>
                 <div class="col-md-9">
-                  <input type="number" formControlName="max_capa_tl_1" name="text-input" class="form-control" placeholder="0,00" />
+                  <input type="number" [ngClass]="{ 'is-invalid': formHeaderMo.get('max_capa_tl_1')?.invalid && formHeaderMo.get('max_capa_tl_1')?.touched }" formControlName="max_capa_tl_1" name="text-input" class="form-control" placeholder="0,00" />
+                  <div *ngIf="formHeaderMo.get('max_capa_tl_1')?.invalid && formHeaderMo.get('max_capa_tl_1')?.touched" class="invalid-feedback">Maximum Capacity Tire TL is required.</div>
                 </div>
               </div>
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="text-input">Maximum Capacity Tire TT</label>
                 <div class="col-md-9">
-                  <input type="number" formControlName="max_capa_tt_1" name="text-input" class="form-control" placeholder="0,00" />
+                  <input type="number" [ngClass]="{ 'is-invalid': formHeaderMo.get('max_capa_tt_1')?.invalid && formHeaderMo.get('max_capa_tt_1')?.touched }" formControlName="max_capa_tt_1" name="text-input" class="form-control" placeholder="0,00" />
+                  <div *ngIf="formHeaderMo.get('max_capa_tt_1')?.invalid && formHeaderMo.get('max_capa_tt_1')?.touched" class="invalid-feedback">Maximum Capacity Tire TT is required.</div>
                 </div>
               </div>
             </tab>
@@ -167,13 +175,14 @@
                 <label class="col-md-3 col-form-label" for="month-input">Month And Year</label>
                 <div class="col-md-9 d-flex align-items-center">
                   <input class="form-control input-month-year" formControlName="month_2" type="month" [readOnly]="true" />
-                  <button (click)="downloadTemplate()" type="button" class="btn btn-primary ml-2"><i class="fa fa-download fa-lg"></i> Download Template</button>
+                  <button (click)="downloadTemplate_M3()" type="button" class="btn btn-primary ml-2"><i class="fa fa-download fa-lg"></i> Download Template</button>
                 </div>
               </div>
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="file-input">Upload File</label>
                 <div class="col-md-9 d-flex align-items-center">
-                  <input class="form-control-file" formControlName="upload_file_m3" type="file" id="file-input" (change)="uploadFile($event)" />
+                  <input class="form-control-file" [ngClass]="{ 'is-invalid': formHeaderMo.get('upload_file_m2')?.invalid && formHeaderMo.get('upload_file_m2')?.touched }" formControlName="upload_file_m2" type="file" id="file-input" (change)="readExcel_M3($event)" />
+                  <div *ngIf="formHeaderMo.get('upload_file_m2')?.invalid && formHeaderMo.get('upload_file_m2')?.touched" class="invalid-feedback">Upload File is required.</div>
                 </div>
               </div>
               <div class="form-group row">
@@ -209,19 +218,22 @@
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="text-input">Maximum Tube Capacity</label>
                 <div class="col-md-9">
-                  <input type="number" formControlName="max_tube_capa_2" name="text-input" class="form-control" placeholder="0,00" />
+                  <input [ngClass]="{ 'is-invalid': formHeaderMo.get('max_tube_capa_2')?.invalid && formHeaderMo.get('max_tube_capa_2')?.touched }" type="number" formControlName="max_tube_capa_2" name="text-input" class="form-control" placeholder="0,00" />
+                  <div *ngIf="formHeaderMo.get('max_tube_capa_2')?.invalid && formHeaderMo.get('max_tube_capa_2')?.touched" class="invalid-feedback">Maximum Tube Capacity is required.</div>
                 </div>
               </div>
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="text-input">Maximum Capacity Tire TL</label>
                 <div class="col-md-9">
-                  <input type="number" formControlName="max_capa_tl_2" name="text-input" class="form-control" placeholder="0,00" />
+                  <input [ngClass]="{ 'is-invalid': formHeaderMo.get('max_capa_tl_2')?.invalid && formHeaderMo.get('max_capa_tl_2')?.touched }" type="number" formControlName="max_capa_tl_2" name="text-input" class="form-control" placeholder="0,00" />
+                  <div *ngIf="formHeaderMo.get('max_capa_tl_2')?.invalid && formHeaderMo.get('max_capa_tl_2')?.touched" class="invalid-feedback">Maximum Capacity Tire TL is required.</div>
                 </div>
               </div>
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="text-input">Maximum Capacity Tire TT</label>
                 <div class="col-md-9">
-                  <input type="number" formControlName="max_capa_tt_2" name="text-input" class="form-control" placeholder="0,00" />
+                  <input [ngClass]="{ 'is-invalid': formHeaderMo.get('max_capa_tt_2')?.invalid && formHeaderMo.get('max_capa_tt_2')?.touched }" type="number" formControlName="max_capa_tt_2" name="text-input" class="form-control" placeholder="0,00" />
+                  <div *ngIf="formHeaderMo.get('max_capa_tt_2')?.invalid && formHeaderMo.get('max_capa_tt_2')?.touched" class="invalid-feedback">Maximum Capacity Tire TT is required.</div>
                 </div>
               </div>
             </tab>
