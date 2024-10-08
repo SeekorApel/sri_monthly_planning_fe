@@ -28,6 +28,8 @@ import { ViewMaxCapacityComponent } from './view-max-capacity/view-max-capacity.
 import { ViewTassSizeComponent } from './view-tass-size/view-tass-size.component';
 import { ViewItemCuringComponent } from './view-item-curing/view-item-curing.component';
 import { ViewCtKapaComponent } from './view-ct-kapa/view-ct-kapa.component';
+import { ViewMachineExtrudingComponent } from './view-machine-extruding/view-machine-extruding.component';
+import { ViewDDeliveryScheduleComponent } from './view-d-deliveryschedule/view-d-deliveryschedule.component';
 
 
 
@@ -54,7 +56,9 @@ import { ViewCtKapaComponent } from './view-ct-kapa/view-ct-kapa.component';
     ViewMaxCapacityComponent,
     ViewTassSizeComponent,
     ViewItemCuringComponent,
-    ViewCtKapaComponent
+    ViewCtKapaComponent,
+    ViewMachineExtrudingComponent,
+    ViewDDeliveryScheduleComponent
   ],
   imports: [
     CommonModule,

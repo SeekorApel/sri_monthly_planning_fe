@@ -42,6 +42,7 @@ export class DefaultLayoutComponent {
       { name: 'Size', url: '/master-data/view-size', icon: 'cil-minus' },
       { name: 'Routing Machine', url: '/master-data/view-routing-machine', icon: 'cil-minus' },
       { name: 'Delivery Schedule', url: '/master-data/view-delivery-schedule', icon: 'cil-minus' },
+      { name: 'Detail Delivery Schedule', url: '/master-data/view-d-deliveryschedule', icon: 'cil-minus' },
       { name: 'Machine Curing Type', url: '/master-data/view-machine-curing-type', icon: 'cil-minus' },
       { name: 'Machine Curing Type Cavity', url: '/master-data/view-machine-curing-type-cavity', icon: 'cil-minus' },
       { name: 'Machine Tass Type', url: '/master-data/view-machine-tass-type', icon: 'cil-minus' },
@@ -49,6 +50,7 @@ export class DefaultLayoutComponent {
       { name: 'Item Curing', url: '/master-data/view-item-curing', icon: 'cil-minus' },
       { name: 'Max Capacity', url: '/master-data/view-max-capacity', icon: 'cil-minus' },
       { name: 'Curing Machine', url: '/master-data/view-curing-machine', icon: 'cil-minus' },
+      { name: 'Machine Extruding', url: '/master-data/view-machine-extruding', icon: 'cil-minus' },
       { name: 'CT Kapa', url: '/master-data/view-ct-kapa', icon: 'cil-minus' },
     ];
 

@@ -35,6 +35,8 @@ import { ViewTassSizeComponent } from './views/master-data/view-tass-size/view-t
 import { ViewMonthlyPlanningComponent } from './views/transaksi/view-monthly-planning/view-monthly-planning.component';
 import { AddMonthlyPlanningComponent } from './views/transaksi/add-monthly-planning/add-monthly-planning.component';
 import { ViewCtKapaComponent } from './views/master-data/view-ct-kapa/view-ct-kapa.component';
+import { ViewMachineExtrudingComponent } from './views/master-data/view-machine-extruding/view-machine-extruding.component';
+import { ViewDDeliveryScheduleComponent } from './views/master-data/view-d-deliveryschedule/view-d-deliveryschedule.component';
 export const routes: Routes = [
   {
     path: '',
@@ -109,10 +111,24 @@ export const routes: Routes = [
         },
       },
       {
+        path: 'master-data/view-d-deliveryschedule',
+        component: ViewDDeliveryScheduleComponent,
+        data: {
+          title: 'Master Data / View Detail Delivery Schedule',
+        },
+      },
+      {
         path: 'master-data/view-product-type',
         component: ViewProductTypeComponent,
         data: {
           title: 'Master Data / View Product Type',
+        },
+      },
+      {
+        path: 'master-data/view-machine-extruding',
+        component: ViewMachineExtrudingComponent,
+        data: {
+          title: 'Master Data / View Machine Extruding',
         },
       },
       {
@@ -278,61 +294,43 @@ export const routes: Routes = [
       },
       {
         path: 'base',
-        loadChildren: () =>
-          import('./views/base/base.module').then((m) => m.BaseModule),
+        loadChildren: () => import('./views/base/base.module').then((m) => m.BaseModule),
       },
       {
         path: 'buttons',
-        loadChildren: () =>
-          import('./views/buttons/buttons.module').then((m) => m.ButtonsModule),
+        loadChildren: () => import('./views/buttons/buttons.module').then((m) => m.ButtonsModule),
       },
       {
         path: 'charts',
-        loadChildren: () =>
-          import('./views/chartjs/chartjs.module').then((m) => m.ChartJSModule),
+        loadChildren: () => import('./views/chartjs/chartjs.module').then((m) => m.ChartJSModule),
       },
       {
         path: 'dashboard',
-        loadChildren: () =>
-          import('./views/dashboard/dashboard.module').then(
-            (m) => m.DashboardModule
-          ),
+        loadChildren: () => import('./views/dashboard/dashboard.module').then((m) => m.DashboardModule),
       },
       {
         path: 'icons',
-        loadChildren: () =>
-          import('./views/icons/icons.module').then((m) => m.IconsModule),
+        loadChildren: () => import('./views/icons/icons.module').then((m) => m.IconsModule),
       },
       {
         path: 'notifications',
-        loadChildren: () =>
-          import('./views/notifications/notifications.module').then(
-            (m) => m.NotificationsModule
-          ),
+        loadChildren: () => import('./views/notifications/notifications.module').then((m) => m.NotificationsModule),
       },
       {
         path: 'theme',
-        loadChildren: () =>
-          import('./views/theme/theme.module').then((m) => m.ThemeModule),
+        loadChildren: () => import('./views/theme/theme.module').then((m) => m.ThemeModule),
       },
       {
         path: 'widgets',
-        loadChildren: () =>
-          import('./views/widgets/widgets.module').then((m) => m.WidgetsModule),
+        loadChildren: () => import('./views/widgets/widgets.module').then((m) => m.WidgetsModule),
       },
       {
         path: 'master-data',
-        loadChildren: () =>
-          import('./views/master-data/master-data.module').then(
-            (m) => m.MasterDataModule
-          ),
+        loadChildren: () => import('./views/master-data/master-data.module').then((m) => m.MasterDataModule),
       },
       {
         path: 'transaksi',
-        loadChildren: () =>
-          import('./views/transaksi/transaksi.module').then(
-            (m) => m.TransaksiModule
-          ),
+        loadChildren: () => import('./views/transaksi/transaksi.module').then((m) => m.TransaksiModule),
       },
     ],
   },
