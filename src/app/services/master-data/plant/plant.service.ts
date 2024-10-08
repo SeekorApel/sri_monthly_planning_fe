@@ -13,7 +13,7 @@ import { map, catchError } from 'rxjs/operators';
 export class PlantService {
   //Isi tokenya
   token: String =
-    'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBdXJlbCIsImV4cCI6MTcyODA0MjI3MX0.kXci-OsfnRRxP6IyYgaSG9A66AiZvxWO8M9eg-mlpnC2bo6V9MWmB0AZB1EFZHjV2vnP91yFTsp53anBg-Wceg';
+    'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBdXJlbCIsImV4cCI6MTcyODQ3NDE1NH0._GkpDPuI4SceCLK0RRvEWMHbkV-B3tEHAequ23g33DnPZ3KUqQjq__JkCczmWr0rDj4LcuVqr9osKh1Rr3rjLg';
 
   constructor(private http: HttpClient) {}
 

@@ -1,5 +1,5 @@
 export class RoutingMachine {
-  CT_assy_ID?: number;        
+  CT_assy_ID: number;        
   wip: string;
   description: string;
   group_counter: string;           

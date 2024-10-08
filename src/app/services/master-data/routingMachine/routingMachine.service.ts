@@ -13,7 +13,7 @@ import { map, catchError } from 'rxjs/operators';
 export class RoutingService {
   //Isi tokenya
   token: String =
-    'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBdXJlbCIsImV4cCI6MTcyODMwODA4M30.y03EN8mmoDGrL7FzHc5W7QDPLuAoVmD21CNXz4OrBMyci5OSMFW8urH69vONuD8YW87911-NUE2BvkFrpFYWhA';
+    'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBdXJlbCIsImV4cCI6MTcyODQ3OTM3OX0.jdYVsbeEF1ZQTVEfNpjN4uBnTiaLdjxu2uMO1aaOtW9VkojtyF27mGbknua7fKBjgYhP3e7PcCm5t2fpQOq9uA';
 
   constructor(private http: HttpClient) {}
 

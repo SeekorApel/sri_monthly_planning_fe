@@ -24,41 +24,41 @@
         <table class="table table-striped">
           <thead>
             <tr>
-              <th style="min-width: 80px">CT ID</th>
-              <th style="min-width: 80px">WIP</th>
-              <th style="min-width: 150px">Description</th>
-              <th style="min-width: 150px">Group Counter</th>
-              <th style="min-width: 150px">Var Group Counter</th>
-              <th style="min-width: 150px">Sequence</th>
-              <th style="min-width: 150px">Operation Short Text</th>
-              <th style="min-width: 150px">Operation Unit</th>
-              <th style="min-width: 150px">Base Quantity</th>
-              <th style="min-width: 150px">Standard Value Unit</th>
-              <th style="min-width: 150px">CT SEC/1</th>
-              <th>WH Normal Shift 1</th>
-              <th>WH Normal Shift 2</th>
-              <th>WH Normal Shift 3</th>
-              <th>Wh Shift Jumat</th>
-              <th>Wh Total Normal Shift</th>
-              <th>Wh Total Shift Jumat</th>
-              <th>Allow Normal Shift 1</th>
-              <th>Allow Normal Shift 2</th>
-              <th>Allow Normal Shift 3</th>
-              <th>Allow Total</th>
-              <th>OP Time Normal Shift 1</th>
-              <th>OP Time Normal Shift 2</th>
-              <th>OP Time Normal Shift 3</th>
-              <th>OP Time Shift Jumat</th>
-              <th>OP Time Total Normal Shift</th>
-              <th>OP Time Total Shift Jumat</th>
-              <th>Kapasitas Normal Shift 1</th>
-              <th>Kapasitas Normal Shift 2</th>
-              <th>Kapasitas Normal Shift 3</th>
-              <th>Kapasitas Shift Jumat</th>
-              <th>Kapasitas Total Normal Shift</th>
-              <th>Kapasitas Total Shift Jumat</th>
-              <th>Waktu Total CT Normal</th>
-              <th>Waktu Total CT Jumat</th>
+              <th style="min-width: 80px; text-align: center;">CT ID</th>
+              <th style="min-width: 80px; text-align: center;">WIP</th>
+              <th style="min-width: 150px; text-align: center;">Description</th>
+              <th style="min-width: 150px; text-align: center;">Group Counter</th>
+              <th style="min-width: 150px; text-align: center;">Var Group Counter</th>
+              <th style="min-width: 150px; text-align: center;">Sequence</th>
+              <th style="min-width: 200px; text-align: center;">Operation Short Text</th>
+              <th style="min-width: 150px; text-align: center;">Operation Unit</th>
+              <th style="min-width: 150px; text-align: center;">Base Quantity</th>
+              <th style="min-width: 200px; text-align: center;">Standard Value Unit</th>
+              <th style="min-width: 150px; text-align: center;">CT SEC/1</th>
+              <th style="min-width: 150px; text-align: center;">WH Normal Shift 1</th>
+              <th style="min-width: 150px; text-align: center;">WH Normal Shift 2</th>
+              <th style="min-width: 150px; text-align: center;">WH Normal Shift 3</th>
+              <th style="min-width: 150px; text-align: center;">Wh Shift Jumat</th>
+              <th style="min-width: 200px; text-align: center;">Wh Total Normal Shift</th>
+              <th style="min-width: 200px; text-align: center;">Wh Total Shift Jumat</th>
+              <th style="min-width: 200px; text-align: center;">Allow Normal Shift 1</th>
+              <th style="min-width: 200px; text-align: center;">Allow Normal Shift 2</th>
+              <th style="min-width: 200px; text-align: center;">Allow Normal Shift 3</th>
+              <th style="min-width: 150px; text-align: center;">Allow Total</th>
+              <th style="min-width: 200px; text-align: center;">OP Time Normal Shift 1</th>
+              <th style="min-width: 200px; text-align: center;">OP Time Normal Shift 2</th>
+              <th style="min-width: 200px; text-align: center;">OP Time Normal Shift 3</th>
+              <th style="min-width: 200px; text-align: center;">OP Time Shift Jumat</th>
+              <th style="min-width: 250px; text-align: center;">OP Time Total Normal Shift</th>
+              <th style="min-width: 200px; text-align: center;">OP Time Total Shift Jumat</th>
+              <th style="min-width: 200px; text-align: center;">Kapasitas Normal Shift 1</th>
+              <th style="min-width: 200px; text-align: center;">Kapasitas Normal Shift 2</th>
+              <th style="min-width: 200px; text-align: center;">Kapasitas Normal Shift 3</th>
+              <th style="min-width: 200px; text-align: center;">Kapasitas Shift Jumat</th>
+              <th style="min-width: 250px; text-align: center;">Kapasitas Total Normal Shift</th>
+              <th style="min-width: 250px; text-align: center;">Kapasitas Total Shift Jumat</th>
+              <th style="min-width: 200px; text-align: center;">Waktu Total CT Normal</th>
+              <th style="min-width: 200px; text-align: center;">Waktu Total CT Jumat</th>
             </tr>
           </thead>
           <tbody>
@@ -125,7 +125,7 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="addModalLabel">Edit Setting</h5>
+        <h5 class="modal-title" id="addModalLabel">Edit CT Assy</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -318,7 +318,6 @@
             <input [(ngModel)]="edtRoutingMachineObject.waktu_total_CT_jumat" type="text" class="form-control" id="waktu_total_CT_jumat" formControlName="waktu_total_CT_jumat" [ngClass]="{ 'is-invalid': editRoutingMachineForm.get('waktu_total_CT_jumat').invalid && editRoutingMachineForm.get('waktu_total_CT_jumat').touched }" />
             <!-- Error message if plantName is empty -->
             <div *ngIf="editRoutingMachineForm.get('waktu_total_CT_jumat').invalid && editRoutingMachineForm.get('waktu_total_CT_jumat')touched" class="invalid-feedback">waktu total CT jumat value is required.</div>
-          
           </div>
 
         </form>
@@ -326,7 +325,7 @@
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         <!-- Disable Update button if form is invalid -->
-        <button type="button" class="btn btn-primary" [disabled]="editRoutingMachineForm.invalid" (click)="updateCtAssy()">Update Setting</button>
+        <button type="button" class="btn btn-primary" [disabled]="editRoutingMachineForm.invalid" (click)="updateCtAssy()">Update CT ASSY</button>
       </div>
     </div>
   </div>
