@@ -1,95 +1,220 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Setting } from 'src/app/models/Setting';
+import { ApiResponse } from 'src/app/response/Response';
 import { SettingService } from 'src/app/services/master-data/setting/setting.service';
+import Swal from 'sweetalert2';
+declare var $: any;
 import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-view-setting',
   templateUrl: './view-setting.component.html',
-  styleUrls: ['./view-setting.component.scss']
+  styleUrls: ['./view-setting.component.scss'],
 })
 export class ViewSettingComponent implements OnInit {
-  loginForm: FormGroup;
-  loading = false;
-  settingList: any[] = [];
+
+  //Variable Declaration
+  settings: Setting[] = [];
+  searchText: string = '';
+  errorMessage: string | null = null;
+  edtSettingObject: Setting = new Setting();
+  isEditMode: boolean = false;
   file: File | null = null;
+  editSettingForm: FormGroup;
 
-  constructor(
-    private formBuilder: FormBuilder,
-    private router: Router,
-    private settingService: SettingService // Inject PlantService
-  ) { }
+  // Pagination
+  pageOfItems: Array<any>;
+  pageSize: number = 5;
+  totalPages: number = 5;
 
-  ngOnInit() {
-    this.loadSetting(); // Panggil metode untuk memuat data plant
+  constructor(private settingService: SettingService, private fb: FormBuilder) { 
+    this.editSettingForm = this.fb.group({
+      settingKey: ['', Validators.required],
+      settingValue: ['', Validators.required],
+      description: ['', Validators.required]
+
+    });
   }
 
-  onDragOver(event: DragEvent) {
-        event.preventDefault(); // Mencegah default behavior
-    }
+  ngOnInit(): void {
+    this.getAllSetting();
+  }
 
-    onDrop(event: DragEvent) {
-        event.preventDefault();
-        const files = event.dataTransfer?.files;
-        if (files.length > 0) {
-            this.file = files[0];
-            this.ReadExcel({ target: { files } }); // Panggil ReadExcel dengan file yang di-drop
-        }
-    }
-
-  loadSetting() {
+  getAllSetting(): void {
     this.settingService.getAllSetting().subscribe(
-      (response) => {
-        this.settingList = response.data; // Simpan data plant ke dalam variabel
+      (response: ApiResponse<Setting[]>) => {
+        this.settings = response.data;
+        this.onChangePage(this.settings.slice(0, this.pageSize));
       },
       (error) => {
-        console.error('Error fetching plants:', error); // Tangani error
+        this.errorMessage = 'Failed to load plants: ' + error.message;
       }
     );
   }
 
+  onChangePage(pageOfItems: Array<any>) {
+    this.pageOfItems = pageOfItems;
+  }
 
-  ReadExcel(event: any) {
-    this.file = event.target.files[0];
-    let fileReader = new FileReader();
-    fileReader.readAsBinaryString(this.file as File);
-    fileReader.onload = (e) => {
-      var workbook = XLSX.read(fileReader.result, { type: 'binary' });
-      var sheetName = workbook.SheetNames[0];
-      var excelData = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
-      console.log(excelData); // Tampilkan data Excel yang terbaca di console
+  onSearchChange(): void {
+    // Lakukan filter berdasarkan nama plant yang mengandung text pencarian (case-insensitive)
+    const filteredPlants = this.settings.filter(
+      (setting) =>
+        setting.setting_KEY
+          .toLowerCase()
+          .includes(this.searchText.toLowerCase()) ||
+        setting.setting_ID.toString().includes(this.searchText)||
+        setting.setting_VALUE.toLowerCase().toString().includes(this.searchText) ||
+        setting.description.toLowerCase().toString().includes(this.searchText)
+    );
+
+    // Tampilkan hasil filter pada halaman pertama
+    this.onChangePage(filteredPlants.slice(0, this.pageSize));
+  }
+
+  resetSearch(): void {
+    this.searchText = '';
+    this.onChangePage(this.settings.slice(0, this.pageSize));
+  }
+
+  updateSetting(): void {
+    
+    this.settingService.updateSetting(this.edtSettingObject).subscribe(
+      (response) => {
+        // SweetAlert setelah update berhasil
+        Swal.fire({
+          title: 'Success!',
+          text: 'Data plant successfully updated.',
+          icon: 'success',
+          confirmButtonText: 'OK',
+        }).then((result) => {
+          if (result.isConfirmed) {
+            $('#editModal').modal('hide');
+            window.location.reload();
+          }
+        });
+      },
+      (err) => {
+        Swal.fire('Error!', 'Error updating data.', 'error');
+      }
+    );
+  }
+
+  openModalEdit(idSetting: number): void {
+    this.isEditMode = true;
+    this.getPlantById(idSetting);
+    $('#editModal').modal('show');
+  }
+
+  getPlantById(idPlant: number): void {
+    this.settingService.getSettingById(idPlant).subscribe(
+      (response: ApiResponse<Setting>) => {
+        this.edtSettingObject = response.data;
+      },
+      (error) => {
+        this.errorMessage = 'Failed to load plants: ' + error.message;
+      }
+    );
+  }
+
+  deleteData(plant: Setting): void {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'This data plant will be deleted!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes',
+      cancelButtonText: 'No',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.settingService.deleteSetting(plant).subscribe(
+          (response) => {
+            Swal.fire('Deleted!', 'Data plant has been deleted', 'success').then(() => {
+              window.location.reload();
+            });
+          },
+          (err) => {
+            Swal.fire('Error!', 'Failed to delete the plant.', 'error');
+          }
+        );
+      }
+    });
+  }
+
+
+  openModalUpload(): void {
+    $('#uploadModal').modal('show');
+  }
+
+  downloadTemplate() {
+    const link = document.createElement('a');
+    link.href = 'assets/Template Excel/Layout_Master_Setting.xlsx';
+    link.download = 'Layout_Master_Setting.xlsx';
+    link.click();
+  }
+
+
+  onFileChange(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      const file = input.files[0];
+      const fileName = file.name.toLowerCase();
+
+      // Validasi ekstensi file
+      if (fileName.endsWith('.xls') || fileName.endsWith('.xlsx')) {
+        this.file = file; // Hanya simpan file jika ekstensi valid
+      } else {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Invalid File Type',
+          text: 'Please upload a valid Excel file (.xls or .xlsx).',
+          confirmButtonText: 'OK',
+        });
+        // Kosongkan file jika ekstensi tidak valid
+        this.file = null;
+        input.value = '';
+      }
     }
   }
 
 
-  uploadExcelFile() {
+  uploadFileExcel() {
     if (this.file) {
       const formData = new FormData();
       formData.append('file', this.file);
-  
-      this.settingService.signIn('Aurel', 'polman').subscribe(
-        (signinResponse) => {
-            const token = signinResponse.data; 
-  
-          // Now upload the Excel file
-          this.settingService.saveSettingsExcelFile(formData).subscribe(
-            (response) => {
-              console.log('File uploaded successfully', response);
-            },
-            (error) => {
-              console.error('Error uploading file', error);
-            }
-          );
+      // unggah file Excel
+      this.settingService.uploadFileExcel(formData).subscribe(
+        (response) => {
+          Swal.fire({
+            icon: 'success',
+            title: 'Success!',
+            text: 'Excel file uploaded successfully.',
+            confirmButtonText: 'OK',
+          }).then(() => {
+            $('#editModal').modal('hide');
+            window.location.reload();
+          });
         },
         (error) => {
-          console.error('Error signing in', error);
+          console.error('Error uploading file', error);
+          Swal.fire({
+            icon: 'error',
+            title: 'Failed!',
+            text: 'An error occurred while uploading the file.',
+            confirmButtonText: 'OK',
+          });
         }
       );
     } else {
-      console.error('No file selected');
+      Swal.fire({
+        icon: 'warning',
+        title: 'Warning!',
+        text: 'Please select a file to upload.',
+        confirmButtonText: 'OK',
+      });
     }
-  }
-  
-  
+  };
 }

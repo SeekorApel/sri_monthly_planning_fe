@@ -1,52 +1,51 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Quadrant } from 'src/app/models/quadrant';
+import { machineAllowance } from 'src/app/models/machineAllowance';
 import { ApiResponse } from 'src/app/response/Response';
-import { QuadrantService } from 'src/app/services/master-data/quadrant/quadrant.service';
+import { machineAllowanceService } from 'src/app/services/master-data/machine-allowance/machine-allowance.service';
 import Swal from 'sweetalert2';
 declare var $: any;
 import * as XLSX from 'xlsx';
 
 @Component({
-  selector: 'app-view-quadrant',
-  templateUrl: './view-quadrant.component.html',
-  styleUrls: ['./view-quadrant.component.scss'],
+  selector: 'app-view-machine-allowance',
+  templateUrl: './view-machine-allowance.component.html',
+  styleUrls: ['./view-machine-allowance.component.scss'],
 })
-export class ViewQuadrantComponent implements OnInit {
+export class ViewMachineAllowanceComponent implements OnInit {
 
   //Variable Declaration
-  quadrants: Quadrant[] = [];
+  machineAllowances: machineAllowance[] = [];
   searchText: string = '';
   errorMessage: string | null = null;
-  edtQuadrantObject: Quadrant = new Quadrant();
+  edtMachineAllowanceObject: machineAllowance = new machineAllowance();
   isEditMode: boolean = false;
   file: File | null = null;
-  editQuadrantForm: FormGroup;
+  editMachineAllowanceForm: FormGroup;
 
   // Pagination
   pageOfItems: Array<any>;
   pageSize: number = 5;
   totalPages: number = 5;
 
-  constructor(private quadrantService: QuadrantService, private fb: FormBuilder) { 
-    this.editQuadrantForm = this.fb.group({
-      quadrantName: ['', Validators.required]
-
+  constructor(private machineAllowanceService: machineAllowanceService, private fb: FormBuilder) { 
+    this.editMachineAllowanceForm = this.fb.group({
+      IDMachine: ['', Validators.required],
     });
   }
 
   ngOnInit(): void {
-    this.getAllQuadrant();
+    this.getAllMachineAllowance();
   }
 
-  getAllQuadrant(): void {
-    this.quadrantService.getAllQuadrant().subscribe(
-      (response: ApiResponse<Quadrant[]>) => {
-        this.quadrants = response.data;
-        this.onChangePage(this.quadrants.slice(0, this.pageSize));
+  getAllMachineAllowance(): void {
+    this.machineAllowanceService.getAllMachineAllowance().subscribe(
+      (response: ApiResponse<machineAllowance[]>) => {
+        this.machineAllowances = response.data;
+        this.onChangePage(this.machineAllowances.slice(0, this.pageSize));
       },
       (error) => {
-        this.errorMessage = 'Failed to load quadrants: ' + error.message;
+        this.errorMessage = 'Failed to load plants: ' + error.message;
       }
     );
   }
@@ -57,13 +56,12 @@ export class ViewQuadrantComponent implements OnInit {
 
   onSearchChange(): void {
     // Lakukan filter berdasarkan nama plant yang mengandung text pencarian (case-insensitive)
-    const filteredPlants = this.quadrants.filter(
-      (quadrant) =>
-        quadrant.quadrant_ID
-          .toString()
+    const filteredPlants = this.machineAllowances.filter(
+      (machineAllowance) =>
+        machineAllowance.ID_machine
+          .toLowerCase()
           .includes(this.searchText.toLowerCase()) ||
-        quadrant.building_ID.toString().includes(this.searchText)||
-        quadrant.quadrant_NAME.toLowerCase().toString().includes(this.searchText)
+          machineAllowance.machine_allow_ID.toString().includes(this.searchText)
     );
 
     // Tampilkan hasil filter pada halaman pertama
@@ -72,17 +70,17 @@ export class ViewQuadrantComponent implements OnInit {
 
   resetSearch(): void {
     this.searchText = '';
-    this.onChangePage(this.quadrants.slice(0, this.pageSize));
+    this.onChangePage(this.machineAllowances.slice(0, this.pageSize));
   }
 
-  updateQuadrant(): void {
+  updateMachineAllowance(): void {
     
-    this.quadrantService.updateQuadrant(this.edtQuadrantObject).subscribe(
+    this.machineAllowanceService.updateMachineAllowance(this.edtMachineAllowanceObject).subscribe(
       (response) => {
         // SweetAlert setelah update berhasil
         Swal.fire({
           title: 'Success!',
-          text: 'Data quadrant successfully updated.',
+          text: 'Data machineAllowance successfully updated.',
           icon: 'success',
           confirmButtonText: 'OK',
         }).then((result) => {
@@ -98,24 +96,24 @@ export class ViewQuadrantComponent implements OnInit {
     );
   }
 
-  openModalEdit(idQuadrant: number): void {
+  openModalEdit(idPlant: number): void {
     this.isEditMode = true;
-    this.getQuadrantById(idQuadrant);
+    this.getMachineAllowanceById(idPlant);
     $('#editModal').modal('show');
   }
 
-  getQuadrantById(idQuadrant: number): void {
-    this.quadrantService.getQuadrantById(idQuadrant).subscribe(
-      (response: ApiResponse<Quadrant>) => {
-        this.edtQuadrantObject = response.data;
+  getMachineAllowanceById(idMachineAllowance: number): void {
+    this.machineAllowanceService.getMachineAllowanceById(idMachineAllowance).subscribe(
+      (response: ApiResponse<machineAllowance>) => {
+        this.edtMachineAllowanceObject = response.data;
       },
       (error) => {
-        this.errorMessage = 'Failed to load quadrants: ' + error.message;
+        this.errorMessage = 'Failed to load plants: ' + error.message;
       }
     );
   }
 
-  deleteData(quadrant: Quadrant): void {
+  deleteData(plant: machineAllowance): void {
     Swal.fire({
       title: 'Are you sure?',
       text: 'This data plant will be deleted!',
@@ -127,14 +125,14 @@ export class ViewQuadrantComponent implements OnInit {
       cancelButtonText: 'No',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.quadrantService.deleteQuadrant(quadrant).subscribe(
+        this.machineAllowanceService.deleteMachineAllowance(plant).subscribe(
           (response) => {
-            Swal.fire('Deleted!', 'Data quadrant has been deleted', 'success').then(() => {
+            Swal.fire('Deleted!', 'Data plant has been deleted', 'success').then(() => {
               window.location.reload();
             });
           },
           (err) => {
-            Swal.fire('Error!', 'Failed to delete the quadrant.', 'error');
+            Swal.fire('Error!', 'Failed to delete the plant.', 'error');
           }
         );
       }
@@ -148,8 +146,8 @@ export class ViewQuadrantComponent implements OnInit {
 
   downloadTemplate() {
     const link = document.createElement('a');
-    link.href = 'assets/Template Excel/Layout_Master_Quadrant.xlsx';
-    link.download = 'Layout_Master_Quadrant.xlsx';
+    link.href = 'assets/Template Excel/Layout_Master_MachineAllowance.xlsx';
+    link.download = 'Layout_Master_MachineAllowance.xlsx';
     link.click();
   }
 
@@ -183,7 +181,7 @@ export class ViewQuadrantComponent implements OnInit {
       const formData = new FormData();
       formData.append('file', this.file);
       // unggah file Excel
-      this.quadrantService.uploadFileExcel(formData).subscribe(
+      this.machineAllowanceService.uploadFileExcel(formData).subscribe(
         (response) => {
           Swal.fire({
             icon: 'success',
@@ -213,5 +211,5 @@ export class ViewQuadrantComponent implements OnInit {
         confirmButtonText: 'OK',
       });
     }
-  };
+  }
 }

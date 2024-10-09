@@ -1,68 +1,92 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { IRoutingMachine } from 'src/app/response/RoutingMachine';
-import { ApiResponse } from 'src/app/response/ApiResponse';
-import { tap } from 'rxjs/operators'; 
+import { RoutingMachine } from 'src/app/models/RoutingMachine';
+import { ApiResponse } from 'src/app/response/Response';
 import { throwError } from 'rxjs';
+import { environment } from 'src/environments/environment';
+import { map, catchError } from 'rxjs/operators';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
-export class RoutingMachineService {
-  private baseUrl = 'http://localhost:8080';
-  private apiUrl = 'http://localhost:8080'; 
-
+export class RoutingService {
+  //Isi tokenya
+  token: String =
+    'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBdXJlbCIsImV4cCI6MTcyODQ3OTM3OX0.jdYVsbeEF1ZQTVEfNpjN4uBnTiaLdjxu2uMO1aaOtW9VkojtyF27mGbknua7fKBjgYhP3e7PcCm5t2fpQOq9uA';
 
   constructor(private http: HttpClient) {}
 
-  getAllRoutingMachine(): Observable<ApiResponse<IRoutingMachine[]>> {
-    return this.http.get<ApiResponse<IRoutingMachine[]>>(`${this.baseUrl}/getAllRoutingMachine`);
+  // Method untuk menambahkan header Authorization dengan token
+  private getHeaders() {
+    return new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+    });
   }
-  
-//   getPlantById(id: number): Observable<DtoResponse> {
-//     return this.http.get<DtoResponse>(`${this.baseUrl}/getObatById/${id}`);
-//   }
 
-//   savePlant(obat: IObat): Observable<DtoResponse> {
-//     return this.http.post<DtoResponse>(`${this.baseUrl}/saveObat`, obat);
-//   }
-
-//   updatePlant(id: number, data: IObat): Observable<any> {
-//     const updatedData = { ...data, idObat: id }; // Menambahkan idObat ke dalam body
-//     return this.http.post<any>(`${this.apiUrl}/updateObat`, updatedData);
-//   }
-   
-
-//   deletePlant(obat: { idObat: number }): Observable<ApiResponse<any>> {
-//     const url = `${this.apiUrl}/deleteObats`;
-//     return this.http.post<ApiResponse<any>>(url, obat);
-//   }  
-
-signIn(userName: string, password: string): Observable<{ data: string }> {
-    return this.http.post<{ data: string }>(`${this.baseUrl}/signin`, {
-      userName,
-      password
-    }).pipe(
-      tap(response => {
-        // Store the token from the 'data' field in localStorage
-        localStorage.setItem('token', response.data);
-      })
+  getCtAssyById(idCtAssy: number): Observable<ApiResponse<RoutingMachine>> {
+    return this.http.get<ApiResponse<RoutingMachine>>(
+      environment.apiUrlWebAdmin + '/getCtAssyById/' + idCtAssy,
+      { headers: this.getHeaders() }
     );
   }
-  
-  saveRoutingMachinesExcelFile(formData: FormData): Observable<any> {
-    const token = localStorage.getItem('token'); // Retrieve the token
-    if (!token) {
-      console.error('Token is not available');
-      // Return an observable that emits an error
-      return throwError('Token is not available'); // Make sure to import throwError from 'rxjs'
-    }
-  
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`
-    });
-  
-    return this.http.post(`${this.baseUrl}/savePlantsExcel`, formData, { headers });
+
+  getAllCtAssy(): Observable<ApiResponse<RoutingMachine[]>> {
+    return this.http.get<ApiResponse<RoutingMachine[]>>(
+      environment.apiUrlWebAdmin + '/getAllCtAssy',
+      { headers: this.getHeaders() }
+    );
+  }
+
+  //Method Update plant
+  updateCtAssy(routingMachine: RoutingMachine): Observable<ApiResponse<RoutingMachine>> {
+    return this.http
+      .post<ApiResponse<RoutingMachine>>(
+        environment.apiUrlWebAdmin + '/updateCtAssy',
+        routingMachine,
+        { headers: this.getHeaders() } // Menyertakan header
+      )
+      .pipe(
+        map((response) => {
+          return response;
+        }),
+        catchError((err) => {
+          return throwError(err);
+        })
+      );
+  }
+
+  deleteCtAssy(CtAssy: RoutingMachine): Observable<ApiResponse<RoutingMachine>> {
+    return this.http
+      .post<ApiResponse<RoutingMachine>>(
+        environment.apiUrlWebAdmin + '/deleteCtAssy',
+        CtAssy,
+        { headers: this.getHeaders() }
+      )
+      .pipe(
+        map((response) => {
+          return response;
+        }),
+        catchError((err) => {
+          return throwError(err);
+        })
+      );
+  }
+
+  uploadFileExcel(file: FormData): Observable<ApiResponse<RoutingMachine>> {
+    return this.http
+      .post<ApiResponse<RoutingMachine>>(
+        environment.apiUrlWebAdmin + '/saveQuadrantExcel',
+        file,
+        { headers: this.getHeaders() }
+      )
+      .pipe(
+        map((response) => {
+          return response;
+        }),
+        catchError((err) => {
+          return throwError(err);
+        })
+      );
   }
 }

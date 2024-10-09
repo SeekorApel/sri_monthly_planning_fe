@@ -1,49 +1,49 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Quadrant } from 'src/app/models/quadrant';
+import { Item_Assy } from 'src/app/models/Item_Assy';
 import { ApiResponse } from 'src/app/response/Response';
-import { QuadrantService } from 'src/app/services/master-data/quadrant/quadrant.service';
+import { ItemAssyService } from 'src/app/services/master-data/item-assy/itemAssy.service';
 import Swal from 'sweetalert2';
 declare var $: any;
 import * as XLSX from 'xlsx';
 
 @Component({
-  selector: 'app-view-quadrant',
-  templateUrl: './view-quadrant.component.html',
-  styleUrls: ['./view-quadrant.component.scss'],
+  selector: 'app-view-item-assy',
+  templateUrl: './view-item-assy.component.html',
+  styleUrls: ['./view-item-assy.component.scss'],
 })
-export class ViewQuadrantComponent implements OnInit {
+export class ViewItemAssyComponent implements OnInit {
 
   //Variable Declaration
-  quadrants: Quadrant[] = [];
+  itemAssys: Item_Assy[] = [];
   searchText: string = '';
   errorMessage: string | null = null;
-  edtQuadrantObject: Quadrant = new Quadrant();
+  edtItemAssyObject: Item_Assy = new Item_Assy();
   isEditMode: boolean = false;
   file: File | null = null;
-  editQuadrantForm: FormGroup;
+  editItemAssyForm: FormGroup;
 
   // Pagination
   pageOfItems: Array<any>;
   pageSize: number = 5;
   totalPages: number = 5;
 
-  constructor(private quadrantService: QuadrantService, private fb: FormBuilder) { 
-    this.editQuadrantForm = this.fb.group({
-      quadrantName: ['', Validators.required]
+  constructor(private itemAssyService: ItemAssyService, private fb: FormBuilder) { 
+    this.editItemAssyForm = this.fb.group({
+      itemAssy: ['', Validators.required]
 
     });
   }
 
   ngOnInit(): void {
-    this.getAllQuadrant();
+    this.getAllItemAssy();
   }
 
-  getAllQuadrant(): void {
-    this.quadrantService.getAllQuadrant().subscribe(
-      (response: ApiResponse<Quadrant[]>) => {
-        this.quadrants = response.data;
-        this.onChangePage(this.quadrants.slice(0, this.pageSize));
+  getAllItemAssy(): void {
+    this.itemAssyService.getAllItemAssy().subscribe(
+      (response: ApiResponse<Item_Assy[]>) => {
+        this.itemAssys = response.data;
+        this.onChangePage(this.itemAssys.slice(0, this.pageSize));
       },
       (error) => {
         this.errorMessage = 'Failed to load quadrants: ' + error.message;
@@ -57,13 +57,12 @@ export class ViewQuadrantComponent implements OnInit {
 
   onSearchChange(): void {
     // Lakukan filter berdasarkan nama plant yang mengandung text pencarian (case-insensitive)
-    const filteredPlants = this.quadrants.filter(
-      (quadrant) =>
-        quadrant.quadrant_ID
+    const filteredPlants = this.itemAssys.filter(
+      (itemAssy) =>
+        itemAssy.item_ASSY
           .toString()
           .includes(this.searchText.toLowerCase()) ||
-        quadrant.building_ID.toString().includes(this.searchText)||
-        quadrant.quadrant_NAME.toLowerCase().toString().includes(this.searchText)
+          itemAssy.item_ASSY.toString().includes(this.searchText)
     );
 
     // Tampilkan hasil filter pada halaman pertama
@@ -72,17 +71,17 @@ export class ViewQuadrantComponent implements OnInit {
 
   resetSearch(): void {
     this.searchText = '';
-    this.onChangePage(this.quadrants.slice(0, this.pageSize));
+    this.onChangePage(this.itemAssys.slice(0, this.pageSize));
   }
 
-  updateQuadrant(): void {
+  updateItemAssy(): void {
     
-    this.quadrantService.updateQuadrant(this.edtQuadrantObject).subscribe(
+    this.itemAssyService.updateItemAssy(this.edtItemAssyObject).subscribe(
       (response) => {
         // SweetAlert setelah update berhasil
         Swal.fire({
           title: 'Success!',
-          text: 'Data quadrant successfully updated.',
+          text: 'Data item assy successfully updated.',
           icon: 'success',
           confirmButtonText: 'OK',
         }).then((result) => {
@@ -93,32 +92,33 @@ export class ViewQuadrantComponent implements OnInit {
         });
       },
       (err) => {
+        console.log(err);
         Swal.fire('Error!', 'Error updating data.', 'error');
       }
     );
   }
 
-  openModalEdit(idQuadrant: number): void {
+  openModalEdit(idItemAssy: number): void {
     this.isEditMode = true;
-    this.getQuadrantById(idQuadrant);
+    this.getItemAssyById(idItemAssy);
     $('#editModal').modal('show');
   }
 
-  getQuadrantById(idQuadrant: number): void {
-    this.quadrantService.getQuadrantById(idQuadrant).subscribe(
-      (response: ApiResponse<Quadrant>) => {
-        this.edtQuadrantObject = response.data;
+  getItemAssyById(idItemAssy: number): void {
+    this.itemAssyService.getItemAssyById(idItemAssy).subscribe(
+      (response: ApiResponse<Item_Assy>) => {
+        this.edtItemAssyObject = response.data;
       },
       (error) => {
-        this.errorMessage = 'Failed to load quadrants: ' + error.message;
+        this.errorMessage = 'Failed to load item assys: ' + error.message;
       }
     );
   }
 
-  deleteData(quadrant: Quadrant): void {
+  deleteData(itemAssy: Item_Assy): void {
     Swal.fire({
       title: 'Are you sure?',
-      text: 'This data plant will be deleted!',
+      text: 'This data item assy will be deleted!',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -127,14 +127,14 @@ export class ViewQuadrantComponent implements OnInit {
       cancelButtonText: 'No',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.quadrantService.deleteQuadrant(quadrant).subscribe(
+        this.itemAssyService.deleteItemAssy(itemAssy).subscribe(
           (response) => {
-            Swal.fire('Deleted!', 'Data quadrant has been deleted', 'success').then(() => {
+            Swal.fire('Deleted!', 'Data item assy has been deleted', 'success').then(() => {
               window.location.reload();
             });
           },
           (err) => {
-            Swal.fire('Error!', 'Failed to delete the quadrant.', 'error');
+            Swal.fire('Error!', 'Failed to delete the item assy.', 'error');
           }
         );
       }
@@ -148,8 +148,8 @@ export class ViewQuadrantComponent implements OnInit {
 
   downloadTemplate() {
     const link = document.createElement('a');
-    link.href = 'assets/Template Excel/Layout_Master_Quadrant.xlsx';
-    link.download = 'Layout_Master_Quadrant.xlsx';
+    link.href = 'assets/Template Excel/Layout_Master_ItemAssy.xlsx';
+    link.download = 'Layout_Master_ItemAssy.xlsx';
     link.click();
   }
 
@@ -183,7 +183,7 @@ export class ViewQuadrantComponent implements OnInit {
       const formData = new FormData();
       formData.append('file', this.file);
       // unggah file Excel
-      this.quadrantService.uploadFileExcel(formData).subscribe(
+      this.itemAssyService.uploadFileExcel(formData).subscribe(
         (response) => {
           Swal.fire({
             icon: 'success',

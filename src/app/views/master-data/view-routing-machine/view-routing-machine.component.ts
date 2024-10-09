@@ -1,95 +1,287 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
-import { RoutingMachineService } from 'src/app/services/master-data/routingMachine/routingMachine.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { RoutingMachine } from 'src/app/models/RoutingMachine';
+import { ApiResponse } from 'src/app/response/Response';
+import { RoutingService } from 'src/app/services/master-data/routingMachine/routingMachine.service';
+import Swal from 'sweetalert2';
+declare var $: any;
 import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-view-routing-machine',
   templateUrl: './view-routing-machine.component.html',
-  styleUrls: ['./view-routing-machine.component.scss']
+  styleUrls: ['./view-routing-machine.component.scss'],
 })
 export class ViewRoutingMachineComponent implements OnInit {
-  loginForm: FormGroup;
-  loading = false;
-  quadrantList: any[] = [];
+
+  //Variable Declaration
+  routingMachines: RoutingMachine[] = [];
+  searchText: string = '';
+  errorMessage: string | null = null;
+  edtRoutingMachineObject: RoutingMachine = new RoutingMachine();
+  isEditMode: boolean = false;
   file: File | null = null;
+  editRoutingMachineForm: FormGroup;
 
-  constructor(
-    private formBuilder: FormBuilder,
-    private router: Router,
-    private routingMachineService: RoutingMachineService // Inject PlantService
-  ) { }
+  // Pagination
+  pageOfItems: Array<any>;
+  pageSize: number = 5;
+  totalPages: number = 5;
 
-  ngOnInit() {
-    this.loadRoutingMachine(); // Panggil metode untuk memuat data plant
+  constructor(private RoutingMachineService: RoutingService, private fb: FormBuilder) { 
+    this.editRoutingMachineForm = this.fb.group({
+      CtAssyID: ['', Validators.required],
+      wip: ['', Validators.required],
+      description: ['', Validators.required],
+      group_counter: ['', Validators.required],
+      var_group_counter: ['', Validators.required],
+      sequence: ['', Validators.required],
+      wct: ['', Validators.required],
+      operation_short_text: ['', Validators.required],
+      operation_unit: ['', Validators.required],
+      base_quantity: ['', Validators.required],
+      standard_value_unit: ['', Validators.required],
+      CT_sec_1: ['', Validators.required],
+      CT_hr_1000: ['', Validators.required],
+      WH_normal_shift_1: ['', Validators.required],
+      WH_normal_shift_2: ['', Validators.required],
+      WH_normal_shift_3: ['', Validators.required],
+      WH_shift_jumat: ['', Validators.required],
+      WH_total_normal_shift: ['', Validators.required],
+      WH_total_shift_jumat: ['', Validators.required],
+      allow_normal_shift_1: ['', Validators.required],
+      allow_normal_shift_2: ['', Validators.required],
+      allow_normal_shift_3: ['', Validators.required],
+      allow_total: ['', Validators.required],
+      OP_time_normal_shift_1: ['', Validators.required],
+      OP_time_normal_shift_2: ['', Validators.required],
+      OP_time_normal_shift_3: ['', Validators.required],
+      OP_time_shift_jumat: ['', Validators.required],
+      OP_time_total_normal_shift: ['', Validators.required],
+      OP_time_total_shift_jumat: ['', Validators.required],
+      kaps_normal_shift_1: ['', Validators.required],
+      kaps_normal_shift_2: ['', Validators.required],
+      kaps_normal_shift_3: ['', Validators.required],
+      kaps_shift_jumat: ['', Validators.required],
+      kaps_total_normal_shift: ['', Validators.required],
+      kaps_total_shift_jumat: ['', Validators.required],
+      waktu_total_CT_normal: ['', Validators.required],
+      waktu_total_CT_jumat: ['', Validators.required]
+    });
   }
 
-  onDragOver(event: DragEvent) {
-        event.preventDefault(); // Mencegah default behavior
-    }
+  ngOnInit(): void {
+    this.getAllCtAssy();
+  }
 
-    onDrop(event: DragEvent) {
-        event.preventDefault();
-        const files = event.dataTransfer?.files;
-        if (files.length > 0) {
-            this.file = files[0];
-            this.ReadExcel({ target: { files } }); // Panggil ReadExcel dengan file yang di-drop
-        }
-    }
-
-  loadRoutingMachine() {
-    this.routingMachineService.getAllRoutingMachine().subscribe(
-      (response) => {
-        this.quadrantList = response.data; // Simpan data plant ke dalam variabel
+  getAllCtAssy(): void {
+    this.RoutingMachineService.getAllCtAssy().subscribe(
+      (response: ApiResponse<RoutingMachine[]>) => {
+        this.routingMachines = response.data;
+        this.onChangePage(this.routingMachines.slice(0, this.pageSize));
       },
       (error) => {
-        console.error('Error fetching plants:', error); // Tangani error
+        this.errorMessage = 'Failed to load Ct Assy: ' + error.message;
       }
     );
   }
 
+  onChangePage(pageOfItems: Array<any>) {
+    this.pageOfItems = pageOfItems;
+  }
 
-  ReadExcel(event: any) {
-    this.file = event.target.files[0];
-    let fileReader = new FileReader();
-    fileReader.readAsBinaryString(this.file as File);
-    fileReader.onload = (e) => {
-      var workbook = XLSX.read(fileReader.result, { type: 'binary' });
-      var sheetName = workbook.SheetNames[0];
-      var excelData = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
-      console.log(excelData); // Tampilkan data Excel yang terbaca di console
+  onSearchChange(): void {
+    // Lakukan filter berdasarkan nama plant yang mengandung text pencarian (case-insensitive)
+    const filteredPlants = this.routingMachines.filter(
+      (routingMachine) =>
+        routingMachine.CT_assy_ID
+          .toString()
+          .includes(this.searchText.toLowerCase()) ||
+          routingMachine.wip.toString().includes(this.searchText)||
+          routingMachine.description.toLowerCase().toString().includes(this.searchText) ||
+          routingMachine.group_counter.toLowerCase().toString().includes(this.searchText) ||
+          routingMachine.var_group_counter.toLowerCase().toString().includes(this.searchText) ||
+          routingMachine.sequence.toString().includes(this.searchText) ||
+          routingMachine.wct.toLowerCase().toString().includes(this.searchText) ||
+          routingMachine.operation_short_text.toLowerCase().toString().includes(this.searchText) ||
+          routingMachine.operation_unit.toLowerCase().toString().includes(this.searchText) ||
+          routingMachine.base_quantity.toString().includes(this.searchText) ||
+          routingMachine.standard_value_unit.toLowerCase().toString().includes(this.searchText) ||
+          routingMachine.CT_sec_1.toString().includes(this.searchText) ||
+          routingMachine.CT_hr_1000.toString().includes(this.searchText) ||
+          routingMachine.WH_normal_shift_1.toString().includes(this.searchText) ||
+          routingMachine.WH_normal_shift_2.toString().includes(this.searchText) ||
+          routingMachine.WH_normal_shift_3.toString().includes(this.searchText) ||
+          routingMachine.WH_shift_jumat.toString().includes(this.searchText) ||
+          routingMachine.WH_total_normal_shift.toString().includes(this.searchText) ||
+          routingMachine.WH_total_shift_jumat.toString().includes(this.searchText) ||
+          routingMachine.allow_normal_shift_1.toString().includes(this.searchText) ||
+          routingMachine.allow_normal_shift_2.toString().includes(this.searchText) ||
+          routingMachine.allow_normal_shift_3.toString().includes(this.searchText) ||
+          routingMachine.allow_total.toString().includes(this.searchText) ||
+          routingMachine.OP_time_normal_shift_1.toString().includes(this.searchText) ||
+          routingMachine.OP_time_normal_shift_1.toString().includes(this.searchText) ||
+          routingMachine.OP_time_normal_shift_1.toString().includes(this.searchText) ||
+          routingMachine.OP_time_shift_jumat.toString().includes(this.searchText) ||
+          routingMachine.OP_time_total_normal_shift.toString().includes(this.searchText) ||
+          routingMachine.OP_time_total_shift_jumat.toString().includes(this.searchText) ||
+          routingMachine.kaps_normal_shift_1.toString().includes(this.searchText) ||
+          routingMachine.kaps_normal_shift_2.toString().includes(this.searchText) ||
+          routingMachine.kaps_normal_shift_3.toString().includes(this.searchText) ||
+          routingMachine.kaps_shift_jumat.toString().includes(this.searchText) ||
+          routingMachine.kaps_total_normal_shift.toString().includes(this.searchText) ||
+          routingMachine.kaps_total_shift_jumat.toString().includes(this.searchText) ||
+          routingMachine.waktu_total_CT_normal.toString().includes(this.searchText) ||
+          routingMachine.waktu_total_CT_jumat.toString().includes(this.searchText) ||
+          routingMachine.status.toString().includes(this.searchText)
+    );
+
+    // Tampilkan hasil filter pada halaman pertama
+    this.onChangePage(filteredPlants.slice(0, this.pageSize));
+  }
+
+  resetSearch(): void {
+    this.searchText = '';
+    this.onChangePage(this.routingMachines.slice(0, this.pageSize));
+  }
+
+  updateCtAssy(): void {
+    
+    this.RoutingMachineService.updateCtAssy(this.edtRoutingMachineObject).subscribe(
+      (response) => {
+        // SweetAlert setelah update berhasil
+        Swal.fire({
+          title: 'Success!',
+          text: 'Data plant successfully updated.',
+          icon: 'success',
+          confirmButtonText: 'OK',
+        }).then((result) => {
+          if (result.isConfirmed) {
+            $('#editModal').modal('hide');
+            window.location.reload();
+          }
+        });
+      },
+      (err) => {
+        Swal.fire('Error!', 'Error updating data.', 'error');
+      }
+    );
+  }
+
+  openModalEdit(idCtAssy: number): void {
+    this.isEditMode = true;
+    this.getPlantById(idCtAssy);
+    $('#editModal').modal('show');
+  }
+
+  getPlantById(idCtAssy: number): void {
+    this.RoutingMachineService.getCtAssyById(idCtAssy).subscribe(
+      (response: ApiResponse<RoutingMachine>) => {
+        this.edtRoutingMachineObject = response.data;
+      },
+      (error) => {
+        this.errorMessage = 'Failed to load plants: ' + error.message;
+      }
+    );
+  }
+
+  deleteData(CtAssy: RoutingMachine): void {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'This data plant will be deleted!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes',
+      cancelButtonText: 'No',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.RoutingMachineService.deleteCtAssy(CtAssy).subscribe(
+          (response) => {
+            Swal.fire('Deleted!', 'Data plant has been deleted', 'success').then(() => {
+              window.location.reload();
+            });
+          },
+          (err) => {
+            Swal.fire('Error!', 'Failed to delete the plant.', 'error');
+          }
+        );
+      }
+    });
+  }
+
+
+  openModalUpload(): void {
+    $('#uploadModal').modal('show');
+  }
+
+  downloadTemplate() {
+    const link = document.createElement('a');
+    link.href = 'assets/Template Excel/Layout_Master_Setting.xlsx';
+    link.download = 'Layout_Master_Setting.xlsx';
+    link.click();
+  }
+
+
+  onFileChange(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      const file = input.files[0];
+      const fileName = file.name.toLowerCase();
+
+      // Validasi ekstensi file
+      if (fileName.endsWith('.xls') || fileName.endsWith('.xlsx')) {
+        this.file = file; // Hanya simpan file jika ekstensi valid
+      } else {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Invalid File Type',
+          text: 'Please upload a valid Excel file (.xls or .xlsx).',
+          confirmButtonText: 'OK',
+        });
+        // Kosongkan file jika ekstensi tidak valid
+        this.file = null;
+        input.value = '';
+      }
     }
   }
 
 
-  uploadExcelFile() {
+  uploadFileExcel() {
     if (this.file) {
       const formData = new FormData();
       formData.append('file', this.file);
-  
-      this.routingMachineService.signIn('Aurel', 'polman').subscribe(
-        (signinResponse) => {
-            const token = signinResponse.data; 
-  
-          // Now upload the Excel file
-          this.routingMachineService.saveRoutingMachinesExcelFile(formData).subscribe(
-            (response) => {
-              console.log('File uploaded successfully', response);
-            },
-            (error) => {
-              console.error('Error uploading file', error);
-            }
-          );
+      // unggah file Excel
+      this.RoutingMachineService.uploadFileExcel(formData).subscribe(
+        (response) => {
+          Swal.fire({
+            icon: 'success',
+            title: 'Success!',
+            text: 'Excel file uploaded successfully.',
+            confirmButtonText: 'OK',
+          }).then(() => {
+            $('#editModal').modal('hide');
+            window.location.reload();
+          });
         },
         (error) => {
-          console.error('Error signing in', error);
+          console.error('Error uploading file', error);
+          Swal.fire({
+            icon: 'error',
+            title: 'Failed!',
+            text: 'An error occurred while uploading the file.',
+            confirmButtonText: 'OK',
+          });
         }
       );
     } else {
-      console.error('No file selected');
+      Swal.fire({
+        icon: 'warning',
+        title: 'Warning!',
+        text: 'Please select a file to upload.',
+        confirmButtonText: 'OK',
+      });
     }
-  }
-  
-  
+  };
 }
