@@ -1,7 +1,7 @@
 <div class="col-lg-12">
   <div class="card">
     <div class="card-header">
-      <strong><i class="fa fa-bars"></i>&nbsp;Master Data Machine Tass Type</strong>
+      <strong><i class="fa fa-bars"></i>&nbsp;Master Data Machine Extruding</strong>
     </div>
 
     <div class="card-body">
@@ -24,20 +24,20 @@
         <thead>
           <tr>
             <th>No</th>
-            <th>Code</th>
-            <th>Setting ID</th>
-            <th>Description</th>
+            <th>ID Machine Extruding</th>
+            <th>Building ID</th>
+            <th>Type</th>
             <th>Status</th>
             <th>Action</th>
           </tr>
         </thead>
         <tbody>
-          <tr *ngFor="let mtt of pageOfItems; let i = index">
+          <tr *ngFor="let me of pageOfItems; let i = index">
             <td>{{ i + 1 }}</td>
-            <td>{{ mtt.machinetasstype_ID }}</td>
-            <td>{{ mtt.setting_ID }}</td>
-            <td>{{ mtt.description }}</td>
-            <td>{{ mtt.status === 1 ? 'Active' : 'Deactive' }}</td>
+            <td>{{ me.ID_machine_ext }}</td>
+            <td>{{ me.building_ID }}</td>
+            <td>{{ me.type }}</td>
+            <td>{{ me.status === 1 ? 'Active' : 'Deactive' }}</td>
             <td>
               <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(mtt.machinetasstype_ID)">Update</button>
               <button type="button" class="btn btn-md btn-danger ml-2" (click)="deleteData(mtt)">Delete</button>
@@ -48,7 +48,7 @@
       <!-- Pagination -->
       <nav>
         <ul class="pagination">
-          <jw-pagination [items]="mtt" [pageSize]="pageSize" [maxPages]="totalPages" (changePage)="onChangePage($event)"> </jw-pagination>
+          <jw-pagination [items]="machineExtudings" [pageSize]="pageSize" [maxPages]="totalPages" (changePage)="onChangePage($event)"> </jw-pagination>
         </ul>
       </nav>
     </div>
@@ -60,32 +60,32 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="addModalLabel">Edit Machine Tass Type</h5>
+        <h5 class="modal-title" id="addModalLabel">Edit Machine Extruding</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
         <!-- Form with Reactive Forms -->
-        <form [formGroup]="editMachineTassTypeForm">
+        <form [formGroup]="editMachineExtrudingTypeForm">
           <div class="form-group">
-            <label for="setting">Setting</label>
-            <input [(ngModel)]="edtMachineTassTypeObject.setting_ID" type="text" class="form-control" id="setting" formControlName="setting" [ngClass]="{ 'is-invalid': editMachineTassTypeForm.get('setting').invalid && editMachineTassTypeForm.get('setting').touched }" />
+            <label for="buildingID">Building ID</label>
+            <input [(ngModel)]="editMachineExtrudingTypeObject.building_ID" type="text" class="form-control" id="buildingID" formControlName="buildingID" [ngClass]="{ 'is-invalid': editMachineExtrudingTypeForm.get('buildingID').invalid && editMachineExtrudingTypeForm.get('buildingID').touched }" />
             <!-- Error message if plantName is empty -->
-            <div *ngIf="editMachineTassTypeForm.get('setting').invalid && editMachineTassTypeForm.get('setting').touched" class="invalid-feedback">Machine Tass Type Description name is required.</div>
+            <div *ngIf="editMachineExtrudingTypeForm.get('buildingID').invalid && editMachineExtrudingTypeForm.get('buildingID').touched" class="invalid-feedback">Machine Extruding Description name is required.</div>
           </div>
           <div class="form-group">
-            <label for="description">Description</label>
-            <input [(ngModel)]="edtMachineTassTypeObject.description" type="text" class="form-control" id="description" formControlName="description" [ngClass]="{ 'is-invalid': editMachineTassTypeForm.get('description').invalid && editMachineTassTypeForm.get('description').touched }" />
+            <label for="Type">Type</label>
+            <input [(ngModel)]="editMachineExtrudingTypeObject.type" type="text" class="form-control" id="Type" formControlName="Type" [ngClass]="{ 'is-invalid': editMachineExtrudingTypeForm.get('Type').invalid && editMachineExtrudingTypeForm.get('Type').touched }" />
             <!-- Error message if plantName is empty -->
-            <div *ngIf="editMachineTassTypeForm.get('description').invalid && editMachineTassTypeForm.get('description').touched" class="invalid-feedback">Machine Tass Type Description name is required.</div>
+            <div *ngIf="editMachineExtrudingTypeForm.get('Type').invalid && editMachineExtrudingTypeForm.get('Type').touched" class="invalid-feedback">Machine Extruding Description name is required.</div>
           </div>
         </form>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         <!-- Disable Update button if form is invalid -->
-        <button type="button" class="btn btn-primary" [disabled]="editMachineTassTypeForm.invalid" (click)="updateMachineTassType()">Update Machine Tass Type</button>
+        <button type="button" class="btn btn-primary" [disabled]="editMachineExtrudingTypeForm.invalid" (click)="updateMachineExtruding()">Update Machine Extruding</button>
       </div>
     </div>
   </div>

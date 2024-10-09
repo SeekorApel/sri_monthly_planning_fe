@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { ViewPlantComponent } from './view-plant/view-plant.component';
 import { ViewProductComponent } from './view-product/view-product.component';
 import { ViewPatternComponent } from './view-pattern/view-pattern.component';
-import { ViewTassMachine } from './view-tassmachine/view-tassmachine.component';
+import { ViewMachineTassComponent } from './view-tassmachine/view-tassmachine.component';
 import { ViewSettingComponent } from './view-setting/view-setting.component';
 import { ViewQuadrantComponent } from './view-quadrant/view-quadrant.component';
 import { ViewProductTypeComponent } from './view-product-type/view-product-type.component';
@@ -54,7 +54,7 @@ const routes: Routes = [
       },
       {
         path: 'master-data/view-tassmachine',
-        component: ViewTassMachine,
+        component: ViewMachineTassComponent,
         data: {
           title: 'Master Tass Machine',
         },

@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { MachineTassService } from './tassMachine.service';
+import { CtKapaService } from './ctkapa.service';
 
 describe('PatternService', () => {
-  let service: MachineTassService;
+  let service: CtKapaService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(MachineTassService);
+    service = TestBed.inject(CtKapaService);
   });
 
   it('should be created', () => {

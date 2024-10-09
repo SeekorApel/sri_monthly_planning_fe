@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { MachineTassType } from 'src/app/models/machine-tass-type';
+import { MachineExtruding } from 'src/app/models/machine-extruding';
 import { ApiResponse } from 'src/app/response/Response';
 import { throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -10,7 +10,7 @@ import { map, catchError } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root',
 })
-export class MachineTassTypeService {
+export class MachineExtrudingService {
   //Isi tokenya
   token: String = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBdXJlbCIsImV4cCI6MTcyODM4NTExNH0.EcIqiAPq5tX2MgDMcwD5rDNN-85fobiCN6S57r3rOBO64TK4JKUwzlF1zpLTqj4ul0KsBdnHqpDh4zOcAzoT8w';
   constructor(private http: HttpClient) {}
@@ -22,20 +22,20 @@ export class MachineTassTypeService {
     });
   }
 
-  getMachineTassTypeById(idMachineTassType: number): Observable<ApiResponse<MachineTassType>> {
-    return this.http.get<ApiResponse<MachineTassType>>(environment.apiUrlWebAdmin + '/getMachineTassTypeById/' + idMachineTassType, { headers: this.getHeaders() });
+  getMachineExtrudingByID(idMachineExtruding: number): Observable<ApiResponse<MachineExtruding>> {
+    return this.http.get<ApiResponse<MachineExtruding>>(environment.apiUrlWebAdmin + '/getMachineExtrudingById/' + idMachineExtruding, { headers: this.getHeaders() });
   }
 
-  getAllMachineTassType(): Observable<ApiResponse<MachineTassType[]>> {
-    return this.http.get<ApiResponse<MachineTassType[]>>(environment.apiUrlWebAdmin + '/getAllMachineTassType', { headers: this.getHeaders() });
+  getAllMachineExtruding(): Observable<ApiResponse<MachineExtruding[]>> {
+    return this.http.get<ApiResponse<MachineExtruding[]>>(environment.apiUrlWebAdmin + '/getAllMachineExtruding', { headers: this.getHeaders() });
   }
 
   //Method Update Machine Tass Type
-  updateMachineTassType(machineTassType: MachineTassType): Observable<ApiResponse<MachineTassType>> {
+  updateMachineExtruding(machineExtruding: MachineExtruding): Observable<ApiResponse<MachineExtruding>> {
     return this.http
-      .post<ApiResponse<MachineTassType>>(
-        environment.apiUrlWebAdmin + '/updateMachineTassType',
-        machineTassType,
+      .post<ApiResponse<MachineExtruding>>(
+        environment.apiUrlWebAdmin + '/updateMachineExtruding',
+        machineExtruding,
         { headers: this.getHeaders() } // Menyertakan header
       )
       .pipe(
@@ -48,8 +48,8 @@ export class MachineTassTypeService {
       );
   }
 
-  deleteMachineTassType(machineTassType: MachineTassType): Observable<ApiResponse<MachineTassType>> {
-    return this.http.post<ApiResponse<MachineTassType>>(environment.apiUrlWebAdmin + '/deleteMachineTassType', machineTassType, { headers: this.getHeaders() }).pipe(
+  deleteMachineExtruding(machineExtruding: MachineExtruding): Observable<ApiResponse<MachineExtruding>> {
+    return this.http.post<ApiResponse<MachineExtruding>>(environment.apiUrlWebAdmin + '/deleteMachineExtruding', machineExtruding, { headers: this.getHeaders() }).pipe(
       map((response) => {
         return response;
       }),
@@ -59,8 +59,8 @@ export class MachineTassTypeService {
     );
   }
 
-  uploadFileExcel(file: FormData): Observable<ApiResponse<MachineTassType>> {
-    return this.http.post<ApiResponse<MachineTassType>>(environment.apiUrlWebAdmin + '/saveMachineTassTypeExcel', file, { headers: this.getHeaders() }).pipe(
+  uploadFileExcel(file: FormData): Observable<ApiResponse<MachineExtruding>> {
+    return this.http.post<ApiResponse<MachineExtruding>>(environment.apiUrlWebAdmin + '/saveMachineExtruding', file, { headers: this.getHeaders() }).pipe(
       map((response) => {
         return response;
       }),
