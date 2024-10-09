@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Quadrant } from 'src/app/models/quadrant';
+import { Item_Assy } from 'src/app/models/Item_Assy';
 import { ApiResponse } from 'src/app/response/Response';
 import { throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -10,7 +10,7 @@ import { map, catchError } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root',
 })
-export class QuadrantService {
+export class ItemAssyService {
   //Isi tokenya
   token: String =
     'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBdXJlbCIsImV4cCI6MTcyODMwODA4M30.y03EN8mmoDGrL7FzHc5W7QDPLuAoVmD21CNXz4OrBMyci5OSMFW8urH69vONuD8YW87911-NUE2BvkFrpFYWhA';
@@ -24,26 +24,27 @@ export class QuadrantService {
     });
   }
 
-  getQuadrantById(idQuadrant: number): Observable<ApiResponse<Quadrant>> {
-    return this.http.get<ApiResponse<Quadrant>>(
-      environment.apiUrlWebAdmin + '/getQuadrantById/' + idQuadrant,
+  getItemAssyById(idItemAssy: number): Observable<ApiResponse<Item_Assy>> {
+    return this.http.get<ApiResponse<Item_Assy>>(
+      environment.apiUrlWebAdmin + '/getItemAssyById/' + idItemAssy,
       { headers: this.getHeaders() }
     );
   }
 
-  getAllQuadrant(): Observable<ApiResponse<Quadrant[]>> {
-    return this.http.get<ApiResponse<Quadrant[]>>(
-      environment.apiUrlWebAdmin + '/getAllQuadrant',
+  getAllItemAssy(): Observable<ApiResponse<Item_Assy[]>> {
+    return this.http.get<ApiResponse<Item_Assy[]>>(
+      environment.apiUrlWebAdmin + '/getAllItemAssy',
       { headers: this.getHeaders() }
     );
   }
 
   //Method Update plant
-  updateQuadrant(quadrant: Quadrant): Observable<ApiResponse<Quadrant>> {
+  updateItemAssy(itemAssy: Item_Assy): Observable<ApiResponse<Item_Assy>> {
+    console.log(itemAssy);
     return this.http
-      .post<ApiResponse<Quadrant>>(
-        environment.apiUrlWebAdmin + '/updateQuadrant',
-        quadrant,
+      .post<ApiResponse<Item_Assy>>(
+        environment.apiUrlWebAdmin + '/updateItemAssy',
+        itemAssy,
         { headers: this.getHeaders() } // Menyertakan header
       )
       .pipe(
@@ -56,11 +57,11 @@ export class QuadrantService {
       );
   }
 
-  deleteQuadrant(quadrant: Quadrant): Observable<ApiResponse<Quadrant>> {
+  deleteItemAssy(item_Assy: Item_Assy): Observable<ApiResponse<Item_Assy>> {
     return this.http
-      .post<ApiResponse<Quadrant>>(
-        environment.apiUrlWebAdmin + '/deleteQuadrant',
-        quadrant,
+      .post<ApiResponse<Item_Assy>>(
+        environment.apiUrlWebAdmin + '/deleteItemAssy',
+        item_Assy,
         { headers: this.getHeaders() }
       )
       .pipe(
@@ -73,10 +74,10 @@ export class QuadrantService {
       );
   }
 
-  uploadFileExcel(file: FormData): Observable<ApiResponse<Quadrant>> {
+  uploadFileExcel(file: FormData): Observable<ApiResponse<Item_Assy>> {
     return this.http
-      .post<ApiResponse<Quadrant>>(
-        environment.apiUrlWebAdmin + '/saveQuadrantExcel',
+      .post<ApiResponse<Item_Assy>>(
+        environment.apiUrlWebAdmin + '/saveItemAssyExcel',
         file,
         { headers: this.getHeaders() }
       )

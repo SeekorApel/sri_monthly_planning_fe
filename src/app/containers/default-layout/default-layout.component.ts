@@ -51,12 +51,12 @@ export class DefaultLayoutComponent {
       { name: 'Max Capacity', url: '/master-data/view-max-capacity', icon: 'cil-minus' },
       { name: 'Curing Machine', url: '/master-data/view-curing-machine', icon: 'cil-minus' },
       { name: 'Machine Extruding', url: '/master-data/view-machine-extruding', icon: 'cil-minus' },
-      { name: 'CT Kapa', url: '/master-data/view-ct-kapa', icon: 'cil-minus' },
+      { name: 'CT Kapa', url: '/master-data/view-ct-kapa', icon: 'cil-minus' }
     ];
 
     this.csTrx = [
       { name: 'Marketing Order', url: '/transaksi/view-marketing-order', icon: 'cil-minus' },
-      { name: 'Monthly Planning', url: '/transaksi/view-monthly-planning', icon: 'cil-minus' },
+      { name: 'Monthly Planning', url: '/transaksi/view-monthly-planning', icon: 'cil-minus' }
     ];
   }
 

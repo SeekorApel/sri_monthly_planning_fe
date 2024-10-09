@@ -17,6 +17,7 @@ import { ViewCuringMachineComponent } from './view-curing-machine/view-curing-ma
 import { ViewMaxCapacityComponent } from './view-max-capacity/view-max-capacity.component';
 import { ViewItemCuringComponent } from './view-item-curing/view-item-curing.component';
 import { ViewTassSizeComponent } from './view-tass-size/view-tass-size.component';
+import { ViewMachineAllowanceComponent } from './view-machine-allowance/view-machine-allowance.component';
 
 
 const routes: Routes = [
@@ -163,11 +164,13 @@ const routes: Routes = [
           title: 'Master View Item Curing'
         }
       },
-
-
-
-
-
+      {
+        path: 'master-data/view-machine-allowance',
+        component: ViewMachineAllowanceComponent,
+        data: {
+          title: 'Master View Machine Allowance'
+        }
+      },
     ],
   },
 ];

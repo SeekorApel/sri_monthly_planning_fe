@@ -1,12 +1,8 @@
-export interface ApiResponse<T> {
-  message?: string;
-  data: T;
-}
 
-export interface IMax_Capacity {
-  max_Cap_ID?: number;        
-  product_ID: string;
-  type_Code: string;
+export class Max_Capacity {
+  max_Cap_ID: number;        
+  product_ID: number;
+  machine_curing_type_ID: string;
   cycle_TIME: number;
   capacity_Shift_1: number;
   capacity_Shift_2: number;

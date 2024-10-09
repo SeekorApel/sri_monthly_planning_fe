@@ -1,21 +1,17 @@
-export interface ApiResponse<T> {
-  message?: string;
-  data: T;
-}
-
-export interface IRoutingMachine {
-  CT_ID?: number;        
-  WIP: string;
+export class RoutingMachine {
+  CT_assy_ID: number;        
+  wip: string;
+  description: string;
   group_counter: string;           
   var_group_counter: string;     
   sequence: number;       
-  WCT: string;  
+  wct: string;  
   operation_short_text: string;
   operation_unit: string;
   base_quantity: number;
   standard_value_unit: string;
   CT_sec_1: number;
-  CT_HR_1000: number;
+  CT_hr_1000: number;
   WH_normal_shift_1: number;
   WH_normal_shift_2: number;
   WH_normal_shift_3: number;
@@ -40,6 +36,7 @@ export interface IRoutingMachine {
   kaps_total_shift_jumat: number;
   waktu_total_CT_normal: number;
   waktu_total_CT_jumat: number;
+  status: number;
 }
 
 
