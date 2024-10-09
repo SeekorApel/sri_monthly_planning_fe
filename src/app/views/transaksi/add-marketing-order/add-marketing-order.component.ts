@@ -102,7 +102,6 @@ export class AddMarketingOrderComponent implements OnInit {
     // Ambil bulan dan tahun dari input
     const monthValue = this.formHeaderMo.get('month_0').value;
 
-    // Cek apakah bulan sudah dipilih
     if (!monthValue) {
       Swal.fire({
         icon: 'error',
@@ -110,15 +109,15 @@ export class AddMarketingOrderComponent implements OnInit {
         text: 'Please select a month first!',
         confirmButtonText: 'OK',
       });
-      return; // Stop execution if no month is selected
+      return;
     }
 
-    const date = new Date(monthValue); // Mengubah ke objek Date
+    const date = new Date(monthValue);
     const year = date.getFullYear();
-    const month = date.getMonth(); // Mengambil bulan (0-11)
+    const month = date.getMonth();
 
     // Hitung jumlah hari dalam bulan
-    const lastDay = new Date(year, month + 1, 0).getDate(); // Ambil tanggal terakhir bulan ini
+    const lastDay = new Date(year, month + 1, 0).getDate();
 
     // Buat workbook baru
     const workbook = new ExcelJS.Workbook();
@@ -860,6 +859,7 @@ export class AddMarketingOrderComponent implements OnInit {
   }
 
   saveHeaderMo() {
+    // Set the values from the form to the marketingOrder object
     this.marketingOrder.revision = this.formHeaderMo.get('revision')?.value;
     this.marketingOrder.date = this.formHeaderMo.get('date')?.value;
     this.marketingOrder.type = this.formHeaderMo.get('type')?.value;
@@ -867,45 +867,54 @@ export class AddMarketingOrderComponent implements OnInit {
     this.marketingOrder.month_1 = new Date(this.formHeaderMo.get('month_1')?.value);
     this.marketingOrder.month_2 = new Date(this.formHeaderMo.get('month_2')?.value);
 
-    console.log('MO', this.marketingOrder);
-
-    let lastID = '';
-
+    // Call the service to save marketing order
     this.moService.saveMarketingOrder(this.marketingOrder).subscribe(
       (response) => {
-        console.log(response.data.mo_ID);
+        console.log("Last id : ", response.data.mo_ID);
+        const moId = response.data.mo_ID; // Get mo_ID from the response
+
+        // Now build the headerMo array with the obtained mo_ID
+        for (let i = 0; i < 3; i++) {
+          this.headerMo.push({
+            mo_ID: moId, // Use the obtained mo_ID here
+            month: new Date(this.formHeaderMo.get(`month_${i}`)?.value),
+            wd_NORMAL: this.formHeaderMo.get(`nwd_${i}`)?.value,
+            wd_OT_TL: this.formHeaderMo.get(`tl_ot_wd_${i}`)?.value,
+            wd_OT_TT: this.formHeaderMo.get(`tt_ot_wd_${i}`)?.value,
+            total_WD_TL: this.formHeaderMo.get(`total_tlwd_${i}`)?.value,
+            total_WD_TT: this.formHeaderMo.get(`total_ttwd_${i}`)?.value,
+            max_CAP_TUBE: this.formHeaderMo.get(`max_tube_capa_${i}`)?.value,
+            max_CAP_TL: this.formHeaderMo.get(`max_capa_tl_${i}`)?.value,
+            max_CAP_TT: this.formHeaderMo.get(`max_capa_tt_${i}`)?.value,
+          });
+        }
+
+        // Call the service to save header marketing order
+        this.moService.saveHeaderMarketingOrder(this.headerMo).subscribe(
+          (response) => {
+            Swal.fire({
+              title: 'Success!',
+              text: 'Data MO dan Header Mo successfully Added.',
+              icon: 'success',
+              confirmButtonText: 'OK',
+            }).then((result) => {
+              if (result.isConfirmed) {
+                this.fillTheTableMo();
+                this.isTableVisible = true;
+              }
+            });
+          },
+          (err) => {
+            Swal.fire('Error!', 'Error insert data Header MO.', 'error');
+          }
+        );
       },
       (err) => {
-        Swal.fire('Error!', 'Error updating data.', 'error');
+        Swal.fire('Error!', 'Error insert data MO.', 'error');
       }
     );
-
-    console.log('Last id', lastID);
-
-    for (let i = 0; i < 3; i++) {
-      this.headerMo.push({
-        mo_ID: lastID,
-        month: new Date(this.formHeaderMo.get(`month_${i}`)?.value),
-        wd_NORMAL: this.formHeaderMo.get(`nwd_${i}`)?.value,
-        wd_OT_TL: this.formHeaderMo.get(`tl_ot_wd_${i}`)?.value,
-        wd_OT_TT: this.formHeaderMo.get(`tt_ot_wd_${i}`)?.value,
-        total_WD_TL: this.formHeaderMo.get(`total_tlwd_${i}`)?.value,
-        total_WD_TT: this.formHeaderMo.get(`total_ttwd_${i}`)?.value,
-        max_CAP_TUBE: this.formHeaderMo.get(`max_tube_capa_${i}`)?.value,
-        max_CAP_TL: this.formHeaderMo.get(`max_capa_tl_${i}`)?.value,
-        max_CAP_TT: this.formHeaderMo.get(`max_capa_tt_${i}`)?.value,
-      });
-    }
-
-    console.log('detail wd M1', this.workDay_M0);
-    console.log('detail wd M2', this.workDay_M1);
-    console.log('detail wd M3', this.workDay_M2);
-    console.log('MO data', this.marketingOrder);
-    console.log('Header Mo data', this.headerMo);
-
-    // this.fillTheTableMo();
-    // this.isTableVisible = true;
   }
+
 
   fillTheTableMo(): void {
     // Inisialisasi data tabel marketing order
@@ -997,9 +1006,9 @@ export class AddMarketingOrderComponent implements OnInit {
     return dataTableMo; // Kembalikan data sebagai array objek
   }
 
-  getLastIdMo(idMo: number) {
-    let number = idMo;
-    return number;
+  getLastIdMo(idMo: String) {
+    let idLastMo = idMo;
+    return idLastMo;
   }
 
   navigateToViewMo() {

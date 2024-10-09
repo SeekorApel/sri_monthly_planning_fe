@@ -11,15 +11,13 @@ import { catchError, map } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class MarketingOrderService {
-  //Isi tokenya
-  token: String = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBdXJlbCIsImV4cCI6MTcyODU1NjM5Mn0.suGoRnxr7T7CrF2T3rFb40vKen9hTWllFP8yZZNJ1zeAVADMhfJGRE7AZJhlGHtt1TGd7w4KrkRJ0xP32moVfg';
-
+  
   constructor(private http: HttpClient) {}
 
   // Method untuk menambahkan header Authorization dengan token
   private getHeaders() {
     return new HttpHeaders({
-      Authorization: `Bearer ${this.token}`,
+      Authorization: `Bearer ${environment.token}`,
     });
   }
 
