@@ -1,7 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Curing_Machine } from 'src/app/models/Curing_Machine';
+import { ApiResponse } from 'src/app/response/Response';
 import { CuringMachineService } from 'src/app/services/master-data/curing-machine/curing-machine.service';
+import Swal from 'sweetalert2';
+declare var $: any;
 import * as XLSX from 'xlsx';
 
 @Component({
@@ -10,84 +13,209 @@ import * as XLSX from 'xlsx';
   styleUrls: ['./view-curing-machine.component.scss']
 })
 export class ViewCuringMachineComponent implements OnInit {
-  loginForm: FormGroup;
-  loading = false;
-  curingMachineList: any[] = [];
+
+  //Variable Declaration
+  curingmachines: Curing_Machine[] = [];
+  searchText: string = '';
+  errorMessage: string | null = null;
+  edtCuringMachineObject: Curing_Machine = new Curing_Machine();
+  isEditMode: boolean = false;
   file: File | null = null;
+  editCuringMachineForm: FormGroup;
 
-  constructor(
-    private formBuilder: FormBuilder,
-    private router: Router,
-    private curingMachineService: CuringMachineService // Inject PlantService
-  ) { }
+  // Pagination
+  pageOfItems: Array<any>;
+  pageSize: number = 5;
+  totalPages: number = 5;
 
-  ngOnInit() {
-    this.loadCuringMachine(); // Panggil metode untuk memuat data plant
+  constructor(private curingmachineService: CuringMachineService, private fb: FormBuilder) { 
+    this.editCuringMachineForm = this.fb.group({
+      buildingID: ['', Validators.required],
+      curingNumber: ['', Validators.required],
+      cavity: ['', Validators.required],
+      workCenterText: ['', Validators.required],
+    });
   }
 
-  onDragOver(event: DragEvent) {
-        event.preventDefault(); // Mencegah default behavior
-    }
+  ngOnInit(): void {
+    this.getAllCuringMachines();
+  }
 
-    onDrop(event: DragEvent) {
-        event.preventDefault();
-        const files = event.dataTransfer?.files;
-        if (files.length > 0) {
-            this.file = files[0];
-            this.ReadExcel({ target: { files } }); // Panggil ReadExcel dengan file yang di-drop
-        }
-    }
-
-  loadCuringMachine() {
-    this.curingMachineService.getAllCuringMachine().subscribe(
-      (response) => {
-        this.curingMachineList = response.data; // Simpan data plant ke dalam variabel
+  getAllCuringMachines(): void {
+    this.curingmachineService.getAllMachineCuring().subscribe(
+      (response: ApiResponse<Curing_Machine[]>) => {
+        this.curingmachines = response.data;
+        this.onChangePage(this.curingmachines.slice(0, this.pageSize));
       },
       (error) => {
-        console.error('Error fetching plants:', error); // Tangani error
+        this.errorMessage = 'Failed to load curing machines: ' + error.message;
       }
     );
   }
 
+  onChangePage(pageOfItems: Array<any>) {
+    this.pageOfItems = pageOfItems;
+  }
 
-  ReadExcel(event: any) {
-    this.file = event.target.files[0];
-    let fileReader = new FileReader();
-    fileReader.readAsBinaryString(this.file as File);
-    fileReader.onload = (e) => {
-      var workbook = XLSX.read(fileReader.result, { type: 'binary' });
-      var sheetName = workbook.SheetNames[0];
-      var excelData = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
-      console.log(excelData); // Tampilkan data Excel yang terbaca di console
+  onSearchChange(): void {
+    // Lakukan filter berdasarkan nama plant yang mengandung text pencarian (case-insensitive)
+    const filteredCuringMachines = this.curingmachines.filter(
+      (curingmachine) =>
+        curingmachine.id_MACHINE_CURING
+          .toLowerCase()
+          .includes(this.searchText.toLowerCase()) ||
+          curingmachine.building_ID.toString().includes(this.searchText)||
+          curingmachine.curing_NUMBER.toString().includes(this.searchText)||
+          curingmachine.cavity.toString().includes(this.searchText)||
+          curingmachine.work_CENTER_TEXT.includes(this.searchText)
+    );
+
+    // Tampilkan hasil filter pada halaman pertama
+    this.onChangePage(filteredCuringMachines.slice(0, this.pageSize));
+  }
+
+  resetSearch(): void {
+    this.searchText = '';
+    this.onChangePage(this.curingmachines.slice(0, this.pageSize));
+  }
+
+  updateCuringMachine(): void {
+    
+    this.curingmachineService.updateMachineCuring(this.edtCuringMachineObject).subscribe(
+      (response) => {
+        // SweetAlert setelah update berhasil
+        Swal.fire({
+          title: 'Success!',
+          text: 'Data curing machine successfully updated.',
+          icon: 'success',
+          confirmButtonText: 'OK',
+        }).then((result) => {
+          if (result.isConfirmed) {
+            $('#editModal').modal('hide');
+            window.location.reload();
+          }
+        });
+      },
+      (err) => {
+        Swal.fire('Error!', 'Error updating data.', 'error');
+      }
+    );
+  }
+
+  openModalEdit(idCuringMachine: string): void {
+    this.isEditMode = true;
+    this.getCuringMachineById(idCuringMachine);
+    $('#editModal').modal('show');
+  }
+
+  getCuringMachineById(idCuringMachine: string): void {
+    this.curingmachineService.getMachineCuringById(idCuringMachine).subscribe(
+      (response: ApiResponse<Curing_Machine>) => {
+        this.edtCuringMachineObject = response.data;
+      },
+      (error) => {
+        this.errorMessage = 'Failed to load curing machines: ' + error.message;
+      }
+    );
+  }
+
+  deleteData(curingmachine: Curing_Machine): void {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'This data curing machine will be deleted!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes',
+      cancelButtonText: 'No',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.curingmachineService.deleteMachineCuring(curingmachine).subscribe(
+          (response) => {
+            Swal.fire('Deleted!', 'Data curing machine has been deleted', 'success').then(() => {
+              window.location.reload();
+            });
+          },
+          (err) => {
+            Swal.fire('Error!', 'Failed to delete the curing machine.', 'error');
+          }
+        );
+      }
+    });
+  }
+
+
+  openModalUpload(): void {
+    $('#uploadModal').modal('show');
+  }
+
+  downloadTemplate() {
+    const link = document.createElement('a');
+    link.href = 'assets/Template Excel/Layout_Master_Curing_Machine.xlsx';
+    link.download = 'Layout_Master_Curing_Machine.xlsx';
+    link.click();
+  }
+
+
+  onFileChange(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      const file = input.files[0];
+      const fileName = file.name.toLowerCase();
+
+      // Validasi ekstensi file
+      if (fileName.endsWith('.xls') || fileName.endsWith('.xlsx')) {
+        this.file = file; // Hanya simpan file jika ekstensi valid
+      } else {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Invalid File Type',
+          text: 'Please upload a valid Excel file (.xls or .xlsx).',
+          confirmButtonText: 'OK',
+        });
+        // Kosongkan file jika ekstensi tidak valid
+        this.file = null;
+        input.value = '';
+      }
     }
   }
 
 
-  uploadExcelFile() {
+  uploadFileExcel() {
     if (this.file) {
       const formData = new FormData();
       formData.append('file', this.file);
-  
-      this.curingMachineService.signIn('Aurel', 'polman').subscribe(
-        (signinResponse) => {
-            const token = signinResponse.data; 
-  
-          // Now upload the Excel file
-          this.curingMachineService.savePlantsExcelFile(formData).subscribe(
-            (response) => {
-              console.log('File uploaded successfully', response);
-            },
-            (error) => {
-              console.error('Error uploading file', error);
-            }
-          );
+      // unggah file Excel
+      this.curingmachineService.uploadFileExcel(formData).subscribe(
+        (response) => {
+          Swal.fire({
+            icon: 'success',
+            title: 'Success!',
+            text: 'Excel file uploaded successfully.',
+            confirmButtonText: 'OK',
+          }).then(() => {
+            $('#editModal').modal('hide');
+            window.location.reload();
+          });
         },
         (error) => {
-          console.error('Error signing in', error);
+          console.error('Error uploading file', error);
+          Swal.fire({
+            icon: 'error',
+            title: 'Failed!',
+            text: 'An error occurred while uploading the file.',
+            confirmButtonText: 'OK',
+          });
         }
       );
     } else {
-      console.error('No file selected');
+      Swal.fire({
+        icon: 'warning',
+        title: 'Warning!',
+        text: 'Please select a file to upload.',
+        confirmButtonText: 'OK',
+      });
     }
-  } 
+  }
 }

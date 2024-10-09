@@ -34,6 +34,7 @@ import { ViewItemCuringComponent } from './views/master-data/view-item-curing/vi
 import { ViewTassSizeComponent } from './views/master-data/view-tass-size/view-tass-size.component';
 import { ViewMonthlyPlanningComponent } from './views/transaksi/view-monthly-planning/view-monthly-planning.component';
 import { AddMonthlyPlanningComponent } from './views/transaksi/add-monthly-planning/add-monthly-planning.component';
+import { ViewCtCuringComponent } from './views/master-data/view-ct-curing/view-ct-curing.component';
 import { ViewMachineAllowanceComponent } from './views/master-data/view-machine-allowance/view-machine-allowance.component';
 import { ViewItemAssyComponent } from './views/master-data/view-item-assy/view-item-assy.component';
 import { ViewMachineExtrudingComponent } from './views/master-data/view-machine-extruding/view-machine-extruding.component'
@@ -237,6 +238,13 @@ export const routes: Routes = [
         component: ViewTassSizeComponent,
         data: {
           title: 'Master Data / View Tass Size',
+        },
+      },
+      {
+        path: 'master-data/view-ct-curing',
+        component: ViewCtCuringComponent,
+        data: {
+          title: 'Master Data / View CT Curing',
         },
       },
       {

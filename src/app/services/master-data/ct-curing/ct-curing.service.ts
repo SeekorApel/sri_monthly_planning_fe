@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { BDistance } from 'src/app/models/BDistance';
+import { CT_Curing } from 'src/app/models/CT_Curing';
 import { ApiResponse } from 'src/app/response/Response';
 import { throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -10,10 +10,10 @@ import { map, catchError } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root',
 })
-export class BDistanceService {
+export class CTCuringService {
   //Isi tokenya
   token: String =
-    'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBdXJlbCIsImV4cCI6MTcyODA0MjAzNH0.j_HYWCIoDutMP1jk2VbfOJOlbMpUEKkpaP_S4uPOu4Ajds66XOpxxA7t0nFi7zgG7YgC0KVmKPhv2wpb4XQLPA';
+    'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBdXJlbCIsImV4cCI6MTcyODUyMDUzMX0.Hg8SUxKJX8hTT8rYrBOnyphRoPPSzcRIeJWJHTDOdZQb3_U1KqM7m6J6k6LDpEoPba2DplpwV_KRsNti1Tcbig';
 
   constructor(private http: HttpClient) {}
 
@@ -24,26 +24,27 @@ export class BDistanceService {
     });
   }
 
-  getlBuildingDistanceById(bdistance: number): Observable<ApiResponse<BDistance>> {
-    return this.http.get<ApiResponse<BDistance>>(
-      environment.apiUrlWebAdmin + '/getBuildingDistanceById/' + bdistance,
+  getCTCuringById(idCTCuring: number): Observable<ApiResponse<CT_Curing>> {
+    return this.http.get<ApiResponse<CT_Curing>>(
+      environment.apiUrlWebAdmin + '/getCTCuringById/' + idCTCuring,
       { headers: this.getHeaders() }
     );
   }
 
-  getAllBuildingDistance(): Observable<ApiResponse<BDistance[]>> {
-    return this.http.get<ApiResponse<BDistance[]>>(
-      environment.apiUrlWebAdmin + '/getAllBuildingDistance',
+  getAllCTCuring(): Observable<ApiResponse<CT_Curing[]>> {
+    return this.http.get<ApiResponse<CT_Curing[]>>(
+      environment.apiUrlWebAdmin + '/getAllCTCuring',
       { headers: this.getHeaders() }
     );
   }
 
-  //Method Update
-  updateBuildingDistance(bdistance: BDistance): Observable<ApiResponse<BDistance>> {
+  //Method Update plant
+  updateCTCuring(ctcuring: CT_Curing): Observable<ApiResponse<CT_Curing>> {
+    console.log(ctcuring);
     return this.http
-      .post<ApiResponse<BDistance>>(
-        environment.apiUrlWebAdmin + '/updateBuildingDistance',
-        bdistance,
+      .post<ApiResponse<CT_Curing>>(
+        environment.apiUrlWebAdmin + '/updateCTCuring',
+        ctcuring,
         { headers: this.getHeaders() } // Menyertakan header
       )
       .pipe(
@@ -56,11 +57,11 @@ export class BDistanceService {
       );
   }
 
-  deletelBuildingDistance(bdistance: BDistance): Observable<ApiResponse<BDistance>> {
+  deleteCTCuring(ctcuring: CT_Curing): Observable<ApiResponse<CT_Curing>> {
     return this.http
-      .post<ApiResponse<BDistance>>(
-        environment.apiUrlWebAdmin + '/deleteBuildingDistance',
-        bdistance,
+      .post<ApiResponse<CT_Curing>>(
+        environment.apiUrlWebAdmin + '/deleteCTCuring',
+        ctcuring,
         { headers: this.getHeaders() }
       )
       .pipe(
@@ -73,10 +74,10 @@ export class BDistanceService {
       );
   }
 
-  uploadFileExcel(file: FormData): Observable<ApiResponse<BDistance>> {
+  uploadFileExcel(file: FormData): Observable<ApiResponse<CT_Curing>> {
     return this.http
-      .post<ApiResponse<BDistance>>(
-        environment.apiUrlWebAdmin + '/saveBuildingDistancesExcel',
+      .post<ApiResponse<CT_Curing>>(
+        environment.apiUrlWebAdmin + '/saveCTCuringExcel',
         file,
         { headers: this.getHeaders() }
       )

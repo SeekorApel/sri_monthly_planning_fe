@@ -1,7 +1,10 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Tass_Size } from 'src/app/models/Tass_Size';
+import { ApiResponse } from 'src/app/response/Response';
 import { TassSizeService } from 'src/app/services/master-data/tass-size/tass-size.service';
+import Swal from 'sweetalert2';
+declare var $: any;
 import * as XLSX from 'xlsx';
 
 @Component({
@@ -10,84 +13,204 @@ import * as XLSX from 'xlsx';
   styleUrls: ['./view-tass-size.component.scss']
 })
 export class ViewTassSizeComponent implements OnInit {
-  loginForm: FormGroup;
-  loading = false;
-  tassSizeList: any[] = [];
+
+  //Variable Declaration
+  tass_sizes: Tass_Size[] = [];
+  searchText: string = '';
+  errorMessage: string | null = null;
+  edtTassSizeObject: Tass_Size = new Tass_Size();
+  isEditMode: boolean = false;
   file: File | null = null;
+  editTassSizeForm: FormGroup;
 
-  constructor(
-    private formBuilder: FormBuilder,
-    private router: Router,
-    private tassSizeService: TassSizeService // Inject PlantService
-  ) { }
+  // Pagination
+  pageOfItems: Array<any>;
+  pageSize: number = 5;
+  totalPages: number = 5;
 
-  ngOnInit() {
-    this.loadTassSize(); // Panggil metode untuk memuat data plant
+  constructor(private tass_sizeService: TassSizeService, private fb: FormBuilder) { 
+    this.editTassSizeForm = this.fb.group({
+      machinetasstype: ['', Validators.required],
+      sizeid: ['', Validators.required],
+      capacity: ['', Validators.required],
+    });
   }
 
-  onDragOver(event: DragEvent) {
-        event.preventDefault(); // Mencegah default behavior
-    }
+  ngOnInit(): void {
+    this.getAllTassSize();
+  }
 
-    onDrop(event: DragEvent) {
-        event.preventDefault();
-        const files = event.dataTransfer?.files;
-        if (files.length > 0) {
-            this.file = files[0];
-            this.ReadExcel({ target: { files } }); // Panggil ReadExcel dengan file yang di-drop
-        }
-    }
-
-  loadTassSize() {
-    this.tassSizeService.getAllTassSize().subscribe(
-      (response) => {
-        this.tassSizeList = response.data; // Simpan data plant ke dalam variabel
+  getAllTassSize(): void {
+    this.tass_sizeService.getAllTassSize().subscribe(
+      (response: ApiResponse<Tass_Size[]>) => {
+        this.tass_sizes = response.data;
+        this.onChangePage(this.tass_sizes.slice(0, this.pageSize));
       },
       (error) => {
-        console.error('Error fetching plants:', error); // Tangani error
+        this.errorMessage = 'Failed to load tass sizes: ' + error.message;
       }
     );
   }
 
+  onChangePage(pageOfItems: Array<any>) {
+    this.pageOfItems = pageOfItems;
+  }
 
-  ReadExcel(event: any) {
-    this.file = event.target.files[0];
-    let fileReader = new FileReader();
-    fileReader.readAsBinaryString(this.file as File);
-    fileReader.onload = (e) => {
-      var workbook = XLSX.read(fileReader.result, { type: 'binary' });
-      var sheetName = workbook.SheetNames[0];
-      var excelData = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
-      console.log(excelData); // Tampilkan data Excel yang terbaca di console
+  onSearchChange(): void {
+    const filteredTassSizes = this.tass_sizes.filter(
+      (tass_size) =>
+        tass_size.machinetasstype_ID
+          .toLowerCase()
+          .includes(this.searchText.toLowerCase()) ||
+        tass_size.tassize_ID.toString().includes(this.searchText)
+    );
+
+    // Tampilkan hasil filter pada halaman pertama
+    this.onChangePage(filteredTassSizes.slice(0, this.pageSize));
+  }
+
+  resetSearch(): void {
+    this.searchText = '';
+    this.onChangePage(this.tass_sizes.slice(0, this.pageSize));
+  }
+
+  updateTassSize(): void {
+    
+    this.tass_sizeService.updateTassSize(this.edtTassSizeObject).subscribe(
+      (response) => {
+        // SweetAlert setelah update berhasil
+        Swal.fire({
+          title: 'Success!',
+          text: 'Data tass size successfully updated.',
+          icon: 'success',
+          confirmButtonText: 'OK',
+        }).then((result) => {
+          if (result.isConfirmed) {
+            $('#editModal').modal('hide');
+            window.location.reload();
+          }
+        });
+      },
+      (err) => {
+        Swal.fire('Error!', 'Error updating data.', 'error');
+      }
+    );
+  }
+
+  openModalEdit(idTassSize: number): void {
+    this.isEditMode = true;
+    this.getTassSizeById(idTassSize);
+    $('#editModal').modal('show');
+  }
+
+  getTassSizeById(idTassSize: number): void {
+    this.tass_sizeService.getTassSizeById(idTassSize).subscribe(
+      (response: ApiResponse<Tass_Size>) => {
+        this.edtTassSizeObject = response.data;
+      },
+      (error) => {
+        this.errorMessage = 'Failed to load tass sizes: ' + error.message;
+      }
+    );
+  }
+
+  deleteData(tass_size: Tass_Size): void {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'This data tass size will be deleted!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes',
+      cancelButtonText: 'No',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.tass_sizeService.deleteTassSize(tass_size).subscribe(
+          (response) => {
+            Swal.fire('Deleted!', 'Data tass size has been deleted', 'success').then(() => {
+              window.location.reload();
+            });
+          },
+          (err) => {
+            Swal.fire('Error!', 'Failed to delete the tass size.', 'error');
+          }
+        );
+      }
+    });
+  }
+
+
+  openModalUpload(): void {
+    $('#uploadModal').modal('show');
+  }
+
+  downloadTemplate() {
+    const link = document.createElement('a');
+    link.href = 'assets/Template Excel/Layout_Master_Tass_Size.xlsx';
+    link.download = 'Layout_Master_Tass_Size.xlsx';
+    link.click();
+  }
+
+
+  onFileChange(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      const file = input.files[0];
+      const fileName = file.name.toLowerCase();
+
+      // Validasi ekstensi file
+      if (fileName.endsWith('.xls') || fileName.endsWith('.xlsx')) {
+        this.file = file; // Hanya simpan file jika ekstensi valid
+      } else {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Invalid File Type',
+          text: 'Please upload a valid Excel file (.xls or .xlsx).',
+          confirmButtonText: 'OK',
+        });
+        // Kosongkan file jika ekstensi tidak valid
+        this.file = null;
+        input.value = '';
+      }
     }
   }
 
 
-  uploadExcelFile() {
+  uploadFileExcel() {
     if (this.file) {
       const formData = new FormData();
       formData.append('file', this.file);
-  
-      this.tassSizeService.signIn('Aurel', 'polman').subscribe(
-        (signinResponse) => {
-            const token = signinResponse.data; 
-  
-          // Now upload the Excel file
-          this.tassSizeService.savePlantsExcelFile(formData).subscribe(
-            (response) => {
-              console.log('File uploaded successfully', response);
-            },
-            (error) => {
-              console.error('Error uploading file', error);
-            }
-          );
+      // unggah file Excel
+      this.tass_sizeService.uploadFileExcel(formData).subscribe(
+        (response) => {
+          Swal.fire({
+            icon: 'success',
+            title: 'Success!',
+            text: 'Excel file uploaded successfully.',
+            confirmButtonText: 'OK',
+          }).then(() => {
+            $('#editModal').modal('hide');
+            window.location.reload();
+          });
         },
         (error) => {
-          console.error('Error signing in', error);
+          console.error('Error uploading file', error);
+          Swal.fire({
+            icon: 'error',
+            title: 'Failed!',
+            text: 'An error occurred while uploading the file.',
+            confirmButtonText: 'OK',
+          });
         }
       );
     } else {
-      console.error('No file selected');
+      Swal.fire({
+        icon: 'warning',
+        title: 'Warning!',
+        text: 'Please select a file to upload.',
+        confirmButtonText: 'OK',
+      });
     }
-  } 
+  }
 }

@@ -1,13 +1,9 @@
-export interface ApiResponse<T> {
-  message?: string;
-  data: T;
-}
-
-export interface ITass_Size {
-  type_CODE?: string;        
-  size_ID?: string;        
-  capacity: number;                   
-  setting_ID: number;                   
+export class Tass_Size {
+  tassize_ID: number;
+  machinetasstype_ID: string;
+  size_ID: string;
+  capacity: number; 
+  status: number;                   
   creation_DATE: Date;     
   created_BY: string;       
   last_UPDATE_DATE: Date;  

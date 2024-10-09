@@ -27,13 +27,12 @@ import { ViewCuringMachineComponent } from './view-curing-machine/view-curing-ma
 import { ViewMaxCapacityComponent } from './view-max-capacity/view-max-capacity.component';
 import { ViewTassSizeComponent } from './view-tass-size/view-tass-size.component';
 import { ViewItemCuringComponent } from './view-item-curing/view-item-curing.component';
+import { ViewCtCuringComponent } from './view-ct-curing/view-ct-curing.component';
 import { ViewCtKapaComponent } from './view-ct-kapa/view-ct-kapa.component';
 import { ViewMachineExtrudingComponent } from './view-machine-extruding/view-machine-extruding.component';
 import { ViewDDeliveryScheduleComponent } from './view-d-deliveryschedule/view-d-deliveryschedule.component';
 import { ViewMachineAllowanceComponent } from './view-machine-allowance/view-machine-allowance.component';
 import { ViewItemAssyComponent } from './view-item-assy/view-item-assy.component';
-
-
 
 
 @NgModule({
@@ -58,6 +57,7 @@ import { ViewItemAssyComponent } from './view-item-assy/view-item-assy.component
     ViewMaxCapacityComponent,
     ViewTassSizeComponent,
     ViewItemCuringComponent,
+    ViewCtCuringComponent,
     ViewCtKapaComponent,
     ViewMachineExtrudingComponent,
     ViewDDeliveryScheduleComponent,
