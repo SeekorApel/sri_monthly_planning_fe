@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Tass_Size } from 'src/app/models/Tass_Size';
+import { CT_Curing } from 'src/app/models/CT_Curing';
 import { ApiResponse } from 'src/app/response/Response';
 import { throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -10,10 +10,10 @@ import { map, catchError } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root',
 })
-export class TassSizeService {
+export class CTCuringService {
   //Isi tokenya
   token: String =
-    'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBdXJlbCIsImV4cCI6MTcyODQ0NTU3M30.mZU3Cv8_PnnHvdb75SGJdJoJ6lPt8-aURge2J2OooVGl7k0lsWlaPyUE1iIHi4BTPN1SkcDdOxJc4BP2hxvH3Q';
+    'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBdXJlbCIsImV4cCI6MTcyODUyMDUzMX0.Hg8SUxKJX8hTT8rYrBOnyphRoPPSzcRIeJWJHTDOdZQb3_U1KqM7m6J6k6LDpEoPba2DplpwV_KRsNti1Tcbig';
 
   constructor(private http: HttpClient) {}
 
@@ -24,25 +24,27 @@ export class TassSizeService {
     });
   }
 
-  getTassSizeById(idTassSize: number): Observable<ApiResponse<Tass_Size>> {
-    return this.http.get<ApiResponse<Tass_Size>>(
-      environment.apiUrlWebAdmin + '/getTassSizeById/' + idTassSize,
+  getCTCuringById(idCTCuring: number): Observable<ApiResponse<CT_Curing>> {
+    return this.http.get<ApiResponse<CT_Curing>>(
+      environment.apiUrlWebAdmin + '/getCTCuringById/' + idCTCuring,
       { headers: this.getHeaders() }
     );
   }
 
-  getAllTassSize(): Observable<ApiResponse<Tass_Size[]>> {
-    return this.http.get<ApiResponse<Tass_Size[]>>(
-      environment.apiUrlWebAdmin + '/getAllTassSize',
+  getAllCTCuring(): Observable<ApiResponse<CT_Curing[]>> {
+    return this.http.get<ApiResponse<CT_Curing[]>>(
+      environment.apiUrlWebAdmin + '/getAllCTCuring',
       { headers: this.getHeaders() }
     );
   }
-  updateTassSize(tass_size: Tass_Size): Observable<ApiResponse<Tass_Size>> {
-    console.log(tass_size);
+
+  //Method Update plant
+  updateCTCuring(ctcuring: CT_Curing): Observable<ApiResponse<CT_Curing>> {
+    console.log(ctcuring);
     return this.http
-      .post<ApiResponse<Tass_Size>>(
-        environment.apiUrlWebAdmin + '/updateTassSize',
-        tass_size,
+      .post<ApiResponse<CT_Curing>>(
+        environment.apiUrlWebAdmin + '/updateCTCuring',
+        ctcuring,
         { headers: this.getHeaders() } // Menyertakan header
       )
       .pipe(
@@ -55,11 +57,11 @@ export class TassSizeService {
       );
   }
 
-  deleteTassSize(tass_size: Tass_Size): Observable<ApiResponse<Tass_Size>> {
+  deleteCTCuring(ctcuring: CT_Curing): Observable<ApiResponse<CT_Curing>> {
     return this.http
-      .post<ApiResponse<Tass_Size>>(
-        environment.apiUrlWebAdmin + '/deleteTassSize',
-        tass_size,
+      .post<ApiResponse<CT_Curing>>(
+        environment.apiUrlWebAdmin + '/deleteCTCuring',
+        ctcuring,
         { headers: this.getHeaders() }
       )
       .pipe(
@@ -72,10 +74,10 @@ export class TassSizeService {
       );
   }
 
-  uploadFileExcel(file: FormData): Observable<ApiResponse<Tass_Size>> {
+  uploadFileExcel(file: FormData): Observable<ApiResponse<CT_Curing>> {
     return this.http
-      .post<ApiResponse<Tass_Size>>(
-        environment.apiUrlWebAdmin + '/saveTassSizesExcel',
+      .post<ApiResponse<CT_Curing>>(
+        environment.apiUrlWebAdmin + '/saveCTCuringExcel',
         file,
         { headers: this.getHeaders() }
       )

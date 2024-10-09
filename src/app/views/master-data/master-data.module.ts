@@ -27,6 +27,7 @@ import { ViewCuringMachineComponent } from './view-curing-machine/view-curing-ma
 import { ViewMaxCapacityComponent } from './view-max-capacity/view-max-capacity.component';
 import { ViewTassSizeComponent } from './view-tass-size/view-tass-size.component';
 import { ViewItemCuringComponent } from './view-item-curing/view-item-curing.component';
+import { ViewCtCuringComponent } from './view-ct-curing/view-ct-curing.component';
 
 
 
@@ -52,7 +53,8 @@ import { ViewItemCuringComponent } from './view-item-curing/view-item-curing.com
     ViewCuringMachineComponent,
     ViewMaxCapacityComponent,
     ViewTassSizeComponent,
-    ViewItemCuringComponent
+    ViewItemCuringComponent,
+    ViewCtCuringComponent
   ],
   imports: [
     CommonModule,
