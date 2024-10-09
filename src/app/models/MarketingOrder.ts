@@ -7,7 +7,7 @@ export class MarketingOrder {
   date: Date;
   month_0: Date;
   month_2: Date;
-  mo_ID: number;
+  mo_ID: String;
   revision: number;
   month_1: Date;
   created_BY: string;

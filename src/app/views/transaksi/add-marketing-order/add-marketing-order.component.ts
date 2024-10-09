@@ -31,20 +31,23 @@ export class AddMarketingOrderComponent implements OnInit {
   workDay_M1: any[] = [];
   workDay_M2: any[] = [];
 
-  totalWorkday_M0: number = 0;
-  totalOtTl_M0: number = 0;
-  totalOtTt_M0: number = 0;
-  totalOff_M0: number = 0;
+  total_wd_m0: any = {
+    total_wd: 0,
+    total_ot_tl: 0,
+    total_ot_tt: 0,
+  };
 
-  totalWorkday_M1: number = 0;
-  totalOtTl_M1: number = 0;
-  totalOtTt_M1: number = 0;
-  totalOff_M1: number = 0;
+  total_wd_m1: any = {
+    total_wd: 0,
+    total_ot_tl: 0,
+    total_ot_tt: 0,
+  };
 
-  totalWorkday_M2: number = 0;
-  totalOtTl_M2: number = 0;
-  totalOtTt_M2: number = 0;
-  totalOff_M2: number = 0;
+  total_wd_m2: any = {
+    total_wd: 0,
+    total_ot_tl: 0,
+    total_ot_tt: 0,
+  };
 
   constructor(private router: Router, private fb: FormBuilder, private moService: MarketingOrderService) {
     this.formHeaderMo = this.fb.group({
@@ -83,7 +86,6 @@ export class AddMarketingOrderComponent implements OnInit {
       upload_file_m2: [null, [Validators.required]],
     });
 
-    // Memonitor perubahan setiap input bulan dengan memantau formHeaderMo, bukan fb
     this.formHeaderMo.valueChanges.subscribe((values) => {
       this.updateMonthNames();
     });
@@ -622,7 +624,7 @@ export class AddMarketingOrderComponent implements OnInit {
   readExcel_M1(event: any) {
     const file = event.target.files[0];
     const reader = new FileReader();
-    const result: any[] = [];
+    this.workDay_M0 = [];
 
     reader.onload = (e: any) => {
       const data = new Uint8Array(e.target.result);
@@ -640,35 +642,41 @@ export class AddMarketingOrderComponent implements OnInit {
 
       // Iterasi melalui setiap kolom tanggal
       for (let i = 1; i <= convertTypeDate.length; i++) {
-        // Perbaikan indeks dimulai dari 1
-        const shift3 = jsonData[1][i] === '☑' ? 1 : 0; // Baris 1: Shift 3
-        const shift2 = jsonData[2][i] === '☑' ? 1 : 0; // Baris 2: Shift 2
-        const shift1 = jsonData[3][i] === '☑' ? 1 : 0; // Baris 3: Shift 1
-        const ot_tl_3 = jsonData[4][i] === '☑' ? 1 : 0; // Baris 4: OT TL 3
-        const ot_tl_2 = jsonData[5][i] === '☑' ? 1 : 0; // Baris 5: OT TL 2
-        const ot_tl_1 = jsonData[6][i] === '☑' ? 1 : 0; // Baris 6: OT TL 1
-        const ot_tt_3 = jsonData[7][i] === '☑' ? 1 : 0; // Baris 7: OT TT 3
-        const ot_tt_2 = jsonData[8][i] === '☑' ? 1 : 0; // Baris 8: OT TT 2
-        const ot_tt_1 = jsonData[9][i] === '☑' ? 1 : 0; // Baris 9: OT TT 1
-        const off = jsonData[10][i] === '☑' ? 1 : 0; // Baris 10: OFF
+        const shift3 = jsonData[1][i] === '☑' ? 1 : 0;
+        const shift2 = jsonData[2][i] === '☑' ? 1 : 0;
+        const shift1 = jsonData[3][i] === '☑' ? 1 : 0;
+        const ot_tl_3 = jsonData[4][i] === '☑' ? 1 : 0;
+        const ot_tl_2 = jsonData[5][i] === '☑' ? 1 : 0;
+        const ot_tl_1 = jsonData[6][i] === '☑' ? 1 : 0;
+        const ot_tt_3 = jsonData[7][i] === '☑' ? 1 : 0;
+        const ot_tt_2 = jsonData[8][i] === '☑' ? 1 : 0;
+        const ot_tt_1 = jsonData[9][i] === '☑' ? 1 : 0;
+        const off = jsonData[10][i] === '☑' ? 1 : 0;
 
         const data = {
-          date: convertTypeDate[i - 1], // Tanggal pada kolom yang sesuai
-          shift1: shift1,
-          shift2: shift2,
-          shift3: shift3,
-          ot_tl_3: ot_tl_3,
-          ot_tl_2: ot_tl_2,
-          ot_tl_1: ot_tl_1,
-          ot_tt_3: ot_tt_3,
-          ot_tt_2: ot_tt_2,
-          ot_tt_1: ot_tt_1,
+          date_WD: convertTypeDate[i - 1],
+          iwd_SHIFT_1: shift1,
+          iwd_SHIFT_2: shift2,
+          iwd_SHIFT_3: shift3,
+          iot_TL_3: ot_tl_3,
+          iot_TL_2: ot_tl_2,
+          iot_TL_1: ot_tl_1,
+          iot_TT_3: ot_tt_3,
+          iot_TT_2: ot_tt_2,
+          iot_TT_1: ot_tt_1,
           off: off,
         };
-
-        // Tambahkan setiap hasil ke array
         this.workDay_M0.push(data);
       }
+
+      this.total_wd_m0 = this.calculateWd(this.workDay_M0);
+
+      // Update form jika ada perubahan
+      this.formHeaderMo.patchValue({
+        nwd_0: this.total_wd_m0.total_wd,
+        tl_ot_wd_0: this.total_wd_m0.total_ot_tl,
+        tt_ot_wd_0: this.total_wd_m0.total_ot_tt,
+      });
     };
 
     reader.readAsArrayBuffer(file);
@@ -677,7 +685,7 @@ export class AddMarketingOrderComponent implements OnInit {
   readExcel_M2(event: any) {
     const file = event.target.files[0];
     const reader = new FileReader();
-    const result: any[] = [];
+    this.workDay_M1 = [];
 
     reader.onload = (e: any) => {
       const data = new Uint8Array(e.target.result);
@@ -686,44 +694,45 @@ export class AddMarketingOrderComponent implements OnInit {
       // Ambil nama sheet pertama
       const worksheet = workbook.Sheets[workbook.SheetNames[0]];
       const jsonData: any[] = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-
-      // Ambil array tanggal dari baris pertama (kolom 1 hingga akhir)
       const tanggal = jsonData[0].slice(1);
-
-      // Menggunakan map untuk mengubah setiap elemen string menjadi objek Date (jika diperlukan)
       const convertTypeDate = tanggal.map((tgl) => new Date(tgl));
 
       // Iterasi melalui setiap kolom tanggal
       for (let i = 1; i <= convertTypeDate.length; i++) {
-        // Perbaikan indeks dimulai dari 1
-        const shift3 = jsonData[1][i] === '☑' ? 1 : 0; // Baris 1: Shift 3
-        const shift2 = jsonData[2][i] === '☑' ? 1 : 0; // Baris 2: Shift 2
-        const shift1 = jsonData[3][i] === '☑' ? 1 : 0; // Baris 3: Shift 1
-        const ot_tl_3 = jsonData[4][i] === '☑' ? 1 : 0; // Baris 4: OT TL 3
-        const ot_tl_2 = jsonData[5][i] === '☑' ? 1 : 0; // Baris 5: OT TL 2
-        const ot_tl_1 = jsonData[6][i] === '☑' ? 1 : 0; // Baris 6: OT TL 1
-        const ot_tt_3 = jsonData[7][i] === '☑' ? 1 : 0; // Baris 7: OT TT 3
-        const ot_tt_2 = jsonData[8][i] === '☑' ? 1 : 0; // Baris 8: OT TT 2
-        const ot_tt_1 = jsonData[9][i] === '☑' ? 1 : 0; // Baris 9: OT TT 1
-        const off = jsonData[10][i] === '☑' ? 1 : 0; // Baris 10: OFF
+        const shift3 = jsonData[1][i] === '☑' ? 1 : 0;
+        const shift2 = jsonData[2][i] === '☑' ? 1 : 0;
+        const shift1 = jsonData[3][i] === '☑' ? 1 : 0;
+        const ot_tl_3 = jsonData[4][i] === '☑' ? 1 : 0;
+        const ot_tl_2 = jsonData[5][i] === '☑' ? 1 : 0;
+        const ot_tl_1 = jsonData[6][i] === '☑' ? 1 : 0;
+        const ot_tt_3 = jsonData[7][i] === '☑' ? 1 : 0;
+        const ot_tt_2 = jsonData[8][i] === '☑' ? 1 : 0;
+        const ot_tt_1 = jsonData[9][i] === '☑' ? 1 : 0;
+        const off = jsonData[10][i] === '☑' ? 1 : 0;
 
         const data = {
-          date: convertTypeDate[i - 1], // Tanggal pada kolom yang sesuai
-          shift1: shift1,
-          shift2: shift2,
-          shift3: shift3,
-          ot_tl_3: ot_tl_3,
-          ot_tl_2: ot_tl_2,
-          ot_tl_1: ot_tl_1,
-          ot_tt_3: ot_tt_3,
-          ot_tt_2: ot_tt_2,
-          ot_tt_1: ot_tt_1,
+          date_WD: convertTypeDate[i - 1],
+          iwd_SHIFT_1: shift1,
+          iwd_SHIFT_2: shift2,
+          iwd_SHIFT_3: shift3,
+          iot_TL_3: ot_tl_3,
+          iot_TL_2: ot_tl_2,
+          iot_TL_1: ot_tl_1,
+          iot_TT_3: ot_tt_3,
+          iot_TT_2: ot_tt_2,
+          iot_TT_1: ot_tt_1,
           off: off,
         };
-
-        // Tambahkan setiap hasil ke array
         this.workDay_M1.push(data);
       }
+
+      this.total_wd_m1 = this.calculateWd(this.workDay_M1);
+      // Update form jika ada perubahan
+      this.formHeaderMo.patchValue({
+        nwd_1: this.total_wd_m1.total_wd,
+        tl_ot_wd_1: this.total_wd_m1.total_ot_tl,
+        tt_ot_wd_1: this.total_wd_m1.total_ot_tt,
+      });
     };
 
     reader.readAsArrayBuffer(file);
@@ -732,7 +741,7 @@ export class AddMarketingOrderComponent implements OnInit {
   readExcel_M3(event: any) {
     const file = event.target.files[0];
     const reader = new FileReader();
-    const result: any[] = [];
+    this.workDay_M2 = [];
 
     reader.onload = (e: any) => {
       const data = new Uint8Array(e.target.result);
@@ -741,44 +750,45 @@ export class AddMarketingOrderComponent implements OnInit {
       // Ambil nama sheet pertama
       const worksheet = workbook.Sheets[workbook.SheetNames[0]];
       const jsonData: any[] = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
-
-      // Ambil array tanggal dari baris pertama (kolom 1 hingga akhir)
       const tanggal = jsonData[0].slice(1);
-
-      // Menggunakan map untuk mengubah setiap elemen string menjadi objek Date (jika diperlukan)
       const convertTypeDate = tanggal.map((tgl) => new Date(tgl));
 
       // Iterasi melalui setiap kolom tanggal
       for (let i = 1; i <= convertTypeDate.length; i++) {
-        // Perbaikan indeks dimulai dari 1
-        const shift3 = jsonData[1][i] === '☑' ? 1 : 0; // Baris 1: Shift 3
-        const shift2 = jsonData[2][i] === '☑' ? 1 : 0; // Baris 2: Shift 2
-        const shift1 = jsonData[3][i] === '☑' ? 1 : 0; // Baris 3: Shift 1
-        const ot_tl_3 = jsonData[4][i] === '☑' ? 1 : 0; // Baris 4: OT TL 3
-        const ot_tl_2 = jsonData[5][i] === '☑' ? 1 : 0; // Baris 5: OT TL 2
-        const ot_tl_1 = jsonData[6][i] === '☑' ? 1 : 0; // Baris 6: OT TL 1
-        const ot_tt_3 = jsonData[7][i] === '☑' ? 1 : 0; // Baris 7: OT TT 3
-        const ot_tt_2 = jsonData[8][i] === '☑' ? 1 : 0; // Baris 8: OT TT 2
-        const ot_tt_1 = jsonData[9][i] === '☑' ? 1 : 0; // Baris 9: OT TT 1
-        const off = jsonData[10][i] === '☑' ? 1 : 0; // Baris 10: OFF
+        const shift3 = jsonData[1][i] === '☑' ? 1 : 0;
+        const shift2 = jsonData[2][i] === '☑' ? 1 : 0;
+        const shift1 = jsonData[3][i] === '☑' ? 1 : 0;
+        const ot_tl_3 = jsonData[4][i] === '☑' ? 1 : 0;
+        const ot_tl_2 = jsonData[5][i] === '☑' ? 1 : 0;
+        const ot_tl_1 = jsonData[6][i] === '☑' ? 1 : 0;
+        const ot_tt_3 = jsonData[7][i] === '☑' ? 1 : 0;
+        const ot_tt_2 = jsonData[8][i] === '☑' ? 1 : 0;
+        const ot_tt_1 = jsonData[9][i] === '☑' ? 1 : 0;
+        const off = jsonData[10][i] === '☑' ? 1 : 0;
 
         const data = {
-          date: convertTypeDate[i - 1], // Tanggal pada kolom yang sesuai
-          shift1: shift1,
-          shift2: shift2,
-          shift3: shift3,
-          ot_tl_3: ot_tl_3,
-          ot_tl_2: ot_tl_2,
-          ot_tl_1: ot_tl_1,
-          ot_tt_3: ot_tt_3,
-          ot_tt_2: ot_tt_2,
-          ot_tt_1: ot_tt_1,
+          date_WD: convertTypeDate[i - 1],
+          iwd_SHIFT_1: shift1,
+          iwd_SHIFT_2: shift2,
+          iwd_SHIFT_3: shift3,
+          iot_TL_3: ot_tl_3,
+          iot_TL_2: ot_tl_2,
+          iot_TL_1: ot_tl_1,
+          iot_TT_3: ot_tt_3,
+          iot_TT_2: ot_tt_2,
+          iot_TT_1: ot_tt_1,
           off: off,
         };
-
-        // Tambahkan setiap hasil ke array
         this.workDay_M2.push(data);
       }
+
+      this.total_wd_m2 = this.calculateWd(this.workDay_M2);
+      // Update form jika ada perubahan
+      this.formHeaderMo.patchValue({
+        nwd_2: this.total_wd_m2.total_wd,
+        tl_ot_wd_2: this.total_wd_m2.total_ot_tl,
+        tt_ot_wd_2: this.total_wd_m2.total_ot_tt,
+      });
     };
 
     reader.readAsArrayBuffer(file);
@@ -819,7 +829,6 @@ export class AddMarketingOrderComponent implements OnInit {
     }
   }
 
-  // Fungsi untuk format date ke YYYY-MM
   formatDate(date: Date): string {
     const year = date.getFullYear();
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
@@ -851,13 +860,6 @@ export class AddMarketingOrderComponent implements OnInit {
   }
 
   saveHeaderMo() {
-    // if (this.formHeaderMo.invalid) {
-    //   // Tandai semua form control sebagai "touched" agar error message muncul
-    //   this.formHeaderMo.markAllAsTouched();
-    //   return;
-    // }
-
-    //Save MO
     this.marketingOrder.revision = this.formHeaderMo.get('revision')?.value;
     this.marketingOrder.date = this.formHeaderMo.get('date')?.value;
     this.marketingOrder.type = this.formHeaderMo.get('type')?.value;
@@ -865,72 +867,44 @@ export class AddMarketingOrderComponent implements OnInit {
     this.marketingOrder.month_1 = new Date(this.formHeaderMo.get('month_1')?.value);
     this.marketingOrder.month_2 = new Date(this.formHeaderMo.get('month_2')?.value);
 
+    console.log('MO', this.marketingOrder);
+
+    let lastID = '';
+
+    this.moService.saveMarketingOrder(this.marketingOrder).subscribe(
+      (response) => {
+        console.log(response.data.mo_ID);
+      },
+      (err) => {
+        Swal.fire('Error!', 'Error updating data.', 'error');
+      }
+    );
+
+    console.log('Last id', lastID);
+
     for (let i = 0; i < 3; i++) {
       this.headerMo.push({
-        mo_id: this.getLastIdMo(),
+        mo_ID: lastID,
         month: new Date(this.formHeaderMo.get(`month_${i}`)?.value),
-        nwd: this.formHeaderMo.get(`nwd_${i}`)?.value,
-        tl_ot_wd: this.formHeaderMo.get(`tl_ot_wd_${i}`)?.value,
-        tt_ot_wd: this.formHeaderMo.get(`tt_ot_wd_${i}`)?.value,
-        total_tlwd: this.formHeaderMo.get(`total_tlwd_${i}`)?.value,
-        total_ttwd: this.formHeaderMo.get(`total_ttwd_${i}`)?.value,
-        max_tube_capa: this.formHeaderMo.get(`max_tube_capa_${i}`)?.value,
-        max_capa_tl: this.formHeaderMo.get(`max_capa_tl_${i}`)?.value,
-        max_capa_tt: this.formHeaderMo.get(`max_capa_tt_${i}`)?.value,
+        wd_NORMAL: this.formHeaderMo.get(`nwd_${i}`)?.value,
+        wd_OT_TL: this.formHeaderMo.get(`tl_ot_wd_${i}`)?.value,
+        wd_OT_TT: this.formHeaderMo.get(`tt_ot_wd_${i}`)?.value,
+        total_WD_TL: this.formHeaderMo.get(`total_tlwd_${i}`)?.value,
+        total_WD_TT: this.formHeaderMo.get(`total_ttwd_${i}`)?.value,
+        max_CAP_TUBE: this.formHeaderMo.get(`max_tube_capa_${i}`)?.value,
+        max_CAP_TL: this.formHeaderMo.get(`max_capa_tl_${i}`)?.value,
+        max_CAP_TT: this.formHeaderMo.get(`max_capa_tt_${i}`)?.value,
       });
     }
 
-    this.workDay_M0.forEach((item) => {
-      const workday = item.shift1 + item.shift2 + item.shift3;
-      const ot_tl = item.ot_tl_1 + item.ot_tl_2 + item.ot_tl_3;
-      const ot_tt = item.ot_tt_1 + item.ot_tt_2 + item.ot_tt_3;
-      const off = item.off;
+    console.log('detail wd M1', this.workDay_M0);
+    console.log('detail wd M2', this.workDay_M1);
+    console.log('detail wd M3', this.workDay_M2);
+    console.log('MO data', this.marketingOrder);
+    console.log('Header Mo data', this.headerMo);
 
-      this.totalWorkday_M0 += workday;
-      this.totalOtTl_M0 += ot_tl;
-      this.totalOtTt_M0 += ot_tt;
-      this.totalOff_M0 += off;
-    });
-
-    this.workDay_M1.forEach((item) => {
-      const workday = item.shift1 + item.shift2 + item.shift3;
-      const ot_tl = item.ot_tl_1 + item.ot_tl_2 + item.ot_tl_3;
-      const ot_tt = item.ot_tt_1 + item.ot_tt_2 + item.ot_tt_3;
-      const off = item.off;
-
-      this.totalWorkday_M1 += workday;
-      this.totalOtTl_M1 += ot_tl;
-      this.totalOtTt_M1 += ot_tt;
-      this.totalOff_M1 += off;
-    });
-
-    this.workDay_M2.forEach((item) => {
-      const workday = item.shift1 + item.shift2 + item.shift3;
-      const ot_tl = item.ot_tl_1 + item.ot_tl_2 + item.ot_tl_3;
-      const ot_tt = item.ot_tt_1 + item.ot_tt_2 + item.ot_tt_3;
-      const off = item.off;
-
-      this.totalWorkday_M2 += workday;
-      this.totalOtTl_M2 += ot_tl;
-      this.totalOtTt_M2 += ot_tt;
-      this.totalOff_M2 += off;
-    });
-
-    // Menyimpan hasil pembagian ke dalam totalWorkday_M0
-    this.totalWorkday_M0 /= 3;
-    this.totalOtTl_M0 /= 3;
-    this.totalOtTt_M0 /= 3;
-
-    this.totalWorkday_M1 /= 3;
-    this.totalOtTl_M1 /= 3;
-    this.totalOtTt_M1 /= 3;
-
-    this.totalWorkday_M2 /= 3;
-    this.totalOtTl_M2 /= 3;
-    this.totalOtTt_M2 /= 3;
-
-    this.fillTheTableMo();
-    this.isTableVisible = true;
+    // this.fillTheTableMo();
+    // this.isTableVisible = true;
   }
 
   fillTheTableMo(): void {
@@ -966,6 +940,8 @@ export class AddMarketingOrderComponent implements OnInit {
   }
 
   saveAllMo() {
+    console.log('MO data', this.marketingOrder);
+    console.log('Header Mo data', this.headerMo);
     // this.dataTableMo = this.marketingOrderTable.map((mo) => {
     //   return {
     //     category: mo.category,
@@ -988,10 +964,10 @@ export class AddMarketingOrderComponent implements OnInit {
     //     inputInitialStock: mo.inputInitialStock,
     //   };
     // });
-    this.dataTableMo = this.getMarketingOrderData();
-    console.log('Table Data: ', JSON.stringify(this.dataTableMo, null, 2));
-    console.log('Marketing order : ', this.marketingOrder);
-    console.log('Header Mo : ', this.headerMo);
+    // this.dataTableMo = this.getMarketingOrderData();
+    // console.log('Table Data: ', JSON.stringify(this.dataTableMo, null, 2));
+    // console.log('Marketing order : ', this.marketingOrder);
+    // console.log('Header Mo : ', this.headerMo);
   }
 
   getMarketingOrderData() {
@@ -1021,12 +997,45 @@ export class AddMarketingOrderComponent implements OnInit {
     return dataTableMo; // Kembalikan data sebagai array objek
   }
 
-  getLastIdMo() {
-    let number = 1;
+  getLastIdMo(idMo: number) {
+    let number = idMo;
     return number;
   }
 
   navigateToViewMo() {
     this.router.navigate(['/transaksi/view-marketing-order']);
+  }
+
+  calculateWd(data: any[]) {
+    let totalWd = 0;
+    let totalOtTl = 0;
+    let totalOtTt = 0;
+    let totalOff = 0;
+
+    data.forEach((item) => {
+      const wd = item.iwd_SHIFT_1 + item.iwd_SHIFT_2 + item.iwd_SHIFT_3;
+      const overtimeTl = item.iot_TL_1 + item.iot_TL_2 + item.iot_TL_3;
+      const overtimeTT = item.iot_TT_1 + item.iot_TT_2 + item.iot_TT_3;
+      const off = item.off;
+
+      totalWd += wd;
+      totalOtTl += overtimeTl;
+      totalOtTt += overtimeTT;
+      totalOff += off;
+    });
+
+    totalWd /= 3;
+    totalOtTl /= 3;
+    totalOtTt /= 3;
+
+    let total_wd = totalWd.toFixed(2);
+    let total_ot_tl = totalOtTl.toFixed(2);
+    let total_ot_tt = totalOtTt.toFixed(2);
+
+    return {
+      total_wd,
+      total_ot_tl,
+      total_ot_tt,
+    };
   }
 }
