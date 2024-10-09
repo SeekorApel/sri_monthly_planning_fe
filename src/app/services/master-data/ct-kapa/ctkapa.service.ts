@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { MachineCuringType } from 'src/app/models/machine-curing-type';
+import { CtKapa } from 'src/app/models/ct-kapa';
 import { ApiResponse } from 'src/app/response/Response';
 import { throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -10,10 +10,10 @@ import { map, catchError } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root',
 })
-export class MachineCuringTypeService {
+export class CtKapaService {
   //Isi tokenya
   token: String =
-    'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBdXJlbCIsImV4cCI6MTcyNzk2MjczMX0.3qeq8OusdWu9a9IyjGZY-nwx97qWsaJw2ga2DUHqxcN35iLPV9wi8ZqEX48ptxQ0BbtYnWxc7Img6pumz_JJ8w';
+    'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBdXJlbCIsImV4cCI6MTcyODA1Nzk5Mn0.aVJTkZq5E2y3TC0z1tDAbvsDln1IeWm36cN5IvtibIydnEw4wfEpsxaP5dY6nt1l2N0Wl42XgdCC-sRZ1sytmw';
   constructor(private http: HttpClient) {}
 
   // Method untuk menambahkan header Authorization dengan token
@@ -23,26 +23,26 @@ export class MachineCuringTypeService {
     });
   }
 
-  getMctById(idMct: number): Observable<ApiResponse<MachineCuringType>> {
-    return this.http.get<ApiResponse<MachineCuringType>>(
-      environment.apiUrlWebAdmin + '/getMachineCuringTypeById/' + idMct,
+  getCtKapaById(idCtkapa: number): Observable<ApiResponse<CtKapa>> {
+    return this.http.get<ApiResponse<CtKapa>>(
+      environment.apiUrlWebAdmin + '/getCtKapaById/' + idCtkapa,
       { headers: this.getHeaders() }
     );
   }
 
-  getAllMCT(): Observable<ApiResponse<MachineCuringType[]>> {
-    return this.http.get<ApiResponse<MachineCuringType[]>>(
-      environment.apiUrlWebAdmin + '/getAllMachineCuringType',
+  getAllCtKapa(): Observable<ApiResponse<CtKapa[]>> {
+    return this.http.get<ApiResponse<CtKapa[]>>(
+      environment.apiUrlWebAdmin + '/getAllCtKapa',
       { headers: this.getHeaders() }
     );
   }
 
   //Method Update plant
-  updateMCT(mct: MachineCuringType): Observable<ApiResponse<MachineCuringType>> {
+  updateCtKapa(ctkapa: CtKapa): Observable<ApiResponse<CtKapa>> {
     return this.http
-      .post<ApiResponse<MachineCuringType>>(
-        environment.apiUrlWebAdmin + '/updateMachineCuringType',
-        mct,
+      .post<ApiResponse<CtKapa>>(
+        environment.apiUrlWebAdmin + '/updateCtKapa',
+        ctkapa,
         { headers: this.getHeaders() } // Menyertakan header
       )
       .pipe(
@@ -55,11 +55,11 @@ export class MachineCuringTypeService {
       );
   }
 
-  deleteMct(mct: MachineCuringType): Observable<ApiResponse<MachineCuringType>> {
+  deleteCtKapa(ctkapa: CtKapa): Observable<ApiResponse<CtKapa>> {
     return this.http
-      .post<ApiResponse<MachineCuringType>>(
-        environment.apiUrlWebAdmin + '/deleteMachineCuringType',
-        mct,
+      .post<ApiResponse<CtKapa>>(
+        environment.apiUrlWebAdmin + '/deleteCtKapa',
+        ctkapa,
         { headers: this.getHeaders() }
       )
       .pipe(
@@ -72,10 +72,10 @@ export class MachineCuringTypeService {
       );
   }
 
-  uploadFileExcel(file: FormData): Observable<ApiResponse<MachineCuringType>> {
+  uploadFileExcel(file: FormData): Observable<ApiResponse<CtKapa>> {
     return this.http
-      .post<ApiResponse<MachineCuringType>>(
-        environment.apiUrlWebAdmin + '/saveMachineCuringTypeExcel',
+      .post<ApiResponse<CtKapa>>(
+        environment.apiUrlWebAdmin + '/saveCtKapasExcel',
         file,
         { headers: this.getHeaders() }
       )

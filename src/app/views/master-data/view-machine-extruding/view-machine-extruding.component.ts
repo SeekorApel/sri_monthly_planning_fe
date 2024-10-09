@@ -1,63 +1,52 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Product } from 'src/app/models/Product';
+import { MachineExtruding } from 'src/app/models/machine-extruding';
 import { ApiResponse } from 'src/app/response/Response';
-import { ProductService } from 'src/app/services/master-data/product/product.service';
+import { MachineExtrudingService } from 'src/app/services/master-data/machine-extruding/machine-extruding.service';
 import Swal from 'sweetalert2';
 declare var $: any;
 import * as XLSX from 'xlsx';
 
 @Component({
-  selector: 'app-view-product',
-  templateUrl: './view-product.component.html',
-  styleUrls: ['./view-product.component.scss'],
+  selector: 'app-view-machine-extruding',
+  templateUrl: './view-machine-extruding.component.html',
+  styleUrls: ['./view-machine-extruding.component.scss'],
 })
-export class ViewProductComponent implements OnInit {
+export class ViewMachineExtrudingComponent implements OnInit {
   //Variable Declaration
-  products: Product[] = [];
+  machineExtudings: MachineExtruding[] = [];
   searchText: string = '';
   errorMessage: string | null = null;
-  editProductTypeObject: Product = new Product();
+  editMachineExtrudingTypeObject: MachineExtruding = new MachineExtruding();
   isEditMode: boolean = false;
   file: File | null = null;
-  editProductTypeForm: FormGroup;
+  editMachineExtrudingTypeForm: FormGroup;
 
   // Pagination
   pageOfItems: Array<any>;
   pageSize: number = 5;
   totalPages: number = 5;
 
-  constructor(private productService: ProductService, private fb: FormBuilder) {
-    this.editProductTypeForm = this.fb.group({
-      curing: ['', Validators.required],
-      pattern: ['', Validators.required],
-      size: ['', Validators.required],
-      productType: ['', Validators.required],
-      qty: ['', Validators.required],
-      upper: ['', Validators.required],
-      lower: ['', Validators.required],
-      desc: ['', Validators.required],
-      itemExt: ['', Validators.required],
-      itemAssy: ['', Validators.required],
-      wibTube: ['', Validators.required],
-      rim: ['', Validators.required],
-      description: ['', Validators.required],
+  constructor(private MEService: MachineExtrudingService, private fb: FormBuilder) {
+    this.editMachineExtrudingTypeForm = this.fb.group({
+      buildingID: ['', Validators.required],
+      Type: ['', Validators.required],
     });
   }
 
   ngOnInit(): void {
-    this.getAllMachineTassType();
+    this.getAllMachineExtruding();
   }
 
-  getAllMachineTassType(): void {
-    this.productService.getAllProduct().subscribe(
-      (response: ApiResponse<Product[]>) => {
-        this.products = response.data;
-        console.log(this.products);
-        this.onChangePage(this.products.slice(0, this.pageSize));
+  getAllMachineExtruding(): void {
+    this.MEService.getAllMachineExtruding().subscribe(
+      (response: ApiResponse<MachineExtruding[]>) => {
+        this.machineExtudings = response.data;
+        console.log(this.machineExtudings);
+        this.onChangePage(this.machineExtudings.slice(0, this.pageSize));
       },
       (error) => {
-        this.errorMessage = 'Failed to load product: ' + error.message;
+        this.errorMessage = 'Failed to load machine extruding: ' + error.message;
       }
     );
   }
@@ -67,25 +56,25 @@ export class ViewProductComponent implements OnInit {
   }
 
   onSearchChange(): void {
-    // Lakukan filter berdasarkan nama Product yang mengandung text pencarian (case-insensitive)
-    const filteredProduct = this.products.filter((descriptions) => descriptions.description.toLowerCase().includes(this.searchText.toLowerCase()) || descriptions.part_NUMBER.toString().includes(this.searchText));
+    // Lakukan filter berdasarkan nama MachineTASSType yang mengandung text pencarian (case-insensitive)
+    const filteredmachineExtruding = this.machineExtudings.filter((meType) => meType.type.toLowerCase().includes(this.searchText.toLowerCase()) || meType.ID_machine_ext.toString().includes(this.searchText));
 
     // Tampilkan hasil filter pada halaman pertama
-    this.onChangePage(filteredProduct.slice(0, this.pageSize));
+    this.onChangePage(filteredmachineExtruding.slice(0, this.pageSize));
   }
 
   resetSearch(): void {
     this.searchText = '';
-    this.onChangePage(this.products.slice(0, this.pageSize));
+    this.onChangePage(this.machineExtudings.slice(0, this.pageSize));
   }
 
-  updateProduct(): void {
-    this.productService.updateProduct(this.editProductTypeObject).subscribe(
+  updateMachineExtruding(): void {
+    this.MEService.updateMachineExtruding(this.editMachineExtrudingTypeObject).subscribe(
       (response) => {
         // SweetAlert setelah update berhasil
         Swal.fire({
           title: 'Success!',
-          text: 'Data Product successfully updated.',
+          text: 'Data Machine Extruding successfully updated.',
           icon: 'success',
           confirmButtonText: 'OK',
         }).then((result) => {
@@ -101,27 +90,27 @@ export class ViewProductComponent implements OnInit {
     );
   }
 
-  openModalEdit(partNum: number): void {
+  openModalEdit(idMachineExtruding: number): void {
     this.isEditMode = true;
-    this.getProductById(partNum);
+    this.getMachineExtrudingById(idMachineExtruding);
     $('#editModal').modal('show');
   }
 
-  getProductById(partNum: number): void {
-    this.productService.getProductById(partNum).subscribe(
-      (response: ApiResponse<Product>) => {
-        this.editProductTypeObject = response.data;
+  getMachineExtrudingById(idMachineExtruding: number): void {
+    this.MEService.getMachineExtrudingByID(idMachineExtruding).subscribe(
+      (response: ApiResponse<MachineExtruding>) => {
+        this.editMachineExtrudingTypeObject = response.data;
       },
       (error) => {
-        this.errorMessage = 'Failed to load Product: ' + error.message;
+        this.errorMessage = 'Failed to load Machine Extruding: ' + error.message;
       }
     );
   }
 
-  deleteData(product: Product): void {
+  deleteData(machineExtruding: MachineExtruding): void {
     Swal.fire({
       title: 'Are you sure?',
-      text: 'This data product will be deleted!',
+      text: 'This data machine extruding will be deleted!',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -130,14 +119,14 @@ export class ViewProductComponent implements OnInit {
       cancelButtonText: 'No',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.productService.deleteProduct(product).subscribe(
+        this.MEService.deleteMachineExtruding(machineExtruding).subscribe(
           (response) => {
-            Swal.fire('Deleted!', 'Data product has been deleted', 'success').then(() => {
+            Swal.fire('Deleted!', 'Data Machine Extruding has been deleted', 'success').then(() => {
               window.location.reload();
             });
           },
           (err) => {
-            Swal.fire('Error!', 'Failed to delete the Machine Tass Type.', 'error');
+            Swal.fire('Error!', 'Failed to delete the Machine Extruding.', 'error');
           }
         );
       }
@@ -150,8 +139,8 @@ export class ViewProductComponent implements OnInit {
 
   downloadTemplate() {
     const link = document.createElement('a');
-    link.href = 'assets/Template Excel/Layout_Master_Product.xlsx';
-    link.download = 'Layout_Master_Product.xlsx';
+    link.href = 'assets/Template Excel/Layout_Master_Machine_Extruding.xlsx';
+    link.download = 'Layout_Master_Machine_Extruding.xlsx';
     link.click();
   }
 
@@ -183,7 +172,7 @@ export class ViewProductComponent implements OnInit {
       const formData = new FormData();
       formData.append('file', this.file);
       // unggah file Excel
-      this.productService.uploadFileExcel(formData).subscribe(
+      this.MEService.uploadFileExcel(formData).subscribe(
         (response) => {
           Swal.fire({
             icon: 'success',

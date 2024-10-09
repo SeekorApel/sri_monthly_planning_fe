@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ViewMachineTassComponent } from './view-tassmachine.component';
+import { ViewCtKapaComponent } from './view-ct-kapa.component';
 
-describe('ViewTassmachineComponent', () => {
-  let component: ViewMachineTassComponent;
-  let fixture: ComponentFixture<ViewMachineTassComponent>;
+describe('ViewCtKapaComponent', () => {
+  let component: ViewCtKapaComponent;
+  let fixture: ComponentFixture<ViewCtKapaComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ViewMachineTassComponent ]
+      declarations: [ ViewCtKapaComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ViewMachineTassComponent);
+    fixture = TestBed.createComponent(ViewCtKapaComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

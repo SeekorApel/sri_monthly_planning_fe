@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ViewMachineTassTypeComponent } from './view-machine-tass-type.component';
 
-describe('ViewPatternComponent', () => {
+describe('ViewMachineTassTypeComponent', () => {
   let component: ViewMachineTassTypeComponent;
   let fixture: ComponentFixture<ViewMachineTassTypeComponent>;
 

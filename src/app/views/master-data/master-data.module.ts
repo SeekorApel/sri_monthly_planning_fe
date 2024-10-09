@@ -10,7 +10,7 @@ import { MasterDataRoutingModule } from './master-data-routing.module';
 import { ViewPlantComponent } from './view-plant/view-plant.component';
 import { ViewProductComponent } from './view-product/view-product.component';
 import { ViewPatternComponent } from './view-pattern/view-pattern.component';
-import { ViewTassMachine } from './view-tassmachine/view-tassmachine.component';
+import { ViewMachineTassComponent } from './view-tassmachine/view-tassmachine.component';
 import { ViewSettingComponent } from './view-setting/view-setting.component';
 import { ViewQuadrantComponent } from './view-quadrant/view-quadrant.component';
 import { ViewProductTypeComponent } from './view-product-type/view-product-type.component';
@@ -28,6 +28,9 @@ import { ViewMaxCapacityComponent } from './view-max-capacity/view-max-capacity.
 import { ViewTassSizeComponent } from './view-tass-size/view-tass-size.component';
 import { ViewItemCuringComponent } from './view-item-curing/view-item-curing.component';
 import { ViewCtCuringComponent } from './view-ct-curing/view-ct-curing.component';
+import { ViewCtKapaComponent } from './view-ct-kapa/view-ct-kapa.component';
+import { ViewMachineExtrudingComponent } from './view-machine-extruding/view-machine-extruding.component';
+import { ViewDDeliveryScheduleComponent } from './view-d-deliveryschedule/view-d-deliveryschedule.component';
 import { ViewMachineAllowanceComponent } from './view-machine-allowance/view-machine-allowance.component';
 import { ViewItemAssyComponent } from './view-item-assy/view-item-assy.component';
 
@@ -37,7 +40,7 @@ import { ViewItemAssyComponent } from './view-item-assy/view-item-assy.component
     ViewPlantComponent,
     ViewProductComponent,
     ViewPatternComponent,
-    ViewTassMachine,
+    ViewMachineTassComponent,
     ViewSettingComponent,
     ViewQuadrantComponent,
     ViewProductTypeComponent,
@@ -55,6 +58,9 @@ import { ViewItemAssyComponent } from './view-item-assy/view-item-assy.component
     ViewTassSizeComponent,
     ViewItemCuringComponent,
     ViewCtCuringComponent,
+    ViewCtKapaComponent,
+    ViewMachineExtrudingComponent,
+    ViewDDeliveryScheduleComponent,
     ViewMachineAllowanceComponent,
     ViewItemAssyComponent
   ],

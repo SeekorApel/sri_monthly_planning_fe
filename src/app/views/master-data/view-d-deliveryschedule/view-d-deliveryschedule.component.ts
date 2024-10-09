@@ -1,63 +1,54 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Product } from 'src/app/models/Product';
+import { DDeliverySchedule } from 'src/app/models/d-deliveryschedule';
 import { ApiResponse } from 'src/app/response/Response';
-import { ProductService } from 'src/app/services/master-data/product/product.service';
+import { DDeliveryScheduleService } from 'src/app/services/master-data/DdeliverySchedule/DdeliverySchedule.service';
 import Swal from 'sweetalert2';
 declare var $: any;
 import * as XLSX from 'xlsx';
 
 @Component({
-  selector: 'app-view-product',
-  templateUrl: './view-product.component.html',
-  styleUrls: ['./view-product.component.scss'],
+  selector: 'app-view-d-deliveryschedule',
+  templateUrl: './view-d-deliveryschedule.component.html',
+  styleUrls: ['./view-d-deliveryschedule.component.scss'],
 })
-export class ViewProductComponent implements OnInit {
+export class ViewDDeliveryScheduleComponent implements OnInit {
   //Variable Declaration
-  products: Product[] = [];
+  ddeliveryScedules: DDeliverySchedule[] = [];
   searchText: string = '';
   errorMessage: string | null = null;
-  editProductTypeObject: Product = new Product();
+  editDDeliveryScheduleTypeObject: DDeliverySchedule = new DDeliverySchedule();
   isEditMode: boolean = false;
   file: File | null = null;
-  editProductTypeForm: FormGroup;
+  editDDeliveryScheduleTypeForm: FormGroup;
 
   // Pagination
   pageOfItems: Array<any>;
   pageSize: number = 5;
   totalPages: number = 5;
 
-  constructor(private productService: ProductService, private fb: FormBuilder) {
-    this.editProductTypeForm = this.fb.group({
-      curing: ['', Validators.required],
-      pattern: ['', Validators.required],
-      size: ['', Validators.required],
-      productType: ['', Validators.required],
-      qty: ['', Validators.required],
-      upper: ['', Validators.required],
-      lower: ['', Validators.required],
-      desc: ['', Validators.required],
-      itemExt: ['', Validators.required],
-      itemAssy: ['', Validators.required],
-      wibTube: ['', Validators.required],
-      rim: ['', Validators.required],
-      description: ['', Validators.required],
+  constructor(private ddeliveryschedule: DDeliveryScheduleService, private fb: FormBuilder) {
+    this.editDDeliveryScheduleTypeForm = this.fb.group({
+      dsID: ['', Validators.required],
+      partNum: ['', Validators.required],
+      date: ['', Validators.required],
+      totalDelvery: ['', Validators.required],
     });
   }
 
   ngOnInit(): void {
-    this.getAllMachineTassType();
+    this.getAllDDeliverySchedule();
   }
 
-  getAllMachineTassType(): void {
-    this.productService.getAllProduct().subscribe(
-      (response: ApiResponse<Product[]>) => {
-        this.products = response.data;
-        console.log(this.products);
-        this.onChangePage(this.products.slice(0, this.pageSize));
+  getAllDDeliverySchedule(): void {
+    this.ddeliveryschedule.getAllDDeliverySchedule().subscribe(
+      (response: ApiResponse<DDeliverySchedule[]>) => {
+        this.ddeliveryScedules = response.data;
+        console.log(this.ddeliveryScedules);
+        this.onChangePage(this.ddeliveryScedules.slice(0, this.pageSize));
       },
       (error) => {
-        this.errorMessage = 'Failed to load product: ' + error.message;
+        this.errorMessage = 'Failed to load Detail Delivery Schedule: ' + error.message;
       }
     );
   }
@@ -67,25 +58,25 @@ export class ViewProductComponent implements OnInit {
   }
 
   onSearchChange(): void {
-    // Lakukan filter berdasarkan nama Product yang mengandung text pencarian (case-insensitive)
-    const filteredProduct = this.products.filter((descriptions) => descriptions.description.toLowerCase().includes(this.searchText.toLowerCase()) || descriptions.part_NUMBER.toString().includes(this.searchText));
+    // Lakukan filter berdasarkan nama detail DeliverySchedule yang mengandung text pencarian (case-insensitive)
+    const filteredDDeliverySchedule = this.ddeliveryScedules.filter((dds) => dds.part_NUM.toLowerCase().includes(this.searchText.toLowerCase()) || dds.detail_DS_ID.toString().includes(this.searchText));
 
     // Tampilkan hasil filter pada halaman pertama
-    this.onChangePage(filteredProduct.slice(0, this.pageSize));
+    this.onChangePage(filteredDDeliverySchedule.slice(0, this.pageSize));
   }
 
   resetSearch(): void {
     this.searchText = '';
-    this.onChangePage(this.products.slice(0, this.pageSize));
+    this.onChangePage(this.ddeliveryScedules.slice(0, this.pageSize));
   }
 
-  updateProduct(): void {
-    this.productService.updateProduct(this.editProductTypeObject).subscribe(
+  updateDDeliverySchedule(): void {
+    this.ddeliveryschedule.updateDDeliverySchedule(this.editDDeliveryScheduleTypeObject).subscribe(
       (response) => {
         // SweetAlert setelah update berhasil
         Swal.fire({
           title: 'Success!',
-          text: 'Data Product successfully updated.',
+          text: 'Data Detail Delivery Schedule successfully updated.',
           icon: 'success',
           confirmButtonText: 'OK',
         }).then((result) => {
@@ -101,27 +92,27 @@ export class ViewProductComponent implements OnInit {
     );
   }
 
-  openModalEdit(partNum: number): void {
+  openModalEdit(idDetail: number): void {
     this.isEditMode = true;
-    this.getProductById(partNum);
+    this.getDDeliveryScheduleByID(idDetail);
     $('#editModal').modal('show');
   }
 
-  getProductById(partNum: number): void {
-    this.productService.getProductById(partNum).subscribe(
-      (response: ApiResponse<Product>) => {
-        this.editProductTypeObject = response.data;
+  getDDeliveryScheduleByID(idDetail: number): void {
+    this.ddeliveryschedule.getDDeliveryScheduleByID(idDetail).subscribe(
+      (response: ApiResponse<DDeliverySchedule>) => {
+        this.editDDeliveryScheduleTypeObject = response.data;
       },
       (error) => {
-        this.errorMessage = 'Failed to load Product: ' + error.message;
+        this.errorMessage = 'Failed to load Detail Delivery Schedule: ' + error.message;
       }
     );
   }
 
-  deleteData(product: Product): void {
+  deleteData(ddeliveryschedulee: DDeliverySchedule): void {
     Swal.fire({
       title: 'Are you sure?',
-      text: 'This data product will be deleted!',
+      text: 'This data Detail Delivery Schedule will be deleted!',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -130,14 +121,14 @@ export class ViewProductComponent implements OnInit {
       cancelButtonText: 'No',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.productService.deleteProduct(product).subscribe(
+        this.ddeliveryschedule.deleteDDeliverySchedule(ddeliveryschedulee).subscribe(
           (response) => {
-            Swal.fire('Deleted!', 'Data product has been deleted', 'success').then(() => {
+            Swal.fire('Deleted!', 'Data Detail Delivery Schelude has been deleted', 'success').then(() => {
               window.location.reload();
             });
           },
           (err) => {
-            Swal.fire('Error!', 'Failed to delete the Machine Tass Type.', 'error');
+            Swal.fire('Error!', 'Failed to delete the Delivery Schedule.', 'error');
           }
         );
       }
@@ -150,8 +141,8 @@ export class ViewProductComponent implements OnInit {
 
   downloadTemplate() {
     const link = document.createElement('a');
-    link.href = 'assets/Template Excel/Layout_Master_Product.xlsx';
-    link.download = 'Layout_Master_Product.xlsx';
+    link.href = 'assets/Template Excel/Layout_Master_DDelivery_Schedule.xlsx';
+    link.download = 'Layout_Master_DDelivery_Schedule.xlsx';
     link.click();
   }
 
@@ -183,7 +174,7 @@ export class ViewProductComponent implements OnInit {
       const formData = new FormData();
       formData.append('file', this.file);
       // unggah file Excel
-      this.productService.uploadFileExcel(formData).subscribe(
+      this.ddeliveryschedule.uploadFileExcel(formData).subscribe(
         (response) => {
           Swal.fire({
             icon: 'success',
