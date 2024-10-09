@@ -3,121 +3,187 @@
     <div class="card-header">
       <strong><i class="fa fa-bars"></i>&nbsp;Master Data Product</strong>
     </div>
-    <div class="card-footer text-right">
-      <button type="submit" class="btn btn-sm btn-primary ml-2">
-        <i class="fa fa-download fa-lg"></i> Download Template
-      </button>
-      <!-- Button to trigger modal -->
-      <button
-        type="button"
-        class="btn btn-sm btn-success ml-2"
-        data-toggle="modal"
-        data-target="#uploadModal"
-      >
-        <i class="fa fa-file-excel-o fa-lg"></i> Export Excel
-      </button>
-    </div>
 
     <div class="card-body">
+      <!-- Wrapper for the input and buttons in one row -->
+      <div class="d-flex justify-content-between mb-3">
+        <div class="d-flex align-items-center">
+          <input type="text" class="form-control col-md-12 col-lg-12" [(ngModel)]="searchText" (input)="onSearchChange()" placeholder="Find here..." />
+          <button type="submit" class="btn btn-primary ml-2" (click)="resetSearch()">Reset</button>
+        </div>
+
+        <!-- Right side: Download Template and Export Excel buttons -->
+        <div>
+          <button type="button" class="btn btn-primary ml-2" (click)="downloadTemplate()"><i class="fa fa-download fa-lg"></i> Download Template</button>
+          <button type="button" class="btn btn-success ml-2" data-toggle="modal" data-target="#uploadModal"><i class="fa fa-file-excel-o fa-lg"></i> Upload Excel</button>
+        </div>
+      </div>
+
+      <!-- Table -->
       <table class="table table-striped">
         <thead>
-          <tr>
-            <th>Part Number</th>
-            <th>Item</th>
-            <th>Pattern ID</th>
-            <th>Size ID</th>
-            <th>Product Type ID</th>
-            <th>Category</th>
-            <th>Qty Per Rak</th>
-            <th>Upper Constant</th>
-            <th>Lower Constant</th>
-            <th>Status</th>
-            <th>Action</th>
-          </tr>
+          <th>No</th>
+          <th>Part Number</th>
+          <th>Item Curing</th>
+          <th>Pattern ID</th>
+          <th>Size ID</th>
+          <th>Product Type ID</th>
+          <th>Qty Per Rak</th>
+          <th>Upper Constant</th>
+          <th>Lower Constant</th>
+          <th>Ext Description</th>
+          <th>Item Ext</th>
+          <th>Item Assy</th>
+          <th>Wib Tube</th>
+          <th>Rim</th>
+          <th>Description</th>
+          <th>Status</th>
+          <th>Action</th>
         </thead>
         <tbody>
-          <tr *ngFor="let plant of plantList; let i = index">
-            <td>{{ plant.plant_ID }}</td>
-            <td>{{ plant.plant_NAME }}</td>
-            <td>{{ plant.status }}</td>
+          <tr *ngFor="let productt of pageOfItems; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td>{{ productt.part_NUMBER }}</td>
+            <td>{{ productt.item_CURING }}</td>
+            <td>{{ productt.pattern_ID }}</td>
+            <td>{{ productt.size_ID }}</td>
+            <td>{{ productt.product_TYPE_ID }}</td>
+            <td>{{ productt.qty_PER_RAK }}</td>
+            <td>{{ productt.upper_CONSTANT }}</td>
+            <td>{{ productt.lower_CONSTANT }}</td>
+            <td>{{ productt.ext_DESCRIPTION }}</td>
+            <td>{{ productt.item_EXT }}</td>
+            <td>{{ productt.item_ASSY }}</td>
+            <td>{{ productt.wib_TUBE }}</td>
+            <td>{{ productt.rim }}</td>
+            <td>{{ productt.description }}</td>
+            <td>{{ productt.status === 1 ? 'Active' : 'Deactive' }}</td>
             <td>
-              <button type="button" class="btn btn-sm btn-primary">
-                <i class="fa fa-plus fa-lg"></i> Update
-              </button>
-              <button class="btn btn-danger btn-sm ml-2">Delete</button>
+              <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(productt.part_number)">Update</button>
+              <button type="button" class="btn btn-md btn-danger ml-2" (click)="deleteData(productt)">Delete</button>
             </td>
           </tr>
         </tbody>
       </table>
+      <!-- Pagination -->
+      <nav>
+        <ul class="pagination">
+          <jw-pagination [items]="products" [pageSize]="pageSize" [maxPages]="totalPages" (changePage)="onChangePage($event)"> </jw-pagination>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+<!-- Modal edit -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addModalLabel">Edit Product</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- Form with Reactive Forms -->
+        <form [formGroup]="editProductTypeForm">
+          <div class="form-group">
+            <label for="curing">Curing Item</label>
+            <input [(ngModel)]="editProductTypeObject.item_CURING" type="text" class="form-control" id="curing" formControlName="curing" [ngClass]="{ 'is-invalid': editProductTypeForm.get('curing').invalid && editProductTypeForm.get('curing').touched }" />
+            <div *ngIf="editProductTypeForm.get('curing').invalid && editProductTypeForm.get('curing').touched" class="invalid-feedback">Curing name is required.</div>
+          </div>
+          <div class="form-group">
+            <label for="pattern">Pattern</label>
+            <input [(ngModel)]="editProductTypeObject.pattern_ID" type="text" class="form-control" id="pattern" formControlName="pattern" [ngClass]="{ 'is-invalid': editProductTypeForm.get('pattern').invalid && editProductTypeForm.get('pattern').touched }" />
+            <div *ngIf="editProductTypeForm.get('pattern').invalid && editProductTypeForm.get('pattern').touched" class="invalid-feedback">pattern is required.</div>
+          </div>
+          <div class="form-group">
+            <label for="size">Size ID</label>
+            <input [(ngModel)]="editProductTypeObject.size_ID" type="text" class="form-control" id="size" formControlName="size" [ngClass]="{ 'is-invalid': editProductTypeForm.get('size').invalid && editProductTypeForm.get('size').touched }" />
+            <div *ngIf="editProductTypeForm.get('size').invalid && editProductTypeForm.get('size').touched" class="invalid-feedback">Machine Number is required.</div>
+          </div>
+          <div class="form-group">
+            <label for="productType">Product Type ID</label>
+            <input [(ngModel)]="editProductTypeObject.product_TYPE_ID" type="text" class="form-control" id="productType" formControlName="productType" [ngClass]="{ 'is-invalid': editProductTypeForm.get('productType').invalid && editProductTypeForm.get('productType').touched }" />
+            <div *ngIf="editProductTypeForm.get('productType').invalid && editProductTypeForm.get('productType').touched" class="invalid-feedback">productType is required.</div>
+          </div>
+          <div class="form-group">
+            <label for="qty">Qty Per Rak</label>
+            <input [(ngModel)]="editProductTypeObject.qty_PER_RAK" type="text" class="form-control" id="qty" formControlName="qty" [ngClass]="{ 'is-invalid': editProductTypeForm.get('qty').invalid && editProductTypeForm.get('qty').touched }" />
+            <div *ngIf="editProductTypeForm.get('qty').invalid && editProductTypeForm.get('qty').touched" class="invalid-feedback">Qty Per Rak Text is required.</div>
+          </div>
+          <div class="form-group">
+            <label for="upper">Upper Constant</label>
+            <input [(ngModel)]="editProductTypeObject.upper_CONSTANT" type="text" class="form-control" id="upper" formControlName="qty" [ngClass]="{ 'is-invalid': editProductTypeForm.get('upper').invalid && editProductTypeForm.get('upper').touched }" />
+            <div *ngIf="editProductTypeForm.get('upper').invalid && editProductTypeForm.get('upper').touched" class="invalid-feedback">upper Per Rak Text is required.</div>
+          </div>
+          <div class="form-group">
+            <label for="lower">Lower Constant</label>
+            <input [(ngModel)]="editProductTypeObject.lower_CONSTANT" type="text" class="form-control" id="lower" formControlName="lower" [ngClass]="{ 'is-invalid': editProductTypeForm.get('lower').invalid && editProductTypeForm.get('lower').touched }" />
+            <div *ngIf="editProductTypeForm.get('lower').invalid && editProductTypeForm.get('lower').touched" class="invalid-feedback">lower Text is required.</div>
+          </div>
+          <div class="form-group">
+            <label for="desc">Ext Description</label>
+            <input [(ngModel)]="editProductTypeObject.ext_DESCRIPTION" type="text" class="form-control" id="desc" formControlName="desc" [ngClass]="{ 'is-invalid': editProductTypeForm.get('desc').invalid && editProductTypeForm.get('desc').touched }" />
+            <div *ngIf="editProductTypeForm.get('desc').invalid && editProductTypeForm.get('desc').touched" class="invalid-feedback">Ext Description Text is required.</div>
+          </div>
+          <div class="form-group">
+            <label for="itemExt">Item Ext</label>
+            <input [(ngModel)]="editProductTypeObject.item_EXT" type="text" class="form-control" id="itemExt" formControlName="itemExt" [ngClass]="{ 'is-invalid': editProductTypeForm.get('itemExt').invalid && editProductTypeForm.get('itemExt').touched }" />
+            <div *ngIf="editProductTypeForm.get('itemExt').invalid && editProductTypeForm.get('itemExt').touched" class="invalid-feedback">Item Ext Text is required.</div>
+          </div>
+          <div class="form-group">
+            <label for="itemAssy">Item Assy</label>
+            <input [(ngModel)]="editProductTypeObject.item_ASSY" type="itemAssy" class="form-control" id="itemAssy" formControlName="itemAssy" [ngClass]="{ 'is-invalid': editProductTypeForm.get('itemAssy').invalid && editProductTypeForm.get('itemAssy').touched }" />
+            <div *ngIf="editProductTypeForm.get('itemAssy').invalid && editProductTypeForm.get('itemAssy').touched" class="invalid-feedback">Item Assy Text is required.</div>
+          </div>
+          <div class="form-group">
+            <label for="wibTube">Wib Tube</label>
+            <input [(ngModel)]="editProductTypeObject.wib_TUBE" type="text" class="form-control" id="wibTube" formControlName="wibTube" [ngClass]="{ 'is-invalid': editProductTypeForm.get('wibTube').invalid && editProductTypeForm.get('wibTube').touched }" />
+            <div *ngIf="editProductTypeForm.get('wibTube').invalid && editProductTypeForm.get('wibTube').touched" class="invalid-feedback">Wib Tube is required.</div>
+          </div>
+          <div class="form-group">
+            <label for="rim">Rim</label>
+            <input [(ngModel)]="editProductTypeObject.rim" type="text" class="form-control" id="rim" formControlName="rim" [ngClass]="{ 'is-invalid': editProductTypeForm.get('rim').invalid && editProductTypeForm.get('rim').touched }" />
+            <div *ngIf="editProductTypeForm.get('rim').invalid && editProductTypeForm.get('rim').touched" class="invalid-feedback">Rim Text is required.</div>
+          </div>
+          <div class="form-group">
+            <label for="description">Description</label>
+            <input [(ngModel)]="editProductTypeObject.description" type="text" class="form-control" id="description" formControlName="qty" [ngClass]="{ 'is-invalid': editProductTypeForm.get('description').invalid && editProductTypeForm.get('description').touched }" />
+            <div *ngIf="editProductTypeForm.get('description').invalid && editProductTypeForm.get('description').touched" class="invalid-feedback">Description Text is required.</div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" [disabled]="editProductTypeForm.invalid" (click)="updateProduct()">Update Product</button>
+      </div>
     </div>
   </div>
 </div>
 
 <!-- Modal for Upload Excel -->
-<div
-  class="modal fade"
-  id="uploadModal"
-  tabindex="-1"
-  role="dialog"
-  aria-labelledby="uploadModalLabel"
-  aria-hidden="true"
->
+<div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="uploadModalLabel">Upload Excel File</h5>
-        <button
-          type="button"
-          class="close"
-          data-dismiss="modal"
-          aria-label="Close"
-        >
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
         <form id="uploadForm">
-          <!-- Drop Zone -->
-          <div
-            class="drop-zone"
-            id="drop-zone"
-            (dragover)="onDragOver($event)"
-            (drop)="onDrop($event)"
-          >
-            <p>Drag & Drop your Excel file here or click to browse</p>
-            <input
-              type="file"
-              id="fileInput"
-              accept=".xls,.xlsx"
-              (change)="ReadExcel($event)"
-            />
-          </div>
-
           <!-- Manual File Input -->
           <div class="form-group mt-3">
-            <label for="manualFileInput">Choose File Manually</label>
-            <input
-              type="file"
-              class="form-control-file"
-              id="manualFileInput"
-              accept=".xls,.xlsx"
-              (change)="ReadExcel($event)"
-            />
+            <input type="file" class="form-control-file" id="manualFileInput" accept=".xls,.xlsx" (change)="onFileChange($event)" />
           </div>
         </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">
-          Close
-        </button>
-        <button
-          type="button"
-          class="btn btn-primary"
-          id="uploadButton"
-          (click)="uploadExcelFile()"
-        >
-          Upload
-        </button>
+        <button type="button" class="btn btn-md btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-md btn-primary" id="uploadButton" (click)="uploadFileExcel()">Upload</button>
       </div>
     </div>
   </div>

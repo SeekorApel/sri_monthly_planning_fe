@@ -1,11 +1,6 @@
-export interface ApiResponse<T> {
-  message?: string;
-  data: T;
-}
-
-export interface IBuilding {
-  building_ID?: number;
-  plant_ID?: number;        
+export class Building {
+  building_ID: number;
+  plant_ID: number;        
   building_NAME: string;
   status: number;           
   creation_DATE: Date;     

@@ -22,7 +22,7 @@ import { ViewBDistanceComponent } from './views/master-data/view-bdistance/view-
 import { ViewQDistanceComponent } from './views/master-data/view-qdistance/view-qdistance.component';
 import { ViewPatternComponent } from './views/master-data/view-pattern/view-pattern.component';
 import { ViewProductComponent } from './views/master-data/view-product/view-product.component';
-import { ViewTassMachine } from './views/master-data/view-tassmachine/view-tassmachine.component';
+import { ViewMachineTassComponent } from './views/master-data/view-tassmachine/view-tassmachine.component';
 import { ViewRoutingMachineComponent } from './views/master-data/view-routing-machine/view-routing-machine.component';
 import { ViewDeliveryScheduleComponent } from './views/master-data/view-delivery-schedule/view-delivery-schedule.component';
 import { ViewMachineCuringTypeComponent } from './views/master-data/view-machine-curing-type/view-machine-curing-type.component';
@@ -34,6 +34,13 @@ import { ViewItemCuringComponent } from './views/master-data/view-item-curing/vi
 import { ViewTassSizeComponent } from './views/master-data/view-tass-size/view-tass-size.component';
 import { ViewMonthlyPlanningComponent } from './views/transaksi/view-monthly-planning/view-monthly-planning.component';
 import { AddMonthlyPlanningComponent } from './views/transaksi/add-monthly-planning/add-monthly-planning.component';
+import { ViewCtCuringComponent } from './views/master-data/view-ct-curing/view-ct-curing.component';
+import { ViewMachineAllowanceComponent } from './views/master-data/view-machine-allowance/view-machine-allowance.component';
+import { ViewItemAssyComponent } from './views/master-data/view-item-assy/view-item-assy.component';
+import { ViewMachineExtrudingComponent } from './views/master-data/view-machine-extruding/view-machine-extruding.component'
+import { ViewCtKapaComponent } from './views/master-data/view-ct-kapa/view-ct-kapa.component'
+import { ViewDDeliveryScheduleComponent } from './views/master-data/view-d-deliveryschedule/view-d-deliveryschedule.component'
+
 export const routes: Routes = [
   {
     path: '',
@@ -108,10 +115,24 @@ export const routes: Routes = [
         },
       },
       {
+        path: 'master-data/view-d-deliveryschedule',
+        component: ViewDDeliveryScheduleComponent,
+        data: {
+          title: 'Master Data / View Detail Delivery Schedule',
+        },
+      },
+      {
         path: 'master-data/view-product-type',
         component: ViewProductTypeComponent,
         data: {
           title: 'Master Data / View Product Type',
+        },
+      },
+      {
+        path: 'master-data/view-machine-extruding',
+        component: ViewMachineExtrudingComponent,
+        data: {
+          title: 'Master Data / View Machine Extruding',
         },
       },
       {
@@ -157,6 +178,13 @@ export const routes: Routes = [
         },
       },
       {
+        path: 'master-data/view-ct-kapa',
+        component: ViewCtKapaComponent,
+        data: {
+          title: 'Master Data / View CT Kapa',
+        },
+      },
+      {
         path: 'master-data/view-machine-curing-type',
         component: ViewMachineCuringTypeComponent,
         data: {
@@ -179,7 +207,7 @@ export const routes: Routes = [
       },
       {
         path: 'master-data/view-tassMachine',
-        component: ViewTassMachine,
+        component: ViewMachineTassComponent,
         data: {
           title: 'Master Data / View Machine',
         },
@@ -210,6 +238,13 @@ export const routes: Routes = [
         component: ViewTassSizeComponent,
         data: {
           title: 'Master Data / View Tass Size',
+        },
+      },
+      {
+        path: 'master-data/view-ct-curing',
+        component: ViewCtCuringComponent,
+        data: {
+          title: 'Master Data / View CT Curing',
         },
       },
       {
@@ -255,6 +290,20 @@ export const routes: Routes = [
         },
       },
       {
+        path: 'master-data/view-machine-allowance',
+        component: ViewMachineAllowanceComponent,
+        data: {
+          title: 'Master Data / View Machine Allowance',
+        },
+      },
+      {
+        path: 'master-data/view-item-assy',
+        component: ViewItemAssyComponent,
+        data: {
+          title: 'Master Data / View Item Assy',
+        },
+      },
+      {
         path: 'transaksi/view-monthly-planning',
         component: ViewMonthlyPlanningComponent,
         data: {
@@ -270,61 +319,43 @@ export const routes: Routes = [
       },
       {
         path: 'base',
-        loadChildren: () =>
-          import('./views/base/base.module').then((m) => m.BaseModule),
+        loadChildren: () => import('./views/base/base.module').then((m) => m.BaseModule),
       },
       {
         path: 'buttons',
-        loadChildren: () =>
-          import('./views/buttons/buttons.module').then((m) => m.ButtonsModule),
+        loadChildren: () => import('./views/buttons/buttons.module').then((m) => m.ButtonsModule),
       },
       {
         path: 'charts',
-        loadChildren: () =>
-          import('./views/chartjs/chartjs.module').then((m) => m.ChartJSModule),
+        loadChildren: () => import('./views/chartjs/chartjs.module').then((m) => m.ChartJSModule),
       },
       {
         path: 'dashboard',
-        loadChildren: () =>
-          import('./views/dashboard/dashboard.module').then(
-            (m) => m.DashboardModule
-          ),
+        loadChildren: () => import('./views/dashboard/dashboard.module').then((m) => m.DashboardModule),
       },
       {
         path: 'icons',
-        loadChildren: () =>
-          import('./views/icons/icons.module').then((m) => m.IconsModule),
+        loadChildren: () => import('./views/icons/icons.module').then((m) => m.IconsModule),
       },
       {
         path: 'notifications',
-        loadChildren: () =>
-          import('./views/notifications/notifications.module').then(
-            (m) => m.NotificationsModule
-          ),
+        loadChildren: () => import('./views/notifications/notifications.module').then((m) => m.NotificationsModule),
       },
       {
         path: 'theme',
-        loadChildren: () =>
-          import('./views/theme/theme.module').then((m) => m.ThemeModule),
+        loadChildren: () => import('./views/theme/theme.module').then((m) => m.ThemeModule),
       },
       {
         path: 'widgets',
-        loadChildren: () =>
-          import('./views/widgets/widgets.module').then((m) => m.WidgetsModule),
+        loadChildren: () => import('./views/widgets/widgets.module').then((m) => m.WidgetsModule),
       },
       {
         path: 'master-data',
-        loadChildren: () =>
-          import('./views/master-data/master-data.module').then(
-            (m) => m.MasterDataModule
-          ),
+        loadChildren: () => import('./views/master-data/master-data.module').then((m) => m.MasterDataModule),
       },
       {
         path: 'transaksi',
-        loadChildren: () =>
-          import('./views/transaksi/transaksi.module').then(
-            (m) => m.TransaksiModule
-          ),
+        loadChildren: () => import('./views/transaksi/transaksi.module').then((m) => m.TransaksiModule),
       },
     ],
   },

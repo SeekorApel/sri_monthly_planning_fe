@@ -1,17 +1,12 @@
-export interface ApiResponse<T> {
-  message?: string;
-  data: T;
-}
-export interface IMachineTassType {
-  code: string;
+export class MachineTassType {
+  machinetasstype_ID: string;
   setting_ID: number;  
   description: string;   
-  floor: number;
   status: number;
-  CREABY: number;       
-  CREADATE: Date;
-  MODIBY: number;       
-  MODIDATE: Date;
+  created_BY: string;       
+  creation_DATE: Date;
+  last_UPDATED_BY: string;       
+  last_UPDATE_DATE: Date;
 }
 
 

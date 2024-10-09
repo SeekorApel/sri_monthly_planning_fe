@@ -1,68 +1,91 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { IMachineCuringType } from 'src/app/models/machine-curing-type';
-import { ApiResponse } from 'src/app/response/ApiResponse';
-import { tap } from 'rxjs/operators';
+import { MachineCuringType } from 'src/app/models/machine-curing-type';
+import { ApiResponse } from 'src/app/response/Response';
 import { throwError } from 'rxjs';
+import { environment } from 'src/environments/environment';
+import { map, catchError } from 'rxjs/operators';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class MachineCuringTypeService {
-  private baseUrl = 'http://localhost:8080';
-  private apiUrl = 'http://localhost:8080';
-
-
+  //Isi tokenya
+  token: String =
+    'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBdXJlbCIsImV4cCI6MTcyNzk2MjczMX0.3qeq8OusdWu9a9IyjGZY-nwx97qWsaJw2ga2DUHqxcN35iLPV9wi8ZqEX48ptxQ0BbtYnWxc7Img6pumz_JJ8w';
   constructor(private http: HttpClient) {}
 
-  getAllPlant(): Observable<ApiResponse<IMachineCuringType[]>> {
-    return this.http.get<ApiResponse<IMachineCuringType[]>>(`${this.baseUrl}/getAllPlant`);
+  // Method untuk menambahkan header Authorization dengan token
+  private getHeaders() {
+    return new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+    });
   }
 
-//   getPlantById(id: number): Observable<DtoResponse> {
-//     return this.http.get<DtoResponse>(`${this.baseUrl}/getObatById/${id}`);
-//   }
-
-//   savePlant(obat: IObat): Observable<DtoResponse> {
-//     return this.http.post<DtoResponse>(`${this.baseUrl}/saveObat`, obat);
-//   }
-
-//   updatePlant(id: number, data: IObat): Observable<any> {
-//     const updatedData = { ...data, idObat: id }; // Menambahkan idObat ke dalam body
-//     return this.http.post<any>(`${this.apiUrl}/updateObat`, updatedData);
-//   }
-
-
-//   deletePlant(obat: { idObat: number }): Observable<ApiResponse<any>> {
-//     const url = `${this.apiUrl}/deleteObats`;
-//     return this.http.post<ApiResponse<any>>(url, obat);
-//   }
-
-signIn(userName: string, password: string): Observable<{ data: string }> {
-    return this.http.post<{ data: string }>(`${this.baseUrl}/signin`, {
-      userName,
-      password
-    }).pipe(
-      tap(response => {
-        // Store the token from the 'data' field in localStorage
-        localStorage.setItem('token', response.data);
-      })
+  getMctById(idMct: number): Observable<ApiResponse<MachineCuringType>> {
+    return this.http.get<ApiResponse<MachineCuringType>>(
+      environment.apiUrlWebAdmin + '/getMachineCuringTypeById/' + idMct,
+      { headers: this.getHeaders() }
     );
   }
 
-  savePlantsExcelFile(formData: FormData): Observable<any> {
-    const token = localStorage.getItem('token'); // Retrieve the token
-    if (!token) {
-      console.error('Token is not available');
-      // Return an observable that emits an error
-      return throwError('Token is not available'); // Make sure to import throwError from 'rxjs'
-    }
+  getAllMCT(): Observable<ApiResponse<MachineCuringType[]>> {
+    return this.http.get<ApiResponse<MachineCuringType[]>>(
+      environment.apiUrlWebAdmin + '/getAllMachineCuringType',
+      { headers: this.getHeaders() }
+    );
+  }
 
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`
-    });
+  //Method Update plant
+  updateMCT(mct: MachineCuringType): Observable<ApiResponse<MachineCuringType>> {
+    return this.http
+      .post<ApiResponse<MachineCuringType>>(
+        environment.apiUrlWebAdmin + '/updateMachineCuringType',
+        mct,
+        { headers: this.getHeaders() } // Menyertakan header
+      )
+      .pipe(
+        map((response) => {
+          return response;
+        }),
+        catchError((err) => {
+          return throwError(err);
+        })
+      );
+  }
 
-    return this.http.post(`${this.baseUrl}/savePlantsExcel`, formData, { headers });
+  deleteMct(mct: MachineCuringType): Observable<ApiResponse<MachineCuringType>> {
+    return this.http
+      .post<ApiResponse<MachineCuringType>>(
+        environment.apiUrlWebAdmin + '/deleteMachineCuringType',
+        mct,
+        { headers: this.getHeaders() }
+      )
+      .pipe(
+        map((response) => {
+          return response;
+        }),
+        catchError((err) => {
+          return throwError(err);
+        })
+      );
+  }
+
+  uploadFileExcel(file: FormData): Observable<ApiResponse<MachineCuringType>> {
+    return this.http
+      .post<ApiResponse<MachineCuringType>>(
+        environment.apiUrlWebAdmin + '/saveMachineCuringTypeExcel',
+        file,
+        { headers: this.getHeaders() }
+      )
+      .pipe(
+        map((response) => {
+          return response;
+        }),
+        catchError((err) => {
+          return throwError(err);
+        })
+      );
   }
 }

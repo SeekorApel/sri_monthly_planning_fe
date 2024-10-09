@@ -1,87 +1,120 @@
 <div class="col-lg-12">
-    <div class="card">
-      <div class="card-header">
-        <strong><i class="fa fa-bars"></i>&nbsp;Master Data Max Capacity</strong>
+  <div class="card">
+    <div class="card-header">
+      <strong><i class="fa fa-bars"></i>&nbsp;Master Data Max Capacity</strong>
     </div>
-      <div class="card-footer text-right">
-                 
-        <button type="submit" class="btn btn-sm btn-primary ml-2">
-          <i class="fa fa-download fa-lg"></i> Download Template
-        </button>
-        <!-- Button to trigger modal -->
-        <button type="button" class="btn btn-sm btn-success ml-2" data-toggle="modal" data-target="#uploadModal">
-          <i class="fa fa-file-excel-o fa-lg"></i> Export Excel
+
+    <div class="card-body">
+      <!-- Wrapper for the input and buttons in one row -->
+      <div class="d-flex justify-content-between mb-3">
+        <div class="d-flex align-items-center">
+          <input type="text" class="form-control col-md-12 col-lg-12" [(ngModel)]="searchText" (input)="onSearchChange()" placeholder="Find here..." />
+          <button type="submit" class="btn btn-primary ml-2" (click)="resetSearch()">Reset</button>
+        </div>
+
+        <!-- Right side: Download Template and Export Excel buttons -->
+        <div>
+          <button type="button" class="btn btn-primary ml-2" (click)="downloadTemplate()"><i class="fa fa-download fa-lg"></i> Download Template</button>
+          <button type="button" class="btn btn-success ml-2" data-toggle="modal" data-target="#uploadModal"><i class="fa fa-file-excel-o fa-lg"></i> Upload Excel</button>
+        </div>
+      </div>
+
+      <!-- Table -->
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>No</th>
+            <th>Max Capacity ID</th>
+            <th>Product ID</th>
+            <th>Machine Curing Type ID</th>
+            <th>Cycle Time</th>
+            <th>Capacity Shift 1</th>
+            <th>Capacity Shift 2</th>
+            <th>Capacity Shift 3</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let maxCapacity of pageOfItems; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td>{{ maxCapacity.max_Cap_ID }}</td>
+            <td>{{ maxCapacity.product_ID }}</td>
+            <td>{{ maxCapacity.machine_curing_type_ID }}</td>
+            <td>{{ maxCapacity.cycle_TIME }}</td>
+            <td>{{ maxCapacity.capacity_Shift_1 }}</td>
+            <td>{{ maxCapacity.capacity_Shift_2 }}</td>
+            <td>{{ maxCapacity.capacity_Shift_3 }}</td>
+            <td>{{ maxCapacity.status === 1 ? 'Active' : 'Deactive' }}</td>
+            <td>
+              <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(quadrant.quadrant_ID)">Update</button>
+              <button type="button" class="btn btn-md btn-danger ml-2" (click)="deleteData(quadrant)">Delete</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <!-- Pagination -->
+      <nav>
+        <ul class="pagination">
+          <jw-pagination [items]="maxCapacitys" [pageSize]="pageSize" [maxPages]="totalPages" (changePage)="onChangePage($event)"> </jw-pagination>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+<!-- Modal edit -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addModalLabel">Edit Max Capacity</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
         </button>
       </div>
-  
-      <div class="card-body">
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th>Max Capacity ID</th>
-              <th>Product ID</th>
-              <th>Type Code</th>
-              <th>Cycle Time</th>
-              <th>Shift 1</th>
-              <th>Shift 2</th>
-              <th>Shift 3</th>
-              <th>Status</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let maxCapacity of maxCapacityList; let i = index">
-                <td>{{ maxCapacity.max_Cap_ID }}</td>
-                <td>{{ maxCapacity.product_ID }}</td>
-                <td>{{ maxCapacity.type_Code }}</td>
-                <td>{{ maxCapacity.cycle_TIME }}</td>
-                <td>{{ maxCapacity.capacity_Shift_1 }}</td>
-                <td>{{ maxCapacity.capacity_Shift_2 }}</td>
-                <td>{{ maxCapacity.capacity_Shift_3 }}</td>
-                <td>{{ maxCapacity.status }}</td>
-                <td>
-                    <button type="button" class="btn btn-sm btn-primary" >
-                        <i class="fa fa-plus fa-lg"></i> Update
-                    </button> 
-                    <button class="btn btn-danger btn-sm ml-2" >Delete</button>
-                  </td>
-              </tr>
-          </tbody>
-          
-        </table>
+      <div class="modal-body">
+        <!-- Form with Reactive Forms -->
+        <form [formGroup]="editMaxCapacityForm">
+          <div class="form-group">
+            <label for="maxCapacity">Max Capacity ID</label>
+            <input [(ngModel)]="edtMaxCapacityObject.product_ID" type="text" class="form-control" id="maxCapacity" formControlName="maxCapacity" [ngClass]="{ 'is-invalid': editMaxCapacityForm.get('maxCapacity').invalid && editMaxCapacityForm.get('maxCapacity').touched }" />
+            <!-- Error message if quadrantName is empty -->
+            <div *ngIf="editMaxCapacityForm.get('maxCapacity').invalid && editMaxCapacityForm.get('maxCapacity').touched" class="invalid-feedback">Max Capacity name is required.</div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <!-- Disable Update button if form is invalid -->
+        <button type="button" class="btn btn-primary" [disabled]="editMaxCapacityForm.invalid" (click)="updateMaxCapacity()">Update Max Capacity</button>
       </div>
     </div>
   </div>
-  
- <!-- Modal for Upload Excel -->
-<div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="uploadModalLabel">Upload Excel File</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form id="uploadForm">
-                    <!-- Drop Zone -->
-                    <div class="drop-zone" id="drop-zone" (dragover)="onDragOver($event)" (drop)="onDrop($event)">
-                        <p>Drag & Drop your Excel file here or click to browse</p>
-                        <input type="file" id="fileInput" accept=".xls,.xlsx" (change)="ReadExcel($event)">
-                    </div>
+</div>
 
-                    <!-- Manual File Input -->
-                    <div class="form-group mt-3">
-                        <label for="manualFileInput">Choose File Manually</label>
-                        <input type="file" class="form-control-file" id="manualFileInput" accept=".xls,.xlsx" (change)="ReadExcel($event)">
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="uploadButton" (click)="uploadExcelFile()">Upload</button>
-            </div>
-        </div>
+<!-- Modal for Upload Excel -->
+<div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="uploadModalLabel">Upload Excel File</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="uploadForm">
+          <!-- Manual File Input -->
+          <div class="form-group mt-3">
+            <input type="file" class="form-control-file" id="manualFileInput" accept=".xls,.xlsx" (change)="onFileChange($event)" />
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-md btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-md btn-primary" id="uploadButton" (click)="uploadFileExcel()">Upload</button>
+      </div>
     </div>
+  </div>
 </div>

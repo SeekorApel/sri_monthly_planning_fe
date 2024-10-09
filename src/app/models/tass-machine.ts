@@ -1,20 +1,15 @@
-export interface ApiResponse<T> {
-  message?: string;
-  data: T;
-}
-export interface ITassMachine {
-  machine_NUM: number;
-  quadrant_ID: number;  
-  type_CODE: string;   
+export class MachineTass {
+  id_MACHINE_TASS: string;
+  building_ID:  number;
   floor: number;
-  type: string;         
-  work_center_text: string; 
-  servicer: number;
+  type: string;
   status: number;
-  CREABY: number;       
-  CREADATE: Date;
-  MODIBY: number;       
-  MODIDATE: Date;
+  machine_NUMBER: number;
+  work_CENTER_TEXT: string;
+  creation_DATE: string;
+  last_UPDATED_BY: string;
+  last_UPDATE_DATE: string | null;
+  created_BY: string | null;
 }
 
 

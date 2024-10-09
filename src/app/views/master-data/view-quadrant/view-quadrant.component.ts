@@ -1,95 +1,217 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { Router } from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Quadrant } from 'src/app/models/quadrant';
+import { ApiResponse } from 'src/app/response/Response';
 import { QuadrantService } from 'src/app/services/master-data/quadrant/quadrant.service';
+import Swal from 'sweetalert2';
+declare var $: any;
 import * as XLSX from 'xlsx';
 
 @Component({
   selector: 'app-view-quadrant',
   templateUrl: './view-quadrant.component.html',
-  styleUrls: ['./view-quadrant.component.scss']
+  styleUrls: ['./view-quadrant.component.scss'],
 })
 export class ViewQuadrantComponent implements OnInit {
-  loginForm: FormGroup;
-  loading = false;
-  quadrantList: any[] = [];
+
+  //Variable Declaration
+  quadrants: Quadrant[] = [];
+  searchText: string = '';
+  errorMessage: string | null = null;
+  edtQuadrantObject: Quadrant = new Quadrant();
+  isEditMode: boolean = false;
   file: File | null = null;
+  editQuadrantForm: FormGroup;
 
-  constructor(
-    private formBuilder: FormBuilder,
-    private router: Router,
-    private quadrantService: QuadrantService // Inject PlantService
-  ) { }
+  // Pagination
+  pageOfItems: Array<any>;
+  pageSize: number = 5;
+  totalPages: number = 5;
 
-  ngOnInit() {
-    this.loadQuadrant(); // Panggil metode untuk memuat data plant
+  constructor(private quadrantService: QuadrantService, private fb: FormBuilder) { 
+    this.editQuadrantForm = this.fb.group({
+      quadrantName: ['', Validators.required]
+
+    });
   }
 
-  onDragOver(event: DragEvent) {
-        event.preventDefault(); // Mencegah default behavior
-    }
+  ngOnInit(): void {
+    this.getAllQuadrant();
+  }
 
-    onDrop(event: DragEvent) {
-        event.preventDefault();
-        const files = event.dataTransfer?.files;
-        if (files.length > 0) {
-            this.file = files[0];
-            this.ReadExcel({ target: { files } }); // Panggil ReadExcel dengan file yang di-drop
-        }
-    }
-
-  loadQuadrant() {
+  getAllQuadrant(): void {
     this.quadrantService.getAllQuadrant().subscribe(
-      (response) => {
-        this.quadrantList = response.data; // Simpan data plant ke dalam variabel
+      (response: ApiResponse<Quadrant[]>) => {
+        this.quadrants = response.data;
+        this.onChangePage(this.quadrants.slice(0, this.pageSize));
       },
       (error) => {
-        console.error('Error fetching plants:', error); // Tangani error
+        this.errorMessage = 'Failed to load quadrants: ' + error.message;
       }
     );
   }
 
+  onChangePage(pageOfItems: Array<any>) {
+    this.pageOfItems = pageOfItems;
+  }
 
-  ReadExcel(event: any) {
-    this.file = event.target.files[0];
-    let fileReader = new FileReader();
-    fileReader.readAsBinaryString(this.file as File);
-    fileReader.onload = (e) => {
-      var workbook = XLSX.read(fileReader.result, { type: 'binary' });
-      var sheetName = workbook.SheetNames[0];
-      var excelData = XLSX.utils.sheet_to_json(workbook.Sheets[sheetName]);
-      console.log(excelData); // Tampilkan data Excel yang terbaca di console
+  onSearchChange(): void {
+    // Lakukan filter berdasarkan nama plant yang mengandung text pencarian (case-insensitive)
+    const filteredPlants = this.quadrants.filter(
+      (quadrant) =>
+        quadrant.quadrant_ID
+          .toString()
+          .includes(this.searchText.toLowerCase()) ||
+        quadrant.building_ID.toString().includes(this.searchText)||
+        quadrant.quadrant_NAME.toLowerCase().toString().includes(this.searchText)
+    );
+
+    // Tampilkan hasil filter pada halaman pertama
+    this.onChangePage(filteredPlants.slice(0, this.pageSize));
+  }
+
+  resetSearch(): void {
+    this.searchText = '';
+    this.onChangePage(this.quadrants.slice(0, this.pageSize));
+  }
+
+  updateQuadrant(): void {
+    
+    this.quadrantService.updateQuadrant(this.edtQuadrantObject).subscribe(
+      (response) => {
+        // SweetAlert setelah update berhasil
+        Swal.fire({
+          title: 'Success!',
+          text: 'Data quadrant successfully updated.',
+          icon: 'success',
+          confirmButtonText: 'OK',
+        }).then((result) => {
+          if (result.isConfirmed) {
+            $('#editModal').modal('hide');
+            window.location.reload();
+          }
+        });
+      },
+      (err) => {
+        Swal.fire('Error!', 'Error updating data.', 'error');
+      }
+    );
+  }
+
+  openModalEdit(idQuadrant: number): void {
+    this.isEditMode = true;
+    this.getQuadrantById(idQuadrant);
+    $('#editModal').modal('show');
+  }
+
+  getQuadrantById(idQuadrant: number): void {
+    this.quadrantService.getQuadrantById(idQuadrant).subscribe(
+      (response: ApiResponse<Quadrant>) => {
+        this.edtQuadrantObject = response.data;
+      },
+      (error) => {
+        this.errorMessage = 'Failed to load quadrants: ' + error.message;
+      }
+    );
+  }
+
+  deleteData(quadrant: Quadrant): void {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'This data plant will be deleted!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes',
+      cancelButtonText: 'No',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.quadrantService.deleteQuadrant(quadrant).subscribe(
+          (response) => {
+            Swal.fire('Deleted!', 'Data quadrant has been deleted', 'success').then(() => {
+              window.location.reload();
+            });
+          },
+          (err) => {
+            Swal.fire('Error!', 'Failed to delete the quadrant.', 'error');
+          }
+        );
+      }
+    });
+  }
+
+
+  openModalUpload(): void {
+    $('#uploadModal').modal('show');
+  }
+
+  downloadTemplate() {
+    const link = document.createElement('a');
+    link.href = 'assets/Template Excel/Layout_Master_Quadrant.xlsx';
+    link.download = 'Layout_Master_Quadrant.xlsx';
+    link.click();
+  }
+
+
+  onFileChange(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      const file = input.files[0];
+      const fileName = file.name.toLowerCase();
+
+      // Validasi ekstensi file
+      if (fileName.endsWith('.xls') || fileName.endsWith('.xlsx')) {
+        this.file = file; // Hanya simpan file jika ekstensi valid
+      } else {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Invalid File Type',
+          text: 'Please upload a valid Excel file (.xls or .xlsx).',
+          confirmButtonText: 'OK',
+        });
+        // Kosongkan file jika ekstensi tidak valid
+        this.file = null;
+        input.value = '';
+      }
     }
   }
 
 
-  uploadExcelFile() {
+  uploadFileExcel() {
     if (this.file) {
       const formData = new FormData();
       formData.append('file', this.file);
-  
-      this.quadrantService.signIn('Aurel', 'polman').subscribe(
-        (signinResponse) => {
-            const token = signinResponse.data; 
-  
-          // Now upload the Excel file
-          this.quadrantService.saveQuadrantsExcelFile(formData).subscribe(
-            (response) => {
-              console.log('File uploaded successfully', response);
-            },
-            (error) => {
-              console.error('Error uploading file', error);
-            }
-          );
+      // unggah file Excel
+      this.quadrantService.uploadFileExcel(formData).subscribe(
+        (response) => {
+          Swal.fire({
+            icon: 'success',
+            title: 'Success!',
+            text: 'Excel file uploaded successfully.',
+            confirmButtonText: 'OK',
+          }).then(() => {
+            $('#editModal').modal('hide');
+            window.location.reload();
+          });
         },
         (error) => {
-          console.error('Error signing in', error);
+          console.error('Error uploading file', error);
+          Swal.fire({
+            icon: 'error',
+            title: 'Failed!',
+            text: 'An error occurred while uploading the file.',
+            confirmButtonText: 'OK',
+          });
         }
       );
     } else {
-      console.error('No file selected');
+      Swal.fire({
+        icon: 'warning',
+        title: 'Warning!',
+        text: 'Please select a file to upload.',
+        confirmButtonText: 'OK',
+      });
     }
-  }
-  
-  
+  };
 }

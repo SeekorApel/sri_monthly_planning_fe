@@ -1,77 +1,121 @@
 <div class="col-lg-12">
-    <div class="card">
-      <div class="card-header">
-        <strong><i class="fa fa-bars"></i>&nbsp;Master Data Building Distance</strong>
+  <div class="card">
+    <div class="card-header">
+      <strong><i class="fa fa-bars"></i>&nbsp;Master Data Plant</strong>
     </div>
-      <div class="card-footer text-right">
-                 
-        <button type="submit" class="btn btn-sm btn-primary ml-2">
-          <i class="fa fa-download fa-lg"></i> Download Template
-        </button>
-        <!-- Button to trigger modal -->
-        <button type="button" class="btn btn-sm btn-success ml-2" data-toggle="modal" data-target="#uploadModal">
-          <i class="fa fa-file-excel-o fa-lg"></i> Export Excel
+
+    <div class="card-body">
+      <!-- Wrapper for the input and buttons in one row -->
+      <div class="d-flex justify-content-between mb-3">
+        <div class="d-flex align-items-center">
+          <input type="text" class="form-control col-md-12 col-lg-12" [(ngModel)]="searchText" (input)="onSearchChange()" placeholder="Find here..." />
+          <button type="submit" class="btn btn-primary ml-2" (click)="resetSearch()">Reset</button>
+        </div>
+
+        <!-- Right side: Download Template and Export Excel buttons -->
+        <div>
+          <button type="button" class="btn btn-primary ml-2" (click)="downloadTemplate()"><i class="fa fa-download fa-lg"></i> Download Template</button>
+          <button type="button" class="btn btn-success ml-2" data-toggle="modal" data-target="#uploadModal"><i class="fa fa-file-excel-o fa-lg"></i> Upload Excel</button>
+        </div>
+      </div>
+
+      <!-- Table -->
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>No</th>
+            <th>Building Distance ID</th>
+            <th>Building 1</th>
+            <th>Building 2</th>
+            <th>Distance</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let bdistance of pageOfItems; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td>{{ bdistance.id_B_DISTANCE }}</td>
+            <td>{{ bdistance.building_ID_1 }}</td>
+            <td>{{ bdistance.building_ID_2 }}</td>
+            <td>{{ bdistance.distance }}</td>
+            <td>{{ bdistance.status === 1 ? 'Active' : 'Deactive' }}</td>
+            <td>
+              <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(bdistance.id_B_DISTANCE)">Update</button>
+              <button type="button" class="btn btn-md btn-danger ml-2" (click)="deleteData(bdistance)">Delete</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <!-- Pagination -->
+      <nav>
+        <ul class="pagination">
+          <jw-pagination [items]="bdistances" [pageSize]="pageSize" [maxPages]="totalPages" (changePage)="onChangePage($event)"> </jw-pagination>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+<!-- Modal edit -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addModalLabel">Edit Plant</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
         </button>
       </div>
-  
-      <div class="card-body">
-        <table class="table table-striped">
-          <thead>
-            <tr>
-              <th>Building Distance ID</th>
-              <th>Distance</th>
-              <th>Status</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let bdistance of bDistanceList; let i = index">
-                <td>{{ bdistance.bdistance_ID }}</td>
-                <td>{{ bdistance.building_Distance }}</td>
-                <td>{{ bdistance.status }}</td>
-                <td>
-                    <button type="button" class="btn btn-sm btn-primary" >
-                        <i class="fa fa-plus fa-lg"></i> Update
-                    </button> 
-                    <button class="btn btn-danger btn-sm ml-2" >Delete</button>
-                  </td>
-              </tr>
-          </tbody>
-          
-        </table>
+      <div class="modal-body">
+        <!-- Form with Reactive Forms -->
+        <form [formGroup]="editBDistanceForm">
+          <div class="form-group">
+            <label for="building1">Building 1</label>
+            <input [(ngModel)]="edtBDistanceObject.building_ID_1" type="text" class="form-control" id="building1" formControlName="building1" [ngClass]="{ 'is-invalid': editBDistanceForm.get('building1').invalid && editBDistanceForm.get('building1').touched }" />
+            <div *ngIf="editBDistanceForm.get('building1').invalid && editBDistanceForm.get('building1').touched" class="invalid-feedback">Building 1 value is required.</div>
+            
+            <label for="building2">Building 2</label>
+            <input [(ngModel)]="edtBDistanceObject.building_ID_2" type="text" class="form-control" id="building2" formControlName="building2" [ngClass]="{ 'is-invalid': editBDistanceForm.get('building2').invalid && editBDistanceForm.get('building2').touched }" />
+            <div *ngIf="editBDistanceForm.get('building2').invalid && editBDistanceForm.get('building2').touched" class="invalid-feedback">Building 1 value is required.</div>
+            
+            <label for="distance">Distance</label>
+            <input [(ngModel)]="edtBDistanceObject.distance" type="text" class="form-control" id="distance" formControlName="distance" [ngClass]="{ 'is-invalid': editBDistanceForm.get('distance').invalid && editBDistanceForm.get('distance').touched }" />
+            <div *ngIf="editBDistanceForm.get('distance').invalid && editBDistanceForm.get('distance').touched" class="invalid-feedback">Distance Value is required.</div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <!-- Disable Update button if form is invalid -->
+        <button type="button" class="btn btn-primary" [disabled]="editBDistanceForm.invalid" (click)="updateBuildingDistance()">Update Building Distance</button>
       </div>
     </div>
   </div>
-  
- <!-- Modal for Upload Excel -->
-<div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="uploadModalLabel">Upload Excel File</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form id="uploadForm">
-                    <!-- Drop Zone -->
-                    <div class="drop-zone" id="drop-zone" (dragover)="onDragOver($event)" (drop)="onDrop($event)">
-                        <p>Drag & Drop your Excel file here or click to browse</p>
-                        <input type="file" id="fileInput" accept=".xls,.xlsx" (change)="ReadExcel($event)">
-                    </div>
+</div>
 
-                    <!-- Manual File Input -->
-                    <div class="form-group mt-3">
-                        <label for="manualFileInput">Choose File Manually</label>
-                        <input type="file" class="form-control-file" id="manualFileInput" accept=".xls,.xlsx" (change)="ReadExcel($event)">
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="uploadButton" (click)="uploadExcelFile()">Upload</button>
-            </div>
-        </div>
+<!-- Modal for Upload Excel -->
+<div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="uploadModalLabel">Upload Excel File</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="uploadForm">
+          <!-- Manual File Input -->
+          <div class="form-group mt-3">
+            <input type="file" class="form-control-file" id="manualFileInput" accept=".xls,.xlsx" (change)="onFileChange($event)" />
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-md btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-md btn-primary" id="uploadButton" (click)="uploadFileExcel()">Upload</button>
+      </div>
     </div>
+  </div>
 </div>

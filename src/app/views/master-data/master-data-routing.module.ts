@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { ViewPlantComponent } from './view-plant/view-plant.component';
 import { ViewProductComponent } from './view-product/view-product.component';
 import { ViewPatternComponent } from './view-pattern/view-pattern.component';
-import { ViewTassMachine } from './view-tassmachine/view-tassmachine.component';
+import { ViewMachineTassComponent } from './view-tassmachine/view-tassmachine.component';
 import { ViewSettingComponent } from './view-setting/view-setting.component';
 import { ViewQuadrantComponent } from './view-quadrant/view-quadrant.component';
 import { ViewProductTypeComponent } from './view-product-type/view-product-type.component';
@@ -17,6 +17,8 @@ import { ViewCuringMachineComponent } from './view-curing-machine/view-curing-ma
 import { ViewMaxCapacityComponent } from './view-max-capacity/view-max-capacity.component';
 import { ViewItemCuringComponent } from './view-item-curing/view-item-curing.component';
 import { ViewTassSizeComponent } from './view-tass-size/view-tass-size.component';
+import { ViewCtCuringComponent } from './view-ct-curing/view-ct-curing.component';
+import { ViewMachineAllowanceComponent } from './view-machine-allowance/view-machine-allowance.component';
 
 
 const routes: Routes = [
@@ -53,7 +55,7 @@ const routes: Routes = [
       },
       {
         path: 'master-data/view-tassmachine',
-        component: ViewTassMachine,
+        component: ViewMachineTassComponent,
         data: {
           title: 'Master Tass Machine',
         },
@@ -163,11 +165,20 @@ const routes: Routes = [
           title: 'Master View Item Curing'
         }
       },
-
-
-
-
-
+      {
+        path: 'master-data/view-ct-curing',
+        component: ViewCtCuringComponent,
+        data: {
+          title: 'Master View CT Curing'
+        }
+      },
+      {
+        path: 'master-data/view-machine-allowance',
+        component: ViewMachineAllowanceComponent,
+        data: {
+          title: 'Master View Machine Allowance'
+        }
+      },
     ],
   },
 ];

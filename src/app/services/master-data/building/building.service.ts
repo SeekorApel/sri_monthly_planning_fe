@@ -1,68 +1,92 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { IBuilding } from 'src/app/models/Building';
-import { ApiResponse } from 'src/app/response/ApiResponse';
-import { tap } from 'rxjs/operators'; 
+import { Building } from 'src/app/models/Building';
+import { ApiResponse } from 'src/app/response/Response';
 import { throwError } from 'rxjs';
+import { environment } from 'src/environments/environment';
+import { map, catchError } from 'rxjs/operators';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class BuildingService {
-  private baseUrl = 'http://10.1.23.59:8080';
-  private apiUrl = 'http://10.1.23.59:8080'; 
-
+  //Isi tokenya
+  token: String =
+    'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBdXJlbCIsImV4cCI6MTcyODA0MjAzNH0.j_HYWCIoDutMP1jk2VbfOJOlbMpUEKkpaP_S4uPOu4Ajds66XOpxxA7t0nFi7zgG7YgC0KVmKPhv2wpb4XQLPA';
 
   constructor(private http: HttpClient) {}
 
-  getAllBuilding(): Observable<ApiResponse<IBuilding[]>> {
-    return this.http.get<ApiResponse<IBuilding[]>>(`${this.baseUrl}/getAllBuilding`);
+  // Method untuk menambahkan header Authorization dengan token
+  private getHeaders() {
+    return new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+    });
   }
-  
-//   getPlantById(id: number): Observable<DtoResponse> {
-//     return this.http.get<DtoResponse>(`${this.baseUrl}/getObatById/${id}`);
-//   }
 
-//   savePlant(obat: IObat): Observable<DtoResponse> {
-//     return this.http.post<DtoResponse>(`${this.baseUrl}/saveObat`, obat);
-//   }
-
-//   updatePlant(id: number, data: IObat): Observable<any> {
-//     const updatedData = { ...data, idObat: id }; // Menambahkan idObat ke dalam body
-//     return this.http.post<any>(`${this.apiUrl}/updateObat`, updatedData);
-//   }
-   
-
-//   deletePlant(obat: { idObat: number }): Observable<ApiResponse<any>> {
-//     const url = `${this.apiUrl}/deleteObats`;
-//     return this.http.post<ApiResponse<any>>(url, obat);
-//   }  
-
-signIn(userName: string, password: string): Observable<{ data: string }> {
-    return this.http.post<{ data: string }>(`${this.baseUrl}/signin`, {
-      userName,
-      password
-    }).pipe(
-      tap(response => {
-        // Store the token from the 'data' field in localStorage
-        localStorage.setItem('token', response.data);
-      })
+  getBuildingById(idBuilding: number): Observable<ApiResponse<Building>> {
+    return this.http.get<ApiResponse<Building>>(
+      environment.apiUrlWebAdmin + '/getBuildingById/' + idBuilding,
+      { headers: this.getHeaders() }
     );
   }
-  
-  savePlantsExcelFile(formData: FormData): Observable<any> {
-    const token = localStorage.getItem('token'); // Retrieve the token
-    if (!token) {
-      console.error('Token is not available');
-      // Return an observable that emits an error
-      return throwError('Token is not available'); // Make sure to import throwError from 'rxjs'
-    }
-  
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`
-    });
-  
-    return this.http.post(`${this.baseUrl}/savePlantsExcel`, formData, { headers });
+
+  getAllBuilding(): Observable<ApiResponse<Building[]>> {
+    return this.http.get<ApiResponse<Building[]>>(
+      environment.apiUrlWebAdmin + '/getAllBuilding',
+      { headers: this.getHeaders() }
+    );
+  }
+
+  //Method Update plant
+  updateBuilding(building: Building): Observable<ApiResponse<Building>> {
+    return this.http
+      .post<ApiResponse<Building>>(
+        environment.apiUrlWebAdmin + '/updateBuilding',
+        building,
+        { headers: this.getHeaders() } // Menyertakan header
+      )
+      .pipe(
+        map((response) => {
+          return response;
+        }),
+        catchError((err) => {
+          return throwError(err);
+        })
+      );
+  }
+
+  deleteBuilding(building: Building): Observable<ApiResponse<Building>> {
+    return this.http
+      .post<ApiResponse<Building>>(
+        environment.apiUrlWebAdmin + '/deleteBuilding',
+        building,
+        { headers: this.getHeaders() }
+      )
+      .pipe(
+        map((response) => {
+          return response;
+        }),
+        catchError((err) => {
+          return throwError(err);
+        })
+      );
+  }
+
+  uploadFileExcel(file: FormData): Observable<ApiResponse<Building>> {
+    return this.http
+      .post<ApiResponse<Building>>(
+        environment.apiUrlWebAdmin + '/saveBuildingsExcel',
+        file,
+        { headers: this.getHeaders() }
+      )
+      .pipe(
+        map((response) => {
+          return response;
+        }),
+        catchError((err) => {
+          return throwError(err);
+        })
+      );
   }
 }
