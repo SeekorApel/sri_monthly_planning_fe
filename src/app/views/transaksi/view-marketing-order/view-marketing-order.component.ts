@@ -1,30 +1,69 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { MarketingOrder } from 'src/app/models/MarketingOrder';
+import { ApiResponse } from 'src/app/response/Response';
+import { MarketingOrderService } from 'src/app/services/transaksi/marketing order/marketing-order.service';
+import { ParsingDate } from 'src/app/utils/ParsingDate'
 
 @Component({
   selector: 'app-view-marketing-order',
   templateUrl: './view-marketing-order.component.html',
-  styleUrls: ['./view-marketing-order.component.scss']
+  styleUrls: ['./view-marketing-order.component.scss'],
 })
 export class ViewMarketingOrderComponent implements OnInit {
+  //Declaration
+  marketingOrders: MarketingOrder[] = [];
+  errorMessage: string | null = null;
+  searchText: string = '';
+  dateUtil: typeof ParsingDate;
 
-  marketingOrders: any[] = [];
+  // Pagination
+  pageOfItems: Array<any>;
+  pageSize: number = 5;
+  totalPages: number = 5;
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, private moService: MarketingOrderService) {
+    this.dateUtil = ParsingDate;
+  }
 
   ngOnInit(): void {
-    // Data sample untuk Marketing Order
-    this.marketingOrders = [
-      { no: 1, orderId: 'MO-001', type: 'FED', date: '2024-09-01', revision: 1, month1: "AUG", month2: "SEP", month3: "OCT" },
-      { no: 2, orderId: 'MO-002', type: 'FDR', date: '2024-08-15', revision: 2, month1: "NOV", month2: "DEC", month3: "JAN" },
-      { no: 3, orderId: 'MO-003', type: 'FED', date: '2024-09-05', revision: 1, month1: "FEB", month2: "MAR", month3: "APR" },
-      { no: 4, orderId: 'MO-004', type: 'FDR', date: '2024-08-25', revision: 3, month1: "AUG", month2: "SEP", month3: "OCT" },
-      { no: 5, orderId: 'MO-005', type: 'FED', date: '2024-09-10', revision: 1, month1: "AUG", month2: "SEP", month3: "OCT" }
-    ];
+    this.getAllMarketingOrder();
+  }
+
+  getAllMarketingOrder(): void {
+    this.moService.getAllMarketingOrder().subscribe(
+      (response: ApiResponse<MarketingOrder[]>) => {
+        this.marketingOrders = response.data;
+        this.onChangePage(this.marketingOrders.slice(0, this.pageSize));
+      },
+      (error) => {
+        this.errorMessage = 'Failed to load plants: ' + error.message;
+      }
+    );
+  }
+
+  onChangePage(pageOfItems: Array<any>) {
+    this.pageOfItems = pageOfItems;
+  }
+
+  onSearchChange(): void {
+    // Lakukan filter berdasarkan nama plant yang mengandung text pencarian (case-insensitive)
+    const filteredSearch = this.marketingOrders.filter(
+      (mo) =>
+        mo.mo_ID.toString().includes(this.searchText) ||
+        mo.type.toLowerCase().includes(this.searchText.toLowerCase())
+    );
+
+    // Tampilkan hasil filter pada halaman pertama
+    this.onChangePage(filteredSearch.slice(0, this.pageSize));
+  }
+
+  resetSearch(): void {
+    this.searchText = '';
+    this.onChangePage(this.marketingOrders.slice(0, this.pageSize));
   }
 
   navigateToAdd() {
     this.router.navigate(['/transaksi/add-marketing-order']);
   }
-
 }

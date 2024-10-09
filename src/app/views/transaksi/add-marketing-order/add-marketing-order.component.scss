@@ -26,6 +26,21 @@
   padding: 8px; // Memberikan padding dalam sel
 }
 
+// SCSS untuk input spesifik
+.input-month-year {
+  width: 100%; // Default untuk layar kecil
+  height: 36px;
+
+  @media (min-width: 768px) { // Medium screen and above
+    width: 550px;
+  }
+
+  @media (min-width: 1200px) { // Large screen and above
+    width: 680px;
+  }
+}
+
+
 
 
 

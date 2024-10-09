@@ -6,6 +6,7 @@ import { PlantService } from 'src/app/services/master-data/plant/plant.service';
 import Swal from 'sweetalert2';
 declare var $: any;
 import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-view-plant',
@@ -13,7 +14,6 @@ import * as XLSX from 'xlsx';
   styleUrls: ['./view-plant.component.scss'],
 })
 export class ViewPlantComponent implements OnInit {
-
   //Variable Declaration
   plants: Plant[] = [];
   searchText: string = '';
@@ -28,7 +28,7 @@ export class ViewPlantComponent implements OnInit {
   pageSize: number = 5;
   totalPages: number = 5;
 
-  constructor(private plantService: PlantService, private fb: FormBuilder) { 
+  constructor(private plantService: PlantService, private fb: FormBuilder) {
     this.editPlantForm = this.fb.group({
       plantName: ['', Validators.required],
     });
@@ -56,13 +56,7 @@ export class ViewPlantComponent implements OnInit {
 
   onSearchChange(): void {
     // Lakukan filter berdasarkan nama plant yang mengandung text pencarian (case-insensitive)
-    const filteredPlants = this.plants.filter(
-      (plant) =>
-        plant.plant_NAME
-          .toLowerCase()
-          .includes(this.searchText.toLowerCase()) ||
-        plant.plant_ID.toString().includes(this.searchText)
-    );
+    const filteredPlants = this.plants.filter((plant) => plant.plant_NAME.toLowerCase().includes(this.searchText.toLowerCase()) || plant.plant_ID.toString().includes(this.searchText));
 
     // Tampilkan hasil filter pada halaman pertama
     this.onChangePage(filteredPlants.slice(0, this.pageSize));
@@ -74,7 +68,6 @@ export class ViewPlantComponent implements OnInit {
   }
 
   updatePlant(): void {
-    
     this.plantService.updatePlant(this.edtPlantObject).subscribe(
       (response) => {
         // SweetAlert setelah update berhasil
@@ -139,6 +132,31 @@ export class ViewPlantComponent implements OnInit {
     });
   }
 
+  activateData(plant: Plant): void {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'This data plant will be Activated!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes',
+      cancelButtonText: 'No',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.plantService.activatePlant(plant).subscribe(
+          (response) => {
+            Swal.fire('Activated!', 'Data plant has been Activated', 'success').then(() => {
+              window.location.reload();
+            });
+          },
+          (err) => {
+            Swal.fire('Error!', 'Failed to Activated the plant.', 'error');
+          }
+        );
+      }
+    });
+  }
 
   openModalUpload(): void {
     $('#uploadModal').modal('show');
@@ -150,7 +168,6 @@ export class ViewPlantComponent implements OnInit {
     link.download = 'Layout_Master_Plant.xlsx';
     link.click();
   }
-
 
   onFileChange(event: Event) {
     const input = event.target as HTMLInputElement;
@@ -174,7 +191,6 @@ export class ViewPlantComponent implements OnInit {
       }
     }
   }
-
 
   uploadFileExcel() {
     if (this.file) {
@@ -212,4 +228,38 @@ export class ViewPlantComponent implements OnInit {
       });
     }
   }
+
+  downloadExcel(): void {
+    // Mengonversi data plants menjadi worksheet Excel
+    const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.plants);
+    const workbook: XLSX.WorkBook = { Sheets: { Plants: worksheet }, SheetNames: ['Plants'] };
+
+    // Mengonversi workbook ke dalam buffer
+    const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+
+    // Mengunduh file Excel
+    this.saveAsExcelFile(excelBuffer, 'PlantData');
+  }
+
+  saveAsExcelFile(buffer: any, fileName: string): void {
+    const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+    const data: Blob = new Blob([buffer], { type: EXCEL_TYPE });
+    saveAs(data, `${fileName}_export_${new Date().getTime()}.xlsx`);
+  }
+
+  // downloadExcel(): void {
+  //   this.plantService.downloadPlantsExcel().subscribe(
+  //     (response: Blob) => {
+  //       const blobUrl = window.URL.createObjectURL(response);
+  //       const a = document.createElement('a');
+  //       a.href = blobUrl;
+  //       a.download = 'MASTER_PLANT.xlsx';
+  //       a.click();
+  //       window.URL.revokeObjectURL(blobUrl);
+  //     },
+  //     (error) => {
+  //       this.errorMessage = 'Failed to download Excel: ' + error.message;
+  //     }
+  //   );
+  // }
 }

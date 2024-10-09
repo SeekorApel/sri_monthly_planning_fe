@@ -12,7 +12,8 @@ import { map, catchError } from 'rxjs/operators';
 })
 export class PlantService {
   //Isi tokenya
-  token: String = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBdXJlbCIsImV4cCI6MTcyODM4NTExNH0.EcIqiAPq5tX2MgDMcwD5rDNN-85fobiCN6S57r3rOBO64TK4JKUwzlF1zpLTqj4ul0KsBdnHqpDh4zOcAzoT8w';
+  token: String = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBdXJlbCIsImV4cCI6MTcyODM0OTg1NX0.wAf4xGwS_kJRxyx8Q5qMlH6tqtJRxYCAEI9qBtWOaJfOKxLJ7PHDFryxnBrXRDRem0-kMT7gT8efCeV2tRpxnA';
+
   constructor(private http: HttpClient) {}
 
   // Method untuk menambahkan header Authorization dengan token
@@ -22,11 +23,20 @@ export class PlantService {
     });
   }
 
+  // downloadPlantsExcel(): Observable<Blob> {
+  //   return this.http.get(environment.apiUrlWebAdmin + '/exportPlantsExcel', {
+  //     headers: this.getHeaders(),
+  //     responseType: 'blob',
+  //   });
+  // }
+
   getPlantById(idPlant: number): Observable<ApiResponse<Plant>> {
+    return this.http.get<ApiResponse<Plant>>(environment.apiUrlWebAdmin + '/getPlantById/' + idPlant, { headers: this.getHeaders() });
     return this.http.get<ApiResponse<Plant>>(environment.apiUrlWebAdmin + '/getPlantById/' + idPlant, { headers: this.getHeaders() });
   }
 
   getAllPlant(): Observable<ApiResponse<Plant[]>> {
+    return this.http.get<ApiResponse<Plant[]>>(environment.apiUrlWebAdmin + '/getAllPlant', { headers: this.getHeaders() });
     return this.http.get<ApiResponse<Plant[]>>(environment.apiUrlWebAdmin + '/getAllPlant', { headers: this.getHeaders() });
   }
 
@@ -59,7 +69,26 @@ export class PlantService {
     );
   }
 
+  activatePlant(plant: Plant): Observable<ApiResponse<Plant>> {
+    return this.http.post<ApiResponse<Plant>>(environment.apiUrlWebAdmin + '/activePlant', plant, { headers: this.getHeaders() }).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((err) => {
+        return throwError(err);
+      })
+    );
+  }
+
   uploadFileExcel(file: FormData): Observable<ApiResponse<Plant>> {
+    return this.http.post<ApiResponse<Plant>>(environment.apiUrlWebAdmin + '/savePlantsExcel', file, { headers: this.getHeaders() }).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((err) => {
+        return throwError(err);
+      })
+    );
     return this.http.post<ApiResponse<Plant>>(environment.apiUrlWebAdmin + '/savePlantsExcel', file, { headers: this.getHeaders() }).pipe(
       map((response) => {
         return response;
