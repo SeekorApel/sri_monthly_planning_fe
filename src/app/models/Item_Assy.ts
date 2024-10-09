@@ -1,9 +1,6 @@
 
-
-export class Quadrant {
-  quadrant_ID?: number;        
-  building_ID: string;
-  quadrant_NAME: string;           
+export class Item_Assy {
+  item_ASSY: string;            
   status: number;
   creation_DATE: Date;  
   created_BY: string;  

@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { Quadrant } from 'src/app/models/quadrant';
+import { machineAllowance } from 'src/app/models/machineAllowance';
 import { ApiResponse } from 'src/app/response/Response';
 import { throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -10,7 +10,7 @@ import { map, catchError } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root',
 })
-export class QuadrantService {
+export class machineAllowanceService {
   //Isi tokenya
   token: String =
     'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBdXJlbCIsImV4cCI6MTcyODMwODA4M30.y03EN8mmoDGrL7FzHc5W7QDPLuAoVmD21CNXz4OrBMyci5OSMFW8urH69vONuD8YW87911-NUE2BvkFrpFYWhA';
@@ -24,26 +24,26 @@ export class QuadrantService {
     });
   }
 
-  getQuadrantById(idQuadrant: number): Observable<ApiResponse<Quadrant>> {
-    return this.http.get<ApiResponse<Quadrant>>(
-      environment.apiUrlWebAdmin + '/getQuadrantById/' + idQuadrant,
+  getMachineAllowanceById(idMachineAllowance: number): Observable<ApiResponse<machineAllowance>> {
+    return this.http.get<ApiResponse<machineAllowance>>(
+      environment.apiUrlWebAdmin + '/getMachineAllowenceById/' + idMachineAllowance,
       { headers: this.getHeaders() }
     );
   }
 
-  getAllQuadrant(): Observable<ApiResponse<Quadrant[]>> {
-    return this.http.get<ApiResponse<Quadrant[]>>(
-      environment.apiUrlWebAdmin + '/getAllQuadrant',
+  getAllMachineAllowance(): Observable<ApiResponse<machineAllowance[]>> {
+    return this.http.get<ApiResponse<machineAllowance[]>>(
+      environment.apiUrlWebAdmin + '/getAllMachineAllowence',
       { headers: this.getHeaders() }
     );
   }
 
   //Method Update plant
-  updateQuadrant(quadrant: Quadrant): Observable<ApiResponse<Quadrant>> {
+  updateMachineAllowance(machineAllowance: machineAllowance): Observable<ApiResponse<machineAllowance>> {
     return this.http
-      .post<ApiResponse<Quadrant>>(
-        environment.apiUrlWebAdmin + '/updateQuadrant',
-        quadrant,
+      .post<ApiResponse<machineAllowance>>(
+        environment.apiUrlWebAdmin + '/updateMachineAllowence',
+        machineAllowance,
         { headers: this.getHeaders() } // Menyertakan header
       )
       .pipe(
@@ -56,11 +56,11 @@ export class QuadrantService {
       );
   }
 
-  deleteQuadrant(quadrant: Quadrant): Observable<ApiResponse<Quadrant>> {
+  deleteMachineAllowance(machineAllowance: machineAllowance): Observable<ApiResponse<machineAllowance>> {
     return this.http
-      .post<ApiResponse<Quadrant>>(
-        environment.apiUrlWebAdmin + '/deleteQuadrant',
-        quadrant,
+      .post<ApiResponse<machineAllowance>>(
+        environment.apiUrlWebAdmin + '/deleteMachineAllowence',
+        machineAllowance,
         { headers: this.getHeaders() }
       )
       .pipe(
@@ -73,10 +73,10 @@ export class QuadrantService {
       );
   }
 
-  uploadFileExcel(file: FormData): Observable<ApiResponse<Quadrant>> {
+  uploadFileExcel(file: FormData): Observable<ApiResponse<machineAllowance>> {
     return this.http
-      .post<ApiResponse<Quadrant>>(
-        environment.apiUrlWebAdmin + '/saveQuadrantExcel',
+      .post<ApiResponse<machineAllowance>>(
+        environment.apiUrlWebAdmin + '/saveMachineAllowencesExcel',
         file,
         { headers: this.getHeaders() }
       )
