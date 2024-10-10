@@ -20,42 +20,44 @@
         </div>
       </div>
 
-      <!-- Table -->
-      <table class="table table-bordered table-striped table-sm">
-        <thead>
-          <tr>
-            <th>No</th>
-            <th>Quadrant Distance ID</th>
-            <th>Quadrant ID 1</th>
-            <th>Quadrant ID 2</th>
-            <th>Distance</th>
-            <th>Status</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let qdistance of pageOfItems; let i = index">
-            <td>{{ i + 1 }}</td>
-            <td>{{ qdistance.id_Q_DISTANCE }}</td>
-            <td>{{ qdistance.quadrant_ID_1 }}</td>
-            <td>{{ qdistance.quadrant_ID_2 }}</td>
-            <td>{{ qdistance.distance }}</td>
-            <td [ngClass]="{ 'bg-success': qdistance.status === 1, 'bg-danger': qdistance.status !== 1 }">{{ qdistance.status === 1 ? 'Active' : 'Deactive' }}</td>
-            <td>
-              <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(qdistance.id_Q_DISTANCE)">Update</button>
-              <button type="button" class="btn btn-md ml-2" [ngClass]="{ 'btn-danger': qdistance.status === 1, 'btn-success': qdistance.status !== 1 }" (click)="qdistance.status === 1 ? deleteData(qdistance) : activateData(qdistance)">
-                {{ qdistance.status === 1 ? 'Delete' : 'Active' }}
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <!-- Pagination -->
-      <nav>
-        <ul class="pagination">
-          <jw-pagination [items]="qdistances" [pageSize]="pageSize" [maxPages]="totalPages" (changePage)="onChangePage($event)"> </jw-pagination>
-        </ul>
-      </nav>
+      <div class="table-responsive">
+        <!-- Table -->
+        <table class="table table-bordered table-striped table-sm">
+          <thead>
+            <tr>
+              <th>No</th>
+              <th>Quadrant Distance ID</th>
+              <th>Quadrant ID 1</th>
+              <th>Quadrant ID 2</th>
+              <th>Distance</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr align="center" *ngFor="let qdistance of pageOfItems; let i = index">
+              <td>{{ i + 1 }}</td>
+              <td>{{ qdistance.id_Q_DISTANCE }}</td>
+              <td>{{ qdistance.quadrant_ID_1 }}</td>
+              <td>{{ qdistance.quadrant_ID_2 }}</td>
+              <td>{{ qdistance.distance }}</td>
+              <td [ngClass]="{ 'bg-success': qdistance.status === 1, 'bg-danger': qdistance.status !== 1 }">{{ qdistance.status === 1 ? 'Active' : 'Deactive' }}</td>
+              <td>
+                <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(qdistance.id_Q_DISTANCE)">Update</button>
+                <button type="button" class="btn btn-md ml-2" [ngClass]="{ 'btn-danger': qdistance.status === 1, 'btn-success': qdistance.status !== 1 }" (click)="qdistance.status === 1 ? deleteData(qdistance) : activateData(qdistance)">
+                  {{ qdistance.status === 1 ? 'Delete' : 'Active' }}
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <!-- Pagination -->
+        <nav>
+          <ul class="pagination">
+            <jw-pagination [items]="qdistances" [pageSize]="pageSize" [maxPages]="totalPages" (changePage)="onChangePage($event)"> </jw-pagination>
+          </ul>
+        </nav>
+      </div>
     </div>
   </div>
 </div>

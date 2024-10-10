@@ -15,40 +15,45 @@
         <!-- Right side: Download Template and Export Excel buttons -->
         <div>
           <button type="button" class="btn btn-primary ml-2" (click)="downloadTemplate()"><i class="fa fa-download fa-lg"></i> Download Template</button>
+          <button type="button" class="btn btn-primary ml-2" (click)="downloadExcel()"><i class="fa fa-download fa-lg"></i> Export Excel</button>
           <button type="button" class="btn btn-success ml-2" data-toggle="modal" data-target="#uploadModal"><i class="fa fa-file-excel-o fa-lg"></i> Upload Excel</button>
         </div>
       </div>
 
       <!-- Table -->
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th>No</th>
-            <th>Size ID</th>
-            <th>Description</th>
-            <th>Status</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let size of pageOfItems; let i = index">
-            <td>{{ i + 1 }}</td>
-            <td>{{ size.size_ID }}</td>
-            <td>{{ size.description }}</td>
-            <td>{{ size.status === 1 ? 'Active' : 'Deactive' }}</td>
-            <td>
-              <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(size.size_ID)">Update</button>
-              <button type="button" class="btn btn-md btn-danger ml-2" (click)="deleteData(size)">Delete</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <!-- Pagination -->
-      <nav>
-        <ul class="pagination">
-          <jw-pagination [items]="sizes" [pageSize]="pageSize" [maxPages]="totalPages" (changePage)="onChangePage($event)"> </jw-pagination>
-        </ul>
-      </nav>
+      <div class="table-responsive">
+        <table class="table table-bordered table-striped table-sm">
+          <thead>
+            <tr>
+              <th>No</th>
+              <th>Size ID</th>
+              <th>Description</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr align="center" *ngFor="let size of pageOfItems; let i = index">
+              <td>{{ i + 1 }}</td>
+              <td>{{ size.size_ID }}</td>
+              <td>{{ size.description }}</td>
+              <td [ngClass]="{ 'bg-success': size.status === 1, 'bg-danger': size.status !== 1 }">{{ size.status === 1 ? 'Active' : 'Deactive' }}</td>
+              <td>
+                <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(size.size_ID)">Update</button>
+                <button type="button" class="btn btn-md ml-2" [ngClass]="{ 'btn-danger': size.status === 1, 'btn-success': size.status !== 1 }" (click)="size.status === 1 ? deleteData(size) : activateData(size)">
+                  {{ size.status === 1 ? 'Delete' : 'Active' }}
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <!-- Pagination -->
+        <nav>
+          <ul class="pagination">
+            <jw-pagination [items]="sizes" [pageSize]="pageSize" [maxPages]="totalPages" (changePage)="onChangePage($event)"> </jw-pagination>
+          </ul>
+        </nav>
+      </div>
     </div>
   </div>
 </div>
@@ -69,7 +74,6 @@
           <div class="form-group">
             <label for="description">Size Name</label>
             <input [(ngModel)]="edtSizeObject.description" type="text" class="form-control" id="description" formControlName="description" [ngClass]="{ 'is-invalid': editSizeForm.get('description').invalid && editSizeForm.get('description').touched }" />
-            <!-- Error message if plantName is empty -->
             <div *ngIf="editSizeForm.get('description').invalid && editSizeForm.get('description').touched" class="invalid-feedback">Description is required.</div>
           </div>
         </form>

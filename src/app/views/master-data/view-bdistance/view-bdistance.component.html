@@ -19,43 +19,44 @@
           <button type="button" class="btn btn-success ml-2" data-toggle="modal" data-target="#uploadModal"><i class="fa fa-file-excel-o fa-lg"></i> Upload Excel</button>
         </div>
       </div>
-
-      <!-- Table -->
-      <table class="table table-bordered table-striped table-sm">
-        <thead>
-          <tr>
-            <th>No</th>
-            <th>Building Distance ID</th>
-            <th>Building 1</th>
-            <th>Building 2</th>
-            <th>Distance</th>
-            <th>Status</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let bdistance of pageOfItems; let i = index">
-            <td>{{ i + 1 }}</td>
-            <td>{{ bdistance.id_B_DISTANCE }}</td>
-            <td>{{ bdistance.building_ID_1 }}</td>
-            <td>{{ bdistance.building_ID_2 }}</td>
-            <td>{{ bdistance.distance }}</td>
-            <td [ngClass]="{ 'bg-success': bdistance.status === 1, 'bg-danger': bdistance.status !== 1 }">{{ bdistance.status === 1 ? 'Active' : 'Deactive' }}</td>
-            <td>
-              <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(bdistance.id_B_DISTANCE)">Update</button>
-              <button type="button" class="btn btn-md ml-2" [ngClass]="{ 'btn-danger': bdistance.status === 1, 'btn-success': bdistance.status !== 1 }" (click)="bdistance.status === 1 ? deleteData(bdistance) : activateData(bdistance)">
-                {{ bdistance.status === 1 ? 'Delete' : 'Active' }}
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <!-- Pagination -->
-      <nav>
-        <ul class="pagination">
-          <jw-pagination [items]="bdistances" [pageSize]="pageSize" [maxPages]="totalPages" (changePage)="onChangePage($event)"> </jw-pagination>
-        </ul>
-      </nav>
+      <div class="table-responsive">
+        <!-- Table -->
+        <table class="table table-bordered table-striped table-sm">
+          <thead>
+            <tr>
+              <th>No</th>
+              <th>Building Distance ID</th>
+              <th>Building 1</th>
+              <th>Building 2</th>
+              <th>Distance</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr align="center" *ngFor="let bdistance of pageOfItems; let i = index">
+              <td>{{ i + 1 }}</td>
+              <td>{{ bdistance.id_B_DISTANCE }}</td>
+              <td>{{ bdistance.building_ID_1 }}</td>
+              <td>{{ bdistance.building_ID_2 }}</td>
+              <td>{{ bdistance.distance }}</td>
+              <td [ngClass]="{ 'bg-success': bdistance.status === 1, 'bg-danger': bdistance.status !== 1 }">{{ bdistance.status === 1 ? 'Active' : 'Deactive' }}</td>
+              <td>
+                <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(bdistance.id_B_DISTANCE)">Update</button>
+                <button type="button" class="btn btn-md ml-2" [ngClass]="{ 'btn-danger': bdistance.status === 1, 'btn-success': bdistance.status !== 1 }" (click)="bdistance.status === 1 ? deleteData(bdistance) : activateData(bdistance)">
+                  {{ bdistance.status === 1 ? 'Delete' : 'Active' }}
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <!-- Pagination -->
+        <nav>
+          <ul class="pagination">
+            <jw-pagination [items]="bdistances" [pageSize]="pageSize" [maxPages]="totalPages" (changePage)="onChangePage($event)"> </jw-pagination>
+          </ul>
+        </nav>
+      </div>
     </div>
   </div>
 </div>

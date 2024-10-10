@@ -141,6 +141,31 @@ export class ViewBuildingComponent implements OnInit {
     });
   }
 
+  activateData(building: Building): void {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'This data building will be Activated!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes',
+      cancelButtonText: 'No',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.buildingService.activateBuilding(building).subscribe(
+          (response) => {
+            Swal.fire('Activated!', 'Data building has been Activated', 'success').then(() => {
+              window.location.reload();
+            });
+          },
+          (err) => {
+            Swal.fire('Error!', 'Failed to Activated the building.', 'error');
+          }
+        );
+      }
+    });
+  }
 
   openModalUpload(): void {
     $('#uploadModal').modal('show');

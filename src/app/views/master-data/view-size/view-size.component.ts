@@ -6,6 +6,7 @@ import { SizeService } from 'src/app/services/master-data/size/size.service';
 import Swal from 'sweetalert2';
 declare var $: any;
 import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-view-size',
@@ -139,6 +140,31 @@ export class ViewSizeComponent implements OnInit {
     });
   }
 
+  activateData(size: Size): void {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'This data size will be Activated!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes',
+      cancelButtonText: 'No',
+    }).then((result) => {
+      if (result.isConfirmed) { 
+        this.sizeService.activateSize(size).subscribe(
+          (response) => {
+            Swal.fire('Activated!', 'Data size has been Activated', 'success').then(() => {
+              window.location.reload();
+            });
+          },
+          (err) => {
+            Swal.fire('Error!', 'Failed to Activated the size.', 'error');
+          }
+        );
+      }
+    });
+  }
 
   openModalUpload(): void {
     $('#uploadModal').modal('show');
@@ -211,5 +237,17 @@ export class ViewSizeComponent implements OnInit {
         confirmButtonText: 'OK',
       });
     }
+  }
+  downloadExcel(): void {
+    this.sizeService.exportSizesExcel().subscribe({
+      next: (response) => {
+        // Menggunakan nama file yang sudah ditentukan di backend
+        const filename = 'SIZE_DATA.xlsx'; // Nama file bisa dinamis jika diperlukan
+        saveAs(response, filename); // Mengunduh file
+      },
+      error: (err) => {
+        console.error('Download error:', err);
+      }
+    });
   }
 }

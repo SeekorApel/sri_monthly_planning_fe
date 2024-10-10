@@ -73,7 +73,16 @@ export class ItemCuringService {
         })
       );
   }
-
+  activateItemCuring(item_curing: Item_Curing): Observable<ApiResponse<Item_Curing>> {
+    return this.http.post<ApiResponse<Item_Curing>>(environment.apiUrlWebAdmin + '/restoreItemCuring', item_curing, { headers: this.getHeaders() }).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((err) => {
+        return throwError(err);
+      })
+    );
+  }
   uploadFileExcel(file: FormData): Observable<ApiResponse<Item_Curing>> {
     return this.http
       .post<ApiResponse<Item_Curing>>(
@@ -89,5 +98,8 @@ export class ItemCuringService {
           return throwError(err);
         })
       );
+  }
+  exportItemCuringsExcel(): Observable<Blob> {
+    return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/exportItemCuringExcel`, { responseType: 'blob' as 'json' });
   }
 }

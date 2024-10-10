@@ -1,7 +1,7 @@
 export class CT_Curing {
   ct_CURING_ID: number;
   wip: string;
-  description: string;
+  description: number;
   group_COUNTER: string;
   var_GROUP_COUNTER: string;
   sequence: number;
@@ -9,9 +9,9 @@ export class CT_Curing {
   operation_SHORT_TEXT: string;
   operation_UNIT: string;
   base_QUANTITY: number;
-  standard_VALUE_UNIT: string;
-  ct_SEC_1: number;
-  ct_HR_1000: number;
+  standart_VALUE_UNIT: string;
+  ct_SEC1: number;
+  ct_HR1000: number;
   wh_NORMAL_SHIFT_0: number;
   wh_NORMAL_SHIFT_1: number;
   wh_NORMAL_SHIFT_2: number;
@@ -26,7 +26,7 @@ export class CT_Curing {
   op_TIME_NORMAL_SHIFT_1: number;
   op_TIME_NORMAL_SHIFT_2: number;
   op_TIME_SHIFT_FRIDAY: number;
-  op_TIME_NORMAL_SHIFT: number;
+  op_TIME_TOTAL_NORMAL_SHIFT: number;
   op_TIME_TOTAL_SHIFT_FRIDAY: number;
   kaps_NORMAL_SHIFT_0: number;
   kaps_NORMAL_SHIFT_1: number;
@@ -42,5 +42,4 @@ export class CT_Curing {
   last_UPDATE_DATE: string;
   last_UPDATED_BY: string;
 }
-
 
