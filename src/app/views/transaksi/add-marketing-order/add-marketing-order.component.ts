@@ -7,6 +7,8 @@ import Swal from 'sweetalert2';
 import * as ExcelJS from 'exceljs/dist/exceljs.min.js';
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
+import { DetailMarketingOrder } from 'src/app/models/DetailMarketingOrder';
+import { ApiResponse } from 'src/app/response/Response';
 declare var $: any;
 
 @Component({
@@ -24,8 +26,9 @@ export class AddMarketingOrderComponent implements OnInit {
   formHeaderMo: FormGroup;
   isTableVisible: boolean = false;
   monthNames: string[] = ['', '', ''];
-  marketingOrderTable: any[] = [];
+  marketingOrderTable: DetailMarketingOrder[];
   excelData: any[] = [];
+  errorMessage: string | null = null;
 
   workDay_M0: any[] = [];
   workDay_M1: any[] = [];
@@ -72,15 +75,15 @@ export class AddMarketingOrderComponent implements OnInit {
       total_ttwd_1: ['', []],
       total_tlwd_2: ['', []],
       total_ttwd_2: ['', []],
-      max_tube_capa_0: ['', [Validators.required, Validators.min(0)]],
-      max_tube_capa_1: ['', [Validators.required, Validators.min(0)]],
-      max_tube_capa_2: ['', [Validators.required, Validators.min(0)]],
-      max_capa_tl_0: ['', [Validators.required, Validators.min(0)]],
-      max_capa_tt_0: ['', [Validators.required, Validators.min(0)]],
-      max_capa_tl_1: ['', [Validators.required, Validators.min(0)]],
-      max_capa_tt_1: ['', [Validators.required, Validators.min(0)]],
-      max_capa_tl_2: ['', [Validators.required, Validators.min(0)]],
-      max_capa_tt_2: ['', [Validators.required, Validators.min(0)]],
+      max_tube_capa_0: [10, [Validators.required, Validators.min(0)]],
+      max_tube_capa_1: [20, [Validators.required, Validators.min(0)]],
+      max_tube_capa_2: [30, [Validators.required, Validators.min(0)]],
+      max_capa_tl_0: [10, [Validators.required, Validators.min(0)]],
+      max_capa_tt_0: [20, [Validators.required, Validators.min(0)]],
+      max_capa_tl_1: [30, [Validators.required, Validators.min(0)]],
+      max_capa_tt_1: [10, [Validators.required, Validators.min(0)]],
+      max_capa_tl_2: [20, [Validators.required, Validators.min(0)]],
+      max_capa_tt_2: [30, [Validators.required, Validators.min(0)]],
       upload_file_m0: [null, [Validators.required]],
       upload_file_m1: [null, [Validators.required]],
       upload_file_m2: [null, [Validators.required]],
@@ -859,7 +862,30 @@ export class AddMarketingOrderComponent implements OnInit {
   }
 
   saveHeaderMo() {
-    // Set the values from the form to the marketingOrder object
+    this.fillTheTableMo();
+    this.isTableVisible = true;
+  }
+
+  fillTheTableMo(): void {
+    const totalHKTT1 = this.formHeaderMo.get('total_ttwd_0').value;
+    const totalHKTT2 = this.formHeaderMo.get('total_ttwd_1').value;
+    const totalHKTT3 = this.formHeaderMo.get('total_ttwd_2').value;
+    const totalHKTL1 = this.formHeaderMo.get('total_ttwd_0').value;
+    const totalHKTL2 = this.formHeaderMo.get('total_ttwd_1').value;
+    const totalHKTL3 = this.formHeaderMo.get('total_ttwd_2').value;
+    const productMerk = this.formHeaderMo.get('type').value;
+
+    this.moService.getRowDetailMarketingOrder(totalHKTT1, totalHKTT2, totalHKTT3, totalHKTL1, totalHKTL2, totalHKTL3, productMerk).subscribe(
+      (response: ApiResponse<DetailMarketingOrder[]>) => {
+        this.marketingOrderTable = response.data;
+      },
+      (error) => {
+        this.errorMessage = 'Failed to load plants: ' + error.message;
+      }
+    );
+  }
+
+  saveAllMo() {
     this.marketingOrder.revision = this.formHeaderMo.get('revision')?.value;
     this.marketingOrder.date = this.formHeaderMo.get('date')?.value;
     this.marketingOrder.type = this.formHeaderMo.get('type')?.value;
@@ -867,16 +893,12 @@ export class AddMarketingOrderComponent implements OnInit {
     this.marketingOrder.month_1 = new Date(this.formHeaderMo.get('month_1')?.value);
     this.marketingOrder.month_2 = new Date(this.formHeaderMo.get('month_2')?.value);
 
-    // Call the service to save marketing order
     this.moService.saveMarketingOrder(this.marketingOrder).subscribe(
       (response) => {
-        console.log("Last id : ", response.data.mo_ID);
-        const moId = response.data.mo_ID; // Get mo_ID from the response
-
-        // Now build the headerMo array with the obtained mo_ID
+        const last_id_mo = response.data.mo_ID;
         for (let i = 0; i < 3; i++) {
           this.headerMo.push({
-            mo_ID: moId, // Use the obtained mo_ID here
+            mo_ID: last_id_mo,
             month: new Date(this.formHeaderMo.get(`month_${i}`)?.value),
             wd_NORMAL: this.formHeaderMo.get(`nwd_${i}`)?.value,
             wd_OT_TL: this.formHeaderMo.get(`tl_ot_wd_${i}`)?.value,
@@ -888,70 +910,42 @@ export class AddMarketingOrderComponent implements OnInit {
             max_CAP_TT: this.formHeaderMo.get(`max_capa_tt_${i}`)?.value,
           });
         }
-
-        // Call the service to save header marketing order
         this.moService.saveHeaderMarketingOrder(this.headerMo).subscribe(
           (response) => {
-            Swal.fire({
-              title: 'Success!',
-              text: 'Data MO dan Header Mo successfully Added.',
-              icon: 'success',
-              confirmButtonText: 'OK',
-            }).then((result) => {
-              if (result.isConfirmed) {
-                this.fillTheTableMo();
-                this.isTableVisible = true;
-              }
+            this.marketingOrderTable.forEach((item) => {
+              item.moId = last_id_mo;
             });
+            this.moService.saveDetailRowMarketingOrder(this.marketingOrderTable).subscribe(
+              (response) => {
+                Swal.fire({
+                  title: 'Success!',
+                  text: 'Data Marketing Order successfully Added.',
+                  icon: 'success',
+                  confirmButtonText: 'OK',
+                }).then((result) => {
+                  if (result.isConfirmed) {
+                    this.router.navigate(['/transaksi/view-marketing-order']);
+                  }
+                });
+              },
+              (err) => {
+                Swal.fire('Error!', 'Error insert data Detaill Marketing Order.', 'error');
+              }
+            );
           },
           (err) => {
-            Swal.fire('Error!', 'Error insert data Header MO.', 'error');
+            Swal.fire('Error!', 'Error insert data Header Marketing Order.', 'error');
           }
         );
       },
       (err) => {
-        Swal.fire('Error!', 'Error insert data MO.', 'error');
+        Swal.fire('Error!', 'Error insert data Marketing Order.', 'error');
       }
     );
   }
 
-
-  fillTheTableMo(): void {
-    // Inisialisasi data tabel marketing order
-    this.marketingOrderTable = [
-      {
-        category: 'FED TB NR',
-        item: 1060204000038,
-        description: 'FED TB NR 2.25-17 H',
-        type: 'A/B',
-        kapasitas: 447,
-        qtyMould: 64,
-        qtyPerRak: 1200,
-        minOrder: 1200,
-        kpm_m1: 613.2,
-        kpm_m2: 540.0,
-        kpm_m3: 631.2,
-      },
-      {
-        category: 'OEM TT',
-        item: 1110904064059,
-        description: 'FED SET-R 70/90-17 FT 138',
-        type: 'A/B',
-        kapasitas: 447,
-        qtyMould: 80,
-        qtyPerRak: 1200,
-        minOrder: 1200,
-        kpm_m1: 93.04,
-        kpm_m2: 91.76,
-        kpm_m3: 103.2,
-      },
-    ];
-  }
-
-  saveAllMo() {
-    console.log('MO data', this.marketingOrder);
-    console.log('Header Mo data', this.headerMo);
-    // this.dataTableMo = this.marketingOrderTable.map((mo) => {
+  getMarketingOrderData() {
+    // const dataTableMo = this.marketingOrderTable.map((mo) => {
     //   return {
     //     category: mo.category,
     //     item: mo.item,
@@ -973,37 +967,7 @@ export class AddMarketingOrderComponent implements OnInit {
     //     inputInitialStock: mo.inputInitialStock,
     //   };
     // });
-    // this.dataTableMo = this.getMarketingOrderData();
-    // console.log('Table Data: ', JSON.stringify(this.dataTableMo, null, 2));
-    // console.log('Marketing order : ', this.marketingOrder);
-    // console.log('Header Mo : ', this.headerMo);
-  }
-
-  getMarketingOrderData() {
-    const dataTableMo = this.marketingOrderTable.map((mo) => {
-      return {
-        category: mo.category,
-        item: mo.item,
-        description: mo.description,
-        type: mo.type,
-        kapasitas: mo.kapasitas,
-        qtyMould: mo.qtyMould,
-        qtyPerRak: mo.qtyPerRak,
-        minOrder: mo.minOrder,
-        kpm_m1: mo.kpm_m1,
-        kpm_m2: mo.kpm_m2,
-        kpm_m3: mo.kpm_m3,
-        inputSalesForecastMonth1: mo.inputSalesForecastMonth1,
-        inputSalesForecastMonth2: mo.inputSalesForecastMonth2,
-        inputSalesForecastMonth3: mo.inputSalesForecastMonth3,
-        inputMarketingOrderMonth1: mo.inputMarketingOrderMonth1,
-        inputMarketingOrderMonth2: mo.inputMarketingOrderMonth2,
-        inputMarketingOrderMonth3: mo.inputMarketingOrderMonth3,
-        inputInitialStock: mo.inputInitialStock,
-      };
-    });
-
-    return dataTableMo; // Kembalikan data sebagai array objek
+    // return dataTableMo; // Kembalikan data sebagai array objek
   }
 
   getLastIdMo(idMo: String) {

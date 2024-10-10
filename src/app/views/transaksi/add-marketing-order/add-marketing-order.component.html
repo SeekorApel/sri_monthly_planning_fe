@@ -288,36 +288,36 @@
               <tr *ngFor="let mo of marketingOrderTable; let i = index" align="center">
                 <td>{{ i + 1 }}</td>
                 <td>{{ mo.category }}</td>
-                <td>{{ mo.item }}</td>
+                <td>{{ mo.partNumber }}</td>
                 <td>{{ mo.description }}</td>
-                <td>{{ mo.type }}</td>
-                <td>{{ mo.kapasitas }}</td>
-                <td>{{ mo.qtyMould }}</td>
-                <td>{{ mo.qtyPerRak }}</td>
-                <td>{{ mo.minOrder }}</td>
-                <td>{{ mo.kpm_m1 }}</td>
-                <td>{{ mo.kpm_m2 }}</td>
-                <td>{{ mo.kpm_m3 }}</td>
+                <td>{{ mo.machineType }}</td>
+                <td>{{ mo.kapaPerMould | number : '1.0-0' }}</td>
+                <td>{{ mo.numberOfMould | number : '1.0-0' }}</td>
+                <td>{{ mo.qtyPerRak | number : '1.0-0' }}</td>
+                <td>{{ mo.minOrder | number : '1.0-0' }}</td>
+                <td>{{ mo.kapasitasMaksimum1 | number : '1.0-0' }}</td>
+                <td>{{ mo.kapasitasMaksimum2 | number : '1.0-0' }}</td>
+                <td>{{ mo.kapasitasMaksimum3 | number : '1.0-0' }}</td>
                 <td>
-                  <input type="number" class="form-control" [(ngModel)]="mo.inputSalesForecastMonth1" />
+                  <input type="number" class="form-control" [(ngModel)]="mo.initialstock" />
                 </td>
                 <td>
-                  <input type="number" class="form-control" [(ngModel)]="mo.inputSalesForecastMonth2" />
+                  <input type="number" class="form-control" [(ngModel)]="mo.sf_month_0" />
                 </td>
                 <td>
-                  <input type="number" class="form-control" [(ngModel)]="mo.inputSalesForecastMonth3" />
+                  <input type="number" class="form-control" [(ngModel)]="mo.sf_month_1" />
                 </td>
                 <td>
-                  <input type="number" class="form-control" [(ngModel)]="mo.inputMarketingOrderMonth1" />
+                  <input type="number" class="form-control" [(ngModel)]="mo.sf_month_2" />
                 </td>
                 <td>
-                  <input type="number" class="form-control" [(ngModel)]="mo.inputMarketingOrderMonth2" />
+                  <input type="number" class="form-control" [(ngModel)]="mo.mo_month_0" />
                 </td>
                 <td>
-                  <input type="number" class="form-control" [(ngModel)]="mo.inputMarketingOrderMonth3" />
+                  <input type="number" class="form-control" [(ngModel)]="mo.mo_month_1" />
                 </td>
                 <td>
-                  <input type="number" class="form-control" [(ngModel)]="mo.inputInitialStock" />
+                  <input type="number" class="form-control" [(ngModel)]="mo.mo_month_2" />
                 </td>
               </tr>
             </tbody>
