@@ -20,7 +20,7 @@ export class ItemAssyService {
   // Method untuk menambahkan header Authorization dengan token
   private getHeaders() {
     return new HttpHeaders({
-      Authorization: `Bearer ${this.token}`,
+      Authorization: `Bearer ${environment.token}`,
     });
   }
 

@@ -6,6 +6,8 @@ import { BDistanceService } from 'src/app/services/master-data/Bdistance/Bdistan
 import Swal from 'sweetalert2';
 declare var $: any;
 import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
+
 
 @Component({
   selector: 'app-view-bdistance',
@@ -27,6 +29,7 @@ export class ViewBDistanceComponent implements OnInit {
   pageOfItems: Array<any>;
   pageSize: number = 5;
   totalPages: number = 5;
+  isDataEmpty: boolean = true; // Flag untuk mengecek apakah data kosong
 
   constructor(private bdistanceService: BDistanceService, private fb: FormBuilder) { 
     this.editBDistanceForm = this.fb.group({
@@ -44,10 +47,12 @@ export class ViewBDistanceComponent implements OnInit {
     this.bdistanceService.getAllBuildingDistance().subscribe(
       (response: ApiResponse<BDistance[]>) => {
         this.bdistances = response.data;
+        this.isDataEmpty = this.bdistances.length === 0; // Update status data kosong
         this.onChangePage(this.bdistances.slice(0, this.pageSize));
       },
       (error) => {
         this.errorMessage = 'Failed to load building distances: ' + error.message;
+        this.isDataEmpty = true; // Set data kosong jika terjadi error
       }
     );
   }
@@ -150,8 +155,8 @@ export class ViewBDistanceComponent implements OnInit {
 
   downloadTemplate() {
     const link = document.createElement('a');
-    link.href = 'assets/Template Excel/Layout_Master_Building_Distance.xlsx';
-    link.download = 'Layout_Master_Building_Distance.xlsx';
+    link.href = 'assets/Template Excel/Layout_Building_Distance.xlsx';
+    link.download = 'Layout_Building_Distance.xlsx';
     link.click();
   }
 
@@ -215,5 +220,18 @@ export class ViewBDistanceComponent implements OnInit {
         confirmButtonText: 'OK',
       });
     }
+  }
+
+  downloadExcel(): void {
+    this.bdistanceService.exportExcel().subscribe({
+      next: (response) => {
+        // Menggunakan nama file yang sudah ditentukan di backend
+        const filename = 'BUILDING_DISTANCE_DATA.xlsx'; // Nama file bisa dinamis jika diperlukan
+        saveAs(response, filename); // Mengunduh file
+      },
+      error: (err) => {
+        console.error('Download error:', err);
+      }
+    });
   }
 }

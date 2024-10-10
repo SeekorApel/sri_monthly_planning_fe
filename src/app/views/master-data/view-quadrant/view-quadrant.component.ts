@@ -148,8 +148,8 @@ export class ViewQuadrantComponent implements OnInit {
 
   downloadTemplate() {
     const link = document.createElement('a');
-    link.href = 'assets/Template Excel/Layout_Master_Quadrant.xlsx';
-    link.download = 'Layout_Master_Quadrant.xlsx';
+    link.href = 'assets/Template Excel/Layout_Quadrant.xlsx';
+    link.download = 'Layout_Quadrant.xlsx';
     link.click();
   }
 

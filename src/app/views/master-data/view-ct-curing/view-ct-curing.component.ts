@@ -181,8 +181,8 @@ export class ViewCtCuringComponent  implements OnInit {
 
   downloadTemplate() {
     const link = document.createElement('a');
-    link.href = 'assets/Template Excel/Layout_Master_Plant.xlsx';
-    link.download = 'Layout_Master_Plant.xlsx';
+    link.href = 'assets/Template Excel/Layout_CT_Curing.xlsx';
+    link.download = 'Layout_CT_Curing.xlsx';
     link.click();
   }
 

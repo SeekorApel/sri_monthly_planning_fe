@@ -18,7 +18,7 @@ export class ProductService {
   // Method untuk menambahkan header Authorization dengan token
   private getHeaders() {
     return new HttpHeaders({
-      Authorization: `Bearer ${this.token}`,
+      Authorization: `Bearer ${environment.token}`,
     });
   }
 
@@ -68,5 +68,9 @@ export class ProductService {
         return throwError(err);
       })
     );
+  }
+
+  exportExcel(): Observable<Blob> {
+    return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/exportProductsExcel`, { responseType: 'blob' as 'json' });
   }
 }
