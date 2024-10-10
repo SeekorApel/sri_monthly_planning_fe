@@ -18,7 +18,7 @@ export class PatternService {
   // Method untuk menambahkan header Authorization dengan token
   private getHeaders() {
     return new HttpHeaders({
-      Authorization: `Bearer ${this.token}`,
+      Authorization: `Bearer ${environment.token}`,
     });
   }
 
@@ -68,5 +68,8 @@ export class PatternService {
         return throwError(err);
       })
     );
+  }
+  exportExcel(): Observable<Blob> {
+    return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/exportPatternExcel`, { responseType: 'blob' as 'json' });
   }
 }

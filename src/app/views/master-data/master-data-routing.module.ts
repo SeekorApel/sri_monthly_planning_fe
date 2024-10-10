@@ -68,13 +68,6 @@ const routes: Routes = [
         },
       },
       {
-        path: 'master-data/view-machine-curing-type-cavity',
-        component: ViewMachineCuringTypeComponent,
-        data: {
-          title: 'View Machine Curing Type Cavity',
-        },
-      },
-      {
         path: 'master-data/view-machine-tass-type',
         component: ViewMachineTassTypeComponent,
         data: {

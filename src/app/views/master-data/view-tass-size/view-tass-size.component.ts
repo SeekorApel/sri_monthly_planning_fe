@@ -147,8 +147,8 @@ export class ViewTassSizeComponent implements OnInit {
 
   downloadTemplate() {
     const link = document.createElement('a');
-    link.href = 'assets/Template Excel/Layout_Master_Tass_Size.xlsx';
-    link.download = 'Layout_Master_Tass_Size.xlsx';
+    link.href = 'assets/Template Excel/Layout_Tass_Size.xlsx';
+    link.download = 'Layout_Tass_Size.xlsx';
     link.click();
   }
 

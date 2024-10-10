@@ -15,6 +15,7 @@
         <!-- Right side: Download Template and Export Excel buttons -->
         <div>
           <button type="button" class="btn btn-primary ml-2" (click)="downloadTemplate()"><i class="fa fa-download fa-lg"></i> Download Template</button>
+          <button type="button" class="btn btn-primary ml-2" (click)="downloadExcel()"><i class="fa fa-download fa-lg"></i> Export Excel</button>
           <button type="button" class="btn btn-success ml-2" data-toggle="modal" data-target="#uploadModal"><i class="fa fa-file-excel-o fa-lg"></i> Upload Excel</button>
         </div>
       </div>
@@ -35,10 +36,14 @@
             <td>{{ i + 1 }}</td>
             <td>{{ building.plant_ID }}</td>
             <td>{{ building.building_NAME }}</td>
-            <td>{{ building.status === 1 ? 'Active' : 'Deactive' }}</td>
+            <td [ngClass]="{ 'bg-success': building.status === 1, 'bg-danger': building.status !== 1 }">
+              {{ building.status === 1 ? 'Active' : 'Deactive' }}
+            </td>
             <td>
               <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(building.building_ID)">Update</button>
-              <button type="button" class="btn btn-md btn-danger ml-2" (click)="deleteData(building)">Delete</button>
+              <button type="button" class="btn btn-md ml-2" [ngClass]="{ 'btn-danger': building.status === 1, 'btn-success': building.status !== 1 }" (click)="building.status === 1 ? deleteData(building) : activateData(building)">
+                {{ building.status === 1 ? 'Delete' : 'Active' }}
+              </button>
             </td>
           </tr>
         </tbody>
@@ -67,7 +72,7 @@
         <!-- Form with Reactive Forms -->
         <form [formGroup]="editBuildingForm">
           <div class="form-group">
-            <label for="plantID">Building Name</label>
+            <label for="plantID">Plant Id</label>
             <input [(ngModel)]="edtBuildingObject.plant_ID" type="text" class="form-control" id="plantID" formControlName="plantID" [ngClass]="{ 'is-invalid': editBuildingForm.get('plantID').invalid && editBuildingForm.get('plantID').touched }" />
             <!-- Error message if plantName is empty -->
             <div *ngIf="editBuildingForm.get('plantID').invalid && editBuildingForm.get('plantID').touched" class="invalid-feedback">Building name is required.</div>

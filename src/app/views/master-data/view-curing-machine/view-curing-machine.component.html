@@ -20,15 +20,15 @@
       </div>
 
       <!-- Table -->
-      <table class="table table-striped">
-        <thead>
+      <div class="table-responsive">
+        <table class="table table-bordered table-striped table-sm" style="table-layout: auto;">
+          <thead align="center">
           <tr>
             <th>No</th>
-            <th>Machine Curing ID</th>
-            <th>Building ID</th>
-            <th>Curing Number</th>
-            <th>Cavity</th>
             <th>Work Center Text</th>
+            <th>Building ID</th>
+            <th>Machine Type</th>
+            <th>Cavity</th>
             <th>Status</th>
             <th>Action</th>
           </tr>
@@ -36,15 +36,18 @@
         <tbody>
           <tr *ngFor="let curingmachine of pageOfItems; let i = index">
             <td>{{ i + 1 }}</td>
-            <td>{{ curingmachine.id_MACHINE_CURING }}</td>
+            <td>{{ curingmachine.work_CENTER_TEXT }}</td>
             <td>{{ curingmachine.building_ID }}</td>
             <td>{{ curingmachine.curing_NUMBER }}</td>
             <td>{{ curingmachine.cavity }}</td>
-            <td>{{ curingmachine.work_CENTER_TEXT }}</td>
-            <td>{{ curingmachine.status === 1 ? 'Active' : 'Deactive' }}</td>
+            <td [ngClass]="{ 'bg-success': curingmachine.status === 1, 'bg-danger': curingmachine.status !== 1 }">
+              {{ curingmachine.status === 1 ? 'Active' : 'Deactive' }}
+            </td>  
             <td>
               <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(curingmachine.id_MACHINE_CURING)">Update</button>
-              <button type="button" class="btn btn-md btn-danger ml-2" (click)="deleteData(curingmachine)">Delete</button>
+              <button type="button" class="btn btn-md ml-3" [ngClass]="{ 'btn-danger': curingmachine.status === 1, 'btn-success': curingmachine.status !== 1 }" (click)="curingmachine.status === 1 ? deleteData(curingmachine) : activateData(curingmachine)">
+                {{ curingmachine.status === 1 ? 'Delete' : 'Active' }}
+              </button>
             </td>
           </tr>
         </tbody>
@@ -55,6 +58,7 @@
           <jw-pagination [items]="curingmachines" [pageSize]="pageSize" [maxPages]="totalPages" (changePage)="onChangePage($event)"> </jw-pagination>
         </ul>
       </nav>
+    </div>
     </div>
   </div>
 </div>

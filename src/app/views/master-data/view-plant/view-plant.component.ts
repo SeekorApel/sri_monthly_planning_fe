@@ -164,8 +164,8 @@ export class ViewPlantComponent implements OnInit {
 
   downloadTemplate() {
     const link = document.createElement('a');
-    link.href = 'assets/Template Excel/Layout_Master_Plant.xlsx';
-    link.download = 'Layout_Master_Plant.xlsx';
+    link.href = 'assets/Template Excel/Layout_Plant.xlsx';
+    link.download = 'Layout_Plant.xlsx';
     link.click();
   }
 
@@ -230,15 +230,16 @@ export class ViewPlantComponent implements OnInit {
   }
 
   downloadExcel(): void {
-    // Mengonversi data plants menjadi worksheet Excel
-    const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(this.plants);
-    const workbook: XLSX.WorkBook = { Sheets: { Plants: worksheet }, SheetNames: ['Plants'] };
-
-    // Mengonversi workbook ke dalam buffer
-    const excelBuffer: any = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-
-    // Mengunduh file Excel
-    this.saveAsExcelFile(excelBuffer, 'PlantData');
+    this.plantService.exportPlantsExcel().subscribe({
+      next: (response) => {
+        // Menggunakan nama file yang sudah ditentukan di backend
+        const filename = 'PLANT_DATA.xlsx'; // Nama file bisa dinamis jika diperlukan
+        saveAs(response, filename); // Mengunduh file
+      },
+      error: (err) => {
+        console.error('Download error:', err);
+      }
+    });
   }
 
   saveAsExcelFile(buffer: any, fileName: string): void {

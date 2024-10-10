@@ -152,8 +152,8 @@ export class ViewMaxCapacityComponent implements OnInit {
 
   downloadTemplate() {
     const link = document.createElement('a');
-    link.href = 'assets/Template Excel/Layout_Master_Max_Capacity.xlsx';
-    link.download = 'Layout_Master_Max_Capacity.xlsx';
+    link.href = 'assets/Template Excel/Layout_Max_Capacity.xlsx';
+    link.download = 'Layout_Max_Capacity.xlsx';
     link.click();
   }
 

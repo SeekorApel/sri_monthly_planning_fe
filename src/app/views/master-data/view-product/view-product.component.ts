@@ -6,6 +6,8 @@ import { ProductService } from 'src/app/services/master-data/product/product.ser
 import Swal from 'sweetalert2';
 declare var $: any;
 import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
+
 
 @Component({
   selector: 'app-view-product',
@@ -150,8 +152,8 @@ export class ViewProductComponent implements OnInit {
 
   downloadTemplate() {
     const link = document.createElement('a');
-    link.href = 'assets/Template Excel/Layout_Master_Product.xlsx';
-    link.download = 'Layout_Master_Product.xlsx';
+    link.href = 'assets/Template Excel/Layout_Product.xlsx';
+    link.download = 'Layout_Product.xlsx';
     link.click();
   }
 
@@ -213,5 +215,18 @@ export class ViewProductComponent implements OnInit {
         confirmButtonText: 'OK',
       });
     }
+  }
+
+  downloadExcel(): void {
+    this.productService.exportExcel().subscribe({
+      next: (response) => {
+        // Menggunakan nama file yang sudah ditentukan di backend
+        const filename = 'PRODUCT_DATA.xlsx'; // Nama file bisa dinamis jika diperlukan
+        saveAs(response, filename); // Mengunduh file
+      },
+      error: (err) => {
+        console.error('Download error:', err);
+      }
+    });
   }
 }

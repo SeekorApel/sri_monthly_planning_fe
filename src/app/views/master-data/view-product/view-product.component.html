@@ -15,62 +15,72 @@
         <!-- Right side: Download Template and Export Excel buttons -->
         <div>
           <button type="button" class="btn btn-primary ml-2" (click)="downloadTemplate()"><i class="fa fa-download fa-lg"></i> Download Template</button>
+          <button type="button" class="btn btn-primary ml-2" (click)="downloadExcel()"><i class="fa fa-download fa-lg"></i> Export Excel</button>
           <button type="button" class="btn btn-success ml-2" data-toggle="modal" data-target="#uploadModal"><i class="fa fa-file-excel-o fa-lg"></i> Upload Excel</button>
         </div>
       </div>
 
       <!-- Table -->
-      <table class="table table-striped">
-        <thead>
-          <th>No</th>
-          <th>Part Number</th>
-          <th>Item Curing</th>
-          <th>Pattern ID</th>
-          <th>Size ID</th>
-          <th>Product Type ID</th>
-          <th>Qty Per Rak</th>
-          <th>Upper Constant</th>
-          <th>Lower Constant</th>
-          <th>Ext Description</th>
-          <th>Item Ext</th>
-          <th>Item Assy</th>
-          <th>Wib Tube</th>
-          <th>Rim</th>
-          <th>Description</th>
-          <th>Status</th>
-          <th>Action</th>
-        </thead>
-        <tbody>
-          <tr *ngFor="let productt of pageOfItems; let i = index">
-            <td>{{ i + 1 }}</td>
-            <td>{{ productt.part_NUMBER }}</td>
-            <td>{{ productt.item_CURING }}</td>
-            <td>{{ productt.pattern_ID }}</td>
-            <td>{{ productt.size_ID }}</td>
-            <td>{{ productt.product_TYPE_ID }}</td>
-            <td>{{ productt.qty_PER_RAK }}</td>
-            <td>{{ productt.upper_CONSTANT }}</td>
-            <td>{{ productt.lower_CONSTANT }}</td>
-            <td>{{ productt.ext_DESCRIPTION }}</td>
-            <td>{{ productt.item_EXT }}</td>
-            <td>{{ productt.item_ASSY }}</td>
-            <td>{{ productt.wib_TUBE }}</td>
-            <td>{{ productt.rim }}</td>
-            <td>{{ productt.description }}</td>
-            <td>{{ productt.status === 1 ? 'Active' : 'Deactive' }}</td>
-            <td>
-              <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(productt.part_number)">Update</button>
-              <button type="button" class="btn btn-md btn-danger ml-2" (click)="deleteData(productt)">Delete</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <!-- Pagination -->
-      <nav>
-        <ul class="pagination">
-          <jw-pagination [items]="products" [pageSize]="pageSize" [maxPages]="totalPages" (changePage)="onChangePage($event)"> </jw-pagination>
-        </ul>
-      </nav>
+      <div class="table-responsive">
+        <table class="table table-bordered table-striped table-sm" style="table-layout: auto;">
+          <thead align="center">
+            <tr>
+              <th style="min-width: 50px;">No</th>
+              <th style="min-width: 150px;">Part Number</th>
+              <th style="min-width: 150px;">Item Curing</th>
+              <th style="min-width: 100px;">Pattern ID</th>
+              <th style="min-width: 100px;">Size ID</th>
+              <th style="min-width: 150px;">Product Type ID</th>
+              <th style="min-width: 100px;">Qty Per Rak</th>
+              <th style="min-width: 150px;">Upper Constant</th>
+              <th style="min-width: 150px;">Lower Constant</th>
+              <th style="min-width: 200px;">Ext Description</th>
+              <th style="min-width: 100px;">Item Ext</th>
+              <th style="min-width: 100px;">Item Assy</th>
+              <th style="min-width: 100px;">Wib Tube</th>
+              <th style="min-width: 100px;">Rim</th>
+              <th style="min-width: 200px;">Description</th>
+              <th style="min-width: 100px;">Status</th>
+              <th style="min-width: 220px; padding: 10px;">Action</th>
+          </tr>          
+          </thead>
+          <tbody >
+            <tr align="center" *ngFor="let productt of pageOfItems; let i = index">
+              <td>{{ i + 1 }}</td>
+              <td>{{ productt.part_NUMBER }}</td>
+              <td>{{ productt.item_CURING }}</td>
+              <td>{{ productt.pattern_ID }}</td>
+              <td>{{ productt.size_ID }}</td>
+              <td>{{ productt.product_TYPE_ID }}</td>
+              <td>{{ productt.qty_PER_RAK }}</td>
+              <td>{{ productt.upper_CONSTANT }}</td>
+              <td>{{ productt.lower_CONSTANT }}</td>
+              <td>{{ productt.ext_DESCRIPTION }}</td>
+              <td>{{ productt.item_EXT }}</td>
+              <td>{{ productt.item_ASSY }}</td>
+              <td>{{ productt.wib_TUBE }}</td>
+              <td>{{ productt.rim }}</td>
+              <td>{{ productt.description }}</td>
+              <td [ngClass]="{ 'bg-success': productt.status === 1, 'bg-danger': productt.status !== 1 }">
+                {{ productt.status === 1 ? 'Active' : 'Deactive' }}
+              </td>           
+              <td>
+                <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(productt.part_number)">Update</button>
+                <button type="button" class="btn btn-md ml-3" [ngClass]="{ 'btn-danger': productt.status === 1, 'btn-success': productt.status !== 1 }" (click)="productt.status === 1 ? deleteData(productt) : activateData(productt)">
+                  {{ productt.status === 1 ? 'Delete' : 'Active' }}
+                </button>
+              </td>
+              
+            </tr>
+          </tbody>
+        </table>
+        <!-- Pagination -->
+        <nav>
+          <ul class="pagination">
+            <jw-pagination [items]="products" [pageSize]="pageSize" [maxPages]="totalPages" (changePage)="onChangePage($event)"> </jw-pagination>
+          </ul>
+        </nav>
+      </div>      
     </div>
   </div>
 </div>

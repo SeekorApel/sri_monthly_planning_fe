@@ -20,20 +20,11 @@ export class PlantService {
     });
   }
 
-  // downloadPlantsExcel(): Observable<Blob> {
-  //   return this.http.get(environment.apiUrlWebAdmin + '/exportPlantsExcel', {
-  //     headers: this.getHeaders(),
-  //     responseType: 'blob',
-  //   });
-  // }
-
   getPlantById(idPlant: number): Observable<ApiResponse<Plant>> {
-    return this.http.get<ApiResponse<Plant>>(environment.apiUrlWebAdmin + '/getPlantById/' + idPlant, { headers: this.getHeaders() });
     return this.http.get<ApiResponse<Plant>>(environment.apiUrlWebAdmin + '/getPlantById/' + idPlant, { headers: this.getHeaders() });
   }
 
   getAllPlant(): Observable<ApiResponse<Plant[]>> {
-    return this.http.get<ApiResponse<Plant[]>>(environment.apiUrlWebAdmin + '/getAllPlant', { headers: this.getHeaders() });
     return this.http.get<ApiResponse<Plant[]>>(environment.apiUrlWebAdmin + '/getAllPlant', { headers: this.getHeaders() });
   }
 
@@ -67,7 +58,7 @@ export class PlantService {
   }
 
   activatePlant(plant: Plant): Observable<ApiResponse<Plant>> {
-    return this.http.post<ApiResponse<Plant>>(environment.apiUrlWebAdmin + '/activePlant', plant, { headers: this.getHeaders() }).pipe(
+    return this.http.post<ApiResponse<Plant>>(environment.apiUrlWebAdmin + '/restorePlant', plant, { headers: this.getHeaders() }).pipe(
       map((response) => {
         return response;
       }),
@@ -86,13 +77,10 @@ export class PlantService {
         return throwError(err);
       })
     );
-    return this.http.post<ApiResponse<Plant>>(environment.apiUrlWebAdmin + '/savePlantsExcel', file, { headers: this.getHeaders() }).pipe(
-      map((response) => {
-        return response;
-      }),
-      catchError((err) => {
-        return throwError(err);
-      })
-    );
   }
+
+  exportPlantsExcel(): Observable<Blob> {
+    return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/exportPlantsExcel`, { responseType: 'blob' as 'json' });
+  }
+
 }

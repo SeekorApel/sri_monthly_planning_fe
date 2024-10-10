@@ -151,8 +151,8 @@ export class ViewSettingComponent implements OnInit {
 
   downloadTemplate() {
     const link = document.createElement('a');
-    link.href = 'assets/Template Excel/Layout_Master_Setting.xlsx';
-    link.download = 'Layout_Master_Setting.xlsx';
+    link.href = 'assets/Template Excel/Layout_Setting.xlsx';
+    link.download = 'Layout_Setting.xlsx';
     link.click();
   }
 
