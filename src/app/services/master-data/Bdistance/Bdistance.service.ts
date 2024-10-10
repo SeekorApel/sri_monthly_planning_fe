@@ -90,14 +90,19 @@ export class BDistanceService {
       );
   }
 
-  ExportExcel(): Observable<ApiResponse<BDistance[]>> {
-    return this.http.get<ApiResponse<BDistance[]>>(
-      environment.apiUrlWebAdmin + '/exportBuildingDistancesExcel',
-      { headers: this.getHeaders() }
+  activateQuadrantDistance(bdistance: BDistance): Observable<ApiResponse<BDistance>> {
+    return this.http.post<ApiResponse<BDistance>>(environment.apiUrlWebAdmin + '/restoreBuildingDistance', bdistance, { headers: this.getHeaders() }).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((err) => {
+        return throwError(err);
+      })
     );
   }
 
   exportExcel(): Observable<Blob> {
     return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/exportBuildingDistancesExcel`, { responseType: 'blob' as 'json' });
   }
+
 }
