@@ -42,20 +42,20 @@
               </td>
               <td>
                 <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(plant.plant_ID)">Update</button>
-                <button type="button" class="btn btn-md ml-2"[ngClass]="{'btn-danger': plant.status === 1, 'btn-success': plant.status !== 1}" (click)="plant.status === 1 ? deleteData(plant) : activateData(plant)">
+                <button type="button" class="btn btn-md ml-2" [ngClass]="{ 'btn-danger': plant.status === 1, 'btn-success': plant.status !== 1 }" (click)="plant.status === 1 ? deleteData(plant) : activateData(plant)">
                   {{ plant.status === 1 ? 'Delete' : 'Active' }}
                 </button>
               </td>
             </tr>
           </tbody>
         </table>
+        <!-- Pagination -->
+        <nav>
+          <ul class="pagination">
+            <jw-pagination [items]="plants" [pageSize]="pageSize" [maxPages]="totalPages" (changePage)="onChangePage($event)"> </jw-pagination>
+          </ul>
+        </nav>
       </div>
-      <!-- Pagination -->
-      <nav>
-        <ul class="pagination">
-          <jw-pagination [items]="plants" [pageSize]="pageSize" [maxPages]="totalPages" (changePage)="onChangePage($event)"> </jw-pagination>
-        </ul>
-      </nav>
     </div>
   </div>
 </div>
