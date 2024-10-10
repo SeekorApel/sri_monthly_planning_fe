@@ -15,13 +15,15 @@
         <!-- Right side: Download Template and Export Excel buttons -->
         <div>
           <button type="button" class="btn btn-primary ml-2" (click)="downloadTemplate()"><i class="fa fa-download fa-lg"></i> Download Template</button>
+          <button type="button" class="btn btn-primary ml-2" (click)="downloadExcel()"><i class="fa fa-download fa-lg"></i> Export Excel</button>
           <button type="button" class="btn btn-success ml-2" data-toggle="modal" data-target="#uploadModal"><i class="fa fa-file-excel-o fa-lg"></i> Upload Excel</button>
         </div>
       </div>
 
       <!-- Table -->
-      <table class="table table-striped">
-        <thead>
+      <div class="table-responsive">
+        <table class="table table-bordered table-striped table-sm" style="table-layout: auto;">
+          <thead align="center">
           <tr>
             <th>No</th>
             <th>Pattern ID</th>
@@ -35,10 +37,14 @@
             <td>{{ i + 1 }}</td>
             <td>{{ pattern.pattern_ID }}</td>
             <td>{{ pattern.pattern_NAME }}</td>
-            <td>{{ pattern.status === 1 ? 'Active' : 'Deactive' }}</td>
+            <td [ngClass]="{ 'bg-success': pattern.status === 1, 'bg-danger': pattern.status !== 1 }">
+              {{ pattern.status === 1 ? 'Active' : 'Deactive' }}
+            </td>  
             <td>
               <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(pattern.pattern_ID)">Update</button>
-              <button type="button" class="btn btn-md btn-danger ml-2" (click)="deleteData(pattern)">Delete</button>
+              <button type="button" class="btn btn-md ml-3" [ngClass]="{ 'btn-danger': pattern.status === 1, 'btn-success': pattern.status !== 1 }" (click)="pattern.status === 1 ? deleteData(pattern) : activateData(pattern)">
+                {{ pattern.status === 1 ? 'Delete' : 'Active' }}
+              </button>
             </td>
           </tr>
         </tbody>
@@ -49,6 +55,7 @@
           <jw-pagination [items]="patterns" [pageSize]="pageSize" [maxPages]="totalPages" (changePage)="onChangePage($event)"> </jw-pagination>
         </ul>
       </nav>
+    </div> 
     </div>
   </div>
 </div>

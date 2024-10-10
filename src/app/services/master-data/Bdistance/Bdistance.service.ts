@@ -20,7 +20,7 @@ export class BDistanceService {
   // Method untuk menambahkan header Authorization dengan token
   private getHeaders() {
     return new HttpHeaders({
-      Authorization: `Bearer ${this.token}`,
+      Authorization: `Bearer ${environment.token}`,
     });
   }
 
@@ -88,5 +88,16 @@ export class BDistanceService {
           return throwError(err);
         })
       );
+  }
+
+  ExportExcel(): Observable<ApiResponse<BDistance[]>> {
+    return this.http.get<ApiResponse<BDistance[]>>(
+      environment.apiUrlWebAdmin + '/exportBuildingDistancesExcel',
+      { headers: this.getHeaders() }
+    );
+  }
+
+  exportExcel(): Observable<Blob> {
+    return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/exportBuildingDistancesExcel`, { responseType: 'blob' as 'json' });
   }
 }

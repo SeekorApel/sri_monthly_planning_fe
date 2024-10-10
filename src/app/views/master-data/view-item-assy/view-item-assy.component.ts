@@ -148,8 +148,8 @@ export class ViewItemAssyComponent implements OnInit {
 
   downloadTemplate() {
     const link = document.createElement('a');
-    link.href = 'assets/Template Excel/Layout_Master_ItemAssy.xlsx';
-    link.download = 'Layout_Master_ItemAssy.xlsx';
+    link.href = 'assets/Template Excel/Layout_Item_Assy.xlsx';
+    link.download = 'Layout_Item_Assy.xlsx';
     link.click();
   }
 

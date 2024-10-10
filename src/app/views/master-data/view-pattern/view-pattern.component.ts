@@ -6,6 +6,8 @@ import { PatternService } from 'src/app/services/master-data/pattern/pattern.ser
 import Swal from 'sweetalert2';
 declare var $: any;
 import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
+
 
 @Component({
   selector: 'app-view-pattern',
@@ -138,8 +140,8 @@ export class ViewPatternComponent implements OnInit {
 
   downloadTemplate() {
     const link = document.createElement('a');
-    link.href = 'assets/Template Excel/Layout_Master_Pattern.xlsx';
-    link.download = 'Layout_Master_Pattern.xlsx';
+    link.href = 'assets/Template Excel/Layout_Pattern.xlsx';
+    link.download = 'Layout_Pattern.xlsx';
     link.click();
   }
 
@@ -201,5 +203,17 @@ export class ViewPatternComponent implements OnInit {
         confirmButtonText: 'OK',
       });
     }
+  }
+  downloadExcel(): void {
+    this.patternService.exportExcel().subscribe({
+      next: (response) => {
+        // Menggunakan nama file yang sudah ditentukan di backend
+        const filename = 'PRODUCT_DATA.xlsx'; // Nama file bisa dinamis jika diperlukan
+        saveAs(response, filename); // Mengunduh file
+      },
+      error: (err) => {
+        console.error('Download error:', err);
+      }
+    });
   }
 }

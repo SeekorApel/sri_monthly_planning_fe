@@ -150,8 +150,8 @@ export class ViewQDistanceComponent implements OnInit {
 
   downloadTemplate() {
     const link = document.createElement('a');
-    link.href = 'assets/Template Excel/Layout_Master_Quadrant_Distance.xlsx';
-    link.download = 'Layout_Master_Quadrant_Distance.xlsx';
+    link.href = 'assets/Template Excel/Layout_Quadrant_Distance.xlsx';
+    link.download = 'Layout_Quadrant_Distance.xlsx';
     link.click();
   }
 

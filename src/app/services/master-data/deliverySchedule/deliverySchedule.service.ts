@@ -19,25 +19,7 @@ export class DeliveryScheduleService {
   getAllDeliverySchedule(): Observable<ApiResponse<IDeliverySchedule[]>> {
     return this.http.get<ApiResponse<IDeliverySchedule[]>>(`${this.baseUrl}/getAllDeliverySchedule`);
   }
-  
-//   getPlantById(id: number): Observable<DtoResponse> {
-//     return this.http.get<DtoResponse>(`${this.baseUrl}/getObatById/${id}`);
-//   }
-
-//   savePlant(obat: IObat): Observable<DtoResponse> {
-//     return this.http.post<DtoResponse>(`${this.baseUrl}/saveObat`, obat);
-//   }
-
-//   updatePlant(id: number, data: IObat): Observable<any> {
-//     const updatedData = { ...data, idObat: id }; // Menambahkan idObat ke dalam body
-//     return this.http.post<any>(`${this.apiUrl}/updateObat`, updatedData);
-//   }
    
-
-//   deletePlant(obat: { idObat: number }): Observable<ApiResponse<any>> {
-//     const url = `${this.apiUrl}/deleteObats`;
-//     return this.http.post<ApiResponse<any>>(url, obat);
-//   }  
 
 signIn(userName: string, password: string): Observable<{ data: string }> {
     return this.http.post<{ data: string }>(`${this.baseUrl}/signin`, {

@@ -147,8 +147,8 @@ export class ViewItemCuringComponent implements OnInit {
 
   downloadTemplate() {
     const link = document.createElement('a');
-    link.href = 'assets/Template Excel/Layout_Master_Item_Curing.xlsx';
-    link.download = 'Layout_Master_Item_Curing.xlsx';
+    link.href = 'assets/Template Excel/Layout_Item_Curing.xlsx';
+    link.download = 'Layout_Item_Curing.xlsx';
     link.click();
   }
 

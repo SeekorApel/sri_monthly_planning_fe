@@ -145,8 +145,8 @@ export class ViewCtKapaComponent implements OnInit {
 
   downloadTemplate() {
     const link = document.createElement('a');
-    link.href = 'assets/Template Excel/Layout_Master_CT_KAPA.xlsx';
-    link.download = 'Layout_Master_CT_KAPA.xlsx';
+    link.href = 'assets/Template Excel/Layout_CT_Kapa.xlsx';
+    link.download = 'Layout_CT_Kapa.xlsx';
     link.click();
   }
 

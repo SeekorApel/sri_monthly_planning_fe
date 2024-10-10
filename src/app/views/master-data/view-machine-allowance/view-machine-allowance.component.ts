@@ -146,8 +146,8 @@ export class ViewMachineAllowanceComponent implements OnInit {
 
   downloadTemplate() {
     const link = document.createElement('a');
-    link.href = 'assets/Template Excel/Layout_Master_MachineAllowance.xlsx';
-    link.download = 'Layout_Master_MachineAllowance.xlsx';
+    link.href = 'assets/Template Excel/Layout_Machine_Allowance.xlsx';
+    link.download = 'Layout_Machine_Allowance.xlsx';
     link.click();
   }
 
