@@ -75,7 +75,7 @@ getMachineCuringById(idMachineCuring: string): Observable<ApiResponse<Curing_Mac
   uploadFileExcel(file: FormData): Observable<ApiResponse<Curing_Machine>> {
     return this.http
       .post<ApiResponse<Curing_Machine>>(
-        environment.apiUrlWebAdmin + '/saveMachineCuringsExcel',
+        environment.apiUrlWebAdmin + '/saveMachineCuringExcel',
         file,
         { headers: this.getHeaders() }
       )

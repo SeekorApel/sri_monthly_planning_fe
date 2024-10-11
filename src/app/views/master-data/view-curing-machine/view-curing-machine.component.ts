@@ -34,7 +34,7 @@ export class ViewCuringMachineComponent implements OnInit {
       buildingID: ['', Validators.required],
       machinetype: ['', Validators.required],
       cavity: ['', Validators.required],
-      statusUsage: ['', Validators.required],
+      wordcentertext: ['', Validators.required],
     });
   }
 
@@ -61,11 +61,11 @@ export class ViewCuringMachineComponent implements OnInit {
   onSearchChange(): void {
     const filteredCuringMachines = this.curingmachines.filter(
       (curingmachine) =>
-        curingmachine.status_USAGE.toString()
+        curingmachine.curing_NUMBER.toString()
           .toLowerCase()
           .includes(this.searchText.toLowerCase()) ||
           curingmachine.building_ID.toString().includes(this.searchText)||
-          curingmachine.machine_TYPE.includes(this.searchText)||
+          curingmachine.curing_NUMBER.toString().includes(this.searchText)||
           curingmachine.cavity.toString().includes(this.searchText)||
           curingmachine.work_CENTER_TEXT.includes(this.searchText)
     );

@@ -28,9 +28,8 @@
             <th>No</th>
             <th>Work Center Text</th>
             <th>Building ID</th>
-            <th>Machine Type</th>
+            <th>Curing Number</th>
             <th>Cavity</th>
-            <th>Usage</th>
             <th>Status</th>
             <th>Action</th>
           </tr>
@@ -40,14 +39,13 @@
             <td>{{ i + 1 }}</td>
             <td>{{ curingmachine.work_CENTER_TEXT }}</td>
             <td>{{ curingmachine.building_ID }}</td>
-            <td>{{ curingmachine.machine_TYPE }}</td>
+            <td>{{ curingmachine.curing_NUMBER }}</td>
             <td>{{ curingmachine.cavity }}</td>
-            <td>{{ curingmachine.status_USAGE }}</td>
             <td [ngClass]="{ 'bg-success': curingmachine.status === 1, 'bg-danger': curingmachine.status !== 1 }">
               {{ curingmachine.status === 1 ? 'Active' : 'Deactive' }}
             </td>  
             <td>
-              <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(curingmachine.work_CENTER_TEXT)">Update</button>
+              <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(curingmachine.id_MACHINE_CURING)">Update</button>
               <button type="button" class="btn btn-md ml-3" [ngClass]="{ 'btn-danger': curingmachine.status === 1, 'btn-success': curingmachine.status !== 1 }" (click)="curingmachine.status === 1 ? deleteData(curingmachine) : activateData(curingmachine)">
                 {{ curingmachine.status === 1 ? 'Delete' : 'Active' }}
               </button>
@@ -80,21 +78,22 @@
         <!-- Form with Reactive Forms -->
         <form [formGroup]="editCuringMachineForm">
           <div class="form-group">
+            <label for="wordcentertext">Work Center Text</label>
+            <input [(ngModel)]="edtCuringMachineObject.work_CENTER_TEXT" type="text" class="form-control" id="wordcentertext" formControlName="wordcentertext" [ngClass]="{ 'is-invalid': editCuringMachineForm.get('wordcentertext').invalid && editCuringMachineForm.get('wordcentertext').touched }" />
+            <div *ngIf="editCuringMachineForm.get('wordcentertext').invalid && editCuringMachineForm.get('wordcentertext').touched" class="invalid-feedback">Word center text is required.</div>
+
             <label for="buildingID">Building ID</label>
             <input [(ngModel)]="edtCuringMachineObject.building_ID" type="text" class="form-control" id="buildingID" formControlName="buildingID" [ngClass]="{ 'is-invalid': editCuringMachineForm.get('buildingID').invalid && editCuringMachineForm.get('buildingID').touched }" />
             <div *ngIf="editCuringMachineForm.get('buildingID').invalid && editCuringMachineForm.get('buildingID').touched" class="invalid-feedback">Building id is required.</div>
             
             <label for="machinetype">Curing Number</label>
-            <input [(ngModel)]="edtCuringMachineObject.machine_TYPE" type="text" class="form-control" id="machinetype" formControlName="machinetype" [ngClass]="{ 'is-invalid': editCuringMachineForm.get('machinetype').invalid && editCuringMachineForm.get('machinetype').touched }" />
+            <input [(ngModel)]="edtCuringMachineObject.curing_NUMBER" type="text" class="form-control" id="machinetype" formControlName="machinetype" [ngClass]="{ 'is-invalid': editCuringMachineForm.get('machinetype').invalid && editCuringMachineForm.get('machinetype').touched }" />
             <div *ngIf="editCuringMachineForm.get('machinetype').invalid && editCuringMachineForm.get('machinetype').touched" class="invalid-feedback">Curing number is required.</div>
 
             <label for="cavity">Cavity</label>
             <input [(ngModel)]="edtCuringMachineObject.cavity" type="text" class="form-control" id="cavity" formControlName="cavity" [ngClass]="{ 'is-invalid': editCuringMachineForm.get('cavity').invalid && editCuringMachineForm.get('cavity').touched }" />
             <div *ngIf="editCuringMachineForm.get('cavity').invalid && editCuringMachineForm.get('cavity').touched" class="invalid-feedback">Cavity is required.</div>
-
-            <label for="statusUsage">Usage</label>
-            <input [(ngModel)]="edtCuringMachineObject.status_USAGE" type="text" class="form-control" id="statusUsage" formControlName="statusUsage" [ngClass]="{ 'is-invalid': editCuringMachineForm.get('statusUsage').invalid && editCuringMachineForm.get('statusUsage').touched }" />
-            <div *ngIf="editCuringMachineForm.get('statusUsage').invalid && editCuringMachineForm.get('statusUsage').touched" class="invalid-feedback">Word center text is required.</div>
+            
           </div>
         </form>
       </div>

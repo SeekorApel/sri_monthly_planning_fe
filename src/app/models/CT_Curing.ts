@@ -1,7 +1,7 @@
 export class CT_Curing {
   ct_CURING_ID: number;
   wip: string;
-  description: number;
+  description: string;
   group_COUNTER: string;
   var_GROUP_COUNTER: string;
   sequence: number;
@@ -37,9 +37,9 @@ export class CT_Curing {
   waktu_TOTAL_CT_NORMAL: number;
   waktu_TOTAL_CT_FRIDAY: number;
   status: number;
-  creation_DATE: string;
+  creation_DATE: Date;
   created_BY: string;
-  last_UPDATE_DATE: string;
+  last_UPDATE_DATE: Date;
   last_UPDATED_BY: string;
 }
 

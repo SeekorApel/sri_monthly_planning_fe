@@ -6,6 +6,7 @@ import { CTCuringService } from 'src/app/services/master-data/ct-curing/ct-curin
 import Swal from 'sweetalert2';
 declare var $: any;
 import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-view-ct-curing',
@@ -92,10 +93,13 @@ export class ViewCtCuringComponent  implements OnInit {
   onSearchChange(): void {
     const filteredCTCurings = this.ctcurings.filter(
       (ctcuring) =>
-        ctcuring.ct_CURING_ID.toString()
-          .toLowerCase()
-          .includes(this.searchText.toLowerCase()) ||
-        ctcuring.wip.toString().includes(this.searchText)
+        ctcuring.ct_CURING_ID.toString().toLowerCase().includes(this.searchText.toLowerCase()) ||
+        ctcuring.wip.toString().includes(this.searchText)||
+        ctcuring.description.toLowerCase().includes(this.searchText.toLowerCase())||
+        ctcuring.group_COUNTER.toLowerCase().includes(this.searchText.toLowerCase())||
+        ctcuring.var_GROUP_COUNTER.toLowerCase().includes(this.searchText.toLowerCase())||
+        ctcuring.sequence.toString().toLowerCase().includes(this.searchText.toLowerCase())||
+        ctcuring.wct.toLowerCase().includes(this.searchText.toLowerCase())
     );
 
     // Tampilkan hasil filter pada halaman pertama
@@ -151,7 +155,7 @@ export class ViewCtCuringComponent  implements OnInit {
     console.log(ctcuring);
     Swal.fire({
       title: 'Are you sure?',
-      text: 'This data plant will be deleted!',
+      text: 'This data CT Curing will be deleted!',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -162,18 +166,43 @@ export class ViewCtCuringComponent  implements OnInit {
       if (result.isConfirmed) {
         this.ctcuringService.deleteCTCuring(ctcuring).subscribe(
           (response) => {
-            Swal.fire('Deleted!', 'Data plant has been deleted', 'success').then(() => {
+            Swal.fire('Deleted!', 'Data CT Curing has been deleted', 'success').then(() => {
               window.location.reload();
             });
           },
           (err) => {
-            Swal.fire('Error!', 'Failed to delete the plant.', 'error');
+            Swal.fire('Error!', 'Failed to delete the CT Curing.', 'error');
           }
         );
       }
     });
   }
 
+  activateData(ct_curing: CT_Curing): void {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'This data CT Curing will be Activated!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes',
+      cancelButtonText: 'No',
+    }).then((result) => {
+      if (result.isConfirmed) { 
+        this.ctcuringService.activateCTCuring(ct_curing).subscribe(
+          (response) => {
+            Swal.fire('Activated!', 'Data CT Curing has been Activated', 'success').then(() => {
+              window.location.reload();
+            });
+          },
+          (err) => {
+            Swal.fire('Error!', 'Failed to Activated the CT Curing.', 'error');
+          }
+        );
+      }
+    });
+  }
 
   openModalUpload(): void {
     $('#uploadModal').modal('show');
@@ -246,5 +275,17 @@ export class ViewCtCuringComponent  implements OnInit {
         confirmButtonText: 'OK',
       });
     }
+  }
+  downloadExcel(): void {
+    this.ctcuringService.exportCTCuringsExcel().subscribe({
+      next: (response) => {
+        // Menggunakan nama file yang sudah ditentukan di backend
+        const filename = 'CT_CURING_DATA.xlsx'; // Nama file bisa dinamis jika diperlukan
+        saveAs(response, filename); // Mengunduh file
+      },
+      error: (err) => {
+        console.error('Download error:', err);
+      }
+    });
   }
 }

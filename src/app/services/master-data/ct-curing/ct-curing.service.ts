@@ -74,6 +74,17 @@ export class CTCuringService {
       );
   }
 
+  activateCTCuring(ct_curing: CT_Curing): Observable<ApiResponse<CT_Curing>> {
+    return this.http.post<ApiResponse<CT_Curing>>(environment.apiUrlWebAdmin + '/activateCTCuring', ct_curing, { headers: this.getHeaders() }).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((err) => {
+        return throwError(err);
+      })
+    );
+  }
+
   uploadFileExcel(file: FormData): Observable<ApiResponse<CT_Curing>> {
     return this.http
       .post<ApiResponse<CT_Curing>>(
@@ -89,5 +100,8 @@ export class CTCuringService {
           return throwError(err);
         })
       );
+  }
+  exportCTCuringsExcel(): Observable<Blob> {
+    return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/exportCTCuringExcel`, { responseType: 'blob' as 'json' });
   }
 }

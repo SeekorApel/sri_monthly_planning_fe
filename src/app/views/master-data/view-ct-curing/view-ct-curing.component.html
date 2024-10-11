@@ -15,59 +15,59 @@
           <!-- Right side: Download Template and Export Excel buttons -->
           <div>
             <button type="button" class="btn btn-primary ml-2" (click)="downloadTemplate()"><i class="fa fa-download fa-lg"></i> Download Template</button>
+            <button type="button" class="btn btn-primary ml-2" (click)="downloadExcel()"><i class="fa fa-download fa-lg"></i> Export Excel</button>
             <button type="button" class="btn btn-success ml-2" data-toggle="modal" data-target="#uploadModal"><i class="fa fa-file-excel-o fa-lg"></i> Upload Excel</button>
           </div>
         </div>
         <div class="table-responsive">
             <!-- Table -->
-            <table class="table table-striped">
-                <thead>
+            <table class="table table-bordered table-striped table-sm">
+                <thead  align="center">
                 <tr>
-                    <th>No</th>
-                    <th>CT Curing ID</th>
-                    <th>WIP</th>
-                    <th>Description</th>
-                    <th>Group Counter</th>
-                    <th>Var Group Counter</th>
-                    <th>Sequence</th>
-                    <th>WCT</th>
-                    <th>Operation Short Text</th>
-                    <th>Operation Unit</th>
-                    <th>Base Quantity</th>
-                    <th>Standard Value Unit</th>
-                    <th>CT Sec 1</th>
-                    <th>CT HR 1000</th>
-                    <th>WH Normal Shift 0</th>
-                    <th>WH Normal Shift 1</th>
-                    <th>WH Normal Shift 2</th>
-                    <th>WH Shift FRIDAY</th>
-                    <th>WH Total Normal Shift</th>
-                    <th>WH Total Shift FRIDAY</th>
-                    <th>Allow Normal Shift 0</th>
-                    <th>Allow Normal Shift 1</th>
-                    <th>Allow Normal Shift 2</th>
-                    <th>Allow Total</th>
-                    <th>OP Time Normal Shift 0</th>
-                    <th>OP Time Normal Shift 1</th>
-                    <th>OP Time Normal Shift 2</th>
-                    <th>OP Time Shift FRIDAY</th>
-                    <th>OP Time Total Normal Shift</th>
-                    <th>OP Time Total Shift FRIDAY</th>
-                    <th>Kaps Normal Shift 0</th>
-                    <th>Kaps Normal Shift 1</th>
-                    <th>Kaps Normal Shift 2</th>
-                    <th>Kaps Shift FRIDAY</th>
-                    <th>Kaps Total Normal Shift</th>
-                    <th>Kaps Total Shift FRIDAY</th>
-                    <th>Waktu Total CT Normal</th>
-                    <th>Waktu Total CT FRIDAY</th>
-                    <th>Status</th>
-
-                    <th>Action</th>
+                    <th style="min-width: '30px';">No</th>
+                    <th style="min-width: '100px';">CT Curing ID</th>
+                    <th style="min-width: '100px';">WIP</th>
+                    <th style="min-width: '225px';">Description</th>
+                    <th style="min-width: '150px';">Group Counter</th>
+                    <th style="min-width: '150px';">Var Group Counter</th>
+                    <th style="min-width: '100px';">Sequence</th>
+                    <th style="min-width: '100px';">WCT</th>
+                    <th style="min-width: '250px';">Operation Short Text</th>
+                    <th style="min-width: '150px';">Operation Unit</th>
+                    <th style="min-width: '150px';">Base Quantity</th>
+                    <th style="min-width: '150px';">Standard Value Unit</th>
+                    <th style="min-width: '100px';">CT Sec 1</th>
+                    <th style="min-width: '100px';">CT HR 1000</th>
+                    <th style="min-width: '150px';">WH Normal Shift 0</th>
+                    <th style="min-width: '150px';">WH Normal Shift 1</th>
+                    <th style="min-width: '150px';">WH Normal Shift 2</th>
+                    <th style="min-width: '150px';">WH Shift FRIDAY</th>
+                    <th style="min-width: '200px';">WH Total Normal Shift</th>
+                    <th style="min-width: '200px';">WH Total Shift FRIDAY</th>
+                    <th style="min-width: '150px';">Allow Normal Shift 0</th>
+                    <th style="min-width: '150px';">Allow Normal Shift 1</th>
+                    <th style="min-width: '150px';">Allow Normal Shift 2</th>
+                    <th style="min-width: '100px';">Allow Total</th>
+                    <th style="min-width: '200px';">OP Time Normal Shift 0</th>
+                    <th style="min-width: '200px';">OP Time Normal Shift 1</th>
+                    <th style="min-width: '200px';">OP Time Normal Shift 2</th>
+                    <th style="min-width: '200px';">OP Time Shift FRIDAY</th>
+                    <th style="min-width: '200px';">OP Time Total Normal Shift</th>
+                    <th style="min-width: '200px';">OP Time Total Shift FRIDAY</th>
+                    <th style="min-width: '150px';">Kaps Normal Shift 0</th>
+                    <th style="min-width: '150px';">Kaps Normal Shift 1</th>
+                    <th style="min-width: '150px';">Kaps Normal Shift 2</th>
+                    <th style="min-width: '150px';">Kaps Shift FRIDAY</th>
+                    <th style="min-width: '200px';">Kaps Total Normal Shift</th>
+                    <th style="min-width: '200px';">Kaps Total Shift FRIDAY</th>
+                    <th style="min-width: '200px';">Waktu Total CT Normal</th>
+                    <th style="min-width: '200px';">Waktu Total CT FRIDAY</th>
+                    <th style="min-width: '100px';">Status</th>
+                    <th style="min-width: '200px';">Action</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr *ngFor="let ctcuring of pageOfItems; let i = index">
+                <tr align="center" *ngFor="let ctcuring of pageOfItems; let i = index">
                     <td>{{ i + 1 }}</td>
                     <td>{{ ctcuring.ct_CURING_ID }}</td>
                     <td>{{ ctcuring.wip }}</td>
@@ -106,21 +106,23 @@
                     <td>{{ ctcuring.kaps_TOTAL_SHIFT_FRIDAY }}</td>
                     <td>{{ ctcuring.waktu_TOTAL_CT_NORMAL }}</td>
                     <td>{{ ctcuring.waktu_TOTAL_CT_FRIDAY }}</td>
-                    <td>{{ ctcuring.status === 1 ? 'Active' : 'Deactive' }}</td>
+                    <td [ngClass]="{ 'bg-success': ctcuring.status === 1, 'bg-danger': ctcuring.status !== 1 }">{{ ctcuring.status === 1 ? 'Active' : 'Deactive' }}</td>
                     <td>
                     <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(ctcuring.ct_CURING_ID)">Update</button>
-                    <button type="button" class="btn btn-md btn-danger ml-2" (click)="deleteData(ctcuring)">Delete</button>
+                    <button type="button" class="btn btn-md ml-2" [ngClass]="{ 'btn-danger': ctcuring.status === 1, 'btn-success': ctcuring.status !== 1 }" (click)="ctcuring.status === 1 ? deleteData(ctcuring) : activateData(ctcuring)">
+                      {{ ctcuring.status === 1 ? 'Delete' : 'Active' }}
+                    </button>
                     </td>
                 </tr>
                 </tbody>
             </table>
+            <!-- Pagination -->
+            <nav>
+              <ul class="pagination">
+                <jw-pagination [items]="ctcurings" [pageSize]="pageSize" [maxPages]="totalPages" (changePage)="onChangePage($event)"> </jw-pagination>
+              </ul>
+            </nav>
         </div>
-        <!-- Pagination -->
-        <nav>
-          <ul class="pagination">
-            <jw-pagination [items]="ctcurings" [pageSize]="pageSize" [maxPages]="totalPages" (changePage)="onChangePage($event)"> </jw-pagination>
-          </ul>
-        </nav>
       </div>
     </div>
   </div>
