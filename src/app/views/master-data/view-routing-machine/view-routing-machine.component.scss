@@ -2,3 +2,7 @@
     width: 100%;
     overflow-x: auto;
 }
+.trTDTH td, th{
+    min-width: 250px;
+    text-align: center;
+}

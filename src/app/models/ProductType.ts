@@ -1,11 +1,8 @@
-export interface ApiResponse<T> {
-  message?: string;
-  data: T;
-}
-
-export interface IProductType {
-  plant_ID?: number;        
-  plant_NAME: string;
+export class ProductType {
+  product_TYPE_ID: number;        
+  product_MERK: string;
+  product_TYPE: string;
+  category: string;
   status: number;           
   creation_DATE: Date;     
   created_BY: string;       

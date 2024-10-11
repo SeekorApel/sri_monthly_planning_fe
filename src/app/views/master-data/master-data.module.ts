@@ -30,7 +30,7 @@ import { ViewCtCuringComponent } from './view-ct-curing/view-ct-curing.component
 import { ViewCtKapaComponent } from './view-ct-kapa/view-ct-kapa.component';
 import { ViewMachineExtrudingComponent } from './view-machine-extruding/view-machine-extruding.component';
 import { ViewDDeliveryScheduleComponent } from './view-d-deliveryschedule/view-d-deliveryschedule.component';
-import { ViewMachineAllowanceComponent } from './view-machine-allowance/view-machine-allowance.component';
+import { ViewMachineAllowenceComponent } from './view-machine-allowence/view-machine-allowence.component';
 import { ViewItemAssyComponent } from './view-item-assy/view-item-assy.component';
 
 
@@ -59,7 +59,7 @@ import { ViewItemAssyComponent } from './view-item-assy/view-item-assy.component
     ViewCtKapaComponent,
     ViewMachineExtrudingComponent,
     ViewDDeliveryScheduleComponent,
-    ViewMachineAllowanceComponent,
+    ViewMachineAllowenceComponent,
     ViewItemAssyComponent
   ],
   imports: [

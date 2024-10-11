@@ -15,42 +15,51 @@
         <!-- Right side: Download Template and Export Excel buttons -->
         <div>
           <button type="button" class="btn btn-primary ml-2" (click)="downloadTemplate()"><i class="fa fa-download fa-lg"></i> Download Template</button>
+          <button type="button" class="btn btn-primary ml-2" (click)="downloadExcel()"><i class="fa fa-download fa-lg"></i> Export Excel</button>
           <button type="button" class="btn btn-success ml-2" data-toggle="modal" data-target="#uploadModal"><i class="fa fa-file-excel-o fa-lg"></i> Upload Excel</button>
         </div>
       </div>
 
       <!-- Table -->
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th>Setting ID</th>
-            <th>Setting Key</th>
-            <th>Setting Value</th>
-            <th>Description</th>
-            <th>Status</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let setting of pageOfItems; let i = index">
-            <td>{{ i + 1 }}</td>
-            <td>{{ setting.setting_KEY }}</td>
-            <td>{{ setting.setting_VALUE }}</td>
-            <td>{{ setting.description }}</td>
-            <td>{{ setting.status === 1 ? 'Active' : 'Deactive' }}</td>
-            <td>
-              <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(setting.setting_ID)">Update</button>
-              <button type="button" class="btn btn-md btn-danger ml-2" (click)="deleteData(setting)">Delete</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <!-- Pagination -->
-      <nav>
-        <ul class="pagination">
-          <jw-pagination [items]="settings" [pageSize]="pageSize" [maxPages]="totalPages" (changePage)="onChangePage($event)"> </jw-pagination>
-        </ul>
-      </nav>
+      <div class="table-responsive">
+        <table class="table table-bordered table-striped table-sm">
+          <thead align="center">
+            <tr>
+              <th>No</th>
+              <th>Setting ID</th>
+              <th>Setting Key</th>
+              <th>Setting Value</th>
+              <th>Description</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr align="center" *ngFor="let setting of pageOfItems; let i = index">
+              <td>{{ i + 1 }}</td>
+              <td>{{ setting.setting_ID }}</td>
+              <td>{{ setting.setting_KEY }}</td>
+              <td>{{ setting.setting_VALUE }}</td>
+              <td>{{ setting.description }}</td>
+              <td [ngClass]="{ 'bg-success': setting.status === 1, 'bg-danger': setting.status !== 1 }">
+                {{ setting.status === 1 ? 'Active' : 'Deactive' }}
+              </td>
+              <td>
+                <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(setting.setting_ID)">Update</button>
+                <button type="button" class="btn btn-md ml-2" [ngClass]="{ 'btn-danger': setting.status === 1, 'btn-success': setting.status !== 1 }" (click)="setting.status === 1 ? deleteData(setting) : activateData(setting)">
+                  {{ setting.status === 1 ? 'Delete' : 'Active' }}
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <!-- Pagination -->
+        <nav>
+          <ul class="pagination">
+            <jw-pagination [items]="settings" [pageSize]="pageSize" [maxPages]="totalPages" (changePage)="onChangePage($event)"> </jw-pagination>
+          </ul>
+        </nav>
+      </div>
     </div>
   </div>
 </div>
@@ -69,22 +78,23 @@
         <!-- Form with Reactive Forms -->
         <form [formGroup]="editSettingForm">
           <div class="form-group">
-            <label for="settingKey">Setting Key</label>
-            <input [(ngModel)]="edtSettingObject.setting_KEY" type="text" class="form-control" id="settingKey" formControlName="settingKey" [ngClass]="{ 'is-invalid': editSettingForm.get('settingKey').invalid && editSettingForm.get('settingKey').touched }" />
+            <label for="settingKEY">Setting KEY</label>
+            <input [(ngModel)]="edtSettingObject.setting_KEY" type="text" class="form-control" id="settingKEY" formControlName="settingKEY" [ngClass]="{ 'is-invalid': editSettingForm.get('settingKEY').invalid && editSettingForm.get('settingKEY').touched }" />
             <!-- Error message if plantName is empty -->
-            <div *ngIf="editSettingForm.get('settingKey').invalid && editSettingForm.get('settingKey').touched" class="invalid-feedback">Setting key is required.</div>
-
-            <label for="settingValue">Setting Value</label>
-            <input [(ngModel)]="edtSettingObject.setting_VALUE" type="text" class="form-control" id="settingValue" formControlName="settingValue" [ngClass]="{ 'is-invalid': editSettingForm.get('settingValue').invalid && editSettingForm.get('settingValue').touched }" />
+            <div *ngIf="editSettingForm.get('settingKEY').invalid && editSettingForm.get('settingKEY').touched" class="invalid-feedback">Setting KEY is required.</div>
+          </div>
+          <div class="form-group">
+            <label for="settingVALUE">Setting VALUE</label>
+            <input [(ngModel)]="edtSettingObject.setting_ID" type="text" class="form-control" id="settingID" formControlName="settingVALUE" [ngClass]="{ 'is-invalid': editSettingForm.get('settingVALUE').invalid && editSettingForm.get('settingVALUE').touched }" />
             <!-- Error message if plantName is empty -->
-            <div *ngIf="editSettingForm.get('settingValue').invalid && editSettingForm.get('settingValue').touched" class="invalid-feedback">Setting value is required.</div>
-
+            <div *ngIf="editSettingForm.get('settingVALUE').invalid && editSettingForm.get('settingVALUE').touched" class="invalid-feedback">Setting VALUE is required.</div>
+          </div>
+          <div class="form-group">
             <label for="description">Description</label>
             <input [(ngModel)]="edtSettingObject.description" type="text" class="form-control" id="description" formControlName="description" [ngClass]="{ 'is-invalid': editSettingForm.get('description').invalid && editSettingForm.get('description').touched }" />
             <!-- Error message if plantName is empty -->
-            <div *ngIf="editSettingForm.get('description').invalid && editSettingForm.get('description')touched" class="invalid-feedback">description value is required.</div>
+            <div *ngIf="editSettingForm.get('description').invalid && editSettingForm.get('description').touched" class="invalid-feedback">Description is required.</div>
           </div>
-
         </form>
       </div>
       <div class="modal-footer">

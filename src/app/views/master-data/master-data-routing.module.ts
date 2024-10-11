@@ -18,7 +18,7 @@ import { ViewMaxCapacityComponent } from './view-max-capacity/view-max-capacity.
 import { ViewItemCuringComponent } from './view-item-curing/view-item-curing.component';
 import { ViewTassSizeComponent } from './view-tass-size/view-tass-size.component';
 import { ViewCtCuringComponent } from './view-ct-curing/view-ct-curing.component';
-import { ViewMachineAllowanceComponent } from './view-machine-allowance/view-machine-allowance.component';
+import { ViewMachineAllowenceComponent } from './view-machine-allowence/view-machine-allowence.component';
 
 
 const routes: Routes = [
@@ -166,10 +166,10 @@ const routes: Routes = [
         }
       },
       {
-        path: 'master-data/view-machine-allowance',
-        component: ViewMachineAllowanceComponent,
+        path: 'master-data/view-machine-allowence',
+        component: ViewMachineAllowenceComponent,
         data: {
-          title: 'Master View Machine Allowance'
+          title: 'Master View Machine Allowence'
         }
       },
     ],

@@ -1,0 +1,165 @@
+<div class="col-lg-12">
+  <div class="card">
+    <div class="card-header">
+      <strong><i class="fa fa-bars"></i>&nbsp;Master Data Machine Allowence</strong>
+    </div>
+
+    <div class="card-body">
+      <!-- Wrapper for the input and buttons in one row -->
+      <div class="d-flex justify-content-between mb-3">
+        <div class="d-flex align-items-center">
+          <input type="text" class="form-control col-md-12 col-lg-12" [(ngModel)]="searchText" (input)="onSearchChange()" placeholder="Find here..." />
+          <button type="submit" class="btn btn-primary ml-2" (click)="resetSearch()">Reset</button>
+        </div>
+
+        <!-- Right side: Download Template and Export Excel buttons -->
+        <div>
+          <button type="button" class="btn btn-primary ml-2" (click)="downloadTemplate()"><i class="fa fa-download fa-lg"></i> Download Template</button>
+          <button type="button" class="btn btn-primary ml-2" (click)="downloadExcel()"><i class="fa fa-download fa-lg"></i> Export Excel</button>
+          <button type="button" class="btn btn-success ml-2" data-toggle="modal" data-target="#uploadModal"><i class="fa fa-file-excel-o fa-lg"></i> Upload Excel</button>
+        </div>
+      </div>
+
+      <!-- Table -->
+      <div class="table-responsive">
+        <table class="table table-bordered table-striped table-sm">
+          <thead align="center">
+            <tr>
+              <th>No</th>
+              <th>Machine Allowence ID</th>
+              <th>ID Machine</th>
+              <th>Person Responsible</th>
+              <th>Shift 1</th>
+              <th>Shift 2</th>
+              <th>Shift 3</th>
+              <th>Shift 1 Friday</th>
+              <th>Total Shift 123</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr align="center" *ngFor="let machienAllowence of pageOfItems; let i = index">
+              <td>{{ i + 1 }}</td>
+              <td>{{ machienAllowence.machine_allow_ID }}</td>
+              <td>{{ machienAllowence.ID_machine }}</td>
+              <td>{{ machienAllowence.person_Responsible }}</td>
+              <td>{{ machienAllowence.shift_1 }}</td>
+              <td>{{ machienAllowence.shift_2 }}</td>
+              <td>{{ machienAllowence.shift_3 }}</td>
+              <td>{{ machienAllowence.shift_1_friday }}</td>
+              <td>{{ machienAllowence.total_shift_123 }}</td>
+              <td [ngClass]="{ 'bg-success': machienAllowence.status === 1, 'bg-danger': machienAllowence.status !== 1 }">
+                {{ machienAllowence.status === 1 ? 'Active' : 'Deactive' }}
+              </td>
+              <td>
+                <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(machienAllowence.machine_allow_ID)">Update</button>
+                <button type="button" class="btn btn-md ml-2" [ngClass]="{ 'btn-danger': machienAllowence.status === 1, 'btn-success': machienAllowence.status !== 1 }" (click)="machienAllowence.status === 1 ? deleteData(machienAllowence) : activateData(machienAllowence)">
+                  {{ machienAllowence.status === 1 ? 'Delete' : 'Active' }}
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <!-- Pagination -->
+        <nav>
+          <ul class="pagination">
+            <jw-pagination [items]="machineAllowences" [pageSize]="pageSize" [maxPages]="totalPages" (changePage)="onChangePage($event)"> </jw-pagination>
+          </ul>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal edit -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addModalLabel">Edit Machine Allowence</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- Form with Reactive Forms -->
+        <form [formGroup]="editMachineAllowenceForm">
+          <div class="form-group">
+            <label for="idMachine">ID Machine</label>
+            <input [(ngModel)]="edtMachineAllowenceObject.ID_machine" type="text" class="form-control" id="idMachine" formControlName="idMachine" [ngClass]="{ 'is-invalid': editMachineAllowenceForm.get('idMachine').invalid && editMachineAllowenceForm.get('idMachine').touched }" />
+            <!-- Error message if plantName is empty -->
+            <div *ngIf="editMachineAllowenceForm.get('idMachine').invalid && editMachineAllowenceForm.get('idMachine').touched" class="invalid-feedback">ID Machine is required.</div>
+          </div>
+          <div class="form-group">
+            <label for="personResponsible">Person Responsible</label>
+            <input [(ngModel)]="edtMachineAllowenceObject.person_Responsible" type="text" class="form-control" id="idMachine" formControlName="personResponsible" [ngClass]="{ 'is-invalid': editMachineAllowenceForm.get('personResponsible').invalid && editMachineAllowenceForm.get('personResponsible').touched }" />
+            <!-- Error message if plantName is empty -->
+            <div *ngIf="editMachineAllowenceForm.get('personResponsible').invalid && editMachineAllowenceForm.get('personResponsible').touched" class="invalid-feedback">Person Responsible is required.</div>
+          </div>
+          <div class="form-group">
+            <label for="shift1">Shift 1</label>
+            <input [(ngModel)]="edtMachineAllowenceObject.shift_1" type="text" class="form-control" id="shift1" formControlName="shift1" [ngClass]="{ 'is-invalid': editMachineAllowenceForm.get('shift1').invalid && editMachineAllowenceForm.get('shift1').touched }" />
+            <!-- Error message if plantName is empty -->
+            <div *ngIf="editMachineAllowenceForm.get('shift1').invalid && editMachineAllowenceForm.get('shift1').touched" class="invalid-feedback">Shift 1 is required.</div>
+          </div>
+          <div class="form-group">
+            <label for="shift2">Shift 2</label>
+            <input [(ngModel)]="edtMachineAllowenceObject.shift_2" type="text" class="form-control" id="shift2" formControlName="shift2" [ngClass]="{ 'is-invalid': editMachineAllowenceForm.get('shift2').invalid && editMachineAllowenceForm.get('shift2').touched }" />
+            <!-- Error message if plantName is empty -->
+            <div *ngIf="editMachineAllowenceForm.get('shift2').invalid && editMachineAllowenceForm.get('shift2').touched" class="invalid-feedback">Shift 2 is required.</div>
+          </div>
+          <div class="form-group">
+            <label for="shift3">Shift 3</label>
+            <input [(ngModel)]="edtMachineAllowenceObject.shift_3" type="text" class="form-control" id="shift3" formControlName="shift1" [ngClass]="{ 'is-invalid': editMachineAllowenceForm.get('shift3').invalid && editMachineAllowenceForm.get('shift3').touched }" />
+            <!-- Error message if plantName is empty -->
+            <div *ngIf="editMachineAllowenceForm.get('shift3').invalid && editMachineAllowenceForm.get('shift3').touched" class="invalid-feedback">Shift 3 is required.</div>
+          </div>
+          <div class="form-group">
+            <label for="shift1Friday">Shift 1 Friday</label>
+            <input [(ngModel)]="edtMachineAllowenceObject.shift_1_friday" type="text" class="form-control" id="shift1Friday" formControlName="shift1Friday" [ngClass]="{ 'is-invalid': editMachineAllowenceForm.get('shift1Friday').invalid && editMachineAllowenceForm.get('shift1Friday').touched }" />
+            <!-- Error message if plantName is empty -->
+            <div *ngIf="editMachineAllowenceForm.get('shift1Friday').invalid && editMachineAllowenceForm.get('shift1Friday').touched" class="invalid-feedback">Shift 1 friday  is required.</div>
+          </div>
+          <div class="form-group">
+            <label for="totalShift123">Total Shift 123</label>
+            <input [(ngModel)]="edtMachineAllowenceObject.total_shift_123" type="text" class="form-control" id="totalShift123" formControlName="totalShift123" [ngClass]="{ 'is-invalid': editMachineAllowenceForm.get('totalShift123').invalid && editMachineAllowenceForm.get('totalShift123').touched }" />
+            <!-- Error message if plantName is empty -->
+            <div *ngIf="editMachineAllowenceForm.get('totalShift123').invalid && editMachineAllowenceForm.get('totalShift123').touched" class="invalid-feedback">Total Shift 123 is required.</div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <!-- Disable Update button if form is invalid -->
+        <button type="button" class="btn btn-primary" [disabled]="editMachineAllowenceForm.invalid" (click)="updateMachineAllowence()">Update Machine Allowence</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal for Upload Excel -->
+<div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="uploadModalLabel">Upload Excel File</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="uploadForm">
+          <!-- Manual File Input -->
+          <div class="form-group mt-3">
+            <input type="file" class="form-control-file" id="manualFileInput" accept=".xls,.xlsx" (change)="onFileChange($event)" />
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-md btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-md btn-primary" id="uploadButton" (click)="uploadFileExcel()">Upload</button>
+      </div>
+    </div>
+  </div>
+</div>

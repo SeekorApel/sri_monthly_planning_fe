@@ -6,6 +6,7 @@ import { MaxCapacityService } from 'src/app/services/master-data/max-capacity/ma
 import Swal from 'sweetalert2';
 declare var $: any;
 import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-view-max-capacity',
@@ -30,7 +31,12 @@ export class ViewMaxCapacityComponent implements OnInit {
 
   constructor(private maxCapacityService: MaxCapacityService, private fb: FormBuilder) { 
     this.editMaxCapacityForm = this.fb.group({
-      maxCapacity: ['', Validators.required]
+      productID: ['', Validators.required],
+      machineCuringTypeID: ['', Validators.required],
+      cycleTime: ['', Validators.required],
+      capacityShift1: ['', Validators.required],
+      capacityShift2: ['', Validators.required],
+      capacityShift3: ['', Validators.required]
 
     });
   }
@@ -46,7 +52,7 @@ export class ViewMaxCapacityComponent implements OnInit {
         this.onChangePage(this.maxCapacitys.slice(0, this.pageSize));
       },
       (error) => {
-        this.errorMessage = 'Failed to load quadrants: ' + error.message;
+        this.errorMessage = 'Failed to load max capacity: ' + error.message;
       }
     );
   }
@@ -57,7 +63,7 @@ export class ViewMaxCapacityComponent implements OnInit {
 
   onSearchChange(): void {
     // Lakukan filter berdasarkan nama plant yang mengandung text pencarian (case-insensitive)
-    const filteredPlants = this.maxCapacitys.filter(
+    const filteredMaxCapacity = this.maxCapacitys.filter(
       (maxCapacity) =>
         maxCapacity.max_Cap_ID
           .toString()
@@ -71,7 +77,7 @@ export class ViewMaxCapacityComponent implements OnInit {
     );
 
     // Tampilkan hasil filter pada halaman pertama
-    this.onChangePage(filteredPlants.slice(0, this.pageSize));
+    this.onChangePage(filteredMaxCapacity.slice(0, this.pageSize));
   }
 
   resetSearch(): void {
@@ -86,7 +92,7 @@ export class ViewMaxCapacityComponent implements OnInit {
         // SweetAlert setelah update berhasil
         Swal.fire({
           title: 'Success!',
-          text: 'Data quadrant successfully updated.',
+          text: 'Data max capacity successfully updated.',
           icon: 'success',
           confirmButtonText: 'OK',
         }).then((result) => {
@@ -104,17 +110,17 @@ export class ViewMaxCapacityComponent implements OnInit {
 
   openModalEdit(idMaxCapacity: number): void {
     this.isEditMode = true;
-    this.getQuadrantById(idMaxCapacity);
+    this.getMaxCapacityById(idMaxCapacity);
     $('#editModal').modal('show');
   }
 
-  getQuadrantById(idMaxCapacity: number): void {
+  getMaxCapacityById(idMaxCapacity: number): void {
     this.maxCapacityService.getMaxCapacityById(idMaxCapacity).subscribe(
       (response: ApiResponse<Max_Capacity>) => {
         this.edtMaxCapacityObject = response.data;
       },
       (error) => {
-        this.errorMessage = 'Failed to load quadrants: ' + error.message;
+        this.errorMessage = 'Failed to load max capacity: ' + error.message;
       }
     );
   }
@@ -133,18 +139,43 @@ export class ViewMaxCapacityComponent implements OnInit {
       if (result.isConfirmed) {
         this.maxCapacityService.deleteMaxCapacity(maxCapacity).subscribe(
           (response) => {
-            Swal.fire('Deleted!', 'Data quadrant has been deleted', 'success').then(() => {
+            Swal.fire('Deleted!', 'Data max capacity has been deleted', 'success').then(() => {
               window.location.reload();
             });
           },
           (err) => {
-            Swal.fire('Error!', 'Failed to delete the quadrant.', 'error');
+            Swal.fire('Error!', 'Failed to delete the max Capacity.', 'error');
           }
         );
       }
     });
   }
 
+  activateData(maxCapacity: Max_Capacity): void {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'This data plant will be Activated!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes',
+      cancelButtonText: 'No',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.maxCapacityService.activateMaxCapacity(maxCapacity).subscribe(
+          (response) => {
+            Swal.fire('Activated!', 'Data max capacity has been Activated', 'success').then(() => {
+              window.location.reload();
+            });
+          },
+          (err) => {
+            Swal.fire('Error!', 'Failed to Activated the max capacity.', 'error');
+          }
+        );
+      }
+    });
+  }
 
   openModalUpload(): void {
     $('#uploadModal').modal('show');
@@ -181,6 +212,24 @@ export class ViewMaxCapacityComponent implements OnInit {
     }
   }
 
+  downloadExcel(): void {
+    this.maxCapacityService.exportMaxCapacitiesExcel().subscribe({
+      next: (response) => {
+        // Menggunakan nama file yang sudah ditentukan di backend
+        const filename = 'MAX_CAPACITY_DATA.xlsx'; // Nama file bisa dinamis jika diperlukan
+        saveAs(response, filename); // Mengunduh file
+      },
+      error: (err) => {
+        console.error('Download error:', err);
+      }
+    });
+  }
+
+  saveAsExcelFile(buffer: any, fileName: string): void {
+    const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+    const data: Blob = new Blob([buffer], { type: EXCEL_TYPE });
+    saveAs(data, `${fileName}_export_${new Date().getTime()}.xlsx`);
+  }
 
   uploadFileExcel() {
     if (this.file) {

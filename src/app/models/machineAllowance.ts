@@ -1,5 +1,5 @@
 
-export class machineAllowance {
+export class machineAllowence {
   machine_allow_ID: number;        
   ID_machine: string;
   person_Responsible: string;
