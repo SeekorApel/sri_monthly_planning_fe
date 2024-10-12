@@ -12,15 +12,16 @@ export class DefaultLayoutComponent {
   public navItems: any = ([] = navItems);
   public nrp;
   public name;
+  public role;
   public csMd: any;
   public csTrx: any;
 
   constructor(private authenticationService: AuthenticationService, private router: Router) {
     //PERSONAL INFORMATION
     let currentUserSubject = JSON.parse(localStorage.getItem('currentUser'));
-    console.log('ISI currentUser', currentUserSubject);
     this.nrp = currentUserSubject.userName;
     this.name = currentUserSubject.nama;
+    this.role = 'marketing';
 
     this.navItems = navItems;
     this.navItems[1].children = [];
@@ -62,16 +63,33 @@ export class DefaultLayoutComponent {
   }
 
   ngOnInit(): void {
-    this.navItems[1].children = [];
-    this.navItems[2].children = [];
+    // this.navItems[1].children = [];
+    // this.navItems[2].children = [];
 
-    this.csMd.forEach((item) => {
-      this.navItems[1].children.push(item);
-    });
+    // this.csMd.forEach((item) => {
+    //   this.navItems[1].children.push(item);
+    // });
 
-    this.csTrx.forEach((item) => {
-      this.navItems[2].children.push(item);
-    });
+    // this.csTrx.forEach((item) => {
+    //   this.navItems[2].children.push(item);
+    // });
+    // Check the role of the user
+    if (this.role === 'ppc') {
+      // PPC: show Master Data and Transaksi
+      this.csMd.forEach((item) => {
+        this.navItems[1].children.push(item);
+      });
+      this.csTrx.forEach((item) => {
+        this.navItems[2].children.push(item);
+      });
+    } else if (this.role === 'marketing') {
+      this.csTrx.forEach((item) => {
+        this.navItems[2].children.push(item);
+      });
+
+      // Optionally, remove Master Data from navItems for marketing role
+      this.navItems = this.navItems.filter((item) => item.name !== 'Master Data');
+    }
   }
 
   toggleMinimize(e) {
