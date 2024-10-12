@@ -19,10 +19,8 @@ export class DefaultLayoutComponent {
     //PERSONAL INFORMATION
     let currentUserSubject = JSON.parse(localStorage.getItem('currentUser'));
     console.log('ISI currentUser', currentUserSubject);
-    // this.nrp = currentUserSubject.userName;
-    // this.name = currentUserSubject.personal[0].nama;
-    this.nrp = 123;
-    this.name = 'benetAdmin';
+    this.nrp = currentUserSubject.userName;
+    this.name = currentUserSubject.nama;
 
     this.navItems = navItems;
     this.navItems[1].children = [];
@@ -54,12 +52,12 @@ export class DefaultLayoutComponent {
       { name: 'Machine Allowance', url: '/master-data/view-machine-allowance', icon: 'cil-minus' },
       { name: 'Item Assy', url: '/master-data/view-item-assy', icon: 'cil-minus' },
       { name: 'Machine Extruding', url: '/master-data/view-machine-extruding', icon: 'cil-minus' },
-      { name: 'CT Kapa', url: '/master-data/view-ct-kapa', icon: 'cil-minus' }
+      { name: 'CT Kapa', url: '/master-data/view-ct-kapa', icon: 'cil-minus' },
     ];
 
     this.csTrx = [
       { name: 'Marketing Order', url: '/transaksi/view-marketing-order', icon: 'cil-minus' },
-      { name: 'Monthly Planning', url: '/transaksi/view-monthly-planning', icon: 'cil-minus' }
+      { name: 'Monthly Planning', url: '/transaksi/view-monthly-planning', icon: 'cil-minus' },
     ];
   }
 

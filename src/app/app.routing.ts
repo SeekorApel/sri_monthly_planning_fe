@@ -36,9 +36,9 @@ import { AddMonthlyPlanningComponent } from './views/transaksi/add-monthly-plann
 import { ViewCtCuringComponent } from './views/master-data/view-ct-curing/view-ct-curing.component';
 import { ViewMachineAllowanceComponent } from './views/master-data/view-machine-allowance/view-machine-allowance.component';
 import { ViewItemAssyComponent } from './views/master-data/view-item-assy/view-item-assy.component';
-import { ViewMachineExtrudingComponent } from './views/master-data/view-machine-extruding/view-machine-extruding.component'
-import { ViewCtKapaComponent } from './views/master-data/view-ct-kapa/view-ct-kapa.component'
-import { ViewDDeliveryScheduleComponent } from './views/master-data/view-d-deliveryschedule/view-d-deliveryschedule.component'
+import { ViewMachineExtrudingComponent } from './views/master-data/view-machine-extruding/view-machine-extruding.component';
+import { ViewCtKapaComponent } from './views/master-data/view-ct-kapa/view-ct-kapa.component';
+import { ViewDDeliveryScheduleComponent } from './views/master-data/view-d-deliveryschedule/view-d-deliveryschedule.component';
 
 export const routes: Routes = [
   {
@@ -80,7 +80,7 @@ export const routes: Routes = [
   {
     path: '',
     component: DefaultLayoutComponent,
-    canActivate: [],
+    canActivate: [AuthGuard],
     data: {
       title: 'Home',
     },
