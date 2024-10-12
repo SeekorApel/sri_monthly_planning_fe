@@ -4,6 +4,7 @@ import { Product } from 'src/app/models/Product';
 import { ApiResponse } from 'src/app/response/Response';
 import { ProductService } from 'src/app/services/master-data/product/product.service';
 import Swal from 'sweetalert2';
+import { saveAs } from 'file-saver';
 declare var $: any;
 import * as XLSX from 'xlsx';
 
@@ -47,6 +48,44 @@ export class ViewProductComponent implements OnInit {
 
   ngOnInit(): void {
     this.getAllMachineTassType();
+  }
+
+  activateData(product: Product): void {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'This data product will be Activated!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes',
+      cancelButtonText: 'No',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.productService.activateProduct(product).subscribe(
+          (response) => {
+            Swal.fire('Activated!', 'Data product has been Activated', 'success').then(() => {
+              window.location.reload();
+            });
+          },
+          (err) => {
+            Swal.fire('Error!', 'Failed to Activated the pattern.', 'error');
+          }
+        );
+      }
+    });
+  }
+  downloadExcel(): void {
+    this.productService.exportProductExcel().subscribe({
+      next: (response) => {
+        // Menggunakan nama file yang sudah ditentukan di backend
+        const filename = 'PRODUCT_DATA.xlsx'; // Nama file bisa dinamis jika diperlukan
+        saveAs(response, filename); // Mengunduh file
+      },
+      error: (err) => {
+        console.error('Download error:', err);
+      },
+    });
   }
 
   getAllMachineTassType(): void {
@@ -150,7 +189,7 @@ export class ViewProductComponent implements OnInit {
 
   downloadTemplate() {
     const link = document.createElement('a');
-    link.href = 'assets/Template Excel/Layout_Master_Product.xlsx';
+    link.href = 'assets/Template Excel/MASTER_PRODUCT.xlsx';
     link.download = 'Layout_Master_Product.xlsx';
     link.click();
   }

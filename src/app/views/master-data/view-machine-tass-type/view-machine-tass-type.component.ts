@@ -4,6 +4,8 @@ import { MachineTassType } from 'src/app/models/machine-tass-type';
 import { ApiResponse } from 'src/app/response/Response';
 import { MachineTassTypeService } from 'src/app/services/master-data/machine-tass-type/machine-tass-type.service';
 import Swal from 'sweetalert2';
+import { saveAs } from 'file-saver';
+
 declare var $: any;
 import * as XLSX from 'xlsx';
 
@@ -54,6 +56,31 @@ export class ViewMachineTassTypeComponent implements OnInit {
   onChangePage(pageOfItems: Array<any>) {
     this.pageOfItems = pageOfItems;
   }
+  activateData(mtt: MachineTassType): void {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'This data plant will be Activated!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes',
+      cancelButtonText: 'No',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.mttService.activateMachineTassType(mtt).subscribe(
+          (response) => {
+            Swal.fire('Activated!', 'Data machine tass type has been Activated', 'success').then(() => {
+              window.location.reload();
+            });
+          },
+          (err) => {
+            Swal.fire('Error!', 'Failed to Activated the machine tass type.', 'error');
+          }
+        );
+      }
+    });
+  }
 
   onSearchChange(): void {
     // Lakukan filter berdasarkan nama MachineTASSType yang mengandung text pencarian (case-insensitive)
@@ -92,11 +119,11 @@ export class ViewMachineTassTypeComponent implements OnInit {
 
   openModalEdit(idMachineTassType: number): void {
     this.isEditMode = true;
-    this.getPlantById(idMachineTassType);
+    this.getMachineTassById(idMachineTassType);
     $('#editModal').modal('show');
   }
 
-  getPlantById(idMachineTassType: number): void {
+  getMachineTassById(idMachineTassType: number): void {
     this.mttService.getMachineTassTypeById(idMachineTassType).subscribe(
       (response: ApiResponse<MachineTassType>) => {
         this.edtMachineTassTypeObject = response.data;
@@ -202,5 +229,17 @@ export class ViewMachineTassTypeComponent implements OnInit {
         confirmButtonText: 'OK',
       });
     }
+  }
+  downloadExcel(): void {
+    this.mttService.exportMachineTassTypeExcel().subscribe({
+      next: (response) => {
+        // Menggunakan nama file yang sudah ditentukan di backend
+        const filename = 'MACHINETASSTYPE_DATA.xlsx'; // Nama file bisa dinamis jika diperlukan
+        saveAs(response, filename); // Mengunduh file
+      },
+      error: (err) => {
+        console.error('Download error:', err);
+      },
+    });
   }
 }

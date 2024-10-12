@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { CtKapaService } from './ctkapa.service';
 
-describe('PatternService', () => {
+describe('CtKapaService', () => {
   let service: CtKapaService;
 
   beforeEach(() => {

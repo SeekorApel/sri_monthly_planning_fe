@@ -12,7 +12,7 @@ import { map, catchError } from 'rxjs/operators';
 })
 export class PatternService {
   //Isi tokenya
-  token: String = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBdXJlbCIsImV4cCI6MTcyODM4NTExNH0.EcIqiAPq5tX2MgDMcwD5rDNN-85fobiCN6S57r3rOBO64TK4JKUwzlF1zpLTqj4ul0KsBdnHqpDh4zOcAzoT8w';
+  token: String = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBdXJlbCIsImV4cCI6MTcyODgwMjY5MX0.s3qaQFCXKw4jqPs8oa1A4c6aJNJ9FBVwSLDVXKNZWk3BshgTWLbzFV-M7l8OPeHAXTEOYGrQhNsmarPbRCFgog';
   constructor(private http: HttpClient) {}
 
   // Method untuk menambahkan header Authorization dengan token
@@ -28,6 +28,19 @@ export class PatternService {
 
   getAllPattern(): Observable<ApiResponse<Pattern[]>> {
     return this.http.get<ApiResponse<Pattern[]>>(environment.apiUrlWebAdmin + '/getAllPattern', { headers: this.getHeaders() });
+  }
+  exportPatternExcel(): Observable<Blob> {
+    return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/exportPatternExcel`, { responseType: 'blob' as 'json' });
+  }
+  activatePattern(pattern: Pattern): Observable<ApiResponse<Pattern>> {
+    return this.http.post<ApiResponse<Pattern>>(environment.apiUrlWebAdmin + '/restorePattern', pattern, { headers: this.getHeaders() }).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((err) => {
+        return throwError(err);
+      })
+    );
   }
 
   //Method Update plant

@@ -12,8 +12,7 @@ import { map, catchError } from 'rxjs/operators';
 })
 export class MachineTassService {
   //Isi tokenya
-  token: String =
-  'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBdXJlbCIsImV4cCI6MTcyODA1MzEwMn0.TvtFLNBN9DKENLYA3wSw_BfTWES-lA0rbNKTveGiIB43vyKDSa6Tktxwrm0a6xJdb6CoPYhku4f5z-TODQGAwA';  
+  token: String = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBdXJlbCIsImV4cCI6MTcyODgwMjY5MX0.s3qaQFCXKw4jqPs8oa1A4c6aJNJ9FBVwSLDVXKNZWk3BshgTWLbzFV-M7l8OPeHAXTEOYGrQhNsmarPbRCFgog';
   constructor(private http: HttpClient) {}
 
   // Method untuk menambahkan header Authorization dengan token
@@ -24,17 +23,11 @@ export class MachineTassService {
   }
 
   getMachineTassByID(idMachineTass: number): Observable<ApiResponse<MachineTass>> {
-    return this.http.get<ApiResponse<MachineTass>>(
-      environment.apiUrlWebAdmin + '/getMachineTassById/' + idMachineTass,
-      { headers: this.getHeaders() }
-    );
+    return this.http.get<ApiResponse<MachineTass>>(environment.apiUrlWebAdmin + '/getMachineTassById/' + idMachineTass, { headers: this.getHeaders() });
   }
 
   getAllMachineTass(): Observable<ApiResponse<MachineTass[]>> {
-    return this.http.get<ApiResponse<MachineTass[]>>(
-      environment.apiUrlWebAdmin + '/getAllMachineTass',
-      { headers: this.getHeaders() }
-    );
+    return this.http.get<ApiResponse<MachineTass[]>>(environment.apiUrlWebAdmin + '/getAllMachineTass', { headers: this.getHeaders() });
   }
 
   //Method Update plant
@@ -56,36 +49,37 @@ export class MachineTassService {
   }
 
   deleteMachineTass(machinetass: MachineTass): Observable<ApiResponse<MachineTass>> {
-    return this.http
-      .post<ApiResponse<MachineTass>>(
-        environment.apiUrlWebAdmin + '/deleteMachineTass',
-        machinetass,
-        { headers: this.getHeaders() }
-      )
-      .pipe(
-        map((response) => {
-          return response;
-        }),
-        catchError((err) => {
-          return throwError(err);
-        })
-      );
+    return this.http.post<ApiResponse<MachineTass>>(environment.apiUrlWebAdmin + '/deleteMachineTass', machinetass, { headers: this.getHeaders() }).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((err) => {
+        return throwError(err);
+      })
+    );
   }
 
   uploadFileExcel(file: FormData): Observable<ApiResponse<MachineTass>> {
-    return this.http
-      .post<ApiResponse<MachineTass>>(
-        environment.apiUrlWebAdmin + '/saveMachineTassExcel',
-        file,
-        { headers: this.getHeaders() }
-      )
-      .pipe(
-        map((response) => {
-          return response;
-        }),
-        catchError((err) => {
-          return throwError(err);
-        })
-      );
+    return this.http.post<ApiResponse<MachineTass>>(environment.apiUrlWebAdmin + '/saveMachineTassExcel', file, { headers: this.getHeaders() }).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((err) => {
+        return throwError(err);
+      })
+    );
+  }
+  exportMachineTassExcel(): Observable<Blob> {
+    return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/exportMachineTassExcel`, { responseType: 'blob' as 'json' });
+  }
+  activateMachineTass(machineTass: MachineTass): Observable<ApiResponse<MachineTass>> {
+    return this.http.post<ApiResponse<MachineTass>>(environment.apiUrlWebAdmin + '/restoreMachineTass', machineTass, { headers: this.getHeaders() }).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((err) => {
+        return throwError(err);
+      })
+    );
   }
 }

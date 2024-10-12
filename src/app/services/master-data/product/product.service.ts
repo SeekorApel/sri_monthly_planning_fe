@@ -12,7 +12,7 @@ import { map, catchError } from 'rxjs/operators';
 })
 export class ProductService {
   //Isi tokenya
-  token: String = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBdXJlbCIsImV4cCI6MTcyODQ2NDk4OX0.9gpWMtzc_mTuD8izjRbdtAO54sdnRh60W7WaulIQRSflJamyqlQWK7zkBbtwWciF4h110ZWsO7HBtU_X2UROJA';
+  token: String = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBdXJlbCIsImV4cCI6MTcyODgwMjY5MX0.s3qaQFCXKw4jqPs8oa1A4c6aJNJ9FBVwSLDVXKNZWk3BshgTWLbzFV-M7l8OPeHAXTEOYGrQhNsmarPbRCFgog';
   constructor(private http: HttpClient) {}
 
   // Method untuk menambahkan header Authorization dengan token
@@ -28,6 +28,20 @@ export class ProductService {
 
   getAllProduct(): Observable<ApiResponse<Product[]>> {
     return this.http.get<ApiResponse<Product[]>>(environment.apiUrlWebAdmin + '/getAllProduct', { headers: this.getHeaders() });
+  }
+
+  exportProductExcel(): Observable<Blob> {
+    return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/exportProductsExcel`, { responseType: 'blob' as 'json' });
+  }
+  activateProduct(product: Product): Observable<ApiResponse<Product>> {
+    return this.http.post<ApiResponse<Product>>(environment.apiUrlWebAdmin + '/activateProduct', product, { headers: this.getHeaders() }).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((err) => {
+        return throwError(err);
+      })
+    );
   }
 
   //Method Update plant

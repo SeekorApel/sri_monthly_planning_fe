@@ -4,6 +4,7 @@ import { Pattern } from 'src/app/models/Pattern';
 import { ApiResponse } from 'src/app/response/Response';
 import { PatternService } from 'src/app/services/master-data/pattern/pattern.service';
 import Swal from 'sweetalert2';
+import { saveAs } from 'file-saver';
 declare var $: any;
 import * as XLSX from 'xlsx';
 
@@ -35,6 +36,43 @@ export class ViewPatternComponent implements OnInit {
 
   ngOnInit(): void {
     this.getAllPattern();
+  }
+  activateData(pattern: Pattern): void {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'This data pattern will be Activated!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes',
+      cancelButtonText: 'No',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.patternService.activatePattern(pattern).subscribe(
+          (response) => {
+            Swal.fire('Activated!', 'Data pattern has been Activated', 'success').then(() => {
+              window.location.reload();
+            });
+          },
+          (err) => {
+            Swal.fire('Error!', 'Failed to Activated the pattern.', 'error');
+          }
+        );
+      }
+    });
+  }
+  ExportExcel(): void {
+    this.patternService.exportPatternExcel().subscribe({
+      next: (response) => {
+        // Menggunakan nama file yang sudah ditentukan di backend
+        const filename = 'MASTER_PATTERN.xlsx'; // Nama file bisa dinamis jika diperlukan
+        saveAs(response, filename); // Mengunduh file
+      },
+      error: (err) => {
+        console.error('Download error:', err);
+      },
+    });
   }
 
   getAllPattern(): void {
@@ -138,8 +176,8 @@ export class ViewPatternComponent implements OnInit {
 
   downloadTemplate() {
     const link = document.createElement('a');
-    link.href = 'assets/Template Excel/Layout_Master_Pattern.xlsx';
-    link.download = 'Layout_Master_Pattern.xlsx';
+    link.href = 'assets/Template Excel/MASTER_PATTERN.xlsx';
+    link.download = 'Layout_master_Pattern.xlsx';
     link.click();
   }
 
