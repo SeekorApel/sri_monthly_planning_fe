@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Route, Router } from '@angular/router';
+import { DetailMarketingOrder } from 'src/app/models/DetailMarketingOrder';
 
 @Component({
   selector: 'app-add-mo-marketing',
@@ -7,9 +9,20 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AddMoMarketingComponent implements OnInit {
 
-  constructor() { }
+  //Variable Declaration
+  idMo: String;
+  monthNames: string[] = ['', '', ''];
+  marketingOrderTable: DetailMarketingOrder[];
+
+  constructor(private router: Router, private activeRoute: ActivatedRoute) { }
 
   ngOnInit(): void {
+    this.idMo = this.activeRoute.snapshot.paramMap.get('idMo');
+    console.log("Ini id mo edit", this.idMo);
+  }
+
+  navigateToViewMo() {
+    this.router.navigate(['/transaksi/view-mo-marketing']);
   }
 
 }

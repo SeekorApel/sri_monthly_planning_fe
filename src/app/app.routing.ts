@@ -41,6 +41,8 @@ import { ViewCtKapaComponent } from './views/master-data/view-ct-kapa/view-ct-ka
 import { ViewDDeliveryScheduleComponent } from './views/master-data/view-d-deliveryschedule/view-d-deliveryschedule.component';
 import { ViewMoMarketingComponent } from './views/transaksi/view-mo-marketing/view-mo-marketing.component';
 import { AddMoMarketingComponent } from './views/transaksi/add-mo-marketing/add-mo-marketing.component';
+import { DetailViewMoPpcComponent } from './views/transaksi/detail-view-mo-ppc/detail-view-mo-ppc.component';
+import { EditMoPpcComponent } from './views/transaksi/edit-mo-ppc/edit-mo-ppc.component';
 
 export const routes: Routes = [
   {
@@ -319,10 +321,24 @@ export const routes: Routes = [
         },
       },
       {
-        path: 'transaksi/add-mo-marketing',
+        path: 'transaksi/add-mo-marketing/:idMo',
         component: AddMoMarketingComponent,
         data: {
           title: 'Transaksi / Add Marketing Order',
+        },
+      },
+      {
+        path: 'transaksi/detail-mo-ppc/:idMo',
+        component: DetailViewMoPpcComponent,
+        data: {
+          title: 'Transaksi / Detail Marketing Order',
+        },
+      },
+      {
+        path: 'transaksi/edit-mo-ppc/:idMo',
+        component: EditMoPpcComponent,
+        data: {
+          title: 'Transaksi / Edit Marketing Order',
         },
       },
       {

@@ -40,8 +40,8 @@
                 <td>{{ dateUtil.parseMonthYear(mo.month_1) }}</td>
                 <td>{{ dateUtil.parseMonthYear(mo.month_2) }}</td>
                 <td>
-                  <button type="button" class="btn btn-md btn-secondary">Detail</button>
-                  <button type="button" class="btn btn-md btn-primary ml-2">Revision</button>
+                  <button type="button" class="btn btn-md btn-secondary" (click)="navigateToDetail(mo.mo_ID)">Detail</button>
+                  <button type="button" class="btn btn-md btn-primary ml-2" (click)="navigateToEdit(mo.mo_ID)" >Revision</button>
                 </td>
               </tr>
             </tbody>

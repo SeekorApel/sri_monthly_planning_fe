@@ -1,5 +1,5 @@
 <div class="animated fadeIn">
-  <!-- Header Mo -->
+  <!-- Header Marketing Order -->
   <div class="col-md-12">
     <div class="card">
       <div class="card-header">
@@ -26,7 +26,7 @@
               <div *ngIf="formHeaderMo.get('type')?.invalid && formHeaderMo.get('type')?.touched" class="invalid-feedback">Type is required.</div>
             </div>
           </div>
-          
+
           <!-- Tabset -->
           <tabset>
             <tab heading="Month 1">
@@ -238,6 +238,7 @@
     </div>
   </div>
 
+  <!-- Detail Marketing Order -->
   <div class="col-md-12" *ngIf="isTableVisible">
     <div class="card">
       <div class="card-header">
