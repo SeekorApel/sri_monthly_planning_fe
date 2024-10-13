@@ -13,21 +13,23 @@ export class DefaultLayoutComponent {
   public nrp;
   public name;
   public role;
-  public csMd: any;
-  public csTrx: any;
+  public masterPPC: any;
+  public transaksiPPC: any;
+  public transaksiMarketing: any;
 
   constructor(private authenticationService: AuthenticationService, private router: Router) {
     //PERSONAL INFORMATION
     let currentUserSubject = JSON.parse(localStorage.getItem('currentUser'));
+    console.log("Isi current user : ", currentUserSubject);
     this.nrp = currentUserSubject.userName;
-    this.name = currentUserSubject.nama;
-    this.role = 'marketing';
+    this.name = currentUserSubject.fullName;
+    this.role = currentUserSubject.roles.role_name;
 
     this.navItems = navItems;
     this.navItems[1].children = [];
     this.navItems[2].children = [];
 
-    this.csMd = [
+    this.masterPPC = [
       { name: 'Plant', url: '/master-data/view-plant', icon: 'cil-minus' },
       { name: 'Product', url: '/master-data/view-product', icon: 'cil-minus' },
       { name: 'Pattern', url: '/master-data/view-pattern', icon: 'cil-minus' },
@@ -56,38 +58,40 @@ export class DefaultLayoutComponent {
       { name: 'CT Kapa', url: '/master-data/view-ct-kapa', icon: 'cil-minus' },
     ];
 
-    this.csTrx = [
-      { name: 'Marketing Order', url: '/transaksi/view-marketing-order', icon: 'cil-minus' },
+    this.transaksiPPC = [
+      { name: 'Marketing Order', url: '/transaksi/view-mo-ppc', icon: 'cil-minus' },
       { name: 'Monthly Planning', url: '/transaksi/view-monthly-planning', icon: 'cil-minus' },
     ];
+
+    this.transaksiMarketing = [
+      { name: 'Marketing Order', url: '/transaksi/view-mo-marketing', icon: 'cil-minus' },
+    ]
   }
 
   ngOnInit(): void {
     // this.navItems[1].children = [];
     // this.navItems[2].children = [];
 
-    // this.csMd.forEach((item) => {
+    // this.masterPPC.forEach((item) => {
     //   this.navItems[1].children.push(item);
     // });
 
-    // this.csTrx.forEach((item) => {
+    // this.transaksiPPC.forEach((item) => {
     //   this.navItems[2].children.push(item);
     // });
     // Check the role of the user
-    if (this.role === 'ppc') {
+    if (this.role === 'PPC') {
       // PPC: show Master Data and Transaksi
-      this.csMd.forEach((item) => {
+      this.masterPPC.forEach((item) => {
         this.navItems[1].children.push(item);
       });
-      this.csTrx.forEach((item) => {
+      this.transaksiPPC.forEach((item) => {
         this.navItems[2].children.push(item);
       });
-    } else if (this.role === 'marketing') {
-      this.csTrx.forEach((item) => {
+    } else if (this.role === 'Marketing') {
+      this.transaksiMarketing.forEach((item) => {
         this.navItems[2].children.push(item);
       });
-
-      // Optionally, remove Master Data from navItems for marketing role
       this.navItems = this.navItems.filter((item) => item.name !== 'Master Data');
     }
   }

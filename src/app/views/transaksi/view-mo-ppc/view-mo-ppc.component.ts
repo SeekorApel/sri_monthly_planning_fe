@@ -6,11 +6,11 @@ import { MarketingOrderService } from 'src/app/services/transaksi/marketing orde
 import { ParsingDate } from 'src/app/utils/ParsingDate'
 
 @Component({
-  selector: 'app-view-marketing-order',
-  templateUrl: './view-marketing-order.component.html',
-  styleUrls: ['./view-marketing-order.component.scss'],
+  selector: 'app-view-mo-ppc',
+  templateUrl: './view-mo-ppc.component.html',
+  styleUrls: ['./view-mo-ppc.component.scss'],
 })
-export class ViewMarketingOrderComponent implements OnInit {
+export class ViewMoPpcComponent implements OnInit {
   //Declaration
   marketingOrders: MarketingOrder[] = [];
   errorMessage: string | null = null;
@@ -64,6 +64,6 @@ export class ViewMarketingOrderComponent implements OnInit {
   }
 
   navigateToAdd() {
-    this.router.navigate(['/transaksi/add-marketing-order']);
+    this.router.navigate(['/transaksi/add-mo-ppc']);
   }
 }

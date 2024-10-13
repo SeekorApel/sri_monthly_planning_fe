@@ -11,8 +11,8 @@ import { RegisterComponent } from './views/register/register.component';
 import { AuthGuard } from './services/auth.guard';
 import { DashboardComponent } from './views/dashboard/dashboard.component';
 import { ViewPlantComponent } from './views/master-data/view-plant/view-plant.component';
-import { ViewMarketingOrderComponent } from './views/transaksi/view-marketing-order/view-marketing-order.component';
-import { AddMarketingOrderComponent } from './views/transaksi/add-marketing-order/add-marketing-order.component';
+import { ViewMoPpcComponent } from './views/transaksi/view-mo-ppc/view-mo-ppc.component';
+import { AddMoPpcComponent } from './views/transaksi/add-mo-ppc/add-mo-ppc.component';
 import { ViewSettingComponent } from './views/master-data/view-setting/view-setting.component';
 import { ViewQuadrantComponent } from './views/master-data/view-quadrant/view-quadrant.component';
 import { ViewProductTypeComponent } from './views/master-data/view-product-type/view-product-type.component';
@@ -39,6 +39,8 @@ import { ViewItemAssyComponent } from './views/master-data/view-item-assy/view-i
 import { ViewMachineExtrudingComponent } from './views/master-data/view-machine-extruding/view-machine-extruding.component';
 import { ViewCtKapaComponent } from './views/master-data/view-ct-kapa/view-ct-kapa.component';
 import { ViewDDeliveryScheduleComponent } from './views/master-data/view-d-deliveryschedule/view-d-deliveryschedule.component';
+import { ViewMoMarketingComponent } from './views/transaksi/view-mo-marketing/view-mo-marketing.component';
+import { AddMoMarketingComponent } from './views/transaksi/add-mo-marketing/add-mo-marketing.component';
 
 export const routes: Routes = [
   {
@@ -241,28 +243,14 @@ export const routes: Routes = [
       },
       {
         path: 'transaksi/view-header-mo',
-        component: ViewMarketingOrderComponent,
+        component: ViewMoPpcComponent,
         data: {
           title: 'Transaksi / View Marketing Order',
         },
       },
       {
         path: 'transaksi/add-header-mo',
-        component: AddMarketingOrderComponent,
-        data: {
-          title: 'Transaksi / Add Marketing Order',
-        },
-      },
-      {
-        path: 'transaksi/view-marketing-order',
-        component: ViewMarketingOrderComponent,
-        data: {
-          title: 'Transaksi / View Marketing Order',
-        },
-      },
-      {
-        path: 'transaksi/add-marketing-order',
-        component: AddMarketingOrderComponent,
+        component: AddMoPpcComponent,
         data: {
           title: 'Transaksi / Add Marketing Order',
         },
@@ -307,6 +295,34 @@ export const routes: Routes = [
         component: AddMonthlyPlanningComponent,
         data: {
           title: 'Transaksi / Add Monthly Planning',
+        },
+      },
+      {
+        path: 'transaksi/view-mo-ppc',
+        component: ViewMoPpcComponent,
+        data: {
+          title: 'Transaksi / View Marketing Order',
+        },
+      },
+      {
+        path: 'transaksi/add-mo-ppc',
+        component: AddMoPpcComponent,
+        data: {
+          title: 'Transaksi / Add Marketing Order',
+        },
+      },
+      {
+        path: 'transaksi/view-mo-marketing',
+        component: ViewMoMarketingComponent,
+        data: {
+          title: 'Transaksi / View Marketing Order',
+        },
+      },
+      {
+        path: 'transaksi/add-mo-marketing',
+        component: AddMoMarketingComponent,
+        data: {
+          title: 'Transaksi / Add Marketing Order',
         },
       },
       {
@@ -358,4 +374,4 @@ export const routes: Routes = [
   imports: [RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy' })],
   exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }
