@@ -27,6 +27,13 @@
             </div>
           </div>
 
+          <div class="form-group row">
+            <label class="col-md-3 col-form-label">Revision</label>
+            <div class="col-md-9">
+              <input class="form-control" type="text" formControlName="revision" placeholder="1,2,3...." [readOnly]="isReadOnly" />
+            </div>
+          </div>
+
           <!-- Tabset -->
           <tabset>
             <tab heading="Month 1">
@@ -92,6 +99,42 @@
                 <div class="col-md-9">
                   <input type="number" [ngClass]="{ 'is-invalid': formHeaderMo.get('max_capa_tt_0')?.invalid && formHeaderMo.get('max_capa_tt_0')?.touched }" formControlName="max_capa_tt_0" name="text-input" class="form-control" placeholder="0,00" />
                   <div *ngIf="formHeaderMo.get('max_capa_tt_0')?.invalid && formHeaderMo.get('max_capa_tt_0')?.touched" class="invalid-feedback">Maximum Capacity Tire TT is required.</div>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-3 col-form-label" for="text-input">Looping</label>
+                <div class="col-md-9">
+                  <input type="number" formControlName="looping_m0" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-3 col-form-label" for="text-input">Machine Airbag</label>
+                <div class="col-md-9">
+                  <input type="number" formControlName="machine_airbag_m0" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-3 col-form-label" for="text-input">FED TL</label>
+                <div class="col-md-9">
+                  <input type="number" formControlName="fed_tl_m0" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-3 col-form-label" for="text-input">FED TT</label>
+                <div class="col-md-9">
+                  <input type="number" formControlName="fed_tt_m0" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-3 col-form-label" for="text-input">Total Marketing Order</label>
+                <div class="col-md-9">
+                  <input type="number" formControlName="total_mo_m0" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-3 col-form-label" for="text-input">Note Order TL</label>
+                <div class="col-md-9">
+                  <input type="text" formControlName="note_tl_m0" name="text-input" class="form-control" placeholder="text..." [readOnly]="isReadOnly" />
                 </div>
               </div>
             </tab>
@@ -239,7 +282,7 @@
   <div class="col-md-12">
     <div class="card">
       <div class="card-header">
-        <strong>Marketing Order</strong>
+        <strong>Edit Detail Marketing Order</strong>
       </div>
       <div class="card-body">
         <div class="table-responsive">
