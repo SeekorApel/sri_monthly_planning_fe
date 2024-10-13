@@ -176,7 +176,7 @@ export class ViewPatternComponent implements OnInit {
 
   downloadTemplate() {
     const link = document.createElement('a');
-    link.href = 'assets/Template Excel/MASTER_PATTERN.xlsx';
+    link.href = 'assets/Template Excel/Kosongan/MASTER_PATTERN.xlsx';
     link.download = 'Layout_master_Pattern.xlsx';
     link.click();
   }

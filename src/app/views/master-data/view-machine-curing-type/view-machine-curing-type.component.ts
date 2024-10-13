@@ -122,12 +122,12 @@ export class ViewMachineCuringTypeComponent implements OnInit {
       if (result.isConfirmed) {
         this.machineCuringTypeService.deleteMct(Mct).subscribe(
           (response) => {
-            Swal.fire('Deleted!', 'Data plant has been deleted', 'success').then(() => {
+            Swal.fire('Deleted!', 'Data machine curing type has been deleted', 'success').then(() => {
               window.location.reload();
             });
           },
           (err) => {
-            Swal.fire('Error!', 'Failed to delete the plant.', 'error');
+            Swal.fire('Error!', 'Failed to delete the machine curing type.', 'error');
           }
         );
       }
@@ -140,7 +140,7 @@ export class ViewMachineCuringTypeComponent implements OnInit {
 
   downloadTemplate() {
     const link = document.createElement('a');
-    link.href = 'assets/Template Excel/Layout_Master_Machine_Curing_Type.xlsx';
+    link.href = 'assets/Template Excel/Kosongan/MASTER_MACHINE_CURING_TYPE.xlsx';
     link.download = 'Layout_Master_Machine_Curing_Type.xlsx';
     link.click();
   }

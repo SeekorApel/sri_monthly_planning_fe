@@ -106,7 +106,7 @@ export class ViewCtKapaComponent implements OnInit {
 
   onSearchChange(): void {
     // Lakukan filter berdasarkan nama plant yang mengandung text pencarian (case-insensitive)
-    const filteredPlants = this.ctkapas.filter((ctkapa) => ctkapa.machine.toLowerCase().includes(this.searchText.toLowerCase()) || ctkapa.part_NUMBER.toString().includes(this.searchText));
+    const filteredPlants = this.ctkapas.filter((ctkapa) => ctkapa.machine.toLowerCase().includes(this.searchText.toLowerCase()) || ctkapa.id_CT_KAPA.toString().includes(this.searchText));
 
     // Tampilkan hasil filter pada halaman pertama
     this.onChangePage(filteredPlants.slice(0, this.pageSize));
@@ -188,7 +188,7 @@ export class ViewCtKapaComponent implements OnInit {
 
   downloadTemplate() {
     const link = document.createElement('a');
-    link.href = 'assets/Template Excel/Layout_Master_CT_KAPA.xlsx';
+    link.href = 'assets/Template Excel/Kosongan/MASTER_CT_KAPA.xlsx';
     link.download = 'Layout_Master_CT_KAPA.xlsx';
     link.click();
   }

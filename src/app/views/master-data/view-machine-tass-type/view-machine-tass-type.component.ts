@@ -166,7 +166,7 @@ export class ViewMachineTassTypeComponent implements OnInit {
 
   downloadTemplate() {
     const link = document.createElement('a');
-    link.href = 'assets/Template Excel/Layout_Master_Machine_Tass_Type.xlsx';
+    link.href = 'assets/Template Excel/Kosongan/MACHINE_TASS_TYPE.xlsx';
     link.download = 'Layout_Master_Machine_Tass_Type.xlsx';
     link.click();
   }

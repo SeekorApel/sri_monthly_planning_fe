@@ -27,7 +27,6 @@
             <tr>
               <th>No</th>
               <th>ID CT Kapa</th>
-              <th>Part NUMBER</th>
               <th>Item Curing</th>
               <th>Type Curing</th>
               <th>Description</th>
@@ -43,7 +42,6 @@
             <tr *ngFor="let ctkapa of pageOfItems; let i = index">
               <td>{{ i + 1 }}</td>
               <td>{{ ctkapa.id_CT_KAPA }}</td>
-              <td>{{ ctkapa.part_NUMBER }}</td>
               <td>{{ ctkapa.item_CURING }}</td>
               <td>{{ ctkapa.type_CURING }}</td>
               <td>{{ ctkapa.description }}</td>

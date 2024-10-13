@@ -79,7 +79,7 @@
         <form [formGroup]="editMCTForm">
           <div class="form-group">
             <label for="setting">Setting</label>
-            <input [(ngModel)]="edtMCTObject.description" type="text" class="form-control" id="setting" formControlName="setting" [ngClass]="{ 'is-invalid': editMCTForm.get('setting').invalid && editMCTForm.get('setting').touched }" />
+            <input [(ngModel)]="edtMCTObject.setting_ID" type="text" class="form-control" id="setting" formControlName="setting" [ngClass]="{ 'is-invalid': editMCTForm.get('setting').invalid && editMCTForm.get('setting').touched }" />
             <label for="description">Description</label>
             <input [(ngModel)]="edtMCTObject.description" type="text" class="form-control" id="description" formControlName="description" [ngClass]="{ 'is-invalid': editMCTForm.get('description').invalid && editMCTForm.get('description').touched }" />
             <label for="cavity">Cavity</label>

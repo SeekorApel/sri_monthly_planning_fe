@@ -12,7 +12,7 @@ import { map, catchError } from 'rxjs/operators';
 })
 export class MachineExtrudingService {
   //Isi tokenya
-  token: String = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBdXJlbCIsImV4cCI6MTcyODgwMjY5MX0.s3qaQFCXKw4jqPs8oa1A4c6aJNJ9FBVwSLDVXKNZWk3BshgTWLbzFV-M7l8OPeHAXTEOYGrQhNsmarPbRCFgog';
+  token: String = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBdXJlbCIsImV4cCI6MTcyODkxMjkwOH0.A5HGKZbQj7z7pNfM2pmCwB7xz6vtoEwPKw3wRBwRpk88-F8Ubfp1j9fXPBt6Je4C1Zam02MrFZvcN1ZNkP5cLQ';
   constructor(private http: HttpClient) {}
 
   // Method untuk menambahkan header Authorization dengan token
@@ -32,8 +32,7 @@ export class MachineExtrudingService {
     );
   }
   exportMachineExtrudingExcel(): Observable<Blob> {
-    return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/exportMachineExtrudingExcel`, 
-      { responseType: 'blob' as 'json' });
+    return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/exportMachineExtrudingExcel`, { responseType: 'blob' as 'json' });
   }
 
   getMachineExtrudingByID(idMachineExtruding: number): Observable<ApiResponse<MachineExtruding>> {

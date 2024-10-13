@@ -178,7 +178,7 @@ export class ViewMachineExtrudingComponent implements OnInit {
 
   downloadTemplate() {
     const link = document.createElement('a');
-    link.href = 'assets/Template Excel/MASTER_MACHINE_EXTRUDING.xlsx';
+    link.href = 'assets/Template Excel/Kosongan/MASTER_MACHINE_EXTRUDING.xlsx';
     link.download = 'Layout_Master_Machine_Extruding.xlsx';
     link.click();
   }

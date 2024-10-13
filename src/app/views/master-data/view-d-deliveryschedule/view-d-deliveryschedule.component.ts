@@ -180,8 +180,8 @@ export class ViewDDeliveryScheduleComponent implements OnInit {
 
   downloadTemplate() {
     const link = document.createElement('a');
-    link.href = 'assets/Template Excel/Layout_Master_DDelivery_Schedule.xlsx';
-    link.download = 'Layout_Master_DDelivery_Schedule.xlsx';
+    link.href = 'assets/Template Excel/Kosongan/MASTER_DETAIL_DELIVERY_SCHEDULE.xlsx';
+    link.download = 'Layout_Master_Detail_Delivery_Schedule.xlsx';
     link.click();
   }
 

@@ -189,7 +189,7 @@ export class ViewProductComponent implements OnInit {
 
   downloadTemplate() {
     const link = document.createElement('a');
-    link.href = 'assets/Template Excel/MASTER_PRODUCT.xlsx';
+    link.href = 'assets/Template Excel/Kosongan/MASTER_PRODUCT.xlsx';
     link.download = 'Layout_Master_Product.xlsx';
     link.click();
   }

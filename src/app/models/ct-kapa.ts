@@ -1,5 +1,4 @@
 export class CtKapa {
-  part_NUMBER: number;
   id_CT_KAPA: number;
   item_CURING: string;
   type_CURING: string;
