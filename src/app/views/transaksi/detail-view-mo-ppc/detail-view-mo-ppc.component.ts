@@ -30,7 +30,7 @@ export class DetailViewMoPpcComponent implements OnInit {
   constructor(private router: Router, private activeRoute: ActivatedRoute, private fb: FormBuilder, private moService: MarketingOrderService) {
     this.formHeaderMo = this.fb.group({
       date: [null, []],
-      type: ["FED", []],
+      type: ['FED', []],
       revision: [null, []],
       month_0: [null, []],
       month_1: [null, []],
@@ -66,6 +66,10 @@ export class DetailViewMoPpcComponent implements OnInit {
       fdr_tl_m0: [null, []],
       fdr_tt_m0: [null, []],
       total_mo_m0: [null, []],
+      fed_TL_percentage_m0: [null, []],
+      fdr_TL_percentage_m0: [null, []],
+      fed_TT_percentage_m0: [null, []],
+      fdr_TT_percentage_m0: [null, []],
       note_tl_m0: [null, []],
       looping_m1: [null, []],
       machine_airbag_m1: [null, []],
@@ -88,8 +92,6 @@ export class DetailViewMoPpcComponent implements OnInit {
   ngOnInit(): void {
     this.idMo = this.activeRoute.snapshot.paramMap.get('idMo');
     this.getAllData(this.idMo);
-
-
   }
 
   getAllData(idMo: String) {
@@ -196,7 +198,6 @@ export class DetailViewMoPpcComponent implements OnInit {
   }
 
   getMonthName(monthValue: Date): string {
-    // Parameter monthValue adalah objek Date
     if (monthValue) {
       return monthValue.toLocaleString('default', { month: 'short' }).toUpperCase();
     }

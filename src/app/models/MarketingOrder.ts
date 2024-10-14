@@ -1,5 +1,5 @@
 export class MarketingOrder {
-  date: Date;
+  date_VALID: Date;
   type: string;
   revision: number;
   month_0: Date;
