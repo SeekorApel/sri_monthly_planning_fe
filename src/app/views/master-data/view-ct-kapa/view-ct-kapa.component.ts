@@ -43,7 +43,7 @@ export class ViewCtKapaComponent implements OnInit {
   activateData(ctkapa: CtKapa): void {
     Swal.fire({
       title: 'Are you sure?',
-      text: 'This data plant will be Activated!',
+      text: 'This data CT Kapa will be Activated!',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -54,12 +54,12 @@ export class ViewCtKapaComponent implements OnInit {
       if (result.isConfirmed) {
         this.ctkapaService.activateCtKapa(ctkapa).subscribe(
           (response) => {
-            Swal.fire('Activated!', 'Data CTKAPA has been Activated', 'success').then(() => {
+            Swal.fire('Activated!', 'Data CT KAPA has been Activated', 'success').then(() => {
               window.location.reload();
             });
           },
           (err) => {
-            Swal.fire('Error!', 'Failed to Activated the CTKAPA.', 'error');
+            Swal.fire('Error!', 'Failed to Activated the CT KAPA.', 'error');
           }
         );
       }
@@ -151,7 +151,7 @@ export class ViewCtKapaComponent implements OnInit {
         this.editCtKapaObject = response.data;
       },
       (error) => {
-        this.errorMessage = 'Failed to load CTKAPA: ' + error.message;
+        this.errorMessage = 'Failed to load CT KAPA: ' + error.message;
       }
     );
   }
@@ -175,7 +175,7 @@ export class ViewCtKapaComponent implements OnInit {
             });
           },
           (err) => {
-            Swal.fire('Error!', 'Failed to delete the pattern.', 'error');
+            Swal.fire('Error!', 'Failed to delete the CT Kapa.', 'error');
           }
         );
       }

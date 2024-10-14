@@ -48,7 +48,7 @@ export class ViewMachineTassTypeComponent implements OnInit {
         this.onChangePage(this.mtt.slice(0, this.pageSize));
       },
       (error) => {
-        this.errorMessage = 'Failed to load plants: ' + error.message;
+        this.errorMessage = 'Failed to load machine tass types: ' + error.message;
       }
     );
   }
@@ -137,7 +137,7 @@ export class ViewMachineTassTypeComponent implements OnInit {
   deleteData(machinetasstype: MachineTassType): void {
     Swal.fire({
       title: 'Are you sure?',
-      text: 'This data plant will be deleted!',
+      text: 'This data machine tass type will be deleted!',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',

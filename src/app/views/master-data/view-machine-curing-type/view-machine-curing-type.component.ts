@@ -103,7 +103,7 @@ export class ViewMachineCuringTypeComponent implements OnInit {
         this.edtMCTObject = response.data;
       },
       (error) => {
-        this.errorMessage = 'Failed to load plants: ' + error.message;
+        this.errorMessage = 'Failed to load machine curing types: ' + error.message;
       }
     );
   }
@@ -111,7 +111,7 @@ export class ViewMachineCuringTypeComponent implements OnInit {
   deleteData(Mct: MachineCuringType): void {
     Swal.fire({
       title: 'Are you sure?',
-      text: 'This data plant will be deleted!',
+      text: 'This data machine curing type will be deleted!',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',

@@ -176,7 +176,7 @@ export class ViewProductComponent implements OnInit {
             });
           },
           (err) => {
-            Swal.fire('Error!', 'Failed to delete the Machine Tass Type.', 'error');
+            Swal.fire('Error!', 'Failed to delete the product.', 'error');
           }
         );
       }

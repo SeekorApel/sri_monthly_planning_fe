@@ -69,7 +69,7 @@ export class ViewDDeliveryScheduleComponent implements OnInit {
   activateData(dDeliverySchedule: DDeliverySchedule): void {
     Swal.fire({
       title: 'Are you sure?',
-      text: 'This data Machine Curing Type will be Activated!',
+      text: 'This data Detail delivery schedule will be Activated!',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -80,12 +80,12 @@ export class ViewDDeliveryScheduleComponent implements OnInit {
       if (result.isConfirmed) {
         this.ddeliveryschedule.activateDdeliverySchedule(dDeliverySchedule).subscribe(
           (response) => {
-            Swal.fire('Activated!', 'Data Machine Curing Type has been Activated', 'success').then(() => {
+            Swal.fire('Activated!', 'Data Detail delivery schedule has been Activated', 'success').then(() => {
               window.location.reload();
             });
           },
           (err) => {
-            Swal.fire('Error!', 'Failed to Activated the Machine Curing Type.', 'error');
+            Swal.fire('Error!', 'Failed to Activated the detail delivery schedule.', 'error');
           }
         );
       }
