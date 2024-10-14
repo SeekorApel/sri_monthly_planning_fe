@@ -65,15 +65,15 @@ export class ViewMaxCapacityComponent implements OnInit {
     // Lakukan filter berdasarkan nama plant yang mengandung text pencarian (case-insensitive)
     const filteredMaxCapacity = this.maxCapacitys.filter(
       (maxCapacity) =>
-        maxCapacity.max_Cap_ID
+        maxCapacity.max_CAP_ID
           .toString()
           .includes(this.searchText.toLowerCase()) ||
           maxCapacity.product_ID.toString().includes(this.searchText)||
-          maxCapacity.machine_curing_type_ID.toLowerCase().toString().includes(this.searchText) ||
+          maxCapacity.machinecuringtype_ID.toLowerCase().toString().includes(this.searchText) ||
           maxCapacity.cycle_TIME.toString().includes(this.searchText) ||
-          maxCapacity.capacity_Shift_1.toString().includes(this.searchText) ||
-          maxCapacity.capacity_Shift_2.toString().includes(this.searchText) ||
-          maxCapacity.capacity_Shift_3.toString().includes(this.searchText)
+          maxCapacity.capacity_SHIFT_1.toString().includes(this.searchText) ||
+          maxCapacity.capacity_SHIFT_2.toString().includes(this.searchText) ||
+          maxCapacity.capacity_SHIFT_3.toString().includes(this.searchText)
     );
 
     // Tampilkan hasil filter pada halaman pertama

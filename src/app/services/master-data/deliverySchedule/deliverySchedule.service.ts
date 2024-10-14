@@ -1,50 +1,86 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { IDeliverySchedule } from 'src/app/response/deliverySchedule';
-import { ApiResponse } from 'src/app/response/ApiResponse';
-import { tap } from 'rxjs/operators'; 
+import { DeliverySchedule } from 'src/app/models/DeliverySchedule';
+import { ApiResponse } from 'src/app/response/Response';
 import { throwError } from 'rxjs';
+import { environment } from 'src/environments/environment';
+import { map, catchError } from 'rxjs/operators';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class DeliveryScheduleService {
-  private baseUrl = 'http://localhost:8080';
-  private apiUrl = 'http://localhost:8080'; 
-
-
   constructor(private http: HttpClient) {}
 
-  getAllDeliverySchedule(): Observable<ApiResponse<IDeliverySchedule[]>> {
-    return this.http.get<ApiResponse<IDeliverySchedule[]>>(`${this.baseUrl}/getAllDeliverySchedule`);
+  // Method untuk menambahkan header Authorization dengan token
+  private getHeaders() {
+    return new HttpHeaders({
+      Authorization: `Bearer ${environment.token}`,
+    });
   }
-   
 
-signIn(userName: string, password: string): Observable<{ data: string }> {
-    return this.http.post<{ data: string }>(`${this.baseUrl}/signin`, {
-      userName,
-      password
-    }).pipe(
-      tap(response => {
-        // Store the token from the 'data' field in localStorage
-        localStorage.setItem('token', response.data);
+  getDeliveryScheduleById(iddDeliverySchedule: number): Observable<ApiResponse<DeliverySchedule>> {
+    return this.http.get<ApiResponse<DeliverySchedule>>(environment.apiUrlWebAdmin + '/getDeliveryScheduleById/' + iddDeliverySchedule, { headers: this.getHeaders() });
+  }
+
+  getAllDeliverySchedule(): Observable<ApiResponse<DeliverySchedule[]>> {
+    return this.http.get<ApiResponse<DeliverySchedule[]>>(environment.apiUrlWebAdmin + '/getAllDeliverySchedules', { headers: this.getHeaders() });
+  }
+
+  
+  updateDeliverySchedule(deliverySchedule: DeliverySchedule): Observable<ApiResponse<DeliverySchedule>> {
+    return this.http
+      .post<ApiResponse<DeliverySchedule>>(
+        environment.apiUrlWebAdmin + '/updateDeliverySchedule',
+        deliverySchedule,
+        { headers: this.getHeaders() } // Menyertakan header
+      )
+      .pipe(
+        map((response) => {
+          return response;
+        }),
+        catchError((err) => {
+          return throwError(err);
+        })
+      );
+  }
+
+  deleteDeliverySchedule(curingsize: DeliverySchedule): Observable<ApiResponse<DeliverySchedule>> {
+    return this.http.post<ApiResponse<DeliverySchedule>>(environment.apiUrlWebAdmin + '/deleteDeliverySchedule', curingsize, { headers: this.getHeaders() }).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((err) => {
+        return throwError(err);
       })
     );
   }
-  
-  savePlantsExcelFile(formData: FormData): Observable<any> {
-    const token = localStorage.getItem('token'); // Retrieve the token
-    if (!token) {
-      console.error('Token is not available');
-      // Return an observable that emits an error
-      return throwError('Token is not available'); // Make sure to import throwError from 'rxjs'
-    }
-  
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`
-    });
-  
-    return this.http.post(`${this.baseUrl}/savePlantsExcel`, formData, { headers });
+
+  activateDeliverySchedule(curingsize: DeliverySchedule): Observable<ApiResponse<DeliverySchedule>> {
+    return this.http.post<ApiResponse<DeliverySchedule>>(environment.apiUrlWebAdmin + '/restoreDeliverySchedule', curingsize, { headers: this.getHeaders() }).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((err) => {
+        return throwError(err);
+      })
+    );
   }
+
+  uploadFileExcel(file: FormData): Observable<ApiResponse<DeliverySchedule>> {
+    return this.http.post<ApiResponse<DeliverySchedule>>(environment.apiUrlWebAdmin + '/saveDeliverySchedulesExcel', file, { headers: this.getHeaders() }).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((err) => {
+        return throwError(err);
+      })
+    );
+  }
+
+  exportDeliveryScheduleExcel(): Observable<Blob> {
+    return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/exportDeliveryScheduleExcel`, { responseType: 'blob' as 'json' });
+  }
+
 }

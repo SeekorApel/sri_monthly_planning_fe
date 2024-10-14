@@ -35,25 +35,25 @@
               <th>Shift 1 Friday</th>
               <th>Total Shift 123</th>
               <th>Status</th>
-              <th>Action</th>
+              <th style="min-width: 200px;">Action</th>
             </tr>
           </thead>
           <tbody>
             <tr align="center" *ngFor="let machienAllowence of pageOfItems; let i = index">
               <td>{{ i + 1 }}</td>
-              <td>{{ machienAllowence.machine_allow_ID }}</td>
-              <td>{{ machienAllowence.ID_machine }}</td>
-              <td>{{ machienAllowence.person_Responsible }}</td>
+              <td>{{ machienAllowence.machine_ALLOW_ID }}</td>
+              <td>{{ machienAllowence.id_MACHINE }}</td>
+              <td>{{ machienAllowence.person_RESPONSIBLE }}</td>
               <td>{{ machienAllowence.shift_1 }}</td>
               <td>{{ machienAllowence.shift_2 }}</td>
               <td>{{ machienAllowence.shift_3 }}</td>
-              <td>{{ machienAllowence.shift_1_friday }}</td>
-              <td>{{ machienAllowence.total_shift_123 }}</td>
+              <td>{{ machienAllowence.shift_1_FRIDAY }}</td>
+              <td>{{ machienAllowence.total_SHIFT_123 }}</td>
               <td [ngClass]="{ 'bg-success': machienAllowence.status === 1, 'bg-danger': machienAllowence.status !== 1 }">
                 {{ machienAllowence.status === 1 ? 'Active' : 'Deactive' }}
               </td>
               <td>
-                <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(machienAllowence.machine_allow_ID)">Update</button>
+                <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(machienAllowence.machine_ALLOW_ID)">Update</button>
                 <button type="button" class="btn btn-md ml-2" [ngClass]="{ 'btn-danger': machienAllowence.status === 1, 'btn-success': machienAllowence.status !== 1 }" (click)="machienAllowence.status === 1 ? deleteData(machienAllowence) : activateData(machienAllowence)">
                   {{ machienAllowence.status === 1 ? 'Delete' : 'Active' }}
                 </button>
@@ -87,13 +87,13 @@
         <form [formGroup]="editMachineAllowenceForm">
           <div class="form-group">
             <label for="idMachine">ID Machine</label>
-            <input [(ngModel)]="edtMachineAllowenceObject.ID_machine" type="text" class="form-control" id="idMachine" formControlName="idMachine" [ngClass]="{ 'is-invalid': editMachineAllowenceForm.get('idMachine').invalid && editMachineAllowenceForm.get('idMachine').touched }" />
+            <input [(ngModel)]="edtMachineAllowenceObject.id_MACHINE" type="text" class="form-control" id="idMachine" formControlName="idMachine" [ngClass]="{ 'is-invalid': editMachineAllowenceForm.get('idMachine').invalid && editMachineAllowenceForm.get('idMachine').touched }" />
             <!-- Error message if plantName is empty -->
             <div *ngIf="editMachineAllowenceForm.get('idMachine').invalid && editMachineAllowenceForm.get('idMachine').touched" class="invalid-feedback">ID Machine is required.</div>
           </div>
           <div class="form-group">
             <label for="personResponsible">Person Responsible</label>
-            <input [(ngModel)]="edtMachineAllowenceObject.person_Responsible" type="text" class="form-control" id="idMachine" formControlName="personResponsible" [ngClass]="{ 'is-invalid': editMachineAllowenceForm.get('personResponsible').invalid && editMachineAllowenceForm.get('personResponsible').touched }" />
+            <input [(ngModel)]="edtMachineAllowenceObject.person_RESPONSIBLE" type="text" class="form-control" id="idMachine" formControlName="personResponsible" [ngClass]="{ 'is-invalid': editMachineAllowenceForm.get('personResponsible').invalid && editMachineAllowenceForm.get('personResponsible').touched }" />
             <!-- Error message if plantName is empty -->
             <div *ngIf="editMachineAllowenceForm.get('personResponsible').invalid && editMachineAllowenceForm.get('personResponsible').touched" class="invalid-feedback">Person Responsible is required.</div>
           </div>
@@ -117,13 +117,13 @@
           </div>
           <div class="form-group">
             <label for="shift1Friday">Shift 1 Friday</label>
-            <input [(ngModel)]="edtMachineAllowenceObject.shift_1_friday" type="text" class="form-control" id="shift1Friday" formControlName="shift1Friday" [ngClass]="{ 'is-invalid': editMachineAllowenceForm.get('shift1Friday').invalid && editMachineAllowenceForm.get('shift1Friday').touched }" />
+            <input [(ngModel)]="edtMachineAllowenceObject.shift_1_FRIDAY" type="text" class="form-control" id="shift1Friday" formControlName="shift1Friday" [ngClass]="{ 'is-invalid': editMachineAllowenceForm.get('shift1Friday').invalid && editMachineAllowenceForm.get('shift1Friday').touched }" />
             <!-- Error message if plantName is empty -->
             <div *ngIf="editMachineAllowenceForm.get('shift1Friday').invalid && editMachineAllowenceForm.get('shift1Friday').touched" class="invalid-feedback">Shift 1 friday  is required.</div>
           </div>
           <div class="form-group">
             <label for="totalShift123">Total Shift 123</label>
-            <input [(ngModel)]="edtMachineAllowenceObject.total_shift_123" type="text" class="form-control" id="totalShift123" formControlName="totalShift123" [ngClass]="{ 'is-invalid': editMachineAllowenceForm.get('totalShift123').invalid && editMachineAllowenceForm.get('totalShift123').touched }" />
+            <input [(ngModel)]="edtMachineAllowenceObject.total_SHIFT_123" type="text" class="form-control" id="totalShift123" formControlName="totalShift123" [ngClass]="{ 'is-invalid': editMachineAllowenceForm.get('totalShift123').invalid && editMachineAllowenceForm.get('totalShift123').touched }" />
             <!-- Error message if plantName is empty -->
             <div *ngIf="editMachineAllowenceForm.get('totalShift123').invalid && editMachineAllowenceForm.get('totalShift123').touched" class="invalid-feedback">Total Shift 123 is required.</div>
           </div>

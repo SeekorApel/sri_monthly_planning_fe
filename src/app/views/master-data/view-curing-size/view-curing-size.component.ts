@@ -1,58 +1,53 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { machineAllowence } from 'src/app/models/machineAllowance';
+import { Curing_Size } from 'src/app/models/curingSize';
 import { ApiResponse } from 'src/app/response/Response';
-import { MachineAllowenceService } from 'src/app/services/master-data/machine-allowance/machine-allowance.service';
+import { CuringSizeService } from 'src/app/services/master-data/curing-size/curing-size.service';
 import Swal from 'sweetalert2';
 declare var $: any;
 import * as XLSX from 'xlsx';
-import {saveAs} from 'file-saver';
+import { saveAs } from 'file-saver';
 
 @Component({
-  selector: 'app-view-machine-allowence',
-  templateUrl: './view-machine-allowence.component.html',
-  styleUrls: ['./view-machine-allowance.component.scss'],
+  selector: 'app-view-curing-size',
+  templateUrl: './view-curing-size.component.html',
+  styleUrls: ['./view-curing-size.component.scss'],
 })
-export class ViewMachineAllowenceComponent implements OnInit {
-
+export class ViewCuringSizeComponent implements OnInit {
   //Variable Declaration
-  machineAllowences: machineAllowence[] = [];
+  curingSizes: Curing_Size[] = [];
   searchText: string = '';
   errorMessage: string | null = null;
-  edtMachineAllowenceObject: machineAllowence = new machineAllowence();
+  edtCuringSizeObject: Curing_Size = new Curing_Size();
   isEditMode: boolean = false;
   file: File | null = null;
-  editMachineAllowenceForm: FormGroup;
+  editCuringSizeForm: FormGroup;
 
   // Pagination
   pageOfItems: Array<any>;
   pageSize: number = 5;
   totalPages: number = 5;
 
-  constructor(private machineAllowenceService: MachineAllowenceService, private fb: FormBuilder) { 
-    this.editMachineAllowenceForm = this.fb.group({
-      idMachine: ['', Validators.required],
-      personResponsible: ['', Validators.required],
-      shift1: ['', Validators.required],
-      shift2: ['', Validators.required],
-      shift3: ['', Validators.required],
-      shift1Friday: ['', Validators.required],
-      totalShift123: ['', Validators.required]
+  constructor(private curingSizeService: CuringSizeService, private fb: FormBuilder) {
+    this.editCuringSizeForm = this.fb.group({
+      machineCuringSizeID: ['', Validators.required],
+      sizeID: ['', Validators.required],
+      capacity: ['', Validators.required]
     });
   }
 
   ngOnInit(): void {
-    this.getAllMachineAllowence();
+    this.getAllCuringSize();
   }
 
-  getAllMachineAllowence(): void {
-    this.machineAllowenceService.getAllMachineAllowence().subscribe(
-      (response: ApiResponse<machineAllowence[]>) => {
-        this.machineAllowences = response.data;
-        this.onChangePage(this.machineAllowences.slice(0, this.pageSize));
+  getAllCuringSize(): void {
+    this.curingSizeService.getAllCuringSize().subscribe(
+      (response: ApiResponse<Curing_Size[]>) => {
+        this.curingSizes = response.data;
+        this.onChangePage(this.curingSizes.slice(0, this.pageSize));
       },
       (error) => {
-        this.errorMessage = 'Failed to load machine allowences: ' + error.message;
+        this.errorMessage = 'Failed to load curing sizes: ' + error.message;
       }
     );
   }
@@ -63,31 +58,28 @@ export class ViewMachineAllowenceComponent implements OnInit {
 
   onSearchChange(): void {
     // Lakukan filter berdasarkan nama plant yang mengandung text pencarian (case-insensitive)
-    const filteredMachineAllowences = this.machineAllowences.filter(
-      (machineAllowance) =>
-        machineAllowance.id_MACHINE
-          .toLowerCase()
-          .includes(this.searchText.toLowerCase()) ||
-          machineAllowance.machine_ALLOW_ID.toString().includes(this.searchText)
+    const filteredCuringSizes = this.curingSizes.filter((curingSizes) => 
+      curingSizes.size_ID.toLowerCase().includes(this.searchText.toLowerCase()) ||
+      curingSizes.machinecuringtype_ID.toString().includes(this.searchText) ||
+      curingSizes.capacity.toString().includes(this.searchText) 
     );
 
     // Tampilkan hasil filter pada halaman pertama
-    this.onChangePage(filteredMachineAllowences.slice(0, this.pageSize));
+    this.onChangePage(filteredCuringSizes.slice(0, this.pageSize));
   }
 
   resetSearch(): void {
     this.searchText = '';
-    this.onChangePage(this.machineAllowences.slice(0, this.pageSize));
+    this.onChangePage(this.curingSizes.slice(0, this.pageSize));
   }
 
-  updateMachineAllowence(): void {
-    
-    this.machineAllowenceService.updateMachineAllowence(this.edtMachineAllowenceObject).subscribe(
+  updateCuringSize(): void {
+    this.curingSizeService.updateCuringSize(this.edtCuringSizeObject).subscribe(
       (response) => {
         // SweetAlert setelah update berhasil
         Swal.fire({
           title: 'Success!',
-          text: 'Data machineAllowence successfully updated.',
+          text: 'Data curing size successfully updated.',
           icon: 'success',
           confirmButtonText: 'OK',
         }).then((result) => {
@@ -103,27 +95,27 @@ export class ViewMachineAllowenceComponent implements OnInit {
     );
   }
 
-  openModalEdit(idMachineAllowence: number): void {
+  openModalEdit(idCuringSize: number): void {
     this.isEditMode = true;
-    this.getMachineAllowenceById(idMachineAllowence);
+    this.getCuringSizeById(idCuringSize);
     $('#editModal').modal('show');
   }
 
-  getMachineAllowenceById(idMachineAllowence: number): void {
-    this.machineAllowenceService.getMachineAllowenceById(idMachineAllowence).subscribe(
-      (response: ApiResponse<machineAllowence>) => {
-        this.edtMachineAllowenceObject = response.data;
+  getCuringSizeById(idCuringSize: number): void {
+    this.curingSizeService.getCuringSizeById(idCuringSize).subscribe(
+      (response: ApiResponse<Curing_Size>) => {
+        this.edtCuringSizeObject = response.data;
       },
       (error) => {
-        this.errorMessage = 'Failed to load machine Allowences: ' + error.message;
+        this.errorMessage = 'Failed to load curing size: ' + error.message;
       }
     );
   }
 
-  deleteData(machineAllowence: machineAllowence): void {
+  deleteData(curingSize: Curing_Size): void {
     Swal.fire({
       title: 'Are you sure?',
-      text: 'This data machine allowence will be deleted!',
+      text: 'This data curing size will be deleted!',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -132,24 +124,24 @@ export class ViewMachineAllowenceComponent implements OnInit {
       cancelButtonText: 'No',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.machineAllowenceService.deleteMachineAllowence(machineAllowence).subscribe(
+        this.curingSizeService.deleteCuringSize(curingSize).subscribe(
           (response) => {
-            Swal.fire('Deleted!', 'Data machine allowence has been deleted', 'success').then(() => {
+            Swal.fire('Deleted!', 'Data curing size has been deleted', 'success').then(() => {
               window.location.reload();
             });
           },
           (err) => {
-            Swal.fire('Error!', 'Failed to delete the machine allowence.', 'error');
+            Swal.fire('Error!', 'Failed to delete the curing size.', 'error');
           }
         );
       }
     });
   }
 
-  activateData(machineAllowense: machineAllowence): void {
+  activateData(curingSize: Curing_Size): void {
     Swal.fire({
       title: 'Are you sure?',
-      text: 'This data machine allowence will be Activated!',
+      text: 'This data curing size will be Activated!',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -158,31 +150,30 @@ export class ViewMachineAllowenceComponent implements OnInit {
       cancelButtonText: 'No',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.machineAllowenceService.activateMachineAllowence(machineAllowense).subscribe(
+        this.curingSizeService.activateCuringSize(curingSize).subscribe(
           (response) => {
-            Swal.fire('Activated!', 'Data machine allowence has been Activated', 'success').then(() => {
+            Swal.fire('Activated!', 'Data curing size has been Activated', 'success').then(() => {
               window.location.reload();
             });
           },
           (err) => {
-            Swal.fire('Error!', 'Failed to Activated the machine allowence.', 'error');
+            Swal.fire('Error!', 'Failed to Activated the curing size.', 'error');
           }
         );
       }
     });
   }
-  
+
   openModalUpload(): void {
     $('#uploadModal').modal('show');
   }
 
   downloadTemplate() {
     const link = document.createElement('a');
-    link.href = 'assets/Template Excel/Layout_Machine_Allowence.xlsx';
-    link.download = 'Layout_Machine_Allowance.xlsx';
+    link.href = 'assets/Template Excel/Layout_Curing_Size.xlsx';
+    link.download = 'Layout_Curing_Size.xlsx';
     link.click();
   }
-
 
   onFileChange(event: Event) {
     const input = event.target as HTMLInputElement;
@@ -207,13 +198,12 @@ export class ViewMachineAllowenceComponent implements OnInit {
     }
   }
 
-
   uploadFileExcel() {
     if (this.file) {
       const formData = new FormData();
       formData.append('file', this.file);
       // unggah file Excel
-      this.machineAllowenceService.uploadFileExcel(formData).subscribe(
+      this.curingSizeService.uploadFileExcel(formData).subscribe(
         (response) => {
           Swal.fire({
             icon: 'success',
@@ -246,10 +236,10 @@ export class ViewMachineAllowenceComponent implements OnInit {
   }
 
   downloadExcel(): void {
-    this.machineAllowenceService.exportMachineAllowenceExcel().subscribe({
+    this.curingSizeService.exportCuringSizeExcel().subscribe({
       next: (response) => {
         // Menggunakan nama file yang sudah ditentukan di backend
-        const filename = 'MACHINE_ALLOWENCE_DATA.xlsx'; // Nama file bisa dinamis jika diperlukan
+        const filename = 'CURING_SIZE_DATA.xlsx'; // Nama file bisa dinamis jika diperlukan
         saveAs(response, filename); // Mengunduh file
       },
       error: (err) => {
@@ -263,4 +253,20 @@ export class ViewMachineAllowenceComponent implements OnInit {
     const data: Blob = new Blob([buffer], { type: EXCEL_TYPE });
     saveAs(data, `${fileName}_export_${new Date().getTime()}.xlsx`);
   }
+
+  // downloadExcel(): void {
+  //   this.plantService.downloadPlantsExcel().subscribe(
+  //     (response: Blob) => {
+  //       const blobUrl = window.URL.createObjectURL(response);
+  //       const a = document.createElement('a');
+  //       a.href = blobUrl;
+  //       a.download = 'MASTER_PLANT.xlsx';
+  //       a.click();
+  //       window.URL.revokeObjectURL(blobUrl);
+  //     },
+  //     (error) => {
+  //       this.errorMessage = 'Failed to download Excel: ' + error.message;
+  //     }
+  //   );
+  // }
 }

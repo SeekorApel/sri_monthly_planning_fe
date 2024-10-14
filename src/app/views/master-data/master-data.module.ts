@@ -32,6 +32,7 @@ import { ViewMachineExtrudingComponent } from './view-machine-extruding/view-mac
 import { ViewDDeliveryScheduleComponent } from './view-d-deliveryschedule/view-d-deliveryschedule.component';
 import { ViewMachineAllowenceComponent } from './view-machine-allowence/view-machine-allowence.component';
 import { ViewItemAssyComponent } from './view-item-assy/view-item-assy.component';
+import { ViewCuringSizeComponent } from './view-curing-size/view-curing-size.component';
 
 
 @NgModule({
@@ -60,7 +61,8 @@ import { ViewItemAssyComponent } from './view-item-assy/view-item-assy.component
     ViewMachineExtrudingComponent,
     ViewDDeliveryScheduleComponent,
     ViewMachineAllowenceComponent,
-    ViewItemAssyComponent
+    ViewItemAssyComponent,
+    ViewCuringSizeComponent
   ],
   imports: [
     CommonModule,

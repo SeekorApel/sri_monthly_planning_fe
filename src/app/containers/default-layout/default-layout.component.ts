@@ -54,7 +54,8 @@ export class DefaultLayoutComponent {
       { name: 'Machine Allowence', url: '/master-data/view-machine-allowence', icon: 'cil-minus' },
       { name: 'Item Assy', url: '/master-data/view-item-assy', icon: 'cil-minus' },
       { name: 'Machine Extruding', url: '/master-data/view-machine-extruding', icon: 'cil-minus' },
-      { name: 'CT Kapa', url: '/master-data/view-ct-kapa', icon: 'cil-minus' }
+      { name: 'CT Kapa', url: '/master-data/view-ct-kapa', icon: 'cil-minus' },
+      { name: 'Curing Size', url: '/master-data/view-curing-size', icon: 'cil-minus' }
     ];
 
     this.csTrx = [

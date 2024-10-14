@@ -19,6 +19,7 @@ import { ViewItemCuringComponent } from './view-item-curing/view-item-curing.com
 import { ViewTassSizeComponent } from './view-tass-size/view-tass-size.component';
 import { ViewCtCuringComponent } from './view-ct-curing/view-ct-curing.component';
 import { ViewMachineAllowenceComponent } from './view-machine-allowence/view-machine-allowence.component';
+import { ViewCuringSizeComponent } from './view-curing-size/view-curing-size.component';
 
 
 const routes: Routes = [
@@ -170,6 +171,13 @@ const routes: Routes = [
         component: ViewMachineAllowenceComponent,
         data: {
           title: 'Master View Machine Allowence'
+        }
+      },
+      {
+        path: 'master-data/view-curing-size',
+        component: ViewCuringSizeComponent,
+        data: {
+          title: 'Master View Curing Size'
         }
       },
     ],

@@ -58,7 +58,7 @@ export class RoutingService {
   }
 
   activateCTAssy(routingMachine: RoutingMachine): Observable<ApiResponse<RoutingMachine>> {
-    return this.http.post<ApiResponse<RoutingMachine>>(environment.apiUrlWebAdmin + '/activateCTAssy', routingMachine, { headers: this.getHeaders() }).pipe(
+    return this.http.post<ApiResponse<RoutingMachine>>(environment.apiUrlWebAdmin + '/restoreCTAssy', routingMachine, { headers: this.getHeaders() }).pipe(
       map((response) => {
         return response;
       }),
