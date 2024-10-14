@@ -30,7 +30,7 @@ export class DetailViewMoPpcComponent implements OnInit {
   constructor(private router: Router, private activeRoute: ActivatedRoute, private fb: FormBuilder, private moService: MarketingOrderService) {
     this.formHeaderMo = this.fb.group({
       date: [null, []],
-      type: ['FED', []],
+      type: [null, []],
       revision: [null, []],
       month_0: [null, []],
       month_1: [null, []],
@@ -75,13 +75,25 @@ export class DetailViewMoPpcComponent implements OnInit {
       machine_airbag_m1: [null, []],
       fed_tl_m1: [null, []],
       fed_tt_m1: [null, []],
+      fdr_tl_m1: [null, []],
+      fdr_tt_m1: [null, []],
       total_mo_m1: [null, []],
+      fed_TL_percentage_m1: [null, []],
+      fdr_TL_percentage_m1: [null, []],
+      fed_TT_percentage_m1: [null, []],
+      fdr_TT_percentage_m1: [null, []],
       note_tl_m1: [null, []],
       looping_m2: [null, []],
       machine_airbag_m2: [null, []],
       fed_tl_m2: [null, []],
       fed_tt_m2: [null, []],
+      fdr_tl_m2: [null, []],
+      fdr_tt_m2: [null, []],
       total_mo_m2: [null, []],
+      fed_TL_percentage_m2: [null, []],
+      fdr_TL_percentage_m2: [null, []],
+      fed_TT_percentage_m2: [null, []],
+      fdr_TT_percentage_m2: [null, []],
       note_tl_m2: [null, []],
       upload_file_m0: [null, []],
       upload_file_m1: [null, []],
@@ -119,15 +131,13 @@ export class DetailViewMoPpcComponent implements OnInit {
     this.router.navigate(['/transaksi/edit-mo-ppc', this.idMo]);
   }
 
-  showData() {
-    console.log('Hasil Pencet', this.allData);
-  }
-
   fillAllData(data: any) {
     this.headerMarketingOrder = data.dataHeaderMo;
     this.detailMarketingOrder = data.dataDetailMo;
+    let typeProduct = data.type;
 
     this.formHeaderMo.patchValue({
+      date: new Date(data.datevalid).toISOString().split('T')[0],
       type: data.type,
       revision: data.revision,
 
@@ -143,8 +153,14 @@ export class DetailViewMoPpcComponent implements OnInit {
       max_capa_tt_0: this.headerMarketingOrder[1].max_CAP_TT,
       looping_m0: this.headerMarketingOrder[1].looping,
       machine_airbag_m0: this.headerMarketingOrder[1].airbag_MACHINE,
-      fed_tl_m0: this.headerMarketingOrder[1].fed_TL,
-      fed_tt_m0: this.headerMarketingOrder[1].fed_TT,
+      fed_tl_m0: typeProduct === 'FED' ? this.headerMarketingOrder[1].tl : null,
+      fed_tt_m0: typeProduct === 'FED' ? this.headerMarketingOrder[1].tt : null,
+      fdr_tl_m0: typeProduct === 'FDR' ? this.headerMarketingOrder[1].tl : null,
+      fdr_tt_m0: typeProduct === 'FDR' ? this.headerMarketingOrder[1].tt : null,
+      fed_TL_percentage_m0: typeProduct === 'FED' ? this.headerMarketingOrder[1].tl_PERCENTAGE : null,
+      fed_TT_percentage_m0: typeProduct === 'FED' ? this.headerMarketingOrder[1].tt_PERCENTAGE : null,
+      fdr_TL_percentage_m0: typeProduct === 'FDR' ? this.headerMarketingOrder[1].tl_PERCENTAGE : null,
+      fdr_TT_percentage_m0: typeProduct === 'FDR' ? this.headerMarketingOrder[1].tt_PERCENTAGE : null,
       total_mo_m0: this.headerMarketingOrder[1].total_MO,
       note_tl_m0: this.headerMarketingOrder[1].note_ORDER_TL,
       // Header Month 2
@@ -159,8 +175,14 @@ export class DetailViewMoPpcComponent implements OnInit {
       max_capa_tt_1: this.headerMarketingOrder[2].max_CAP_TT,
       looping_m1: this.headerMarketingOrder[2].looping,
       machine_airbag_m1: this.headerMarketingOrder[2].airbag_MACHINE,
-      fed_tl_m1: this.headerMarketingOrder[2].fed_TL,
-      fed_tt_m1: this.headerMarketingOrder[2].fed_TT,
+      fed_tl_m1: typeProduct === 'FED' ? this.headerMarketingOrder[2].tl : null,
+      fed_tt_m1: typeProduct === 'FED' ? this.headerMarketingOrder[2].tt : null,
+      fdr_tl_m1: typeProduct === 'FDR' ? this.headerMarketingOrder[2].tl : null,
+      fdr_tt_m1: typeProduct === 'FDR' ? this.headerMarketingOrder[2].tt : null,
+      fed_TL_percentage_m1: typeProduct === 'FED' ? this.headerMarketingOrder[2].tl_PERCENTAGE : null,
+      fed_TT_percentage_m1: typeProduct === 'FED' ? this.headerMarketingOrder[2].tt_PERCENTAGE : null,
+      fdr_TL_percentage_m1: typeProduct === 'FDR' ? this.headerMarketingOrder[2].tl_PERCENTAGE : null,
+      fdr_TT_percentage_m1: typeProduct === 'FDR' ? this.headerMarketingOrder[2].tt_PERCENTAGE : null,
       total_mo_m1: this.headerMarketingOrder[2].total_MO,
       note_tl_m1: this.headerMarketingOrder[2].note_ORDER_TL,
       // Header Month 3
@@ -175,8 +197,14 @@ export class DetailViewMoPpcComponent implements OnInit {
       max_capa_tt_2: this.headerMarketingOrder[0].max_CAP_TT,
       looping_m2: this.headerMarketingOrder[0].looping,
       machine_airbag_m2: this.headerMarketingOrder[0].airbag_MACHINE,
-      fed_tl_m2: this.headerMarketingOrder[0].fed_TL,
-      fed_tt_m2: this.headerMarketingOrder[0].fed_TT,
+      fed_tl_m2: typeProduct === 'FED' ? this.headerMarketingOrder[2].tl : null,
+      fed_tt_m2: typeProduct === 'FED' ? this.headerMarketingOrder[2].tt : null,
+      fdr_tl_m2: typeProduct === 'FDR' ? this.headerMarketingOrder[2].tl : null,
+      fdr_tt_m2: typeProduct === 'FDR' ? this.headerMarketingOrder[2].tt : null,
+      fed_TL_percentage_m2: typeProduct === 'FED' ? this.headerMarketingOrder[2].tl_PERCENTAGE : null,
+      fed_TT_percentage_m2: typeProduct === 'FED' ? this.headerMarketingOrder[2].tt_PERCENTAGE : null,
+      fdr_TL_percentage_m2: typeProduct === 'FDR' ? this.headerMarketingOrder[2].tl_PERCENTAGE : null,
+      fdr_TT_percentage_m2: typeProduct === 'FDR' ? this.headerMarketingOrder[2].tt_PERCENTAGE : null,
       total_mo_m2: this.headerMarketingOrder[0].total_MO,
       note_tl_m2: this.headerMarketingOrder[0].note_ORDER_TL,
     });
@@ -192,9 +220,9 @@ export class DetailViewMoPpcComponent implements OnInit {
   }
 
   updateMonthNames(hm: HeaderMarketingOrder[]): void {
-    this.monthNames[0] = this.getMonthName(this.headerMarketingOrder[0].month);
-    this.monthNames[1] = this.getMonthName(this.headerMarketingOrder[1].month);
-    this.monthNames[2] = this.getMonthName(this.headerMarketingOrder[2].month);
+    this.monthNames[0] = this.getMonthName(new Date(this.headerMarketingOrder[1].month));
+    this.monthNames[1] = this.getMonthName(new Date(this.headerMarketingOrder[2].month));
+    this.monthNames[2] = this.getMonthName(new Date(this.headerMarketingOrder[0].month));
   }
 
   getMonthName(monthValue: Date): string {

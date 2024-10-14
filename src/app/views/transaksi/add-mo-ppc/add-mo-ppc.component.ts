@@ -826,10 +826,9 @@ export class AddMoPpcComponent implements OnInit {
     this.formHeaderMo.patchValue({ [`total_ttwd_${month}`]: totalTtWd.toFixed(2) });
   }
 
-  saveHeaderMo() {
+  showDetailMo() {
     this.fillTheTableMo();
     this.isTableVisible = true;
-    console.log(this.headerMo);
   }
 
   fillTheTableMo(): void {
@@ -868,6 +867,7 @@ export class AddMoPpcComponent implements OnInit {
     this.moService.saveMarketingOrder(this.marketingOrder).subscribe(
       (response) => {
         const last_id_mo = response.data.mo_ID;
+        this.headerMo = [];
         for (let i = 0; i < 3; i++) {
           this.headerMo.push({
             mo_ID: last_id_mo,
@@ -882,9 +882,6 @@ export class AddMoPpcComponent implements OnInit {
             max_CAP_TT: this.formHeaderMo.get(`max_capa_tt_${i}`)?.value,
           });
         }
-
-        console.log('Price to bepa ', this.headerMo);
-        
         this.moService.saveHeaderMarketingOrder(this.headerMo).subscribe(
           (response) => {
             this.marketingOrderTable.forEach((item) => {

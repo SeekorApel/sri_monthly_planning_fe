@@ -1,11 +1,8 @@
 export class HeaderMarketingOrder {
-  creation_DATE: Date | null;
+  header_ID: number;
+  mo_ID: number;
   status: number;
-  last_UPDATE_DATE: Date | null;
-  last_UPDATED_BY: string | null;
   max_CAP_TL: number;
-  fed_TL: number;
-  fed_TT: number;
   airbag_MACHINE: number;
   total_MO: number;
   total_WD_TL: number;
@@ -17,10 +14,13 @@ export class HeaderMarketingOrder {
   max_CAP_TT: number;
   wd_OT_TL: number;
   looping: number;
-  header_ID: number;
-  mo_ID: number;
   note_ORDER_TL: string;
-  fed_TT_PERCENTAGE: number;
-  fed_TL_PERCENTAGE: number;
+  tl: number;
+  tt: number;
+  tl_PERCENTAGE: number;
+  tt_PERCENTAGE: number;
+  creation_DATE: Date | null;
   created_BY: string | null;
+  last_UPDATED_BY: string | null;
+  last_UPDATE_DATE: Date | null;
 }
