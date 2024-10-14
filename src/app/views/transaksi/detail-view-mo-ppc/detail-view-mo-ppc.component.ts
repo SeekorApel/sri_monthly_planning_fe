@@ -30,7 +30,7 @@ export class DetailViewMoPpcComponent implements OnInit {
   constructor(private router: Router, private activeRoute: ActivatedRoute, private fb: FormBuilder, private moService: MarketingOrderService) {
     this.formHeaderMo = this.fb.group({
       date: [null, []],
-      type: [null, []],
+      type: ["FED", []],
       revision: [null, []],
       month_0: [null, []],
       month_1: [null, []],
@@ -63,6 +63,8 @@ export class DetailViewMoPpcComponent implements OnInit {
       machine_airbag_m0: [null, []],
       fed_tl_m0: [null, []],
       fed_tt_m0: [null, []],
+      fdr_tl_m0: [null, []],
+      fdr_tt_m0: [null, []],
       total_mo_m0: [null, []],
       note_tl_m0: [null, []],
       looping_m1: [null, []],
@@ -86,6 +88,8 @@ export class DetailViewMoPpcComponent implements OnInit {
   ngOnInit(): void {
     this.idMo = this.activeRoute.snapshot.paramMap.get('idMo');
     this.getAllData(this.idMo);
+
+
   }
 
   getAllData(idMo: String) {
