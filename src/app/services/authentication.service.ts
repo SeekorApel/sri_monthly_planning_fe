@@ -34,7 +34,6 @@ export class AuthenticationService {
     return this.http.post(environment.apiUrlLocalAdmin + '/loginUser', body, { headers }).pipe(
       map((res: any) => {
         this.token = res.data;
-        console.log(this.token);
         if (res && this.token) {
           this.fetchUsername(userName);
         }

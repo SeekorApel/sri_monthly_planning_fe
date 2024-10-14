@@ -103,9 +103,7 @@ export class AddMoPpcComponent implements OnInit {
   }
 
   downloadTemplate_M1() {
-    // Ambil bulan dan tahun dari input
     const monthValue = this.formHeaderMo.get('month_0').value;
-
     if (!monthValue) {
       Swal.fire({
         icon: 'error',
@@ -115,17 +113,14 @@ export class AddMoPpcComponent implements OnInit {
       });
       return;
     }
-
     const date = new Date(monthValue);
     const year = date.getFullYear();
     const month = date.getMonth();
-
-    // Hitung jumlah hari dalam bulan
     const lastDay = new Date(year, month + 1, 0).getDate();
 
     // Buat workbook baru
     const workbook = new ExcelJS.Workbook();
-    const worksheet = workbook.addWorksheet('Shift Template');
+    const worksheet = workbook.addWorksheet('Workday Template');
 
     // Data untuk shift yang akan ditulis ke Excel
     const shiftData = [['Shift 3'], ['Shift 2'], ['Shift 1'], ['OT TL 3'], ['OT TL 2'], ['OT TL 1'], ['OT TT 3'], ['OT TT 2'], ['OT TT 1'], ['OFF']];
@@ -153,7 +148,7 @@ export class AddMoPpcComponent implements OnInit {
 
     // Mengatur format untuk setiap hari dan mewarnai hari Minggu dan juga jumat
     worksheet.getRow(1).eachCell((cell, colNumber) => {
-      const dateValue = new Date(year, month, colNumber - 1); // Mendapatkan tanggal
+      const dateValue = new Date(year, month, colNumber - 1);
 
       // Jika hari Minggu, warnai sel
       if (dateValue.getDay() === 0) {
@@ -231,7 +226,7 @@ export class AddMoPpcComponent implements OnInit {
       horizontal: 'left',
     };
 
-    for (let col = 2; col <= 4; col++) {
+    for (let col = 2; col <= 3; col++) {
       const cell = worksheet.getCell(14, col);
       cell.fill = {
         type: 'pattern',
@@ -244,9 +239,9 @@ export class AddMoPpcComponent implements OnInit {
       };
     }
 
-    // Menambahkan simbol ☑ di E9
-    const checkBoxCell = worksheet.getCell('E14');
-    checkBoxCell.value = '☑';
+    // Menambahkan simbol V di D14
+    const checkBoxCell = worksheet.getCell('D14');
+    checkBoxCell.value = 'V';
     checkBoxCell.alignment = {
       vertical: 'middle',
       horizontal: 'center',
@@ -256,7 +251,7 @@ export class AddMoPpcComponent implements OnInit {
     const indonesiaTime = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Jakarta' }));
     const monthFn = date.toLocaleDateString('en-US', { month: 'long' });
     const timestamp = indonesiaTime.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }).replace(':', '');
-    const fileName = `workday_${monthFn}_${year}_${timestamp}.xlsx`;
+    const fileName = `Workday_${monthFn}_${year}_${timestamp}.xlsx`;
 
     // Ekspor workbook sebagai file Excel
     workbook.xlsx.writeBuffer().then((buffer) => {
@@ -288,7 +283,7 @@ export class AddMoPpcComponent implements OnInit {
 
     // Buat workbook baru
     const workbook = new ExcelJS.Workbook();
-    const worksheet = workbook.addWorksheet('Shift Template');
+    const worksheet = workbook.addWorksheet('Workday Template');
 
     // Data untuk shift yang akan ditulis ke Excel
     const shiftData = [['Shift 3'], ['Shift 2'], ['Shift 1'], ['OT TL 3'], ['OT TL 2'], ['OT TL 1'], ['OT TT 3'], ['OT TT 2'], ['OT TT 1'], ['OFF']];
@@ -394,8 +389,7 @@ export class AddMoPpcComponent implements OnInit {
       horizontal: 'left',
     };
 
-    for (let col = 2; col <= 4; col++) {
-      // B14 (2) sampai D14 (4)
+    for (let col = 2; col <= 3; col++) {
       const cell = worksheet.getCell(14, col);
       cell.fill = {
         type: 'pattern',
@@ -408,9 +402,9 @@ export class AddMoPpcComponent implements OnInit {
       };
     }
 
-    // Menambahkan simbol ☑ di E9
-    const checkBoxCell = worksheet.getCell('E14');
-    checkBoxCell.value = '☑';
+    // Menambahkan simbol V di D14
+    const checkBoxCell = worksheet.getCell('D14');
+    checkBoxCell.value = 'V';
     checkBoxCell.alignment = {
       vertical: 'middle',
       horizontal: 'center',
@@ -420,7 +414,7 @@ export class AddMoPpcComponent implements OnInit {
     const indonesiaTime = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Jakarta' }));
     const monthFn = date.toLocaleDateString('en-US', { month: 'long' });
     const timestamp = indonesiaTime.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }).replace(':', '');
-    const fileName = `workday_${monthFn}_${year}_${timestamp}.xlsx`;
+    const fileName = `Workday_${monthFn}_${year}_${timestamp}.xlsx`;
 
     // Ekspor workbook sebagai file Excel
     workbook.xlsx.writeBuffer().then((buffer) => {
@@ -430,10 +424,8 @@ export class AddMoPpcComponent implements OnInit {
   }
 
   downloadTemplate_M3() {
-    // Ambil bulan dan tahun dari input
     const monthValue = this.formHeaderMo.get('month_2').value;
 
-    // Cek apakah bulan sudah dipilih
     if (!monthValue) {
       Swal.fire({
         icon: 'error',
@@ -441,19 +433,19 @@ export class AddMoPpcComponent implements OnInit {
         text: 'Please select a month first!',
         confirmButtonText: 'OK',
       });
-      return; // Stop execution if no month is selected
+      return;
     }
 
-    const date = new Date(monthValue); // Mengubah ke objek Date
+    const date = new Date(monthValue);
     const year = date.getFullYear();
-    const month = date.getMonth(); // Mengambil bulan (0-11)
+    const month = date.getMonth();
 
     // Hitung jumlah hari dalam bulan
-    const lastDay = new Date(year, month + 1, 0).getDate(); // Ambil tanggal terakhir bulan ini
+    const lastDay = new Date(year, month + 1, 0).getDate();
 
     // Buat workbook baru
     const workbook = new ExcelJS.Workbook();
-    const worksheet = workbook.addWorksheet('Shift Template');
+    const worksheet = workbook.addWorksheet('Workday Template');
 
     // Data untuk shift yang akan ditulis ke Excel
     const shiftData = [['Shift 3'], ['Shift 2'], ['Shift 1'], ['OT TL 3'], ['OT TL 2'], ['OT TL 1'], ['OT TT 3'], ['OT TT 2'], ['OT TT 1'], ['OFF']];
@@ -463,10 +455,10 @@ export class AddMoPpcComponent implements OnInit {
       // Format tanggal menjadi "Tue, 26 November 2024"
       return day
         .toLocaleDateString('en-US', {
-          weekday: 'short', // Nama hari singkat (Tue, Wed, dst.)
-          day: '2-digit', // Tanggal dua digit (26, 27, dst.)
-          month: 'long', // Nama bulan penuh (November, Desember, dst.)
-          year: 'numeric', // Tahun (2024)
+          weekday: 'short',
+          day: '2-digit',
+          month: 'long',
+          year: 'numeric',
         })
         .replace(',', '')
         .replace(/^(\D+)\s(\d+)\s(\D+)\s(\d+)$/, '$1, $2 $3 $4');
@@ -482,7 +474,7 @@ export class AddMoPpcComponent implements OnInit {
 
     // Mengatur format untuk setiap hari dan mewarnai hari Minggu dan juga jumat
     worksheet.getRow(1).eachCell((cell, colNumber) => {
-      const dateValue = new Date(year, month, colNumber - 1); // Mendapatkan tanggal
+      const dateValue = new Date(year, month, colNumber - 1);
 
       // Jika hari Minggu, warnai sel
       if (dateValue.getDay() === 0) {
@@ -524,11 +516,11 @@ export class AddMoPpcComponent implements OnInit {
       };
 
       // Sesuaikan lebar kolom berdasarkan isi
-      worksheet.getColumn(colNumber + 0).width = cell.value.length + 2; // Menyesuaikan lebar kolom
+      worksheet.getColumn(colNumber + 0).width = cell.value.length + 2;
     });
 
     // Menambahkan border pada setiap sel di kolom A dan B
-    const totalRows = shiftData.length + 1; // +1 untuk baris header
+    const totalRows = shiftData.length + 1;
 
     for (let rowNumber = 1; rowNumber <= totalRows; rowNumber++) {
       for (let colNumber = 1; colNumber <= lastDay + 1; colNumber++) {
@@ -555,20 +547,19 @@ export class AddMoPpcComponent implements OnInit {
     instructionCell.fill = {
       type: 'pattern',
       pattern: 'solid',
-      fgColor: { argb: 'FFFF00' }, // Warna kuning
+      fgColor: { argb: 'FFFF00' },
     };
     instructionCell.alignment = {
       vertical: 'middle',
       horizontal: 'left',
     };
 
-    for (let col = 2; col <= 4; col++) {
-      // B14 (2) sampai D14 (4)
+    for (let col = 2; col <= 3; col++) {
       const cell = worksheet.getCell(14, col);
       cell.fill = {
         type: 'pattern',
         pattern: 'solid',
-        fgColor: { argb: 'FFFF00' }, // Warna kuning
+        fgColor: { argb: 'FFFF00' },
       };
       cell.alignment = {
         vertical: 'middle',
@@ -576,9 +567,9 @@ export class AddMoPpcComponent implements OnInit {
       };
     }
 
-    // Menambahkan simbol ☑ di E9
-    const checkBoxCell = worksheet.getCell('E14');
-    checkBoxCell.value = '☑';
+    // Menambahkan simbol V di D14
+    const checkBoxCell = worksheet.getCell('D14');
+    checkBoxCell.value = 'V';
     checkBoxCell.alignment = {
       vertical: 'middle',
       horizontal: 'center',
@@ -588,7 +579,7 @@ export class AddMoPpcComponent implements OnInit {
     const indonesiaTime = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Jakarta' }));
     const monthFn = date.toLocaleDateString('en-US', { month: 'long' });
     const timestamp = indonesiaTime.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }).replace(':', '');
-    const fileName = `workday_${monthFn}_${year}_${timestamp}.xlsx`;
+    const fileName = `Workday_${monthFn}_${year}_${timestamp}.xlsx`;
 
     // Ekspor workbook sebagai file Excel
     workbook.xlsx.writeBuffer().then((buffer) => {
@@ -618,16 +609,16 @@ export class AddMoPpcComponent implements OnInit {
 
       // Iterasi melalui setiap kolom tanggal
       for (let i = 1; i <= convertTypeDate.length; i++) {
-        const shift3 = jsonData[1][i] === '☑' ? 1 : 0;
-        const shift2 = jsonData[2][i] === '☑' ? 1 : 0;
-        const shift1 = jsonData[3][i] === '☑' ? 1 : 0;
-        const ot_tl_3 = jsonData[4][i] === '☑' ? 1 : 0;
-        const ot_tl_2 = jsonData[5][i] === '☑' ? 1 : 0;
-        const ot_tl_1 = jsonData[6][i] === '☑' ? 1 : 0;
-        const ot_tt_3 = jsonData[7][i] === '☑' ? 1 : 0;
-        const ot_tt_2 = jsonData[8][i] === '☑' ? 1 : 0;
-        const ot_tt_1 = jsonData[9][i] === '☑' ? 1 : 0;
-        const off = jsonData[10][i] === '☑' ? 1 : 0;
+        const shift3 = jsonData[1][i]?.toString().toUpperCase() === 'V' ? 1 : 0;
+        const shift2 = jsonData[2][i]?.toString().toUpperCase() === 'V' ? 1 : 0;
+        const shift1 = jsonData[3][i]?.toString().toUpperCase() === 'V' ? 1 : 0;
+        const ot_tl_3 = jsonData[4][i]?.toString().toUpperCase() === 'V' ? 1 : 0;
+        const ot_tl_2 = jsonData[5][i]?.toString().toUpperCase() === 'V' ? 1 : 0;
+        const ot_tl_1 = jsonData[6][i]?.toString().toUpperCase() === 'V' ? 1 : 0;
+        const ot_tt_3 = jsonData[7][i]?.toString().toUpperCase() === 'V' ? 1 : 0;
+        const ot_tt_2 = jsonData[8][i]?.toString().toUpperCase() === 'V' ? 1 : 0;
+        const ot_tt_1 = jsonData[9][i]?.toString().toUpperCase() === 'V' ? 1 : 0;
+        const off = jsonData[10][i]?.toString().toUpperCase() === 'V' ? 1 : 0;
 
         const data = {
           date_WD: convertTypeDate[i - 1],
@@ -675,16 +666,16 @@ export class AddMoPpcComponent implements OnInit {
 
       // Iterasi melalui setiap kolom tanggal
       for (let i = 1; i <= convertTypeDate.length; i++) {
-        const shift3 = jsonData[1][i] === '☑' ? 1 : 0;
-        const shift2 = jsonData[2][i] === '☑' ? 1 : 0;
-        const shift1 = jsonData[3][i] === '☑' ? 1 : 0;
-        const ot_tl_3 = jsonData[4][i] === '☑' ? 1 : 0;
-        const ot_tl_2 = jsonData[5][i] === '☑' ? 1 : 0;
-        const ot_tl_1 = jsonData[6][i] === '☑' ? 1 : 0;
-        const ot_tt_3 = jsonData[7][i] === '☑' ? 1 : 0;
-        const ot_tt_2 = jsonData[8][i] === '☑' ? 1 : 0;
-        const ot_tt_1 = jsonData[9][i] === '☑' ? 1 : 0;
-        const off = jsonData[10][i] === '☑' ? 1 : 0;
+        const shift3 = jsonData[1][i]?.toString().toUpperCase() === 'V' ? 1 : 0;
+        const shift2 = jsonData[2][i]?.toString().toUpperCase() === 'V' ? 1 : 0;
+        const shift1 = jsonData[3][i]?.toString().toUpperCase() === 'V' ? 1 : 0;
+        const ot_tl_3 = jsonData[4][i]?.toString().toUpperCase() === 'V' ? 1 : 0;
+        const ot_tl_2 = jsonData[5][i]?.toString().toUpperCase() === 'V' ? 1 : 0;
+        const ot_tl_1 = jsonData[6][i]?.toString().toUpperCase() === 'V' ? 1 : 0;
+        const ot_tt_3 = jsonData[7][i]?.toString().toUpperCase() === 'V' ? 1 : 0;
+        const ot_tt_2 = jsonData[8][i]?.toString().toUpperCase() === 'V' ? 1 : 0;
+        const ot_tt_1 = jsonData[9][i]?.toString().toUpperCase() === 'V' ? 1 : 0;
+        const off = jsonData[10][i]?.toString().toUpperCase() === 'V' ? 1 : 0;
 
         const data = {
           date_WD: convertTypeDate[i - 1],
@@ -731,16 +722,16 @@ export class AddMoPpcComponent implements OnInit {
 
       // Iterasi melalui setiap kolom tanggal
       for (let i = 1; i <= convertTypeDate.length; i++) {
-        const shift3 = jsonData[1][i] === '☑' ? 1 : 0;
-        const shift2 = jsonData[2][i] === '☑' ? 1 : 0;
-        const shift1 = jsonData[3][i] === '☑' ? 1 : 0;
-        const ot_tl_3 = jsonData[4][i] === '☑' ? 1 : 0;
-        const ot_tl_2 = jsonData[5][i] === '☑' ? 1 : 0;
-        const ot_tl_1 = jsonData[6][i] === '☑' ? 1 : 0;
-        const ot_tt_3 = jsonData[7][i] === '☑' ? 1 : 0;
-        const ot_tt_2 = jsonData[8][i] === '☑' ? 1 : 0;
-        const ot_tt_1 = jsonData[9][i] === '☑' ? 1 : 0;
-        const off = jsonData[10][i] === '☑' ? 1 : 0;
+        const shift3 = jsonData[1][i]?.toString().toUpperCase() === 'V' ? 1 : 0;
+        const shift2 = jsonData[2][i]?.toString().toUpperCase() === 'V' ? 1 : 0;
+        const shift1 = jsonData[3][i]?.toString().toUpperCase() === 'V' ? 1 : 0;
+        const ot_tl_3 = jsonData[4][i]?.toString().toUpperCase() === 'V' ? 1 : 0;
+        const ot_tl_2 = jsonData[5][i]?.toString().toUpperCase() === 'V' ? 1 : 0;
+        const ot_tl_1 = jsonData[6][i]?.toString().toUpperCase() === 'V' ? 1 : 0;
+        const ot_tt_3 = jsonData[7][i]?.toString().toUpperCase() === 'V' ? 1 : 0;
+        const ot_tt_2 = jsonData[8][i]?.toString().toUpperCase() === 'V' ? 1 : 0;
+        const ot_tt_1 = jsonData[9][i]?.toString().toUpperCase() === 'V' ? 1 : 0;
+        const off = jsonData[10][i]?.toString().toUpperCase() === 'V' ? 1 : 0;
 
         const data = {
           date_WD: convertTypeDate[i - 1],
@@ -838,6 +829,7 @@ export class AddMoPpcComponent implements OnInit {
   saveHeaderMo() {
     this.fillTheTableMo();
     this.isTableVisible = true;
+    console.log(this.headerMo);
   }
 
   fillTheTableMo(): void {
@@ -858,7 +850,7 @@ export class AddMoPpcComponent implements OnInit {
           icon: 'error',
           title: 'Failed to load detail Marketing Order',
           text: error.message,
-          confirmButtonText: 'OK'
+          confirmButtonText: 'OK',
         });
       }
     );
@@ -890,6 +882,8 @@ export class AddMoPpcComponent implements OnInit {
             max_CAP_TT: this.formHeaderMo.get(`max_capa_tt_${i}`)?.value,
           });
         }
+
+        console.log('Price to bepa ', this.headerMo);
         this.moService.saveHeaderMarketingOrder(this.headerMo).subscribe(
           (response) => {
             this.marketingOrderTable.forEach((item) => {

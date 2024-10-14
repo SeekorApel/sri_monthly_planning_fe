@@ -20,7 +20,6 @@ export class DefaultLayoutComponent {
   constructor(private authenticationService: AuthenticationService, private router: Router) {
     //PERSONAL INFORMATION
     let currentUserSubject = JSON.parse(localStorage.getItem('currentUser'));
-    console.log("Isi current user : ", currentUserSubject);
     this.nrp = currentUserSubject.userName;
     this.name = currentUserSubject.fullName;
     this.role = currentUserSubject.roles.role_name;
@@ -63,9 +62,7 @@ export class DefaultLayoutComponent {
       { name: 'Monthly Planning', url: '/transaksi/view-monthly-planning', icon: 'cil-minus' },
     ];
 
-    this.transaksiMarketing = [
-      { name: 'Marketing Order', url: '/transaksi/view-mo-marketing', icon: 'cil-minus' },
-    ]
+    this.transaksiMarketing = [{ name: 'Marketing Order', url: '/transaksi/view-mo-marketing', icon: 'cil-minus' }];
   }
 
   ngOnInit(): void {

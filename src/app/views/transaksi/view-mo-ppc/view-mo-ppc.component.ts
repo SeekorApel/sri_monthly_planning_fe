@@ -3,7 +3,8 @@ import { Router } from '@angular/router';
 import { MarketingOrder } from 'src/app/models/MarketingOrder';
 import { ApiResponse } from 'src/app/response/Response';
 import { MarketingOrderService } from 'src/app/services/transaksi/marketing order/marketing-order.service';
-import { ParsingDate } from 'src/app/utils/ParsingDate'
+import { ParsingDate } from 'src/app/utils/ParsingDate';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-view-mo-ppc',
@@ -47,14 +48,7 @@ export class ViewMoPpcComponent implements OnInit {
   }
 
   onSearchChange(): void {
-    // Lakukan filter berdasarkan nama plant yang mengandung text pencarian (case-insensitive)
-    const filteredSearch = this.marketingOrders.filter(
-      (mo) =>
-        mo.mo_ID.toString().includes(this.searchText) ||
-        mo.type.toLowerCase().includes(this.searchText.toLowerCase())
-    );
-
-    // Tampilkan hasil filter pada halaman pertama
+    const filteredSearch = this.marketingOrders.filter((mo) => mo.mo_ID.toString().includes(this.searchText) || mo.type.toLowerCase().includes(this.searchText.toLowerCase()));
     this.onChangePage(filteredSearch.slice(0, this.pageSize));
   }
 
@@ -67,11 +61,11 @@ export class ViewMoPpcComponent implements OnInit {
     this.router.navigate(['/transaksi/add-mo-ppc']);
   }
 
-  navigateToDetail(idMo: String){
+  navigateToDetail(idMo: String) {
     this.router.navigate(['/transaksi/detail-mo-ppc', idMo]);
   }
 
-  navigateToEdit(idMo: String){
+  navigateToEdit(idMo: String) {
     this.router.navigate(['/transaksi/edit-mo-ppc', idMo]);
   }
 }
