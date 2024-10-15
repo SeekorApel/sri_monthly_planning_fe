@@ -32,7 +32,8 @@ import { ViewMachineExtrudingComponent } from './view-machine-extruding/view-mac
 import { ViewDDeliveryScheduleComponent } from './view-d-deliveryschedule/view-d-deliveryschedule.component';
 import { ViewMachineAllowanceComponent } from './view-machine-allowance/view-machine-allowance.component';
 import { ViewItemAssyComponent } from './view-item-assy/view-item-assy.component';
-
+import {MatSortModule} from '@angular/material/sort';
+import {MatTableModule} from '@angular/material/table';
 
 @NgModule({
   declarations: [
@@ -72,6 +73,8 @@ import { ViewItemAssyComponent } from './view-item-assy/view-item-assy.component
     MasterDataRoutingModule,
     ModalModule.forRoot(),
     ToastrModule.forRoot(),
+    MatSortModule,
+    MatTableModule,
   ],
 })
 export class MasterDataModule {}

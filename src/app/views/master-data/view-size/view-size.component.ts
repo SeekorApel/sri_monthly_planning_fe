@@ -8,10 +8,13 @@ declare var $: any;
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSort } from '@angular/material/sort';
+
 @Component({
   selector: 'app-view-size',
   templateUrl: './view-size.component.html',
-  styleUrls: ['./view-size.component.scss']
+  styleUrls: ['./view-size.component.scss'],
 })
 export class ViewSizeComponent implements OnInit {
 
@@ -23,11 +26,16 @@ export class ViewSizeComponent implements OnInit {
   isEditMode: boolean = false;
   file: File | null = null;
   editSizeForm: FormGroup;
-
+  
   // Pagination
-  pageOfItems: Array<any>;
+  pageOfItems: Size[] =[];
   pageSize: number = 5;
   totalPages: number = 5;
+  sortBuffer: Array<any>;
+  displayedColumns: string[] = ['no', 'size_ID', 'description','status','action'];
+  dataSource: MatTableDataSource<Size>;
+
+  @ViewChild(MatSort) sort: MatSort;
 
   constructor(private sizeService: SizeService, private fb: FormBuilder) { 
     this.editSizeForm = this.fb.group({
@@ -53,6 +61,9 @@ export class ViewSizeComponent implements OnInit {
 
   onChangePage(pageOfItems: Array<any>) {
     this.pageOfItems = pageOfItems;
+    this.dataSource = new MatTableDataSource(pageOfItems);
+    this.dataSource.sort = this.sort;
+
   }
 
   onSearchChange(): void {
@@ -250,4 +261,31 @@ export class ViewSizeComponent implements OnInit {
       }
     });
   }
+  // sortData(sort: Sort) {
+  //   const data = this.pageOfItems.slice();
+  //   if (!sort.active || sort.direction === '') {
+  //     this.sortBuffer = data;
+  //     return;
+  //   }
+
+  //   this.sortBuffer = data.sort((a, b) => {
+  //     const isAsc = sort.direction === 'asc';
+  //     switch (sort.active) {
+  //       case 'id':
+  //         return compare(a.size_ID, b.size_ID, isAsc);
+  //       case 'desc':
+  //         return compare(a.description, b.description, isAsc);
+  //       default:
+  //         return 0;
+  //     }
+  //   });
+  // }
 }
+function compare(a: number | string, b: number | string, isAsc: boolean) {
+  return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
+}
+const ELEMENT_DATA = [
+  { size_ID: 1, description: 'Size 1', status: 1 },
+  { size_ID: 2, description: 'Size 2', status: 0 },
+  // Add more data as needed
+];

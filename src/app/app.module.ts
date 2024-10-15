@@ -9,6 +9,7 @@ import { PerfectScrollbarConfigInterface } from 'ngx-perfect-scrollbar';
 
 import { IconModule, IconSetModule, IconSetService } from '@coreui/icons-angular';
 
+
 const DEFAULT_PERFECT_SCROLLBAR_CONFIG: PerfectScrollbarConfigInterface = {
   suppressScrollX: true
 };
@@ -52,6 +53,9 @@ import { NgxSpinnerModule } from "ngx-spinner";
 import { JwPaginationModule } from 'jw-angular-pagination';
 import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 
+import {MatSortModule} from '@angular/material/sort';
+import {MatTableModule} from '@angular/material/table';
+
 @NgModule({
   imports: [
     BrowserModule,
@@ -75,6 +79,8 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
     ToastrModule.forRoot(),
     NgxSpinnerModule,
     JwPaginationModule,
+    MatSortModule,
+    MatTableModule,
   ],
   declarations: [
     AppComponent,

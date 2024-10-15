@@ -22,12 +22,55 @@
 
       <!-- Table -->
       <div class="table-responsive">
-        <table class="table table-bordered table-striped table-sm">
+        <table mat-table [dataSource]="dataSource" matSort class="table table-bordered table-striped table-sm">
+          <!-- No Column -->
+          <ng-container matColumnDef="no" >
+            <th *matHeaderCellDef >No</th>
+            <td  *matCellDef="let element; let i = index">{{ i + 1 }}</td>
+          </ng-container>
+        
+          <!-- Size ID Column -->
+          <ng-container matColumnDef="size_ID">
+            <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Size ID</th>
+            <td  *matCellDef="let element">{{ element.size_ID }}</td>
+          </ng-container>
+        
+          <!-- Description Column -->
+          <ng-container matColumnDef="description">
+            <th *matHeaderCellDef mat-sort-header>Description</th>
+            <td *matCellDef="let element">{{ element.description }}</td>
+          </ng-container>
+        
+          <!-- Status Column -->
+          <ng-container matColumnDef="status">
+            <th  *matHeaderCellDef>Status</th>
+            <td *matCellDef="let element" [ngClass]="{ 'bg-success': element.status === 1, 'bg-danger': element.status !== 1 }">
+              {{ element.status === 1 ? 'Active' : 'Deactive' }}
+            </td>
+          </ng-container>
+        
+          <!-- Action Column -->
+          <ng-container matColumnDef="action">
+            <th *matHeaderCellDef>Action</th>
+            <td *matCellDef="let element">
+              <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(element.size_ID)">Update</button>
+              <button type="button" class="btn btn-md ml-2" [ngClass]="{ 'btn-danger': element.status === 1, 'btn-success': element.status !== 1 }" (click)="element.status === 1 ? deleteData(element) : activateData(element)">
+                {{ element.status === 1 ? 'Delete' : 'Active' }}
+              </button>
+            </td>
+          </ng-container>
+        
+          <tr align="center" mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr align="center" mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+        
+
+        <!-- <table class="table table-bordered table-striped table-sm" matSort >
           <thead align="center">
             <tr>
               <th>No</th>
-              <th>Size ID</th>
-              <th>Description</th>
+              <th mat-sort-header="id">Size ID</th>
+              <th mat-sort-header="desc">Description</th>
               <th>Status</th>
               <th>Action</th>
             </tr>
@@ -46,7 +89,7 @@
               </td>
             </tr>
           </tbody>
-        </table>
+        </table> -->
         <!-- Pagination -->
         <nav>
           <ul class="pagination">
