@@ -1,4 +1,5 @@
 export class DetailMarketingOrder {
+  idDetail: Number;
   moId: String;
   category: String;
   partNumber: number;

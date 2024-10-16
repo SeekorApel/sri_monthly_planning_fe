@@ -41,11 +41,11 @@
                 <td>{{ dateUtil.parseMonthYear(mo.month_2) }}</td>
                 <td>
                   <button type="button" class="btn btn-md btn-secondary" (click)="navigateToDetail(mo.mo_ID)">Detail</button>
-                  <button type="button" class="btn btn-md btn-primary ml-2" (click)="navigateToEdit(mo.mo_ID)" >Revision</button>
+                  <button type="button" class="btn btn-md btn-primary ml-2" (click)="navigateToEdit(mo.mo_ID)">Revision</button>
+                  <button type="button" class="btn btn-md ml-2" [ngClass]="{ 'btn-warning': mo.status_FILLED === 2, 'btn-success': mo.status_FILLED === 3 }" [disabled]="mo.status_FILLED === 1" (click)="mo.status_FILLED === 2 ? disableMo(mo) : enableMo(mo)">{{ mo.status_FILLED === 3 ? 'Enable' : 'Disable' }}</button>
                 </td>
               </tr>
             </tbody>
-
           </table>
           <!-- Pagination -->
           <nav>

@@ -33,13 +33,13 @@
                 <td>{{ i + 1 }}</td>
                 <td>{{ mo.mo_ID }}</td>
                 <td>{{ mo.type }}</td>
-                <td>{{ dateUtil.parseFullDate(mo.date) }}</td>
+                <td>{{ dateUtil.parseFullDate(mo.date_VALID) }}</td>
                 <td>{{ mo.revision }}</td>
                 <td>{{ dateUtil.parseMonthYear(mo.month_0) }}</td>
                 <td>{{ dateUtil.parseMonthYear(mo.month_1) }}</td>
                 <td>{{ dateUtil.parseMonthYear(mo.month_2) }}</td>
                 <td>
-                  <button type="button" class="btn btn-md btn-success" (click)="navigateToAdd(mo.mo_ID)">Add</button>
+                  <button type="button" class="btn btn-md" [ngClass]="{ 'btn-success': mo.status_FILLED === 1 || mo.status_FILLED === 2, 'btn-secondary': mo.status_FILLED === 3 }" (click)="mo.status_FILLED === 1 ? navigateToAdd(mo.mo_ID) : mo.status_FILLED === 2 ? navigateToEdit(mo.mo_ID) : navigateToDetail(mo.mo_ID)">{{ mo.status_FILLED === 3 ? 'Detail' : 'Add' }}</button>
                 </td>
               </tr>
             </tbody>

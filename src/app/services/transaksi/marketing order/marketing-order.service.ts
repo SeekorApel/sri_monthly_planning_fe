@@ -65,4 +65,41 @@ export class MarketingOrderService {
       })
     );
   }
+
+  getDetailMarketingOrderMarketing(idMo: String): Observable<ApiResponse<any>> {
+    return this.http.get<ApiResponse<any>>(environment.apiUrlWebAdmin + '/getDetailMoMarketing/' + idMo);
+  }
+
+  addMarketingOrderMarketing(dtmo: DetailMarketingOrder[]) {
+    return this.http.post<ApiResponse<any>>(environment.apiUrlWebAdmin + '/updateDetailMOMarketing', dtmo).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((err) => {
+        return throwError(err);
+      })
+    );
+  }
+
+  enableMarketingOrder(mo: MarketingOrder): Observable<ApiResponse<any>> {
+    return this.http.post<ApiResponse<any>>(environment.apiUrlWebAdmin + '/enableMarketingOrder', mo).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((err) => {
+        return throwError(err);
+      })
+    );
+  }
+
+  disableMarketingOrder(mo: MarketingOrder): Observable<ApiResponse<any>> {
+    return this.http.post<ApiResponse<any>>(environment.apiUrlWebAdmin + '/disableMarketingOrder', mo).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((err) => {
+        return throwError(err);
+      })
+    );
+  }
 }

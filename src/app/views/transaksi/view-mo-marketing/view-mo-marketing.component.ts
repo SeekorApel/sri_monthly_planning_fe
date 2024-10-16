@@ -3,16 +3,15 @@ import { Router } from '@angular/router';
 import { MarketingOrder } from 'src/app/models/MarketingOrder';
 import { ApiResponse } from 'src/app/response/Response';
 import { MarketingOrderService } from 'src/app/services/transaksi/marketing order/marketing-order.service';
-import { ParsingDate } from 'src/app/utils/ParsingDate'
+import { ParsingDate } from 'src/app/utils/ParsingDate';
 import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-view-mo-marketing',
   templateUrl: './view-mo-marketing.component.html',
-  styleUrls: ['./view-mo-marketing.component.scss']
+  styleUrls: ['./view-mo-marketing.component.scss'],
 })
 export class ViewMoMarketingComponent implements OnInit {
-
   //Variable Declaration
   searchText: string = '';
   marketingOrders: MarketingOrder[] = [];
@@ -22,7 +21,6 @@ export class ViewMoMarketingComponent implements OnInit {
   pageOfItems: Array<any>;
   pageSize: number = 5;
   totalPages: number = 5;
-
 
   constructor(private router: Router, private moService: MarketingOrderService) {
     this.dateUtil = ParsingDate;
@@ -43,7 +41,7 @@ export class ViewMoMarketingComponent implements OnInit {
             text: 'There are no marketing orders available.',
           });
         } else {
-          console.log("data", response.data);
+          console.log('data', response.data);
           this.marketingOrders = response.data;
           this.onChangePage(this.marketingOrders.slice(0, this.pageSize));
         }
@@ -68,11 +66,7 @@ export class ViewMoMarketingComponent implements OnInit {
   }
 
   onSearchChange(): void {
-    const filteredSearch = this.marketingOrders.filter(
-      (mo) =>
-        mo.mo_ID.toString().includes(this.searchText) ||
-        mo.type.toLowerCase().includes(this.searchText.toLowerCase())
-    );
+    const filteredSearch = this.marketingOrders.filter((mo) => mo.mo_ID.toString().includes(this.searchText) || mo.type.toLowerCase().includes(this.searchText.toLowerCase()));
     this.onChangePage(filteredSearch.slice(0, this.pageSize));
   }
 
@@ -80,4 +74,11 @@ export class ViewMoMarketingComponent implements OnInit {
     this.router.navigate(['/transaksi/add-mo-marketing', idMo]);
   }
 
+  navigateToEdit(idMo: String) {
+    this.router.navigate(['/transaksi/add-mo-marketing', idMo]);
+  }
+
+  navigateToDetail(idMo: String) {
+    this.router.navigate(['/transaksi/add-mo-marketing', idMo]);
+  }
 }

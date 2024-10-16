@@ -68,4 +68,56 @@ export class ViewMoPpcComponent implements OnInit {
   navigateToEdit(idMo: String) {
     this.router.navigate(['/transaksi/edit-mo-ppc', idMo]);
   }
+
+  enableMo(mo: MarketingOrder): void {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'This data Marketing Order will be enabled!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes',
+      cancelButtonText: 'No',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.moService.enableMarketingOrder(mo).subscribe(
+          (response) => {
+            Swal.fire('Enabled!', 'Data Marketing Order has been Enabled', 'success').then(() => {
+              window.location.reload();
+            });
+          },
+          (err) => {
+            Swal.fire('Error!', 'Failed to Enable Marketing Order.', 'error');
+          }
+        );
+      }
+    });
+  }
+
+  disableMo(mo: MarketingOrder): void {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'This data Marketing Order will be disabled!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes',
+      cancelButtonText: 'No',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.moService.disableMarketingOrder(mo).subscribe(
+          (response) => {
+            Swal.fire('Disabled!', 'Data Marketing Order has been Disabeled', 'success').then(() => {
+              window.location.reload();
+            });
+          },
+          (err) => {
+            Swal.fire('Error!', 'Failed to Disabeled Marketing Order.', 'error');
+          }
+        );
+      }
+    });
+  }
 }
