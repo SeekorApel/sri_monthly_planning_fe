@@ -10,7 +10,7 @@ import { MasterDataRoutingModule } from './master-data-routing.module';
 import { ViewPlantComponent } from './view-plant/view-plant.component';
 import { ViewProductComponent } from './view-product/view-product.component';
 import { ViewPatternComponent } from './view-pattern/view-pattern.component';
-import { ViewMachineTassComponent } from './view-tassmachine/view-tassmachine.component';
+import { ViewMachineTassComponent } from './view-machine-tass/view-machine-tass.component';
 import { ViewSettingComponent } from './view-setting/view-setting.component';
 import { ViewQuadrantComponent } from './view-quadrant/view-quadrant.component';
 import { ViewProductTypeComponent } from './view-product-type/view-product-type.component';
@@ -33,45 +33,8 @@ import { ViewDDeliveryScheduleComponent } from './view-d-deliveryschedule/view-d
 import { ViewMachineAllowanceComponent } from './view-machine-allowance/view-machine-allowance.component';
 import { ViewItemAssyComponent } from './view-item-assy/view-item-assy.component';
 
-
 @NgModule({
-  declarations: [
-    ViewPlantComponent,
-    ViewProductComponent,
-    ViewPatternComponent,
-    ViewMachineTassComponent,
-    ViewSettingComponent,
-    ViewQuadrantComponent,
-    ViewProductTypeComponent,
-    ViewSizeComponent,
-    ViewBuildingComponent,
-    ViewBDistanceComponent,
-    ViewQDistanceComponent,
-    ViewRoutingMachineComponent,
-    ViewDeliveryScheduleComponent,
-    ViewMachineCuringTypeComponent,
-    ViewMachineTassTypeComponent,
-    ViewCuringMachineComponent,
-    ViewMaxCapacityComponent,
-    ViewTassSizeComponent,
-    ViewItemCuringComponent,
-    ViewCtCuringComponent,
-    ViewCtKapaComponent,
-    ViewMachineExtrudingComponent,
-    ViewDDeliveryScheduleComponent,
-    ViewMachineAllowanceComponent,
-    ViewItemAssyComponent
-  ],
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    NgxSpinnerModule,
-    NgSelect2Module,
-    JwPaginationModule,
-    MasterDataRoutingModule,
-    ModalModule.forRoot(),
-    ToastrModule.forRoot(),
-  ],
+  declarations: [ViewPlantComponent, ViewProductComponent, ViewPatternComponent, ViewMachineTassComponent, ViewSettingComponent, ViewQuadrantComponent, ViewProductTypeComponent, ViewSizeComponent, ViewBuildingComponent, ViewBDistanceComponent, ViewQDistanceComponent, ViewRoutingMachineComponent, ViewDeliveryScheduleComponent, ViewMachineCuringTypeComponent, ViewMachineTassTypeComponent, ViewCuringMachineComponent, ViewMaxCapacityComponent, ViewTassSizeComponent, ViewItemCuringComponent, ViewCtCuringComponent, ViewCtKapaComponent, ViewMachineExtrudingComponent, ViewDDeliveryScheduleComponent, ViewMachineAllowanceComponent, ViewItemAssyComponent],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, NgxSpinnerModule, NgSelect2Module, JwPaginationModule, MasterDataRoutingModule, ModalModule.forRoot(), ToastrModule.forRoot()],
 })
 export class MasterDataModule {}

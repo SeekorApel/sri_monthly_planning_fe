@@ -12,7 +12,6 @@ import { map, catchError } from 'rxjs/operators';
 })
 export class MachineTassTypeService {
   //Isi tokenya
-  token: String = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBdXJlbCIsImV4cCI6MTcyODM4NTExNH0.EcIqiAPq5tX2MgDMcwD5rDNN-85fobiCN6S57r3rOBO64TK4JKUwzlF1zpLTqj4ul0KsBdnHqpDh4zOcAzoT8w';
   constructor(private http: HttpClient) {}
 
   // Method untuk menambahkan header Authorization dengan token
@@ -20,6 +19,19 @@ export class MachineTassTypeService {
     return new HttpHeaders({
       Authorization: `Bearer ${environment.token}`,
     });
+  }
+  exportMachineTassTypeExcel(): Observable<Blob> {
+    return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/exportMachineTassTypeExcel`, { responseType: 'blob' as 'json' });
+  }
+  activateMachineTassType(mtt: MachineTassType): Observable<ApiResponse<MachineTassType>> {
+    return this.http.post<ApiResponse<MachineTassType>>(environment.apiUrlWebAdmin + '/restoreMachineTassType', mtt, { headers: this.getHeaders() }).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((err) => {
+        return throwError(err);
+      })
+    );
   }
 
   getMachineTassTypeById(idMachineTassType: number): Observable<ApiResponse<MachineTassType>> {

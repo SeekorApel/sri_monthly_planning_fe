@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ViewMachineTassComponent } from './view-tassmachine.component';
+import { ViewMachineTassComponent } from './view-machine-tass.component';
 
 describe('ViewTassmachineComponent', () => {
   let component: ViewMachineTassComponent;
@@ -8,9 +8,8 @@ describe('ViewTassmachineComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ViewMachineTassComponent ]
-    })
-    .compileComponents();
+      declarations: [ViewMachineTassComponent],
+    }).compileComponents();
   });
 
   beforeEach(() => {

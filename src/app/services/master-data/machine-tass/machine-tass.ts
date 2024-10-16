@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { MachineTassService } from './tassMachine.service';
+import { MachineTassService } from './machine-tass.service';
 
 describe('PatternService', () => {
   let service: MachineTassService;

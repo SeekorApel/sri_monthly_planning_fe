@@ -4,6 +4,7 @@ import { CtKapa } from 'src/app/models/ct-kapa';
 import { ApiResponse } from 'src/app/response/Response';
 import { CtKapaService } from 'src/app/services/master-data/ct-kapa/ctkapa.service';
 import Swal from 'sweetalert2';
+import { saveAs } from 'file-saver';
 declare var $: any;
 import * as XLSX from 'xlsx';
 
@@ -39,6 +40,48 @@ export class ViewCtKapaComponent implements OnInit {
       machine: ['', Validators.required],
     });
   }
+  activateData(ctkapa: CtKapa): void {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'This data CT Kapa will be Activated!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes',
+      cancelButtonText: 'No',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.ctkapaService.activateCtKapa(ctkapa).subscribe(
+          (response) => {
+            Swal.fire('Activated!', 'Data CT KAPA has been Activated', 'success').then(() => {
+              window.location.reload();
+            });
+          },
+          (err) => {
+            Swal.fire('Error!', 'Failed to Activated the CT KAPA.', 'error');
+          }
+        );
+      }
+    });
+  }
+  saveAsExcelFile(buffer: any, fileName: string): void {
+    const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+    const data: Blob = new Blob([buffer], { type: EXCEL_TYPE });
+    saveAs(data, `${fileName}_export_${new Date().getTime()}.xlsx`);
+  }
+  downloadExcel(): void {
+    this.ctkapaService.exportCtKapaExcel().subscribe({
+      next: (response) => {
+        // Menggunakan nama file yang sudah ditentukan di backend
+        const filename = 'CTKAPA_DATA.xlsx'; // Nama file bisa dinamis jika diperlukan
+        saveAs(response, filename); // Mengunduh file
+      },
+      error: (err) => {
+        console.error('Download error:', err);
+      },
+    });
+  }
 
   ngOnInit(): void {
     this.getAllCtKapa();
@@ -63,7 +106,7 @@ export class ViewCtKapaComponent implements OnInit {
 
   onSearchChange(): void {
     // Lakukan filter berdasarkan nama plant yang mengandung text pencarian (case-insensitive)
-    const filteredPlants = this.ctkapas.filter((ctkapa) => ctkapa.machine.toLowerCase().includes(this.searchText.toLowerCase()) || ctkapa.part_NUMBER.toString().includes(this.searchText));
+    const filteredPlants = this.ctkapas.filter((ctkapa) => ctkapa.machine.toLowerCase().includes(this.searchText.toLowerCase()) || ctkapa.id_CT_KAPA.toString().includes(this.searchText));
 
     // Tampilkan hasil filter pada halaman pertama
     this.onChangePage(filteredPlants.slice(0, this.pageSize));
@@ -108,7 +151,7 @@ export class ViewCtKapaComponent implements OnInit {
         this.editCtKapaObject = response.data;
       },
       (error) => {
-        this.errorMessage = 'Failed to load plants: ' + error.message;
+        this.errorMessage = 'Failed to load CT KAPA: ' + error.message;
       }
     );
   }
@@ -132,7 +175,7 @@ export class ViewCtKapaComponent implements OnInit {
             });
           },
           (err) => {
-            Swal.fire('Error!', 'Failed to delete the pattern.', 'error');
+            Swal.fire('Error!', 'Failed to delete the CT Kapa.', 'error');
           }
         );
       }
@@ -145,8 +188,8 @@ export class ViewCtKapaComponent implements OnInit {
 
   downloadTemplate() {
     const link = document.createElement('a');
-    link.href = 'assets/Template Excel/Layout_CT_Kapa.xlsx';
-    link.download = 'Layout_CT_Kapa.xlsx';
+    link.href = 'assets/Template Excel/Layout_Ct_Kapa.xlsx';
+    link.download = 'Layout_Master_CT_KAPA.xlsx';
     link.click();
   }
 

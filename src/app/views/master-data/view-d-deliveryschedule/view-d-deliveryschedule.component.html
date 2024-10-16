@@ -15,14 +15,15 @@
         <!-- Right side: Download Template and Export Excel buttons -->
         <div>
           <button type="button" class="btn btn-primary ml-2" (click)="downloadTemplate()"><i class="fa fa-download fa-lg"></i> Download Template</button>
+          <button type="button" class="btn btn-primary ml-2" (click)="downloadExcel()"><i class="fa fa-download fa-lg"></i> Export Excel</button>
           <button type="button" class="btn btn-success ml-2" data-toggle="modal" data-target="#uploadModal"><i class="fa fa-file-excel-o fa-lg"></i> Upload Excel</button>
         </div>
       </div>
 
       <!-- Table -->
-      <div class="card-body">
-        <table class="table table-striped">
-          <thead>
+      <div class="table-responsive">
+        <table class="table table-bordered table-striped table-sm" style="table-layout: auto">
+          <thead align="center">
             <tr>
               <th>Detail Delivery Schedule ID</th>
               <th>Delivery Schedule ID</th>
@@ -30,6 +31,7 @@
               <th>Date</th>
               <th>Total Delivery</th>
               <th>Status</th>
+              <th>Action</th>
             </tr>
           </thead>
           <tbody>
@@ -37,83 +39,87 @@
               <td>{{ detail.detail_DS_ID }}</td>
               <td>{{ detail.ds_ID }}</td>
               <td>{{ detail.part_NUM }}</td>
-              <td>{{ detail.date }}</td>
+              <td>{{ detail.date_DS }}</td>
               <td>{{ detail.total_DELIVERY }}</td>
-              <td>{{ detail.status === 1 ? 'Active' : 'Deactive' }}</td>
-              <td>
+              <td [ngClass]="{ 'bg-success': detail.status === 1, 'bg-danger': detail.status !== 1 }">
+                {{ detail.status === 1 ? 'Active' : 'Deactive' }}
+              </td>
+              <td align="center">
                 <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(detail.detail_DS_ID)">Update</button>
-                <button type="button" class="btn btn-md btn-danger ml-2" (click)="deleteData(detail)">Delete</button>
+                <button type="button" class="btn btn-md ml-2" [ngClass]="{ 'btn-danger': detail.status === 1, 'btn-success': detail.status !== 1 }" (click)="detail.status === 1 ? deleteData(detail) : activateData(detail)">
+                  {{ detail.status === 1 ? 'Delete' : 'Active' }}
+                </button>
               </td>
             </tr>
           </tbody>
         </table>
       </div>
-    </div>
-  </div>
 
-  <!-- Modal edit -->
-  <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="addModalLabel">Edit Detail Delivery Schedule</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <form [formGroup]="editDDeliveryScheduleTypeForm">
-            <div class="form-group">
-              <label for="dsID">Delivery Schedule</label>
-              <input [(ngModel)]="editDDeliveryScheduleTypeObject.ds_ID" type="text" class="form-control" id="dsID" formControlName="dsID" [ngClass]="{ 'is-invalid': editDDeliveryScheduleTypeForm.get('dsID').invalid && editDDeliveryScheduleTypeForm.get('dsID').touched }" />
-              <div *ngIf="editDDeliveryScheduleTypeForm.get('dsID').invalid && editDDeliveryScheduleTypeForm.get('dsID').touched" class="invalid-feedback">Delivery Schedule is required.</div>
+      <!-- Modal edit -->
+      <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="addModalLabel">Edit Detail Delivery Schedule</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
             </div>
-            <div class="form-group">
-              <label for="partNum">Part Number</label>
-              <input [(ngModel)]="editDDeliveryScheduleTypeObject.part_NUM" type="text" class="form-control" id="partNum" formControlName="partNum" [ngClass]="{ 'is-invalid': editDDeliveryScheduleTypeForm.get('partNum').invalid && editDDeliveryScheduleTypeForm.get('partNum').touched }" />
-              <div *ngIf="editDDeliveryScheduleTypeForm.get('partNum').invalid && editDDeliveryScheduleTypeForm.get('partNum').touched" class="invalid-feedback">Part Number is required.</div>
+            <div class="modal-body">
+              <form [formGroup]="editDDeliveryScheduleTypeForm">
+                <div class="form-group">
+                  <label for="dsID">Delivery Schedule</label>
+                  <input [(ngModel)]="editDDeliveryScheduleTypeObject.ds_ID" type="text" class="form-control" id="dsID" formControlName="dsID" [ngClass]="{ 'is-invalid': editDDeliveryScheduleTypeForm.get('dsID').invalid && editDDeliveryScheduleTypeForm.get('dsID').touched }" />
+                  <div *ngIf="editDDeliveryScheduleTypeForm.get('dsID').invalid && editDDeliveryScheduleTypeForm.get('dsID').touched" class="invalid-feedback">Delivery Schedule is required.</div>
+                </div>
+                <div class="form-group">
+                  <label for="partNum">Part Number</label>
+                  <input [(ngModel)]="editDDeliveryScheduleTypeObject.part_NUM" type="text" class="form-control" id="partNum" formControlName="partNum" [ngClass]="{ 'is-invalid': editDDeliveryScheduleTypeForm.get('partNum').invalid && editDDeliveryScheduleTypeForm.get('partNum').touched }" />
+                  <div *ngIf="editDDeliveryScheduleTypeForm.get('partNum').invalid && editDDeliveryScheduleTypeForm.get('partNum').touched" class="invalid-feedback">Part Number is required.</div>
+                </div>
+                <div class="form-group">
+                  <label for="date">Date</label>
+                  <input [(ngModel)]="editDDeliveryScheduleTypeObject.date_DS" type="text" class="form-control" id="date" formControlName="date" [ngClass]="{ 'is-invalid': editDDeliveryScheduleTypeForm.get('date').invalid && editDDeliveryScheduleTypeForm.get('date').touched }" />
+                  <div *ngIf="editDDeliveryScheduleTypeForm.get('date').invalid && editDDeliveryScheduleTypeForm.get('date').touched" class="invalid-feedback">Date is required.</div>
+                </div>
+                <div class="form-group">
+                  <label for="totalDelvery">Total Delivery</label>
+                  <input [(ngModel)]="editDDeliveryScheduleTypeObject.total_DELIVERY" type="text" class="form-control" id="totalDelvery" formControlName="totalDelvery" [ngClass]="{ 'is-invalid': editDDeliveryScheduleTypeForm.get('totalDelvery').invalid && editDDeliveryScheduleTypeForm.get('totalDelvery').touched }" />
+                  <div *ngIf="editDDeliveryScheduleTypeForm.get('totalDelvery').invalid && editDDeliveryScheduleTypeForm.get('totalDelvery').touched" class="invalid-feedback">Total Delivery is required.</div>
+                </div>
+              </form>
             </div>
-            <div class="form-group">
-              <label for="date">Date</label>
-              <input [(ngModel)]="editDDeliveryScheduleTypeObject.date" type="text" class="form-control" id="date" formControlName="date" [ngClass]="{ 'is-invalid': editDDeliveryScheduleTypeForm.get('date').invalid && editDDeliveryScheduleTypeForm.get('date').touched }" />
-              <div *ngIf="editDDeliveryScheduleTypeForm.get('date').invalid && editDDeliveryScheduleTypeForm.get('date').touched" class="invalid-feedback">Date is required.</div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary" [disabled]="editDDeliveryScheduleTypeForm.invalid" (click)="updateDDeliverySchedule()">Update Detail Delivery Schedule</button>
             </div>
-            <div class="form-group">
-              <label for="totalDelvery">Total Delivery</label>
-              <input [(ngModel)]="editDDeliveryScheduleTypeObject.total_DELIVERY" type="text" class="form-control" id="totalDelvery" formControlName="totalDelvery" [ngClass]="{ 'is-invalid': editDDeliveryScheduleTypeForm.get('totalDelvery').invalid && editDDeliveryScheduleTypeForm.get('totalDelvery').touched }" />
-              <div *ngIf="editDDeliveryScheduleTypeForm.get('totalDelvery').invalid && editDDeliveryScheduleTypeForm.get('totalDelvery').touched" class="invalid-feedback">Total Delivery is required.</div>
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" [disabled]="editDDeliveryScheduleTypeForm.invalid" (click)="updateDDeliverySchedule()">Update Detail Delivery Schedule</button>
+          </div>
         </div>
       </div>
-    </div>
-  </div>
 
-  <!-- Modal for Upload Excel -->
-  <div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="uploadModalLabel">Upload Excel File</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <form id="uploadForm">
-            <!-- Manual File Input -->
-            <div class="form-group mt-3">
-              <input type="file" class="form-control-file" id="manualFileInput" accept=".xls,.xlsx" (change)="onFileChange($event)" />
+      <!-- Modal for Upload Excel -->
+      <div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="uploadModalLabel">Upload Excel File</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
             </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-md btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-md btn-primary" id="uploadButton" (click)="uploadFileExcel()">Upload</button>
+            <div class="modal-body">
+              <form id="uploadForm">
+                <!-- Manual File Input -->
+                <div class="form-group mt-3">
+                  <input type="file" class="form-control-file" id="manualFileInput" accept=".xls,.xlsx" (change)="onFileChange($event)" />
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-md btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-md btn-primary" id="uploadButton" (click)="uploadFileExcel()">Upload</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>

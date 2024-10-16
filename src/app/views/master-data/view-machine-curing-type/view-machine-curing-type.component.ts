@@ -4,6 +4,7 @@ import { MachineCuringType } from 'src/app/models/machine-curing-type';
 import { ApiResponse } from 'src/app/response/Response';
 import { MachineCuringTypeService } from 'src/app/services/master-data/machine-curing-type/machine-curing-type.service';
 import Swal from 'sweetalert2';
+import { saveAs } from 'file-saver';
 declare var $: any;
 import * as XLSX from 'xlsx';
 
@@ -102,7 +103,7 @@ export class ViewMachineCuringTypeComponent implements OnInit {
         this.edtMCTObject = response.data;
       },
       (error) => {
-        this.errorMessage = 'Failed to load plants: ' + error.message;
+        this.errorMessage = 'Failed to load machine curing types: ' + error.message;
       }
     );
   }
@@ -110,7 +111,7 @@ export class ViewMachineCuringTypeComponent implements OnInit {
   deleteData(Mct: MachineCuringType): void {
     Swal.fire({
       title: 'Are you sure?',
-      text: 'This data plant will be deleted!',
+      text: 'This data machine curing type will be deleted!',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -121,12 +122,12 @@ export class ViewMachineCuringTypeComponent implements OnInit {
       if (result.isConfirmed) {
         this.machineCuringTypeService.deleteMct(Mct).subscribe(
           (response) => {
-            Swal.fire('Deleted!', 'Data plant has been deleted', 'success').then(() => {
+            Swal.fire('Deleted!', 'Data machine curing type has been deleted', 'success').then(() => {
               window.location.reload();
             });
           },
           (err) => {
-            Swal.fire('Error!', 'Failed to delete the plant.', 'error');
+            Swal.fire('Error!', 'Failed to delete the machine curing type.', 'error');
           }
         );
       }
@@ -140,7 +141,7 @@ export class ViewMachineCuringTypeComponent implements OnInit {
   downloadTemplate() {
     const link = document.createElement('a');
     link.href = 'assets/Template Excel/Layout_Machine_Curing_Type.xlsx';
-    link.download = 'Layout_Machine_Curing_Type.xlsx';
+    link.download = 'Layout_Master_Machine_Curing_Type.xlsx';
     link.click();
   }
 
@@ -202,5 +203,42 @@ export class ViewMachineCuringTypeComponent implements OnInit {
         confirmButtonText: 'OK',
       });
     }
+  }
+  downloadExcel(): void {
+    this.machineCuringTypeService.exportMctExcel().subscribe({
+      next: (response) => {
+        // Menggunakan nama file yang sudah ditentukan di backend
+        const filename = 'MACHIECURINGTYPE_DATA.xlsx'; // Nama file bisa dinamis jika diperlukan
+        saveAs(response, filename); // Mengunduh file
+      },
+      error: (err) => {
+        console.error('Download error:', err);
+      },
+    });
+  }
+  activateData(mct: MachineCuringType): void {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'This data Machine Curing Type will be Activated!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes',
+      cancelButtonText: 'No',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.machineCuringTypeService.activateMct(mct).subscribe(
+          (response) => {
+            Swal.fire('Activated!', 'Data Machine Curing Type has been Activated', 'success').then(() => {
+              window.location.reload();
+            });
+          },
+          (err) => {
+            Swal.fire('Error!', 'Failed to Activated the Machine Curing Type.', 'error');
+          }
+        );
+      }
+    });
   }
 }
