@@ -28,6 +28,16 @@ export class PatternService {
   getAllPattern(): Observable<ApiResponse<Pattern[]>> {
     return this.http.get<ApiResponse<Pattern[]>>(environment.apiUrlWebAdmin + '/getAllPattern', { headers: this.getHeaders() });
   }
+  activatePattern(pattern: Pattern): Observable<ApiResponse<Pattern>> {
+    return this.http.post<ApiResponse<Pattern>>(environment.apiUrlWebAdmin + '/restorePattern', pattern, { headers: this.getHeaders() }).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((err) => {
+        return throwError(err);
+      })
+    );
+  }
 
   //Method Update plant
   updatePattern(pattern: Pattern): Observable<ApiResponse<Pattern>> {

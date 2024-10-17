@@ -198,10 +198,10 @@ export const routes: Routes = [
         },
       },
       {
-        path: 'master-data/view-tassMachine',
+        path: 'master-data/view-machine-tass',
         component: ViewMachineTassComponent,
         data: {
-          title: 'Master Data / View Machine',
+          title: 'Master Data / View Machine Tass',
         },
       },
       {

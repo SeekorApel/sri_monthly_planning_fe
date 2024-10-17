@@ -48,7 +48,9 @@
               </td>
               <td>
                 <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(machinetass.id_MACHINE_TASS)">Update</button>
-                <button type="button" class="btn btn-md btn-danger ml-2" (click)="deleteData(machinetass)">Delete</button>
+                <button type="button" class="btn btn-md ml-3" [ngClass]="{ 'btn-danger': machinetass.status === 1, 'btn-success': machinetass.status !== 1 }" (click)="machinetass.status === 1 ? deleteData(machinetass) : activateData(machinetass)">
+                  {{ machinetass.status === 1 ? 'Delete' : 'Active' }}
+                </button>
               </td>
             </tr>
           </tbody>

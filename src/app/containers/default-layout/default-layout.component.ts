@@ -35,7 +35,7 @@ export class DefaultLayoutComponent {
       { name: 'ProductType', url: '/master-data/view-product-type', icon: 'cil-minus' },
       { name: 'Product', url: '/master-data/view-product', icon: 'cil-minus' },
       { name: 'Pattern', url: '/master-data/view-pattern', icon: 'cil-minus' },
-      { name: 'Machine Tass', url: '/master-data/view-tassMachine', icon: 'cil-minus' },
+      { name: 'Machine Tass', url: '/master-data/view-machine-tass', icon: 'cil-minus' },
       { name: 'Detail Delivery Schedule', url: '/master-data/view-d-deliveryschedule', icon: 'cil-minus' },
       { name: 'Machine Curing Type', url: '/master-data/view-machine-curing-type', icon: 'cil-minus' },
       { name: 'Machine Tass Type', url: '/master-data/view-machine-tass-type', icon: 'cil-minus' },

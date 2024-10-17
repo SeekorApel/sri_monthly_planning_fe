@@ -24,6 +24,16 @@ export class MachineTassService {
   getMachineTassByID(idMachineTass: number): Observable<ApiResponse<MachineTass>> {
     return this.http.get<ApiResponse<MachineTass>>(environment.apiUrlWebAdmin + '/getMachineTassById/' + idMachineTass, { headers: this.getHeaders() });
   }
+  activateMachineTass(machineTass: MachineTass): Observable<ApiResponse<MachineTass>> {
+    return this.http.post<ApiResponse<MachineTass>>(environment.apiUrlWebAdmin + '/restoreMachineTass', machineTass, { headers: this.getHeaders() }).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((err) => {
+        return throwError(err);
+      })
+    );
+  }
 
   getAllMachineTass(): Observable<ApiResponse<MachineTass[]>> {
     return this.http.get<ApiResponse<MachineTass[]>>(environment.apiUrlWebAdmin + '/getAllMachineTass', { headers: this.getHeaders() });
@@ -70,15 +80,5 @@ export class MachineTassService {
   }
   exportMachineTassExcel(): Observable<Blob> {
     return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/exportMachineTassExcel`, { responseType: 'blob' as 'json' });
-  }
-  activateMachineTass(machineTass: MachineTass): Observable<ApiResponse<MachineTass>> {
-    return this.http.post<ApiResponse<MachineTass>>(environment.apiUrlWebAdmin + '/restoreMachineTass', machineTass, { headers: this.getHeaders() }).pipe(
-      map((response) => {
-        return response;
-      }),
-      catchError((err) => {
-        return throwError(err);
-      })
-    );
   }
 }

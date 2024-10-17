@@ -25,6 +25,7 @@
         <table class="table table-bordered table-striped table-sm" style="table-layout: auto">
           <thead align="center">
             <tr>
+              <th>No</th>
               <th>Detail Delivery Schedule ID</th>
               <th>Delivery Schedule ID</th>
               <th>Part Number</th>
@@ -36,6 +37,7 @@
           </thead>
           <tbody>
             <tr *ngFor="let detail of pageOfItems; let i = index">
+              <td>{{ i + 1 }}</td>
               <td>{{ detail.detail_DS_ID }}</td>
               <td>{{ detail.ds_ID }}</td>
               <td>{{ detail.part_NUM }}</td>
