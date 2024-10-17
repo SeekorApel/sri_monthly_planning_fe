@@ -56,7 +56,7 @@ export class AddMoPpcComponent implements OnInit {
 
   constructor(private router: Router, private fb: FormBuilder, private moService: MarketingOrderService) {
     this.formHeaderMo = this.fb.group({
-      date: ['', Validators.required],
+      date: [new Date().toISOString().substring(0, 10)],
       type: ['', Validators.required],
       month_0: ['', Validators.required],
       month_1: ['', []],

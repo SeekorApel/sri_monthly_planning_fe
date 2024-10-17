@@ -19,30 +19,35 @@
             <thead>
               <tr align="center">
                 <th class="align-middle">No</th>
-                <th class="align-middle">Marketing Order ID</th>
+                <th class="align-middle" style="min-width: 150px">Marketing Order ID</th>
                 <th class="align-middle">Type</th>
-                <th class="align-middle">Date</th>
-                <th class="align-middle">Revision</th>
-                <th class="align-middle">Month 1</th>
-                <th class="align-middle">Month 2</th>
-                <th class="align-middle">Month 3</th>
-                <th class="align-middle">Action</th>
+                <th class="align-middle" style="min-width: 150px">Date Valid</th>
+                <th class="align-middle" style="min-width: 150px">Revision by PPC</th>
+                <th class="align-middle" style="min-width: 200px">Revision by Marketing</th>
+                <th class="align-middle" style="min-width: 150px">Month 1</th>
+                <th class="align-middle" style="min-width: 150px">Month 2</th>
+                <th class="align-middle" style="min-width: 150px">Month 3</th>
+                <th class="align-middle" style="min-width: 350px">Action</th>
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let mo of pageOfItems; let i = index" align="center">
+              <tr *ngFor="let mo of dataTemp; let i = index" align="center">
                 <td>{{ i + 1 }}</td>
-                <td>{{ mo.mo_ID }}</td>
+                <td>{{ mo.moId }}</td>
                 <td>{{ mo.type }}</td>
-                <td>{{ dateUtil.parseFullDate(mo.date_VALID) }}</td>
-                <td>{{ mo.revision }}</td>
-                <td>{{ dateUtil.parseMonthYear(mo.month_0) }}</td>
-                <td>{{ dateUtil.parseMonthYear(mo.month_1) }}</td>
-                <td>{{ dateUtil.parseMonthYear(mo.month_2) }}</td>
+                <td>{{ mo.dateValid }}</td>
+                <td>{{ mo.revisionPpc }}</td>
+                <td>{{ mo.revisionMarketing }}</td>
+                <td>{{ mo.month0 }}</td>
+                <td>{{ mo.month1 }}</td>
+                <td>{{ mo.month2 }}</td>
                 <td>
                   <button type="button" class="btn btn-md btn-secondary" (click)="navigateToDetail(mo.mo_ID)">Detail</button>
                   <button type="button" class="btn btn-md btn-primary ml-2" (click)="navigateToEdit(mo.mo_ID)">Revision</button>
-                  <button type="button" class="btn btn-md ml-2" [ngClass]="{ 'btn-warning': mo.status_FILLED === 2, 'btn-success': mo.status_FILLED === 3 }" [disabled]="mo.status_FILLED === 1" (click)="mo.status_FILLED === 2 ? disableMo(mo) : enableMo(mo)">{{ mo.status_FILLED === 3 ? 'Enable' : 'Disable' }}</button>
+                  <button *ngIf="mo.statusFilled === 1" type="button" class="btn btn-md btn-danger ml-2" disabled>Disable</button>
+                  <button *ngIf="mo.statusFilled === 2" type="button" class="btn btn-md btn-danger ml-2" (click)="disableMo(mo)">Disable</button>
+                  <button *ngIf="mo.statusFilled === 3" type="button" class="btn btn-md btn-warning ml-2" (click)="enableMo(mo)">Enable</button>
+                  <button type="button" class="btn btn-md btn-success ml-2" (click)="navigateToEdit(mo.mo_ID)">Print</button>
                 </td>
               </tr>
             </tbody>

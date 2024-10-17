@@ -10,8 +10,7 @@
           <div class="form-group row">
             <label class="col-md-3 col-form-label">Date</label>
             <div class="col-md-9">
-              <input class="form-control" [ngClass]="{ 'is-invalid': formHeaderMo.get('date')?.invalid && formHeaderMo.get('date')?.touched }" type="date" formControlName="date" placeholder="date" />
-              <div *ngIf="formHeaderMo.get('date')?.invalid && formHeaderMo.get('date')?.touched" class="invalid-feedback">Date is required.</div>
+              <input class="form-control" type="date" formControlName="date" placeholder="date" [readOnly]="isReadOnly" />
             </div>
           </div>
 
