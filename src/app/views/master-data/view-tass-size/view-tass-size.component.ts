@@ -62,7 +62,10 @@ export class ViewTassSizeComponent implements OnInit {
         tass_size.machinetasstype_ID
           .toLowerCase()
           .includes(this.searchText.toLowerCase()) ||
-        tass_size.tassize_ID.toString().includes(this.searchText)
+        tass_size.tassize_ID.toString().includes(this.searchText)||
+        tass_size.size_ID.toLowerCase().includes(this.searchText.toLowerCase())||
+        tass_size.capacity.toString().includes(this.searchText.toLowerCase())
+        
     );
 
     // Tampilkan hasil filter pada halaman pertama

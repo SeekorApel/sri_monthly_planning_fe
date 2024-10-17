@@ -86,7 +86,7 @@ export class ItemCuringService {
   uploadFileExcel(file: FormData): Observable<ApiResponse<Item_Curing>> {
     return this.http
       .post<ApiResponse<Item_Curing>>(
-        environment.apiUrlWebAdmin + '/saveItemCuringsExcel',
+        environment.apiUrlWebAdmin + '/saveItemCuringExcel',
         file,
         { headers: this.getHeaders() }
       )

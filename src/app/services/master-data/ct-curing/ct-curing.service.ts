@@ -75,7 +75,7 @@ export class CTCuringService {
   }
 
   activateCTCuring(ct_curing: CT_Curing): Observable<ApiResponse<CT_Curing>> {
-    return this.http.post<ApiResponse<CT_Curing>>(environment.apiUrlWebAdmin + '/activateCTCuring', ct_curing, { headers: this.getHeaders() }).pipe(
+    return this.http.post<ApiResponse<CT_Curing>>(environment.apiUrlWebAdmin + '/restoreCTCuring', ct_curing, { headers: this.getHeaders() }).pipe(
       map((response) => {
         return response;
       }),

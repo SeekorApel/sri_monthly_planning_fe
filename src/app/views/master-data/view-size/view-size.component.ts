@@ -10,7 +10,7 @@ import { saveAs } from 'file-saver';
 
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
-
+import { MatPaginator } from '@angular/material/paginator';
 @Component({
   selector: 'app-view-size',
   templateUrl: './view-size.component.html',
@@ -36,6 +36,7 @@ export class ViewSizeComponent implements OnInit {
   dataSource: MatTableDataSource<Size>;
 
   @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(private sizeService: SizeService, private fb: FormBuilder) { 
     this.editSizeForm = this.fb.group({
@@ -51,7 +52,10 @@ export class ViewSizeComponent implements OnInit {
     this.sizeService.getAllSize().subscribe(
       (response: ApiResponse<Size[]>) => {
         this.sizes = response.data;
-        this.onChangePage(this.sizes.slice(0, this.pageSize));
+        this.dataSource = new MatTableDataSource(this.sizes);
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+        this.onChangePage(this.dataSource.data.slice(0, this.pageSize));
       },
       (error) => {
         this.errorMessage = 'Failed to load sizes: ' + error.message;
@@ -60,24 +64,23 @@ export class ViewSizeComponent implements OnInit {
   }
 
   onChangePage(pageOfItems: Array<any>) {
-    this.pageOfItems = pageOfItems;
-    this.dataSource = new MatTableDataSource(pageOfItems);
-    this.dataSource.sort = this.sort;
-
+    this.pageOfItems = pageOfItems; 
   }
 
   onSearchChange(): void {
-    // Lakukan filter berdasarkan nama plant yang mengandung text pencarian (case-insensitive)
-    const filteredSizes = this.sizes.filter(
-      (size) =>
-        size.description
-          .toLowerCase()
-          .includes(this.searchText.toLowerCase()) ||
-        size.size_ID.toString().includes(this.searchText)
-    );
 
-    // Tampilkan hasil filter pada halaman pertama
-    this.onChangePage(filteredSizes.slice(0, this.pageSize));
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
+    // Lakukan filter berdasarkan nama plant yang mengandung text pencarian (case-insensitive)
+    // const filteredSizes = this.sizes.filter(
+    //   (size) =>
+    //     size.description
+    //       .toLowerCase()
+    //       .includes(this.searchText.toLowerCase()) ||
+    //     size.size_ID.toString().toLowerCase().includes(this.searchText.toLowerCase())
+    // );
+
+    // // Tampilkan hasil filter pada halaman pertama
+    // this.onChangePage(filteredSizes.slice(0, this.pageSize));
   }
 
   resetSearch(): void {

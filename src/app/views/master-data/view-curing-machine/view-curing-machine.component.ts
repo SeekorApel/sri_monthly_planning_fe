@@ -34,7 +34,7 @@ export class ViewCuringMachineComponent implements OnInit {
       buildingID: ['', Validators.required],
       machinetype: ['', Validators.required],
       cavity: ['', Validators.required],
-      wordcentertext: ['', Validators.required],
+      statusUsage: ['', Validators.required],
     });
   }
 
@@ -61,13 +61,13 @@ export class ViewCuringMachineComponent implements OnInit {
   onSearchChange(): void {
     const filteredCuringMachines = this.curingmachines.filter(
       (curingmachine) =>
-        curingmachine.curing_NUMBER.toString()
+        curingmachine.machine_TYPE
           .toLowerCase()
           .includes(this.searchText.toLowerCase()) ||
           curingmachine.building_ID.toString().includes(this.searchText)||
-          curingmachine.curing_NUMBER.toString().includes(this.searchText)||
           curingmachine.cavity.toString().includes(this.searchText)||
-          curingmachine.work_CENTER_TEXT.includes(this.searchText)
+          curingmachine.work_CENTER_TEXT.includes(this.searchText)||
+          curingmachine.status_USAGE.toString().includes(this.searchText)
     );
 
     // Tampilkan hasil filter pada halaman pertama

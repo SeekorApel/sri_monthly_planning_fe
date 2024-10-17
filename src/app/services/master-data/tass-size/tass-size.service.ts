@@ -74,7 +74,8 @@ export class TassSizeService {
 
   
   activateTassSize(tass_size: Tass_Size): Observable<ApiResponse<Tass_Size>> {
-    return this.http.post<ApiResponse<Tass_Size>>(environment.apiUrlWebAdmin + '/activateTassSize', tass_size, { headers: this.getHeaders() }).pipe(
+    console.log(tass_size);
+    return this.http.post<ApiResponse<Tass_Size>>(environment.apiUrlWebAdmin + '/restoreTassSize', tass_size, { headers: this.getHeaders() }).pipe(
       map((response) => {
         return response;
       }),

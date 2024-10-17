@@ -55,6 +55,7 @@ import { BsDatepickerModule } from 'ngx-bootstrap/datepicker';
 
 import {MatSortModule} from '@angular/material/sort';
 import {MatTableModule} from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 @NgModule({
   imports: [
@@ -81,6 +82,7 @@ import {MatTableModule} from '@angular/material/table';
     JwPaginationModule,
     MatSortModule,
     MatTableModule,
+    MatPaginatorModule,
   ],
   declarations: [
     AppComponent,

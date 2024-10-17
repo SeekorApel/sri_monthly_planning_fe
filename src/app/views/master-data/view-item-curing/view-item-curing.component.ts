@@ -64,8 +64,9 @@ export class ViewItemCuringComponent implements OnInit {
         itemcuring.item_CURING
           .toLowerCase()
           .includes(this.searchText.toLowerCase()) ||
-          itemcuring.machine_TYPE.toString().includes(this.searchText)||
-          itemcuring.machine_TYPE.toString().includes(this.searchText)
+          itemcuring.machine_TYPE.toLowerCase().includes(this.searchText.toLowerCase())||
+          itemcuring.kapa_PER_MOULD.toString().includes(this.searchText)||
+          itemcuring.number_OF_MOULD.toString().includes(this.searchText)
     );
 
     // Tampilkan hasil filter pada halaman pertama

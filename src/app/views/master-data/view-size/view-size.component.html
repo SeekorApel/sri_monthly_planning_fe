@@ -37,7 +37,7 @@
         
           <!-- Description Column -->
           <ng-container matColumnDef="description">
-            <th *matHeaderCellDef mat-sort-header>Description</th>
+            <th  *matHeaderCellDef mat-sort-header >Description</th>
             <td *matCellDef="let element">{{ element.description }}</td>
           </ng-container>
         
@@ -50,8 +50,8 @@
           </ng-container>
         
           <!-- Action Column -->
-          <ng-container matColumnDef="action">
-            <th *matHeaderCellDef>Action</th>
+          <ng-container matColumnDef="action" >
+            <th *matHeaderCellDef style="min-width: 200px;">Action</th>
             <td *matCellDef="let element">
               <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(element.size_ID)">Update</button>
               <button type="button" class="btn btn-md ml-2" [ngClass]="{ 'btn-danger': element.status === 1, 'btn-success': element.status !== 1 }" (click)="element.status === 1 ? deleteData(element) : activateData(element)">
@@ -60,42 +60,13 @@
             </td>
           </ng-container>
         
-          <tr align="center" mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr align="center" style="height: 20px;" mat-header-row *matHeaderRowDef="displayedColumns"></tr>
           <tr align="center" mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
         </table>
-        
-
-        <!-- <table class="table table-bordered table-striped table-sm" matSort >
-          <thead align="center">
-            <tr>
-              <th>No</th>
-              <th mat-sort-header="id">Size ID</th>
-              <th mat-sort-header="desc">Description</th>
-              <th>Status</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr align="center" *ngFor="let size of pageOfItems; let i = index">
-              <td>{{ i + 1 }}</td>
-              <td>{{ size.size_ID }}</td>
-              <td>{{ size.description }}</td>
-              <td [ngClass]="{ 'bg-success': size.status === 1, 'bg-danger': size.status !== 1 }">{{ size.status === 1 ? 'Active' : 'Deactive' }}</td>
-              <td>
-                <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(size.size_ID)">Update</button>
-                <button type="button" class="btn btn-md ml-2" [ngClass]="{ 'btn-danger': size.status === 1, 'btn-success': size.status !== 1 }" (click)="size.status === 1 ? deleteData(size) : activateData(size)">
-                  {{ size.status === 1 ? 'Delete' : 'Active' }}
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table> -->
-        <!-- Pagination -->
-        <nav>
-          <ul class="pagination">
-            <jw-pagination [items]="sizes" [pageSize]="pageSize" [maxPages]="totalPages" (changePage)="onChangePage($event)"> </jw-pagination>
-          </ul>
-        </nav>
+            <mat-paginator [pageSize]="pageSize"
+              [pageSizeOptions]="[5, 10, 20]"
+              showFirstLastButtons>
+            </mat-paginator>
       </div>
     </div>
   </div>

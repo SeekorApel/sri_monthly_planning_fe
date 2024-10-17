@@ -34,6 +34,7 @@ import { ViewMachineAllowanceComponent } from './view-machine-allowance/view-mac
 import { ViewItemAssyComponent } from './view-item-assy/view-item-assy.component';
 import {MatSortModule} from '@angular/material/sort';
 import {MatTableModule} from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 @NgModule({
   declarations: [
@@ -75,6 +76,7 @@ import {MatTableModule} from '@angular/material/table';
     ToastrModule.forRoot(),
     MatSortModule,
     MatTableModule,
+    MatPaginatorModule,
   ],
 })
 export class MasterDataModule {}
