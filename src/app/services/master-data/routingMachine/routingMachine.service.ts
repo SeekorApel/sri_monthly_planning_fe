@@ -11,10 +11,6 @@ import { map, catchError } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class RoutingService {
-  //Isi tokenya
-  token: String =
-    'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBdXJlbCIsImV4cCI6MTcyODQ3OTM3OX0.jdYVsbeEF1ZQTVEfNpjN4uBnTiaLdjxu2uMO1aaOtW9VkojtyF27mGbknua7fKBjgYhP3e7PcCm5t2fpQOq9uA';
-
   constructor(private http: HttpClient) {}
 
   // Method untuk menambahkan header Authorization dengan token
@@ -24,26 +20,20 @@ export class RoutingService {
     });
   }
 
-  getCtAssyById(idCtAssy: number): Observable<ApiResponse<RoutingMachine>> {
-    return this.http.get<ApiResponse<RoutingMachine>>(
-      environment.apiUrlWebAdmin + '/getCtAssyById/' + idCtAssy,
-      { headers: this.getHeaders() }
-    );
+  getCTAssyById(idRouting: number): Observable<ApiResponse<RoutingMachine>> {
+    return this.http.get<ApiResponse<RoutingMachine>>(environment.apiUrlWebAdmin + '/getCTAssyById/' + idRouting, { headers: this.getHeaders() });
   }
 
-  getAllCtAssy(): Observable<ApiResponse<RoutingMachine[]>> {
-    return this.http.get<ApiResponse<RoutingMachine[]>>(
-      environment.apiUrlWebAdmin + '/getAllCtAssy',
-      { headers: this.getHeaders() }
-    );
+  getAllCTAssy(): Observable<ApiResponse<RoutingMachine[]>> {
+    return this.http.get<ApiResponse<RoutingMachine[]>>(environment.apiUrlWebAdmin + '/getAllCTAssy', { headers: this.getHeaders() });
   }
 
-  //Method Update plant
-  updateCtAssy(routingMachine: RoutingMachine): Observable<ApiResponse<RoutingMachine>> {
+  //Method Update setting
+  updateCTAssy(setting: RoutingMachine): Observable<ApiResponse<RoutingMachine>> {
     return this.http
       .post<ApiResponse<RoutingMachine>>(
-        environment.apiUrlWebAdmin + '/updateCtAssy',
-        routingMachine,
+        environment.apiUrlWebAdmin + '/updateCTAssy',
+        setting,
         { headers: this.getHeaders() } // Menyertakan header
       )
       .pipe(
@@ -56,37 +46,40 @@ export class RoutingService {
       );
   }
 
-  deleteCtAssy(CtAssy: RoutingMachine): Observable<ApiResponse<RoutingMachine>> {
-    return this.http
-      .post<ApiResponse<RoutingMachine>>(
-        environment.apiUrlWebAdmin + '/deleteCtAssy',
-        CtAssy,
-        { headers: this.getHeaders() }
-      )
-      .pipe(
-        map((response) => {
-          return response;
-        }),
-        catchError((err) => {
-          return throwError(err);
-        })
-      );
+  deleteCTAssy(routingMachine: RoutingMachine): Observable<ApiResponse<RoutingMachine>> {
+    return this.http.post<ApiResponse<RoutingMachine>>(environment.apiUrlWebAdmin + '/deleteCTAssy', routingMachine, { headers: this.getHeaders() }).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((err) => {
+        return throwError(err);
+      })
+    );
+  }
+
+  activateCTAssy(routingMachine: RoutingMachine): Observable<ApiResponse<RoutingMachine>> {
+    return this.http.post<ApiResponse<RoutingMachine>>(environment.apiUrlWebAdmin + '/restoreCTAssy', routingMachine, { headers: this.getHeaders() }).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((err) => {
+        return throwError(err);
+      })
+    );
   }
 
   uploadFileExcel(file: FormData): Observable<ApiResponse<RoutingMachine>> {
-    return this.http
-      .post<ApiResponse<RoutingMachine>>(
-        environment.apiUrlWebAdmin + '/saveQuadrantExcel',
-        file,
-        { headers: this.getHeaders() }
-      )
-      .pipe(
-        map((response) => {
-          return response;
-        }),
-        catchError((err) => {
-          return throwError(err);
-        })
-      );
+    return this.http.post<ApiResponse<RoutingMachine>>(environment.apiUrlWebAdmin + '/saveCTAssyExcel', file, { headers: this.getHeaders() }).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((err) => {
+        return throwError(err);
+      })
+    );
+  }
+
+  exportRoutingMachineExcel(): Observable<Blob> {
+    return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/exportCTAssyExcel`, { responseType: 'blob' as 'json' });
   }
 }

@@ -1,27 +1,29 @@
 <div class="col-lg-12">
-    <div class="card">
-      <div class="card-header">
-        <strong><i class="fa fa-bars"></i>&nbsp;Master Data Item Assy</strong>
-      </div>
-  
-      <div class="card-body">
-        <!-- Wrapper for the input and buttons in one row -->
-        <div class="d-flex justify-content-between mb-3">
-          <div class="d-flex align-items-center">
-            <input type="text" class="form-control col-md-12 col-lg-12" [(ngModel)]="searchText" (input)="onSearchChange()" placeholder="Find here..." />
-            <button type="submit" class="btn btn-primary ml-2" (click)="resetSearch()">Reset</button>
-          </div>
-  
-          <!-- Right side: Download Template and Export Excel buttons -->
-          <div>
-            <button type="button" class="btn btn-primary ml-2" (click)="downloadTemplate()"><i class="fa fa-download fa-lg"></i> Download Template</button>
-            <button type="button" class="btn btn-success ml-2" data-toggle="modal" data-target="#uploadModal"><i class="fa fa-file-excel-o fa-lg"></i> Upload Excel</button>
-          </div>
+  <div class="card">
+    <div class="card-header">
+      <strong><i class="fa fa-bars"></i>&nbsp;Master Data Item Assy</strong>
+    </div>
+
+    <div class="card-body">
+      <!-- Wrapper for the input and buttons in one row -->
+      <div class="d-flex justify-content-between mb-3">
+        <div class="d-flex align-items-center">
+          <input type="text" class="form-control col-md-12 col-lg-12" [(ngModel)]="searchText" (input)="onSearchChange()" placeholder="Find here..." />
+          <button type="submit" class="btn btn-primary ml-2" (click)="resetSearch()">Reset</button>
         </div>
-  
-        <!-- Table -->
-        <table class="table table-striped">
-          <thead>
+
+        <!-- Right side: Download Template and Export Excel buttons -->
+        <div>
+          <button type="button" class="btn btn-primary ml-2" (click)="downloadTemplate()"><i class="fa fa-download fa-lg"></i> Download Template</button>
+          <button type="button" class="btn btn-primary ml-2" (click)="downloadExcel()"><i class="fa fa-download fa-lg"></i> Export Excel</button>
+          <button type="button" class="btn btn-success ml-2" data-toggle="modal" data-target="#uploadModal"><i class="fa fa-file-excel-o fa-lg"></i> Upload Excel</button>
+        </div>
+      </div>
+
+      <!-- Table -->
+      <div class="table-responsive table-wrapper">
+        <table class="table table-bordered table-striped table-sm">
+          <thead align="center">
             <tr>
               <th>No</th>
               <th>Item Assy</th>
@@ -30,13 +32,16 @@
             </tr>
           </thead>
           <tbody>
-            <tr *ngFor="let itemAssy of pageOfItems; let i = index">
+            <tr align="center" *ngFor="let itemAssy of pageOfItems; let i = index">
               <td>{{ i + 1 }}</td>
               <td>{{ itemAssy.item_ASSY }}</td>
-              <td>{{ itemAssy.status === 1 ? 'Active' : 'Deactive' }}</td>
+              <td [ngClass]="{ 'bg-success': itemAssy.status === 1, 'bg-danger': itemAssy.status !== 1 }">
+                {{ itemAssy.status === 1 ? 'Active' : 'Deactive' }}
+              </td>
               <td>
-                <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(itemAssy.item_ASSY)">Update</button>
-                <button type="button" class="btn btn-md btn-danger ml-2" (click)="deleteData(itemAssy)">Delete</button>
+                <button type="button" class="btn btn-md ml-2" [ngClass]="{ 'btn-danger': itemAssy.status === 1, 'btn-success': itemAssy.status !== 1 }" (click)="itemAssy.status === 1 ? deleteData(itemAssy) : activateData(itemAssy)">
+                  {{ itemAssy.status === 1 ? 'Delete' : 'Active' }}
+                </button>
               </td>
             </tr>
           </tbody>
@@ -50,60 +55,60 @@
       </div>
     </div>
   </div>
-  
-  <!-- Modal edit -->
-  <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="addModalLabel">Edit Quadrant</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <!-- Form with Reactive Forms -->
-          <form [formGroup]="editItemAssyForm">
-            <div class="form-group">
-              <label for="itemAssy">Item Assy</label>
-              <input [(ngModel)]="edtItemAssyObject.item_ASSY" type="text" class="form-control" id="itemAssy" formControlName="itemAssy" [ngClass]="{ 'is-invalid': editItemAssyForm.get('itemAssy').invalid && editItemAssyForm.get('itemAssy').touched }" />
-              <!-- Error message if quadrantName is empty -->
-              <div *ngIf="editItemAssyForm.get('itemAssy').invalid && editItemAssyForm.get('itemAssy').touched" class="invalid-feedback">Item Assy name is required.</div>
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <!-- Disable Update button if form is invalid -->
-          <button type="button" class="btn btn-primary" [disabled]="editItemAssyForm.invalid" (click)="updateItemAssy()">Update Item Assy</button>
-        </div>
+</div>
+
+<!-- Modal edit -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="addModalLabel">Edit Item Assy</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- Form with Reactive Forms -->
+        <form [formGroup]="editItemAssyForm">
+          <div class="form-group">
+            <label for="itemAssy">Item Assy</label>
+            <input [(ngModel)]="edtItemAssyObject.item_ASSY" type="text" class="form-control" id="itemAssy" formControlName="itemAssy" [ngClass]="{ 'is-invalid': editItemAssyForm.get('itemAssy').invalid && editItemAssyForm.get('itemAssy').touched }" />
+            <!-- Error message if plantName is empty -->
+            <div *ngIf="editItemAssyForm.get('itemAssy').invalid && editItemAssyForm.get('itemAssy').touched" class="invalid-feedback">Item Assy is required.</div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <!-- Disable Update button if form is invalid -->
+        <button type="button" class="btn btn-primary" [disabled]="editItemAssyForm.invalid" (click)="updateItemAssy()">Update Item Assy</button>
       </div>
     </div>
   </div>
-  
-  <!-- Modal for Upload Excel -->
-  <div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="uploadModalLabel">Upload Excel File</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <form id="uploadForm">
-            <!-- Manual File Input -->
-            <div class="form-group mt-3">
-              <input type="file" class="form-control-file" id="manualFileInput" accept=".xls,.xlsx" (change)="onFileChange($event)" />
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-md btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-md btn-primary" id="uploadButton" (click)="uploadFileExcel()">Upload</button>
-        </div>
+</div>
+
+<!-- Modal for Upload Excel -->
+<div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="uploadModalLabel">Upload Excel File</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="uploadForm">
+          <!-- Manual File Input -->
+          <div class="form-group mt-3">
+            <input type="file" class="form-control-file" id="manualFileInput" accept=".xls,.xlsx" (change)="onFileChange($event)" />
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-md btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-md btn-primary" id="uploadButton" (click)="uploadFileExcel()">Upload</button>
       </div>
     </div>
   </div>
-  
+</div>

@@ -30,11 +30,49 @@ import { ViewCtCuringComponent } from './view-ct-curing/view-ct-curing.component
 import { ViewCtKapaComponent } from './view-ct-kapa/view-ct-kapa.component';
 import { ViewMachineExtrudingComponent } from './view-machine-extruding/view-machine-extruding.component';
 import { ViewDDeliveryScheduleComponent } from './view-d-deliveryschedule/view-d-deliveryschedule.component';
-import { ViewMachineAllowanceComponent } from './view-machine-allowance/view-machine-allowance.component';
+import { ViewMachineAllowenceComponent } from './view-machine-allowence/view-machine-allowence.component';
 import { ViewItemAssyComponent } from './view-item-assy/view-item-assy.component';
+import { ViewCuringSizeComponent } from './view-curing-size/view-curing-size.component';
 
 @NgModule({
-  declarations: [ViewPlantComponent, ViewProductComponent, ViewPatternComponent, ViewMachineTassComponent, ViewSettingComponent, ViewQuadrantComponent, ViewProductTypeComponent, ViewSizeComponent, ViewBuildingComponent, ViewBDistanceComponent, ViewQDistanceComponent, ViewRoutingMachineComponent, ViewDeliveryScheduleComponent, ViewMachineCuringTypeComponent, ViewMachineTassTypeComponent, ViewCuringMachineComponent, ViewMaxCapacityComponent, ViewTassSizeComponent, ViewItemCuringComponent, ViewCtCuringComponent, ViewCtKapaComponent, ViewMachineExtrudingComponent, ViewDDeliveryScheduleComponent, ViewMachineAllowanceComponent, ViewItemAssyComponent],
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, NgxSpinnerModule, NgSelect2Module, JwPaginationModule, MasterDataRoutingModule, ModalModule.forRoot(), ToastrModule.forRoot()],
+  declarations: [
+    ViewPlantComponent,
+    ViewProductComponent,
+    ViewPatternComponent,
+    ViewMachineTassComponent,
+    ViewSettingComponent,
+    ViewQuadrantComponent,
+    ViewProductTypeComponent,
+    ViewSizeComponent,
+    ViewBuildingComponent,
+    ViewBDistanceComponent,
+    ViewQDistanceComponent,
+    ViewRoutingMachineComponent,
+    ViewDeliveryScheduleComponent,
+    ViewMachineCuringTypeComponent,
+    ViewMachineTassTypeComponent,
+    ViewCuringMachineComponent,
+    ViewMaxCapacityComponent,
+    ViewTassSizeComponent,
+    ViewItemCuringComponent,
+    ViewCtCuringComponent,
+    ViewCtKapaComponent,
+    ViewMachineExtrudingComponent,
+    ViewDDeliveryScheduleComponent,
+    ViewMachineAllowenceComponent,
+    ViewItemAssyComponent,
+    ViewCuringSizeComponent
+  ],
+  imports: [
+    CommonModule,
+    FormsModule,
+    ReactiveFormsModule,
+    NgxSpinnerModule,
+    NgSelect2Module,
+    JwPaginationModule,
+    MasterDataRoutingModule,
+    ModalModule.forRoot(),
+    ToastrModule.forRoot(),
+  ],
 })
 export class MasterDataModule {}

@@ -6,6 +6,7 @@ import { ItemAssyService } from 'src/app/services/master-data/item-assy/itemAssy
 import Swal from 'sweetalert2';
 declare var $: any;
 import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-view-item-assy',
@@ -46,7 +47,7 @@ export class ViewItemAssyComponent implements OnInit {
         this.onChangePage(this.itemAssys.slice(0, this.pageSize));
       },
       (error) => {
-        this.errorMessage = 'Failed to load quadrants: ' + error.message;
+        this.errorMessage = 'Failed to load item assy: ' + error.message;
       }
     );
   }
@@ -57,7 +58,7 @@ export class ViewItemAssyComponent implements OnInit {
 
   onSearchChange(): void {
     // Lakukan filter berdasarkan nama plant yang mengandung text pencarian (case-insensitive)
-    const filteredPlants = this.itemAssys.filter(
+    const filteredItemAssy = this.itemAssys.filter(
       (itemAssy) =>
         itemAssy.item_ASSY
           .toString()
@@ -66,7 +67,7 @@ export class ViewItemAssyComponent implements OnInit {
     );
 
     // Tampilkan hasil filter pada halaman pertama
-    this.onChangePage(filteredPlants.slice(0, this.pageSize));
+    this.onChangePage(filteredItemAssy.slice(0, this.pageSize));
   }
 
   resetSearch(): void {
@@ -110,7 +111,7 @@ export class ViewItemAssyComponent implements OnInit {
         this.edtItemAssyObject = response.data;
       },
       (error) => {
-        this.errorMessage = 'Failed to load item assys: ' + error.message;
+        this.errorMessage = 'Failed to load item assy: ' + error.message;
       }
     );
   }
@@ -141,6 +142,31 @@ export class ViewItemAssyComponent implements OnInit {
     });
   }
 
+  activateData(itemAssy: Item_Assy): void {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'This data plant will be Activated!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes',
+      cancelButtonText: 'No',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.itemAssyService.activateItemAssy(itemAssy).subscribe(
+          (response) => {
+            Swal.fire('Activated!', 'Data item assy has been Activated', 'success').then(() => {
+              window.location.reload();
+            });
+          },
+          (err) => {
+            Swal.fire('Error!', 'Failed to Activated the item assy.', 'error');
+          }
+        );
+      }
+    });
+  }
 
   openModalUpload(): void {
     $('#uploadModal').modal('show');
@@ -177,6 +203,24 @@ export class ViewItemAssyComponent implements OnInit {
     }
   }
 
+  downloadExcel(): void {
+    this.itemAssyService.exportItemAssyExcel().subscribe({
+      next: (response) => {
+        // Menggunakan nama file yang sudah ditentukan di backend
+        const filename = 'ITEM_ASSY_DATA.xlsx'; // Nama file bisa dinamis jika diperlukan
+        saveAs(response, filename); // Mengunduh file
+      },
+      error: (err) => {
+        console.error('Download error:', err);
+      }
+    });
+  }
+
+  saveAsExcelFile(buffer: any, fileName: string): void {
+    const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+    const data: Blob = new Blob([buffer], { type: EXCEL_TYPE });
+    saveAs(data, `${fileName}_export_${new Date().getTime()}.xlsx`);
+  }
 
   uploadFileExcel() {
     if (this.file) {

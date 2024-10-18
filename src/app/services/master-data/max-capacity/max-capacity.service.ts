@@ -10,11 +10,7 @@ import { map, catchError } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root',
 })
-export class  MaxCapacityService {
-  //Isi tokenya
-  token: String =
-    'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBdXJlbCIsImV4cCI6MTcyODMwODA4M30.y03EN8mmoDGrL7FzHc5W7QDPLuAoVmD21CNXz4OrBMyci5OSMFW8urH69vONuD8YW87911-NUE2BvkFrpFYWhA';
-
+export class MaxCapacityService {
   constructor(private http: HttpClient) {}
 
   // Method untuk menambahkan header Authorization dengan token
@@ -25,25 +21,19 @@ export class  MaxCapacityService {
   }
 
   getMaxCapacityById(idMaxCapacity: number): Observable<ApiResponse<Max_Capacity>> {
-    return this.http.get<ApiResponse<Max_Capacity>>(
-      environment.apiUrlWebAdmin + '/getMaxCapacityById/' + idMaxCapacity,
-      { headers: this.getHeaders() }
-    );
+    return this.http.get<ApiResponse<Max_Capacity>>(environment.apiUrlWebAdmin + '/getMaxCapacityById/' + idMaxCapacity, { headers: this.getHeaders() });
   }
 
   getAllMaxCapacity(): Observable<ApiResponse<Max_Capacity[]>> {
-    return this.http.get<ApiResponse<Max_Capacity[]>>(
-      environment.apiUrlWebAdmin + '/getAllMaxCapacity',
-      { headers: this.getHeaders() }
-    );
+    return this.http.get<ApiResponse<Max_Capacity[]>>(environment.apiUrlWebAdmin + '/getAllMaxCapacity', { headers: this.getHeaders() });
   }
 
-  //Method Update plant
-  updateMaxCapacity(quadrant: Max_Capacity): Observable<ApiResponse<Max_Capacity>> {
+  //Method Update Max Capacity
+  updateMaxCapacity(maxCapacity: Max_Capacity): Observable<ApiResponse<Max_Capacity>> {
     return this.http
       .post<ApiResponse<Max_Capacity>>(
         environment.apiUrlWebAdmin + '/updateMaxCapacity',
-        quadrant,
+        maxCapacity,
         { headers: this.getHeaders() } // Menyertakan header
       )
       .pipe(
@@ -56,37 +46,41 @@ export class  MaxCapacityService {
       );
   }
 
-  deleteMaxCapacity(quadrant: Max_Capacity): Observable<ApiResponse<Max_Capacity>> {
-    return this.http
-      .post<ApiResponse<Max_Capacity>>(
-        environment.apiUrlWebAdmin + '/deleteMaxCapacity',
-        quadrant,
-        { headers: this.getHeaders() }
-      )
-      .pipe(
-        map((response) => {
-          return response;
-        }),
-        catchError((err) => {
-          return throwError(err);
-        })
-      );
+  deleteMaxCapacity(maxCapacity: Max_Capacity): Observable<ApiResponse<Max_Capacity>> {
+    return this.http.post<ApiResponse<Max_Capacity>>(environment.apiUrlWebAdmin + '/deleteMaxCapacity', maxCapacity, { headers: this.getHeaders() }).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((err) => {
+        return throwError(err);
+      })
+    );
+  }
+
+  activateMaxCapacity(maxCapacity: Max_Capacity): Observable<ApiResponse<Max_Capacity>> {
+    return this.http.post<ApiResponse<Max_Capacity>>(environment.apiUrlWebAdmin + '/restoreMaxCapacity', maxCapacity, { headers: this.getHeaders() }).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((err) => {
+        return throwError(err);
+      })
+    );
   }
 
   uploadFileExcel(file: FormData): Observable<ApiResponse<Max_Capacity>> {
-    return this.http
-      .post<ApiResponse<Max_Capacity>>(
-        environment.apiUrlWebAdmin + '/saveMaxCapacityExcel',
-        file,
-        { headers: this.getHeaders() }
-      )
-      .pipe(
-        map((response) => {
-          return response;
-        }),
-        catchError((err) => {
-          return throwError(err);
-        })
-      );
+    return this.http.post<ApiResponse<Max_Capacity>>(environment.apiUrlWebAdmin + '/saveMaxCapacitiesExcel', file, { headers: this.getHeaders() }).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((err) => {
+        return throwError(err);
+      })
+    );
   }
+
+  exportMaxCapacitiesExcel(): Observable<Blob> {
+    return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/exportMaxCapacityExcel`, { responseType: 'blob' as 'json' });
+  }
+
 }

@@ -11,10 +11,6 @@ import { map, catchError } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class QuadrantService {
-  //Isi tokenya
-  token: String =
-    'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBdXJlbCIsImV4cCI6MTcyODMwODA4M30.y03EN8mmoDGrL7FzHc5W7QDPLuAoVmD21CNXz4OrBMyci5OSMFW8urH69vONuD8YW87911-NUE2BvkFrpFYWhA';
-
   constructor(private http: HttpClient) {}
 
   // Method untuk menambahkan header Authorization dengan token
@@ -25,20 +21,14 @@ export class QuadrantService {
   }
 
   getQuadrantById(idQuadrant: number): Observable<ApiResponse<Quadrant>> {
-    return this.http.get<ApiResponse<Quadrant>>(
-      environment.apiUrlWebAdmin + '/getQuadrantById/' + idQuadrant,
-      { headers: this.getHeaders() }
-    );
+    return this.http.get<ApiResponse<Quadrant>>(environment.apiUrlWebAdmin + '/getQuadrantById/' + idQuadrant, { headers: this.getHeaders() });
   }
 
   getAllQuadrant(): Observable<ApiResponse<Quadrant[]>> {
-    return this.http.get<ApiResponse<Quadrant[]>>(
-      environment.apiUrlWebAdmin + '/getAllQuadrant',
-      { headers: this.getHeaders() }
-    );
+    return this.http.get<ApiResponse<Quadrant[]>>(environment.apiUrlWebAdmin + '/getAllQuadrant', { headers: this.getHeaders() });
   }
 
-  //Method Update plant
+  //Method Update quadrant
   updateQuadrant(quadrant: Quadrant): Observable<ApiResponse<Quadrant>> {
     return this.http
       .post<ApiResponse<Quadrant>>(
@@ -57,36 +47,40 @@ export class QuadrantService {
   }
 
   deleteQuadrant(quadrant: Quadrant): Observable<ApiResponse<Quadrant>> {
-    return this.http
-      .post<ApiResponse<Quadrant>>(
-        environment.apiUrlWebAdmin + '/deleteQuadrant',
-        quadrant,
-        { headers: this.getHeaders() }
-      )
-      .pipe(
-        map((response) => {
-          return response;
-        }),
-        catchError((err) => {
-          return throwError(err);
-        })
-      );
+    return this.http.post<ApiResponse<Quadrant>>(environment.apiUrlWebAdmin + '/deleteQuadrant', quadrant, { headers: this.getHeaders() }).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((err) => {
+        return throwError(err);
+      })
+    );
+  }
+
+  activateQuadrant(quadrant: Quadrant): Observable<ApiResponse<Quadrant>> {
+    return this.http.post<ApiResponse<Quadrant>>(environment.apiUrlWebAdmin + '/restoreQuadrant', quadrant, { headers: this.getHeaders() }).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((err) => {
+        return throwError(err);
+      })
+    );
   }
 
   uploadFileExcel(file: FormData): Observable<ApiResponse<Quadrant>> {
-    return this.http
-      .post<ApiResponse<Quadrant>>(
-        environment.apiUrlWebAdmin + '/saveQuadrantExcel',
-        file,
-        { headers: this.getHeaders() }
-      )
-      .pipe(
-        map((response) => {
-          return response;
-        }),
-        catchError((err) => {
-          return throwError(err);
-        })
-      );
+    return this.http.post<ApiResponse<Quadrant>>(environment.apiUrlWebAdmin + '/saveQuandrantExcel', file, { headers: this.getHeaders() }).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((err) => {
+        return throwError(err);
+      })
+    );
   }
+
+  exportQuadrantsExcel(): Observable<Blob> {
+    return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/exportQuadrantsExcel`, { responseType: 'blob' as 'json' });
+  }
+
 }
