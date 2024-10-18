@@ -34,11 +34,12 @@ import { ViewTassSizeComponent } from './views/master-data/view-tass-size/view-t
 import { ViewMonthlyPlanningComponent } from './views/transaksi/view-monthly-planning/view-monthly-planning.component';
 import { AddMonthlyPlanningComponent } from './views/transaksi/add-monthly-planning/add-monthly-planning.component';
 import { ViewCtCuringComponent } from './views/master-data/view-ct-curing/view-ct-curing.component';
-import { ViewMachineAllowanceComponent } from './views/master-data/view-machine-allowance/view-machine-allowance.component';
+import { ViewMachineAllowenceComponent } from './views/master-data/view-machine-allowence/view-machine-allowence.component';
 import { ViewItemAssyComponent } from './views/master-data/view-item-assy/view-item-assy.component';
 import { ViewMachineExtrudingComponent } from './views/master-data/view-machine-extruding/view-machine-extruding.component'
 import { ViewCtKapaComponent } from './views/master-data/view-ct-kapa/view-ct-kapa.component'
 import { ViewDDeliveryScheduleComponent } from './views/master-data/view-d-deliveryschedule/view-d-deliveryschedule.component'
+import { ViewCuringSizeComponent } from './views/master-data/view-curing-size/view-curing-size.component'
 
 export const routes: Routes = [
   {
@@ -282,10 +283,10 @@ export const routes: Routes = [
         },
       },
       {
-        path: 'master-data/view-machine-allowance',
-        component: ViewMachineAllowanceComponent,
+        path: 'master-data/view-machine-allowence',
+        component: ViewMachineAllowenceComponent,
         data: {
-          title: 'Master Data / View Machine Allowance',
+          title: 'Master Data / View Machine Allowence',
         },
       },
       {
@@ -293,6 +294,13 @@ export const routes: Routes = [
         component: ViewItemAssyComponent,
         data: {
           title: 'Master Data / View Item Assy',
+        },
+      },
+      {
+        path: 'master-data/view-curing-size',
+        component: ViewCuringSizeComponent,
+        data: {
+          title: 'Master Data / View Curing Size',
         },
       },
       {

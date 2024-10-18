@@ -6,6 +6,7 @@ import { RoutingService } from 'src/app/services/master-data/routingMachine/rout
 import Swal from 'sweetalert2';
 declare var $: any;
 import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-view-routing-machine',
@@ -71,17 +72,17 @@ export class ViewRoutingMachineComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getAllCtAssy();
+    this.getAllCTAssy();
   }
 
-  getAllCtAssy(): void {
-    this.RoutingMachineService.getAllCtAssy().subscribe(
+  getAllCTAssy(): void {
+    this.RoutingMachineService.getAllCTAssy().subscribe(
       (response: ApiResponse<RoutingMachine[]>) => {
         this.routingMachines = response.data;
         this.onChangePage(this.routingMachines.slice(0, this.pageSize));
       },
       (error) => {
-        this.errorMessage = 'Failed to load Ct Assy: ' + error.message;
+        this.errorMessage = 'Failed to load CT Assy: ' + error.message;
       }
     );
   }
@@ -94,45 +95,45 @@ export class ViewRoutingMachineComponent implements OnInit {
     // Lakukan filter berdasarkan nama plant yang mengandung text pencarian (case-insensitive)
     const filteredPlants = this.routingMachines.filter(
       (routingMachine) =>
-        routingMachine.CT_assy_ID
+        routingMachine.ct_ASSY_ID
           .toString()
           .includes(this.searchText.toLowerCase()) ||
-          routingMachine.wip.toString().includes(this.searchText)||
-          routingMachine.description.toLowerCase().toString().includes(this.searchText) ||
-          routingMachine.group_counter.toLowerCase().toString().includes(this.searchText) ||
-          routingMachine.var_group_counter.toLowerCase().toString().includes(this.searchText) ||
+          routingMachine.wip.toLowerCase().toString().includes(this.searchText.toLowerCase())||
+          routingMachine.description.toLowerCase().toString().includes(this.searchText.toLowerCase()) ||
+          routingMachine.group_COUNTER.toLowerCase().toString().includes(this.searchText.toLowerCase()) ||
+          routingMachine.var_GROUP_COUNTER.toLowerCase().toString().includes(this.searchText.toLowerCase()) ||
           routingMachine.sequence.toString().includes(this.searchText) ||
-          routingMachine.wct.toLowerCase().toString().includes(this.searchText) ||
-          routingMachine.operation_short_text.toLowerCase().toString().includes(this.searchText) ||
-          routingMachine.operation_unit.toLowerCase().toString().includes(this.searchText) ||
-          routingMachine.base_quantity.toString().includes(this.searchText) ||
-          routingMachine.standard_value_unit.toLowerCase().toString().includes(this.searchText) ||
-          routingMachine.CT_sec_1.toString().includes(this.searchText) ||
-          routingMachine.CT_hr_1000.toString().includes(this.searchText) ||
-          routingMachine.WH_normal_shift_1.toString().includes(this.searchText) ||
-          routingMachine.WH_normal_shift_2.toString().includes(this.searchText) ||
-          routingMachine.WH_normal_shift_3.toString().includes(this.searchText) ||
-          routingMachine.WH_shift_jumat.toString().includes(this.searchText) ||
-          routingMachine.WH_total_normal_shift.toString().includes(this.searchText) ||
-          routingMachine.WH_total_shift_jumat.toString().includes(this.searchText) ||
-          routingMachine.allow_normal_shift_1.toString().includes(this.searchText) ||
-          routingMachine.allow_normal_shift_2.toString().includes(this.searchText) ||
-          routingMachine.allow_normal_shift_3.toString().includes(this.searchText) ||
-          routingMachine.allow_total.toString().includes(this.searchText) ||
-          routingMachine.OP_time_normal_shift_1.toString().includes(this.searchText) ||
-          routingMachine.OP_time_normal_shift_1.toString().includes(this.searchText) ||
-          routingMachine.OP_time_normal_shift_1.toString().includes(this.searchText) ||
-          routingMachine.OP_time_shift_jumat.toString().includes(this.searchText) ||
-          routingMachine.OP_time_total_normal_shift.toString().includes(this.searchText) ||
-          routingMachine.OP_time_total_shift_jumat.toString().includes(this.searchText) ||
-          routingMachine.kaps_normal_shift_1.toString().includes(this.searchText) ||
-          routingMachine.kaps_normal_shift_2.toString().includes(this.searchText) ||
-          routingMachine.kaps_normal_shift_3.toString().includes(this.searchText) ||
-          routingMachine.kaps_shift_jumat.toString().includes(this.searchText) ||
-          routingMachine.kaps_total_normal_shift.toString().includes(this.searchText) ||
-          routingMachine.kaps_total_shift_jumat.toString().includes(this.searchText) ||
-          routingMachine.waktu_total_CT_normal.toString().includes(this.searchText) ||
-          routingMachine.waktu_total_CT_jumat.toString().includes(this.searchText) ||
+          routingMachine.wct.toLowerCase().toString().includes(this.searchText.toLowerCase()) ||
+          routingMachine.operation_SHORT_TEXT.toLowerCase().toString().includes(this.searchText.toLowerCase()) ||
+          routingMachine.operation_UNIT.toLowerCase().toString().includes(this.searchText.toLowerCase()) ||
+          routingMachine.base_QUANTITY.toString().includes(this.searchText) ||
+          routingMachine.standard_VALUE_UNIT.toLowerCase().toString().includes(this.searchText.toLowerCase()) ||
+          routingMachine.ct_SEC_1.toString().includes(this.searchText) ||
+          routingMachine.ct_HR_1000.toString().includes(this.searchText) ||
+          routingMachine.wh_NORMAL_SHIFT_0.toString().includes(this.searchText) ||
+          routingMachine.wh_NORMAL_SHIFT_1.toString().includes(this.searchText) ||
+          routingMachine.wh_NORMAL_SHIFT_2.toString().includes(this.searchText) ||
+          routingMachine.wh_SHIFT_FRIDAY.toString().includes(this.searchText) ||
+          routingMachine.wh_TOTAL_NORMAL_SHIFT.toString().includes(this.searchText) ||
+          routingMachine.wh_TOTAL_SHIFT_FRIDAY.toString().includes(this.searchText) ||
+          routingMachine.allow_NORMAL_SHIFT_0.toString().includes(this.searchText) ||
+          routingMachine.allow_NORMAL_SHIFT_1.toString().includes(this.searchText) ||
+          routingMachine.allow_NORMAL_SHIFT_2.toString().includes(this.searchText) ||
+          routingMachine.allow_TOTAL.toString().includes(this.searchText) ||
+          routingMachine.op_TIME_NORMAL_SHIFT_0.toString().includes(this.searchText) ||
+          routingMachine.op_TIME_NORMAL_SHIFT_1.toString().includes(this.searchText) ||
+          routingMachine.op_TIME_NORMAL_SHIFT_2.toString().includes(this.searchText) ||
+          routingMachine.op_TIME_SHIFT_FRIDAY.toString().includes(this.searchText) ||
+          routingMachine.op_TIME_TOTAL_NORMAL_SHIFT.toString().includes(this.searchText) ||
+          routingMachine.op_TIME_TOTAL_SHIFT_FRIDAY.toString().includes(this.searchText) ||
+          routingMachine.kaps_NORMAL_SHIFT_0.toString().includes(this.searchText) ||
+          routingMachine.kaps_NORMAL_SHIFT_1.toString().includes(this.searchText) ||
+          routingMachine.kaps_NORMAL_SHIFT_2.toString().includes(this.searchText) ||
+          routingMachine.kaps_SHIFT_FRIDAY.toString().includes(this.searchText) ||
+          routingMachine.kaps_TOTAL_NORMAL_SHIFT.toString().includes(this.searchText) ||
+          routingMachine.kaps_TOTAL_SHIFT_FRIDAY.toString().includes(this.searchText) ||
+          routingMachine.waktu_TOTAL_CT_NORMAL.toString().includes(this.searchText) ||
+          routingMachine.waktu_TOTAL_CT_FRIDAY.toString().includes(this.searchText) ||
           routingMachine.status.toString().includes(this.searchText)
     );
 
@@ -147,12 +148,12 @@ export class ViewRoutingMachineComponent implements OnInit {
 
   updateCtAssy(): void {
     
-    this.RoutingMachineService.updateCtAssy(this.edtRoutingMachineObject).subscribe(
+    this.RoutingMachineService.updateCTAssy(this.edtRoutingMachineObject).subscribe(
       (response) => {
         // SweetAlert setelah update berhasil
         Swal.fire({
           title: 'Success!',
-          text: 'Data plant successfully updated.',
+          text: 'Data CT Assy successfully updated.',
           icon: 'success',
           confirmButtonText: 'OK',
         }).then((result) => {
@@ -170,12 +171,12 @@ export class ViewRoutingMachineComponent implements OnInit {
 
   openModalEdit(idCtAssy: number): void {
     this.isEditMode = true;
-    this.getPlantById(idCtAssy);
+    this.getCTAssyById(idCtAssy);
     $('#editModal').modal('show');
   }
 
-  getPlantById(idCtAssy: number): void {
-    this.RoutingMachineService.getCtAssyById(idCtAssy).subscribe(
+  getCTAssyById(idCtAssy: number): void {
+    this.RoutingMachineService.getCTAssyById(idCtAssy).subscribe(
       (response: ApiResponse<RoutingMachine>) => {
         this.edtRoutingMachineObject = response.data;
       },
@@ -188,7 +189,7 @@ export class ViewRoutingMachineComponent implements OnInit {
   deleteData(CtAssy: RoutingMachine): void {
     Swal.fire({
       title: 'Are you sure?',
-      text: 'This data plant will be deleted!',
+      text: 'This data CT Assy will be deleted!',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -197,20 +198,45 @@ export class ViewRoutingMachineComponent implements OnInit {
       cancelButtonText: 'No',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.RoutingMachineService.deleteCtAssy(CtAssy).subscribe(
+        this.RoutingMachineService.deleteCTAssy(CtAssy).subscribe(
           (response) => {
-            Swal.fire('Deleted!', 'Data plant has been deleted', 'success').then(() => {
+            Swal.fire('Deleted!', 'Data CT Assy has been deleted', 'success').then(() => {
               window.location.reload();
             });
           },
           (err) => {
-            Swal.fire('Error!', 'Failed to delete the plant.', 'error');
+            Swal.fire('Error!', 'Failed to delete the CT Assy.', 'error');
           }
         );
       }
     });
   }
 
+  activateData(routingMachine: RoutingMachine): void {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'This data CT Assy will be Activated!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes',
+      cancelButtonText: 'No',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.RoutingMachineService.activateCTAssy(routingMachine).subscribe(
+          (response) => {
+            Swal.fire('Activated!', 'Data CT Assy has been Activated', 'success').then(() => {
+              window.location.reload();
+            });
+          },
+          (err) => {
+            Swal.fire('Error!', 'Failed to Activated the CT Assy.', 'error');
+          }
+        );
+      }
+    });
+  }
 
   openModalUpload(): void {
     $('#uploadModal').modal('show');
@@ -218,12 +244,30 @@ export class ViewRoutingMachineComponent implements OnInit {
 
   downloadTemplate() {
     const link = document.createElement('a');
-    link.href = 'assets/Template Excel/Layout_Master_Setting.xlsx';
-    link.download = 'Layout_Master_Setting.xlsx';
+    link.href = 'assets/Template Excel/Layout_CT_Assy.xlsx';
+    link.download = 'Layout_CT_Assy.xlsx';
     link.click();
   }
 
+  downloadExcel(): void {
+    this.RoutingMachineService.exportRoutingMachineExcel().subscribe({
+      next: (response) => {
+        // Menggunakan nama file yang sudah ditentukan di backend
+        const filename = 'ROUTING_MACHINE_DATA.xlsx'; // Nama file bisa dinamis jika diperlukan
+        saveAs(response, filename); // Mengunduh file
+      },
+      error: (err) => {
+        console.error('Download error:', err);
+      }
+    });
+  }
 
+  saveAsExcelFile(buffer: any, fileName: string): void {
+    const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+    const data: Blob = new Blob([buffer], { type: EXCEL_TYPE });
+    saveAs(data, `${fileName}_export_${new Date().getTime()}.xlsx`);
+  }
+  
   onFileChange(event: Event) {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
