@@ -171,8 +171,6 @@ const routes: Routes = [
         data: {
           title: 'Master View Machine Allowance',
         },
-          title: 'Master View Machine Allowence'
-        }
       },
       {
         path: 'master-data/view-curing-size',

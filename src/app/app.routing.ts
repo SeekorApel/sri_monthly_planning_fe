@@ -39,9 +39,6 @@ import { ViewItemAssyComponent } from './views/master-data/view-item-assy/view-i
 import { ViewMachineExtrudingComponent } from './views/master-data/view-machine-extruding/view-machine-extruding.component';
 import { ViewCtKapaComponent } from './views/master-data/view-ct-kapa/view-ct-kapa.component';
 import { ViewDDeliveryScheduleComponent } from './views/master-data/view-d-deliveryschedule/view-d-deliveryschedule.component';
-import { ViewMachineExtrudingComponent } from './views/master-data/view-machine-extruding/view-machine-extruding.component'
-import { ViewCtKapaComponent } from './views/master-data/view-ct-kapa/view-ct-kapa.component'
-import { ViewDDeliveryScheduleComponent } from './views/master-data/view-d-deliveryschedule/view-d-deliveryschedule.component'
 import { ViewCuringSizeComponent } from './views/master-data/view-curing-size/view-curing-size.component'
 
 export const routes: Routes = [
