@@ -72,10 +72,23 @@ export class TassSizeService {
       );
   }
 
+  
+  activateTassSize(tass_size: Tass_Size): Observable<ApiResponse<Tass_Size>> {
+    console.log(tass_size);
+    return this.http.post<ApiResponse<Tass_Size>>(environment.apiUrlWebAdmin + '/restoreTassSize', tass_size, { headers: this.getHeaders() }).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((err) => {
+        return throwError(err);
+      })
+    );
+  }
+
   uploadFileExcel(file: FormData): Observable<ApiResponse<Tass_Size>> {
     return this.http
       .post<ApiResponse<Tass_Size>>(
-        environment.apiUrlWebAdmin + '/saveTassSizesExcel',
+        environment.apiUrlWebAdmin + '/saveTassSizeExcel',
         file,
         { headers: this.getHeaders() }
       )
@@ -87,5 +100,8 @@ export class TassSizeService {
           return throwError(err);
         })
       );
+  }
+  exportTassSizesExcel(): Observable<Blob> {
+    return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/exportTassSizeexcel`, { responseType: 'blob' as 'json' });
   }
 }

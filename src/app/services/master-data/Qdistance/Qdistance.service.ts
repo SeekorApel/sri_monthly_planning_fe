@@ -89,4 +89,17 @@ export class QDistanceService {
         })
       );
   }
+  activateQuadrantDistance(qdistance: QDistance): Observable<ApiResponse<QDistance>> {
+    return this.http.post<ApiResponse<QDistance>>(environment.apiUrlWebAdmin + '/restoreQuadrantDistance', qdistance, { headers: this.getHeaders() }).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((err) => {
+        return throwError(err);
+      })
+    );
+  }
+  exportQuadrantDistancesExcel(): Observable<Blob> {
+    return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/exportQuadrantDistancesExcel`, { responseType: 'blob' as 'json' });
+  }
 }

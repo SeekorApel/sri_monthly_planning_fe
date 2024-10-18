@@ -62,7 +62,7 @@ export class ViewBDistanceComponent implements OnInit {
   }
 
   onSearchChange(): void {
-    // Lakukan filter berdasarkan nama plant yang mengandung text pencarian (case-insensitive)
+    
     const filteredBDistances = this.bdistances.filter(
       (bdistance) =>
         bdistance.id_B_DISTANCE.toString()
@@ -89,7 +89,7 @@ export class ViewBDistanceComponent implements OnInit {
         // SweetAlert setelah update berhasil
         Swal.fire({
           title: 'Success!',
-          text: 'Data plant successfully updated.',
+          text: 'Data quadrant distance successfully updated.',
           icon: 'success',
           confirmButtonText: 'OK',
         }).then((result) => {
@@ -117,7 +117,7 @@ export class ViewBDistanceComponent implements OnInit {
         this.edtBDistanceObject = response.data;
       },
       (error) => {
-        this.errorMessage = 'Failed to load plants: ' + error.message;
+        this.errorMessage = 'Failed to load quadrant distances: ' + error.message;
       }
     );
   }
@@ -220,6 +220,32 @@ export class ViewBDistanceComponent implements OnInit {
         confirmButtonText: 'OK',
       });
     }
+  }
+
+  activateData(qdistance: BDistance): void {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'This data quadrant distance will be Activated!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes',
+      cancelButtonText: 'No',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.bdistanceService.activateQuadrantDistance(qdistance).subscribe(
+          (response) => {
+            Swal.fire('Activated!', 'Data quadrant distance has been Activated', 'success').then(() => {
+              window.location.reload();
+            });
+          },
+          (err) => {
+            Swal.fire('Error!', 'Failed to Activated the quadrant distance.', 'error');
+          }
+        );
+      }
+    });
   }
 
   downloadExcel(): void {

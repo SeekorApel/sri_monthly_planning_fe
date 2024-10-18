@@ -6,7 +6,7 @@ import { TassSizeService } from 'src/app/services/master-data/tass-size/tass-siz
 import Swal from 'sweetalert2';
 declare var $: any;
 import * as XLSX from 'xlsx';
-
+import { saveAs } from 'file-saver';
 @Component({
   selector: 'app-view-tass-size',
   templateUrl: './view-tass-size.component.html',
@@ -62,7 +62,10 @@ export class ViewTassSizeComponent implements OnInit {
         tass_size.machinetasstype_ID
           .toLowerCase()
           .includes(this.searchText.toLowerCase()) ||
-        tass_size.tassize_ID.toString().includes(this.searchText)
+        tass_size.tassize_ID.toString().includes(this.searchText)||
+        tass_size.size_ID.toLowerCase().includes(this.searchText.toLowerCase())||
+        tass_size.capacity.toString().includes(this.searchText.toLowerCase())
+        
     );
 
     // Tampilkan hasil filter pada halaman pertama
@@ -140,6 +143,31 @@ export class ViewTassSizeComponent implements OnInit {
     });
   }
 
+  activateData(tass_size: Tass_Size): void {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'This data tass size will be Activated!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes',
+      cancelButtonText: 'No',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.tass_sizeService.activateTassSize(tass_size).subscribe(
+          (response) => {
+            Swal.fire('Activated!', 'Data tass size has been Activated', 'success').then(() => {
+              window.location.reload();
+            });
+          },
+          (err) => {
+            Swal.fire('Error!', 'Failed to Activated the tass sizes.', 'error');
+          }
+        );
+      }
+    });
+  }
 
   openModalUpload(): void {
     $('#uploadModal').modal('show');
@@ -212,5 +240,17 @@ export class ViewTassSizeComponent implements OnInit {
         confirmButtonText: 'OK',
       });
     }
+  }
+  downloadExcel(): void {
+    this.tass_sizeService.exportTassSizesExcel().subscribe({
+      next: (response) => {
+        // Menggunakan nama file yang sudah ditentukan di backend
+        const filename = 'TASS_SIZE_DATA.xlsx'; // Nama file bisa dinamis jika diperlukan
+        saveAs(response, filename); // Mengunduh file
+      },
+      error: (err) => {
+        console.error('Download error:', err);
+      }
+    });
   }
 }
