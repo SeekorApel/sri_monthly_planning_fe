@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ViewMarketingOrderComponent } from './view-marketing-order.component';
+import { ViewMoPpcComponent } from './view-mo-ppc.component';
 
-describe('ViewMarketingOrderComponent', () => {
-  let component: ViewMarketingOrderComponent;
-  let fixture: ComponentFixture<ViewMarketingOrderComponent>;
+describe('ViewMoPpcComponent', () => {
+  let component: ViewMoPpcComponent;
+  let fixture: ComponentFixture<ViewMoPpcComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ViewMarketingOrderComponent ]
+      declarations: [ ViewMoPpcComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ViewMarketingOrderComponent);
+    fixture = TestBed.createComponent(ViewMoPpcComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

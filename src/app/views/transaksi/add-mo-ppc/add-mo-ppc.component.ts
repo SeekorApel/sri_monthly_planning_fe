@@ -9,14 +9,15 @@ import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import { DetailMarketingOrder } from 'src/app/models/DetailMarketingOrder';
 import { ApiResponse } from 'src/app/response/Response';
+import { HeaderMarketingOrder } from 'src/app/models/HeaderMarketingOrder';
 declare var $: any;
 
 @Component({
-  selector: 'app-add-marketing-order',
-  templateUrl: './add-marketing-order.component.html',
-  styleUrls: ['./add-marketing-order.component.scss'],
+  selector: 'app-add-mo-ppc',
+  templateUrl: './add-mo-ppc.component.html',
+  styleUrls: ['./add-mo-ppc.component.scss'],
 })
-export class AddMarketingOrderComponent implements OnInit {
+export class AddMoPpcComponent implements OnInit {
   //Variable Declaration
   marketingOrder: MarketingOrder = new MarketingOrder();
   headerMo: any[] = [];
@@ -30,10 +31,12 @@ export class AddMarketingOrderComponent implements OnInit {
   excelData: any[] = [];
   errorMessage: string | null = null;
 
+  //Workday
   workDay_M0: any[] = [];
   workDay_M1: any[] = [];
   workDay_M2: any[] = [];
 
+  //Total Wd
   total_wd_m0: any = {
     total_wd: 0,
     total_ot_tl: 0,
@@ -54,39 +57,38 @@ export class AddMarketingOrderComponent implements OnInit {
 
   constructor(private router: Router, private fb: FormBuilder, private moService: MarketingOrderService) {
     this.formHeaderMo = this.fb.group({
-      date: ['', Validators.required],
-      type: ['', Validators.required],
-      revision: ['', []],
-      month_0: ['', Validators.required],
-      month_1: ['', []],
-      month_2: ['', []],
-      nwd_0: ['', Validators.required],
-      nwd_1: ['', Validators.required],
-      nwd_2: ['', Validators.required],
-      tl_ot_wd_0: ['', [Validators.required, Validators.min(0)]],
-      tt_ot_wd_0: ['', [Validators.required, Validators.min(0)]],
-      tl_ot_wd_1: ['', [Validators.required, Validators.min(0)]],
-      tt_ot_wd_1: ['', [Validators.required, Validators.min(0)]],
-      tl_ot_wd_2: ['', [Validators.required, Validators.min(0)]],
-      tt_ot_wd_2: ['', [Validators.required, Validators.min(0)]],
-      total_tlwd_0: ['', []],
-      total_ttwd_0: ['', []],
-      total_tlwd_1: ['', []],
-      total_ttwd_1: ['', []],
-      total_tlwd_2: ['', []],
-      total_ttwd_2: ['', []],
-      max_tube_capa_0: [10, [Validators.required, Validators.min(0)]],
-      max_tube_capa_1: [20, [Validators.required, Validators.min(0)]],
-      max_tube_capa_2: [30, [Validators.required, Validators.min(0)]],
-      max_capa_tl_0: [10, [Validators.required, Validators.min(0)]],
-      max_capa_tt_0: [20, [Validators.required, Validators.min(0)]],
-      max_capa_tl_1: [30, [Validators.required, Validators.min(0)]],
-      max_capa_tt_1: [10, [Validators.required, Validators.min(0)]],
-      max_capa_tl_2: [20, [Validators.required, Validators.min(0)]],
-      max_capa_tt_2: [30, [Validators.required, Validators.min(0)]],
-      upload_file_m0: [null, [Validators.required]],
-      upload_file_m1: [null, [Validators.required]],
-      upload_file_m2: [null, [Validators.required]],
+      date: [new Date().toISOString().substring(0, 10)],
+      type: [null, Validators.required],
+      month_0: [null, Validators.required],
+      month_1: [null, []],
+      month_2: [null, []],
+      nwd_0: [27.4, Validators.required],
+      nwd_1: [27.4, Validators.required],
+      nwd_2: [27.4, Validators.required],
+      tl_ot_wd_0: [3, [Validators.required, Validators.min(0)]],
+      tt_ot_wd_0: [3, [Validators.required, Validators.min(0)]],
+      tl_ot_wd_1: [3, [Validators.required, Validators.min(0)]],
+      tt_ot_wd_1: [3, [Validators.required, Validators.min(0)]],
+      tl_ot_wd_2: [3, [Validators.required, Validators.min(0)]],
+      tt_ot_wd_2: [3, [Validators.required, Validators.min(0)]],
+      total_tlwd_0: [30.4, []],
+      total_ttwd_0: [30.4, []],
+      total_tlwd_1: [30.4, []],
+      total_ttwd_1: [30.4, []],
+      total_tlwd_2: [30.4, []],
+      total_ttwd_2: [30.4, []],
+      max_tube_capa_0: [null, [Validators.required, Validators.min(0)]],
+      max_tube_capa_1: [null, [Validators.required, Validators.min(0)]],
+      max_tube_capa_2: [null, [Validators.required, Validators.min(0)]],
+      max_capa_tl_0: [null, [Validators.required, Validators.min(0)]],
+      max_capa_tt_0: [null, [Validators.required, Validators.min(0)]],
+      max_capa_tl_1: [null, [Validators.required, Validators.min(0)]],
+      max_capa_tt_1: [null, [Validators.required, Validators.min(0)]],
+      max_capa_tl_2: [null, [Validators.required, Validators.min(0)]],
+      max_capa_tt_2: [null, [Validators.required, Validators.min(0)]],
+      upload_file_m0: [null, []],
+      upload_file_m1: [null, []],
+      upload_file_m2: [null, []],
     });
 
     this.formHeaderMo.valueChanges.subscribe((values) => {
@@ -102,8 +104,328 @@ export class AddMarketingOrderComponent implements OnInit {
   }
 
   downloadTemplate_M1() {
-    // Ambil bulan dan tahun dari input
     const monthValue = this.formHeaderMo.get('month_0').value;
+    if (!monthValue) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Month not selected',
+        text: 'Please select a month first!',
+        confirmButtonText: 'OK',
+      });
+      return;
+    }
+    const date = new Date(monthValue);
+    const year = date.getFullYear();
+    const month = date.getMonth();
+    const lastDay = new Date(year, month + 1, 0).getDate();
+
+    // Buat workbook baru
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet('Workday Template');
+
+    // Data untuk shift yang akan ditulis ke Excel
+    const shiftData = [['Shift 3'], ['Shift 2'], ['Shift 1'], ['OT TL 3'], ['OT TL 2'], ['OT TL 1'], ['OT TT 3'], ['OT TT 2'], ['OT TT 1'], ['OFF']];
+
+    const headerRow = Array.from({ length: lastDay }, (_, i) => {
+      const day = new Date(year, month, i + 1);
+      return day
+        .toLocaleDateString('en-US', {
+          weekday: 'short',
+          day: '2-digit',
+          month: 'long',
+          year: 'numeric',
+        })
+        .replace(',', '')
+        .replace(/^(\D+)\s(\d+)\s(\D+)\s(\d+)$/, '$1, $2 $3 $4');
+    });
+
+    // Menambahkan header tanggal dari A1 Sampai lenght bulannya
+    worksheet.addRow(['Tanggal', ...headerRow]);
+
+    // Menambahkan shift ke kolom A2 Sampai A11
+    shiftData.forEach((shiftRow) => {
+      worksheet.addRow([shiftRow[0]]);
+    });
+
+    // Mengatur format untuk setiap hari dan mewarnai hari Minggu dan juga jumat
+    worksheet.getRow(1).eachCell((cell, colNumber) => {
+      const dateValue = new Date(year, month, colNumber - 1);
+
+      // Jika hari Minggu, warnai sel
+      if (dateValue.getDay() === 0) {
+        cell.fill = {
+          type: 'pattern',
+          pattern: 'solid',
+          fgColor: { argb: 'FF0000' },
+        };
+        cell.font = {
+          color: { argb: 'FFFFFFFF' },
+        };
+      }
+
+      // Jika hari Jumat, warnai sel dengan hijau
+      if (dateValue.getDay() === 5) {
+        cell.fill = {
+          type: 'pattern',
+          pattern: 'solid',
+          fgColor: { argb: '008000' },
+        };
+        cell.font = {
+          color: { argb: 'FFFFFFFF' },
+        };
+      }
+
+      // Menambahkan border penuh pada header tanggal
+      cell.border = {
+        top: { style: 'thin' },
+        left: { style: 'thin' },
+        bottom: { style: 'thin' },
+        right: { style: 'thin' },
+      };
+
+      // Mengatur alignment (center dan middle)
+      cell.alignment = {
+        vertical: 'middle',
+        horizontal: 'center',
+      };
+
+      // Sesuaikan lebar kolom berdasarkan isi
+      worksheet.getColumn(colNumber + 0).width = cell.value.length + 2;
+    });
+
+    // Menambahkan border pada setiap sel di kolom A dan B
+    const totalRows = shiftData.length + 1;
+
+    for (let rowNumber = 1; rowNumber <= totalRows; rowNumber++) {
+      for (let colNumber = 1; colNumber <= lastDay + 1; colNumber++) {
+        const cell = worksheet.getCell(rowNumber, colNumber);
+        cell.border = {
+          top: { style: 'thin' },
+          left: { style: 'thin' },
+          bottom: { style: 'thin' },
+          right: { style: 'thin' },
+        };
+
+        // Mengatur alignment untuk semua sel
+        cell.alignment = {
+          vertical: 'middle',
+          horizontal: 'center',
+        };
+      }
+    }
+
+    // Menambahkan teks instruksi di A14
+    const instructionCell = worksheet.getCell('A14');
+    instructionCell.value = 'Gunakan simbol ini untuk penanda hari kerja';
+    instructionCell.fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'FFFF00' },
+    };
+    instructionCell.alignment = {
+      vertical: 'middle',
+      horizontal: 'left',
+    };
+
+    for (let col = 2; col <= 3; col++) {
+      const cell = worksheet.getCell(14, col);
+      cell.fill = {
+        type: 'pattern',
+        pattern: 'solid',
+        fgColor: { argb: 'FFFF00' },
+      };
+      cell.alignment = {
+        vertical: 'middle',
+        horizontal: 'center',
+      };
+    }
+
+    // Menambahkan simbol V di D14
+    const checkBoxCell = worksheet.getCell('D14');
+    checkBoxCell.value = 'V';
+    checkBoxCell.alignment = {
+      vertical: 'middle',
+      horizontal: 'center',
+    };
+
+    const now = new Date();
+    const indonesiaTime = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Jakarta' }));
+    const monthFn = date.toLocaleDateString('en-US', { month: 'long' });
+    const timestamp = indonesiaTime.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }).replace(':', '');
+    const fileName = `Workday_${monthFn}_${year}_${timestamp}.xlsx`;
+
+    // Ekspor workbook sebagai file Excel
+    workbook.xlsx.writeBuffer().then((buffer) => {
+      const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      saveAs(blob, fileName);
+    });
+  }
+
+  downloadTemplate_M2() {
+    const monthValue = this.formHeaderMo.get('month_1').value;
+
+    // Cek apakah bulan sudah dipilih
+    if (!monthValue) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Month not selected',
+        text: 'Please select a month first!',
+        confirmButtonText: 'OK',
+      });
+      return;
+    }
+
+    const date = new Date(monthValue);
+    const year = date.getFullYear();
+    const month = date.getMonth(); // Mengambil bulan (0-11)
+
+    // Hitung jumlah hari dalam bulan
+    const lastDay = new Date(year, month + 1, 0).getDate();
+
+    // Buat workbook baru
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet('Workday Template');
+
+    // Data untuk shift yang akan ditulis ke Excel
+    const shiftData = [['Shift 3'], ['Shift 2'], ['Shift 1'], ['OT TL 3'], ['OT TL 2'], ['OT TL 1'], ['OT TT 3'], ['OT TT 2'], ['OT TT 1'], ['OFF']];
+
+    const headerRow = Array.from({ length: lastDay }, (_, i) => {
+      const day = new Date(year, month, i + 1);
+      return day
+        .toLocaleDateString('en-US', {
+          weekday: 'short',
+          day: '2-digit',
+          month: 'long',
+          year: 'numeric',
+        })
+        .replace(',', '')
+        .replace(/^(\D+)\s(\d+)\s(\D+)\s(\d+)$/, '$1, $2 $3 $4');
+    });
+
+    // Menambahkan header tanggal dari A1 Sampai lenght bulannya
+    worksheet.addRow(['Tanggal', ...headerRow]);
+
+    // Menambahkan shift ke kolom A2 Sampai A11
+    shiftData.forEach((shiftRow) => {
+      worksheet.addRow([shiftRow[0]]);
+    });
+
+    // Mengatur format untuk setiap hari dan mewarnai hari Minggu dan juga jumat
+    worksheet.getRow(1).eachCell((cell, colNumber) => {
+      const dateValue = new Date(year, month, colNumber - 1);
+
+      // Jika hari Minggu, warnai sel
+      if (dateValue.getDay() === 0) {
+        cell.fill = {
+          type: 'pattern',
+          pattern: 'solid',
+          fgColor: { argb: 'FF0000' },
+        };
+        cell.font = {
+          color: { argb: 'FFFFFFFF' },
+        };
+      }
+
+      // Jika hari Jumat, warnai sel dengan hijau
+      if (dateValue.getDay() === 5) {
+        cell.fill = {
+          type: 'pattern',
+          pattern: 'solid',
+          fgColor: { argb: '008000' },
+        };
+        cell.font = {
+          color: { argb: 'FFFFFFFF' },
+        };
+      }
+
+      // Menambahkan border penuh pada header tanggal
+      cell.border = {
+        top: { style: 'thin' },
+        left: { style: 'thin' },
+        bottom: { style: 'thin' },
+        right: { style: 'thin' },
+      };
+
+      // Mengatur alignment (center dan middle)
+      cell.alignment = {
+        vertical: 'middle',
+        horizontal: 'center',
+      };
+
+      // Sesuaikan lebar kolom berdasarkan isi
+      worksheet.getColumn(colNumber + 0).width = cell.value.length + 2; // Menyesuaikan lebar kolom
+    });
+
+    // Menambahkan border pada setiap sel di kolom A dan B
+    const totalRows = shiftData.length + 1;
+
+    for (let rowNumber = 1; rowNumber <= totalRows; rowNumber++) {
+      for (let colNumber = 1; colNumber <= lastDay + 1; colNumber++) {
+        const cell = worksheet.getCell(rowNumber, colNumber);
+        cell.border = {
+          top: { style: 'thin' },
+          left: { style: 'thin' },
+          bottom: { style: 'thin' },
+          right: { style: 'thin' },
+        };
+
+        // Mengatur alignment untuk semua sel
+        cell.alignment = {
+          vertical: 'middle',
+          horizontal: 'center',
+        };
+      }
+    }
+
+    // Menambahkan teks instruksi di A14
+    const instructionCell = worksheet.getCell('A14');
+    instructionCell.value = 'Gunakan simbol ini untuk penanda hari kerja';
+    instructionCell.fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'FFFF00' },
+    };
+    instructionCell.alignment = {
+      vertical: 'middle',
+      horizontal: 'left',
+    };
+
+    for (let col = 2; col <= 3; col++) {
+      const cell = worksheet.getCell(14, col);
+      cell.fill = {
+        type: 'pattern',
+        pattern: 'solid',
+        fgColor: { argb: 'FFFF00' },
+      };
+      cell.alignment = {
+        vertical: 'middle',
+        horizontal: 'center',
+      };
+    }
+
+    // Menambahkan simbol V di D14
+    const checkBoxCell = worksheet.getCell('D14');
+    checkBoxCell.value = 'V';
+    checkBoxCell.alignment = {
+      vertical: 'middle',
+      horizontal: 'center',
+    };
+
+    const now = new Date();
+    const indonesiaTime = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Jakarta' }));
+    const monthFn = date.toLocaleDateString('en-US', { month: 'long' });
+    const timestamp = indonesiaTime.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }).replace(':', '');
+    const fileName = `Workday_${monthFn}_${year}_${timestamp}.xlsx`;
+
+    // Ekspor workbook sebagai file Excel
+    workbook.xlsx.writeBuffer().then((buffer) => {
+      const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      saveAs(blob, fileName);
+    });
+  }
+
+  downloadTemplate_M3() {
+    const monthValue = this.formHeaderMo.get('month_2').value;
 
     if (!monthValue) {
       Swal.fire({
@@ -124,39 +446,20 @@ export class AddMarketingOrderComponent implements OnInit {
 
     // Buat workbook baru
     const workbook = new ExcelJS.Workbook();
-    const worksheet = workbook.addWorksheet('Shift Template');
+    const worksheet = workbook.addWorksheet('Workday Template');
 
     // Data untuk shift yang akan ditulis ke Excel
     const shiftData = [['Shift 3'], ['Shift 2'], ['Shift 1'], ['OT TL 3'], ['OT TL 2'], ['OT TL 1'], ['OT TT 3'], ['OT TT 2'], ['OT TT 1'], ['OFF']];
-
-    //Format DD/MM/YYYY
-    // Menambahkan header tanggal ke worksheet
-    // const headerRow = Array.from({ length: lastDay }, (_, i) => {
-    //   const day = i + 1;
-    //   return `${day < 10 ? '0' + day : day}/${month + 1 < 10 ? '0' + (month + 1) : month + 1}/${year}`;
-    // });
-
-    // Menambahkan header tanggal ke worksheet
-    // const headerRow = Array.from({ length: lastDay }, (_, i) => {
-    //   const day = new Date(year, month, i + 1); // Buat tanggal untuk setiap hari
-    //   // Format tanggal menjadi "Mon, 05 October 2024"
-    //   return day.toLocaleDateString('en-US', {
-    //     weekday: 'short', // Nama hari singkat (Mon, Tue, dst.)
-    //     day: '2-digit', // Tanggal dua digit (05, 06, dst.)
-    //     month: 'long', // Nama bulan penuh (October, November, dst.)
-    //     year: 'numeric', // Tahun (2024)
-    //   });
-    // });
 
     const headerRow = Array.from({ length: lastDay }, (_, i) => {
       const day = new Date(year, month, i + 1); // Buat tanggal untuk setiap hari
       // Format tanggal menjadi "Tue, 26 November 2024"
       return day
         .toLocaleDateString('en-US', {
-          weekday: 'short', // Nama hari singkat (Tue, Wed, dst.)
-          day: '2-digit', // Tanggal dua digit (26, 27, dst.)
-          month: 'long', // Nama bulan penuh (November, Desember, dst.)
-          year: 'numeric', // Tahun (2024)
+          weekday: 'short',
+          day: '2-digit',
+          month: 'long',
+          year: 'numeric',
         })
         .replace(',', '')
         .replace(/^(\D+)\s(\d+)\s(\D+)\s(\d+)$/, '$1, $2 $3 $4');
@@ -172,7 +475,7 @@ export class AddMarketingOrderComponent implements OnInit {
 
     // Mengatur format untuk setiap hari dan mewarnai hari Minggu dan juga jumat
     worksheet.getRow(1).eachCell((cell, colNumber) => {
-      const dateValue = new Date(year, month, colNumber - 1); // Mendapatkan tanggal
+      const dateValue = new Date(year, month, colNumber - 1);
 
       // Jika hari Minggu, warnai sel
       if (dateValue.getDay() === 0) {
@@ -214,11 +517,11 @@ export class AddMarketingOrderComponent implements OnInit {
       };
 
       // Sesuaikan lebar kolom berdasarkan isi
-      worksheet.getColumn(colNumber + 0).width = cell.value.length + 2; // Menyesuaikan lebar kolom
+      worksheet.getColumn(colNumber + 0).width = cell.value.length + 2;
     });
 
     // Menambahkan border pada setiap sel di kolom A dan B
-    const totalRows = shiftData.length + 1; // +1 untuk baris header
+    const totalRows = shiftData.length + 1;
 
     for (let rowNumber = 1; rowNumber <= totalRows; rowNumber++) {
       for (let colNumber = 1; colNumber <= lastDay + 1; colNumber++) {
@@ -245,20 +548,19 @@ export class AddMarketingOrderComponent implements OnInit {
     instructionCell.fill = {
       type: 'pattern',
       pattern: 'solid',
-      fgColor: { argb: 'FFFF00' }, // Warna kuning
+      fgColor: { argb: 'FFFF00' },
     };
     instructionCell.alignment = {
       vertical: 'middle',
       horizontal: 'left',
     };
 
-    for (let col = 2; col <= 4; col++) {
-      // B14 (2) sampai D14 (4)
+    for (let col = 2; col <= 3; col++) {
       const cell = worksheet.getCell(14, col);
       cell.fill = {
         type: 'pattern',
         pattern: 'solid',
-        fgColor: { argb: 'FFFF00' }, // Warna kuning
+        fgColor: { argb: 'FFFF00' },
       };
       cell.alignment = {
         vertical: 'middle',
@@ -266,9 +568,9 @@ export class AddMarketingOrderComponent implements OnInit {
       };
     }
 
-    // Menambahkan simbol ☑ di E9
-    const checkBoxCell = worksheet.getCell('E14');
-    checkBoxCell.value = '☑';
+    // Menambahkan simbol V di D14
+    const checkBoxCell = worksheet.getCell('D14');
+    checkBoxCell.value = 'V';
     checkBoxCell.alignment = {
       vertical: 'middle',
       horizontal: 'center',
@@ -278,343 +580,7 @@ export class AddMarketingOrderComponent implements OnInit {
     const indonesiaTime = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Jakarta' }));
     const monthFn = date.toLocaleDateString('en-US', { month: 'long' });
     const timestamp = indonesiaTime.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }).replace(':', '');
-    const fileName = `workday_${monthFn}_${year}_${timestamp}.xlsx`;
-
-    // Ekspor workbook sebagai file Excel
-    workbook.xlsx.writeBuffer().then((buffer) => {
-      const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-      saveAs(blob, fileName);
-    });
-  }
-
-  downloadTemplate_M2() {
-    // Ambil bulan dan tahun dari input
-    const monthValue = this.formHeaderMo.get('month_1').value;
-
-    // Cek apakah bulan sudah dipilih
-    if (!monthValue) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Month not selected',
-        text: 'Please select a month first!',
-        confirmButtonText: 'OK',
-      });
-      return; // Stop execution if no month is selected
-    }
-
-    const date = new Date(monthValue); // Mengubah ke objek Date
-    const year = date.getFullYear();
-    const month = date.getMonth(); // Mengambil bulan (0-11)
-
-    // Hitung jumlah hari dalam bulan
-    const lastDay = new Date(year, month + 1, 0).getDate(); // Ambil tanggal terakhir bulan ini
-
-    // Buat workbook baru
-    const workbook = new ExcelJS.Workbook();
-    const worksheet = workbook.addWorksheet('Shift Template');
-
-    // Data untuk shift yang akan ditulis ke Excel
-    const shiftData = [['Shift 3'], ['Shift 2'], ['Shift 1'], ['OT TL 3'], ['OT TL 2'], ['OT TL 1'], ['OT TT 3'], ['OT TT 2'], ['OT TT 1'], ['OFF']];
-
-    const headerRow = Array.from({ length: lastDay }, (_, i) => {
-      const day = new Date(year, month, i + 1); // Buat tanggal untuk setiap hari
-      // Format tanggal menjadi "Tue, 26 November 2024"
-      return day
-        .toLocaleDateString('en-US', {
-          weekday: 'short', // Nama hari singkat (Tue, Wed, dst.)
-          day: '2-digit', // Tanggal dua digit (26, 27, dst.)
-          month: 'long', // Nama bulan penuh (November, Desember, dst.)
-          year: 'numeric', // Tahun (2024)
-        })
-        .replace(',', '')
-        .replace(/^(\D+)\s(\d+)\s(\D+)\s(\d+)$/, '$1, $2 $3 $4');
-    });
-
-    // Menambahkan header tanggal dari A1 Sampai lenght bulannya
-    worksheet.addRow(['Tanggal', ...headerRow]);
-
-    // Menambahkan shift ke kolom A2 Sampai A11
-    shiftData.forEach((shiftRow) => {
-      worksheet.addRow([shiftRow[0]]);
-    });
-
-    // Mengatur format untuk setiap hari dan mewarnai hari Minggu dan juga jumat
-    worksheet.getRow(1).eachCell((cell, colNumber) => {
-      const dateValue = new Date(year, month, colNumber - 1); // Mendapatkan tanggal
-
-      // Jika hari Minggu, warnai sel
-      if (dateValue.getDay() === 0) {
-        // 0 = Minggu
-        cell.fill = {
-          type: 'pattern',
-          pattern: 'solid',
-          fgColor: { argb: 'FF0000' },
-        };
-        cell.font = {
-          color: { argb: 'FFFFFFFF' },
-        };
-      }
-
-      // Jika hari Jumat, warnai sel dengan hijau
-      if (dateValue.getDay() === 5) {
-        cell.fill = {
-          type: 'pattern',
-          pattern: 'solid',
-          fgColor: { argb: '008000' },
-        };
-        cell.font = {
-          color: { argb: 'FFFFFFFF' },
-        };
-      }
-
-      // Menambahkan border penuh pada header tanggal
-      cell.border = {
-        top: { style: 'thin' },
-        left: { style: 'thin' },
-        bottom: { style: 'thin' },
-        right: { style: 'thin' },
-      };
-
-      // Mengatur alignment (center dan middle)
-      cell.alignment = {
-        vertical: 'middle',
-        horizontal: 'center',
-      };
-
-      // Sesuaikan lebar kolom berdasarkan isi
-      worksheet.getColumn(colNumber + 0).width = cell.value.length + 2; // Menyesuaikan lebar kolom
-    });
-
-    // Menambahkan border pada setiap sel di kolom A dan B
-    const totalRows = shiftData.length + 1; // +1 untuk baris header
-
-    for (let rowNumber = 1; rowNumber <= totalRows; rowNumber++) {
-      for (let colNumber = 1; colNumber <= lastDay + 1; colNumber++) {
-        // +1 untuk kolom A
-        const cell = worksheet.getCell(rowNumber, colNumber);
-        cell.border = {
-          top: { style: 'thin' },
-          left: { style: 'thin' },
-          bottom: { style: 'thin' },
-          right: { style: 'thin' },
-        };
-
-        // Mengatur alignment untuk semua sel
-        cell.alignment = {
-          vertical: 'middle',
-          horizontal: 'center',
-        };
-      }
-    }
-
-    // Menambahkan teks instruksi di A14
-    const instructionCell = worksheet.getCell('A14');
-    instructionCell.value = 'Gunakan simbol ini untuk penanda hari kerja';
-    instructionCell.fill = {
-      type: 'pattern',
-      pattern: 'solid',
-      fgColor: { argb: 'FFFF00' }, // Warna kuning
-    };
-    instructionCell.alignment = {
-      vertical: 'middle',
-      horizontal: 'left',
-    };
-
-    for (let col = 2; col <= 4; col++) {
-      // B14 (2) sampai D14 (4)
-      const cell = worksheet.getCell(14, col);
-      cell.fill = {
-        type: 'pattern',
-        pattern: 'solid',
-        fgColor: { argb: 'FFFF00' }, // Warna kuning
-      };
-      cell.alignment = {
-        vertical: 'middle',
-        horizontal: 'center',
-      };
-    }
-
-    // Menambahkan simbol ☑ di E9
-    const checkBoxCell = worksheet.getCell('E14');
-    checkBoxCell.value = '☑';
-    checkBoxCell.alignment = {
-      vertical: 'middle',
-      horizontal: 'center',
-    };
-
-    const now = new Date();
-    const indonesiaTime = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Jakarta' }));
-    const monthFn = date.toLocaleDateString('en-US', { month: 'long' });
-    const timestamp = indonesiaTime.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }).replace(':', '');
-    const fileName = `workday_${monthFn}_${year}_${timestamp}.xlsx`;
-
-    // Ekspor workbook sebagai file Excel
-    workbook.xlsx.writeBuffer().then((buffer) => {
-      const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-      saveAs(blob, fileName);
-    });
-  }
-
-  downloadTemplate_M3() {
-    // Ambil bulan dan tahun dari input
-    const monthValue = this.formHeaderMo.get('month_2').value;
-
-    // Cek apakah bulan sudah dipilih
-    if (!monthValue) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Month not selected',
-        text: 'Please select a month first!',
-        confirmButtonText: 'OK',
-      });
-      return; // Stop execution if no month is selected
-    }
-
-    const date = new Date(monthValue); // Mengubah ke objek Date
-    const year = date.getFullYear();
-    const month = date.getMonth(); // Mengambil bulan (0-11)
-
-    // Hitung jumlah hari dalam bulan
-    const lastDay = new Date(year, month + 1, 0).getDate(); // Ambil tanggal terakhir bulan ini
-
-    // Buat workbook baru
-    const workbook = new ExcelJS.Workbook();
-    const worksheet = workbook.addWorksheet('Shift Template');
-
-    // Data untuk shift yang akan ditulis ke Excel
-    const shiftData = [['Shift 3'], ['Shift 2'], ['Shift 1'], ['OT TL 3'], ['OT TL 2'], ['OT TL 1'], ['OT TT 3'], ['OT TT 2'], ['OT TT 1'], ['OFF']];
-
-    const headerRow = Array.from({ length: lastDay }, (_, i) => {
-      const day = new Date(year, month, i + 1); // Buat tanggal untuk setiap hari
-      // Format tanggal menjadi "Tue, 26 November 2024"
-      return day
-        .toLocaleDateString('en-US', {
-          weekday: 'short', // Nama hari singkat (Tue, Wed, dst.)
-          day: '2-digit', // Tanggal dua digit (26, 27, dst.)
-          month: 'long', // Nama bulan penuh (November, Desember, dst.)
-          year: 'numeric', // Tahun (2024)
-        })
-        .replace(',', '')
-        .replace(/^(\D+)\s(\d+)\s(\D+)\s(\d+)$/, '$1, $2 $3 $4');
-    });
-
-    // Menambahkan header tanggal dari A1 Sampai lenght bulannya
-    worksheet.addRow(['Tanggal', ...headerRow]);
-
-    // Menambahkan shift ke kolom A2 Sampai A11
-    shiftData.forEach((shiftRow) => {
-      worksheet.addRow([shiftRow[0]]);
-    });
-
-    // Mengatur format untuk setiap hari dan mewarnai hari Minggu dan juga jumat
-    worksheet.getRow(1).eachCell((cell, colNumber) => {
-      const dateValue = new Date(year, month, colNumber - 1); // Mendapatkan tanggal
-
-      // Jika hari Minggu, warnai sel
-      if (dateValue.getDay() === 0) {
-        // 0 = Minggu
-        cell.fill = {
-          type: 'pattern',
-          pattern: 'solid',
-          fgColor: { argb: 'FF0000' },
-        };
-        cell.font = {
-          color: { argb: 'FFFFFFFF' },
-        };
-      }
-
-      // Jika hari Jumat, warnai sel dengan hijau
-      if (dateValue.getDay() === 5) {
-        cell.fill = {
-          type: 'pattern',
-          pattern: 'solid',
-          fgColor: { argb: '008000' },
-        };
-        cell.font = {
-          color: { argb: 'FFFFFFFF' },
-        };
-      }
-
-      // Menambahkan border penuh pada header tanggal
-      cell.border = {
-        top: { style: 'thin' },
-        left: { style: 'thin' },
-        bottom: { style: 'thin' },
-        right: { style: 'thin' },
-      };
-
-      // Mengatur alignment (center dan middle)
-      cell.alignment = {
-        vertical: 'middle',
-        horizontal: 'center',
-      };
-
-      // Sesuaikan lebar kolom berdasarkan isi
-      worksheet.getColumn(colNumber + 0).width = cell.value.length + 2; // Menyesuaikan lebar kolom
-    });
-
-    // Menambahkan border pada setiap sel di kolom A dan B
-    const totalRows = shiftData.length + 1; // +1 untuk baris header
-
-    for (let rowNumber = 1; rowNumber <= totalRows; rowNumber++) {
-      for (let colNumber = 1; colNumber <= lastDay + 1; colNumber++) {
-        // +1 untuk kolom A
-        const cell = worksheet.getCell(rowNumber, colNumber);
-        cell.border = {
-          top: { style: 'thin' },
-          left: { style: 'thin' },
-          bottom: { style: 'thin' },
-          right: { style: 'thin' },
-        };
-
-        // Mengatur alignment untuk semua sel
-        cell.alignment = {
-          vertical: 'middle',
-          horizontal: 'center',
-        };
-      }
-    }
-
-    // Menambahkan teks instruksi di A14
-    const instructionCell = worksheet.getCell('A14');
-    instructionCell.value = 'Gunakan simbol ini untuk penanda hari kerja';
-    instructionCell.fill = {
-      type: 'pattern',
-      pattern: 'solid',
-      fgColor: { argb: 'FFFF00' }, // Warna kuning
-    };
-    instructionCell.alignment = {
-      vertical: 'middle',
-      horizontal: 'left',
-    };
-
-    for (let col = 2; col <= 4; col++) {
-      // B14 (2) sampai D14 (4)
-      const cell = worksheet.getCell(14, col);
-      cell.fill = {
-        type: 'pattern',
-        pattern: 'solid',
-        fgColor: { argb: 'FFFF00' }, // Warna kuning
-      };
-      cell.alignment = {
-        vertical: 'middle',
-        horizontal: 'center',
-      };
-    }
-
-    // Menambahkan simbol ☑ di E9
-    const checkBoxCell = worksheet.getCell('E14');
-    checkBoxCell.value = '☑';
-    checkBoxCell.alignment = {
-      vertical: 'middle',
-      horizontal: 'center',
-    };
-
-    const now = new Date();
-    const indonesiaTime = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Jakarta' }));
-    const monthFn = date.toLocaleDateString('en-US', { month: 'long' });
-    const timestamp = indonesiaTime.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }).replace(':', '');
-    const fileName = `workday_${monthFn}_${year}_${timestamp}.xlsx`;
+    const fileName = `Workday_${monthFn}_${year}_${timestamp}.xlsx`;
 
     // Ekspor workbook sebagai file Excel
     workbook.xlsx.writeBuffer().then((buffer) => {
@@ -644,16 +610,16 @@ export class AddMarketingOrderComponent implements OnInit {
 
       // Iterasi melalui setiap kolom tanggal
       for (let i = 1; i <= convertTypeDate.length; i++) {
-        const shift3 = jsonData[1][i] === '☑' ? 1 : 0;
-        const shift2 = jsonData[2][i] === '☑' ? 1 : 0;
-        const shift1 = jsonData[3][i] === '☑' ? 1 : 0;
-        const ot_tl_3 = jsonData[4][i] === '☑' ? 1 : 0;
-        const ot_tl_2 = jsonData[5][i] === '☑' ? 1 : 0;
-        const ot_tl_1 = jsonData[6][i] === '☑' ? 1 : 0;
-        const ot_tt_3 = jsonData[7][i] === '☑' ? 1 : 0;
-        const ot_tt_2 = jsonData[8][i] === '☑' ? 1 : 0;
-        const ot_tt_1 = jsonData[9][i] === '☑' ? 1 : 0;
-        const off = jsonData[10][i] === '☑' ? 1 : 0;
+        const shift3 = jsonData[1][i]?.toString().toUpperCase() === 'V' ? 1 : 0;
+        const shift2 = jsonData[2][i]?.toString().toUpperCase() === 'V' ? 1 : 0;
+        const shift1 = jsonData[3][i]?.toString().toUpperCase() === 'V' ? 1 : 0;
+        const ot_tl_3 = jsonData[4][i]?.toString().toUpperCase() === 'V' ? 1 : 0;
+        const ot_tl_2 = jsonData[5][i]?.toString().toUpperCase() === 'V' ? 1 : 0;
+        const ot_tl_1 = jsonData[6][i]?.toString().toUpperCase() === 'V' ? 1 : 0;
+        const ot_tt_3 = jsonData[7][i]?.toString().toUpperCase() === 'V' ? 1 : 0;
+        const ot_tt_2 = jsonData[8][i]?.toString().toUpperCase() === 'V' ? 1 : 0;
+        const ot_tt_1 = jsonData[9][i]?.toString().toUpperCase() === 'V' ? 1 : 0;
+        const off = jsonData[10][i]?.toString().toUpperCase() === 'V' ? 1 : 0;
 
         const data = {
           date_WD: convertTypeDate[i - 1],
@@ -701,16 +667,16 @@ export class AddMarketingOrderComponent implements OnInit {
 
       // Iterasi melalui setiap kolom tanggal
       for (let i = 1; i <= convertTypeDate.length; i++) {
-        const shift3 = jsonData[1][i] === '☑' ? 1 : 0;
-        const shift2 = jsonData[2][i] === '☑' ? 1 : 0;
-        const shift1 = jsonData[3][i] === '☑' ? 1 : 0;
-        const ot_tl_3 = jsonData[4][i] === '☑' ? 1 : 0;
-        const ot_tl_2 = jsonData[5][i] === '☑' ? 1 : 0;
-        const ot_tl_1 = jsonData[6][i] === '☑' ? 1 : 0;
-        const ot_tt_3 = jsonData[7][i] === '☑' ? 1 : 0;
-        const ot_tt_2 = jsonData[8][i] === '☑' ? 1 : 0;
-        const ot_tt_1 = jsonData[9][i] === '☑' ? 1 : 0;
-        const off = jsonData[10][i] === '☑' ? 1 : 0;
+        const shift3 = jsonData[1][i]?.toString().toUpperCase() === 'V' ? 1 : 0;
+        const shift2 = jsonData[2][i]?.toString().toUpperCase() === 'V' ? 1 : 0;
+        const shift1 = jsonData[3][i]?.toString().toUpperCase() === 'V' ? 1 : 0;
+        const ot_tl_3 = jsonData[4][i]?.toString().toUpperCase() === 'V' ? 1 : 0;
+        const ot_tl_2 = jsonData[5][i]?.toString().toUpperCase() === 'V' ? 1 : 0;
+        const ot_tl_1 = jsonData[6][i]?.toString().toUpperCase() === 'V' ? 1 : 0;
+        const ot_tt_3 = jsonData[7][i]?.toString().toUpperCase() === 'V' ? 1 : 0;
+        const ot_tt_2 = jsonData[8][i]?.toString().toUpperCase() === 'V' ? 1 : 0;
+        const ot_tt_1 = jsonData[9][i]?.toString().toUpperCase() === 'V' ? 1 : 0;
+        const off = jsonData[10][i]?.toString().toUpperCase() === 'V' ? 1 : 0;
 
         const data = {
           date_WD: convertTypeDate[i - 1],
@@ -757,16 +723,16 @@ export class AddMarketingOrderComponent implements OnInit {
 
       // Iterasi melalui setiap kolom tanggal
       for (let i = 1; i <= convertTypeDate.length; i++) {
-        const shift3 = jsonData[1][i] === '☑' ? 1 : 0;
-        const shift2 = jsonData[2][i] === '☑' ? 1 : 0;
-        const shift1 = jsonData[3][i] === '☑' ? 1 : 0;
-        const ot_tl_3 = jsonData[4][i] === '☑' ? 1 : 0;
-        const ot_tl_2 = jsonData[5][i] === '☑' ? 1 : 0;
-        const ot_tl_1 = jsonData[6][i] === '☑' ? 1 : 0;
-        const ot_tt_3 = jsonData[7][i] === '☑' ? 1 : 0;
-        const ot_tt_2 = jsonData[8][i] === '☑' ? 1 : 0;
-        const ot_tt_1 = jsonData[9][i] === '☑' ? 1 : 0;
-        const off = jsonData[10][i] === '☑' ? 1 : 0;
+        const shift3 = jsonData[1][i]?.toString().toUpperCase() === 'V' ? 1 : 0;
+        const shift2 = jsonData[2][i]?.toString().toUpperCase() === 'V' ? 1 : 0;
+        const shift1 = jsonData[3][i]?.toString().toUpperCase() === 'V' ? 1 : 0;
+        const ot_tl_3 = jsonData[4][i]?.toString().toUpperCase() === 'V' ? 1 : 0;
+        const ot_tl_2 = jsonData[5][i]?.toString().toUpperCase() === 'V' ? 1 : 0;
+        const ot_tl_1 = jsonData[6][i]?.toString().toUpperCase() === 'V' ? 1 : 0;
+        const ot_tt_3 = jsonData[7][i]?.toString().toUpperCase() === 'V' ? 1 : 0;
+        const ot_tt_2 = jsonData[8][i]?.toString().toUpperCase() === 'V' ? 1 : 0;
+        const ot_tt_1 = jsonData[9][i]?.toString().toUpperCase() === 'V' ? 1 : 0;
+        const off = jsonData[10][i]?.toString().toUpperCase() === 'V' ? 1 : 0;
 
         const data = {
           date_WD: convertTypeDate[i - 1],
@@ -861,9 +827,29 @@ export class AddMarketingOrderComponent implements OnInit {
     this.formHeaderMo.patchValue({ [`total_ttwd_${month}`]: totalTtWd.toFixed(2) });
   }
 
-  saveHeaderMo() {
-    this.fillTheTableMo();
-    this.isTableVisible = true;
+  showDetailMo() {
+    if (this.formHeaderMo.invalid) {
+      // //Get all form controls that are invalid
+      // const invalidFields = [];
+      // const controls = this.formHeaderMo.controls;
+      // for (const name in controls) {
+      //   if (controls[name].invalid) {
+      //     invalidFields.push(name);
+      //   }
+      // }
+
+      // // Log invalid fields to the console
+      // console.log('Invalid fields:', invalidFields);
+      Swal.fire({
+        title: 'Incomplete Form',
+        text: 'Please fill in all required fields!',
+        icon: 'warning',
+        confirmButtonText: 'OK',
+      });
+    } else {
+      this.fillTheTableMo();
+      this.isTableVisible = true;
+    }
   }
 
   fillTheTableMo(): void {
@@ -880,40 +866,46 @@ export class AddMarketingOrderComponent implements OnInit {
         this.marketingOrderTable = response.data;
       },
       (error) => {
-        this.errorMessage = 'Failed to load plants: ' + error.message;
+        Swal.fire({
+          icon: 'error',
+          title: 'Failed to load detail Marketing Order',
+          text: error.message,
+          confirmButtonText: 'OK',
+        });
       }
     );
   }
 
   saveAllMo() {
-    this.marketingOrder.revision = this.formHeaderMo.get('revision')?.value;
-    this.marketingOrder.date = this.formHeaderMo.get('date')?.value;
+    const workDay = [...this.workDay_M0, ...this.workDay_M1, ...this.workDay_M2];
+    this.marketingOrder.dateValid = this.formHeaderMo.get('date')?.value;
     this.marketingOrder.type = this.formHeaderMo.get('type')?.value;
-    this.marketingOrder.month_0 = new Date(this.formHeaderMo.get('month_0')?.value);
-    this.marketingOrder.month_1 = new Date(this.formHeaderMo.get('month_1')?.value);
-    this.marketingOrder.month_2 = new Date(this.formHeaderMo.get('month_2')?.value);
+    this.marketingOrder.month0 = new Date(this.formHeaderMo.get('month_0')?.value);
+    this.marketingOrder.month1 = new Date(this.formHeaderMo.get('month_1')?.value);
+    this.marketingOrder.month2 = new Date(this.formHeaderMo.get('month_2')?.value);
 
     this.moService.saveMarketingOrder(this.marketingOrder).subscribe(
       (response) => {
-        const last_id_mo = response.data.mo_ID;
+        const lastIdMo = response.data.moId;
+        this.headerMo = [];
         for (let i = 0; i < 3; i++) {
           this.headerMo.push({
-            mo_ID: last_id_mo,
+            moId: lastIdMo,
             month: new Date(this.formHeaderMo.get(`month_${i}`)?.value),
-            wd_NORMAL: this.formHeaderMo.get(`nwd_${i}`)?.value,
-            wd_OT_TL: this.formHeaderMo.get(`tl_ot_wd_${i}`)?.value,
-            wd_OT_TT: this.formHeaderMo.get(`tt_ot_wd_${i}`)?.value,
-            total_WD_TL: this.formHeaderMo.get(`total_tlwd_${i}`)?.value,
-            total_WD_TT: this.formHeaderMo.get(`total_ttwd_${i}`)?.value,
-            max_CAP_TUBE: this.formHeaderMo.get(`max_tube_capa_${i}`)?.value,
-            max_CAP_TL: this.formHeaderMo.get(`max_capa_tl_${i}`)?.value,
-            max_CAP_TT: this.formHeaderMo.get(`max_capa_tt_${i}`)?.value,
+            wdNormal: this.formHeaderMo.get(`nwd_${i}`)?.value,
+            wdOtTl: this.formHeaderMo.get(`tl_ot_wd_${i}`)?.value,
+            wdOtTt: this.formHeaderMo.get(`tt_ot_wd_${i}`)?.value,
+            totalWdTl: this.formHeaderMo.get(`total_tlwd_${i}`)?.value,
+            totalWdTt: this.formHeaderMo.get(`total_ttwd_${i}`)?.value,
+            maxCapTube: this.formHeaderMo.get(`max_tube_capa_${i}`)?.value,
+            maxCapTl: this.formHeaderMo.get(`max_capa_tl_${i}`)?.value,
+            maxCapTt: this.formHeaderMo.get(`max_capa_tt_${i}`)?.value,
           });
         }
         this.moService.saveHeaderMarketingOrder(this.headerMo).subscribe(
           (response) => {
             this.marketingOrderTable.forEach((item) => {
-              item.moId = last_id_mo;
+              item.moId = lastIdMo;
             });
             this.moService.saveDetailRowMarketingOrder(this.marketingOrderTable).subscribe(
               (response) => {
@@ -924,7 +916,7 @@ export class AddMarketingOrderComponent implements OnInit {
                   confirmButtonText: 'OK',
                 }).then((result) => {
                   if (result.isConfirmed) {
-                    this.router.navigate(['/transaksi/view-marketing-order']);
+                    this.navigateToViewMo();
                   }
                 });
               },
@@ -944,39 +936,8 @@ export class AddMarketingOrderComponent implements OnInit {
     );
   }
 
-  getMarketingOrderData() {
-    // const dataTableMo = this.marketingOrderTable.map((mo) => {
-    //   return {
-    //     category: mo.category,
-    //     item: mo.item,
-    //     description: mo.description,
-    //     type: mo.type,
-    //     kapasitas: mo.kapasitas,
-    //     qtyMould: mo.qtyMould,
-    //     qtyPerRak: mo.qtyPerRak,
-    //     minOrder: mo.minOrder,
-    //     kpm_m1: mo.kpm_m1,
-    //     kpm_m2: mo.kpm_m2,
-    //     kpm_m3: mo.kpm_m3,
-    //     inputSalesForecastMonth1: mo.inputSalesForecastMonth1,
-    //     inputSalesForecastMonth2: mo.inputSalesForecastMonth2,
-    //     inputSalesForecastMonth3: mo.inputSalesForecastMonth3,
-    //     inputMarketingOrderMonth1: mo.inputMarketingOrderMonth1,
-    //     inputMarketingOrderMonth2: mo.inputMarketingOrderMonth2,
-    //     inputMarketingOrderMonth3: mo.inputMarketingOrderMonth3,
-    //     inputInitialStock: mo.inputInitialStock,
-    //   };
-    // });
-    // return dataTableMo; // Kembalikan data sebagai array objek
-  }
-
-  getLastIdMo(idMo: String) {
-    let idLastMo = idMo;
-    return idLastMo;
-  }
-
   navigateToViewMo() {
-    this.router.navigate(['/transaksi/view-marketing-order']);
+    this.router.navigate(['/transaksi/view-mo-ppc']);
   }
 
   calculateWd(data: any[]) {

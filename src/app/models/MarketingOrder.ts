@@ -1,14 +1,12 @@
 export class MarketingOrder {
-  last_UPDATE_DATE: Date;
-  creation_DATE: Date;
-  status: number;
+  moId: String;
   type: string;
-  last_UPDATED_BY: string;
-  date: Date;
-  month_0: Date;
-  month_2: Date;
-  mo_ID: String;
-  revision: number;
-  month_1: Date;
-  created_BY: string;
+  dateValid: Date;
+  revisionPpc: Number;
+  revisionMarketing: Number;
+  month0: Date;
+  month1: Date;
+  month2: Date;
+  status: Number;
+  statusFilled: Number;
 }

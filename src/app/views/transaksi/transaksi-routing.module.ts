@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ViewMarketingOrderComponent } from './view-marketing-order/view-marketing-order.component';
-import { AddMonthlyPlanningComponent } from './add-monthly-planning/add-monthly-planning.component';
+import { ViewMoPpcComponent } from './view-mo-ppc/view-mo-ppc.component';
 import { ViewMonthlyPlanningComponent } from './view-monthly-planning/view-monthly-planning.component';
 
 const routes: Routes = [{
@@ -16,8 +15,8 @@ const routes: Routes = [{
       redirectTo: ''
     },
     {
-      path: 'transaksi/view-marketing-order',
-      component: ViewMarketingOrderComponent,
+      path: 'transaksi/view-mo-ppc',
+      component: ViewMoPpcComponent,
       data: {
         title: 'View Marketing Order'
       }

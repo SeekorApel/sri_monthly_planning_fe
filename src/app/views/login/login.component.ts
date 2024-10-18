@@ -1,6 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AuthenticationService } from '../../services/authentication.service';
+import { first } from 'rxjs/operators';
 import { ModalDirective } from 'ngx-bootstrap/modal';
 
 @Component({
@@ -15,11 +17,12 @@ export class LoginComponent implements OnInit {
   returnUrl: string;
   error = '';
 
-  constructor(
-    private formBuilder: FormBuilder,
-    private route: ActivatedRoute,
-    private router: Router
-  ) {}
+  constructor(private formBuilder: FormBuilder, private route: ActivatedRoute, private router: Router, private authenticationService: AuthenticationService) {
+    // redirect to home if already logged in
+    if (this.authenticationService.currentUserValue) {
+      this.router.navigate(['/dashboard']);
+    }
+  }
 
   ngOnInit() {
     this.loginForm = this.formBuilder.group({
@@ -28,8 +31,7 @@ export class LoginComponent implements OnInit {
     });
 
     // get return url from route parameters or default to '/'
-    this.returnUrl =
-      this.route.snapshot.queryParams['returnUrl'] || '/dashboard';
+    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
   }
 
   // convenience getter for easy access to form fields
@@ -45,7 +47,19 @@ export class LoginComponent implements OnInit {
       return;
     }
 
-    // Directly navigate to the dashboard after form submission
-    this.router.navigate([this.returnUrl]);
+    this.loading = true;
+
+    this.authenticationService
+      .login(this.f.username.value, this.f.pin.value)
+      .pipe(first())
+      .subscribe(
+        () => {
+          this.router.navigate([this.returnUrl]);
+        },
+        (error) => {
+          this.error = error;
+          this.loading = false;
+        }
+      );
   }
 }

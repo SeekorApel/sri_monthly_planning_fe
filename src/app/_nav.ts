@@ -4,151 +4,19 @@ export const navItems: INavData[] = [
   {
     name: 'Dashboard',
     url: '/dashboard',
-    icon: 'cil-home'
+    icon: 'cil-home',
   },
   {
     name: 'Master Data',
     url: '/master-data',
     icon: 'cil-folder',
-    children:[
-      // {
-      //   name: 'Plant',
-      //   url: 'master-data/view-plant',
-      //   icon: 'cil-minus'
-      // },
-      // {
-      //   name: 'Building',
-      //   url: '/base/cards',
-      //   icon: 'cil-minus'
-      // },
-      // {
-      //   name: 'Building Distance',
-      //   url: '/base/cards',
-      //   icon: 'cil-minus'
-      // },
-      // {
-      //   name: 'Quadrant',
-      //   url: '/base/cards',
-      //   icon: 'cil-minus'
-      // },
-      // {
-      //   name: 'Tass Machine',
-      //   url: '/base/cards',
-      //   icon: 'cil-minus'
-      // },
-      // {
-      //   name: 'Quadrant Distance',
-      //   url: '/base/cards',
-      //   icon: 'cil-minus'
-      // },
-      // {
-      //   name: 'Curing Machine',
-      //   url: '/base/cards',
-      //   icon: 'cil-minus'
-      // },
-      // {
-      //   name: 'Tass Machine',
-      //   url: '/base/cards',
-      //   icon: 'cil-minus'
-      // },
-      // {
-      //   name: 'Curing Type',
-      //   url: '/base/cards',
-      //   icon: 'cil-minus'
-      // },
-      // {
-      //   name: 'Curing Capacity',
-      //   url: '/base/cards',
-      //   icon: 'cil-minus'
-      // },
-      // {
-      //   name: 'Max Capacity',
-      //   url: '/base/cards',
-      //   icon: 'cil-minus'
-      // },
-      // {
-      //   name: 'Curing Size',
-      //   url: '/base/cards',
-      //   icon: 'cil-minus'
-      // },
-      // {
-      //   name: 'Size',
-      //   url: '/base/cards',
-      //   icon: 'cil-minus'
-      // },
-      // {
-      //   name: 'Pattern',
-      //   url: '/base/cards',
-      //   icon: 'cil-minus'
-      // },
-      // {
-      //   name: 'Product Type',
-      //   url: '/base/cards',
-      //   icon: 'cil-minus'
-      // },
-      // {
-      //   name: 'Product',
-      //   url: '/base/cards',
-      //   icon: 'cil-minus'
-      // },
-      // {
-      //   name: 'Item Curing',
-      //   url: '/base/cards',
-      //   icon: 'cil-minus'
-      // },
-    ]
+    children: [],
   },
   {
     name: 'Transaksi',
     url: '/transaksi',
     icon: 'cil-clipboard',
-    children:[
-      // {
-      //   name: 'Header Marketing Order',
-      //   url: '/base/cards',
-      //   icon: 'cil-minus'
-      // },
-      // {
-      //   name: 'Transaksi Marketing Order',
-      //   url: '/base/cards',
-      //   icon: 'cil-minus'
-      // },
-      // {
-      //   name: 'Detail Marketing Order',
-      //   url: '/base/cards',
-      //   icon: 'cil-minus'
-      // },
-      // {
-      //   name: 'Transaksi Monthly Plan',
-      //   url: '/base/cards',
-      //   icon: 'cil-minus'
-      // },
-      // {
-      //   name: 'Detail Monthly Plan',
-      //   url: '/base/cards',
-      //   icon: 'cil-minus'
-      // },
-      // {
-      //   name: 'Detail Daily Monthly Plan',
-      //   url: '/base/cards',
-      //   icon: 'cil-minus'
-      // },
-      // {
-      //   name: 'Detail Shift Monthly Plan',
-      //   url: '/base/cards',
-      //   icon: 'cil-minus'
-      // },
-      // {
-      //   name: 'Master Delivery Schedule',
-      //   url: '/base/cards',
-      //   icon: 'cil-minus'
-      // },
-      // {
-      //   name: 'Detail Delivery Schedule',
-      //   url: '/base/cards',
-      //   icon: 'cil-minus'
-      // },
-    ]
+    children: [],
   },
   // {
   //   title: true,
@@ -190,65 +58,64 @@ export const navItems: INavData[] = [
       {
         name: 'Cards',
         url: '/base/cards',
-        icon: 'icon-puzzle'
+        icon: 'icon-puzzle',
       },
       {
         name: 'Carousels',
         url: '/base/carousels',
-        icon: 'icon-puzzle'
+        icon: 'icon-puzzle',
       },
       {
         name: 'Collapses',
         url: '/base/collapses',
-        icon: 'icon-puzzle'
+        icon: 'icon-puzzle',
       },
       {
         name: 'Forms',
         url: '/base/forms',
-        icon: 'icon-puzzle'
+        icon: 'icon-puzzle',
       },
       {
         name: 'Navbars',
         url: '/base/navbars',
-        icon: 'icon-puzzle'
-
+        icon: 'icon-puzzle',
       },
       {
         name: 'Pagination',
         url: '/base/paginations',
-        icon: 'icon-puzzle'
+        icon: 'icon-puzzle',
       },
       {
         name: 'Popovers',
         url: '/base/popovers',
-        icon: 'icon-puzzle'
+        icon: 'icon-puzzle',
       },
       {
         name: 'Progress',
         url: '/base/progress',
-        icon: 'icon-puzzle'
+        icon: 'icon-puzzle',
       },
       {
         name: 'Switches',
         url: '/base/switches',
-        icon: 'icon-puzzle'
+        icon: 'icon-puzzle',
       },
       {
         name: 'Tables',
         url: '/base/tables',
-        icon: 'icon-puzzle'
+        icon: 'icon-puzzle',
       },
       {
         name: 'Tabs',
         url: '/base/tabs',
-        icon: 'icon-puzzle'
+        icon: 'icon-puzzle',
       },
       {
         name: 'Tooltips',
         url: '/base/tooltips',
-        icon: 'icon-puzzle'
-      }
-    ]
+        icon: 'icon-puzzle',
+      },
+    ],
   },
 
   // {
@@ -290,13 +157,13 @@ export const navItems: INavData[] = [
         icon: 'icon-star',
         badge: {
           variant: 'success',
-          text: 'NEW'
-        }
+          text: 'NEW',
+        },
       },
       {
         name: 'Flags',
         url: '/icons/flags',
-        icon: 'icon-star'
+        icon: 'icon-star',
       },
       {
         name: 'Font Awesome',
@@ -304,15 +171,15 @@ export const navItems: INavData[] = [
         icon: 'icon-star',
         badge: {
           variant: 'secondary',
-          text: '4.7'
-        }
+          text: '4.7',
+        },
       },
       {
         name: 'Simple Line Icons',
         url: '/icons/simple-line-icons',
-        icon: 'icon-star'
-      }
-    ]
+        icon: 'icon-star',
+      },
+    ],
   },
 
   // {

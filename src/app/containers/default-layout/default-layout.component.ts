@@ -12,23 +12,23 @@ export class DefaultLayoutComponent {
   public navItems: any = ([] = navItems);
   public nrp;
   public name;
-  public csMd: any;
-  public csTrx: any;
+  public role;
+  public masterPPC: any;
+  public transaksiPPC: any;
+  public transaksiMarketing: any;
 
   constructor(private authenticationService: AuthenticationService, private router: Router) {
     //PERSONAL INFORMATION
     let currentUserSubject = JSON.parse(localStorage.getItem('currentUser'));
-    console.log('ISI currentUser', currentUserSubject);
-    // this.nrp = currentUserSubject.userName;
-    // this.name = currentUserSubject.personal[0].nama;
-    this.nrp = 123;
-    this.name = 'benetAdmin';
+    this.nrp = currentUserSubject.userName;
+    this.name = currentUserSubject.fullName;
+    this.role = currentUserSubject.roles.role_name;
 
     this.navItems = navItems;
     this.navItems[1].children = [];
     this.navItems[2].children = [];
 
-    this.csMd = [
+    this.masterPPC = [
       { name: 'Plant', url: '/master-data/view-plant', icon: 'cil-minus' },
       { name: 'Setting', url: '/master-data/view-setting', icon: 'cil-minus' },
       { name: 'Quadrant', url: '/master-data/view-quadrant', icon: 'cil-minus' },
@@ -56,26 +56,42 @@ export class DefaultLayoutComponent {
       { name: 'Item Assy', url: '/master-data/view-item-assy', icon: 'cil-minus' },
       { name: 'Machine Extruding', url: '/master-data/view-machine-extruding', icon: 'cil-minus' },
       { name: 'CT Kapa', url: '/master-data/view-ct-kapa', icon: 'cil-minus' },
-      { name: 'Curing Size', url: '/master-data/view-curing-size', icon: 'cil-minus' }
     ];
 
-    this.csTrx = [
-      { name: 'Marketing Order', url: '/transaksi/view-marketing-order', icon: 'cil-minus' },
+    this.transaksiPPC = [
+      { name: 'Marketing Order', url: '/transaksi/view-mo-ppc', icon: 'cil-minus' },
       { name: 'Monthly Planning', url: '/transaksi/view-monthly-planning', icon: 'cil-minus' },
     ];
+
+    this.transaksiMarketing = [{ name: 'Marketing Order', url: '/transaksi/view-mo-marketing', icon: 'cil-minus' }];
   }
 
   ngOnInit(): void {
-    this.navItems[1].children = [];
-    this.navItems[2].children = [];
+    // this.navItems[1].children = [];
+    // this.navItems[2].children = [];
 
-    this.csMd.forEach((item) => {
-      this.navItems[1].children.push(item);
-    });
+    // this.masterPPC.forEach((item) => {
+    //   this.navItems[1].children.push(item);
+    // });
 
-    this.csTrx.forEach((item) => {
-      this.navItems[2].children.push(item);
-    });
+    // this.transaksiPPC.forEach((item) => {
+    //   this.navItems[2].children.push(item);
+    // });
+    // Check the role of the user
+    if (this.role === 'PPC') {
+      // PPC: show Master Data and Transaksi
+      this.masterPPC.forEach((item) => {
+        this.navItems[1].children.push(item);
+      });
+      this.transaksiPPC.forEach((item) => {
+        this.navItems[2].children.push(item);
+      });
+    } else if (this.role === 'Marketing') {
+      this.transaksiMarketing.forEach((item) => {
+        this.navItems[2].children.push(item);
+      });
+      this.navItems = this.navItems.filter((item) => item.name !== 'Master Data');
+    }
   }
 
   toggleMinimize(e) {

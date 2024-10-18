@@ -33,8 +33,7 @@ export class PlantService {
     return this.http
       .post<ApiResponse<Plant>>(
         environment.apiUrlWebAdmin + '/updatePlant',
-        plant,
-        { headers: this.getHeaders() } // Menyertakan header
+        plant
       )
       .pipe(
         map((response) => {

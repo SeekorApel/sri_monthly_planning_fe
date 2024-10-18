@@ -17,7 +17,7 @@ export class RestService {
   //----START OF GET
   public getUserByUserName(userName): Observable<User> {
     return this.http
-      .get(environment.apiUrlLocalAdmin + "/username/" + userName)
+      .get(environment.apiUrlLocalAdmin + "/getUsername/" + userName)
       .pipe(
         map(response => {
           return new User(response);
@@ -176,7 +176,7 @@ export class RestService {
   //----END OF POST
 
   //PUT
-  
+
   //----END OF PUT
 
   //DELETE
