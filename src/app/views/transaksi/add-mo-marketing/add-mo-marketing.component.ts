@@ -172,104 +172,209 @@ export class AddMoMarketingComponent implements OnInit {
   downloadTemplate() {
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet('Form Input MO');
+    const month0 = this.monthNames[0];
+    const month1 = this.monthNames[1];
+    const month2 = this.monthNames[2];
 
-    console.log('Data download', this.detailMarketingOrder);
+    // Fungsi untuk mengatur border pada suatu range sel
+    const setBorder = (cellRange: ExcelJS.Cell) => {
+      cellRange.border = {
+        top: { style: 'thin' },
+        left: { style: 'thin' },
+        bottom: { style: 'thin' },
+        right: { style: 'thin' }
+      };
+    };
 
-    // Menggabungkan sel B19 ke B20
+    worksheet.mergeCells('N9:P9');
+    worksheet.getCell('N9').value = 'Description';
+    worksheet.getCell('N9').alignment = { vertical: 'middle', horizontal: 'left' };
+    setBorder(worksheet.getCell('N9'));
+
+    worksheet.mergeCells('N10:P10');
+    worksheet.getCell('N10').value = 'Workday Normal / Workday Tube';
+    worksheet.getCell('N10').alignment = { vertical: 'middle', horizontal: 'left' };
+    setBorder(worksheet.getCell('N10'));
+
+    worksheet.mergeCells('N11:P11');
+    worksheet.getCell('N11').value = 'Workday Overtime TL';
+    worksheet.getCell('N11').alignment = { vertical: 'middle', horizontal: 'left' };
+    setBorder(worksheet.getCell('N11'));
+
+    worksheet.mergeCells('N12:P12');
+    worksheet.getCell('N12').value = 'Workday Overtime TT';
+    worksheet.getCell('N12').alignment = { vertical: 'middle', horizontal: 'left' };
+    setBorder(worksheet.getCell('N12'));
+
+    worksheet.mergeCells('N13:P13');
+    worksheet.getCell('N13').value = 'Total Workday Tire TL';
+    worksheet.getCell('N13').alignment = { vertical: 'middle', horizontal: 'left' };
+    setBorder(worksheet.getCell('N13'));
+
+    worksheet.mergeCells('N14:P14');
+    worksheet.getCell('N14').value = 'Total Workday Tire TT';
+    worksheet.getCell('N14').alignment = { vertical: 'middle', horizontal: 'left' };
+    setBorder(worksheet.getCell('N14'));
+
+    worksheet.mergeCells('N15:P15');
+    worksheet.getCell('N15').value = 'Max Capacity Tube';
+    worksheet.getCell('N15').alignment = { vertical: 'middle', horizontal: 'left' };
+    setBorder(worksheet.getCell('N15'));
+
+    worksheet.mergeCells('N16:P16');
+    worksheet.getCell('N16').value = 'Max Capacity Tire TL';
+    worksheet.getCell('N16').alignment = { vertical: 'middle', horizontal: 'left' };
+    setBorder(worksheet.getCell('N16'));
+
+    worksheet.mergeCells('N17:P17');
+    worksheet.getCell('N17').value = 'Max Capacity Tire TT';
+    worksheet.getCell('N17').alignment = { vertical: 'middle', horizontal: 'left' };
+    setBorder(worksheet.getCell('N17'));
+
+    worksheet.mergeCells('N18:P18');
+    worksheet.getCell('N18').value = 'Note Order TL';
+    worksheet.getCell('N18').alignment = { vertical: 'middle', horizontal: 'left' };
+    setBorder(worksheet.getCell('N18'));
+
+    for (let i = 9; i <= 20; i++) {
+      worksheet.getRow(i).height = 20;
+    }
+
+
+    worksheet.getCell('Q9').value = month0;
+    worksheet.getCell('Q9').alignment = { vertical: 'middle', horizontal: 'center' };
+    setBorder(worksheet.getCell('Q9'));
+
+    worksheet.getCell('R9').value = month1;
+    worksheet.getCell('R9').alignment = { vertical: 'middle', horizontal: 'center' };
+    setBorder(worksheet.getCell('R9'));
+
+    worksheet.getCell('S9').value = month2;
+    worksheet.getCell('S9').alignment = { vertical: 'middle', horizontal: 'center' };
+    setBorder(worksheet.getCell('S9'));
+
+    for (let row = 10; row <= 18; row++) {
+      setBorder(worksheet.getCell(`Q${row}`));
+      setBorder(worksheet.getCell(`R${row}`));
+      setBorder(worksheet.getCell(`S${row}`));
+    }
+
+    // Detail Marketing Order 
     worksheet.mergeCells('B19:B20');
     worksheet.getCell('B19').value = 'Category';
     worksheet.getCell('B19').alignment = { vertical: 'middle', horizontal: 'center' };
     worksheet.getColumn('B').width = 20;
+    setBorder(worksheet.getCell('B19'));
 
     worksheet.mergeCells('C19:C20');
     worksheet.getCell('C19').value = 'Item';
     worksheet.getCell('C19').alignment = { vertical: 'middle', horizontal: 'center' };
     worksheet.getColumn('C').width = 20;
+    setBorder(worksheet.getCell('C19'));
 
     worksheet.mergeCells('D19:D20');
     worksheet.getCell('D19').value = 'Description';
     worksheet.getCell('D19').alignment = { vertical: 'middle', horizontal: 'center' };
     worksheet.getColumn('D').width = 41;
+    setBorder(worksheet.getCell('D19'));
 
     worksheet.mergeCells('E19:E20');
     worksheet.getCell('E19').value = 'Machine Type';
     worksheet.getCell('E19').alignment = { vertical: 'middle', horizontal: 'center' };
     worksheet.getColumn('E').width = 15;
+    setBorder(worksheet.getCell('E19'));
 
     worksheet.mergeCells('F19:F20');
     worksheet.getCell('F19').value = 'Capacity 99,5%';
     worksheet.getCell('F19').alignment = { vertical: 'middle', horizontal: 'center' };
     worksheet.getColumn('F').width = 18;
+    setBorder(worksheet.getCell('F19'));
 
     worksheet.mergeCells('G19:G20');
     worksheet.getCell('G19').value = 'Qty Mould';
     worksheet.getCell('G19').alignment = { vertical: 'middle', horizontal: 'center' };
     worksheet.getColumn('G').width = 18;
+    setBorder(worksheet.getCell('G19'));
 
     worksheet.mergeCells('H19:H20');
     worksheet.getCell('H19').value = 'Qty Per Rak';
     worksheet.getCell('H19').alignment = { vertical: 'middle', horizontal: 'center' };
     worksheet.getColumn('H').width = 18;
+    setBorder(worksheet.getCell('H19'));
 
     worksheet.mergeCells('I19:I20');
     worksheet.getCell('I19').value = 'Minimal Order';
     worksheet.getCell('I19').alignment = { vertical: 'middle', horizontal: 'center' };
     worksheet.getColumn('I').width = 18;
+    setBorder(worksheet.getCell('I19'));
 
     worksheet.mergeCells('J19:L19');
     worksheet.getCell('J19').value = 'Capacity Maximum';
     worksheet.getCell('J19').alignment = { vertical: 'middle', horizontal: 'center' };
     worksheet.getColumn('J').width = 15;
+    setBorder(worksheet.getCell('J19'));
 
-    worksheet.getCell('J20').value = 'Month 1';
+    worksheet.getCell('J20').value = month0;
     worksheet.getCell('J20').alignment = { vertical: 'middle', horizontal: 'center' };
+    setBorder(worksheet.getCell('J20'));
 
-    worksheet.getCell('K20').value = 'Month 2';
+    worksheet.getCell('K20').value = month1;
     worksheet.getCell('K20').alignment = { vertical: 'middle', horizontal: 'center' };
     worksheet.getColumn('K').width = 15;
+    setBorder(worksheet.getCell('K20'));
 
-    worksheet.getCell('L20').value = 'Month 3';
+    worksheet.getCell('L20').value = month2;
     worksheet.getCell('L20').alignment = { vertical: 'middle', horizontal: 'center' };
     worksheet.getColumn('L').width = 15;
+    setBorder(worksheet.getCell('L20'));
 
     worksheet.mergeCells('M19:M20');
     worksheet.getCell('M19').value = 'Initial Stock';
     worksheet.getCell('M19').alignment = { vertical: 'middle', horizontal: 'center' };
     worksheet.getColumn('M').width = 20;
+    setBorder(worksheet.getCell('M19'));
 
     worksheet.mergeCells('N19:P19');
     worksheet.getCell('N19').value = 'Sales Forecast';
     worksheet.getCell('N19').alignment = { vertical: 'middle', horizontal: 'center' };
     worksheet.getColumn('N').width = 20;
+    setBorder(worksheet.getCell('N19'));
 
-    worksheet.getCell('N20').value = 'Month 1';
+    worksheet.getCell('N20').value = month0;
     worksheet.getCell('N20').alignment = { vertical: 'middle', horizontal: 'center' };
     worksheet.getColumn('O').width = 20;
+    setBorder(worksheet.getCell('N20'));
 
-    worksheet.getCell('O20').value = 'Month 2';
+    worksheet.getCell('O20').value = month1;
     worksheet.getCell('O20').alignment = { vertical: 'middle', horizontal: 'center' };
     worksheet.getColumn('O').width = 20;
+    setBorder(worksheet.getCell('O20'));
 
-    worksheet.getCell('P20').value = 'Month 3';
+    worksheet.getCell('P20').value = month2;
     worksheet.getCell('P20').alignment = { vertical: 'middle', horizontal: 'center' };
     worksheet.getColumn('P').width = 20;
+    setBorder(worksheet.getCell('P20'));
 
     worksheet.mergeCells('Q19:S19');
     worksheet.getCell('Q19').value = 'Marketing Order';
     worksheet.getCell('Q19').alignment = { vertical: 'middle', horizontal: 'center' };
     worksheet.getColumn('Q').width = 20;
+    setBorder(worksheet.getCell('Q19'));
 
-    worksheet.getCell('Q20').value = 'Month 1';
+    worksheet.getCell('Q20').value = month0;
     worksheet.getCell('Q20').alignment = { vertical: 'middle', horizontal: 'center' };
     worksheet.getColumn('Q').width = 20;
+    setBorder(worksheet.getCell('Q20'));
 
-    worksheet.getCell('R20').value = 'Month 2';
+    worksheet.getCell('R20').value = month1;
     worksheet.getCell('R20').alignment = { vertical: 'middle', horizontal: 'center' };
     worksheet.getColumn('R').width = 20;
+    setBorder(worksheet.getCell('R20'));
 
-    worksheet.getCell('S20').value = 'Month 3';
+    worksheet.getCell('S20').value = month2;
     worksheet.getCell('S20').alignment = { vertical: 'middle', horizontal: 'center' };
     worksheet.getColumn('S').width = 20;
+    setBorder(worksheet.getCell('S20'));
 
     let rowIndex = 21; // Starting row for data
     this.detailMarketingOrder.forEach((item) => {
@@ -298,6 +403,12 @@ export class AddMoMarketingComponent implements OnInit {
       ['B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S'].forEach((col) => {
         const cell = worksheet.getCell(`${col}${rowIndex}`);
         cell.alignment = { vertical: 'middle', horizontal: 'center' };
+        cell.border = {
+          top: { style: 'thin' },
+          left: { style: 'thin' },
+          bottom: { style: 'thin' },
+          right: { style: 'thin' }
+        };
       });
 
       rowIndex++;
