@@ -857,16 +857,16 @@ export class AddMoPpcComponent implements OnInit {
 
   saveAllMo() {
     const workDay = [...this.workDay_M0, ...this.workDay_M1, ...this.workDay_M2];
-    this.marketingOrder.revision = this.formHeaderMo.get('revision')?.value;
-    this.marketingOrder.date_VALID = this.formHeaderMo.get('date')?.value;
-    this.marketingOrder.type = this.formHeaderMo.get('type')?.value;
-    this.marketingOrder.month_0 = new Date(this.formHeaderMo.get('month_0')?.value);
-    this.marketingOrder.month_1 = new Date(this.formHeaderMo.get('month_1')?.value);
-    this.marketingOrder.month_2 = new Date(this.formHeaderMo.get('month_2')?.value);
+    // this.marketingOrder.revision = this.formHeaderMo.get('revision')?.value;
+    // this.marketingOrder.date_VALID = this.formHeaderMo.get('date')?.value;
+    // this.marketingOrder.type = this.formHeaderMo.get('type')?.value;
+    // this.marketingOrder.month_0 = new Date(this.formHeaderMo.get('month_0')?.value);
+    // this.marketingOrder.month_1 = new Date(this.formHeaderMo.get('month_1')?.value);
+    // this.marketingOrder.month_2 = new Date(this.formHeaderMo.get('month_2')?.value);
 
     this.moService.saveMarketingOrder(this.marketingOrder).subscribe(
       (response) => {
-        const last_id_mo = response.data.mo_ID;
+        const last_id_mo = response.data.moId;
         this.headerMo = [];
         for (let i = 0; i < 3; i++) {
           this.headerMo.push({

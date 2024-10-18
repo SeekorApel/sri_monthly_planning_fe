@@ -66,7 +66,7 @@ export class ViewMoMarketingComponent implements OnInit {
   }
 
   onSearchChange(): void {
-    const filteredSearch = this.marketingOrders.filter((mo) => mo.mo_ID.toString().includes(this.searchText) || mo.type.toLowerCase().includes(this.searchText.toLowerCase()));
+    const filteredSearch = this.marketingOrders.filter((mo) => mo.moId.toString().includes(this.searchText) || mo.type.toLowerCase().includes(this.searchText.toLowerCase()));
     this.onChangePage(filteredSearch.slice(0, this.pageSize));
   }
 
