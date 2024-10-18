@@ -7,6 +7,9 @@ import { MarketingOrder } from 'src/app/models/MarketingOrder';
 import { ApiResponse } from 'src/app/response/Response';
 import { MarketingOrderService } from 'src/app/services/transaksi/marketing order/marketing-order.service';
 import Swal from 'sweetalert2';
+import * as ExcelJS from 'exceljs/dist/exceljs.min.js';
+import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-add-mo-marketing',
@@ -100,7 +103,6 @@ export class AddMoMarketingComponent implements OnInit {
 
   ngOnInit(): void {
     this.idMo = this.activeRoute.snapshot.paramMap.get('idMo');
-    console.log('Ini id mo edit', this.idMo);
     this.getAllData(this.idMo);
   }
 
@@ -119,10 +121,6 @@ export class AddMoMarketingComponent implements OnInit {
         });
       }
     );
-  }
-
-  navigateToViewMo() {
-    this.router.navigate(['/transaksi/view-mo-marketing']);
   }
 
   fillAllData(data: any): void {
@@ -169,6 +167,161 @@ export class AddMoMarketingComponent implements OnInit {
     });
 
     this.updateMonthNames(this.headerMarketingOrder);
+  }
+
+  downloadTemplate() {
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet('Form Input MO');
+
+    console.log('Data download', this.detailMarketingOrder);
+
+    // Menggabungkan sel B19 ke B20
+    worksheet.mergeCells('B19:B20');
+    worksheet.getCell('B19').value = 'Category';
+    worksheet.getCell('B19').alignment = { vertical: 'middle', horizontal: 'center' };
+    worksheet.getColumn('B').width = 20;
+
+    worksheet.mergeCells('C19:C20');
+    worksheet.getCell('C19').value = 'Item';
+    worksheet.getCell('C19').alignment = { vertical: 'middle', horizontal: 'center' };
+    worksheet.getColumn('C').width = 20;
+
+    worksheet.mergeCells('D19:D20');
+    worksheet.getCell('D19').value = 'Description';
+    worksheet.getCell('D19').alignment = { vertical: 'middle', horizontal: 'center' };
+    worksheet.getColumn('D').width = 41;
+
+    worksheet.mergeCells('E19:E20');
+    worksheet.getCell('E19').value = 'Machine Type';
+    worksheet.getCell('E19').alignment = { vertical: 'middle', horizontal: 'center' };
+    worksheet.getColumn('E').width = 15;
+
+    worksheet.mergeCells('F19:F20');
+    worksheet.getCell('F19').value = 'Capacity 99,5%';
+    worksheet.getCell('F19').alignment = { vertical: 'middle', horizontal: 'center' };
+    worksheet.getColumn('F').width = 18;
+
+    worksheet.mergeCells('G19:G20');
+    worksheet.getCell('G19').value = 'Qty Mould';
+    worksheet.getCell('G19').alignment = { vertical: 'middle', horizontal: 'center' };
+    worksheet.getColumn('G').width = 18;
+
+    worksheet.mergeCells('H19:H20');
+    worksheet.getCell('H19').value = 'Qty Per Rak';
+    worksheet.getCell('H19').alignment = { vertical: 'middle', horizontal: 'center' };
+    worksheet.getColumn('H').width = 18;
+
+    worksheet.mergeCells('I19:I20');
+    worksheet.getCell('I19').value = 'Minimal Order';
+    worksheet.getCell('I19').alignment = { vertical: 'middle', horizontal: 'center' };
+    worksheet.getColumn('I').width = 18;
+
+    worksheet.mergeCells('J19:L19');
+    worksheet.getCell('J19').value = 'Capacity Maximum';
+    worksheet.getCell('J19').alignment = { vertical: 'middle', horizontal: 'center' };
+    worksheet.getColumn('J').width = 15;
+
+    worksheet.getCell('J20').value = 'Month 1';
+    worksheet.getCell('J20').alignment = { vertical: 'middle', horizontal: 'center' };
+
+    worksheet.getCell('K20').value = 'Month 2';
+    worksheet.getCell('K20').alignment = { vertical: 'middle', horizontal: 'center' };
+    worksheet.getColumn('K').width = 15;
+
+    worksheet.getCell('L20').value = 'Month 3';
+    worksheet.getCell('L20').alignment = { vertical: 'middle', horizontal: 'center' };
+    worksheet.getColumn('L').width = 15;
+
+    worksheet.mergeCells('M19:M20');
+    worksheet.getCell('M19').value = 'Initial Stock';
+    worksheet.getCell('M19').alignment = { vertical: 'middle', horizontal: 'center' };
+    worksheet.getColumn('M').width = 20;
+
+    worksheet.mergeCells('N19:P19');
+    worksheet.getCell('N19').value = 'Sales Forecast';
+    worksheet.getCell('N19').alignment = { vertical: 'middle', horizontal: 'center' };
+    worksheet.getColumn('N').width = 20;
+
+    worksheet.getCell('N20').value = 'Month 1';
+    worksheet.getCell('N20').alignment = { vertical: 'middle', horizontal: 'center' };
+    worksheet.getColumn('O').width = 20;
+
+    worksheet.getCell('O20').value = 'Month 2';
+    worksheet.getCell('O20').alignment = { vertical: 'middle', horizontal: 'center' };
+    worksheet.getColumn('O').width = 20;
+
+    worksheet.getCell('P20').value = 'Month 3';
+    worksheet.getCell('P20').alignment = { vertical: 'middle', horizontal: 'center' };
+    worksheet.getColumn('P').width = 20;
+
+    worksheet.mergeCells('Q19:S19');
+    worksheet.getCell('Q19').value = 'Marketing Order';
+    worksheet.getCell('Q19').alignment = { vertical: 'middle', horizontal: 'center' };
+    worksheet.getColumn('Q').width = 20;
+
+    worksheet.getCell('Q20').value = 'Month 1';
+    worksheet.getCell('Q20').alignment = { vertical: 'middle', horizontal: 'center' };
+    worksheet.getColumn('Q').width = 20;
+
+    worksheet.getCell('R20').value = 'Month 2';
+    worksheet.getCell('R20').alignment = { vertical: 'middle', horizontal: 'center' };
+    worksheet.getColumn('R').width = 20;
+
+    worksheet.getCell('S20').value = 'Month 3';
+    worksheet.getCell('S20').alignment = { vertical: 'middle', horizontal: 'center' };
+    worksheet.getColumn('S').width = 20;
+
+    let rowIndex = 21; // Starting row for data
+    this.detailMarketingOrder.forEach((item) => {
+      worksheet.getCell(`B${rowIndex}`).value = item.category;
+      worksheet.getCell(`C${rowIndex}`).value = item.partNumber;
+      worksheet.getCell(`D${rowIndex}`).value = item.description;
+      worksheet.getCell(`E${rowIndex}`).value = item.machineType;
+      worksheet.getCell(`F${rowIndex}`).value = item.capacity;
+      worksheet.getCell(`G${rowIndex}`).value = item.qtyPerMould;
+      worksheet.getCell(`H${rowIndex}`).value = item.qtyPerRak;
+      worksheet.getCell(`I${rowIndex}`).value = item.minOrder;
+      worksheet.getCell(`J${rowIndex}`).value = item.maxCapMonth0;
+      worksheet.getCell(`K${rowIndex}`).value = item.maxCapMonth1;
+      worksheet.getCell(`L${rowIndex}`).value = item.maxCapMonth2;
+      worksheet.getCell(`M${rowIndex}`).value = item.initialStock;
+      worksheet.getCell(`N${rowIndex}`).value = item.sfMonth0;
+      worksheet.getCell(`O${rowIndex}`).value = item.sfMonth1;
+      worksheet.getCell(`P${rowIndex}`).value = item.sfMonth2;
+      worksheet.getCell(`Q${rowIndex}`).value = item.moMonth0;
+      worksheet.getCell(`R${rowIndex}`).value = item.moMonth1;
+      worksheet.getCell(`S${rowIndex}`).value = item.moMonth2;
+
+      // Mengatur format number untuk kolom C
+      worksheet.getCell(`C${rowIndex}`).numFmt = '0'; // format angka
+      // Menyelaraskan semua sel di baris ini ke tengah dan tengah
+      ['B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S'].forEach((col) => {
+        const cell = worksheet.getCell(`${col}${rowIndex}`);
+        cell.alignment = { vertical: 'middle', horizontal: 'center' };
+      });
+
+      rowIndex++;
+    });
+
+    workbook.xlsx.writeBuffer().then((buffer) => {
+      const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      const fileName = this.getFileNameExcel();
+      saveAs(blob, fileName);
+    });
+  }
+
+  getFileNameExcel(): string {
+    const now = new Date();
+    const indonesiaTime = new Date(now.toLocaleString('en-US', { timeZone: 'Asia/Jakarta' }));
+    const monthFn = indonesiaTime.toLocaleDateString('en-US', { month: 'long' });
+    const year = indonesiaTime.getFullYear();
+    const timestamp = indonesiaTime.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }).replace(':', '');
+    const fileName = `From_Marketing Order_${monthFn}_${year}_${timestamp}.xlsx`;
+    return fileName;
+  }
+
+  navigateToViewMo() {
+    this.router.navigate(['/transaksi/view-mo-marketing']);
   }
 
   formatDateToString(dateString) {
