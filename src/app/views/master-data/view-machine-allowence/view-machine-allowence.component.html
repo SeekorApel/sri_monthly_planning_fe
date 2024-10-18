@@ -93,7 +93,7 @@
           </div>
           <div class="form-group">
             <label for="personResponsible">Person Responsible</label>
-            <input [(ngModel)]="edtMachineAllowenceObject.person_RESPONSIBLE" type="text" class="form-control" id="idMachine" formControlName="personResponsible" [ngClass]="{ 'is-invalid': editMachineAllowenceForm.get('personResponsible').invalid && editMachineAllowenceForm.get('personResponsible').touched }" />
+            <input [(ngModel)]="edtMachineAllowenceObject.person_RESPONSIBLE" type="text" class="form-control" id="personResponsible" formControlName="personResponsible" [ngClass]="{ 'is-invalid': editMachineAllowenceForm.get('personResponsible').invalid && editMachineAllowenceForm.get('personResponsible').touched }" />
             <!-- Error message if plantName is empty -->
             <div *ngIf="editMachineAllowenceForm.get('personResponsible').invalid && editMachineAllowenceForm.get('personResponsible').touched" class="invalid-feedback">Person Responsible is required.</div>
           </div>
@@ -111,7 +111,7 @@
           </div>
           <div class="form-group">
             <label for="shift3">Shift 3</label>
-            <input [(ngModel)]="edtMachineAllowenceObject.shift_3" type="text" class="form-control" id="shift3" formControlName="shift1" [ngClass]="{ 'is-invalid': editMachineAllowenceForm.get('shift3').invalid && editMachineAllowenceForm.get('shift3').touched }" />
+            <input [(ngModel)]="edtMachineAllowenceObject.shift_3" type="text" class="form-control" id="shift3" formControlName="shift3" [ngClass]="{ 'is-invalid': editMachineAllowenceForm.get('shift3').invalid && editMachineAllowenceForm.get('shift3').touched }" />
             <!-- Error message if plantName is empty -->
             <div *ngIf="editMachineAllowenceForm.get('shift3').invalid && editMachineAllowenceForm.get('shift3').touched" class="invalid-feedback">Shift 3 is required.</div>
           </div>

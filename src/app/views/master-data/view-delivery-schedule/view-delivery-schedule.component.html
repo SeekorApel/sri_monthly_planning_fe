@@ -78,20 +78,14 @@
         <!-- Form with Reactive Forms -->
         <form [formGroup]="editDeliveryScheduleForm">
           <div class="form-group">
-            <label for="dsID">DS ID</label>
-            <input [(ngModel)]="edtDeliveryScheduleObject.ds_ID" type="text" class="form-control" id="dsID" formControlName="dsID" [ngClass]="{ 'is-invalid': editDeliveryScheduleForm.get('dsID').invalid && editDeliveryScheduleForm.get('dsID').touched }" />
-            <!-- Error message if plantName is empty -->
-            <div *ngIf="editDeliveryScheduleForm.get('dsID').invalid && editDeliveryScheduleForm.get('dsID').touched" class="invalid-feedback">Delivery Schedule ID is required.</div>
-          </div>
-          <div class="form-group">
             <label for="effectiveTime">Effective Time</label>
-            <input [(ngModel)]="edtDeliveryScheduleObject.effective_TIME" type="text" class="form-control" id="sizeID" formControlName="effectiveTime" [ngClass]="{ 'is-invalid': editDeliveryScheduleForm.get('effectiveTime').invalid && editDeliveryScheduleForm.get('effectiveTime').touched }" />
+            <input [(ngModel)]="edtDeliveryScheduleObject.effective_TIME" type="date" class="form-control" id="effectiveTime" formControlName="effectiveTime" [ngClass]="{ 'is-invalid': editDeliveryScheduleForm.get('effectiveTime').invalid && editDeliveryScheduleForm.get('effectiveTime').touched }" />
             <!-- Error message if plantName is empty -->
             <div *ngIf="editDeliveryScheduleForm.get('effectiveTime').invalid && editDeliveryScheduleForm.get('effectiveTime').touched" class="invalid-feedback">Effective time is required.</div>
           </div>
           <div class="form-group">
             <label for="dataIssue">Data Issue</label>
-            <input [(ngModel)]="edtDeliveryScheduleObject.date_ISSUED" type="text" class="form-control" id="dataIssue" formControlName="dataIssue" [ngClass]="{ 'is-invalid': editDeliveryScheduleForm.get('dataIssue').invalid && editDeliveryScheduleForm.get('dataIssue').touched }" />
+            <input [(ngModel)]="edtDeliveryScheduleObject.date_ISSUED" type="date" class="form-control" id="dataIssue" formControlName="dataIssue" [ngClass]="{ 'is-invalid': editDeliveryScheduleForm.get('dataIssue').invalid && editDeliveryScheduleForm.get('dataIssue').touched }" />
             <!-- Error message if plantName is empty -->
             <div *ngIf="editDeliveryScheduleForm.get('dataIssue').invalid && editDeliveryScheduleForm.get('dataIssue').touched" class="invalid-feedback">Data Issue is required.</div>
           </div>

@@ -30,8 +30,7 @@ export class ViewDeliveryScheduleComponent implements OnInit {
 
   constructor(private deliveryScheduleService: DeliveryScheduleService, private fb: FormBuilder) {
     this.editDeliveryScheduleForm = this.fb.group({
-      dsID: ['', Validators.required],
-      effectiveTime: ['', Validators.required],
+      effectiveTime: [null, Validators.required],
       dataIssue: ['', Validators.required],
       category: ['', Validators.required]
     });

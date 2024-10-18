@@ -30,6 +30,7 @@ export class DeliveryScheduleService {
 
   
   updateDeliverySchedule(deliverySchedule: DeliverySchedule): Observable<ApiResponse<DeliverySchedule>> {
+    console.log(deliverySchedule);
     return this.http
       .post<ApiResponse<DeliverySchedule>>(
         environment.apiUrlWebAdmin + '/updateDeliverySchedule',

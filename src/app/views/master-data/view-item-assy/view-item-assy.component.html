@@ -39,7 +39,6 @@
                 {{ itemAssy.status === 1 ? 'Active' : 'Deactive' }}
               </td>
               <td>
-                <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(itemAssy.item_ASSY)">Update</button>
                 <button type="button" class="btn btn-md ml-2" [ngClass]="{ 'btn-danger': itemAssy.status === 1, 'btn-success': itemAssy.status !== 1 }" (click)="itemAssy.status === 1 ? deleteData(itemAssy) : activateData(itemAssy)">
                   {{ itemAssy.status === 1 ? 'Delete' : 'Active' }}
                 </button>

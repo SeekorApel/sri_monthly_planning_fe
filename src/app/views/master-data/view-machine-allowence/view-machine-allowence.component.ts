@@ -68,7 +68,14 @@ export class ViewMachineAllowenceComponent implements OnInit {
         machineAllowance.id_MACHINE
           .toLowerCase()
           .includes(this.searchText.toLowerCase()) ||
-          machineAllowance.machine_ALLOW_ID.toString().includes(this.searchText)
+          machineAllowance.machine_ALLOW_ID.toString().includes(this.searchText.toLowerCase()) ||
+          machineAllowance.id_MACHINE.toString().includes(this.searchText.toLowerCase()) ||
+          machineAllowance.person_RESPONSIBLE.toLowerCase().toString().includes(this.searchText.toLowerCase()) ||
+          machineAllowance.shift_1.toString().includes(this.searchText) ||
+          machineAllowance.shift_2.toString().includes(this.searchText) ||
+          machineAllowance.shift_3.toString().includes(this.searchText) ||
+          machineAllowance.shift_1_FRIDAY.toString().includes(this.searchText) ||
+          machineAllowance.total_SHIFT_123.toString().includes(this.searchText)
     );
 
     // Tampilkan hasil filter pada halaman pertama

@@ -47,7 +47,7 @@ export class MaxCapacityService {
   }
 
   deleteMaxCapacity(maxCapacity: Max_Capacity): Observable<ApiResponse<Max_Capacity>> {
-    return this.http.post<ApiResponse<Max_Capacity>>(environment.apiUrlWebAdmin + '/deleteMaxcapacity', maxCapacity, { headers: this.getHeaders() }).pipe(
+    return this.http.post<ApiResponse<Max_Capacity>>(environment.apiUrlWebAdmin + '/deleteMaxCapacity', maxCapacity, { headers: this.getHeaders() }).pipe(
       map((response) => {
         return response;
       }),

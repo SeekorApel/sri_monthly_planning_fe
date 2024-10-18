@@ -98,16 +98,16 @@ export class ViewRoutingMachineComponent implements OnInit {
         routingMachine.ct_ASSY_ID
           .toString()
           .includes(this.searchText.toLowerCase()) ||
-          routingMachine.wip.toString().includes(this.searchText)||
-          routingMachine.description.toLowerCase().toString().includes(this.searchText) ||
-          routingMachine.group_COUNTER.toLowerCase().toString().includes(this.searchText) ||
-          routingMachine.var_GROUP_COUNTER.toLowerCase().toString().includes(this.searchText) ||
+          routingMachine.wip.toLowerCase().toString().includes(this.searchText.toLowerCase())||
+          routingMachine.description.toLowerCase().toString().includes(this.searchText.toLowerCase()) ||
+          routingMachine.group_COUNTER.toLowerCase().toString().includes(this.searchText.toLowerCase()) ||
+          routingMachine.var_GROUP_COUNTER.toLowerCase().toString().includes(this.searchText.toLowerCase()) ||
           routingMachine.sequence.toString().includes(this.searchText) ||
-          routingMachine.wct.toLowerCase().toString().includes(this.searchText) ||
-          routingMachine.operation_SHORT_TEXT.toLowerCase().toString().includes(this.searchText) ||
-          routingMachine.operation_UNIT.toLowerCase().toString().includes(this.searchText) ||
+          routingMachine.wct.toLowerCase().toString().includes(this.searchText.toLowerCase()) ||
+          routingMachine.operation_SHORT_TEXT.toLowerCase().toString().includes(this.searchText.toLowerCase()) ||
+          routingMachine.operation_UNIT.toLowerCase().toString().includes(this.searchText.toLowerCase()) ||
           routingMachine.base_QUANTITY.toString().includes(this.searchText) ||
-          routingMachine.standard_VALUE_UNIT.toLowerCase().toString().includes(this.searchText) ||
+          routingMachine.standard_VALUE_UNIT.toLowerCase().toString().includes(this.searchText.toLowerCase()) ||
           routingMachine.ct_SEC_1.toString().includes(this.searchText) ||
           routingMachine.ct_HR_1000.toString().includes(this.searchText) ||
           routingMachine.wh_NORMAL_SHIFT_0.toString().includes(this.searchText) ||

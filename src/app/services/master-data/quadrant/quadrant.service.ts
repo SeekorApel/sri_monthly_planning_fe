@@ -69,7 +69,7 @@ export class QuadrantService {
   }
 
   uploadFileExcel(file: FormData): Observable<ApiResponse<Quadrant>> {
-    return this.http.post<ApiResponse<Quadrant>>(environment.apiUrlWebAdmin + '/saveQuadrantExcel', file, { headers: this.getHeaders() }).pipe(
+    return this.http.post<ApiResponse<Quadrant>>(environment.apiUrlWebAdmin + '/saveQuandrantExcel', file, { headers: this.getHeaders() }).pipe(
       map((response) => {
         return response;
       }),

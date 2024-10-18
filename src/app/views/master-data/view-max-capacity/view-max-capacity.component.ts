@@ -69,7 +69,7 @@ export class ViewMaxCapacityComponent implements OnInit {
           .toString()
           .includes(this.searchText.toLowerCase()) ||
           maxCapacity.product_ID.toString().includes(this.searchText)||
-          maxCapacity.machinecuringtype_ID.toLowerCase().toString().includes(this.searchText) ||
+          maxCapacity.machinecuringtype_ID.toLowerCase().toString().includes(this.searchText.toLowerCase()) ||
           maxCapacity.cycle_TIME.toString().includes(this.searchText) ||
           maxCapacity.capacity_SHIFT_1.toString().includes(this.searchText) ||
           maxCapacity.capacity_SHIFT_2.toString().includes(this.searchText) ||

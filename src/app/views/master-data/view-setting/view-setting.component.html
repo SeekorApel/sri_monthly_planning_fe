@@ -85,7 +85,7 @@
           </div>
           <div class="form-group">
             <label for="settingVALUE">Setting VALUE</label>
-            <input [(ngModel)]="edtSettingObject.setting_ID" type="text" class="form-control" id="settingID" formControlName="settingVALUE" [ngClass]="{ 'is-invalid': editSettingForm.get('settingVALUE').invalid && editSettingForm.get('settingVALUE').touched }" />
+            <input [(ngModel)]="edtSettingObject.setting_VALUE" type="text" class="form-control" id="settingID" formControlName="settingVALUE" [ngClass]="{ 'is-invalid': editSettingForm.get('settingVALUE').invalid && editSettingForm.get('settingVALUE').touched }" />
             <!-- Error message if plantName is empty -->
             <div *ngIf="editSettingForm.get('settingVALUE').invalid && editSettingForm.get('settingVALUE').touched" class="invalid-feedback">Setting VALUE is required.</div>
           </div>

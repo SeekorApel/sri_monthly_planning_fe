@@ -144,11 +144,6 @@
         <!-- Form with Reactive Forms -->
         <form [formGroup]="editRoutingMachineForm">
           <div class="form-group">
-            <label for="CtAssyID">CT Assy ID</label>
-            <input [(ngModel)]="edtRoutingMachineObject.ct_ASSY_ID" type="text" class="form-control" id="CtAssyID" formControlName="CtAssyID" [ngClass]="{ 'is-invalid': editRoutingMachineForm.get('CtAssyID').invalid && editRoutingMachineForm.get('CtAssyID').touched }" />
-            <!-- Error message if plantName is empty -->
-            <div *ngIf="editRoutingMachineForm.get('CtAssyID').invalid && editRoutingMachineForm.get('CtAssyID').touched" class="invalid-feedback">CT ASSY ID is required.</div>
-
             <label for="wip">WIP</label>
             <input [(ngModel)]="edtRoutingMachineObject.wip" type="text" class="form-control" id="wip" formControlName="wip" [ngClass]="{ 'is-invalid': editRoutingMachineForm.get('wip').invalid && editRoutingMachineForm.get('wip').touched }" />
             <!-- Error message if plantName is empty -->

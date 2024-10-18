@@ -21,7 +21,7 @@
         </div>
   
         <!-- Table -->
-        <div class="table-responsive">
+        <div class="table-responsive table-wrapper">
           <table class="table table-bordered table-striped table-sm">
             <thead align="center">
               <tr>
@@ -85,7 +85,7 @@
             </div>
             <div class="form-group">
               <label for="sizeID">Size ID</label>
-              <input [(ngModel)]="edtCuringSizeObject.size_ID" type="text" class="form-control" id="sizeID" formControlName="machineCuringSizeID" [ngClass]="{ 'is-invalid': editCuringSizeForm.get('machineCuringSizeID').invalid && editCuringSizeForm.get('machineCuringSizeID').touched }" />
+              <input [(ngModel)]="edtCuringSizeObject.size_ID" type="text" class="form-control" id="sizeID" formControlName="sizeID" [ngClass]="{ 'is-invalid': editCuringSizeForm.get('sizeID').invalid && editCuringSizeForm.get('sizeID').touched }" />
               <!-- Error message if plantName is empty -->
               <div *ngIf="editCuringSizeForm.get('sizeID').invalid && editCuringSizeForm.get('sizeID').touched" class="invalid-feedback">Curing size ID is required.</div>
             </div>
