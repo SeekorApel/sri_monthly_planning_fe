@@ -4,6 +4,8 @@ import { MachineExtruding } from 'src/app/models/machine-extruding';
 import { ApiResponse } from 'src/app/response/Response';
 import { MachineExtrudingService } from 'src/app/services/master-data/machine-extruding/machine-extruding.service';
 import Swal from 'sweetalert2';
+import { saveAs } from 'file-saver';
+
 declare var $: any;
 import * as XLSX from 'xlsx';
 
@@ -106,6 +108,43 @@ export class ViewMachineExtrudingComponent implements OnInit {
       }
     );
   }
+  downloadExcel(): void {
+    this.MEService.exportMachineExtrudingExcel().subscribe({
+      next: (response) => {
+        // Menggunakan nama file yang sudah ditentukan di backend
+        const filename = 'MACHIE_EXTRUDING_DATA.xlsx'; // Nama file bisa dinamis jika diperlukan
+        saveAs(response, filename); // Mengunduh file
+      },
+      error: (err) => {
+        console.error('Download error:', err);
+      },
+    });
+  }
+  activateData(me: MachineExtruding): void {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'This data Machine Extruding will be Activated!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes',
+      cancelButtonText: 'No',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.MEService.activateMachineExtruding(me).subscribe(
+          (response) => {
+            Swal.fire('Activated!', 'Data Machine Extruding has been Activated', 'success').then(() => {
+              window.location.reload();
+            });
+          },
+          (err) => {
+            Swal.fire('Error!', 'Failed to Activated the Machine Extruding.', 'error');
+          }
+        );
+      }
+    });
+  }
 
   deleteData(machineExtruding: MachineExtruding): void {
     Swal.fire({
@@ -140,7 +179,7 @@ export class ViewMachineExtrudingComponent implements OnInit {
   downloadTemplate() {
     const link = document.createElement('a');
     link.href = 'assets/Template Excel/Layout_Machine_Extruding.xlsx';
-    link.download = 'Layout_Machine_Extruding.xlsx';
+    link.download = 'Layout_Master_Machine_Extruding.xlsx';
     link.click();
   }
 

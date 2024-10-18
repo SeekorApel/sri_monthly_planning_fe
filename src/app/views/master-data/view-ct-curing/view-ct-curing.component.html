@@ -15,59 +15,59 @@
           <!-- Right side: Download Template and Export Excel buttons -->
           <div>
             <button type="button" class="btn btn-primary ml-2" (click)="downloadTemplate()"><i class="fa fa-download fa-lg"></i> Download Template</button>
+            <button type="button" class="btn btn-primary ml-2" (click)="downloadExcel()"><i class="fa fa-download fa-lg"></i> Export Excel</button>
             <button type="button" class="btn btn-success ml-2" data-toggle="modal" data-target="#uploadModal"><i class="fa fa-file-excel-o fa-lg"></i> Upload Excel</button>
           </div>
         </div>
         <div class="table-responsive">
             <!-- Table -->
-            <table class="table table-striped">
-                <thead>
+            <table class="table table-bordered table-striped table-sm">
+                <thead  align="center">
                 <tr>
-                    <th>No</th>
-                    <th>CT Curing ID</th>
-                    <th>WIP</th>
-                    <th>Description</th>
-                    <th>Group Counter</th>
-                    <th>Var Group Counter</th>
-                    <th>Sequence</th>
-                    <th>WCT</th>
-                    <th>Operation Short Text</th>
-                    <th>Operation Unit</th>
-                    <th>Base Quantity</th>
-                    <th>Standard Value Unit</th>
-                    <th>CT Sec 1</th>
-                    <th>CT HR 1000</th>
-                    <th>WH Normal Shift 0</th>
-                    <th>WH Normal Shift 1</th>
-                    <th>WH Normal Shift 2</th>
-                    <th>WH Shift FRIDAY</th>
-                    <th>WH Total Normal Shift</th>
-                    <th>WH Total Shift FRIDAY</th>
-                    <th>Allow Normal Shift 0</th>
-                    <th>Allow Normal Shift 1</th>
-                    <th>Allow Normal Shift 2</th>
-                    <th>Allow Total</th>
-                    <th>OP Time Normal Shift 0</th>
-                    <th>OP Time Normal Shift 1</th>
-                    <th>OP Time Normal Shift 2</th>
-                    <th>OP Time Shift FRIDAY</th>
-                    <th>OP Time Total Normal Shift</th>
-                    <th>OP Time Total Shift FRIDAY</th>
-                    <th>Kaps Normal Shift 0</th>
-                    <th>Kaps Normal Shift 1</th>
-                    <th>Kaps Normal Shift 2</th>
-                    <th>Kaps Shift FRIDAY</th>
-                    <th>Kaps Total Normal Shift</th>
-                    <th>Kaps Total Shift FRIDAY</th>
-                    <th>Waktu Total CT Normal</th>
-                    <th>Waktu Total CT FRIDAY</th>
-                    <th>Status</th>
-
-                    <th>Action</th>
+                    <th style="min-width: '30px';">No</th>
+                    <th style="min-width: '100px';">CT Curing ID</th>
+                    <th style="min-width: '100px';">WIP</th>
+                    <th style="min-width: '225px';">Description</th>
+                    <th style="min-width: '150px';">Group Counter</th>
+                    <th style="min-width: '150px';">Var Group Counter</th>
+                    <th style="min-width: '100px';">Sequence</th>
+                    <th style="min-width: '100px';">WCT</th>
+                    <th style="min-width: '250px';">Operation Short Text</th>
+                    <th style="min-width: '150px';">Operation Unit</th>
+                    <th style="min-width: '150px';">Base Quantity</th>
+                    <th style="min-width: '150px';">Standard Value Unit</th>
+                    <th style="min-width: '100px';">CT Sec 1</th>
+                    <th style="min-width: '100px';">CT HR 1000</th>
+                    <th style="min-width: '150px';">WH Normal Shift 0</th>
+                    <th style="min-width: '150px';">WH Normal Shift 1</th>
+                    <th style="min-width: '150px';">WH Normal Shift 2</th>
+                    <th style="min-width: '150px';">WH Shift FRIDAY</th>
+                    <th style="min-width: '200px';">WH Total Normal Shift</th>
+                    <th style="min-width: '200px';">WH Total Shift FRIDAY</th>
+                    <th style="min-width: '150px';">Allow Normal Shift 0</th>
+                    <th style="min-width: '150px';">Allow Normal Shift 1</th>
+                    <th style="min-width: '150px';">Allow Normal Shift 2</th>
+                    <th style="min-width: '100px';">Allow Total</th>
+                    <th style="min-width: '200px';">OP Time Normal Shift 0</th>
+                    <th style="min-width: '200px';">OP Time Normal Shift 1</th>
+                    <th style="min-width: '200px';">OP Time Normal Shift 2</th>
+                    <th style="min-width: '200px';">OP Time Shift FRIDAY</th>
+                    <th style="min-width: '200px';">OP Time Total Normal Shift</th>
+                    <th style="min-width: '200px';">OP Time Total Shift FRIDAY</th>
+                    <th style="min-width: '150px';">Kaps Normal Shift 0</th>
+                    <th style="min-width: '150px';">Kaps Normal Shift 1</th>
+                    <th style="min-width: '150px';">Kaps Normal Shift 2</th>
+                    <th style="min-width: '150px';">Kaps Shift FRIDAY</th>
+                    <th style="min-width: '200px';">Kaps Total Normal Shift</th>
+                    <th style="min-width: '200px';">Kaps Total Shift FRIDAY</th>
+                    <th style="min-width: '200px';">Waktu Total CT Normal</th>
+                    <th style="min-width: '200px';">Waktu Total CT FRIDAY</th>
+                    <th style="min-width: '100px';">Status</th>
+                    <th style="min-width: '200px';">Action</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr *ngFor="let ctcuring of pageOfItems; let i = index">
+                <tr align="center" *ngFor="let ctcuring of pageOfItems; let i = index">
                     <td>{{ i + 1 }}</td>
                     <td>{{ ctcuring.ct_CURING_ID }}</td>
                     <td>{{ ctcuring.wip }}</td>
@@ -79,9 +79,9 @@
                     <td>{{ ctcuring.operation_SHORT_TEXT }}</td>
                     <td>{{ ctcuring.operation_UNIT }}</td>
                     <td>{{ ctcuring.base_QUANTITY }}</td>
-                    <td>{{ ctcuring.standard_VALUE_UNIT }}</td>
-                    <td>{{ ctcuring.ct_SEC_1 }}</td>
-                    <td>{{ ctcuring.ct_HR_1000 }}</td>
+                    <td>{{ ctcuring.standart_VALUE_UNIT }}</td>
+                    <td>{{ ctcuring.ct_SEC1 }}</td>
+                    <td>{{ ctcuring.ct_HR1000 }}</td>
                     <td>{{ ctcuring.wh_NORMAL_SHIFT_0 }}</td>
                     <td>{{ ctcuring.wh_NORMAL_SHIFT_1 }}</td>
                     <td>{{ ctcuring.wh_NORMAL_SHIFT_2 }}</td>
@@ -106,21 +106,23 @@
                     <td>{{ ctcuring.kaps_TOTAL_SHIFT_FRIDAY }}</td>
                     <td>{{ ctcuring.waktu_TOTAL_CT_NORMAL }}</td>
                     <td>{{ ctcuring.waktu_TOTAL_CT_FRIDAY }}</td>
-                    <td>{{ ctcuring.status === 1 ? 'Active' : 'Deactive' }}</td>
+                    <td [ngClass]="{ 'bg-success': ctcuring.status === 1, 'bg-danger': ctcuring.status !== 1 }">{{ ctcuring.status === 1 ? 'Active' : 'Deactive' }}</td>
                     <td>
                     <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(ctcuring.ct_CURING_ID)">Update</button>
-                    <button type="button" class="btn btn-md btn-danger ml-2" (click)="deleteData(ctcuring)">Delete</button>
+                    <button type="button" class="btn btn-md ml-2" [ngClass]="{ 'btn-danger': ctcuring.status === 1, 'btn-success': ctcuring.status !== 1 }" (click)="ctcuring.status === 1 ? deleteData(ctcuring) : activateData(ctcuring)">
+                      {{ ctcuring.status === 1 ? 'Delete' : 'Active' }}
+                    </button>
                     </td>
                 </tr>
                 </tbody>
             </table>
+            <!-- Pagination -->
+            <nav>
+              <ul class="pagination">
+                <jw-pagination [items]="ctcurings" [pageSize]="pageSize" [maxPages]="totalPages" (changePage)="onChangePage($event)"> </jw-pagination>
+              </ul>
+            </nav>
         </div>
-        <!-- Pagination -->
-        <nav>
-          <ul class="pagination">
-            <jw-pagination [items]="ctcurings" [pageSize]="pageSize" [maxPages]="totalPages" (changePage)="onChangePage($event)"> </jw-pagination>
-          </ul>
-        </nav>
       </div>
     </div>
   </div>
@@ -176,15 +178,15 @@
               <div *ngIf="editCTCuringForm.get('basequantity').invalid && editCTCuringForm.get('basequantity').touched" class="invalid-feedback">Base Quantity is required.</div>
 
               <label for="standardvalueunit">Standard Value Unit</label>
-              <input [(ngModel)]="edtCTCuringObject.standard_VALUE_UNIT" type="text" class="form-control" id="standardvalueunit" formControlName="standardvalueunit" [ngClass]="{ 'is-invalid': editCTCuringForm.get('standardvalueunit').invalid && editCTCuringForm.get('standardvalueunit').touched }" />
+              <input [(ngModel)]="edtCTCuringObject.standart_VALUE_UNIT" type="text" class="form-control" id="standardvalueunit" formControlName="standardvalueunit" [ngClass]="{ 'is-invalid': editCTCuringForm.get('standardvalueunit').invalid && editCTCuringForm.get('standardvalueunit').touched }" />
               <div *ngIf="editCTCuringForm.get('standardvalueunit').invalid && editCTCuringForm.get('standardvalueunit').touched" class="invalid-feedback">Standard Value Unit is required.</div>
 
               <label for="ctsec1">CT Sec 1</label>
-              <input [(ngModel)]="edtCTCuringObject.ct_SEC_1" type="number" class="form-control" id="ctsec1" formControlName="ctsec1" [ngClass]="{ 'is-invalid': editCTCuringForm.get('ctsec1').invalid && editCTCuringForm.get('ctsec1').touched }" />
+              <input [(ngModel)]="edtCTCuringObject.ct_SEC1" type="number" class="form-control" id="ctsec1" formControlName="ctsec1" [ngClass]="{ 'is-invalid': editCTCuringForm.get('ctsec1').invalid && editCTCuringForm.get('ctsec1').touched }" />
               <div *ngIf="editCTCuringForm.get('ctsec1').invalid && editCTCuringForm.get('ctsec1').touched" class="invalid-feedback">CT Sec 1 is required.</div>
 
               <label for="cthr1000">CT HR 1000</label>
-              <input [(ngModel)]="edtCTCuringObject.ct_HR_1000" type="number" class="form-control" id="cthr1000" formControlName="cthr1000" [ngClass]="{ 'is-invalid': editCTCuringForm.get('cthr1000').invalid && editCTCuringForm.get('cthr1000').touched }" />
+              <input [(ngModel)]="edtCTCuringObject.ct_HR1000" type="number" class="form-control" id="cthr1000" formControlName="cthr1000" [ngClass]="{ 'is-invalid': editCTCuringForm.get('cthr1000').invalid && editCTCuringForm.get('cthr1000').touched }" />
               <div *ngIf="editCTCuringForm.get('cthr1000').invalid && editCTCuringForm.get('cthr1000').touched" class="invalid-feedback">CT HR 1000 is required.</div>
 
               <label for="whnormalshift0">WH Normal Shift 0</label>
@@ -244,7 +246,7 @@
               <div *ngIf="editCTCuringForm.get('optimeshiftfriday').invalid && editCTCuringForm.get('optimeshiftfriday').touched" class="invalid-feedback">OP Time Shift Friday is required.</div>
 
               <label for="optimenormalshift">OP Time Total Normal Shift</label>
-              <input [(ngModel)]="edtCTCuringObject.op_TIME_NORMAL_SHIFT" type="number" class="form-control" id="optimenormalshift" formControlName="optimenormalshift" [ngClass]="{ 'is-invalid': editCTCuringForm.get('optimenormalshift').invalid && editCTCuringForm.get('optimenormalshift').touched }" />
+              <input [(ngModel)]="edtCTCuringObject.op_TIME_TOTAL_NORMAL_SHIFT" type="number" class="form-control" id="optimenormalshift" formControlName="optimenormalshift" [ngClass]="{ 'is-invalid': editCTCuringForm.get('optimenormalshift').invalid && editCTCuringForm.get('optimenormalshift').touched }" />
               <div *ngIf="editCTCuringForm.get('optimenormalshift').invalid && editCTCuringForm.get('optimenormalshift').touched" class="invalid-feedback">OP Time Total Normal Shift is required.</div>
 
               <label for="optimetotalshiftfriday">OP Time Total Shift Friday</label>

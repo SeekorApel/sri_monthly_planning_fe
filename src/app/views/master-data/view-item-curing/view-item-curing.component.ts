@@ -6,6 +6,8 @@ import { ItemCuringService } from 'src/app/services/master-data/item-curing/item
 import Swal from 'sweetalert2';
 declare var $: any;
 import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
+
 @Component({
   selector: 'app-view-item-curing',
   templateUrl: './view-item-curing.component.html',
@@ -62,8 +64,9 @@ export class ViewItemCuringComponent implements OnInit {
         itemcuring.item_CURING
           .toLowerCase()
           .includes(this.searchText.toLowerCase()) ||
-          itemcuring.machine_TYPE.toString().includes(this.searchText)||
-          itemcuring.machine_TYPE.toString().includes(this.searchText)
+          itemcuring.machine_TYPE.toLowerCase().includes(this.searchText.toLowerCase())||
+          itemcuring.kapa_PER_MOULD.toString().includes(this.searchText)||
+          itemcuring.number_OF_MOULD.toString().includes(this.searchText)
     );
 
     // Tampilkan hasil filter pada halaman pertama
@@ -140,6 +143,31 @@ export class ViewItemCuringComponent implements OnInit {
     });
   }
 
+  activateData(item_curing: Item_Curing): void {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'This data item curing will be Activated!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes',
+      cancelButtonText: 'No',
+    }).then((result) => {
+      if (result.isConfirmed) { 
+        this.itemcuringService.activateItemCuring(item_curing).subscribe(
+          (response) => {
+            Swal.fire('Activated!', 'Data item curing has been Activated', 'success').then(() => {
+              window.location.reload();
+            });
+          },
+          (err) => {
+            Swal.fire('Error!', 'Failed to Activated the item curing.', 'error');
+          }
+        );
+      }
+    });
+  }
 
   openModalUpload(): void {
     $('#uploadModal').modal('show');
@@ -212,5 +240,17 @@ export class ViewItemCuringComponent implements OnInit {
         confirmButtonText: 'OK',
       });
     }
+  }
+  downloadExcel(): void {
+    this.itemcuringService.exportItemCuringsExcel().subscribe({
+      next: (response) => {
+        // Menggunakan nama file yang sudah ditentukan di backend
+        const filename = 'ITEM_CURING_DATA.xlsx'; // Nama file bisa dinamis jika diperlukan
+        saveAs(response, filename); // Mengunduh file
+      },
+      error: (err) => {
+        console.error('Download error:', err);
+      }
+    });
   }
 }

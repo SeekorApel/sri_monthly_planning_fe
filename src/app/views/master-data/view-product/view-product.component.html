@@ -22,29 +22,29 @@
 
       <!-- Table -->
       <div class="table-responsive">
-        <table class="table table-bordered table-striped table-sm" style="table-layout: auto;">
+        <table class="table table-bordered table-striped table-sm" style="table-layout: auto">
           <thead align="center">
             <tr>
-              <th style="min-width: 50px;">No</th>
-              <th style="min-width: 150px;">Part Number</th>
-              <th style="min-width: 150px;">Item Curing</th>
-              <th style="min-width: 100px;">Pattern ID</th>
-              <th style="min-width: 100px;">Size ID</th>
-              <th style="min-width: 150px;">Product Type ID</th>
-              <th style="min-width: 100px;">Qty Per Rak</th>
-              <th style="min-width: 150px;">Upper Constant</th>
-              <th style="min-width: 150px;">Lower Constant</th>
-              <th style="min-width: 200px;">Ext Description</th>
-              <th style="min-width: 100px;">Item Ext</th>
-              <th style="min-width: 100px;">Item Assy</th>
-              <th style="min-width: 100px;">Wib Tube</th>
-              <th style="min-width: 100px;">Rim</th>
-              <th style="min-width: 200px;">Description</th>
-              <th style="min-width: 100px;">Status</th>
-              <th style="min-width: 220px; padding: 10px;">Action</th>
-          </tr>          
+              <th style="min-width: 50px">No</th>
+              <th style="min-width: 150px">Part Number</th>
+              <th style="min-width: 150px">Item Curing</th>
+              <th style="min-width: 100px">Pattern ID</th>
+              <th style="min-width: 100px">Size ID</th>
+              <th style="min-width: 150px">Product Type ID</th>
+              <th style="min-width: 100px">Qty Per Rak</th>
+              <th style="min-width: 150px">Upper Constant</th>
+              <th style="min-width: 150px">Lower Constant</th>
+              <th style="min-width: 200px">Ext Description</th>
+              <th style="min-width: 100px">Item Ext</th>
+              <th style="min-width: 100px">Item Assy</th>
+              <th style="min-width: 100px">Wib Tube</th>
+              <th style="min-width: 100px">Rim</th>
+              <th style="min-width: 200px">Description</th>
+              <th style="min-width: 100px">Status</th>
+              <th style="min-width: 220px; padding: 10px">Action</th>
+            </tr>
           </thead>
-          <tbody >
+          <tbody>
             <tr align="center" *ngFor="let productt of pageOfItems; let i = index">
               <td>{{ i + 1 }}</td>
               <td>{{ productt.part_NUMBER }}</td>
@@ -63,14 +63,13 @@
               <td>{{ productt.description }}</td>
               <td [ngClass]="{ 'bg-success': productt.status === 1, 'bg-danger': productt.status !== 1 }">
                 {{ productt.status === 1 ? 'Active' : 'Deactive' }}
-              </td>           
+              </td>
               <td>
-                <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(productt.part_number)">Update</button>
+                <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(productt.part_NUMBER)">Update</button>
                 <button type="button" class="btn btn-md ml-3" [ngClass]="{ 'btn-danger': productt.status === 1, 'btn-success': productt.status !== 1 }" (click)="productt.status === 1 ? deleteData(productt) : activateData(productt)">
                   {{ productt.status === 1 ? 'Delete' : 'Active' }}
                 </button>
               </td>
-              
             </tr>
           </tbody>
         </table>
@@ -80,7 +79,7 @@
             <jw-pagination [items]="products" [pageSize]="pageSize" [maxPages]="totalPages" (changePage)="onChangePage($event)"> </jw-pagination>
           </ul>
         </nav>
-      </div>      
+      </div>
     </div>
   </div>
 </div>
@@ -125,7 +124,7 @@
           </div>
           <div class="form-group">
             <label for="upper">Upper Constant</label>
-            <input [(ngModel)]="editProductTypeObject.upper_CONSTANT" type="text" class="form-control" id="upper" formControlName="qty" [ngClass]="{ 'is-invalid': editProductTypeForm.get('upper').invalid && editProductTypeForm.get('upper').touched }" />
+            <input [(ngModel)]="editProductTypeObject.upper_CONSTANT" type="text" class="form-control" id="upper" formControlName="upper" [ngClass]="{ 'is-invalid': editProductTypeForm.get('upper').invalid && editProductTypeForm.get('upper').touched }" />
             <div *ngIf="editProductTypeForm.get('upper').invalid && editProductTypeForm.get('upper').touched" class="invalid-feedback">upper Per Rak Text is required.</div>
           </div>
           <div class="form-group">
@@ -160,7 +159,7 @@
           </div>
           <div class="form-group">
             <label for="description">Description</label>
-            <input [(ngModel)]="editProductTypeObject.description" type="text" class="form-control" id="description" formControlName="qty" [ngClass]="{ 'is-invalid': editProductTypeForm.get('description').invalid && editProductTypeForm.get('description').touched }" />
+            <input [(ngModel)]="editProductTypeObject.description" type="text" class="form-control" id="description" formControlName="description" [ngClass]="{ 'is-invalid': editProductTypeForm.get('description').invalid && editProductTypeForm.get('description').touched }" />
             <div *ngIf="editProductTypeForm.get('description').invalid && editProductTypeForm.get('description').touched" class="invalid-feedback">Description Text is required.</div>
           </div>
         </form>

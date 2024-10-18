@@ -6,11 +6,15 @@ import { SizeService } from 'src/app/services/master-data/size/size.service';
 import Swal from 'sweetalert2';
 declare var $: any;
 import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
 
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSort } from '@angular/material/sort';
+import { MatPaginator } from '@angular/material/paginator';
 @Component({
   selector: 'app-view-size',
   templateUrl: './view-size.component.html',
-  styleUrls: ['./view-size.component.scss']
+  styleUrls: ['./view-size.component.scss'],
 })
 export class ViewSizeComponent implements OnInit {
 
@@ -22,11 +26,17 @@ export class ViewSizeComponent implements OnInit {
   isEditMode: boolean = false;
   file: File | null = null;
   editSizeForm: FormGroup;
-
+  
   // Pagination
-  pageOfItems: Array<any>;
+  pageOfItems: Size[] =[];
   pageSize: number = 5;
   totalPages: number = 5;
+  sortBuffer: Array<any>;
+  displayedColumns: string[] = ['no', 'size_ID', 'description','status','action'];
+  dataSource: MatTableDataSource<Size>;
+
+  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(private sizeService: SizeService, private fb: FormBuilder) { 
     this.editSizeForm = this.fb.group({
@@ -42,7 +52,10 @@ export class ViewSizeComponent implements OnInit {
     this.sizeService.getAllSize().subscribe(
       (response: ApiResponse<Size[]>) => {
         this.sizes = response.data;
-        this.onChangePage(this.sizes.slice(0, this.pageSize));
+        this.dataSource = new MatTableDataSource(this.sizes);
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+        this.onChangePage(this.dataSource.data.slice(0, this.pageSize));
       },
       (error) => {
         this.errorMessage = 'Failed to load sizes: ' + error.message;
@@ -51,21 +64,23 @@ export class ViewSizeComponent implements OnInit {
   }
 
   onChangePage(pageOfItems: Array<any>) {
-    this.pageOfItems = pageOfItems;
+    this.pageOfItems = pageOfItems; 
   }
 
   onSearchChange(): void {
-    // Lakukan filter berdasarkan nama plant yang mengandung text pencarian (case-insensitive)
-    const filteredSizes = this.sizes.filter(
-      (size) =>
-        size.description
-          .toLowerCase()
-          .includes(this.searchText.toLowerCase()) ||
-        size.size_ID.toString().includes(this.searchText)
-    );
 
-    // Tampilkan hasil filter pada halaman pertama
-    this.onChangePage(filteredSizes.slice(0, this.pageSize));
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
+    // Lakukan filter berdasarkan nama plant yang mengandung text pencarian (case-insensitive)
+    // const filteredSizes = this.sizes.filter(
+    //   (size) =>
+    //     size.description
+    //       .toLowerCase()
+    //       .includes(this.searchText.toLowerCase()) ||
+    //     size.size_ID.toString().toLowerCase().includes(this.searchText.toLowerCase())
+    // );
+
+    // // Tampilkan hasil filter pada halaman pertama
+    // this.onChangePage(filteredSizes.slice(0, this.pageSize));
   }
 
   resetSearch(): void {
@@ -139,6 +154,31 @@ export class ViewSizeComponent implements OnInit {
     });
   }
 
+  activateData(size: Size): void {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'This data size will be Activated!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes',
+      cancelButtonText: 'No',
+    }).then((result) => {
+      if (result.isConfirmed) { 
+        this.sizeService.activateSize(size).subscribe(
+          (response) => {
+            Swal.fire('Activated!', 'Data size has been Activated', 'success').then(() => {
+              window.location.reload();
+            });
+          },
+          (err) => {
+            Swal.fire('Error!', 'Failed to Activated the size.', 'error');
+          }
+        );
+      }
+    });
+  }
 
   openModalUpload(): void {
     $('#uploadModal').modal('show');
@@ -212,4 +252,43 @@ export class ViewSizeComponent implements OnInit {
       });
     }
   }
+  downloadExcel(): void {
+    this.sizeService.exportSizesExcel().subscribe({
+      next: (response) => {
+        // Menggunakan nama file yang sudah ditentukan di backend
+        const filename = 'SIZE_DATA.xlsx'; // Nama file bisa dinamis jika diperlukan
+        saveAs(response, filename); // Mengunduh file
+      },
+      error: (err) => {
+        console.error('Download error:', err);
+      }
+    });
+  }
+  // sortData(sort: Sort) {
+  //   const data = this.pageOfItems.slice();
+  //   if (!sort.active || sort.direction === '') {
+  //     this.sortBuffer = data;
+  //     return;
+  //   }
+
+  //   this.sortBuffer = data.sort((a, b) => {
+  //     const isAsc = sort.direction === 'asc';
+  //     switch (sort.active) {
+  //       case 'id':
+  //         return compare(a.size_ID, b.size_ID, isAsc);
+  //       case 'desc':
+  //         return compare(a.description, b.description, isAsc);
+  //       default:
+  //         return 0;
+  //     }
+  //   });
+  // }
 }
+function compare(a: number | string, b: number | string, isAsc: boolean) {
+  return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
+}
+const ELEMENT_DATA = [
+  { size_ID: 1, description: 'Size 1', status: 1 },
+  { size_ID: 2, description: 'Size 2', status: 0 },
+  // Add more data as needed
+];

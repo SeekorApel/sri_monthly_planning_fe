@@ -15,40 +15,59 @@
         <!-- Right side: Download Template and Export Excel buttons -->
         <div>
           <button type="button" class="btn btn-primary ml-2" (click)="downloadTemplate()"><i class="fa fa-download fa-lg"></i> Download Template</button>
+          <button type="button" class="btn btn-primary ml-2" (click)="downloadExcel()"><i class="fa fa-download fa-lg"></i> Export Excel</button>
           <button type="button" class="btn btn-success ml-2" data-toggle="modal" data-target="#uploadModal"><i class="fa fa-file-excel-o fa-lg"></i> Upload Excel</button>
         </div>
       </div>
 
       <!-- Table -->
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th>No</th>
-            <th>Size ID</th>
-            <th>Description</th>
-            <th>Status</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let size of pageOfItems; let i = index">
-            <td>{{ i + 1 }}</td>
-            <td>{{ size.size_ID }}</td>
-            <td>{{ size.description }}</td>
-            <td>{{ size.status === 1 ? 'Active' : 'Deactive' }}</td>
-            <td>
-              <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(size.size_ID)">Update</button>
-              <button type="button" class="btn btn-md btn-danger ml-2" (click)="deleteData(size)">Delete</button>
+      <div class="table-responsive">
+        <table mat-table [dataSource]="dataSource" matSort class="table table-bordered table-striped table-sm">
+          <!-- No Column -->
+          <ng-container matColumnDef="no" >
+            <th *matHeaderCellDef >No</th>
+            <td  *matCellDef="let element; let i = index">{{ i + 1 }}</td>
+          </ng-container>
+        
+          <!-- Size ID Column -->
+          <ng-container matColumnDef="size_ID">
+            <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Size ID</th>
+            <td  *matCellDef="let element">{{ element.size_ID }}</td>
+          </ng-container>
+        
+          <!-- Description Column -->
+          <ng-container matColumnDef="description">
+            <th  *matHeaderCellDef mat-sort-header >Description</th>
+            <td *matCellDef="let element">{{ element.description }}</td>
+          </ng-container>
+        
+          <!-- Status Column -->
+          <ng-container matColumnDef="status">
+            <th  *matHeaderCellDef>Status</th>
+            <td *matCellDef="let element" [ngClass]="{ 'bg-success': element.status === 1, 'bg-danger': element.status !== 1 }">
+              {{ element.status === 1 ? 'Active' : 'Deactive' }}
             </td>
-          </tr>
-        </tbody>
-      </table>
-      <!-- Pagination -->
-      <nav>
-        <ul class="pagination">
-          <jw-pagination [items]="sizes" [pageSize]="pageSize" [maxPages]="totalPages" (changePage)="onChangePage($event)"> </jw-pagination>
-        </ul>
-      </nav>
+          </ng-container>
+        
+          <!-- Action Column -->
+          <ng-container matColumnDef="action" >
+            <th *matHeaderCellDef style="min-width: 200px;">Action</th>
+            <td *matCellDef="let element">
+              <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(element.size_ID)">Update</button>
+              <button type="button" class="btn btn-md ml-2" [ngClass]="{ 'btn-danger': element.status === 1, 'btn-success': element.status !== 1 }" (click)="element.status === 1 ? deleteData(element) : activateData(element)">
+                {{ element.status === 1 ? 'Delete' : 'Active' }}
+              </button>
+            </td>
+          </ng-container>
+        
+          <tr align="center" style="height: 20px;" mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr align="center" mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+            <mat-paginator [pageSize]="pageSize"
+              [pageSizeOptions]="[5, 10, 20]"
+              showFirstLastButtons>
+            </mat-paginator>
+      </div>
     </div>
   </div>
 </div>
@@ -69,7 +88,6 @@
           <div class="form-group">
             <label for="description">Size Name</label>
             <input [(ngModel)]="edtSizeObject.description" type="text" class="form-control" id="description" formControlName="description" [ngClass]="{ 'is-invalid': editSizeForm.get('description').invalid && editSizeForm.get('description').touched }" />
-            <!-- Error message if plantName is empty -->
             <div *ngIf="editSizeForm.get('description').invalid && editSizeForm.get('description').touched" class="invalid-feedback">Description is required.</div>
           </div>
         </form>

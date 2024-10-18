@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { MachineTassService } from './tassMachine.service';
+import { QuadrantService } from './curing-size.service';
 
-describe('PatternService', () => {
-  let service: MachineTassService;
+describe('QuadrantService', () => {
+  let service: QuadrantService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(MachineTassService);
+    service = TestBed.inject(QuadrantService);
   });
 
   it('should be created', () => {

@@ -15,44 +15,49 @@
         <!-- Right side: Download Template and Export Excel buttons -->
         <div>
           <button type="button" class="btn btn-primary ml-2" (click)="downloadTemplate()"><i class="fa fa-download fa-lg"></i> Download Template</button>
+          <button type="button" class="btn btn-primary ml-2" (click)="downloadExcel()"><i class="fa fa-download fa-lg"></i> Export Excel</button>
           <button type="button" class="btn btn-success ml-2" data-toggle="modal" data-target="#uploadModal"><i class="fa fa-file-excel-o fa-lg"></i> Upload Excel</button>
         </div>
       </div>
 
       <!-- Table -->
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th>No</th>
-            <th>Tass Size ID</th>
-            <th>Machine Tass Type ID</th>
-            <th>Size ID</th>
-            <th>Capacity</th>
-            <th>Status</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let tass_sizes of pageOfItems; let i = index">
-            <td>{{ i + 1 }}</td>
-            <td>{{ tass_sizes.tassize_ID }}</td>
-            <td>{{ tass_sizes.machinetasstype_ID }}</td>
-            <td>{{ tass_sizes.size_ID }}</td>
-            <td>{{ tass_sizes.capacity }}</td>
-            <td>{{ tass_sizes.status === 1 ? 'Active' : 'Deactive' }}</td>
-            <td>
-              <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(tass_sizes.tassize_ID)">Update</button>
-              <button type="button" class="btn btn-md btn-danger ml-2" (click)="deleteData(tass_sizes)">Delete</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <!-- Pagination -->
-      <nav>
-        <ul class="pagination">
-          <jw-pagination [items]="tass_sizes" [pageSize]="pageSize" [maxPages]="totalPages" (changePage)="onChangePage($event)"> </jw-pagination>
-        </ul>
-      </nav>
+       <div class="table-responsive">
+         <table class="table table-bordered table-striped table-sm">
+           <thead align="center">
+             <tr>
+               <th>No</th>
+               <th>Tass Size ID</th>
+               <th>Machine Tass Type ID</th>
+               <th>Size ID</th>
+               <th>Capacity</th>
+               <th>Status</th>
+               <th>Action</th>
+             </tr>
+           </thead>
+           <tbody>
+             <tr align="center" *ngFor="let tass_sizes of pageOfItems; let i = index">
+               <td>{{ i + 1 }}</td>
+               <td>{{ tass_sizes.tassize_ID }}</td>
+               <td>{{ tass_sizes.machinetasstype_ID }}</td>
+               <td>{{ tass_sizes.size_ID }}</td>
+               <td>{{ tass_sizes.capacity }}</td>
+               <td [ngClass]="{ 'bg-success': tass_sizes.status === 1, 'bg-danger': tass_sizes.status !== 1 }" >{{ tass_sizes.status === 1 ? 'Active' : 'Deactive' }}</td>
+               <td>
+                 <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(tass_sizes.tassize_ID)">Update</button>
+                 <button type="button" class="btn btn-md ml-2" [ngClass]="{ 'btn-danger': tass_sizes.status === 1, 'btn-success': tass_sizes.status !== 1 }" (click)="tass_sizes.status === 1 ? deleteData(tass_sizes) : activateData(tass_sizes)">
+                  {{ tass_sizes.status === 1 ? 'Delete' : 'Active' }}
+                </button>
+               </td>
+             </tr>
+           </tbody>
+         </table>
+         <!-- Pagination -->
+         <nav>
+           <ul class="pagination">
+             <jw-pagination [items]="tass_sizes" [pageSize]="pageSize" [maxPages]="totalPages" (changePage)="onChangePage($event)"> </jw-pagination>
+           </ul>
+         </nav>
+       </div>
     </div>
   </div>
 </div>

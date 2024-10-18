@@ -6,6 +6,7 @@ import { QuadrantService } from 'src/app/services/master-data/quadrant/quadrant.
 import Swal from 'sweetalert2';
 declare var $: any;
 import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-view-quadrant',
@@ -13,7 +14,6 @@ import * as XLSX from 'xlsx';
   styleUrls: ['./view-quadrant.component.scss'],
 })
 export class ViewQuadrantComponent implements OnInit {
-
   //Variable Declaration
   quadrants: Quadrant[] = [];
   searchText: string = '';
@@ -28,10 +28,10 @@ export class ViewQuadrantComponent implements OnInit {
   pageSize: number = 5;
   totalPages: number = 5;
 
-  constructor(private quadrantService: QuadrantService, private fb: FormBuilder) { 
+  constructor(private quadrantService: QuadrantService, private fb: FormBuilder) {
     this.editQuadrantForm = this.fb.group({
-      quadrantName: ['', Validators.required]
-
+      quadrantName: ['', Validators.required],
+      buildingID: ['', Validators.required]
     });
   }
 
@@ -46,7 +46,7 @@ export class ViewQuadrantComponent implements OnInit {
         this.onChangePage(this.quadrants.slice(0, this.pageSize));
       },
       (error) => {
-        this.errorMessage = 'Failed to load quadrants: ' + error.message;
+        this.errorMessage = 'Failed to load plants: ' + error.message;
       }
     );
   }
@@ -57,17 +57,13 @@ export class ViewQuadrantComponent implements OnInit {
 
   onSearchChange(): void {
     // Lakukan filter berdasarkan nama plant yang mengandung text pencarian (case-insensitive)
-    const filteredPlants = this.quadrants.filter(
-      (quadrant) =>
-        quadrant.quadrant_ID
-          .toString()
-          .includes(this.searchText.toLowerCase()) ||
-        quadrant.building_ID.toString().includes(this.searchText)||
-        quadrant.quadrant_NAME.toLowerCase().toString().includes(this.searchText)
-    );
+    const filteredQuadrant = this.quadrants.filter((quadrant) => 
+    quadrant.quadrant_NAME.toLowerCase().includes(this.searchText.toLowerCase()) || 
+    quadrant.quadrant_ID.toString().includes(this.searchText) ||
+    quadrant.building_ID.toString().includes(this.searchText));
 
     // Tampilkan hasil filter pada halaman pertama
-    this.onChangePage(filteredPlants.slice(0, this.pageSize));
+    this.onChangePage(filteredQuadrant.slice(0, this.pageSize));
   }
 
   resetSearch(): void {
@@ -76,13 +72,12 @@ export class ViewQuadrantComponent implements OnInit {
   }
 
   updateQuadrant(): void {
-    
     this.quadrantService.updateQuadrant(this.edtQuadrantObject).subscribe(
       (response) => {
         // SweetAlert setelah update berhasil
         Swal.fire({
           title: 'Success!',
-          text: 'Data quadrant successfully updated.',
+          text: 'Data plant successfully updated.',
           icon: 'success',
           confirmButtonText: 'OK',
         }).then((result) => {
@@ -141,6 +136,31 @@ export class ViewQuadrantComponent implements OnInit {
     });
   }
 
+  activateData(quadrant: Quadrant): void {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'This data plant will be Activated!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes',
+      cancelButtonText: 'No',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.quadrantService.activateQuadrant(quadrant).subscribe(
+          (response) => {
+            Swal.fire('Activated!', 'Data quadrant has been Activated', 'success').then(() => {
+              window.location.reload();
+            });
+          },
+          (err) => {
+            Swal.fire('Error!', 'Failed to Activated the quadrant.', 'error');
+          }
+        );
+      }
+    });
+  }
 
   openModalUpload(): void {
     $('#uploadModal').modal('show');
@@ -152,7 +172,6 @@ export class ViewQuadrantComponent implements OnInit {
     link.download = 'Layout_Quadrant.xlsx';
     link.click();
   }
-
 
   onFileChange(event: Event) {
     const input = event.target as HTMLInputElement;
@@ -176,7 +195,6 @@ export class ViewQuadrantComponent implements OnInit {
       }
     }
   }
-
 
   uploadFileExcel() {
     if (this.file) {
@@ -213,5 +231,40 @@ export class ViewQuadrantComponent implements OnInit {
         confirmButtonText: 'OK',
       });
     }
-  };
+  }
+
+  downloadExcel(): void {
+    this.quadrantService.exportQuadrantsExcel().subscribe({
+      next: (response) => {
+        // Menggunakan nama file yang sudah ditentukan di backend
+        const filename = 'QUADRANT_DATA.xlsx'; // Nama file bisa dinamis jika diperlukan
+        saveAs(response, filename); // Mengunduh file
+      },
+      error: (err) => {
+        console.error('Download error:', err);
+      }
+    });
+  }
+
+  saveAsExcelFile(buffer: any, fileName: string): void {
+    const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
+    const data: Blob = new Blob([buffer], { type: EXCEL_TYPE });
+    saveAs(data, `${fileName}_export_${new Date().getTime()}.xlsx`);
+  }
+
+  // downloadExcel(): void {
+  //   this.plantService.downloadPlantsExcel().subscribe(
+  //     (response: Blob) => {
+  //       const blobUrl = window.URL.createObjectURL(response);
+  //       const a = document.createElement('a');
+  //       a.href = blobUrl;
+  //       a.download = 'MASTER_PLANT.xlsx';
+  //       a.click();
+  //       window.URL.revokeObjectURL(blobUrl);
+  //     },
+  //     (error) => {
+  //       this.errorMessage = 'Failed to download Excel: ' + error.message;
+  //     }
+  //   );
+  // }
 }

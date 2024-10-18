@@ -11,10 +11,6 @@ import { map, catchError } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class ItemAssyService {
-  //Isi tokenya
-  token: String =
-    'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBdXJlbCIsImV4cCI6MTcyODMwODA4M30.y03EN8mmoDGrL7FzHc5W7QDPLuAoVmD21CNXz4OrBMyci5OSMFW8urH69vONuD8YW87911-NUE2BvkFrpFYWhA';
-
   constructor(private http: HttpClient) {}
 
   // Method untuk menambahkan header Authorization dengan token
@@ -25,26 +21,19 @@ export class ItemAssyService {
   }
 
   getItemAssyById(idItemAssy: number): Observable<ApiResponse<Item_Assy>> {
-    return this.http.get<ApiResponse<Item_Assy>>(
-      environment.apiUrlWebAdmin + '/getItemAssyById/' + idItemAssy,
-      { headers: this.getHeaders() }
-    );
+    return this.http.get<ApiResponse<Item_Assy>>(environment.apiUrlWebAdmin + '/getItemAssyById/' + idItemAssy, { headers: this.getHeaders() });
   }
 
   getAllItemAssy(): Observable<ApiResponse<Item_Assy[]>> {
-    return this.http.get<ApiResponse<Item_Assy[]>>(
-      environment.apiUrlWebAdmin + '/getAllItemAssy',
-      { headers: this.getHeaders() }
-    );
+    return this.http.get<ApiResponse<Item_Assy[]>>(environment.apiUrlWebAdmin + '/getAllItemAssy', { headers: this.getHeaders() });
   }
 
   //Method Update plant
-  updateItemAssy(itemAssy: Item_Assy): Observable<ApiResponse<Item_Assy>> {
-    console.log(itemAssy);
+  updateItemAssy(plant: Item_Assy): Observable<ApiResponse<Item_Assy>> {
     return this.http
       .post<ApiResponse<Item_Assy>>(
         environment.apiUrlWebAdmin + '/updateItemAssy',
-        itemAssy,
+        plant,
         { headers: this.getHeaders() } // Menyertakan header
       )
       .pipe(
@@ -57,37 +46,41 @@ export class ItemAssyService {
       );
   }
 
-  deleteItemAssy(item_Assy: Item_Assy): Observable<ApiResponse<Item_Assy>> {
-    return this.http
-      .post<ApiResponse<Item_Assy>>(
-        environment.apiUrlWebAdmin + '/deleteItemAssy',
-        item_Assy,
-        { headers: this.getHeaders() }
-      )
-      .pipe(
-        map((response) => {
-          return response;
-        }),
-        catchError((err) => {
-          return throwError(err);
-        })
-      );
+  deleteItemAssy(itemAssy: Item_Assy): Observable<ApiResponse<Item_Assy>> {
+    return this.http.post<ApiResponse<Item_Assy>>(environment.apiUrlWebAdmin + '/deleteItemAssy', itemAssy, { headers: this.getHeaders() }).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((err) => {
+        return throwError(err);
+      })
+    );
+  }
+
+  activateItemAssy(itemAssy: Item_Assy): Observable<ApiResponse<Item_Assy>> {
+    return this.http.post<ApiResponse<Item_Assy>>(environment.apiUrlWebAdmin + '/restoreItemAssy', itemAssy, { headers: this.getHeaders() }).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((err) => {
+        return throwError(err);
+      })
+    );
   }
 
   uploadFileExcel(file: FormData): Observable<ApiResponse<Item_Assy>> {
-    return this.http
-      .post<ApiResponse<Item_Assy>>(
-        environment.apiUrlWebAdmin + '/saveItemAssyExcel',
-        file,
-        { headers: this.getHeaders() }
-      )
-      .pipe(
-        map((response) => {
-          return response;
-        }),
-        catchError((err) => {
-          return throwError(err);
-        })
-      );
+    return this.http.post<ApiResponse<Item_Assy>>(environment.apiUrlWebAdmin + '/saveItemAssyExcel', file, { headers: this.getHeaders() }).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((err) => {
+        return throwError(err);
+      })
+    );
   }
+
+  exportItemAssyExcel(): Observable<Blob> {
+    return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/exportItemAssyExcel`, { responseType: 'blob' as 'json' });
+  }
+
 }

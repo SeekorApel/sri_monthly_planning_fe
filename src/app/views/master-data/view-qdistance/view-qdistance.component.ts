@@ -6,6 +6,7 @@ import { QDistanceService } from 'src/app/services/master-data/Qdistance/Qdistan
 import Swal from 'sweetalert2';
 declare var $: any;
 import * as XLSX from 'xlsx';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-view-qdistance',
@@ -57,7 +58,6 @@ export class ViewQDistanceComponent implements OnInit {
   }
 
   onSearchChange(): void {
-    // Lakukan filter berdasarkan nama plant yang mengandung text pencarian (case-insensitive)
     const filteredQDistances = this.qdistances.filter(
       (distance) =>
         distance.id_Q_DISTANCE.toString()
@@ -215,5 +215,42 @@ export class ViewQDistanceComponent implements OnInit {
         confirmButtonText: 'OK',
       });
     }
+  }
+  activateData(qdistance: QDistance): void {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'This data quadrant distance will be Activated!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes',
+      cancelButtonText: 'No',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.qdistanceService.activateQuadrantDistance(qdistance).subscribe(
+          (response) => {
+            Swal.fire('Activated!', 'Data quadrant distance has been Activated', 'success').then(() => {
+              window.location.reload();
+            });
+          },
+          (err) => {
+            Swal.fire('Error!', 'Failed to Activated the quadrant distance.', 'error');
+          }
+        );
+      }
+    });
+  }
+  downloadExcel(): void {
+    this.qdistanceService.exportQuadrantDistancesExcel().subscribe({
+      next: (response) => {
+        // Menggunakan nama file yang sudah ditentukan di backend
+        const filename = 'QUADRANT_DISTANCE_DATA.xlsx'; // Nama file bisa dinamis jika diperlukan
+        saveAs(response, filename); // Mengunduh file
+      },
+      error: (err) => {
+        console.error('Download error:', err);
+      }
+    });
   }
 }

@@ -19,41 +19,42 @@
           <button type="button" class="btn btn-success ml-2" data-toggle="modal" data-target="#uploadModal"><i class="fa fa-file-excel-o fa-lg"></i> Upload Excel</button>
         </div>
       </div>
-
-      <!-- Table -->
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th>No</th>
-            <th>Plant ID</th>
-            <th>Building Name</th>
-            <th>Status</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let building of pageOfItems; let i = index">
-            <td>{{ i + 1 }}</td>
-            <td>{{ building.plant_ID }}</td>
-            <td>{{ building.building_NAME }}</td>
-            <td [ngClass]="{ 'bg-success': building.status === 1, 'bg-danger': building.status !== 1 }">
-              {{ building.status === 1 ? 'Active' : 'Deactive' }}
-            </td>
-            <td>
-              <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(building.building_ID)">Update</button>
-              <button type="button" class="btn btn-md ml-2" [ngClass]="{ 'btn-danger': building.status === 1, 'btn-success': building.status !== 1 }" (click)="building.status === 1 ? deleteData(building) : activateData(building)">
-                {{ building.status === 1 ? 'Delete' : 'Active' }}
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <!-- Pagination -->
-      <nav>
-        <ul class="pagination">
-          <jw-pagination [items]="buildings" [pageSize]="pageSize" [maxPages]="totalPages" (changePage)="onChangePage($event)"> </jw-pagination>
-        </ul>
-      </nav>
+      <div class="table-responsive">
+        <!-- Table -->
+        <table class="table table-striped">
+          <thead  align="center">
+            <tr>
+              <th>No</th>
+              <th>Plant ID</th>
+              <th>Building Name</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr align="center" *ngFor="let building of pageOfItems; let i = index">
+              <td>{{ i + 1 }}</td>
+              <td>{{ building.plant_ID }}</td>
+              <td>{{ building.building_NAME }}</td>
+              <td [ngClass]="{ 'bg-success': building.status === 1, 'bg-danger': building.status !== 1 }">
+                {{ building.status === 1 ? 'Active' : 'Deactive' }}
+              </td>
+              <td>
+                <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(building.building_ID)">Update</button>
+                <button type="button" class="btn btn-md ml-2" [ngClass]="{ 'btn-danger': building.status === 1, 'btn-success': building.status !== 1 }" (click)="building.status === 1 ? deleteData(building) : activateData(building)">
+                  {{ building.status === 1 ? 'Delete' : 'Active' }}
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <!-- Pagination -->
+        <nav>
+          <ul class="pagination">
+            <jw-pagination [items]="buildings" [pageSize]="pageSize" [maxPages]="totalPages" (changePage)="onChangePage($event)"> </jw-pagination>
+          </ul>
+        </nav>
+      </div>
     </div>
   </div>
 </div>

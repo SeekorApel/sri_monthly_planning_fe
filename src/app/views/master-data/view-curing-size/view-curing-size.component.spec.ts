@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ViewMachineTassComponent } from './view-tassmachine.component';
+import { ViewCuringSizeComponent } from './view-curing-size.component';
 
-describe('ViewTassmachineComponent', () => {
-  let component: ViewMachineTassComponent;
-  let fixture: ComponentFixture<ViewMachineTassComponent>;
+describe('ViewCuringSizeComponent', () => {
+  let component: ViewCuringSizeComponent;
+  let fixture: ComponentFixture<ViewCuringSizeComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ViewMachineTassComponent ]
+      declarations: [ ViewCuringSizeComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ViewMachineTassComponent);
+    fixture = TestBed.createComponent(ViewCuringSizeComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

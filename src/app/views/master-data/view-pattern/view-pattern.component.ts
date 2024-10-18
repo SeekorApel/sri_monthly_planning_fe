@@ -8,7 +8,6 @@ declare var $: any;
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 
-
 @Component({
   selector: 'app-view-pattern',
   templateUrl: './view-pattern.component.html',
@@ -37,6 +36,31 @@ export class ViewPatternComponent implements OnInit {
 
   ngOnInit(): void {
     this.getAllPattern();
+  }
+  activateData(pattern: Pattern): void {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'This data pattern will be Activated!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes',
+      cancelButtonText: 'No',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.patternService.activatePattern(pattern).subscribe(
+          (response) => {
+            Swal.fire('Activated!', 'Data pattern has been Activated', 'success').then(() => {
+              window.location.reload();
+            });
+          },
+          (err) => {
+            Swal.fire('Error!', 'Failed to Activated the pattern.', 'error');
+          }
+        );
+      }
+    });
   }
 
   getAllPattern(): void {
@@ -208,12 +232,12 @@ export class ViewPatternComponent implements OnInit {
     this.patternService.exportExcel().subscribe({
       next: (response) => {
         // Menggunakan nama file yang sudah ditentukan di backend
-        const filename = 'PRODUCT_DATA.xlsx'; // Nama file bisa dinamis jika diperlukan
+        const filename = 'PATTERN_DATA.xlsx'; // Nama file bisa dinamis jika diperlukan
         saveAs(response, filename); // Mengunduh file
       },
       error: (err) => {
         console.error('Download error:', err);
-      }
+      },
     });
   }
 }

@@ -72,10 +72,21 @@ export class SizeService {
       );
   }
 
+  activateSize(size: Size): Observable<ApiResponse<Size>> {
+    return this.http.post<ApiResponse<Size>>(environment.apiUrlWebAdmin + '/restoreSize', size, { headers: this.getHeaders() }).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((err) => {
+        return throwError(err);
+      })
+    );
+  }
+
   uploadFileExcel(file: FormData): Observable<ApiResponse<Size>> {
     return this.http
       .post<ApiResponse<Size>>(
-        environment.apiUrlWebAdmin + '/saveSizesExcel',
+        environment.apiUrlWebAdmin + '/saveSizeExcel',
         file,
         { headers: this.getHeaders() }
       )
@@ -88,4 +99,8 @@ export class SizeService {
         })
       );
   }
+  exportSizesExcel(): Observable<Blob> {
+    return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/exportSizeexcel`, { responseType: 'blob' as 'json' });
+  }
+
 }

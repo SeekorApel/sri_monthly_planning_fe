@@ -15,44 +15,48 @@
         <!-- Right side: Download Template and Export Excel buttons -->
         <div>
           <button type="button" class="btn btn-primary ml-2" (click)="downloadTemplate()"><i class="fa fa-download fa-lg"></i> Download Template</button>
+          <button type="button" class="btn btn-primary ml-2" (click)="downloadExcel()"><i class="fa fa-download fa-lg"></i> Export Excel</button>
           <button type="button" class="btn btn-success ml-2" data-toggle="modal" data-target="#uploadModal"><i class="fa fa-file-excel-o fa-lg"></i> Upload Excel</button>
         </div>
       </div>
-
-      <!-- Table -->
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th>No</th>
-            <th>Item Curing ID</th>
-            <th>Machine Type</th>
-            <th>Kapa per Mould</th>
-            <th>Number of Mould</th>
-            <th>Status</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let itemcuring of pageOfItems; let i = index">
-            <td>{{ i + 1 }}</td>
-            <td>{{ itemcuring.item_CURING }}</td>
-            <td>{{ itemcuring.machine_TYPE }}</td>
-            <td>{{ itemcuring.kapa_PER_MOULD }}</td>
-            <td>{{ itemcuring.number_OF_MOULD }}</td>
-            <td>{{ itemcuring.status === 1 ? 'Active' : 'Deactive' }}</td>
-            <td>
-              <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(itemcuring.item_CURING)">Update</button>
-              <button type="button" class="btn btn-md btn-danger ml-2" (click)="deleteData(itemcuring)">Delete</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <!-- Pagination -->
-      <nav>
-        <ul class="pagination">
-          <jw-pagination [items]="itemcurings" [pageSize]="pageSize" [maxPages]="totalPages" (changePage)="onChangePage($event)"> </jw-pagination>
-        </ul>
-      </nav>
+      <div class="table-responsive">
+        <!-- Table -->
+        <table class="table table-bordered table-striped table-sm">
+          <thead  align="center">
+            <tr>
+              <th>No</th>
+              <th>Item Curing ID</th>
+              <th>Machine Type</th>
+              <th>Kapa per Mould</th>
+              <th>Number of Mould</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr align="center" *ngFor="let itemcuring of pageOfItems; let i = index">
+              <td>{{ i + 1 }}</td>
+              <td>{{ itemcuring.item_CURING }}</td>
+              <td>{{ itemcuring.machine_TYPE }}</td>
+              <td>{{ itemcuring.kapa_PER_MOULD }}</td>
+              <td>{{ itemcuring.number_OF_MOULD }}</td>
+              <td [ngClass]="{ 'bg-success': itemcuring.status === 1, 'bg-danger': itemcuring.status !== 1 }">{{ itemcuring.status === 1 ? 'Active' : 'Deactive' }}</td>
+              <td>
+                <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(itemcuring.item_CURING)">Update</button>
+                <button type="button" class="btn btn-md ml-2" [ngClass]="{ 'btn-danger': itemcuring.status === 1, 'btn-success': itemcuring.status !== 1 }" (click)="itemcuring.status === 1 ? deleteData(itemcuring) : activateData(itemcuring)">
+                  {{ itemcuring.status === 1 ? 'Delete' : 'Active' }}
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <!-- Pagination -->
+        <nav>
+          <ul class="pagination">
+            <jw-pagination [items]="itemcurings" [pageSize]="pageSize" [maxPages]="totalPages" (changePage)="onChangePage($event)"> </jw-pagination>
+          </ul>
+        </nav>
+      </div>
     </div>
   </div>
 </div>

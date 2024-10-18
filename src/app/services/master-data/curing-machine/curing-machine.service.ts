@@ -38,12 +38,11 @@ getMachineCuringById(idMachineCuring: string): Observable<ApiResponse<Curing_Mac
     );
   }
 
-  //Method Update plant
-  updateMachineCuring(plant: Curing_Machine): Observable<ApiResponse<Curing_Machine>> {
+  updateMachineCuring(curingmachine: Curing_Machine): Observable<ApiResponse<Curing_Machine>> {
     return this.http
       .post<ApiResponse<Curing_Machine>>(
         environment.apiUrlWebAdmin + '/updateMachineCuring',
-        plant,
+        curingmachine,
         { headers: this.getHeaders() } // Menyertakan header
       )
       .pipe(
@@ -56,11 +55,11 @@ getMachineCuringById(idMachineCuring: string): Observable<ApiResponse<Curing_Mac
       );
   }
 
-  deleteMachineCuring(plant: Curing_Machine): Observable<ApiResponse<Curing_Machine>> {
+  deleteMachineCuring(curingmachine: Curing_Machine): Observable<ApiResponse<Curing_Machine>> {
     return this.http
       .post<ApiResponse<Curing_Machine>>(
         environment.apiUrlWebAdmin + '/deleteMachineCuring',
-        plant,
+        curingmachine,
         { headers: this.getHeaders() }
       )
       .pipe(
@@ -76,7 +75,7 @@ getMachineCuringById(idMachineCuring: string): Observable<ApiResponse<Curing_Mac
   uploadFileExcel(file: FormData): Observable<ApiResponse<Curing_Machine>> {
     return this.http
       .post<ApiResponse<Curing_Machine>>(
-        environment.apiUrlWebAdmin + '/saveMachineCuringsExcel',
+        environment.apiUrlWebAdmin + '/saveMachineCuringExcel',
         file,
         { headers: this.getHeaders() }
       )
@@ -88,5 +87,18 @@ getMachineCuringById(idMachineCuring: string): Observable<ApiResponse<Curing_Mac
           return throwError(err);
         })
       );
+  }
+  activateCuringMachine(curingmachine: Curing_Machine): Observable<ApiResponse<Curing_Machine>> {
+    return this.http.post<ApiResponse<Curing_Machine>>(environment.apiUrlWebAdmin + '/restoreMachineCuring', curingmachine, { headers: this.getHeaders() }).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((err) => {
+        return throwError(err);
+      })
+    );
+  }
+  exportMachineCuringsExcel(): Observable<Blob> {
+    return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/exportMachineCuringExcel`, { responseType: 'blob' as 'json' });
   }
 }

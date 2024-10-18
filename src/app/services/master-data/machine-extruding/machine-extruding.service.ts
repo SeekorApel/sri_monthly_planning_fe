@@ -12,7 +12,6 @@ import { map, catchError } from 'rxjs/operators';
 })
 export class MachineExtrudingService {
   //Isi tokenya
-  token: String = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBdXJlbCIsImV4cCI6MTcyODM4NTExNH0.EcIqiAPq5tX2MgDMcwD5rDNN-85fobiCN6S57r3rOBO64TK4JKUwzlF1zpLTqj4ul0KsBdnHqpDh4zOcAzoT8w';
   constructor(private http: HttpClient) {}
 
   // Method untuk menambahkan header Authorization dengan token
@@ -20,6 +19,19 @@ export class MachineExtrudingService {
     return new HttpHeaders({
       Authorization: `Bearer ${environment.token}`,
     });
+  }
+  activateMachineExtruding(me: MachineExtruding): Observable<ApiResponse<MachineExtruding>> {
+    return this.http.post<ApiResponse<MachineExtruding>>(environment.apiUrlWebAdmin + '/restoreMachineExtruding', me, { headers: this.getHeaders() }).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((err) => {
+        return throwError(err);
+      })
+    );
+  }
+  exportMachineExtrudingExcel(): Observable<Blob> {
+    return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/exportMachineExtrudingExcel`, { responseType: 'blob' as 'json' });
   }
 
   getMachineExtrudingByID(idMachineExtruding: number): Observable<ApiResponse<MachineExtruding>> {
@@ -60,7 +72,7 @@ export class MachineExtrudingService {
   }
 
   uploadFileExcel(file: FormData): Observable<ApiResponse<MachineExtruding>> {
-    return this.http.post<ApiResponse<MachineExtruding>>(environment.apiUrlWebAdmin + '/saveMachineExtruding', file, { headers: this.getHeaders() }).pipe(
+    return this.http.post<ApiResponse<MachineExtruding>>(environment.apiUrlWebAdmin + '/saveMachineExtrudingsExcel', file, { headers: this.getHeaders() }).pipe(
       map((response) => {
         return response;
       }),

@@ -72,6 +72,16 @@ export class BuildingService {
         })
       );
   }
+  activateBuilding(building: Building): Observable<ApiResponse<Building>> {
+    return this.http.post<ApiResponse<Building>>(environment.apiUrlWebAdmin + '/restoreBuilding', building, { headers: this.getHeaders() }).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((err) => {
+        return throwError(err);
+      })
+    );
+  }
 
   uploadFileExcel(file: FormData): Observable<ApiResponse<Building>> {
     return this.http

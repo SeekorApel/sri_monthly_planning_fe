@@ -143,7 +143,7 @@ export class ViewPlantComponent implements OnInit {
       confirmButtonText: 'Yes',
       cancelButtonText: 'No',
     }).then((result) => {
-      if (result.isConfirmed) {
+      if (result.isConfirmed) { 
         this.plantService.activatePlant(plant).subscribe(
           (response) => {
             Swal.fire('Activated!', 'Data plant has been Activated', 'success').then(() => {
