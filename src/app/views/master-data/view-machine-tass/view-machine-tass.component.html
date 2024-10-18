@@ -1,7 +1,7 @@
 <div class="col-lg-12">
   <div class="card">
     <div class="card-header">
-      <strong><i class="fa fa-bars"></i>&nbsp;Master Data Pattern</strong>
+      <strong><i class="fa fa-bars"></i>&nbsp;Master Data Machine Tass</strong>
     </div>
 
     <div class="card-body">
@@ -15,40 +15,47 @@
         <!-- Right side: Download Template and Export Excel buttons -->
         <div>
           <button type="button" class="btn btn-primary ml-2" (click)="downloadTemplate()"><i class="fa fa-download fa-lg"></i> Download Template</button>
+          <button type="button" class="btn btn-primary ml-2" (click)="downloadExcel()"><i class="fa fa-download fa-lg"></i> Export Excel</button>
           <button type="button" class="btn btn-success ml-2" data-toggle="modal" data-target="#uploadModal"><i class="fa fa-file-excel-o fa-lg"></i> Upload Excel</button>
         </div>
       </div>
 
       <!-- Table -->
-      <table class="table table-striped">
-        <thead>
-          <th>No</th>
-              <th>Machine Tass ID</th>
-              <th>Building ID</th>
-              <th>Floor</th>
-              <th>Machine Number</th>
-              <th>Type</th>
-              <th>Work Center Text</th>          
-              <th>Status</th>
-              <th>Action</th>
-        </thead>
-        <tbody>
-          <tr *ngFor="let machinetass of pageOfItems; let i = index">
-            <td>{{ i + 1 }}</td>
-            <td>{{ machinetass.id_MACHINE_TASS }}</td>
-            <td>{{ machinetass.building_ID }}</td>
-            <td>{{ machinetass.floor }}</td>
-            <td>{{ machinetass.machine_NUMBER }}</td>
-            <td>{{ machinetass.type }}</td>
-            <td>{{ machinetass.work_CENTER_TEXT }}</td>
-            <td>{{ machinetass.status === 1 ? 'Active' : 'Deactive' }}</td>
-            <td>
-              <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(machinetass.id_MACHINE_TASS)">Update</button>
-              <button type="button" class="btn btn-md btn-danger ml-2" (click)="deleteData(machinetass)">Delete</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="table-responsive">
+        <table class="table table-bordered table-striped table-sm" style="table-layout: auto">
+          <thead align="center">
+            <th>No</th>
+            <th>Machine Tass ID</th>
+            <th>Building ID</th>
+            <th>Floor</th>
+            <th>Machine Number</th>
+            <th>Type</th>
+            <th>Work Center Text</th>
+            <th>Status</th>
+            <th>Action</th>
+          </thead>
+          <tbody>
+            <tr *ngFor="let machinetass of pageOfItems; let i = index">
+              <td>{{ i + 1 }}</td>
+              <td>{{ machinetass.id_MACHINE_TASS }}</td>
+              <td>{{ machinetass.building_ID }}</td>
+              <td>{{ machinetass.floor }}</td>
+              <td>{{ machinetass.machine_NUMBER }}</td>
+              <td>{{ machinetass.type }}</td>
+              <td>{{ machinetass.work_CENTER_TEXT }}</td>
+              <td [ngClass]="{ 'bg-success': machinetass.status === 1, 'bg-danger': machinetass.status !== 1 }">
+                {{ machinetass.status === 1 ? 'Active' : 'Deactive' }}
+              </td>
+              <td>
+                <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(machinetass.id_MACHINE_TASS)">Update</button>
+                <button type="button" class="btn btn-md ml-3" [ngClass]="{ 'btn-danger': machinetass.status === 1, 'btn-success': machinetass.status !== 1 }" (click)="machinetass.status === 1 ? deleteData(machinetass) : activateData(machinetass)">
+                  {{ machinetass.status === 1 ? 'Delete' : 'Active' }}
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
       <!-- Pagination -->
       <nav>
         <ul class="pagination">
@@ -64,7 +71,7 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="addModalLabel">Edit Pattern</h5>
+        <h5 class="modal-title" id="addModalLabel">Edit Machine Tass</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -75,44 +82,37 @@
           <div class="form-group">
             <label for="building">Building</label>
             <input [(ngModel)]="editMachineTassObject.building_ID" type="text" class="form-control" id="building" formControlName="building" [ngClass]="{ 'is-invalid': editMachineTassForm.get('building').invalid && editMachineTassForm.get('building').touched }" />
-            <!-- Error message if plantName is empty -->
             <div *ngIf="editMachineTassForm.get('building').invalid && editMachineTassForm.get('building').touched" class="invalid-feedback">Building name is required.</div>
           </div>
           <div class="form-group">
             <label for="floor">Floor</label>
             <input [(ngModel)]="editMachineTassObject.floor" type="text" class="form-control" id="floor" formControlName="floor" [ngClass]="{ 'is-invalid': editMachineTassForm.get('floor').invalid && editMachineTassForm.get('floor').touched }" />
-            <!-- Error message if plantName is empty -->
             <div *ngIf="editMachineTassForm.get('floor').invalid && editMachineTassForm.get('floor').touched" class="invalid-feedback">Floor is required.</div>
           </div>
           <div class="form-group">
             <label for="machineNum">Machine Number</label>
             <input [(ngModel)]="editMachineTassObject.machine_NUMBER" type="text" class="form-control" id="machineNum" formControlName="machineNum" [ngClass]="{ 'is-invalid': editMachineTassForm.get('machineNum').invalid && editMachineTassForm.get('machineNum').touched }" />
-            <!-- Error message if plantName is empty -->
             <div *ngIf="editMachineTassForm.get('machineNum').invalid && editMachineTassForm.get('machineNum').touched" class="invalid-feedback">Machine Number is required.</div>
           </div>
           <div class="form-group">
             <label for="type">Type</label>
             <input [(ngModel)]="editMachineTassObject.type" type="text" class="form-control" id="type" formControlName="type" [ngClass]="{ 'is-invalid': editMachineTassForm.get('type').invalid && editMachineTassForm.get('type').touched }" />
-            <!-- Error message if plantName is empty -->
             <div *ngIf="editMachineTassForm.get('type').invalid && editMachineTassForm.get('type').touched" class="invalid-feedback">Type is required.</div>
           </div>
           <div class="form-group">
             <label for="wct">Work Center Text</label>
-            <input [(ngModel)]="editMachineTassObject.type" type="text" class="form-control" id="wct" formControlName="wct" [ngClass]="{ 'is-invalid': editMachineTassForm.get('wct').invalid && editMachineTassForm.get('wct').touched }" />
-            <!-- Error message if plantName is empty -->
+            <input [(ngModel)]="editMachineTassObject.work_CENTER_TEXT" type="text" class="form-control" id="wct" formControlName="wct" [ngClass]="{ 'is-invalid': editMachineTassForm.get('wct').invalid && editMachineTassForm.get('wct').touched }" />
             <div *ngIf="editMachineTassForm.get('wct').invalid && editMachineTassForm.get('wct').touched" class="invalid-feedback">Work Center Text is required.</div>
           </div>
         </form>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <!-- Disable Update button if form is invalid -->
         <button type="button" class="btn btn-primary" [disabled]="editMachineTassForm.invalid" (click)="updateMachineTass()">Update Machine Tass</button>
       </div>
     </div>
   </div>
 </div>
-
 <!-- Modal for Upload Excel -->
 <div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">

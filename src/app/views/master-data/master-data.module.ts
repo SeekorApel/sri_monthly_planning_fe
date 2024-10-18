@@ -10,7 +10,7 @@ import { MasterDataRoutingModule } from './master-data-routing.module';
 import { ViewPlantComponent } from './view-plant/view-plant.component';
 import { ViewProductComponent } from './view-product/view-product.component';
 import { ViewPatternComponent } from './view-pattern/view-pattern.component';
-import { ViewMachineTassComponent } from './view-tassmachine/view-tassmachine.component';
+import { ViewMachineTassComponent } from './view-machine-tass/view-machine-tass.component';
 import { ViewSettingComponent } from './view-setting/view-setting.component';
 import { ViewQuadrantComponent } from './view-quadrant/view-quadrant.component';
 import { ViewProductTypeComponent } from './view-product-type/view-product-type.component';
@@ -30,11 +30,12 @@ import { ViewCtCuringComponent } from './view-ct-curing/view-ct-curing.component
 import { ViewCtKapaComponent } from './view-ct-kapa/view-ct-kapa.component';
 import { ViewMachineExtrudingComponent } from './view-machine-extruding/view-machine-extruding.component';
 import { ViewDDeliveryScheduleComponent } from './view-d-deliveryschedule/view-d-deliveryschedule.component';
-import { ViewMachineAllowanceComponent } from './view-machine-allowance/view-machine-allowance.component';
+import { ViewMachineAllowenceComponent } from './view-machine-allowence/view-machine-allowence.component';
 import { ViewItemAssyComponent } from './view-item-assy/view-item-assy.component';
 import {MatSortModule} from '@angular/material/sort';
 import {MatTableModule} from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { ViewCuringSizeComponent } from './view-curing-size/view-curing-size.component';
 
 @NgModule({
   declarations: [
@@ -61,8 +62,9 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     ViewCtKapaComponent,
     ViewMachineExtrudingComponent,
     ViewDDeliveryScheduleComponent,
-    ViewMachineAllowanceComponent,
-    ViewItemAssyComponent
+    ViewMachineAllowenceComponent,
+    ViewItemAssyComponent,
+    ViewCuringSizeComponent
   ],
   imports: [
     CommonModule,

@@ -1,16 +1,17 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MachineTass } from 'src/app/models/tass-machine';
+import { MachineTass } from 'src/app/models/machine-tass';
 import { ApiResponse } from 'src/app/response/Response';
-import { MachineTassService } from 'src/app/services/master-data/tassMachine/tassMachine.service';
+import { MachineTassService } from 'src/app/services/master-data/machine-tass/machine-tass.service';
 import Swal from 'sweetalert2';
+import { saveAs } from 'file-saver';
 declare var $: any;
 import * as XLSX from 'xlsx';
 
 @Component({
-  selector: 'app-view-tassmachine',
-  templateUrl: './view-tassmachine.component.html',
-  styleUrls: ['./view-tassmachine.component.scss'],
+  selector: 'app-view-machine-tass',
+  templateUrl: './view-machine-tass.component.html',
+  styleUrls: ['./view-machine-tass.component.scss'],
 })
 export class ViewMachineTassComponent implements OnInit {
   //Variable Declaration
@@ -38,10 +39,10 @@ export class ViewMachineTassComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getAllPattern();
+    this.getAllMachineTass();
   }
 
-  getAllPattern(): void {
+  getAllMachineTass(): void {
     this.machineTassService.getAllMachineTass().subscribe(
       (response: ApiResponse<MachineTass[]>) => {
         this.machineTasss = response.data;
@@ -143,8 +144,20 @@ export class ViewMachineTassComponent implements OnInit {
   downloadTemplate() {
     const link = document.createElement('a');
     link.href = 'assets/Template Excel/Layout_Machine_Tass.xlsx';
-    link.download = 'Layout_Machine_Tass.xlsx';
+    link.download = 'Layout_Master_Machine_Tass.xlsx';
     link.click();
+  }
+  downloadExcel(): void {
+    this.machineTassService.exportMachineTassExcel().subscribe({
+      next: (response) => {
+        // Menggunakan nama file yang sudah ditentukan di backend
+        const filename = 'MACHINETASS_DATA.xlsx'; // Nama file bisa dinamis jika diperlukan
+        saveAs(response, filename); // Mengunduh file
+      },
+      error: (err) => {
+        console.error('Download error:', err);
+      },
+    });
   }
 
   onFileChange(event: Event) {
@@ -205,5 +218,30 @@ export class ViewMachineTassComponent implements OnInit {
         confirmButtonText: 'OK',
       });
     }
+  }
+  activateData(machineTass: MachineTass): void {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'This data Machine Tass will be Activated!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes',
+      cancelButtonText: 'No',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.machineTassService.activateMachineTass(machineTass).subscribe(
+          (response) => {
+            Swal.fire('Activated!', 'Data Machine Tass has been Activated', 'success').then(() => {
+              window.location.reload();
+            });
+          },
+          (err) => {
+            Swal.fire('Error!', 'Failed to Activated the Machine Tass.', 'error');
+          }
+        );
+      }
+    });
   }
 }

@@ -12,8 +12,6 @@ import { map, catchError } from 'rxjs/operators';
 })
 export class CtKapaService {
   //Isi tokenya
-  token: String =
-    'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBdXJlbCIsImV4cCI6MTcyODA1Nzk5Mn0.aVJTkZq5E2y3TC0z1tDAbvsDln1IeWm36cN5IvtibIydnEw4wfEpsxaP5dY6nt1l2N0Wl42XgdCC-sRZ1sytmw';
   constructor(private http: HttpClient) {}
 
   // Method untuk menambahkan header Authorization dengan token
@@ -24,17 +22,24 @@ export class CtKapaService {
   }
 
   getCtKapaById(idCtkapa: number): Observable<ApiResponse<CtKapa>> {
-    return this.http.get<ApiResponse<CtKapa>>(
-      environment.apiUrlWebAdmin + '/getCtKapaById/' + idCtkapa,
-      { headers: this.getHeaders() }
+    return this.http.get<ApiResponse<CtKapa>>(environment.apiUrlWebAdmin + '/getCtKapaById/' + idCtkapa, { headers: this.getHeaders() });
+  }
+  exportCtKapaExcel(): Observable<Blob> {
+    return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/exportCtKapaExcel`, { responseType: 'blob' as 'json' });
+  }
+  activateCtKapa(ctkapa: CtKapa): Observable<ApiResponse<CtKapa>> {
+    return this.http.post<ApiResponse<CtKapa>>(environment.apiUrlWebAdmin + '/restoreCtKapa', ctkapa, { headers: this.getHeaders() }).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((err) => {
+        return throwError(err);
+      })
     );
   }
 
   getAllCtKapa(): Observable<ApiResponse<CtKapa[]>> {
-    return this.http.get<ApiResponse<CtKapa[]>>(
-      environment.apiUrlWebAdmin + '/getAllCtKapa',
-      { headers: this.getHeaders() }
-    );
+    return this.http.get<ApiResponse<CtKapa[]>>(environment.apiUrlWebAdmin + '/getAllCtKapa', { headers: this.getHeaders() });
   }
 
   //Method Update plant
@@ -56,36 +61,24 @@ export class CtKapaService {
   }
 
   deleteCtKapa(ctkapa: CtKapa): Observable<ApiResponse<CtKapa>> {
-    return this.http
-      .post<ApiResponse<CtKapa>>(
-        environment.apiUrlWebAdmin + '/deleteCtKapa',
-        ctkapa,
-        { headers: this.getHeaders() }
-      )
-      .pipe(
-        map((response) => {
-          return response;
-        }),
-        catchError((err) => {
-          return throwError(err);
-        })
-      );
+    return this.http.post<ApiResponse<CtKapa>>(environment.apiUrlWebAdmin + '/deleteCtKapa', ctkapa, { headers: this.getHeaders() }).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((err) => {
+        return throwError(err);
+      })
+    );
   }
 
   uploadFileExcel(file: FormData): Observable<ApiResponse<CtKapa>> {
-    return this.http
-      .post<ApiResponse<CtKapa>>(
-        environment.apiUrlWebAdmin + '/saveCtKapasExcel',
-        file,
-        { headers: this.getHeaders() }
-      )
-      .pipe(
-        map((response) => {
-          return response;
-        }),
-        catchError((err) => {
-          return throwError(err);
-        })
-      );
+    return this.http.post<ApiResponse<CtKapa>>(environment.apiUrlWebAdmin + '/saveCtKapasExcel', file, { headers: this.getHeaders() }).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((err) => {
+        return throwError(err);
+      })
+    );
   }
 }

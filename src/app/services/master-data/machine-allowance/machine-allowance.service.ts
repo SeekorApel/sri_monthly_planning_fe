@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { machineAllowance } from 'src/app/models/machineAllowance';
+import { machineAllowence } from 'src/app/models/machineAllowance';
 import { ApiResponse } from 'src/app/response/Response';
 import { throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -10,11 +10,7 @@ import { map, catchError } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root',
 })
-export class machineAllowanceService {
-  //Isi tokenya
-  token: String =
-    'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBdXJlbCIsImV4cCI6MTcyODMwODA4M30.y03EN8mmoDGrL7FzHc5W7QDPLuAoVmD21CNXz4OrBMyci5OSMFW8urH69vONuD8YW87911-NUE2BvkFrpFYWhA';
-
+export class MachineAllowenceService {
   constructor(private http: HttpClient) {}
 
   // Method untuk menambahkan header Authorization dengan token
@@ -24,26 +20,20 @@ export class machineAllowanceService {
     });
   }
 
-  getMachineAllowanceById(idMachineAllowance: number): Observable<ApiResponse<machineAllowance>> {
-    return this.http.get<ApiResponse<machineAllowance>>(
-      environment.apiUrlWebAdmin + '/getMachineAllowenceById/' + idMachineAllowance,
-      { headers: this.getHeaders() }
-    );
+  getMachineAllowenceById(idMachineAllowence: number): Observable<ApiResponse<machineAllowence>> {
+    return this.http.get<ApiResponse<machineAllowence>>(environment.apiUrlWebAdmin + '/getMachineAllowenceById/' + idMachineAllowence, { headers: this.getHeaders() });
   }
 
-  getAllMachineAllowance(): Observable<ApiResponse<machineAllowance[]>> {
-    return this.http.get<ApiResponse<machineAllowance[]>>(
-      environment.apiUrlWebAdmin + '/getAllMachineAllowence',
-      { headers: this.getHeaders() }
-    );
+  getAllMachineAllowence(): Observable<ApiResponse<machineAllowence[]>> {
+    return this.http.get<ApiResponse<machineAllowence[]>>(environment.apiUrlWebAdmin + '/getAllMachineAllowence', { headers: this.getHeaders() });
   }
 
-  //Method Update plant
-  updateMachineAllowance(machineAllowance: machineAllowance): Observable<ApiResponse<machineAllowance>> {
+  //Method Update Machine Allowence
+  updateMachineAllowence(machineAllowence: machineAllowence): Observable<ApiResponse<machineAllowence>> {
     return this.http
-      .post<ApiResponse<machineAllowance>>(
+      .post<ApiResponse<machineAllowence>>(
         environment.apiUrlWebAdmin + '/updateMachineAllowence',
-        machineAllowance,
+        machineAllowence,
         { headers: this.getHeaders() } // Menyertakan header
       )
       .pipe(
@@ -56,37 +46,41 @@ export class machineAllowanceService {
       );
   }
 
-  deleteMachineAllowance(machineAllowance: machineAllowance): Observable<ApiResponse<machineAllowance>> {
-    return this.http
-      .post<ApiResponse<machineAllowance>>(
-        environment.apiUrlWebAdmin + '/deleteMachineAllowence',
-        machineAllowance,
-        { headers: this.getHeaders() }
-      )
-      .pipe(
-        map((response) => {
-          return response;
-        }),
-        catchError((err) => {
-          return throwError(err);
-        })
-      );
+  deleteMachineAllowence(machineAllowence: machineAllowence): Observable<ApiResponse<machineAllowence>> {
+    return this.http.post<ApiResponse<machineAllowence>>(environment.apiUrlWebAdmin + '/deleteMachineAllowence', machineAllowence, { headers: this.getHeaders() }).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((err) => {
+        return throwError(err);
+      })
+    );
   }
 
-  uploadFileExcel(file: FormData): Observable<ApiResponse<machineAllowance>> {
-    return this.http
-      .post<ApiResponse<machineAllowance>>(
-        environment.apiUrlWebAdmin + '/saveMachineAllowencesExcel',
-        file,
-        { headers: this.getHeaders() }
-      )
-      .pipe(
-        map((response) => {
-          return response;
-        }),
-        catchError((err) => {
-          return throwError(err);
-        })
-      );
+  activateMachineAllowence(machineAllowence: machineAllowence): Observable<ApiResponse<machineAllowence>> {
+    return this.http.post<ApiResponse<machineAllowence>>(environment.apiUrlWebAdmin + '/restoreMachineAllowence', machineAllowence, { headers: this.getHeaders() }).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((err) => {
+        return throwError(err);
+      })
+    );
   }
+
+  uploadFileExcel(file: FormData): Observable<ApiResponse<machineAllowence>> {
+    return this.http.post<ApiResponse<machineAllowence>>(environment.apiUrlWebAdmin + '/saveMachineAllowencesExcel', file, { headers: this.getHeaders() }).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((err) => {
+        return throwError(err);
+      })
+    );
+  }
+
+  exportMachineAllowenceExcel(): Observable<Blob> {
+    return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/exportMachineAllowenceExcel`, { responseType: 'blob' as 'json' });
+  }
+
 }

@@ -1,68 +1,85 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { IProductType } from 'src/app/models/ProductType';
-import { ApiResponse } from 'src/app/response/ApiResponse';
-import { tap } from 'rxjs/operators'; 
+import { ProductType } from 'src/app/models/ProductType';
+import { ApiResponse } from 'src/app/response/Response';
 import { throwError } from 'rxjs';
+import { environment } from 'src/environments/environment';
+import { map, catchError } from 'rxjs/operators';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ProductTypeService {
-  private baseUrl = 'http://localhost:8080';
-  private apiUrl = 'http://localhost:8080'; 
-
-
   constructor(private http: HttpClient) {}
 
-  getAllProductType(): Observable<ApiResponse<IProductType[]>> {
-    return this.http.get<ApiResponse<IProductType[]>>(`${this.baseUrl}/getAllProductType`);
+  // Method untuk menambahkan header Authorization dengan token
+  private getHeaders() {
+    return new HttpHeaders({
+      Authorization: `Bearer ${environment.token}`,
+    });
   }
-  
-//   getPlantById(id: number): Observable<DtoResponse> {
-//     return this.http.get<DtoResponse>(`${this.baseUrl}/getObatById/${id}`);
-//   }
 
-//   savePlant(obat: IObat): Observable<DtoResponse> {
-//     return this.http.post<DtoResponse>(`${this.baseUrl}/saveObat`, obat);
-//   }
+  getProductTypeById(idProductType: number): Observable<ApiResponse<ProductType>> {
+    return this.http.get<ApiResponse<ProductType>>(environment.apiUrlWebAdmin + '/getProductTypeById/' + idProductType, { headers: this.getHeaders() });
+  }
 
-//   updatePlant(id: number, data: IObat): Observable<any> {
-//     const updatedData = { ...data, idObat: id }; // Menambahkan idObat ke dalam body
-//     return this.http.post<any>(`${this.apiUrl}/updateObat`, updatedData);
-//   }
-   
+  getAllProductType(): Observable<ApiResponse<ProductType[]>> {
+    return this.http.get<ApiResponse<ProductType[]>>(environment.apiUrlWebAdmin + '/getAllProductType', { headers: this.getHeaders() });
+  }
 
-//   deletePlant(obat: { idObat: number }): Observable<ApiResponse<any>> {
-//     const url = `${this.apiUrl}/deleteObats`;
-//     return this.http.post<ApiResponse<any>>(url, obat);
-//   }  
+  //Method Update setting
+  updateProductType(productType: ProductType): Observable<ApiResponse<ProductType>> {
+    return this.http
+      .post<ApiResponse<ProductType>>(
+        environment.apiUrlWebAdmin + '/updateProductType',
+        productType,
+        { headers: this.getHeaders() } // Menyertakan header
+      )
+      .pipe(
+        map((response) => {
+          return response;
+        }),
+        catchError((err) => {
+          return throwError(err);
+        })
+      );
+  }
 
-signIn(userName: string, password: string): Observable<{ data: string }> {
-    return this.http.post<{ data: string }>(`${this.baseUrl}/signin`, {
-      userName,
-      password
-    }).pipe(
-      tap(response => {
-        // Store the token from the 'data' field in localStorage
-        localStorage.setItem('token', response.data);
+  deleteProductType(productType: ProductType): Observable<ApiResponse<ProductType>> {
+    return this.http.post<ApiResponse<ProductType>>(environment.apiUrlWebAdmin + '/deleteProductType', productType, { headers: this.getHeaders() }).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((err) => {
+        return throwError(err);
       })
     );
   }
-  
-  savePlantsExcelFile(formData: FormData): Observable<any> {
-    const token = localStorage.getItem('token'); // Retrieve the token
-    if (!token) {
-      console.error('Token is not available');
-      // Return an observable that emits an error
-      return throwError('Token is not available'); // Make sure to import throwError from 'rxjs'
-    }
-  
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${token}`
-    });
-  
-    return this.http.post(`${this.baseUrl}/savePlantsExcel`, formData, { headers });
+
+  activateProductType(productType: ProductType): Observable<ApiResponse<ProductType>> {
+    return this.http.post<ApiResponse<ProductType>>(environment.apiUrlWebAdmin + '/restoreProductType', productType, { headers: this.getHeaders() }).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((err) => {
+        return throwError(err);
+      })
+    );
+  }
+
+  uploadFileExcel(file: FormData): Observable<ApiResponse<ProductType>> {
+    return this.http.post<ApiResponse<ProductType>>(environment.apiUrlWebAdmin + '/saveProductTypeExcel', file, { headers: this.getHeaders() }).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((err) => {
+        return throwError(err);
+      })
+    );
+  }
+
+  exportProductTypeExcel(): Observable<Blob> {
+    return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/exportProductTypesExcel`, { responseType: 'blob' as 'json' });
   }
 }
