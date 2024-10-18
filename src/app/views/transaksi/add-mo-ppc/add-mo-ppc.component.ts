@@ -9,6 +9,7 @@ import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import { DetailMarketingOrder } from 'src/app/models/DetailMarketingOrder';
 import { ApiResponse } from 'src/app/response/Response';
+import { HeaderMarketingOrder } from 'src/app/models/HeaderMarketingOrder';
 declare var $: any;
 
 @Component({
@@ -57,37 +58,37 @@ export class AddMoPpcComponent implements OnInit {
   constructor(private router: Router, private fb: FormBuilder, private moService: MarketingOrderService) {
     this.formHeaderMo = this.fb.group({
       date: [new Date().toISOString().substring(0, 10)],
-      type: ['', Validators.required],
-      month_0: ['', Validators.required],
-      month_1: ['', []],
-      month_2: ['', []],
-      nwd_0: ['', Validators.required],
-      nwd_1: ['', Validators.required],
-      nwd_2: ['', Validators.required],
-      tl_ot_wd_0: ['', [Validators.required, Validators.min(0)]],
-      tt_ot_wd_0: ['', [Validators.required, Validators.min(0)]],
-      tl_ot_wd_1: ['', [Validators.required, Validators.min(0)]],
-      tt_ot_wd_1: ['', [Validators.required, Validators.min(0)]],
-      tl_ot_wd_2: ['', [Validators.required, Validators.min(0)]],
-      tt_ot_wd_2: ['', [Validators.required, Validators.min(0)]],
-      total_tlwd_0: ['', []],
-      total_ttwd_0: ['', []],
-      total_tlwd_1: ['', []],
-      total_ttwd_1: ['', []],
-      total_tlwd_2: ['', []],
-      total_ttwd_2: ['', []],
-      max_tube_capa_0: [10, [Validators.required, Validators.min(0)]],
-      max_tube_capa_1: [20, [Validators.required, Validators.min(0)]],
-      max_tube_capa_2: [30, [Validators.required, Validators.min(0)]],
-      max_capa_tl_0: [10, [Validators.required, Validators.min(0)]],
-      max_capa_tt_0: [20, [Validators.required, Validators.min(0)]],
-      max_capa_tl_1: [30, [Validators.required, Validators.min(0)]],
-      max_capa_tt_1: [10, [Validators.required, Validators.min(0)]],
-      max_capa_tl_2: [20, [Validators.required, Validators.min(0)]],
-      max_capa_tt_2: [30, [Validators.required, Validators.min(0)]],
-      upload_file_m0: [null, [Validators.required]],
-      upload_file_m1: [null, [Validators.required]],
-      upload_file_m2: [null, [Validators.required]],
+      type: [null, Validators.required],
+      month_0: [null, Validators.required],
+      month_1: [null, []],
+      month_2: [null, []],
+      nwd_0: [27.4, Validators.required],
+      nwd_1: [27.4, Validators.required],
+      nwd_2: [27.4, Validators.required],
+      tl_ot_wd_0: [3, [Validators.required, Validators.min(0)]],
+      tt_ot_wd_0: [3, [Validators.required, Validators.min(0)]],
+      tl_ot_wd_1: [3, [Validators.required, Validators.min(0)]],
+      tt_ot_wd_1: [3, [Validators.required, Validators.min(0)]],
+      tl_ot_wd_2: [3, [Validators.required, Validators.min(0)]],
+      tt_ot_wd_2: [3, [Validators.required, Validators.min(0)]],
+      total_tlwd_0: [30.4, []],
+      total_ttwd_0: [30.4, []],
+      total_tlwd_1: [30.4, []],
+      total_ttwd_1: [30.4, []],
+      total_tlwd_2: [30.4, []],
+      total_ttwd_2: [30.4, []],
+      max_tube_capa_0: [null, [Validators.required, Validators.min(0)]],
+      max_tube_capa_1: [null, [Validators.required, Validators.min(0)]],
+      max_tube_capa_2: [null, [Validators.required, Validators.min(0)]],
+      max_capa_tl_0: [null, [Validators.required, Validators.min(0)]],
+      max_capa_tt_0: [null, [Validators.required, Validators.min(0)]],
+      max_capa_tl_1: [null, [Validators.required, Validators.min(0)]],
+      max_capa_tt_1: [null, [Validators.required, Validators.min(0)]],
+      max_capa_tl_2: [null, [Validators.required, Validators.min(0)]],
+      max_capa_tt_2: [null, [Validators.required, Validators.min(0)]],
+      upload_file_m0: [null, []],
+      upload_file_m1: [null, []],
+      upload_file_m2: [null, []],
     });
 
     this.formHeaderMo.valueChanges.subscribe((values) => {
@@ -827,8 +828,28 @@ export class AddMoPpcComponent implements OnInit {
   }
 
   showDetailMo() {
-    this.fillTheTableMo();
-    this.isTableVisible = true;
+    if (this.formHeaderMo.invalid) {
+      // //Get all form controls that are invalid
+      // const invalidFields = [];
+      // const controls = this.formHeaderMo.controls;
+      // for (const name in controls) {
+      //   if (controls[name].invalid) {
+      //     invalidFields.push(name);
+      //   }
+      // }
+
+      // // Log invalid fields to the console
+      // console.log('Invalid fields:', invalidFields);
+      Swal.fire({
+        title: 'Incomplete Form',
+        text: 'Please fill in all required fields!',
+        icon: 'warning',
+        confirmButtonText: 'OK',
+      });
+    } else {
+      this.fillTheTableMo();
+      this.isTableVisible = true;
+    }
   }
 
   fillTheTableMo(): void {
@@ -857,35 +878,34 @@ export class AddMoPpcComponent implements OnInit {
 
   saveAllMo() {
     const workDay = [...this.workDay_M0, ...this.workDay_M1, ...this.workDay_M2];
-    // this.marketingOrder.revision = this.formHeaderMo.get('revision')?.value;
-    // this.marketingOrder.date_VALID = this.formHeaderMo.get('date')?.value;
-    // this.marketingOrder.type = this.formHeaderMo.get('type')?.value;
-    // this.marketingOrder.month_0 = new Date(this.formHeaderMo.get('month_0')?.value);
-    // this.marketingOrder.month_1 = new Date(this.formHeaderMo.get('month_1')?.value);
-    // this.marketingOrder.month_2 = new Date(this.formHeaderMo.get('month_2')?.value);
+    this.marketingOrder.dateValid = this.formHeaderMo.get('date')?.value;
+    this.marketingOrder.type = this.formHeaderMo.get('type')?.value;
+    this.marketingOrder.month0 = new Date(this.formHeaderMo.get('month_0')?.value);
+    this.marketingOrder.month1 = new Date(this.formHeaderMo.get('month_1')?.value);
+    this.marketingOrder.month2 = new Date(this.formHeaderMo.get('month_2')?.value);
 
     this.moService.saveMarketingOrder(this.marketingOrder).subscribe(
       (response) => {
-        const last_id_mo = response.data.moId;
+        const lastIdMo = response.data.moId;
         this.headerMo = [];
         for (let i = 0; i < 3; i++) {
           this.headerMo.push({
-            mo_ID: last_id_mo,
+            moId: lastIdMo,
             month: new Date(this.formHeaderMo.get(`month_${i}`)?.value),
-            wd_NORMAL: this.formHeaderMo.get(`nwd_${i}`)?.value,
-            wd_OT_TL: this.formHeaderMo.get(`tl_ot_wd_${i}`)?.value,
-            wd_OT_TT: this.formHeaderMo.get(`tt_ot_wd_${i}`)?.value,
-            total_WD_TL: this.formHeaderMo.get(`total_tlwd_${i}`)?.value,
-            total_WD_TT: this.formHeaderMo.get(`total_ttwd_${i}`)?.value,
-            max_CAP_TUBE: this.formHeaderMo.get(`max_tube_capa_${i}`)?.value,
-            max_CAP_TL: this.formHeaderMo.get(`max_capa_tl_${i}`)?.value,
-            max_CAP_TT: this.formHeaderMo.get(`max_capa_tt_${i}`)?.value,
+            wdNormal: this.formHeaderMo.get(`nwd_${i}`)?.value,
+            wdOtTl: this.formHeaderMo.get(`tl_ot_wd_${i}`)?.value,
+            wdOtTt: this.formHeaderMo.get(`tt_ot_wd_${i}`)?.value,
+            totalWdTl: this.formHeaderMo.get(`total_tlwd_${i}`)?.value,
+            totalWdTt: this.formHeaderMo.get(`total_ttwd_${i}`)?.value,
+            maxCapTube: this.formHeaderMo.get(`max_tube_capa_${i}`)?.value,
+            maxCapTl: this.formHeaderMo.get(`max_capa_tl_${i}`)?.value,
+            maxCapTt: this.formHeaderMo.get(`max_capa_tt_${i}`)?.value,
           });
         }
         this.moService.saveHeaderMarketingOrder(this.headerMo).subscribe(
           (response) => {
             this.marketingOrderTable.forEach((item) => {
-              item.moId = last_id_mo;
+              item.moId = lastIdMo;
             });
             this.moService.saveDetailRowMarketingOrder(this.marketingOrderTable).subscribe(
               (response) => {

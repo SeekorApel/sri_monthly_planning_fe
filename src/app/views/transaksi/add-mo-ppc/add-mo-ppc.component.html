@@ -31,17 +31,16 @@
             <tab heading="Month 1">
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="month-input">Month And Year</label>
-                <div class="col-md-9 d-flex align-items-center">
-                  <input class="form-control input-month-year" formControlName="month_0" type="month" />
-                  <button (click)="downloadTemplate_M1()" type="button" class="btn btn-primary ml-2"><i class="fa fa-download fa-lg"></i> Download Template</button>
+                <div class="col-md-9">
+                  <input class="form-control" formControlName="month_0" type="month" />
                 </div>
               </div>
-              <div class="form-group row">
+              <!-- <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="file-input">Upload File</label>
                 <div class="col-md-9 d-flex align-items-center">
                   <input class="form-control-file" formControlName="upload_file_m0" type="file" id="file-input" (change)="readExcel_M1($event)" />
                 </div>
-              </div>
+              </div> -->
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="text-input">Normal Working Day</label>
                 <div class="col-md-9">
@@ -97,18 +96,18 @@
             <tab heading="Month 2">
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="month-input">Month And Year</label>
-                <div class="col-md-9 d-flex align-items-center">
-                  <input class="form-control input-month-year" formControlName="month_1" type="month" [readOnly]="true" />
-                  <button (click)="downloadTemplate_M2()" type="button" class="btn btn-primary ml-2"><i class="fa fa-download fa-lg"></i> Download Template</button>
+                <div class="col-md-9">
+                  <input class="form-control" formControlName="month_1" type="month" [readOnly]="true" />
+                  <!-- <button (click)="downloadTemplate_M2()" type="button" class="btn btn-primary ml-2"><i class="fa fa-download fa-lg"></i> Download Template</button> -->
                 </div>
               </div>
-              <div class="form-group row">
+              <!-- <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="file-input">Upload File</label>
                 <div class="col-md-9 d-flex align-items-center">
                   <input class="form-control-file" [ngClass]="{ 'is-invalid': formHeaderMo.get('upload_file_m1')?.invalid && formHeaderMo.get('upload_file_m1')?.touched }" formControlName="upload_file_m1" type="file" id="file-input" (change)="readExcel_M2($event)" />
                   <div *ngIf="formHeaderMo.get('upload_file_m1')?.invalid && formHeaderMo.get('upload_file_m1')?.touched" class="invalid-feedback">Upload File is required.</div>
                 </div>
-              </div>
+              </div> -->
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="text-input">Normal Working Day</label>
                 <div class="col-md-9">
@@ -164,18 +163,18 @@
             <tab heading="Month 3">
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="month-input">Month And Year</label>
-                <div class="col-md-9 d-flex align-items-center">
-                  <input class="form-control input-month-year" formControlName="month_2" type="month" [readOnly]="true" />
-                  <button (click)="downloadTemplate_M3()" type="button" class="btn btn-primary ml-2"><i class="fa fa-download fa-lg"></i> Download Template</button>
+                <div class="col-md-9">
+                  <input class="form-control" formControlName="month_2" type="month" [readOnly]="true" />
+                  <!-- <button (click)="downloadTemplate_M3()" type="button" class="btn btn-primary ml-2"><i class="fa fa-download fa-lg"></i> Download Template</button> -->
                 </div>
               </div>
-              <div class="form-group row">
+              <!-- <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="file-input">Upload File</label>
                 <div class="col-md-9 d-flex align-items-center">
                   <input class="form-control-file" [ngClass]="{ 'is-invalid': formHeaderMo.get('upload_file_m2')?.invalid && formHeaderMo.get('upload_file_m2')?.touched }" formControlName="upload_file_m2" type="file" id="file-input" (change)="readExcel_M3($event)" />
                   <div *ngIf="formHeaderMo.get('upload_file_m2')?.invalid && formHeaderMo.get('upload_file_m2')?.touched" class="invalid-feedback">Upload File is required.</div>
                 </div>
-              </div>
+              </div> -->
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="text-input">Normal Working Day</label>
                 <div class="col-md-9">
@@ -275,13 +274,13 @@
                 <td>{{ mo.partNumber }}</td>
                 <td>{{ mo.description }}</td>
                 <td>{{ mo.machineType }}</td>
-                <td>{{ mo.kapaPerMould | number : '1.0-0' }}</td>
-                <td>{{ mo.numberOfMould | number : '1.0-0' }}</td>
+                <td>{{ mo.capacity | number : '1.0-0' }}</td>
+                <td>{{ mo.qtyPerMould | number : '1.0-0' }}</td>
                 <td>{{ mo.qtyPerRak | number : '1.0-0' }}</td>
                 <td>{{ mo.minOrder | number : '1.0-0' }}</td>
-                <td>{{ mo.kapasitasMaksimum1 | number : '1.0-0' }}</td>
-                <td>{{ mo.kapasitasMaksimum2 | number : '1.0-0' }}</td>
-                <td>{{ mo.kapasitasMaksimum3 | number : '1.0-0' }}</td>
+                <td>{{ mo.maxCapMonth0 | number : '1.0-0' }}</td>
+                <td>{{ mo.maxCapMonth1 | number : '1.0-0' }}</td>
+                <td>{{ mo.maxCapMonth2 | number : '1.0-0' }}</td>
               </tr>
             </tbody>
           </table>

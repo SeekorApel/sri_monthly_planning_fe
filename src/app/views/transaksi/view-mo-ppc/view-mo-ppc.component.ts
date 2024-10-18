@@ -21,8 +21,7 @@ export class ViewMoPpcComponent implements OnInit {
   dateUtil: typeof ParsingDate;
 
   // Pagination
-  // pageOfItems: Array<any>;
-  pageOfItems: any[] = [];
+  pageOfItems: Array<any>;
   pageSize: number = 5;
   totalPages: number = 5;
 
@@ -66,7 +65,7 @@ export class ViewMoPpcComponent implements OnInit {
   }
 
   navigateToDetail(idMo: String) {
-    console.log(idMo)
+    console.log(idMo);
     this.router.navigate(['/transaksi/detail-mo-ppc', idMo]);
   }
 

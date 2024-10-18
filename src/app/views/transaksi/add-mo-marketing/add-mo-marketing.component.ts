@@ -129,44 +129,44 @@ export class AddMoMarketingComponent implements OnInit {
     this.headerMarketingOrder = data.dataHeaderMo;
     this.detailMarketingOrder = data.dataDetailMo;
 
-    this.formHeaderMo.patchValue({
-      date: new Date(data.datevalid).toISOString().split('T')[0],
-      type: data.type,
-      revision: data.revision,
+    // this.formHeaderMo.patchValue({
+    //   date: new Date(data.datevalid).toISOString().split('T')[0],
+    //   type: data.type,
+    //   revision: data.revision,
 
-      // Header Month 1
-      month_0: this.formatDateToString(this.headerMarketingOrder[1].month),
-      nwd_0: this.headerMarketingOrder[1].wd_NORMAL,
-      tl_ot_wd_0: this.headerMarketingOrder[1].wd_OT_TL,
-      tt_ot_wd_0: this.headerMarketingOrder[1].wd_OT_TT,
-      total_tlwd_0: this.headerMarketingOrder[1].total_WD_TL,
-      total_ttwd_0: this.headerMarketingOrder[1].total_WD_TT,
-      max_tube_capa_0: this.headerMarketingOrder[1].max_CAP_TUBE,
-      max_capa_tl_0: this.headerMarketingOrder[1].max_CAP_TL,
-      max_capa_tt_0: this.headerMarketingOrder[1].max_CAP_TT,
+    //   // Header Month 1
+    //   month_0: this.formatDateToString(this.headerMarketingOrder[1].month),
+    //   nwd_0: this.headerMarketingOrder[1].wd_NORMAL,
+    //   tl_ot_wd_0: this.headerMarketingOrder[1].wd_OT_TL,
+    //   tt_ot_wd_0: this.headerMarketingOrder[1].wd_OT_TT,
+    //   total_tlwd_0: this.headerMarketingOrder[1].total_WD_TL,
+    //   total_ttwd_0: this.headerMarketingOrder[1].total_WD_TT,
+    //   max_tube_capa_0: this.headerMarketingOrder[1].max_CAP_TUBE,
+    //   max_capa_tl_0: this.headerMarketingOrder[1].max_CAP_TL,
+    //   max_capa_tt_0: this.headerMarketingOrder[1].max_CAP_TT,
 
-      // Header Month 2
-      month_1: this.formatDateToString(this.headerMarketingOrder[2].month),
-      nwd_1: this.headerMarketingOrder[2].wd_NORMAL,
-      tl_ot_wd_1: this.headerMarketingOrder[2].wd_OT_TL,
-      tt_ot_wd_1: this.headerMarketingOrder[2].wd_OT_TT,
-      total_tlwd_1: this.headerMarketingOrder[2].total_WD_TL,
-      total_ttwd_1: this.headerMarketingOrder[2].total_WD_TT,
-      max_tube_capa_1: this.headerMarketingOrder[2].max_CAP_TUBE,
-      max_capa_tl_1: this.headerMarketingOrder[2].max_CAP_TL,
-      max_capa_tt_1: this.headerMarketingOrder[2].max_CAP_TT,
+    //   // Header Month 2
+    //   month_1: this.formatDateToString(this.headerMarketingOrder[2].month),
+    //   nwd_1: this.headerMarketingOrder[2].wd_NORMAL,
+    //   tl_ot_wd_1: this.headerMarketingOrder[2].wd_OT_TL,
+    //   tt_ot_wd_1: this.headerMarketingOrder[2].wd_OT_TT,
+    //   total_tlwd_1: this.headerMarketingOrder[2].total_WD_TL,
+    //   total_ttwd_1: this.headerMarketingOrder[2].total_WD_TT,
+    //   max_tube_capa_1: this.headerMarketingOrder[2].max_CAP_TUBE,
+    //   max_capa_tl_1: this.headerMarketingOrder[2].max_CAP_TL,
+    //   max_capa_tt_1: this.headerMarketingOrder[2].max_CAP_TT,
 
-      // Header Month 3
-      month_2: this.formatDateToString(this.headerMarketingOrder[0].month),
-      nwd_2: this.headerMarketingOrder[0].wd_NORMAL,
-      tl_ot_wd_2: this.headerMarketingOrder[0].wd_OT_TL,
-      tt_ot_wd_2: this.headerMarketingOrder[0].wd_OT_TT,
-      total_tlwd_2: this.headerMarketingOrder[0].total_WD_TL,
-      total_ttwd_2: this.headerMarketingOrder[0].total_WD_TT,
-      max_tube_capa_2: this.headerMarketingOrder[0].max_CAP_TUBE,
-      max_capa_tl_2: this.headerMarketingOrder[0].max_CAP_TL,
-      max_capa_tt_2: this.headerMarketingOrder[0].max_CAP_TT,
-    });
+    //   // Header Month 3
+    //   month_2: this.formatDateToString(this.headerMarketingOrder[0].month),
+    //   nwd_2: this.headerMarketingOrder[0].wd_NORMAL,
+    //   tl_ot_wd_2: this.headerMarketingOrder[0].wd_OT_TL,
+    //   tt_ot_wd_2: this.headerMarketingOrder[0].wd_OT_TT,
+    //   total_tlwd_2: this.headerMarketingOrder[0].total_WD_TL,
+    //   total_ttwd_2: this.headerMarketingOrder[0].total_WD_TT,
+    //   max_tube_capa_2: this.headerMarketingOrder[0].max_CAP_TUBE,
+    //   max_capa_tl_2: this.headerMarketingOrder[0].max_CAP_TL,
+    //   max_capa_tt_2: this.headerMarketingOrder[0].max_CAP_TT,
+    // });
 
     this.updateMonthNames(this.headerMarketingOrder);
   }
@@ -204,78 +204,78 @@ export class AddMoMarketingComponent implements OnInit {
     const month3 = this.formatMonthToString(this.headerMarketingOrder[0].month);
 
     const item = this.detailMarketingOrder[0];
-    if (item.sf_month_0 < item.minOrder) {
-      Swal.fire({
-        title: 'Warning!',
-        text: `Item ${item.description} in ${month1} cannot be less than the Minimum Order.`,
-        icon: 'warning',
-        confirmButtonText: 'OK',
-      });
-    }
-    if (item.sf_month_1 < item.minOrder) {
-      Swal.fire({
-        title: 'Warning!',
-        text: `Item ${item.description} in ${month2} cannot be less than the Minimum Order.`,
-        icon: 'warning',
-        confirmButtonText: 'OK',
-      });
-    }
-    if (item.sf_month_2 < item.minOrder) {
-      Swal.fire({
-        title: 'Warning!',
-        text: `Item ${item.description} in ${month3} cannot be less than the Minimum Order.`,
-        icon: 'warning',
-        confirmButtonText: 'OK',
-      });
-    }
-    if (item.sf_month_0 > item.kapasitasMaksimum1) {
-      Swal.fire({
-        title: 'Warning!',
-        text: `Sales Forecast Item ${item.description} in ${month1} cannot be more than the Maximum capacity in ${month1}.`,
-        icon: 'warning',
-        confirmButtonText: 'OK',
-      });
-    }
-    if (item.sf_month_1 > item.kapasitasMaksimum2) {
-      Swal.fire({
-        title: 'Warning!',
-        text: `Sales Forecast Item ${item.description} in ${month2} cannot be more than the Maximum capacity in ${month2}.`,
-        icon: 'warning',
-        confirmButtonText: 'OK',
-      });
-    }
-    if (item.sf_month_2 > item.kapasitasMaksimum3) {
-      Swal.fire({
-        title: 'Warning!',
-        text: `Sales Forecast Item ${item.description} in ${month3} cannot be more than the Maximum capacity in ${month3}.`,
-        icon: 'warning',
-        confirmButtonText: 'OK',
-      });
-    }
-    if (item.mo_month_0 > item.kapasitasMaksimum1) {
-      Swal.fire({
-        title: 'Warning!',
-        text: `Marketing Order Item ${item.description} in ${month1} cannot be more than the Maximum capacity in ${month1}.`,
-        icon: 'warning',
-        confirmButtonText: 'OK',
-      });
-    }
-    if (item.mo_month_1 > item.kapasitasMaksimum2) {
-      Swal.fire({
-        title: 'Warning!',
-        text: `Marketing Order Item ${item.description} in ${month2} cannot be more than the Maximum capacity in ${month2}.`,
-        icon: 'warning',
-        confirmButtonText: 'OK',
-      });
-    }
-    if (item.mo_month_2 > item.kapasitasMaksimum3) {
-      Swal.fire({
-        title: 'Warning!',
-        text: `Marketing Order Item ${item.description} in ${month3} cannot be more than the Maximum capacity in ${month3}.`,
-        icon: 'warning',
-        confirmButtonText: 'OK',
-      });
-    }
+    // if (item.sf_month_0 < item.minOrder) {
+    //   Swal.fire({
+    //     title: 'Warning!',
+    //     text: `Item ${item.description} in ${month1} cannot be less than the Minimum Order.`,
+    //     icon: 'warning',
+    //     confirmButtonText: 'OK',
+    //   });
+    // }
+    // if (item.sf_month_1 < item.minOrder) {
+    //   Swal.fire({
+    //     title: 'Warning!',
+    //     text: `Item ${item.description} in ${month2} cannot be less than the Minimum Order.`,
+    //     icon: 'warning',
+    //     confirmButtonText: 'OK',
+    //   });
+    // }
+    // if (item.sf_month_2 < item.minOrder) {
+    //   Swal.fire({
+    //     title: 'Warning!',
+    //     text: `Item ${item.description} in ${month3} cannot be less than the Minimum Order.`,
+    //     icon: 'warning',
+    //     confirmButtonText: 'OK',
+    //   });
+    // }
+    // if (item.sf_month_0 > item.kapasitasMaksimum1) {
+    //   Swal.fire({
+    //     title: 'Warning!',
+    //     text: `Sales Forecast Item ${item.description} in ${month1} cannot be more than the Maximum capacity in ${month1}.`,
+    //     icon: 'warning',
+    //     confirmButtonText: 'OK',
+    //   });
+    // }
+    // if (item.sf_month_1 > item.kapasitasMaksimum2) {
+    //   Swal.fire({
+    //     title: 'Warning!',
+    //     text: `Sales Forecast Item ${item.description} in ${month2} cannot be more than the Maximum capacity in ${month2}.`,
+    //     icon: 'warning',
+    //     confirmButtonText: 'OK',
+    //   });
+    // }
+    // if (item.sf_month_2 > item.kapasitasMaksimum3) {
+    //   Swal.fire({
+    //     title: 'Warning!',
+    //     text: `Sales Forecast Item ${item.description} in ${month3} cannot be more than the Maximum capacity in ${month3}.`,
+    //     icon: 'warning',
+    //     confirmButtonText: 'OK',
+    //   });
+    // }
+    // if (item.mo_month_0 > item.kapasitasMaksimum1) {
+    //   Swal.fire({
+    //     title: 'Warning!',
+    //     text: `Marketing Order Item ${item.description} in ${month1} cannot be more than the Maximum capacity in ${month1}.`,
+    //     icon: 'warning',
+    //     confirmButtonText: 'OK',
+    //   });
+    // }
+    // if (item.mo_month_1 > item.kapasitasMaksimum2) {
+    //   Swal.fire({
+    //     title: 'Warning!',
+    //     text: `Marketing Order Item ${item.description} in ${month2} cannot be more than the Maximum capacity in ${month2}.`,
+    //     icon: 'warning',
+    //     confirmButtonText: 'OK',
+    //   });
+    // }
+    // if (item.mo_month_2 > item.kapasitasMaksimum3) {
+    //   Swal.fire({
+    //     title: 'Warning!',
+    //     text: `Marketing Order Item ${item.description} in ${month3} cannot be more than the Maximum capacity in ${month3}.`,
+    //     icon: 'warning',
+    //     confirmButtonText: 'OK',
+    //   });
+    // }
 
     this.moService.addMarketingOrderMarketing(this.detailMarketingOrder).subscribe(
       (response) => {
@@ -303,7 +303,7 @@ export class AddMoMarketingComponent implements OnInit {
     // });
   }
 
-  navigateToView(){
+  navigateToView() {
     this.router.navigate(['/transaksi/view-mo-marketing']);
   }
 }
