@@ -26,21 +26,22 @@
                 <th class="align-middle" style="min-width: 150px">Month 1</th>
                 <th class="align-middle" style="min-width: 150px">Month 2</th>
                 <th class="align-middle" style="min-width: 150px">Month 3</th>
-                <th class="align-middle" style="min-width: 250px">Action</th>
+                <th class="align-middle" style="min-width: 100px">Action</th>
               </tr>
             </thead>
             <tbody>
               <tr *ngFor="let mo of marketingOrders; let i = index" align="center">
                 <td>{{ i + 1 }}</td>
-                <td>{{ mo.mo_ID }}</td>
+                <td>{{ mo.moId }}</td>
                 <td>{{ mo.type }}</td>
-                <td>{{ dateUtil.parseFullDate(mo.date_VALID) }}</td>
-                <td>{{ mo.revision }}</td>
-                <td>{{ dateUtil.parseMonthYear(mo.month_0) }}</td>
-                <td>{{ dateUtil.parseMonthYear(mo.month_1) }}</td>
-                <td>{{ dateUtil.parseMonthYear(mo.month_2) }}</td>
+                <td>{{ dateUtil.parseFullDate(mo.dateValid) }}</td>
+                <td>{{ mo.revisionPpc }}</td>
+                <td>{{ mo.revisionMarketing }}</td>
+                <td>{{ dateUtil.parseMonthYear(mo.month0) }}</td>
+                <td>{{ dateUtil.parseMonthYear(mo.month1) }}</td>
+                <td>{{ dateUtil.parseMonthYear(mo.month2) }}</td>
                 <td>
-                  <button *ngIf="mo.statusFilled === 1" type="button" class="btn btn-md btn-success ml-2">Add</button>
+                  <button *ngIf="mo.statusFilled === 1" type="button" (click)="navigateToAdd(mo.moId)" class="btn btn-md btn-success ml-2">Add</button>
                   <button *ngIf="mo.statusFilled === 3" type="button" class="btn btn-md btn-warning ml-2">Edit</button>
                   <button *ngIf="mo.statusFilled === 4" type="button" class="btn btn-md btn-secondary ml-2">Detail</button>
                 </td>
