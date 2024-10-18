@@ -12,7 +12,6 @@ import { map, catchError } from 'rxjs/operators';
 })
 export class DDeliveryScheduleService {
   //Isi tokenya
-  token: String = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBdXJlbCIsImV4cCI6MTcyODQ3OTYyNH0.ac7kGJxqMLAs4W7Sk4n3WKVC-LafKMuR_COtCM5XVMnbxV1zqgbEz5dKGu8LKRoXkLjNg7YcT7Jx5dVUWKbVXA';
   constructor(private http: HttpClient) {}
 
   // Method untuk menambahkan header Authorization dengan token
@@ -47,6 +46,19 @@ export class DDeliveryScheduleService {
         })
       );
   }
+  activateDdeliverySchedule(dDeliverySchedule: DDeliverySchedule): Observable<ApiResponse<DDeliverySchedule>> {
+    return this.http.post<ApiResponse<DDeliverySchedule>>(environment.apiUrlWebAdmin + '/restoreDDeliverySchedule', dDeliverySchedule, { headers: this.getHeaders() }).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((err) => {
+        return throwError(err);
+      })
+    );
+  }
+  exportDDeliveryScheduleExcel(): Observable<Blob> {
+    return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/exportDDeliveryScheduleExcel`, { responseType: 'blob' as 'json' });
+  }
 
   deleteDDeliverySchedule(dDeliverySchedule: DDeliverySchedule): Observable<ApiResponse<DDeliverySchedule>> {
     return this.http.post<ApiResponse<DDeliverySchedule>>(environment.apiUrlWebAdmin + '/deleteDDeliverySchedule', dDeliverySchedule, { headers: this.getHeaders() }).pipe(
@@ -60,7 +72,7 @@ export class DDeliveryScheduleService {
   }
 
   uploadFileExcel(file: FormData): Observable<ApiResponse<DDeliverySchedule>> {
-    return this.http.post<ApiResponse<DDeliverySchedule>>(environment.apiUrlWebAdmin + '/saveDDeliverySchedule', file, { headers: this.getHeaders() }).pipe(
+    return this.http.post<ApiResponse<DDeliverySchedule>>(environment.apiUrlWebAdmin + '/saveDDeliverySchedulesExcel', file, { headers: this.getHeaders() }).pipe(
       map((response) => {
         return response;
       }),

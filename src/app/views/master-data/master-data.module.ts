@@ -10,7 +10,7 @@ import { MasterDataRoutingModule } from './master-data-routing.module';
 import { ViewPlantComponent } from './view-plant/view-plant.component';
 import { ViewProductComponent } from './view-product/view-product.component';
 import { ViewPatternComponent } from './view-pattern/view-pattern.component';
-import { ViewMachineTassComponent } from './view-tassmachine/view-tassmachine.component';
+import { ViewMachineTassComponent } from './view-machine-tass/view-machine-tass.component';
 import { ViewSettingComponent } from './view-setting/view-setting.component';
 import { ViewQuadrantComponent } from './view-quadrant/view-quadrant.component';
 import { ViewProductTypeComponent } from './view-product-type/view-product-type.component';
@@ -33,7 +33,6 @@ import { ViewDDeliveryScheduleComponent } from './view-d-deliveryschedule/view-d
 import { ViewMachineAllowenceComponent } from './view-machine-allowence/view-machine-allowence.component';
 import { ViewItemAssyComponent } from './view-item-assy/view-item-assy.component';
 import { ViewCuringSizeComponent } from './view-curing-size/view-curing-size.component';
-
 
 @NgModule({
   declarations: [

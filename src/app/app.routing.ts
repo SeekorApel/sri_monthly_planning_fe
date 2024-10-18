@@ -22,7 +22,7 @@ import { ViewBDistanceComponent } from './views/master-data/view-bdistance/view-
 import { ViewQDistanceComponent } from './views/master-data/view-qdistance/view-qdistance.component';
 import { ViewPatternComponent } from './views/master-data/view-pattern/view-pattern.component';
 import { ViewProductComponent } from './views/master-data/view-product/view-product.component';
-import { ViewMachineTassComponent } from './views/master-data/view-tassmachine/view-tassmachine.component';
+import { ViewMachineTassComponent } from './views/master-data/view-machine-tass/view-machine-tass.component';
 import { ViewRoutingMachineComponent } from './views/master-data/view-routing-machine/view-routing-machine.component';
 import { ViewDeliveryScheduleComponent } from './views/master-data/view-delivery-schedule/view-delivery-schedule.component';
 import { ViewMachineCuringTypeComponent } from './views/master-data/view-machine-curing-type/view-machine-curing-type.component';
@@ -36,6 +36,9 @@ import { AddMonthlyPlanningComponent } from './views/transaksi/add-monthly-plann
 import { ViewCtCuringComponent } from './views/master-data/view-ct-curing/view-ct-curing.component';
 import { ViewMachineAllowenceComponent } from './views/master-data/view-machine-allowence/view-machine-allowence.component';
 import { ViewItemAssyComponent } from './views/master-data/view-item-assy/view-item-assy.component';
+import { ViewMachineExtrudingComponent } from './views/master-data/view-machine-extruding/view-machine-extruding.component';
+import { ViewCtKapaComponent } from './views/master-data/view-ct-kapa/view-ct-kapa.component';
+import { ViewDDeliveryScheduleComponent } from './views/master-data/view-d-deliveryschedule/view-d-deliveryschedule.component';
 import { ViewMachineExtrudingComponent } from './views/master-data/view-machine-extruding/view-machine-extruding.component'
 import { ViewCtKapaComponent } from './views/master-data/view-ct-kapa/view-ct-kapa.component'
 import { ViewDDeliveryScheduleComponent } from './views/master-data/view-d-deliveryschedule/view-d-deliveryschedule.component'
@@ -199,10 +202,10 @@ export const routes: Routes = [
         },
       },
       {
-        path: 'master-data/view-tassMachine',
+        path: 'master-data/view-machine-tass',
         component: ViewMachineTassComponent,
         data: {
-          title: 'Master Data / View Machine',
+          title: 'Master Data / View Machine Tass',
         },
       },
       {

@@ -12,8 +12,6 @@ import { map, catchError } from 'rxjs/operators';
 })
 export class MachineCuringTypeService {
   //Isi tokenya
-  token: String =
-    'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBdXJlbCIsImV4cCI6MTcyNzk2MjczMX0.3qeq8OusdWu9a9IyjGZY-nwx97qWsaJw2ga2DUHqxcN35iLPV9wi8ZqEX48ptxQ0BbtYnWxc7Img6pumz_JJ8w';
   constructor(private http: HttpClient) {}
 
   // Method untuk menambahkan header Authorization dengan token
@@ -22,19 +20,26 @@ export class MachineCuringTypeService {
       Authorization: `Bearer ${environment.token}`,
     });
   }
+  activateMct(mct: MachineCuringType): Observable<ApiResponse<MachineCuringType>> {
+    return this.http.post<ApiResponse<MachineCuringType>>(environment.apiUrlWebAdmin + '/restoreMachineCuringType', mct, { headers: this.getHeaders() }).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((err) => {
+        return throwError(err);
+      })
+    );
+  }
+  exportMctExcel(): Observable<Blob> {
+    return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/exportMachineCuringTypeexcel`, { responseType: 'blob' as 'json' });
+  }
 
   getMctById(idMct: number): Observable<ApiResponse<MachineCuringType>> {
-    return this.http.get<ApiResponse<MachineCuringType>>(
-      environment.apiUrlWebAdmin + '/getMachineCuringTypeById/' + idMct,
-      { headers: this.getHeaders() }
-    );
+    return this.http.get<ApiResponse<MachineCuringType>>(environment.apiUrlWebAdmin + '/getMachineCuringTypeById/' + idMct, { headers: this.getHeaders() });
   }
 
   getAllMCT(): Observable<ApiResponse<MachineCuringType[]>> {
-    return this.http.get<ApiResponse<MachineCuringType[]>>(
-      environment.apiUrlWebAdmin + '/getAllMachineCuringType',
-      { headers: this.getHeaders() }
-    );
+    return this.http.get<ApiResponse<MachineCuringType[]>>(environment.apiUrlWebAdmin + '/getAllMachineCuringType', { headers: this.getHeaders() });
   }
 
   //Method Update plant
@@ -56,36 +61,37 @@ export class MachineCuringTypeService {
   }
 
   deleteMct(mct: MachineCuringType): Observable<ApiResponse<MachineCuringType>> {
-    return this.http
-      .post<ApiResponse<MachineCuringType>>(
-        environment.apiUrlWebAdmin + '/deleteMachineCuringType',
-        mct,
-        { headers: this.getHeaders() }
-      )
-      .pipe(
-        map((response) => {
-          return response;
-        }),
-        catchError((err) => {
-          return throwError(err);
-        })
-      );
+    return this.http.post<ApiResponse<MachineCuringType>>(environment.apiUrlWebAdmin + '/deleteMachineCuringType', mct, { headers: this.getHeaders() }).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((err) => {
+        return throwError(err);
+      })
+    );
   }
 
   uploadFileExcel(file: FormData): Observable<ApiResponse<MachineCuringType>> {
-    return this.http
-      .post<ApiResponse<MachineCuringType>>(
-        environment.apiUrlWebAdmin + '/saveMachineCuringTypeExcel',
-        file,
-        { headers: this.getHeaders() }
-      )
-      .pipe(
-        map((response) => {
-          return response;
-        }),
-        catchError((err) => {
-          return throwError(err);
-        })
-      );
+    return this.http.post<ApiResponse<MachineCuringType>>(environment.apiUrlWebAdmin + '/saveMachineCuringTypeExcel', file, { headers: this.getHeaders() }).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((err) => {
+        return throwError(err);
+      })
+    );
+  }
+  exportProductExcel(): Observable<Blob> {
+    return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/exportMachineCuringTypeexcel`, { responseType: 'blob' as 'json' });
+  }
+  activateProduct(MCT: MachineCuringType): Observable<ApiResponse<MachineCuringType>> {
+    return this.http.post<ApiResponse<MachineCuringType>>(environment.apiUrlWebAdmin + '/restoreMachineCuringType', MCT, { headers: this.getHeaders() }).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((err) => {
+        return throwError(err);
+      })
+    );
   }
 }

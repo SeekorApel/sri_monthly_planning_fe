@@ -15,36 +15,43 @@
         <!-- Right side: Download Template and Export Excel buttons -->
         <div>
           <button type="button" class="btn btn-primary ml-2" (click)="downloadTemplate()"><i class="fa fa-download fa-lg"></i> Download Template</button>
+          <button type="button" class="btn btn-primary ml-2" (click)="downloadExcel()"><i class="fa fa-download fa-lg"></i> Export Excel</button>
           <button type="button" class="btn btn-success ml-2" data-toggle="modal" data-target="#uploadModal"><i class="fa fa-file-excel-o fa-lg"></i> Upload Excel</button>
         </div>
       </div>
 
       <!-- Table -->
-      <table class="table table-striped">
-        <thead>
-          <tr>
-            <th>No</th>
-            <th>Code</th>
-            <th>Setting ID</th>
-            <th>Description</th>
-            <th>Status</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let mtt of pageOfItems; let i = index">
-            <td>{{ i + 1 }}</td>
-            <td>{{ mtt.machinetasstype_ID }}</td>
-            <td>{{ mtt.setting_ID }}</td>
-            <td>{{ mtt.description }}</td>
-            <td>{{ mtt.status === 1 ? 'Active' : 'Deactive' }}</td>
-            <td>
-              <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(mtt.machinetasstype_ID)">Update</button>
-              <button type="button" class="btn btn-md btn-danger ml-2" (click)="deleteData(mtt)">Delete</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="table-responsive">
+        <table class="table table-bordered table-striped table-sm" style="table-layout: auto">
+          <thead align="center">
+            <tr>
+              <th>No</th>
+              <th>Code</th>
+              <th>Setting ID</th>
+              <th>Description</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let mtt of pageOfItems; let i = index">
+              <td>{{ i + 1 }}</td>
+              <td>{{ mtt.machinetasstype_ID }}</td>
+              <td>{{ mtt.setting_ID }}</td>
+              <td>{{ mtt.description }}</td>
+              <td [ngClass]="{ 'bg-success': mtt.status === 1, 'bg-danger': mtt.status !== 1 }">
+                {{ mtt.status === 1 ? 'Active' : 'Deactive' }}
+              </td>
+              <td align="center">
+                <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(mtt.machinetasstype_ID)">Update</button>
+                <button type="button" class="btn btn-md ml-2" [ngClass]="{ 'btn-danger': mtt.status === 1, 'btn-success': mtt.status !== 1 }" (click)="mtt.status === 1 ? deleteData(mtt) : activateData(mtt)">
+                  {{ mtt.status === 1 ? 'Delete' : 'Active' }}
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
       <!-- Pagination -->
       <nav>
         <ul class="pagination">

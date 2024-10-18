@@ -21,6 +21,16 @@ export class ProductService {
       Authorization: `Bearer ${environment.token}`,
     });
   }
+  activateProduct(product: Product): Observable<ApiResponse<Product>> {
+    return this.http.post<ApiResponse<Product>>(environment.apiUrlWebAdmin + '/restoreProduct', product, { headers: this.getHeaders() }).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((err) => {
+        return throwError(err);
+      })
+    );
+  }
 
   getProductById(idProduct: number): Observable<ApiResponse<Product>> {
     return this.http.get<ApiResponse<Product>>(environment.apiUrlWebAdmin + '/getProductById/' + idProduct, { headers: this.getHeaders() });

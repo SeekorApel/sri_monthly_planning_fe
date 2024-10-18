@@ -22,40 +22,40 @@
 
       <!-- Table -->
       <div class="table-responsive">
-        <table class="table table-bordered table-striped table-sm" style="table-layout: auto;">
+        <table class="table table-bordered table-striped table-sm" style="table-layout: auto">
           <thead align="center">
-          <tr>
-            <th>No</th>
-            <th>Pattern ID</th>
-            <th>Pattern Name</th>
-            <th>Status</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let pattern of pageOfItems; let i = index">
-            <td>{{ i + 1 }}</td>
-            <td>{{ pattern.pattern_ID }}</td>
-            <td>{{ pattern.pattern_NAME }}</td>
-            <td [ngClass]="{ 'bg-success': pattern.status === 1, 'bg-danger': pattern.status !== 1 }">
-              {{ pattern.status === 1 ? 'Active' : 'Deactive' }}
-            </td>  
-            <td>
-              <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(pattern.pattern_ID)">Update</button>
-              <button type="button" class="btn btn-md ml-3" [ngClass]="{ 'btn-danger': pattern.status === 1, 'btn-success': pattern.status !== 1 }" (click)="pattern.status === 1 ? deleteData(pattern) : activateData(pattern)">
-                {{ pattern.status === 1 ? 'Delete' : 'Active' }}
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <!-- Pagination -->
-      <nav>
-        <ul class="pagination">
-          <jw-pagination [items]="patterns" [pageSize]="pageSize" [maxPages]="totalPages" (changePage)="onChangePage($event)"> </jw-pagination>
-        </ul>
-      </nav>
-    </div> 
+            <tr>
+              <th>No</th>
+              <th>Pattern ID</th>
+              <th>Pattern Name</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let pattern of pageOfItems; let i = index">
+              <td>{{ i + 1 }}</td>
+              <td>{{ pattern.pattern_ID }}</td>
+              <td>{{ pattern.pattern_NAME }}</td>
+              <td [ngClass]="{ 'bg-success': pattern.status === 1, 'bg-danger': pattern.status !== 1 }">
+                {{ pattern.status === 1 ? 'Active' : 'Deactive' }}
+              </td>
+              <td align="center">
+                <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(pattern.pattern_ID)">Update</button>
+                <button type="button" class="btn btn-md ml-3" [ngClass]="{ 'btn-danger': pattern.status === 1, 'btn-success': pattern.status !== 1 }" (click)="pattern.status === 1 ? deleteData(pattern) : activateData(pattern)">
+                  {{ pattern.status === 1 ? 'Delete' : 'Active' }}
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <!-- Pagination -->
+        <nav>
+          <ul class="pagination">
+            <jw-pagination [items]="patterns" [pageSize]="pageSize" [maxPages]="totalPages" (changePage)="onChangePage($event)"> </jw-pagination>
+          </ul>
+        </nav>
+      </div>
     </div>
   </div>
 </div>

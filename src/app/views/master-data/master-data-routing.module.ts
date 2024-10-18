@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { ViewPlantComponent } from './view-plant/view-plant.component';
 import { ViewProductComponent } from './view-product/view-product.component';
 import { ViewPatternComponent } from './view-pattern/view-pattern.component';
-import { ViewMachineTassComponent } from './view-tassmachine/view-tassmachine.component';
+import { ViewMachineTassComponent } from './view-machine-tass/view-machine-tass.component';
 import { ViewSettingComponent } from './view-setting/view-setting.component';
 import { ViewQuadrantComponent } from './view-quadrant/view-quadrant.component';
 import { ViewProductTypeComponent } from './view-product-type/view-product-type.component';
@@ -20,7 +20,6 @@ import { ViewTassSizeComponent } from './view-tass-size/view-tass-size.component
 import { ViewCtCuringComponent } from './view-ct-curing/view-ct-curing.component';
 import { ViewMachineAllowenceComponent } from './view-machine-allowence/view-machine-allowence.component';
 import { ViewCuringSizeComponent } from './view-curing-size/view-curing-size.component';
-
 
 const routes: Routes = [
   {
@@ -135,41 +134,43 @@ const routes: Routes = [
         path: 'master-data/view-tass-size',
         component: ViewTassSizeComponent,
         data: {
-          title: 'Master Tass Size'
-        }
+          title: 'Master Tass Size',
+        },
       },
       {
         path: 'master-data/view-max-capacity',
         component: ViewMaxCapacityComponent,
         data: {
-          title: 'Master View Max Capacity'
-        }
+          title: 'Master View Max Capacity',
+        },
       },
       {
         path: 'master-dataview-curing-machine',
         component: ViewCuringMachineComponent,
         data: {
-          title: 'Master Curing Machine'
-        }
+          title: 'Master Curing Machine',
+        },
       },
       {
         path: 'master-data/view-item-curing',
         component: ViewItemCuringComponent,
         data: {
-          title: 'Master View Item Curing'
-        }
+          title: 'Master View Item Curing',
+        },
       },
       {
         path: 'master-data/view-ct-curing',
         component: ViewCtCuringComponent,
         data: {
-          title: 'Master View CT Curing'
-        }
+          title: 'Master View CT Curing',
+        },
       },
       {
         path: 'master-data/view-machine-allowence',
         component: ViewMachineAllowenceComponent,
         data: {
+          title: 'Master View Machine Allowance',
+        },
           title: 'Master View Machine Allowence'
         }
       },
@@ -183,8 +184,6 @@ const routes: Routes = [
     ],
   },
 ];
-
-
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],

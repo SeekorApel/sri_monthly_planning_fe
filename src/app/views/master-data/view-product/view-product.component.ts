@@ -8,7 +8,6 @@ declare var $: any;
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 
-
 @Component({
   selector: 'app-view-product',
   templateUrl: './view-product.component.html',
@@ -44,6 +43,31 @@ export class ViewProductComponent implements OnInit {
       wibTube: ['', Validators.required],
       rim: ['', Validators.required],
       description: ['', Validators.required],
+    });
+  }
+  activateData(product: Product): void {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'This data product will be Activated!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes',
+      cancelButtonText: 'No',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.productService.activateProduct(product).subscribe(
+          (response) => {
+            Swal.fire('Activated!', 'Data product has been Activated', 'success').then(() => {
+              window.location.reload();
+            });
+          },
+          (err) => {
+            Swal.fire('Error!', 'Failed to Activated the product.', 'error');
+          }
+        );
+      }
     });
   }
 
@@ -226,7 +250,7 @@ export class ViewProductComponent implements OnInit {
       },
       error: (err) => {
         console.error('Download error:', err);
-      }
+      },
     });
   }
 }

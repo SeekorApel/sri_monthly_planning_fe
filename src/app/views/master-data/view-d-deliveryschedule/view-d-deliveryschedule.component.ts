@@ -4,6 +4,8 @@ import { DDeliverySchedule } from 'src/app/models/d-deliveryschedule';
 import { ApiResponse } from 'src/app/response/Response';
 import { DDeliveryScheduleService } from 'src/app/services/master-data/DdeliverySchedule/DdeliverySchedule.service';
 import Swal from 'sweetalert2';
+import { saveAs } from 'file-saver';
+
 declare var $: any;
 import * as XLSX from 'xlsx';
 
@@ -51,6 +53,43 @@ export class ViewDDeliveryScheduleComponent implements OnInit {
         this.errorMessage = 'Failed to load Detail Delivery Schedule: ' + error.message;
       }
     );
+  }
+  downloadExcel(): void {
+    this.ddeliveryschedule.exportDDeliveryScheduleExcel().subscribe({
+      next: (response) => {
+        // Menggunakan nama file yang sudah ditentukan di backend
+        const filename = 'DETAIL_DELIVERY_SCHEDULE.xlsx'; // Nama file bisa dinamis jika diperlukan
+        saveAs(response, filename); // Mengunduh file
+      },
+      error: (err) => {
+        console.error('Download error:', err);
+      },
+    });
+  }
+  activateData(dDeliverySchedule: DDeliverySchedule): void {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'This data Detail delivery schedule will be Activated!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes',
+      cancelButtonText: 'No',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.ddeliveryschedule.activateDdeliverySchedule(dDeliverySchedule).subscribe(
+          (response) => {
+            Swal.fire('Activated!', 'Data Detail delivery schedule has been Activated', 'success').then(() => {
+              window.location.reload();
+            });
+          },
+          (err) => {
+            Swal.fire('Error!', 'Failed to Activated the detail delivery schedule.', 'error');
+          }
+        );
+      }
+    });
   }
 
   onChangePage(pageOfItems: Array<any>) {
@@ -142,7 +181,7 @@ export class ViewDDeliveryScheduleComponent implements OnInit {
   downloadTemplate() {
     const link = document.createElement('a');
     link.href = 'assets/Template Excel/Layout_Detail_Delivery_Schedule.xlsx';
-    link.download = 'Layout_Detail_Delivery_Schedule.xlsx';
+    link.download = 'Layout_Master_Detail_Delivery_Schedule.xlsx';
     link.click();
   }
 
