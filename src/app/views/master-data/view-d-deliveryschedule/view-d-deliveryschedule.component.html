@@ -55,6 +55,11 @@
             </tr>
           </tbody>
         </table>
+        <nav>
+          <ul class="pagination">
+            <jw-pagination [items]="ddeliveryScedules" [pageSize]="pageSize" [maxPages]="totalPages" (changePage)="onChangePage($event)"> </jw-pagination>
+          </ul>
+        </nav>
       </div>
 
       <!-- Modal edit -->
