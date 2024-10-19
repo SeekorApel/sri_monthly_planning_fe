@@ -8,6 +8,11 @@ import { saveAs } from 'file-saver';
 declare var $: any;
 import * as XLSX from 'xlsx';
 
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSort } from '@angular/material/sort';
+import { MatPaginator } from '@angular/material/paginator';
+
+
 @Component({
   selector: 'app-view-machine-tass',
   templateUrl: './view-machine-tass.component.html',
@@ -27,6 +32,14 @@ export class ViewMachineTassComponent implements OnInit {
   pageOfItems: Array<any>;
   pageSize: number = 5;
   totalPages: number = 5;
+  displayedColumns: string[] = ['no', 'id_MACHINE_TASS', 'building_ID', 'floor','machine_NUMBER',
+    'type','work_CENTER_TEXT','status','action'
+  ];
+  dataSource: MatTableDataSource<MachineTass>;
+
+  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+
 
   constructor(private machineTassService: MachineTassService, private fb: FormBuilder) {
     this.editMachineTassForm = this.fb.group({
@@ -46,11 +59,13 @@ export class ViewMachineTassComponent implements OnInit {
     this.machineTassService.getAllMachineTass().subscribe(
       (response: ApiResponse<MachineTass[]>) => {
         this.machineTasss = response.data;
-        console.log(this.machineTasss);
-        this.onChangePage(this.machineTasss.slice(0, this.pageSize));
+        this.dataSource = new MatTableDataSource(this.machineTasss);
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+        // this.onChangePage(this.machineTasss.slice(0, this.pageSize));
       },
       (error) => {
-        this.errorMessage = 'Failed to load plants: ' + error.message;
+        this.errorMessage = 'Failed to load machine Tass: ' + error.message;
       }
     );
   }
@@ -60,12 +75,8 @@ export class ViewMachineTassComponent implements OnInit {
   }
 
   onSearchChange(): void {
-    // Lakukan filter berdasarkan nama yang mengandung text pencarian (case-insensitive)
-    const filteredMachineTass = this.machineTasss.filter((machineTass) => machineTass.type.toLowerCase().includes(this.searchText.toLowerCase()) || machineTass.id_MACHINE_TASS.toString().includes(this.searchText));
-
-    // Tampilkan hasil filter pada halaman pertama
-    this.onChangePage(filteredMachineTass.slice(0, this.pageSize));
-  }
+      this.dataSource.filter = this.searchText.trim().toLowerCase();
+    }
 
   resetSearch(): void {
     this.searchText = '';

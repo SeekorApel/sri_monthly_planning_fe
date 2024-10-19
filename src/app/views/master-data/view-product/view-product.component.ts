@@ -8,6 +8,10 @@ declare var $: any;
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 
+  import { MatTableDataSource } from '@angular/material/table';
+  import { MatSort } from '@angular/material/sort';
+  import { MatPaginator } from '@angular/material/paginator';
+
 @Component({
   selector: 'app-view-product',
   templateUrl: './view-product.component.html',
@@ -27,6 +31,13 @@ export class ViewProductComponent implements OnInit {
   pageOfItems: Array<any>;
   pageSize: number = 5;
   totalPages: number = 5;
+  displayedColumns: string[] = ['no', 'part_NUMBER','item_CURING',
+    'pattern_ID','size_ID','product_TYPE_ID','qty_PER_RAK','upper_CONSTANT',
+  'lower_CONSTANT','ext_DESCRIPTION','item_EXT','item_ASSY','wib_TUBE','rim','description', 'status','action'];
+  dataSource: MatTableDataSource<Product>;
+
+  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(private productService: ProductService, private fb: FormBuilder) {
     this.editProductTypeForm = this.fb.group({
@@ -72,15 +83,17 @@ export class ViewProductComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.getAllMachineTassType();
+    this.getAllProduct();
   }
 
-  getAllMachineTassType(): void {
+  getAllProduct(): void {
     this.productService.getAllProduct().subscribe(
       (response: ApiResponse<Product[]>) => {
         this.products = response.data;
-        console.log(this.products);
-        this.onChangePage(this.products.slice(0, this.pageSize));
+        this.dataSource = new MatTableDataSource(this.products);
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+        // this.onChangePage(this.products.slice(0, this.pageSize));
       },
       (error) => {
         this.errorMessage = 'Failed to load product: ' + error.message;
@@ -93,11 +106,7 @@ export class ViewProductComponent implements OnInit {
   }
 
   onSearchChange(): void {
-    // Lakukan filter berdasarkan nama Product yang mengandung text pencarian (case-insensitive)
-    const filteredProduct = this.products.filter((descriptions) => descriptions.description.toLowerCase().includes(this.searchText.toLowerCase()) || descriptions.part_NUMBER.toString().includes(this.searchText));
-
-    // Tampilkan hasil filter pada halaman pertama
-    this.onChangePage(filteredProduct.slice(0, this.pageSize));
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
   }
 
   resetSearch(): void {

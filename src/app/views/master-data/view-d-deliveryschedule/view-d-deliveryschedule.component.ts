@@ -9,6 +9,10 @@ import { saveAs } from 'file-saver';
 declare var $: any;
 import * as XLSX from 'xlsx';
 
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSort } from '@angular/material/sort';
+import { MatPaginator } from '@angular/material/paginator';
+
 @Component({
   selector: 'app-view-d-deliveryschedule',
   templateUrl: './view-d-deliveryschedule.component.html',
@@ -28,6 +32,11 @@ export class ViewDDeliveryScheduleComponent implements OnInit {
   pageOfItems: Array<any>;
   pageSize: number = 5;
   totalPages: number = 5;
+  displayedColumns: string[] = ['no', 'detail_DS_ID', 'ds_ID', 'part_NUM', 'date_DS', 'total_DELIVERY', 'status', 'action'];
+  dataSource: MatTableDataSource<DDeliverySchedule>;
+
+  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(private ddeliveryschedule: DDeliveryScheduleService, private fb: FormBuilder) {
     this.editDDeliveryScheduleTypeForm = this.fb.group({
@@ -46,8 +55,10 @@ export class ViewDDeliveryScheduleComponent implements OnInit {
     this.ddeliveryschedule.getAllDDeliverySchedule().subscribe(
       (response: ApiResponse<DDeliverySchedule[]>) => {
         this.ddeliveryScedules = response.data;
-        console.log(this.ddeliveryScedules);
-        this.onChangePage(this.ddeliveryScedules.slice(0, this.pageSize));
+        this.dataSource = new MatTableDataSource(this.ddeliveryScedules);
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+        // this.onChangePage(this.ddeliveryScedules.slice(0, this.pageSize));
       },
       (error) => {
         this.errorMessage = 'Failed to load Detail Delivery Schedule: ' + error.message;
@@ -97,11 +108,7 @@ export class ViewDDeliveryScheduleComponent implements OnInit {
   }
 
   onSearchChange(): void {
-    // Lakukan filter berdasarkan nama detail DeliverySchedule yang mengandung text pencarian (case-insensitive)
-    const filteredDDeliverySchedule = this.ddeliveryScedules.filter((dds) => dds.part_NUM.toLowerCase().includes(this.searchText.toLowerCase()) || dds.detail_DS_ID.toString().includes(this.searchText));
-
-    // Tampilkan hasil filter pada halaman pertama
-    this.onChangePage(filteredDDeliverySchedule.slice(0, this.pageSize));
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
   }
 
   resetSearch(): void {
