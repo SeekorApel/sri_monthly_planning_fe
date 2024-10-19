@@ -79,6 +79,6 @@ export class ViewMoMarketingComponent implements OnInit {
   }
 
   navigateToDetail(idMo: String) {
-    this.router.navigate(['/transaksi/add-mo-marketing', idMo]);
+    this.router.navigate(['/transaksi/detail-mo-marketing', idMo]);
   }
 }

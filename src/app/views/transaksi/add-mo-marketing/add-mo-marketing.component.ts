@@ -111,7 +111,7 @@ export class AddMoMarketingComponent implements OnInit {
   }
 
   getAllData(idMo: String) {
-    this.moService.getDetailMarketingOrderMarketing(idMo).subscribe(
+    this.moService.getDetailMoMarketing(idMo).subscribe(
       (response: ApiResponse<any>) => {
         this.allData = response.data;
         this.fillAllData(this.allData);
@@ -509,10 +509,23 @@ export class AddMoMarketingComponent implements OnInit {
     worksheet.getColumn('S').width = 20;
     setBorder(worksheet.getCell('S20'));
 
+    //Styling Font Header Detail Markting Order
+    ['B19', 'C19', 'D19', 'E19', 'F19', 'G19', 'H19', 'I19', 'J19', 'J20', 'K20', 'L20', 'M19', 'N19', 'N20', 'O20', 'P20', 'Q19', 'Q20', 'R20', 'S20'].forEach((cell) => {
+      const cellRef = worksheet.getCell(cell);
+      cellRef.alignment = { vertical: 'middle', horizontal: 'center' };
+      cellRef.font = {
+        name: 'Calibri Body',
+        size: 11,
+        bold: true,
+      };
+    });
+
     let rowIndex = 21; // Starting row for data
     this.detailMarketingOrder.forEach((item) => {
       worksheet.getCell(`B${rowIndex}`).value = item.category;
       worksheet.getCell(`C${rowIndex}`).value = item.partNumber;
+      worksheet.getCell(`C${rowIndex}`).numFmt = '0';
+
       worksheet.getCell(`D${rowIndex}`).value = item.description;
       worksheet.getCell(`E${rowIndex}`).value = item.machineType;
 
@@ -632,6 +645,10 @@ export class AddMoMarketingComponent implements OnInit {
     this.router.navigate(['/transaksi/view-mo-marketing']);
   }
 
+  navigateToDetail(idMo: String) {
+    this.router.navigate(['/transaksi/view-mo-marketing']);
+  }
+
   openModalUpload(): void {
     $('#uploadModal').modal('show');
   }
@@ -681,8 +698,6 @@ export class AddMoMarketingComponent implements OnInit {
               detail.moMonth2 = moMonth2Value;
             }
           }
-
-          console.log(this.detailMarketingOrder);
         } else {
           console.error('File tidak dapat dibaca sebagai ArrayBuffer');
         }
@@ -701,17 +716,18 @@ export class AddMoMarketingComponent implements OnInit {
 
     const item = this.detailMarketingOrder[0];
 
-    Swal.fire({
-      title: 'Success!',
-      text: 'Data Marketing Order Success added.',
-      icon: 'success',
-      confirmButtonText: 'OK',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        console.log(this.detailMarketingOrder);
-        this.navigateToView();
-      }
-    });
+    // Swal.fire({
+    //   title: 'Success!',
+    //   text: 'Data Marketing Order Success added.',
+    //   icon: 'success',
+    //   confirmButtonText: 'OK',
+    // }).then((result) => {
+    //   if (result.isConfirmed) {
+    //     console.log("Data Detail Update", this.detailMarketingOrder);
+    //     this.navigateToView();
+    //   }
+    // });
+
     // if (item.sf_month_0 < item.minOrder) {
     //   Swal.fire({
     //     title: 'Warning!',
@@ -785,27 +801,30 @@ export class AddMoMarketingComponent implements OnInit {
     //   });
     // }
 
-    // this.moService.addMarketingOrderMarketing(this.detailMarketingOrder).subscribe(
-    //   (response) => {
-    //     Swal.fire({
-    //       title: 'Success!',
-    //       text: 'Data Marketing Order Success added.',
-    //       icon: 'success',
-    //       confirmButtonText: 'OK',
-    //     }).then((result) => {
-    //       if (result.isConfirmed) {
-    //       }
-    //     });
-    //   },
-    //   (error) => {
-    //     Swal.fire({
-    //       icon: 'error',
-    //       title: 'Error',
-    //       text: 'Failed to add marketing order details: ' + error.message,
-    //       confirmButtonText: 'OK',
-    //     });
-    //   }
-    // );
+    this.moService.addMarketingOrderMarketing(this.detailMarketingOrder).subscribe(
+      (response) => {
+        Swal.fire({
+          title: 'Success!',
+          text: 'Data Marketing Order Success added.',
+          icon: 'success',
+          confirmButtonText: 'OK',
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.navigateToView();
+          }
+        });
+      },
+      (error) => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Failed to add marketing order details: ' + error.message,
+          confirmButtonText: 'OK',
+        });
+      }
+    );
+
+
     // this.detailMarketingOrder.forEach((item, index) => {
     //   console.log(`Index: ${index}, Item:`, item);
     // });

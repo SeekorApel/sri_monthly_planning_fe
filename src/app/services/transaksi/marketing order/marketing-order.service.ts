@@ -13,7 +13,7 @@ import { catchError, map } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class MarketingOrderService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getDetailMarketingOrderPpc(idMo: String): Observable<ApiResponse<any>> {
     return this.http.get<ApiResponse<any>>(environment.apiUrlWebAdmin + '/getMoById/' + idMo);
@@ -66,7 +66,7 @@ export class MarketingOrderService {
     );
   }
 
-  getDetailMarketingOrderMarketing(idMo: String): Observable<ApiResponse<any>> {
+  getDetailMoMarketing(idMo: String): Observable<ApiResponse<any>> {
     return this.http.get<ApiResponse<any>>(environment.apiUrlWebAdmin + '/getDetailMoMarketing/' + idMo);
   }
 
