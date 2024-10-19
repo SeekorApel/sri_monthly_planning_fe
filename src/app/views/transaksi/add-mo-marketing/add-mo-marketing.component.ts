@@ -515,24 +515,49 @@ export class AddMoMarketingComponent implements OnInit {
       worksheet.getCell(`C${rowIndex}`).value = item.partNumber;
       worksheet.getCell(`D${rowIndex}`).value = item.description;
       worksheet.getCell(`E${rowIndex}`).value = item.machineType;
-      worksheet.getCell(`F${rowIndex}`).value = item.capacity;
-      worksheet.getCell(`G${rowIndex}`).value = item.qtyPerMould;
-      worksheet.getCell(`H${rowIndex}`).value = item.qtyPerRak;
-      worksheet.getCell(`I${rowIndex}`).value = item.minOrder;
-      worksheet.getCell(`J${rowIndex}`).value = item.maxCapMonth0;
-      worksheet.getCell(`K${rowIndex}`).value = item.maxCapMonth1;
-      worksheet.getCell(`L${rowIndex}`).value = item.maxCapMonth2;
-      worksheet.getCell(`M${rowIndex}`).value = item.initialStock;
-      worksheet.getCell(`N${rowIndex}`).value = item.sfMonth0;
-      worksheet.getCell(`O${rowIndex}`).value = item.sfMonth1;
-      worksheet.getCell(`P${rowIndex}`).value = item.sfMonth2;
-      worksheet.getCell(`Q${rowIndex}`).value = item.moMonth0;
-      worksheet.getCell(`R${rowIndex}`).value = item.moMonth1;
-      worksheet.getCell(`S${rowIndex}`).value = item.moMonth2;
 
-      // Mengatur format number untuk kolom C
-      worksheet.getCell(`C${rowIndex}`).numFmt = '0'; // format angka
-      // Menyelaraskan semua sel di baris ini ke tengah dan tengah
+      worksheet.getCell(`F${rowIndex}`).value = item.capacity;
+      worksheet.getCell(`F${rowIndex}`).numFmt = '#,##0';
+
+      worksheet.getCell(`G${rowIndex}`).value = item.qtyPerMould;
+      worksheet.getCell(`G${rowIndex}`).numFmt = '#,##0';
+
+      worksheet.getCell(`H${rowIndex}`).value = item.qtyPerRak;
+      worksheet.getCell(`H${rowIndex}`).numFmt = '#,##0';
+
+      worksheet.getCell(`I${rowIndex}`).value = item.minOrder;
+      worksheet.getCell(`I${rowIndex}`).numFmt = '#,##0';
+
+      worksheet.getCell(`J${rowIndex}`).value = item.maxCapMonth0;
+      worksheet.getCell(`J${rowIndex}`).numFmt = '#,##0';
+
+      worksheet.getCell(`K${rowIndex}`).value = item.maxCapMonth1;
+      worksheet.getCell(`K${rowIndex}`).numFmt = '#,##0';
+
+      worksheet.getCell(`L${rowIndex}`).value = item.maxCapMonth2;
+      worksheet.getCell(`L${rowIndex}`).numFmt = '#,##0';
+
+      worksheet.getCell(`M${rowIndex}`).value = item.initialStock;
+      worksheet.getCell(`M${rowIndex}`).numFmt = '#,##0';
+
+      worksheet.getCell(`N${rowIndex}`).value = item.sfMonth0;
+      worksheet.getCell(`N${rowIndex}`).numFmt = '#,##0';
+
+      worksheet.getCell(`O${rowIndex}`).value = item.sfMonth1;
+      worksheet.getCell(`O${rowIndex}`).numFmt = '#,##0';
+
+      worksheet.getCell(`P${rowIndex}`).value = item.sfMonth2;
+      worksheet.getCell(`P${rowIndex}`).numFmt = '#,##0';
+
+      worksheet.getCell(`Q${rowIndex}`).value = item.moMonth0;
+      worksheet.getCell(`Q${rowIndex}`).numFmt = '#,##0';
+
+      worksheet.getCell(`R${rowIndex}`).value = item.moMonth1;
+      worksheet.getCell(`R${rowIndex}`).numFmt = '#,##0';
+
+      worksheet.getCell(`S${rowIndex}`).value = item.moMonth2;
+      worksheet.getCell(`S${rowIndex}`).numFmt = '#,##0';
+
       ['B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S'].forEach((col) => {
         const cell = worksheet.getCell(`${col}${rowIndex}`);
         cell.alignment = { vertical: 'middle', horizontal: 'center' };
@@ -543,6 +568,14 @@ export class AddMoMarketingComponent implements OnInit {
           right: { style: 'thin' },
         };
       });
+
+      worksheet.getCell(`M${rowIndex}`).numFmt = '#,##0';
+      worksheet.getCell(`N${rowIndex}`).numFmt = '#,##0';
+      worksheet.getCell(`O${rowIndex}`).numFmt = '#,##0';
+      worksheet.getCell(`P${rowIndex}`).numFmt = '#,##0';
+      worksheet.getCell(`Q${rowIndex}`).numFmt = '#,##0';
+      worksheet.getCell(`R${rowIndex}`).numFmt = '#,##0';
+      worksheet.getCell(`S${rowIndex}`).numFmt = '#,##0';
 
       rowIndex++;
     });
@@ -595,12 +628,90 @@ export class AddMoMarketingComponent implements OnInit {
     return monthName;
   }
 
+  navigateToView() {
+    this.router.navigate(['/transaksi/view-mo-marketing']);
+  }
+
+  openModalUpload(): void {
+    $('#uploadModal').modal('show');
+  }
+
+  uploadFileExcel() {
+    if (this.file) {
+      const formData = new FormData();
+      formData.append('file', this.file);
+
+      // Membaca file Excel
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        // Memastikan hasil pembacaan adalah ArrayBuffer
+        const result = e.target.result;
+        if (result instanceof ArrayBuffer) {
+          const data = new Uint8Array(result);
+          const workbook = XLSX.read(data, { type: 'array' });
+
+          // Ambil nama sheet pertama
+          const firstSheetName = workbook.SheetNames[0];
+          const worksheet = workbook.Sheets[firstSheetName];
+
+          // Menentukan kolom yang akan dibaca (M sampai S)
+          const startRow = 21; // Baris awal
+          const endRow = worksheet['!ref'] ? XLSX.utils.decode_range(worksheet['!ref']).e.r : startRow; // Menghitung baris terakhir
+
+          // Membaca data dari kolom M hingga S
+          for (let row = startRow - 1; row <= endRow; row++) {
+            const partNumber = Number(worksheet[`C${row + 1}`]?.v) || null; // Kolom C
+            const initialStockValue = Number(worksheet[`M${row + 1}`]?.v) || null; // Kolom M
+            const sfMonth0Value = Number(worksheet[`N${row + 1}`]?.v) || null; // Kolom N
+            const sfMonth1Value = Number(worksheet[`O${row + 1}`]?.v) || null; // Kolom O
+            const sfMonth2Value = Number(worksheet[`P${row + 1}`]?.v) || null; // Kolom P
+            const moMonth0Value = Number(worksheet[`Q${row + 1}`]?.v) || null; // Kolom Q
+            const moMonth1Value = Number(worksheet[`R${row + 1}`]?.v) || null; // Kolom R
+            const moMonth2Value = Number(worksheet[`S${row + 1}`]?.v) || null; // Kolom S
+
+            // Mencari dan memperbarui nilai dalam detailMarketingOrder
+            const detail = this.detailMarketingOrder.find((item) => item.partNumber === partNumber);
+            if (detail) {
+              detail.initialStock = initialStockValue;
+              detail.sfMonth0 = sfMonth0Value;
+              detail.sfMonth1 = sfMonth1Value;
+              detail.sfMonth2 = sfMonth2Value;
+              detail.moMonth0 = moMonth0Value;
+              detail.moMonth1 = moMonth1Value;
+              detail.moMonth2 = moMonth2Value;
+            }
+          }
+
+          console.log(this.detailMarketingOrder);
+        } else {
+          console.error('File tidak dapat dibaca sebagai ArrayBuffer');
+        }
+      };
+
+      reader.readAsArrayBuffer(this.file); // Membaca file sebagai ArrayBuffer
+      this.isTableVisible = true;
+      $('#uploadModal').modal('hide');
+    }
+  }
+
   saveMo(): void {
     const month1 = this.formatMonthToString(this.headerMarketingOrder[1].month);
     const month2 = this.formatMonthToString(this.headerMarketingOrder[2].month);
     const month3 = this.formatMonthToString(this.headerMarketingOrder[0].month);
 
     const item = this.detailMarketingOrder[0];
+
+    Swal.fire({
+      title: 'Success!',
+      text: 'Data Marketing Order Success added.',
+      icon: 'success',
+      confirmButtonText: 'OK',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        console.log(this.detailMarketingOrder);
+        this.navigateToView();
+      }
+    });
     // if (item.sf_month_0 < item.minOrder) {
     //   Swal.fire({
     //     title: 'Warning!',
@@ -674,96 +785,30 @@ export class AddMoMarketingComponent implements OnInit {
     //   });
     // }
 
-    this.moService.addMarketingOrderMarketing(this.detailMarketingOrder).subscribe(
-      (response) => {
-        Swal.fire({
-          title: 'Success!',
-          text: 'Data Marketing Order Success added.',
-          icon: 'success',
-          confirmButtonText: 'OK',
-        }).then((result) => {
-          if (result.isConfirmed) {
-          }
-        });
-      },
-      (error) => {
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'Failed to add marketing order details: ' + error.message,
-          confirmButtonText: 'OK',
-        });
-      }
-    );
+    // this.moService.addMarketingOrderMarketing(this.detailMarketingOrder).subscribe(
+    //   (response) => {
+    //     Swal.fire({
+    //       title: 'Success!',
+    //       text: 'Data Marketing Order Success added.',
+    //       icon: 'success',
+    //       confirmButtonText: 'OK',
+    //     }).then((result) => {
+    //       if (result.isConfirmed) {
+    //       }
+    //     });
+    //   },
+    //   (error) => {
+    //     Swal.fire({
+    //       icon: 'error',
+    //       title: 'Error',
+    //       text: 'Failed to add marketing order details: ' + error.message,
+    //       confirmButtonText: 'OK',
+    //     });
+    //   }
+    // );
     // this.detailMarketingOrder.forEach((item, index) => {
     //   console.log(`Index: ${index}, Item:`, item);
     // });
-  }
-
-  navigateToView() {
-    this.router.navigate(['/transaksi/view-mo-marketing']);
-  }
-
-  openModalUpload(): void {
-    $('#uploadModal').modal('show');
-  }
-
-  uploadFileExcel() {
-    if (this.file) {
-      const formData = new FormData();
-      formData.append('file', this.file);
-
-      // Membaca file Excel
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        // Memastikan hasil pembacaan adalah ArrayBuffer
-        const result = e.target.result;
-        if (result instanceof ArrayBuffer) {
-          const data = new Uint8Array(result);
-          const workbook = XLSX.read(data, { type: 'array' });
-
-          // Ambil nama sheet pertama
-          const firstSheetName = workbook.SheetNames[0];
-          const worksheet = workbook.Sheets[firstSheetName];
-
-          // Menentukan kolom yang akan dibaca (M sampai S)
-          const startRow = 21; // Baris awal
-          const endRow = worksheet['!ref'] ? XLSX.utils.decode_range(worksheet['!ref']).e.r : startRow; // Menghitung baris terakhir
-
-          // Membaca data dari kolom M hingga S
-          for (let row = startRow - 1; row <= endRow; row++) {
-            const partNumber = Number(worksheet[`C${row + 1}`]?.v) || null; // Kolom C
-            const initialStockValue = Number(worksheet[`M${row + 1}`]?.v) || null; // Kolom M
-            const sfMonth0Value = Number(worksheet[`N${row + 1}`]?.v) || null; // Kolom N
-            const sfMonth1Value = Number(worksheet[`O${row + 1}`]?.v) || null; // Kolom O
-            const sfMonth2Value = Number(worksheet[`P${row + 1}`]?.v) || null; // Kolom P
-            const moMonth0Value = Number(worksheet[`Q${row + 1}`]?.v) || null; // Kolom Q
-            const moMonth1Value = Number(worksheet[`R${row + 1}`]?.v) || null; // Kolom R
-            const moMonth2Value = Number(worksheet[`S${row + 1}`]?.v) || null; // Kolom S
-
-            // Mencari dan memperbarui nilai dalam detailMarketingOrder
-            const detail = this.detailMarketingOrder.find((item) => item.partNumber === partNumber);
-            if (detail) {
-              detail.initialStock = initialStockValue;
-              detail.sfMonth0 = sfMonth0Value;
-              detail.sfMonth1 = sfMonth1Value;
-              detail.sfMonth2 = sfMonth2Value;
-              detail.moMonth0 = moMonth0Value;
-              detail.moMonth1 = moMonth1Value;
-              detail.moMonth2 = moMonth2Value;
-            }
-          }
-
-          console.log(this.detailMarketingOrder);
-        } else {
-          console.error('File tidak dapat dibaca sebagai ArrayBuffer');
-        }
-      };
-
-      reader.readAsArrayBuffer(this.file); // Membaca file sebagai ArrayBuffer
-      this.isTableVisible = true;
-      $('#uploadModal').modal('hide');
-    }
   }
 
   onFileChange(event: Event) {

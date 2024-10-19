@@ -136,6 +136,8 @@ export class DetailViewMoPpcComponent implements OnInit {
     this.detailMarketingOrder = data.dataDetailMo;
     let typeProduct = data.type;
 
+    console.log(this.detailMarketingOrder);
+
     this.formHeaderMo.patchValue({
       date: new Date(data.dateValid).toISOString().split('T')[0],
       type: data.type,
