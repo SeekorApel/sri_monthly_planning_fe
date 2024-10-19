@@ -32,11 +32,12 @@ import { ViewMachineExtrudingComponent } from './view-machine-extruding/view-mac
 import { ViewDDeliveryScheduleComponent } from './view-d-deliveryschedule/view-d-deliveryschedule.component';
 import { ViewMachineAllowenceComponent } from './view-machine-allowence/view-machine-allowence.component';
 import { ViewItemAssyComponent } from './view-item-assy/view-item-assy.component';
+import { ViewCuringSizeComponent } from './view-curing-size/view-curing-size.component';
+import { ViewWorkDayComponent } from './view-work-day/view-work-day.component';
 import {MatSortModule} from '@angular/material/sort';
 import {MatTableModule} from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
-import { ViewCuringSizeComponent } from './view-curing-size/view-curing-size.component';
-import { ViewWorkDayComponent } from './view-work-day/view-work-day.component';
+import { FullCalendarModule } from '@fullcalendar/angular';
 
 @NgModule({
   declarations: [
@@ -81,6 +82,8 @@ import { ViewWorkDayComponent } from './view-work-day/view-work-day.component';
     MatSortModule,
     MatTableModule,
     MatPaginatorModule,
+    FullCalendarModule,
+
   ],
 })
 export class MasterDataModule {}

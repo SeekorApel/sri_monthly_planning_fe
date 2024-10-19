@@ -1,1 +1,23 @@
-<p>view-work-day works!</p>
+<div>
+    <h3>Add New Event</h3>
+    
+    <label for="eventTitle">Event Title:</label>
+    <input type="text" id="eventTitle" #eventTitle placeholder="Enter event title">
+  
+    <label for="eventDescription">Event Description:</label>
+    <input type="text" id="eventDescription" #eventDescription placeholder="Enter event description">
+  
+    <label for="eventDate">Event Date:</label>
+    <input type="date" id="eventDate" #eventDate>
+  
+    <label for="eventColor">Event Color:</label>
+    <input type="color" id="eventColor" #eventColor value="#00ff00">
+  
+    <button (click)="addNewEvent(eventTitle.value, eventDescription.value, eventDate.value, eventColor.value)">
+      Add Event
+    </button>
+  </div>
+  
+  <!-- FullCalendar Integration -->
+  <full-calendar [options]="calendarOptions"></full-calendar>
+  
