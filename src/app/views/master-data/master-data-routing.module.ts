@@ -20,6 +20,7 @@ import { ViewTassSizeComponent } from './view-tass-size/view-tass-size.component
 import { ViewCtCuringComponent } from './view-ct-curing/view-ct-curing.component';
 import { ViewMachineAllowenceComponent } from './view-machine-allowence/view-machine-allowence.component';
 import { ViewCuringSizeComponent } from './view-curing-size/view-curing-size.component';
+import { ViewWorkDayComponent } from './view-work-day/view-work-day.component';
 
 const routes: Routes = [
   {
@@ -177,6 +178,12 @@ const routes: Routes = [
         component: ViewCuringSizeComponent,
         data: {
           title: 'Master View Curing Size'
+        }
+      },      {
+        path: 'master-data/view-work-day',
+        component: ViewWorkDayComponent,
+        data: {
+          title: 'Master View Work Day'
         }
       },
     ],

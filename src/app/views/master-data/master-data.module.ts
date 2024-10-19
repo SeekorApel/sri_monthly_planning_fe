@@ -36,6 +36,7 @@ import {MatSortModule} from '@angular/material/sort';
 import {MatTableModule} from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { ViewCuringSizeComponent } from './view-curing-size/view-curing-size.component';
+import { ViewWorkDayComponent } from './view-work-day/view-work-day.component';
 
 @NgModule({
   declarations: [
@@ -64,7 +65,8 @@ import { ViewCuringSizeComponent } from './view-curing-size/view-curing-size.com
     ViewDDeliveryScheduleComponent,
     ViewMachineAllowenceComponent,
     ViewItemAssyComponent,
-    ViewCuringSizeComponent
+    ViewCuringSizeComponent,
+    ViewWorkDayComponent
   ],
   imports: [
     CommonModule,
