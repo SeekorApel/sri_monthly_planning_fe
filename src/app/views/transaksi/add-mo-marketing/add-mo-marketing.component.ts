@@ -9,6 +9,7 @@ import { MarketingOrderService } from 'src/app/services/transaksi/marketing orde
 import Swal from 'sweetalert2';
 import * as ExcelJS from 'exceljs/dist/exceljs.min.js';
 import * as XLSX from 'xlsx';
+declare var $: any;
 import { saveAs } from 'file-saver';
 
 @Component({
@@ -22,10 +23,13 @@ export class AddMoMarketingComponent implements OnInit {
   monthNames: string[] = ['', '', ''];
   formHeaderMo: FormGroup;
   isReadOnly: Boolean = true;
+  isTableVisible: boolean = false;
+  file: File | null = null;
   allData: any;
   marketingOrder: MarketingOrder;
   detailMarketingOrder: DetailMarketingOrder[];
   headerMarketingOrder: HeaderMarketingOrder[];
+  detailMarketingOrderUpdate: DetailMarketingOrder[];
 
   constructor(private router: Router, private activeRoute: ActivatedRoute, private moService: MarketingOrderService, private fb: FormBuilder) {
     this.formHeaderMo = this.fb.group({
@@ -176,82 +180,167 @@ export class AddMoMarketingComponent implements OnInit {
     const month1 = this.monthNames[1];
     const month2 = this.monthNames[2];
 
+    const formattedMonths = this.headerMarketingOrder.map((item) => {
+      const date = new Date(item.month);
+      return date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+    });
+
     // Fungsi untuk mengatur border pada suatu range sel
     const setBorder = (cellRange: ExcelJS.Cell) => {
       cellRange.border = {
         top: { style: 'thin' },
         left: { style: 'thin' },
         bottom: { style: 'thin' },
-        right: { style: 'thin' }
+        right: { style: 'thin' },
       };
+    };
+
+    //Header
+    worksheet.mergeCells('B1:L2');
+    worksheet.getCell('B1').value = 'Form Input Marketing Order';
+    worksheet.getCell('B1').alignment = { vertical: 'middle', horizontal: 'center' };
+    worksheet.getCell('B1').font = {
+      name: 'Candara',
+      size: 20,
+      bold: true,
+    };
+
+    worksheet.mergeCells('B3:L5');
+    worksheet.getCell('B3').value = `${month0} - ${month1} - ${month2}`;
+    worksheet.getCell('B3').alignment = { vertical: 'middle', horizontal: 'center' };
+    worksheet.getCell('B3').font = {
+      name: 'Candara',
+      size: 20,
+      bold: true,
     };
 
     worksheet.mergeCells('N9:P9');
     worksheet.getCell('N9').value = 'Description';
     worksheet.getCell('N9').alignment = { vertical: 'middle', horizontal: 'left' };
     setBorder(worksheet.getCell('N9'));
+    worksheet.getCell('N9').font = { name: 'Calibri Body', size: 11, bold: true, italic: true };
 
     worksheet.mergeCells('N10:P10');
     worksheet.getCell('N10').value = 'Workday Normal / Workday Tube';
     worksheet.getCell('N10').alignment = { vertical: 'middle', horizontal: 'left' };
+    worksheet.getCell('N10').font = { name: 'Calibri Body', size: 11, bold: true, italic: true };
     setBorder(worksheet.getCell('N10'));
+
+    worksheet.getCell('Q10').value = this.headerMarketingOrder[1].wdNormal; // "Month 1"
+    worksheet.getCell('R10').value = this.headerMarketingOrder[2].wdNormal; // "Month 2"
+    worksheet.getCell('S10').value = this.headerMarketingOrder[0].wdNormal; // "Month 3"
 
     worksheet.mergeCells('N11:P11');
     worksheet.getCell('N11').value = 'Workday Overtime TL';
     worksheet.getCell('N11').alignment = { vertical: 'middle', horizontal: 'left' };
     setBorder(worksheet.getCell('N11'));
+    worksheet.getCell('Q11').value = this.headerMarketingOrder[1].wdOtTl; // "Month 1"
+    worksheet.getCell('R11').value = this.headerMarketingOrder[2].wdOtTl; // "Month 2"
+    worksheet.getCell('S11').value = this.headerMarketingOrder[0].wdOtTl; // "Month 3"
+    ['Q11', 'R11', 'S11'].forEach((cell) => {
+      worksheet.getCell(cell).alignment = { vertical: 'middle', horizontal: 'center' };
+    });
 
     worksheet.mergeCells('N12:P12');
     worksheet.getCell('N12').value = 'Workday Overtime TT';
     worksheet.getCell('N12').alignment = { vertical: 'middle', horizontal: 'left' };
     setBorder(worksheet.getCell('N12'));
+    worksheet.getCell('Q12').value = this.headerMarketingOrder[1].wdOtTt; // "Month 1"
+    worksheet.getCell('R12').value = this.headerMarketingOrder[2].wdOtTt; // "Month 2"
+    worksheet.getCell('S12').value = this.headerMarketingOrder[0].wdOtTt; // "Month 3"
+    ['Q12', 'R12', 'S12'].forEach((cell) => {
+      worksheet.getCell(cell).alignment = { vertical: 'middle', horizontal: 'center' };
+    });
 
     worksheet.mergeCells('N13:P13');
     worksheet.getCell('N13').value = 'Total Workday Tire TL';
     worksheet.getCell('N13').alignment = { vertical: 'middle', horizontal: 'left' };
     setBorder(worksheet.getCell('N13'));
+    worksheet.getCell('Q13').value = this.headerMarketingOrder[1].totalWdTl; // "Month 1"
+    worksheet.getCell('R13').value = this.headerMarketingOrder[2].totalWdTl; // "Month 2"
+    worksheet.getCell('S13').value = this.headerMarketingOrder[0].totalWdTl; // "Month 3"
+    ['Q13', 'R13', 'S13'].forEach((cell) => {
+      worksheet.getCell(cell).alignment = { vertical: 'middle', horizontal: 'center' };
+    });
 
     worksheet.mergeCells('N14:P14');
     worksheet.getCell('N14').value = 'Total Workday Tire TT';
     worksheet.getCell('N14').alignment = { vertical: 'middle', horizontal: 'left' };
     setBorder(worksheet.getCell('N14'));
+    worksheet.getCell('Q14').value = this.headerMarketingOrder[1].totalWdTt; // "Month 1"
+    worksheet.getCell('R14').value = this.headerMarketingOrder[2].totalWdTt; // "Month 2"
+    worksheet.getCell('S14').value = this.headerMarketingOrder[0].totalWdTt; // "Month 3"
+    ['Q14', 'R14', 'S14'].forEach((cell) => {
+      worksheet.getCell(cell).alignment = { vertical: 'middle', horizontal: 'center' };
+    });
 
     worksheet.mergeCells('N15:P15');
     worksheet.getCell('N15').value = 'Max Capacity Tube';
     worksheet.getCell('N15').alignment = { vertical: 'middle', horizontal: 'left' };
     setBorder(worksheet.getCell('N15'));
+    worksheet.getCell('Q15').value = this.headerMarketingOrder[1].maxCapTube; // "Month 1"
+    worksheet.getCell('R15').value = this.headerMarketingOrder[2].maxCapTube; // "Month 2"
+    worksheet.getCell('S15').value = this.headerMarketingOrder[0].maxCapTube; // "Month 3"
+    ['Q15', 'R15', 'S15'].forEach((cell) => {
+      worksheet.getCell(cell).alignment = { vertical: 'middle', horizontal: 'center' };
+    });
 
     worksheet.mergeCells('N16:P16');
     worksheet.getCell('N16').value = 'Max Capacity Tire TL';
     worksheet.getCell('N16').alignment = { vertical: 'middle', horizontal: 'left' };
     setBorder(worksheet.getCell('N16'));
+    worksheet.getCell('Q16').value = this.headerMarketingOrder[1].maxCapTl; // "Month 1"
+    worksheet.getCell('R16').value = this.headerMarketingOrder[2].maxCapTl; // "Month 2"
+    worksheet.getCell('S16').value = this.headerMarketingOrder[0].maxCapTl; // "Month 3"
+    ['Q16', 'R16', 'S16'].forEach((cell) => {
+      worksheet.getCell(cell).alignment = { vertical: 'middle', horizontal: 'center' };
+    });
 
     worksheet.mergeCells('N17:P17');
     worksheet.getCell('N17').value = 'Max Capacity Tire TT';
     worksheet.getCell('N17').alignment = { vertical: 'middle', horizontal: 'left' };
     setBorder(worksheet.getCell('N17'));
+    worksheet.getCell('Q17').value = this.headerMarketingOrder[1].maxCapTt; // "Month 1"
+    worksheet.getCell('R17').value = this.headerMarketingOrder[2].maxCapTt; // "Month 2"
+    worksheet.getCell('S17').value = this.headerMarketingOrder[0].maxCapTt; // "Month 3"
+    ['Q17', 'R17', 'S17'].forEach((cell) => {
+      worksheet.getCell(cell).alignment = { vertical: 'middle', horizontal: 'center' };
+    });
 
     worksheet.mergeCells('N18:P18');
     worksheet.getCell('N18').value = 'Note Order TL';
     worksheet.getCell('N18').alignment = { vertical: 'middle', horizontal: 'left' };
     setBorder(worksheet.getCell('N18'));
+    worksheet.getCell('Q18').value = this.headerMarketingOrder[1].noteOrderTl; // "Month 1"
+    worksheet.getCell('R18').value = this.headerMarketingOrder[2].noteOrderTl; // "Month 2"
+    worksheet.getCell('S18').value = this.headerMarketingOrder[0].noteOrderTl; // "Month 3"
+    ['Q18', 'R18', 'S18'].forEach((cell) => {
+      worksheet.getCell(cell).alignment = { vertical: 'middle', horizontal: 'center' };
+    });
 
     for (let i = 9; i <= 20; i++) {
       worksheet.getRow(i).height = 20;
     }
 
-
     worksheet.getCell('Q9').value = month0;
-    worksheet.getCell('Q9').alignment = { vertical: 'middle', horizontal: 'center' };
     setBorder(worksheet.getCell('Q9'));
 
     worksheet.getCell('R9').value = month1;
-    worksheet.getCell('R9').alignment = { vertical: 'middle', horizontal: 'center' };
     setBorder(worksheet.getCell('R9'));
 
     worksheet.getCell('S9').value = month2;
-    worksheet.getCell('S9').alignment = { vertical: 'middle', horizontal: 'center' };
     setBorder(worksheet.getCell('S9'));
+
+    ['Q9', 'R9', 'S9'].forEach((cell) => {
+      const cellRef = worksheet.getCell(cell);
+      cellRef.alignment = { vertical: 'middle', horizontal: 'center' };
+      cellRef.font = {
+        name: 'Calibri Body',
+        size: 11,
+        bold: true,
+        italic: true,
+      };
+    });
 
     for (let row = 10; row <= 18; row++) {
       setBorder(worksheet.getCell(`Q${row}`));
@@ -259,7 +348,51 @@ export class AddMoMarketingComponent implements OnInit {
       setBorder(worksheet.getCell(`S${row}`));
     }
 
-    // Detail Marketing Order 
+    ['N11', 'N12', 'N13', 'N14', 'N15', 'N16', 'N17', 'N18'].forEach((cell) => {
+      const cellRef = worksheet.getCell(cell);
+      cellRef.font = {
+        name: 'Calibri Body',
+        size: 11,
+        bold: true,
+        italic: true,
+      };
+    });
+
+    ['Q10', 'Q11', 'Q12', 'Q13', 'Q14', 'Q15', 'Q16', 'Q17'].forEach((cell) => {
+      const cellRef = worksheet.getCell(cell);
+      cellRef.alignment = { vertical: 'middle', horizontal: 'right' };
+      cellRef.font = {
+        name: 'Calibri Body',
+        size: 11,
+        bold: true,
+        italic: true,
+      };
+    });
+
+    ['R10', 'R11', 'R12', 'R13', 'R14', 'R15', 'R16', 'R17'].forEach((cell) => {
+      const cellRef = worksheet.getCell(cell);
+      cellRef.alignment = { vertical: 'middle', horizontal: 'right' };
+      cellRef.font = {
+        name: 'Calibri Body',
+        size: 11,
+        bold: true,
+        italic: true,
+      };
+    });
+
+    ['S10', 'S11', 'S12', 'S13', 'S14', 'S15', 'S16', 'S17'].forEach((cell) => {
+      const cellRef = worksheet.getCell(cell);
+      cellRef.alignment = { vertical: 'middle', horizontal: 'right' };
+      cellRef.font = {
+        name: 'Calibri Body',
+        size: 11,
+        bold: true,
+        italic: true,
+      };
+    });
+    //End Header
+
+    // Detail Marketing Order
     worksheet.mergeCells('B19:B20');
     worksheet.getCell('B19').value = 'Category';
     worksheet.getCell('B19').alignment = { vertical: 'middle', horizontal: 'center' };
@@ -407,7 +540,7 @@ export class AddMoMarketingComponent implements OnInit {
           top: { style: 'thin' },
           left: { style: 'thin' },
           bottom: { style: 'thin' },
-          right: { style: 'thin' }
+          right: { style: 'thin' },
         };
       });
 
@@ -442,7 +575,7 @@ export class AddMoMarketingComponent implements OnInit {
     return `${year}-${month}`;
   }
 
-  updateMonthNames(hm: HeaderMarketingOrder[]): void {
+  updateMonthNames(hmo: HeaderMarketingOrder[]): void {
     this.monthNames[0] = this.getMonthName(new Date(this.headerMarketingOrder[1].month));
     this.monthNames[1] = this.getMonthName(new Date(this.headerMarketingOrder[2].month));
     this.monthNames[2] = this.getMonthName(new Date(this.headerMarketingOrder[0].month));
@@ -569,5 +702,89 @@ export class AddMoMarketingComponent implements OnInit {
 
   navigateToView() {
     this.router.navigate(['/transaksi/view-mo-marketing']);
+  }
+
+  openModalUpload(): void {
+    $('#uploadModal').modal('show');
+  }
+
+  uploadFileExcel() {
+    if (this.file) {
+      const formData = new FormData();
+      formData.append('file', this.file);
+
+      // Membaca file Excel
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        // Memastikan hasil pembacaan adalah ArrayBuffer
+        const result = e.target.result;
+        if (result instanceof ArrayBuffer) {
+          const data = new Uint8Array(result);
+          const workbook = XLSX.read(data, { type: 'array' });
+
+          // Ambil nama sheet pertama
+          const firstSheetName = workbook.SheetNames[0];
+          const worksheet = workbook.Sheets[firstSheetName];
+
+          // Menentukan kolom yang akan dibaca (M sampai S)
+          const startRow = 21; // Baris awal
+          const endRow = worksheet['!ref'] ? XLSX.utils.decode_range(worksheet['!ref']).e.r : startRow; // Menghitung baris terakhir
+
+          // Membaca data dari kolom M hingga S
+          for (let row = startRow - 1; row <= endRow; row++) {
+            const partNumber = Number(worksheet[`C${row + 1}`]?.v) || null; // Kolom C
+            const initialStockValue = Number(worksheet[`M${row + 1}`]?.v) || null; // Kolom M
+            const sfMonth0Value = Number(worksheet[`N${row + 1}`]?.v) || null; // Kolom N
+            const sfMonth1Value = Number(worksheet[`O${row + 1}`]?.v) || null; // Kolom O
+            const sfMonth2Value = Number(worksheet[`P${row + 1}`]?.v) || null; // Kolom P
+            const moMonth0Value = Number(worksheet[`Q${row + 1}`]?.v) || null; // Kolom Q
+            const moMonth1Value = Number(worksheet[`R${row + 1}`]?.v) || null; // Kolom R
+            const moMonth2Value = Number(worksheet[`S${row + 1}`]?.v) || null; // Kolom S
+
+            // Mencari dan memperbarui nilai dalam detailMarketingOrder
+            const detail = this.detailMarketingOrder.find((item) => item.partNumber === partNumber);
+            if (detail) {
+              detail.initialStock = initialStockValue;
+              detail.sfMonth0 = sfMonth0Value;
+              detail.sfMonth1 = sfMonth1Value;
+              detail.sfMonth2 = sfMonth2Value;
+              detail.moMonth0 = moMonth0Value;
+              detail.moMonth1 = moMonth1Value;
+              detail.moMonth2 = moMonth2Value;
+            }
+          }
+
+          console.log(this.detailMarketingOrder);
+        } else {
+          console.error('File tidak dapat dibaca sebagai ArrayBuffer');
+        }
+      };
+
+      reader.readAsArrayBuffer(this.file); // Membaca file sebagai ArrayBuffer
+      this.isTableVisible = true;
+      $('#uploadModal').modal('hide');
+    }
+  }
+
+  onFileChange(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      const file = input.files[0];
+      const fileName = file.name.toLowerCase();
+
+      // Validasi ekstensi file
+      if (fileName.endsWith('.xls') || fileName.endsWith('.xlsx')) {
+        this.file = file;
+      } else {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Invalid File Type',
+          text: 'Please upload a valid Excel file (.xls or .xlsx).',
+          confirmButtonText: 'OK',
+        });
+        this.file = null;
+        input.value = '';
+      }
+    }
   }
 }
