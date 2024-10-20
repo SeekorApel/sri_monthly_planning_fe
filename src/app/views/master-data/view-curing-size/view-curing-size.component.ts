@@ -8,6 +8,10 @@ declare var $: any;
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSort } from '@angular/material/sort';
+import { MatPaginator } from '@angular/material/paginator';
+
 @Component({
   selector: 'app-view-curing-size',
   templateUrl: './view-curing-size.component.html',
@@ -27,6 +31,12 @@ export class ViewCuringSizeComponent implements OnInit {
   pageOfItems: Array<any>;
   pageSize: number = 5;
   totalPages: number = 5;
+  sortBuffer: Array<any>;
+  displayedColumns: string[] = ['no', 'curingsize_ID', 'machinecuringtype_ID','size_ID', 'capacity', 'status', 'action'];
+  dataSource: MatTableDataSource<Curing_Size>;
+
+  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(private curingSizeService: CuringSizeService, private fb: FormBuilder) {
     this.editCuringSizeForm = this.fb.group({
@@ -44,7 +54,10 @@ export class ViewCuringSizeComponent implements OnInit {
     this.curingSizeService.getAllCuringSize().subscribe(
       (response: ApiResponse<Curing_Size[]>) => {
         this.curingSizes = response.data;
-        this.onChangePage(this.curingSizes.slice(0, this.pageSize));
+        this.dataSource = new MatTableDataSource(this.curingSizes);
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+        this.onChangePage(this.dataSource.data.slice(0, this.pageSize));
       },
       (error) => {
         this.errorMessage = 'Failed to load curing sizes: ' + error.message;
@@ -57,15 +70,16 @@ export class ViewCuringSizeComponent implements OnInit {
   }
 
   onSearchChange(): void {
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
     // Lakukan filter berdasarkan nama plant yang mengandung text pencarian (case-insensitive)
-    const filteredCuringSizes = this.curingSizes.filter((curingSizes) => 
-      curingSizes.size_ID.toLowerCase().includes(this.searchText.toLowerCase()) ||
-      curingSizes.machinecuringtype_ID.toString().includes(this.searchText) ||
-      curingSizes.capacity.toString().includes(this.searchText) 
-    );
+    // const filteredCuringSizes = this.curingSizes.filter((curingSizes) => 
+    //   curingSizes.size_ID.toLowerCase().includes(this.searchText.toLowerCase()) ||
+    //   curingSizes.machinecuringtype_ID.toString().includes(this.searchText) ||
+    //   curingSizes.capacity.toString().includes(this.searchText) 
+    // );
 
-    // Tampilkan hasil filter pada halaman pertama
-    this.onChangePage(filteredCuringSizes.slice(0, this.pageSize));
+    // // Tampilkan hasil filter pada halaman pertama
+    // this.onChangePage(filteredCuringSizes.slice(0, this.pageSize));
   }
 
   resetSearch(): void {

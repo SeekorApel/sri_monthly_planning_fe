@@ -22,51 +22,77 @@
 
       <!-- Table -->
       <div class="table-responsive">
-        <table class="table table-bordered table-striped table-sm">
-          <thead align="center">
-            <tr>
-              <th>No</th>
-              <th>Machine Allowence ID</th>
-              <th>ID Machine</th>
-              <th>Person Responsible</th>
-              <th>Shift 1</th>
-              <th>Shift 2</th>
-              <th>Shift 3</th>
-              <th>Shift 1 Friday</th>
-              <th>Total Shift 123</th>
-              <th>Status</th>
-              <th style="min-width: 200px;">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr align="center" *ngFor="let machienAllowence of pageOfItems; let i = index">
-              <td>{{ i + 1 }}</td>
-              <td>{{ machienAllowence.machine_ALLOW_ID }}</td>
-              <td>{{ machienAllowence.id_MACHINE }}</td>
-              <td>{{ machienAllowence.person_RESPONSIBLE }}</td>
-              <td>{{ machienAllowence.shift_1 }}</td>
-              <td>{{ machienAllowence.shift_2 }}</td>
-              <td>{{ machienAllowence.shift_3 }}</td>
-              <td>{{ machienAllowence.shift_1_FRIDAY }}</td>
-              <td>{{ machienAllowence.total_SHIFT_123 }}</td>
-              <td [ngClass]="{ 'bg-success': machienAllowence.status === 1, 'bg-danger': machienAllowence.status !== 1 }">
-                {{ machienAllowence.status === 1 ? 'Active' : 'Deactive' }}
-              </td>
-              <td>
-                <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(machienAllowence.machine_ALLOW_ID)">Update</button>
-                <button type="button" class="btn btn-md ml-2" [ngClass]="{ 'btn-danger': machienAllowence.status === 1, 'btn-success': machienAllowence.status !== 1 }" (click)="machienAllowence.status === 1 ? deleteData(machienAllowence) : activateData(machienAllowence)">
-                  {{ machienAllowence.status === 1 ? 'Delete' : 'Active' }}
-                </button>
-              </td>
-            </tr>
-          </tbody>
+        <table mat-table [dataSource]="dataSource" matSort class="table table-bordered table-striped table-sm">
+          <ng-container matColumnDef="no" >
+            <th *matHeaderCellDef >No</th>
+            <td  *matCellDef="let element; let i = index">{{ i + 1 }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="machine_ALLOW_ID">
+            <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Machine Allow ID</th>
+            <td  *matCellDef="let element">{{ element.machine_ALLOW_ID }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="id_MACHINE">
+            <th  *matHeaderCellDef mat-sort-header >Machine ID</th>
+            <td *matCellDef="let element">{{ element.id_MACHINE }}</td>
+          </ng-container>
+          
+          <ng-container matColumnDef="person_RESPONSIBLE">
+            <th  *matHeaderCellDef mat-sort-header >Person Responsible</th>
+            <td *matCellDef="let element">{{ element.person_RESPONSIBLE }}</td>
+          </ng-container>
+          
+          <ng-container matColumnDef="shift_1">
+            <th  *matHeaderCellDef mat-sort-header >Shift 1</th>
+            <td *matCellDef="let element">{{ element.shift_1 }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="shift_2">
+            <th  *matHeaderCellDef mat-sort-header >Shift 2</th>
+            <td *matCellDef="let element">{{ element.shift_2 }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="shift_3">
+            <th  *matHeaderCellDef mat-sort-header >Shift 3</th>
+            <td *matCellDef="let element">{{ element.shift_3 }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="shift_1_FRIDAY">
+            <th  *matHeaderCellDef mat-sort-header >Shift 1 Friday</th>
+            <td *matCellDef="let element">{{ element.shift_1_FRIDAY }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="total_SHIFT_123">
+            <th  *matHeaderCellDef mat-sort-header >Total Shift 123</th>
+            <td *matCellDef="let element">{{ element.total_SHIFT_123 }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="status">
+            <th  *matHeaderCellDef>Status</th>
+            <td *matCellDef="let element" [ngClass]="{ 'bg-success': element.status === 1, 'bg-danger': element.status !== 1 }">
+              {{ element.status === 1 ? 'Active' : 'Deactive' }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="action" >
+            <th *matHeaderCellDef style="min-width: 200px;">Action</th>
+            <td *matCellDef="let element">
+              <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(element.machine_ALLOW_ID)">Update</button>
+              <button type="button" class="btn btn-md ml-2" [ngClass]="{ 'btn-danger': element.status === 1, 'btn-success': element.status !== 1 }" (click)="element.status === 1 ? deleteData(element) : activateData(element)">
+                {{ element.status === 1 ? 'Delete' : 'Active' }}
+              </button>
+            </td>
+          </ng-container>
+
+          <tr align="center" style="height: 20px;" mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr align="center" mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
         </table>
         <!-- Pagination -->
-        <nav>
-          <ul class="pagination">
-            <jw-pagination [items]="machineAllowences" [pageSize]="pageSize" [maxPages]="totalPages" (changePage)="onChangePage($event)"> </jw-pagination>
-          </ul>
-        </nav>
+        <mat-paginator [pageSize]="pageSize"
+              [pageSizeOptions]="[5, 10, 20]"
+              showFirstLastButtons>
+        </mat-paginator>
       </div>
     </div>
   </div>

@@ -8,6 +8,10 @@ declare var $: any;
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSort } from '@angular/material/sort';
+import { MatPaginator } from '@angular/material/paginator';
+
 @Component({
   selector: 'app-view-quadrant',
   templateUrl: './view-quadrant.component.html',
@@ -27,11 +31,17 @@ export class ViewQuadrantComponent implements OnInit {
   pageOfItems: Array<any>;
   pageSize: number = 5;
   totalPages: number = 5;
+  sortBuffer: Array<any>;
+  displayedColumns: string[] = ['no', 'quadrant_ID', 'building_ID','quadrant_NAME','status', 'action'];
+  dataSource: MatTableDataSource<Quadrant>;
+
+  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(private quadrantService: QuadrantService, private fb: FormBuilder) {
     this.editQuadrantForm = this.fb.group({
       quadrantName: ['', Validators.required],
-      buildingID: ['', Validators.required]
+      buildingID: ['', Validators.required],
     });
   }
 
@@ -43,7 +53,10 @@ export class ViewQuadrantComponent implements OnInit {
     this.quadrantService.getAllQuadrant().subscribe(
       (response: ApiResponse<Quadrant[]>) => {
         this.quadrants = response.data;
-        this.onChangePage(this.quadrants.slice(0, this.pageSize));
+        this.dataSource = new MatTableDataSource(this.quadrants);
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+        this.onChangePage(this.dataSource.data.slice(0, this.pageSize));
       },
       (error) => {
         this.errorMessage = 'Failed to load plants: ' + error.message;
@@ -56,14 +69,9 @@ export class ViewQuadrantComponent implements OnInit {
   }
 
   onSearchChange(): void {
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
     // Lakukan filter berdasarkan nama plant yang mengandung text pencarian (case-insensitive)
-    const filteredQuadrant = this.quadrants.filter((quadrant) => 
-    quadrant.quadrant_NAME.toLowerCase().includes(this.searchText.toLowerCase()) || 
-    quadrant.quadrant_ID.toString().includes(this.searchText) ||
-    quadrant.building_ID.toString().includes(this.searchText));
-
-    // Tampilkan hasil filter pada halaman pertama
-    this.onChangePage(filteredQuadrant.slice(0, this.pageSize));
+    
   }
 
   resetSearch(): void {

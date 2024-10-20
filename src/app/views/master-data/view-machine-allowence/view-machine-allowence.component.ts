@@ -8,6 +8,10 @@ declare var $: any;
 import * as XLSX from 'xlsx';
 import {saveAs} from 'file-saver';
 
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSort } from '@angular/material/sort';
+import { MatPaginator } from '@angular/material/paginator';
+
 @Component({
   selector: 'app-view-machine-allowence',
   templateUrl: './view-machine-allowence.component.html',
@@ -28,6 +32,12 @@ export class ViewMachineAllowenceComponent implements OnInit {
   pageOfItems: Array<any>;
   pageSize: number = 5;
   totalPages: number = 5;
+  sortBuffer: Array<any>;
+  displayedColumns: string[] = ['no', 'machine_ALLOW_ID', 'id_MACHINE','person_RESPONSIBLE', 'shift_1', 'shift_2', 'shift_3', 'shift_1_FRIDAY', 'total_SHIFT_123', 'status', 'action'];
+  dataSource: MatTableDataSource<machineAllowence>;
+
+  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(private machineAllowenceService: MachineAllowenceService, private fb: FormBuilder) { 
     this.editMachineAllowenceForm = this.fb.group({
@@ -49,7 +59,10 @@ export class ViewMachineAllowenceComponent implements OnInit {
     this.machineAllowenceService.getAllMachineAllowence().subscribe(
       (response: ApiResponse<machineAllowence[]>) => {
         this.machineAllowences = response.data;
-        this.onChangePage(this.machineAllowences.slice(0, this.pageSize));
+        this.dataSource = new MatTableDataSource(this.machineAllowences);
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+        this.onChangePage(this.dataSource.data.slice(0, this.pageSize));
       },
       (error) => {
         this.errorMessage = 'Failed to load machine allowences: ' + error.message;
@@ -62,24 +75,25 @@ export class ViewMachineAllowenceComponent implements OnInit {
   }
 
   onSearchChange(): void {
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
     // Lakukan filter berdasarkan nama plant yang mengandung text pencarian (case-insensitive)
-    const filteredMachineAllowences = this.machineAllowences.filter(
-      (machineAllowance) =>
-        machineAllowance.id_MACHINE
-          .toLowerCase()
-          .includes(this.searchText.toLowerCase()) ||
-          machineAllowance.machine_ALLOW_ID.toString().includes(this.searchText.toLowerCase()) ||
-          machineAllowance.id_MACHINE.toString().includes(this.searchText.toLowerCase()) ||
-          machineAllowance.person_RESPONSIBLE.toLowerCase().toString().includes(this.searchText.toLowerCase()) ||
-          machineAllowance.shift_1.toString().includes(this.searchText) ||
-          machineAllowance.shift_2.toString().includes(this.searchText) ||
-          machineAllowance.shift_3.toString().includes(this.searchText) ||
-          machineAllowance.shift_1_FRIDAY.toString().includes(this.searchText) ||
-          machineAllowance.total_SHIFT_123.toString().includes(this.searchText)
-    );
+    // const filteredMachineAllowences = this.machineAllowences.filter(
+    //   (machineAllowance) =>
+    //     machineAllowance.id_MACHINE
+    //       .toLowerCase()
+    //       .includes(this.searchText.toLowerCase()) ||
+    //       machineAllowance.machine_ALLOW_ID.toString().includes(this.searchText.toLowerCase()) ||
+    //       machineAllowance.id_MACHINE.toString().includes(this.searchText.toLowerCase()) ||
+    //       machineAllowance.person_RESPONSIBLE.toLowerCase().toString().includes(this.searchText.toLowerCase()) ||
+    //       machineAllowance.shift_1.toString().includes(this.searchText) ||
+    //       machineAllowance.shift_2.toString().includes(this.searchText) ||
+    //       machineAllowance.shift_3.toString().includes(this.searchText) ||
+    //       machineAllowance.shift_1_FRIDAY.toString().includes(this.searchText) ||
+    //       machineAllowance.total_SHIFT_123.toString().includes(this.searchText)
+    // );
 
-    // Tampilkan hasil filter pada halaman pertama
-    this.onChangePage(filteredMachineAllowences.slice(0, this.pageSize));
+    // // Tampilkan hasil filter pada halaman pertama
+    // this.onChangePage(filteredMachineAllowences.slice(0, this.pageSize));
   }
 
   resetSearch(): void {

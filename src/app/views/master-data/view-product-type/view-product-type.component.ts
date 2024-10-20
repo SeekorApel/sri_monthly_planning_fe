@@ -8,6 +8,10 @@ declare var $: any;
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSort } from '@angular/material/sort';
+import { MatPaginator } from '@angular/material/paginator';
+
 @Component({
   selector: 'app-view-product-type',
   templateUrl: './view-product-type.component.html',
@@ -27,6 +31,12 @@ export class ViewProductTypeComponent implements OnInit {
   pageOfItems: Array<any>;
   pageSize: number = 5;
   totalPages: number = 5;
+  sortBuffer: Array<any>;
+  displayedColumns: string[] = ['no', 'product_TYPE_ID', 'product_MERK','product_TYPE', 'category', 'status', 'action'];
+  dataSource: MatTableDataSource<ProductType>;
+
+  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(private productTypeService: ProductTypeService, private fb: FormBuilder) {
     this.editProductTypeForm = this.fb.group({
@@ -44,7 +54,10 @@ export class ViewProductTypeComponent implements OnInit {
     this.productTypeService.getAllProductType().subscribe(
       (response: ApiResponse<ProductType[]>) => {
         this.productTypes = response.data;
-        this.onChangePage(this.productTypes.slice(0, this.pageSize));
+        this.dataSource = new MatTableDataSource(this.productTypes);
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+        this.onChangePage(this.dataSource.data.slice(0, this.pageSize));
       },
       (error) => {
         this.errorMessage = 'Failed to load product types: ' + error.message;
@@ -57,15 +70,17 @@ export class ViewProductTypeComponent implements OnInit {
   }
 
   onSearchChange(): void {
-    // Lakukan filter berdasarkan nama plant yang mengandung text pencarian (case-insensitive)
-    const filteredProductType = this.productTypes.filter((productType) => 
-    productType.product_TYPE_ID.toString().includes(this.searchText.toLowerCase()) || 
-    productType.product_MERK.toLowerCase().includes(this.searchText.toLowerCase()) ||
-    productType.product_TYPE.toLowerCase().includes(this.searchText.toLowerCase()) ||
-    productType.category.toLowerCase().includes(this.searchText.toLowerCase()));
 
-    // Tampilkan hasil filter pada halaman pertama
-    this.onChangePage(filteredProductType.slice(0, this.pageSize));
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
+    // Lakukan filter berdasarkan nama plant yang mengandung text pencarian (case-insensitive)
+    // const filteredProductType = this.productTypes.filter((productType) => 
+    // productType.product_TYPE_ID.toString().includes(this.searchText.toLowerCase()) || 
+    // productType.product_MERK.toLowerCase().includes(this.searchText.toLowerCase()) ||
+    // productType.product_TYPE.toLowerCase().includes(this.searchText.toLowerCase()) ||
+    // productType.category.toLowerCase().includes(this.searchText.toLowerCase()));
+
+    // // Tampilkan hasil filter pada halaman pertama
+    // this.onChangePage(filteredProductType.slice(0, this.pageSize));
   }
 
   resetSearch(): void {
