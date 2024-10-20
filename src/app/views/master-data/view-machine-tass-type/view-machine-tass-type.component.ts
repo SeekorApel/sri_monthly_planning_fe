@@ -9,6 +9,10 @@ import { saveAs } from 'file-saver';
 declare var $: any;
 import * as XLSX from 'xlsx';
 
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSort } from '@angular/material/sort';
+import { MatPaginator } from '@angular/material/paginator';
+
 @Component({
   selector: 'app-view-plant',
   templateUrl: './view-machine-tass-type.component.html',
@@ -28,6 +32,8 @@ export class ViewMachineTassTypeComponent implements OnInit {
   pageOfItems: Array<any>;
   pageSize: number = 5;
   totalPages: number = 5;
+  displayedColumns: string[] = ['no','machinetasstype_ID','setting_ID','description','status','action'];
+  dataSource: MatTableDataSource<MachineTassType>;
 
   constructor(private mttService: MachineTassTypeService, private fb: FormBuilder) {
     this.editMachineTassTypeForm = this.fb.group({
@@ -35,6 +41,8 @@ export class ViewMachineTassTypeComponent implements OnInit {
       setting: ['', Validators.required],
     });
   }
+  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
   ngOnInit(): void {
     this.getAllMachineTassType();
@@ -44,7 +52,9 @@ export class ViewMachineTassTypeComponent implements OnInit {
     this.mttService.getAllMachineTassType().subscribe(
       (response: ApiResponse<MachineTassType[]>) => {
         this.mtt = response.data;
-        console.log(this.mtt);
+        this.dataSource = new MatTableDataSource(this.mtt);
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
         this.onChangePage(this.mtt.slice(0, this.pageSize));
       },
       (error) => {
@@ -59,7 +69,7 @@ export class ViewMachineTassTypeComponent implements OnInit {
   activateData(mtt: MachineTassType): void {
     Swal.fire({
       title: 'Are you sure?',
-      text: 'This data plant will be Activated!',
+      text: 'This data machine tass type will be Activated!',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -83,11 +93,7 @@ export class ViewMachineTassTypeComponent implements OnInit {
   }
 
   onSearchChange(): void {
-    // Lakukan filter berdasarkan nama MachineTASSType yang mengandung text pencarian (case-insensitive)
-    const filteredPlants = this.mtt.filter((mtType) => mtType.description.toLowerCase().includes(this.searchText.toLowerCase()) || mtType.machinetasstype_ID.toString().includes(this.searchText));
-
-    // Tampilkan hasil filter pada halaman pertama
-    this.onChangePage(filteredPlants.slice(0, this.pageSize));
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
   }
 
   resetSearch(): void {

@@ -9,6 +9,10 @@ import { saveAs } from 'file-saver';
 declare var $: any;
 import * as XLSX from 'xlsx';
 
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSort } from '@angular/material/sort';
+import { MatPaginator } from '@angular/material/paginator';
+
 @Component({
   selector: 'app-view-machine-extruding',
   templateUrl: './view-machine-extruding.component.html',
@@ -28,6 +32,11 @@ export class ViewMachineExtrudingComponent implements OnInit {
   pageOfItems: Array<any>;
   pageSize: number = 5;
   totalPages: number = 5;
+  displayedColumns: string[] = ['no', 'id_MACHINE_EXT','building_ID','type','status','action'];
+  dataSource: MatTableDataSource<MachineExtruding>;
+
+  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(private MEService: MachineExtrudingService, private fb: FormBuilder) {
     this.editMachineExtrudingTypeForm = this.fb.group({
@@ -44,8 +53,10 @@ export class ViewMachineExtrudingComponent implements OnInit {
     this.MEService.getAllMachineExtruding().subscribe(
       (response: ApiResponse<MachineExtruding[]>) => {
         this.machineExtudings = response.data;
-        console.log(this.machineExtudings);
-        this.onChangePage(this.machineExtudings.slice(0, this.pageSize));
+        this.dataSource = new MatTableDataSource(this.machineExtudings);
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+        // this.onChangePage(this.machineExtudings.slice(0, this.pageSize));
       },
       (error) => {
         this.errorMessage = 'Failed to load machine extruding: ' + error.message;
@@ -58,11 +69,7 @@ export class ViewMachineExtrudingComponent implements OnInit {
   }
 
   onSearchChange(): void {
-    // Lakukan filter berdasarkan nama MachineTASSType yang mengandung text pencarian (case-insensitive)
-    const filteredmachineExtruding = this.machineExtudings.filter((meType) => meType.type.toLowerCase().includes(this.searchText.toLowerCase()) || meType.ID_machine_ext.toString().includes(this.searchText));
-
-    // Tampilkan hasil filter pada halaman pertama
-    this.onChangePage(filteredmachineExtruding.slice(0, this.pageSize));
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
   }
 
   resetSearch(): void {

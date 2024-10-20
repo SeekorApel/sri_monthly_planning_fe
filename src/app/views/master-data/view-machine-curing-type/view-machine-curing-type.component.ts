@@ -8,6 +8,10 @@ import { saveAs } from 'file-saver';
 declare var $: any;
 import * as XLSX from 'xlsx';
 
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSort } from '@angular/material/sort';
+import { MatPaginator } from '@angular/material/paginator';
+
 @Component({
   selector: 'app-view-machine-curing-type',
   templateUrl: './view-machine-curing-type.component.html',
@@ -27,6 +31,11 @@ export class ViewMachineCuringTypeComponent implements OnInit {
   pageOfItems: Array<any>;
   pageSize: number = 5;
   totalPages: number = 5;
+  displayedColumns: string[] = ['no', 'machinecuringtype_ID','setting_ID','description','cavity','status','action'];
+  dataSource: MatTableDataSource<MachineCuringType>;
+
+  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(private machineCuringTypeService: MachineCuringTypeService, private fb: FormBuilder) {
     this.editMCTForm = this.fb.group({
@@ -44,7 +53,10 @@ export class ViewMachineCuringTypeComponent implements OnInit {
     this.machineCuringTypeService.getAllMCT().subscribe(
       (response: ApiResponse<MachineCuringType[]>) => {
         this.machineCuringTypes = response.data;
-        this.onChangePage(this.machineCuringTypes.slice(0, this.pageSize));
+        this.dataSource = new MatTableDataSource(this.machineCuringTypes);
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+        // this.onChangePage(this.machineCuringTypes.slice(0, this.pageSize));
       },
       (error) => {
         this.errorMessage = 'Failed to load Machine Curing Type: ' + error.message;
@@ -57,11 +69,7 @@ export class ViewMachineCuringTypeComponent implements OnInit {
   }
 
   onSearchChange(): void {
-    // Lakukan filter berdasarkan nama MCT yang mengandung text pencarian (case-insensitive)
-    const filteredMCT = this.machineCuringTypes.filter((mct) => mct.description.toLowerCase().includes(this.searchText.toLowerCase()) || mct.machinecuringtype_ID.toString().includes(this.searchText));
-
-    // Tampilkan hasil filter pada halaman pertama
-    this.onChangePage(filteredMCT.slice(0, this.pageSize));
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
   }
 
   resetSearch(): void {

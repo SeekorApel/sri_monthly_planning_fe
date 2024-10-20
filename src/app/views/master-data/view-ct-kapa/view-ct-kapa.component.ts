@@ -8,6 +8,10 @@ import { saveAs } from 'file-saver';
 declare var $: any;
 import * as XLSX from 'xlsx';
 
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSort } from '@angular/material/sort';
+import { MatPaginator } from '@angular/material/paginator';
+
 @Component({
   selector: 'app-view-ct-kapa',
   templateUrl: './view-ct-kapa.component.html',
@@ -27,6 +31,11 @@ export class ViewCtKapaComponent implements OnInit {
   pageOfItems: Array<any>;
   pageSize: number = 5;
   totalPages: number = 5;
+  displayedColumns: string[] = ['no','id_CT_KAPA','item_CURING','type_CURING',
+    'description','cycle_TIME','shift','kapa_PERSHIFT','last_UPDATE_DATA','machine',
+    'status','action'
+  ];
+  dataSource: MatTableDataSource<CtKapa>;
 
   constructor(private ctkapaService: CtKapaService, private fb: FormBuilder) {
     this.editCtKapaForm = this.fb.group({
@@ -82,6 +91,8 @@ export class ViewCtKapaComponent implements OnInit {
       },
     });
   }
+  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
   ngOnInit(): void {
     this.getAllCtKapa();
@@ -91,8 +102,10 @@ export class ViewCtKapaComponent implements OnInit {
     this.ctkapaService.getAllCtKapa().subscribe(
       (response: ApiResponse<CtKapa[]>) => {
         this.ctkapas = response.data;
-        console.log(this.ctkapas);
-        this.onChangePage(this.ctkapas.slice(0, this.pageSize));
+        this.dataSource = new MatTableDataSource(this.ctkapas);
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+        // this.onChangePage(this.ctkapas.slice(0, this.pageSize));
       },
       (error) => {
         this.errorMessage = 'Failed to load Ct Kapa: ' + error.message;
