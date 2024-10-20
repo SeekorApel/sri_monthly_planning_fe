@@ -27,9 +27,10 @@ export class AddMoPpcComponent implements OnInit {
   formHeaderMo: FormGroup;
   isTableVisible: boolean = false;
   monthNames: string[] = ['', '', ''];
-  marketingOrderTable: DetailMarketingOrder[];
+  detailMarketingOrder: DetailMarketingOrder[];
   excelData: any[] = [];
   errorMessage: string | null = null;
+  lastIdMo: string = "";
 
   //Workday
   workDay_M0: any[] = [];
@@ -97,10 +98,26 @@ export class AddMoPpcComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.getLastIdMo();
     this.loadValueTotal();
     this.formHeaderMo.get('month_0')?.valueChanges.subscribe((value) => {
       this.calculateNextMonths(value);
     });
+  }
+
+  getLastIdMo(): void {
+    this.moService.getLastIdMo().subscribe(
+      (response: ApiResponse<string>) => {
+        this.lastIdMo = response.data;
+      },
+      (error) => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Failed to load data: ' + error.message,
+        });
+      }
+    );
   }
 
   downloadTemplate_M1() {
@@ -829,17 +846,6 @@ export class AddMoPpcComponent implements OnInit {
 
   showDetailMo() {
     if (this.formHeaderMo.invalid) {
-      // //Get all form controls that are invalid
-      // const invalidFields = [];
-      // const controls = this.formHeaderMo.controls;
-      // for (const name in controls) {
-      //   if (controls[name].invalid) {
-      //     invalidFields.push(name);
-      //   }
-      // }
-
-      // // Log invalid fields to the console
-      // console.log('Invalid fields:', invalidFields);
       Swal.fire({
         title: 'Incomplete Form',
         text: 'Please fill in all required fields!',
@@ -863,7 +869,7 @@ export class AddMoPpcComponent implements OnInit {
 
     this.moService.getRowDetailMarketingOrder(totalHKTT1, totalHKTT2, totalHKTT3, totalHKTL1, totalHKTL2, totalHKTL3, productMerk).subscribe(
       (response: ApiResponse<DetailMarketingOrder[]>) => {
-        this.marketingOrderTable = response.data;
+        this.detailMarketingOrder = response.data;
       },
       (error) => {
         Swal.fire({
@@ -877,63 +883,112 @@ export class AddMoPpcComponent implements OnInit {
   }
 
   saveAllMo() {
-    const workDay = [...this.workDay_M0, ...this.workDay_M1, ...this.workDay_M2];
+
+    //Set data Save MO
+    this.marketingOrder.moId = this.lastIdMo;
     this.marketingOrder.dateValid = this.formHeaderMo.get('date')?.value;
     this.marketingOrder.type = this.formHeaderMo.get('type')?.value;
     this.marketingOrder.month0 = new Date(this.formHeaderMo.get('month_0')?.value);
     this.marketingOrder.month1 = new Date(this.formHeaderMo.get('month_1')?.value);
     this.marketingOrder.month2 = new Date(this.formHeaderMo.get('month_2')?.value);
 
-    this.moService.saveMarketingOrder(this.marketingOrder).subscribe(
+    //Set data save Header Mo
+    this.headerMo = [];
+    for (let i = 0; i < 3; i++) {
+      this.headerMo.push({
+        moId: this.lastIdMo,
+        month: new Date(this.formHeaderMo.get(`month_${i}`)?.value),
+        wdNormal: this.formHeaderMo.get(`nwd_${i}`)?.value,
+        wdOtTl: this.formHeaderMo.get(`tl_ot_wd_${i}`)?.value,
+        wdOtTt: this.formHeaderMo.get(`tt_ot_wd_${i}`)?.value,
+        totalWdTl: this.formHeaderMo.get(`total_tlwd_${i}`)?.value,
+        totalWdTt: this.formHeaderMo.get(`total_ttwd_${i}`)?.value,
+        maxCapTube: this.formHeaderMo.get(`max_tube_capa_${i}`)?.value,
+        maxCapTl: this.formHeaderMo.get(`max_capa_tl_${i}`)?.value,
+        maxCapTt: this.formHeaderMo.get(`max_capa_tt_${i}`)?.value,
+      });
+    }
+
+    //Set data save Detail Mo
+    this.detailMarketingOrder.forEach((item) => {
+      item.moId = this.lastIdMo;
+    });
+
+    const saveMo = {
+      marketingOrder: this.marketingOrder,
+      headerMarketingOrder: this.headerMo,
+      detailMarketingOrder: this.detailMarketingOrder
+    };
+
+    console.log("Save mo", saveMo);
+
+    this.moService.saveTemp(saveMo).subscribe(
       (response) => {
-        const lastIdMo = response.data.moId;
-        this.headerMo = [];
-        for (let i = 0; i < 3; i++) {
-          this.headerMo.push({
-            moId: lastIdMo,
-            month: new Date(this.formHeaderMo.get(`month_${i}`)?.value),
-            wdNormal: this.formHeaderMo.get(`nwd_${i}`)?.value,
-            wdOtTl: this.formHeaderMo.get(`tl_ot_wd_${i}`)?.value,
-            wdOtTt: this.formHeaderMo.get(`tt_ot_wd_${i}`)?.value,
-            totalWdTl: this.formHeaderMo.get(`total_tlwd_${i}`)?.value,
-            totalWdTt: this.formHeaderMo.get(`total_ttwd_${i}`)?.value,
-            maxCapTube: this.formHeaderMo.get(`max_tube_capa_${i}`)?.value,
-            maxCapTl: this.formHeaderMo.get(`max_capa_tl_${i}`)?.value,
-            maxCapTt: this.formHeaderMo.get(`max_capa_tt_${i}`)?.value,
-          });
-        }
-        this.moService.saveHeaderMarketingOrder(this.headerMo).subscribe(
-          (response) => {
-            this.marketingOrderTable.forEach((item) => {
-              item.moId = lastIdMo;
-            });
-            this.moService.saveDetailRowMarketingOrder(this.marketingOrderTable).subscribe(
-              (response) => {
-                Swal.fire({
-                  title: 'Success!',
-                  text: 'Data Marketing Order successfully Added.',
-                  icon: 'success',
-                  confirmButtonText: 'OK',
-                }).then((result) => {
-                  if (result.isConfirmed) {
-                    this.navigateToViewMo();
-                  }
-                });
-              },
-              (err) => {
-                Swal.fire('Error!', 'Error insert data Detaill Marketing Order.', 'error');
-              }
-            );
-          },
-          (err) => {
-            Swal.fire('Error!', 'Error insert data Header Marketing Order.', 'error');
+        Swal.fire({
+          title: 'Success!',
+          text: 'Data Marketing Order successfully Added.',
+          icon: 'success',
+          confirmButtonText: 'OK',
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.navigateToViewMo();
           }
-        );
-      },
-      (err) => {
+        });
+      }, (err) => {
         Swal.fire('Error!', 'Error insert data Marketing Order.', 'error');
       }
-    );
+    )
+
+    // this.moService.saveMarketingOrder(this.marketingOrder).subscribe(
+    //   (response) => {
+    //     const lastIdMo = response.data.moId;
+    //     this.headerMo = [];
+    //     for (let i = 0; i < 3; i++) {
+    //       this.headerMo.push({
+    //         moId: lastIdMo,
+    //         month: new Date(this.formHeaderMo.get(`month_${i}`)?.value),
+    //         wdNormal: this.formHeaderMo.get(`nwd_${i}`)?.value,
+    //         wdOtTl: this.formHeaderMo.get(`tl_ot_wd_${i}`)?.value,
+    //         wdOtTt: this.formHeaderMo.get(`tt_ot_wd_${i}`)?.value,
+    //         totalWdTl: this.formHeaderMo.get(`total_tlwd_${i}`)?.value,
+    //         totalWdTt: this.formHeaderMo.get(`total_ttwd_${i}`)?.value,
+    //         maxCapTube: this.formHeaderMo.get(`max_tube_capa_${i}`)?.value,
+    //         maxCapTl: this.formHeaderMo.get(`max_capa_tl_${i}`)?.value,
+    //         maxCapTt: this.formHeaderMo.get(`max_capa_tt_${i}`)?.value,
+    //       });
+    //     }
+    //     this.moService.saveHeaderMarketingOrder(this.headerMo).subscribe(
+    //       (response) => {
+    //         this.detailMarketingOrder.forEach((item) => {
+    //           item.moId = lastIdMo;
+    //         });
+    //         this.moService.saveDetailRowMarketingOrder(this.detailMarketingOrder).subscribe(
+    //           (response) => {
+    //             Swal.fire({
+    //               title: 'Success!',
+    //               text: 'Data Marketing Order successfully Added.',
+    //               icon: 'success',
+    //               confirmButtonText: 'OK',
+    //             }).then((result) => {
+    //               if (result.isConfirmed) {
+    //                 this.navigateToViewMo();
+    //               }
+    //             });
+    //           },
+    //           (err) => {
+    //             Swal.fire('Error!', 'Error insert data Detaill Marketing Order.', 'error');
+    //           }
+    //         );
+    //       },
+    //       (err) => {
+    //         Swal.fire('Error!', 'Error insert data Header Marketing Order.', 'error');
+    //       }
+    //     );
+    //   },
+    //   (err) => {
+    //     Swal.fire('Error!', 'Error insert data Marketing Order.', 'error');
+    //   }
+    // );
   }
 
   navigateToViewMo() {

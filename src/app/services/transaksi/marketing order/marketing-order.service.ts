@@ -15,12 +15,27 @@ import { catchError, map } from 'rxjs/operators';
 export class MarketingOrderService {
   constructor(private http: HttpClient) { }
 
-  getDetailMarketingOrderPpc(idMo: String): Observable<ApiResponse<any>> {
-    return this.http.get<ApiResponse<any>>(environment.apiUrlWebAdmin + '/getMoById/' + idMo);
+  getLastIdMo(): Observable<ApiResponse<string>> {
+    return this.http.get<ApiResponse<string>>(environment.apiUrlWebAdmin + '/getLastIdMo');
   }
 
   getAllMarketingOrder(): Observable<ApiResponse<MarketingOrder[]>> {
-    return this.http.get<ApiResponse<[]>>(environment.apiUrlWebAdmin + '/getAllMarketingOrders');
+    return this.http.get<ApiResponse<[]>>(environment.apiUrlWebAdmin + '/getAllMarketingOrder');
+  }
+
+  getDetailMarketingOrderById(idMo: String): Observable<ApiResponse<any>> {
+    return this.http.get<ApiResponse<any>>(environment.apiUrlWebAdmin + '/getMarketingOrderById/' + idMo);
+  }
+
+  saveTemp(mo: any): Observable<ApiResponse<any>> {
+    return this.http.post<ApiResponse<any>>(environment.apiUrlWebAdmin + '/saveMarketingOrderPPC', mo).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((err) => {
+        return throwError(err);
+      })
+    );
   }
 
   saveMarketingOrder(mo: MarketingOrder): Observable<ApiResponse<MarketingOrder>> {
@@ -43,10 +58,6 @@ export class MarketingOrderService {
         return throwError(err);
       })
     );
-  }
-
-  saveWorkDay(wd: WorkDay[]) {
-    console.log('ini wd', wd);
   }
 
   getRowDetailMarketingOrder(totalHKTT1: number, totalHKTT2: number, totalHKTT3: number, totalHKTL1: number, totalHKTL2: number, totalHKTL3: number, productMerk: string): Observable<ApiResponse<DetailMarketingOrder[]>> {
