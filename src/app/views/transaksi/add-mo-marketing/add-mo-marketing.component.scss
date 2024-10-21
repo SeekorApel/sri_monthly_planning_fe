@@ -25,3 +25,7 @@ z-index: 1; /* Pastikan sub-header di atas konten dan di bawah header utama */
 border: 1px solid black; // Menambahkan border hitam pada sel
 padding: 8px; // Memberikan padding dalam sel
 }
+
+.invalid-feedback-custome {
+  border-color: red;
+}

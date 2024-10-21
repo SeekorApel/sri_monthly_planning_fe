@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { ActivatedRoute, Route, Router } from '@angular/router';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DetailMarketingOrder } from 'src/app/models/DetailMarketingOrder';
 import { HeaderMarketingOrder } from 'src/app/models/HeaderMarketingOrder';
 import { MarketingOrder } from 'src/app/models/MarketingOrder';
@@ -13,56 +13,56 @@ declare var $: any;
 import { saveAs } from 'file-saver';
 
 @Component({
-  selector: 'app-add-mo-marketing',
-  templateUrl: './add-mo-marketing.component.html',
-  styleUrls: ['./add-mo-marketing.component.scss'],
+  selector: 'app-edit-mo-marketing',
+  templateUrl: './edit-mo-marketing.component.html',
+  styleUrls: ['./edit-mo-marketing.component.scss'],
 })
-export class AddMoMarketingComponent implements OnInit {
+export class EditMoMarketingComponent implements OnInit {
   //Variable Declaration
   idMo: String;
-  monthNames: string[] = ['', '', ''];
   formHeaderMo: FormGroup;
-  isReadOnly: Boolean = true;
-  isTableVisible: boolean = false;
-  file: File | null = null;
+  isReadOnly: boolean = true;
+  monthNames: string[] = ['', '', ''];
   allData: any;
-  marketingOrder: MarketingOrder;
-  detailMarketingOrder: DetailMarketingOrder[];
-  headerMarketingOrder: HeaderMarketingOrder[];
-  detailMarketingOrderUpdate: DetailMarketingOrder[];
+  lastIdMo: string = '';
+  file: File | null = null;
 
-  constructor(private router: Router, private activeRoute: ActivatedRoute, private moService: MarketingOrderService, private fb: FormBuilder) {
+  marketingOrder: MarketingOrder = new MarketingOrder();
+  headerMarketingOrder: any[] = [];
+  detailMarketingOrder: DetailMarketingOrder[];
+
+  constructor(private router: Router, private activeRoute: ActivatedRoute, private fb: FormBuilder, private moService: MarketingOrderService) {
     this.formHeaderMo = this.fb.group({
       date: [null, []],
       type: [null, []],
       revision: [null, []],
-      month_0: [null, []],
+      month_0: [null, Validators.required],
       month_1: [null, []],
       month_2: [null, []],
-      nwd_0: [null, []],
-      nwd_1: [null, []],
-      nwd_2: [null, []],
-      tl_ot_wd_0: [null, []],
-      tt_ot_wd_0: [null, []],
-      tl_ot_wd_1: [null, []],
-      tt_ot_wd_1: [null, []],
-      tl_ot_wd_2: [null, []],
-      tt_ot_wd_2: [null, []],
+      nwd_0: [null, Validators.required],
+      nwd_1: [null, Validators.required],
+      nwd_2: [null, Validators.required],
+      tl_ot_wd_0: [null, [Validators.required, Validators.min(0)]],
+      tt_ot_wd_0: [null, [Validators.required, Validators.min(0)]],
+      tl_ot_wd_1: [null, [Validators.required, Validators.min(0)]],
+      tt_ot_wd_1: [null, [Validators.required, Validators.min(0)]],
+      tl_ot_wd_2: [null, [Validators.required, Validators.min(0)]],
+      tt_ot_wd_2: [null, [Validators.required, Validators.min(0)]],
       total_tlwd_0: [null, []],
       total_ttwd_0: [null, []],
       total_tlwd_1: [null, []],
       total_ttwd_1: [null, []],
       total_tlwd_2: [null, []],
       total_ttwd_2: [null, []],
-      max_tube_capa_0: [null, []],
-      max_tube_capa_1: [null, []],
-      max_tube_capa_2: [null, []],
-      max_capa_tl_0: [null, []],
-      max_capa_tt_0: [null, []],
-      max_capa_tl_1: [null, []],
-      max_capa_tt_1: [null, []],
-      max_capa_tl_2: [null, []],
-      max_capa_tt_2: [null, []],
+      max_tube_capa_0: [null, [Validators.required, Validators.min(0)]],
+      max_tube_capa_1: [null, [Validators.required, Validators.min(0)]],
+      max_tube_capa_2: [null, [Validators.required, Validators.min(0)]],
+      max_capa_tl_0: [null, [Validators.required, Validators.min(0)]],
+      max_capa_tt_0: [null, [Validators.required, Validators.min(0)]],
+      max_capa_tl_1: [null, [Validators.required, Validators.min(0)]],
+      max_capa_tt_1: [null, [Validators.required, Validators.min(0)]],
+      max_capa_tl_2: [null, [Validators.required, Validators.min(0)]],
+      max_capa_tt_2: [null, [Validators.required, Validators.min(0)]],
       looping_m0: [null, []],
       machine_airbag_m0: [null, []],
       fed_tl_m0: [null, []],
@@ -99,19 +99,35 @@ export class AddMoMarketingComponent implements OnInit {
       fed_TT_percentage_m2: [null, []],
       fdr_TT_percentage_m2: [null, []],
       note_tl_m2: [null, []],
-      upload_file_m0: [null, []],
-      upload_file_m1: [null, []],
-      upload_file_m2: [null, []],
+      upload_file_m0: [null, [Validators.required]],
+      upload_file_m1: [null, [Validators.required]],
+      upload_file_m2: [null, [Validators.required]],
     });
   }
 
   ngOnInit(): void {
     this.idMo = this.activeRoute.snapshot.paramMap.get('idMo');
     this.getAllData(this.idMo);
+    this.getLastIdMo();
+  }
+
+  getLastIdMo(): void {
+    this.moService.getLastIdMo().subscribe(
+      (response: ApiResponse<string>) => {
+        this.lastIdMo = response.data;
+      },
+      (error) => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Failed to load data: ' + error.message,
+        });
+      }
+    );
   }
 
   getAllData(idMo: String) {
-    this.moService.getDetailMoMarketing(idMo).subscribe(
+    this.moService.getDetailMarketingOrderById(idMo).subscribe(
       (response: ApiResponse<any>) => {
         this.allData = response.data;
         this.fillAllData(this.allData);
@@ -127,14 +143,14 @@ export class AddMoMarketingComponent implements OnInit {
     );
   }
 
-  fillAllData(data: any): void {
+  fillAllData(data: any) {
     this.headerMarketingOrder = data.dataHeaderMo;
     this.detailMarketingOrder = data.dataDetailMo;
-
+    let typeProduct = data.type;
     this.formHeaderMo.patchValue({
       date: new Date(data.dateValid).toISOString().split('T')[0],
       type: data.type,
-      revision: data.revision,
+      revision: data.revisionMarketing,
 
       // Header Month 1
       month_0: this.formatDateToString(this.headerMarketingOrder[0].month),
@@ -146,7 +162,18 @@ export class AddMoMarketingComponent implements OnInit {
       max_tube_capa_0: this.headerMarketingOrder[0].maxCapTube,
       max_capa_tl_0: this.headerMarketingOrder[0].maxCapTl,
       max_capa_tt_0: this.headerMarketingOrder[0].maxCapTt,
-
+      looping_m0: this.headerMarketingOrder[0].looping,
+      machine_airbag_m0: this.headerMarketingOrder[0].airbagMachine,
+      fed_tl_m0: typeProduct === 'FED' ? this.headerMarketingOrder[0].tl : null,
+      fed_tt_m0: typeProduct === 'FED' ? this.headerMarketingOrder[0].tt : null,
+      fdr_tl_m0: typeProduct === 'FDR' ? this.headerMarketingOrder[0].tl : null,
+      fdr_tt_m0: typeProduct === 'FDR' ? this.headerMarketingOrder[0].tt : null,
+      fed_TL_percentage_m0: typeProduct === 'FED' ? this.headerMarketingOrder[0].tlPercentage : null,
+      fed_TT_percentage_m0: typeProduct === 'FED' ? this.headerMarketingOrder[0].ttPercentage : null,
+      fdr_TL_percentage_m0: typeProduct === 'FDR' ? this.headerMarketingOrder[0].tlPercentage : null,
+      fdr_TT_percentage_m0: typeProduct === 'FDR' ? this.headerMarketingOrder[0].ttPercentage : null,
+      total_mo_m0: this.headerMarketingOrder[0].totalMo,
+      note_tl_m0: this.headerMarketingOrder[0].noteOrderTl,
       // Header Month 2
       month_1: this.formatDateToString(this.headerMarketingOrder[1].month),
       nwd_1: this.headerMarketingOrder[1].wdNormal,
@@ -157,7 +184,18 @@ export class AddMoMarketingComponent implements OnInit {
       max_tube_capa_1: this.headerMarketingOrder[1].maxCapTube,
       max_capa_tl_1: this.headerMarketingOrder[1].maxCapTl,
       max_capa_tt_1: this.headerMarketingOrder[1].maxCapTt,
-
+      looping_m1: this.headerMarketingOrder[1].looping,
+      machine_airbag_m1: this.headerMarketingOrder[1].airbagMachine,
+      fed_tl_m1: typeProduct === 'FED' ? this.headerMarketingOrder[1].tl : null,
+      fed_tt_m1: typeProduct === 'FED' ? this.headerMarketingOrder[1].tt : null,
+      fdr_tl_m1: typeProduct === 'FDR' ? this.headerMarketingOrder[1].tl : null,
+      fdr_tt_m1: typeProduct === 'FDR' ? this.headerMarketingOrder[1].tt : null,
+      fed_TL_percentage_m1: typeProduct === 'FED' ? this.headerMarketingOrder[1].tlPercentage : null,
+      fed_TT_percentage_m1: typeProduct === 'FED' ? this.headerMarketingOrder[1].ttPercentage : null,
+      fdr_TL_percentage_m1: typeProduct === 'FDR' ? this.headerMarketingOrder[1].tlPercentage : null,
+      fdr_TT_percentage_m1: typeProduct === 'FDR' ? this.headerMarketingOrder[1].ttPercentage : null,
+      total_mo_m1: this.headerMarketingOrder[1].totalMo,
+      note_tl_m1: this.headerMarketingOrder[1].noteOrderTl,
       // Header Month 3
       month_2: this.formatDateToString(this.headerMarketingOrder[2].month),
       nwd_2: this.headerMarketingOrder[2].wdNormal,
@@ -168,9 +206,133 @@ export class AddMoMarketingComponent implements OnInit {
       max_tube_capa_2: this.headerMarketingOrder[2].maxCapTube,
       max_capa_tl_2: this.headerMarketingOrder[2].maxCapTl,
       max_capa_tt_2: this.headerMarketingOrder[2].maxCapTt,
+      looping_m2: this.headerMarketingOrder[2].looping,
+      machine_airbag_m2: this.headerMarketingOrder[2].airbagMachine,
+      fed_tl_m2: typeProduct === 'FED' ? this.headerMarketingOrder[2].tl : null,
+      fed_tt_m2: typeProduct === 'FED' ? this.headerMarketingOrder[2].tt : null,
+      fdr_tl_m2: typeProduct === 'FDR' ? this.headerMarketingOrder[2].tl : null,
+      fdr_tt_m2: typeProduct === 'FDR' ? this.headerMarketingOrder[2].tt : null,
+      fed_TL_percentage_m2: typeProduct === 'FED' ? this.headerMarketingOrder[2].tlPercentage : null,
+      fed_TT_percentage_m2: typeProduct === 'FED' ? this.headerMarketingOrder[2].ttPercentage : null,
+      fdr_TL_percentage_m2: typeProduct === 'FDR' ? this.headerMarketingOrder[2].tlPercentage : null,
+      fdr_TT_percentage_m2: typeProduct === 'FDR' ? this.headerMarketingOrder[2].ttPercentage : null,
+      total_mo_m2: this.headerMarketingOrder[1].totalMo,
+      note_tl_m2: this.headerMarketingOrder[1].noteOrderTl,
     });
 
     this.updateMonthNames(this.headerMarketingOrder);
+  }
+
+  formatDateToString(dateString) {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    return `${year}-${month}`;
+  }
+
+  updateMonthNames(hm: HeaderMarketingOrder[]): void {
+    this.monthNames[0] = this.getMonthName(new Date(this.headerMarketingOrder[0].month));
+    this.monthNames[1] = this.getMonthName(new Date(this.headerMarketingOrder[1].month));
+    this.monthNames[2] = this.getMonthName(new Date(this.headerMarketingOrder[2].month));
+  }
+
+  getMonthName(monthValue: Date): string {
+    if (monthValue) {
+      return monthValue.toLocaleString('default', { month: 'short' }).toUpperCase();
+    }
+    return '';
+  }
+
+  navigateToViewMo() {
+    this.router.navigate(['/transaksi/view-mo-marketing']);
+  }
+
+  editMo(): void {
+    const hasInvalidInput = this.detailMarketingOrder.some((mo) => mo.sfMonth0 < mo.minOrder || mo.sfMonth0 > mo.maxCapMonth0 || mo.sfMonth1 < mo.minOrder || mo.sfMonth1 > mo.maxCapMonth1 || mo.sfMonth2 < mo.minOrder || mo.sfMonth2 > mo.maxCapMonth2 || mo.moMonth0 < mo.minOrder || mo.moMonth0 > mo.maxCapMonth0 || mo.moMonth1 < mo.minOrder || mo.moMonth1 > mo.maxCapMonth1 || mo.moMonth2 < mo.minOrder || mo.moMonth2 > mo.maxCapMonth2);
+
+    // Jika terdapat input yang tidak valid, tampilkan SweetAlert dan hentikan fungsi
+    if (hasInvalidInput) {
+      Swal.fire({
+        title: 'Warning!',
+        text: 'There is an invalid input on the marketing order form.',
+        icon: 'warning',
+        confirmButtonText: 'OK',
+      });
+      return;
+    }
+
+    const type = this.formHeaderMo.get('type')?.value;
+
+    //Set data Save MO
+    this.marketingOrder.moId = this.lastIdMo;
+    this.marketingOrder.dateValid = this.formHeaderMo.get('date')?.value;
+    this.marketingOrder.type = this.formHeaderMo.get('type')?.value;
+    this.marketingOrder.revisionMarketing = this.formHeaderMo.get('revision')?.value;
+    this.marketingOrder.revisionPpc = this.allData.revisionPpc;
+    this.marketingOrder.month0 = new Date(this.formHeaderMo.get('month_0')?.value);
+    this.marketingOrder.month1 = new Date(this.formHeaderMo.get('month_1')?.value);
+    this.marketingOrder.month2 = new Date(this.formHeaderMo.get('month_2')?.value);
+    this.marketingOrder.statusFilled = this.allData.statusFilled;
+
+    //Set data save Header Mo
+    this.headerMarketingOrder = [];
+    for (let i = 0; i < 3; i++) {
+      const tlField = type === 'FDR' ? `fdr_tl_m${i}` : `fed_tl_m${i}`;
+      const ttField = type === 'FDR' ? `fdr_tt_m${i}` : `fed_tt_m${i}`;
+
+      const tlFieldPercentage = type === 'FDR' ? `fdr_TL_percentage_m${i}` : `fed_TL_percentage_m${i}`;
+      const ttFieldPercentage = type === 'FDR' ? `fdr_TT_percentage_m${i}` : `fed_TT_percentage_m${i}`;
+
+      this.headerMarketingOrder.push({
+        moId: this.lastIdMo,
+        month: new Date(this.formHeaderMo.get(`month_${i}`)?.value),
+        wdNormal: this.formHeaderMo.get(`nwd_${i}`)?.value,
+        wdOtTl: this.formHeaderMo.get(`tl_ot_wd_${i}`)?.value,
+        wdOtTt: this.formHeaderMo.get(`tt_ot_wd_${i}`)?.value,
+        totalWdTl: this.formHeaderMo.get(`total_tlwd_${i}`)?.value,
+        totalWdTt: this.formHeaderMo.get(`total_ttwd_${i}`)?.value,
+        maxCapTube: this.formHeaderMo.get(`max_tube_capa_${i}`)?.value,
+        maxCapTl: this.formHeaderMo.get(`max_capa_tl_${i}`)?.value,
+        maxCapTt: this.formHeaderMo.get(`max_capa_tt_${i}`)?.value,
+        looping: this.formHeaderMo.get(`looping_m${i}`)?.value,
+        airbagMachine: this.formHeaderMo.get(`machine_airbag_m${i}`)?.value,
+        tl: this.formHeaderMo.get(tlField)?.value,
+        tt: this.formHeaderMo.get(ttField)?.value,
+        totalMo: this.formHeaderMo.get(`total_mo_m${i}`)?.value,
+        tlPercentage: this.formHeaderMo.get(tlFieldPercentage)?.value,
+        ttPercentage: this.formHeaderMo.get(ttFieldPercentage)?.value,
+        noteOrderTl: this.formHeaderMo.get(`note_tl_m${i}`)?.value,
+      });
+    }
+
+    //Set data save Detail Mo
+    this.detailMarketingOrder.forEach((item) => {
+      item.moId = this.lastIdMo;
+    });
+
+    const saveMo = {
+      marketingOrder: this.marketingOrder,
+      headerMarketingOrder: this.headerMarketingOrder,
+      detailMarketingOrder: this.detailMarketingOrder,
+    };
+
+    this.moService.updateMarketingOrderMarketing(saveMo).subscribe(
+      (response) => {
+        Swal.fire({
+          title: 'Success!',
+          text: 'Data Marketing Order successfully Revision.',
+          icon: 'success',
+          confirmButtonText: 'OK',
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.navigateToViewMo();
+          }
+        });
+      },
+      (err) => {
+        Swal.fire('Error!', 'Error insert data Marketing Order.', 'error');
+      }
+    );
   }
 
   downloadTemplate() {
@@ -226,17 +388,17 @@ export class AddMoMarketingComponent implements OnInit {
     worksheet.getCell('N10').font = { name: 'Calibri Body', size: 11, bold: true, italic: true };
     setBorder(worksheet.getCell('N10'));
 
-    worksheet.getCell('Q10').value = this.headerMarketingOrder[1].wdNormal; // "Month 1"
-    worksheet.getCell('R10').value = this.headerMarketingOrder[2].wdNormal; // "Month 2"
-    worksheet.getCell('S10').value = this.headerMarketingOrder[0].wdNormal; // "Month 3"
+    worksheet.getCell('Q10').value = this.headerMarketingOrder[0].wdNormal; // "Month 1"
+    worksheet.getCell('R10').value = this.headerMarketingOrder[1].wdNormal; // "Month 2"
+    worksheet.getCell('S10').value = this.headerMarketingOrder[2].wdNormal; // "Month 3"
 
     worksheet.mergeCells('N11:P11');
     worksheet.getCell('N11').value = 'Workday Overtime TL';
     worksheet.getCell('N11').alignment = { vertical: 'middle', horizontal: 'left' };
     setBorder(worksheet.getCell('N11'));
-    worksheet.getCell('Q11').value = this.headerMarketingOrder[1].wdOtTl; // "Month 1"
-    worksheet.getCell('R11').value = this.headerMarketingOrder[2].wdOtTl; // "Month 2"
-    worksheet.getCell('S11').value = this.headerMarketingOrder[0].wdOtTl; // "Month 3"
+    worksheet.getCell('Q11').value = this.headerMarketingOrder[0].wdOtTl; // "Month 1"
+    worksheet.getCell('R11').value = this.headerMarketingOrder[1].wdOtTl; // "Month 2"
+    worksheet.getCell('S11').value = this.headerMarketingOrder[2].wdOtTl; // "Month 3"
     ['Q11', 'R11', 'S11'].forEach((cell) => {
       worksheet.getCell(cell).alignment = { vertical: 'middle', horizontal: 'center' };
     });
@@ -245,9 +407,9 @@ export class AddMoMarketingComponent implements OnInit {
     worksheet.getCell('N12').value = 'Workday Overtime TT';
     worksheet.getCell('N12').alignment = { vertical: 'middle', horizontal: 'left' };
     setBorder(worksheet.getCell('N12'));
-    worksheet.getCell('Q12').value = this.headerMarketingOrder[1].wdOtTt; // "Month 1"
-    worksheet.getCell('R12').value = this.headerMarketingOrder[2].wdOtTt; // "Month 2"
-    worksheet.getCell('S12').value = this.headerMarketingOrder[0].wdOtTt; // "Month 3"
+    worksheet.getCell('Q12').value = this.headerMarketingOrder[0].wdOtTt; // "Month 1"
+    worksheet.getCell('R12').value = this.headerMarketingOrder[1].wdOtTt; // "Month 2"
+    worksheet.getCell('S12').value = this.headerMarketingOrder[2].wdOtTt; // "Month 3"
     ['Q12', 'R12', 'S12'].forEach((cell) => {
       worksheet.getCell(cell).alignment = { vertical: 'middle', horizontal: 'center' };
     });
@@ -256,9 +418,9 @@ export class AddMoMarketingComponent implements OnInit {
     worksheet.getCell('N13').value = 'Total Workday Tire TL';
     worksheet.getCell('N13').alignment = { vertical: 'middle', horizontal: 'left' };
     setBorder(worksheet.getCell('N13'));
-    worksheet.getCell('Q13').value = this.headerMarketingOrder[1].totalWdTl; // "Month 1"
-    worksheet.getCell('R13').value = this.headerMarketingOrder[2].totalWdTl; // "Month 2"
-    worksheet.getCell('S13').value = this.headerMarketingOrder[0].totalWdTl; // "Month 3"
+    worksheet.getCell('Q13').value = this.headerMarketingOrder[0].totalWdTl; // "Month 1"
+    worksheet.getCell('R13').value = this.headerMarketingOrder[1].totalWdTl; // "Month 2"
+    worksheet.getCell('S13').value = this.headerMarketingOrder[2].totalWdTl; // "Month 3"
     ['Q13', 'R13', 'S13'].forEach((cell) => {
       worksheet.getCell(cell).alignment = { vertical: 'middle', horizontal: 'center' };
     });
@@ -267,9 +429,9 @@ export class AddMoMarketingComponent implements OnInit {
     worksheet.getCell('N14').value = 'Total Workday Tire TT';
     worksheet.getCell('N14').alignment = { vertical: 'middle', horizontal: 'left' };
     setBorder(worksheet.getCell('N14'));
-    worksheet.getCell('Q14').value = this.headerMarketingOrder[1].totalWdTt; // "Month 1"
-    worksheet.getCell('R14').value = this.headerMarketingOrder[2].totalWdTt; // "Month 2"
-    worksheet.getCell('S14').value = this.headerMarketingOrder[0].totalWdTt; // "Month 3"
+    worksheet.getCell('Q14').value = this.headerMarketingOrder[0].totalWdTt; // "Month 1"
+    worksheet.getCell('R14').value = this.headerMarketingOrder[1].totalWdTt; // "Month 2"
+    worksheet.getCell('S14').value = this.headerMarketingOrder[2].totalWdTt; // "Month 3"
     ['Q14', 'R14', 'S14'].forEach((cell) => {
       worksheet.getCell(cell).alignment = { vertical: 'middle', horizontal: 'center' };
     });
@@ -278,9 +440,9 @@ export class AddMoMarketingComponent implements OnInit {
     worksheet.getCell('N15').value = 'Max Capacity Tube';
     worksheet.getCell('N15').alignment = { vertical: 'middle', horizontal: 'left' };
     setBorder(worksheet.getCell('N15'));
-    worksheet.getCell('Q15').value = this.headerMarketingOrder[1].maxCapTube; // "Month 1"
-    worksheet.getCell('R15').value = this.headerMarketingOrder[2].maxCapTube; // "Month 2"
-    worksheet.getCell('S15').value = this.headerMarketingOrder[0].maxCapTube; // "Month 3"
+    worksheet.getCell('Q15').value = this.headerMarketingOrder[0].maxCapTube; // "Month 1"
+    worksheet.getCell('R15').value = this.headerMarketingOrder[1].maxCapTube; // "Month 2"
+    worksheet.getCell('S15').value = this.headerMarketingOrder[2].maxCapTube; // "Month 3"
     ['Q15', 'R15', 'S15'].forEach((cell) => {
       worksheet.getCell(cell).alignment = { vertical: 'middle', horizontal: 'center' };
     });
@@ -289,9 +451,9 @@ export class AddMoMarketingComponent implements OnInit {
     worksheet.getCell('N16').value = 'Max Capacity Tire TL';
     worksheet.getCell('N16').alignment = { vertical: 'middle', horizontal: 'left' };
     setBorder(worksheet.getCell('N16'));
-    worksheet.getCell('Q16').value = this.headerMarketingOrder[1].maxCapTl; // "Month 1"
-    worksheet.getCell('R16').value = this.headerMarketingOrder[2].maxCapTl; // "Month 2"
-    worksheet.getCell('S16').value = this.headerMarketingOrder[0].maxCapTl; // "Month 3"
+    worksheet.getCell('Q16').value = this.headerMarketingOrder[0].maxCapTl; // "Month 1"
+    worksheet.getCell('R16').value = this.headerMarketingOrder[1].maxCapTl; // "Month 2"
+    worksheet.getCell('S16').value = this.headerMarketingOrder[2].maxCapTl; // "Month 3"
     ['Q16', 'R16', 'S16'].forEach((cell) => {
       worksheet.getCell(cell).alignment = { vertical: 'middle', horizontal: 'center' };
     });
@@ -300,9 +462,9 @@ export class AddMoMarketingComponent implements OnInit {
     worksheet.getCell('N17').value = 'Max Capacity Tire TT';
     worksheet.getCell('N17').alignment = { vertical: 'middle', horizontal: 'left' };
     setBorder(worksheet.getCell('N17'));
-    worksheet.getCell('Q17').value = this.headerMarketingOrder[1].maxCapTt; // "Month 1"
-    worksheet.getCell('R17').value = this.headerMarketingOrder[2].maxCapTt; // "Month 2"
-    worksheet.getCell('S17').value = this.headerMarketingOrder[0].maxCapTt; // "Month 3"
+    worksheet.getCell('Q17').value = this.headerMarketingOrder[0].maxCapTt; // "Month 1"
+    worksheet.getCell('R17').value = this.headerMarketingOrder[1].maxCapTt; // "Month 2"
+    worksheet.getCell('S17').value = this.headerMarketingOrder[2].maxCapTt; // "Month 3"
     ['Q17', 'R17', 'S17'].forEach((cell) => {
       worksheet.getCell(cell).alignment = { vertical: 'middle', horizontal: 'center' };
     });
@@ -311,9 +473,9 @@ export class AddMoMarketingComponent implements OnInit {
     worksheet.getCell('N18').value = 'Note Order TL';
     worksheet.getCell('N18').alignment = { vertical: 'middle', horizontal: 'left' };
     setBorder(worksheet.getCell('N18'));
-    worksheet.getCell('Q18').value = this.headerMarketingOrder[1].noteOrderTl; // "Month 1"
-    worksheet.getCell('R18').value = this.headerMarketingOrder[2].noteOrderTl; // "Month 2"
-    worksheet.getCell('S18').value = this.headerMarketingOrder[0].noteOrderTl; // "Month 3"
+    worksheet.getCell('Q18').value = this.headerMarketingOrder[0].noteOrderTl; // "Month 1"
+    worksheet.getCell('R18').value = this.headerMarketingOrder[1].noteOrderTl; // "Month 2"
+    worksheet.getCell('S18').value = this.headerMarketingOrder[2].noteOrderTl; // "Month 3"
     ['Q18', 'R18', 'S18'].forEach((cell) => {
       worksheet.getCell(cell).alignment = { vertical: 'middle', horizontal: 'center' };
     });
@@ -606,51 +768,30 @@ export class AddMoMarketingComponent implements OnInit {
     const monthFn = indonesiaTime.toLocaleDateString('en-US', { month: 'long' });
     const year = indonesiaTime.getFullYear();
     const timestamp = indonesiaTime.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }).replace(':', '');
-    const fileName = `From_Marketing Order_${monthFn}_${year}_${timestamp}.xlsx`;
+    const fileName = `From_Revision_Marketing Order_${monthFn}_${year}_${timestamp}.xlsx`;
     return fileName;
   }
 
-  navigateToViewMo() {
-    this.router.navigate(['/transaksi/view-mo-marketing']);
-  }
+  onFileChange(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      const file = input.files[0];
+      const fileName = file.name.toLowerCase();
 
-  formatDateToString(dateString) {
-    const date = new Date(dateString);
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    return `${year}-${month}`;
-  }
-
-  updateMonthNames(hmo: HeaderMarketingOrder[]): void {
-    this.monthNames[0] = this.getMonthName(new Date(this.headerMarketingOrder[1].month));
-    this.monthNames[1] = this.getMonthName(new Date(this.headerMarketingOrder[2].month));
-    this.monthNames[2] = this.getMonthName(new Date(this.headerMarketingOrder[0].month));
-  }
-
-  getMonthName(monthValue: Date): string {
-    if (monthValue) {
-      return monthValue.toLocaleString('default', { month: 'short' }).toUpperCase();
+      // Validasi ekstensi file
+      if (fileName.endsWith('.xls') || fileName.endsWith('.xlsx')) {
+        this.file = file;
+      } else {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Invalid File Type',
+          text: 'Please upload a valid Excel file (.xls or .xlsx).',
+          confirmButtonText: 'OK',
+        });
+        this.file = null;
+        input.value = '';
+      }
     }
-    return '';
-  }
-
-  formatMonthToString(date: Date) {
-    const dateConvert = new Date(date);
-    const options: Intl.DateTimeFormatOptions = { month: 'long' };
-    const monthName = dateConvert.toLocaleString('en-US', options);
-    return monthName;
-  }
-
-  navigateToView() {
-    this.router.navigate(['/transaksi/view-mo-marketing']);
-  }
-
-  navigateToDetail(idMo: String) {
-    this.router.navigate(['/transaksi/view-mo-marketing']);
-  }
-
-  openModalUpload(): void {
-    $('#uploadModal').modal('show');
   }
 
   uploadFileExcel() {
@@ -704,68 +845,11 @@ export class AddMoMarketingComponent implements OnInit {
       };
 
       reader.readAsArrayBuffer(this.file); // Membaca file sebagai ArrayBuffer
-      this.isTableVisible = true;
       $('#uploadModal').modal('hide');
     }
   }
 
-  saveMo(): void {
-    const hasInvalidInput = this.detailMarketingOrder.some((mo) => mo.sfMonth0 < mo.minOrder || mo.sfMonth0 > mo.maxCapMonth0 || mo.sfMonth1 < mo.minOrder || mo.sfMonth1 > mo.maxCapMonth1 || mo.sfMonth2 < mo.minOrder || mo.sfMonth2 > mo.maxCapMonth2 || mo.moMonth0 < mo.minOrder || mo.moMonth0 > mo.maxCapMonth0 || mo.moMonth1 < mo.minOrder || mo.moMonth1 > mo.maxCapMonth1 || mo.moMonth2 < mo.minOrder || mo.moMonth2 > mo.maxCapMonth2);
-
-    // Jika terdapat input yang tidak valid, tampilkan SweetAlert dan hentikan fungsi
-    if (hasInvalidInput) {
-      Swal.fire({
-        title: 'Warning!',
-        text: 'There is an invalid input on the marketing order form.',
-        icon: 'warning',
-        confirmButtonText: 'OK',
-      });
-      return;
-    }
-
-    this.moService.saveMarketingOrderMarketing(this.detailMarketingOrder).subscribe(
-      (response) => {
-        Swal.fire({
-          title: 'Success!',
-          text: 'Data Marketing Order Success added.',
-          icon: 'success',
-          confirmButtonText: 'OK',
-        }).then((result) => {
-          if (result.isConfirmed) {
-            this.navigateToView();
-          }
-        });
-      },
-      (error) => {
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'Failed to add marketing order details: ' + error.message,
-          confirmButtonText: 'OK',
-        });
-      }
-    );
-  }
-
-  onFileChange(event: Event) {
-    const input = event.target as HTMLInputElement;
-    if (input.files && input.files.length > 0) {
-      const file = input.files[0];
-      const fileName = file.name.toLowerCase();
-
-      // Validasi ekstensi file
-      if (fileName.endsWith('.xls') || fileName.endsWith('.xlsx')) {
-        this.file = file;
-      } else {
-        Swal.fire({
-          icon: 'warning',
-          title: 'Invalid File Type',
-          text: 'Please upload a valid Excel file (.xls or .xlsx).',
-          confirmButtonText: 'OK',
-        });
-        this.file = null;
-        input.value = '';
-      }
-    }
+  openModalUpload(): void {
+    $('#uploadModal').modal('show');
   }
 }

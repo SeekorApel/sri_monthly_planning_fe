@@ -38,6 +38,50 @@ export class MarketingOrderService {
     );
   }
 
+  saveMarketingOrderMarketing(dtmo: DetailMarketingOrder[]): Observable<ApiResponse<any>> {
+    return this.http.post<ApiResponse<any>>(environment.apiUrlWebAdmin + '/saveMarketingOrderMarketing', dtmo).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((err) => {
+        return throwError(err);
+      })
+    );
+  }
+
+  updateMarketingOrderMarketing(mo: any): Observable<ApiResponse<any>> {
+    return this.http.post<ApiResponse<any>>(environment.apiUrlWebAdmin + '/revisiMarketingOrderMarketing', mo).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((err) => {
+        return throwError(err);
+      })
+    );
+  }
+
+  enableMarketingOrder(mo: MarketingOrder): Observable<ApiResponse<any>> {
+    return this.http.post<ApiResponse<any>>(environment.apiUrlWebAdmin + '/enableMarketingOrder', mo).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((err) => {
+        return throwError(err);
+      })
+    );
+  }
+
+  disableMarketingOrder(mo: MarketingOrder): Observable<ApiResponse<any>> {
+    return this.http.post<ApiResponse<any>>(environment.apiUrlWebAdmin + '/disableMarketingOrder', mo).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((err) => {
+        return throwError(err);
+      })
+    );
+  }
+
   //Not used
   saveMarketingOrder(mo: MarketingOrder): Observable<ApiResponse<MarketingOrder>> {
     return this.http.post<ApiResponse<MarketingOrder>>(environment.apiUrlWebAdmin + '/saveMarketingOrder', mo).pipe(
@@ -82,36 +126,14 @@ export class MarketingOrderService {
     return this.http.get<ApiResponse<any>>(environment.apiUrlWebAdmin + '/getDetailMoMarketing/' + idMo);
   }
 
-  saveMarketingOrderMarketing(dtmo: DetailMarketingOrder[]) {
-    return this.http.post<ApiResponse<any>>(environment.apiUrlWebAdmin + '/saveMarketingOrderMarketing', dtmo).pipe(
-      map((response) => {
-        return response;
-      }),
-      catchError((err) => {
-        return throwError(err);
-      })
-    );
-  }
-
-  enableMarketingOrder(mo: MarketingOrder): Observable<ApiResponse<any>> {
-    return this.http.post<ApiResponse<any>>(environment.apiUrlWebAdmin + '/enableMarketingOrder', mo).pipe(
-      map((response) => {
-        return response;
-      }),
-      catchError((err) => {
-        return throwError(err);
-      })
-    );
-  }
-
-  disableMarketingOrder(mo: MarketingOrder): Observable<ApiResponse<any>> {
-    return this.http.post<ApiResponse<any>>(environment.apiUrlWebAdmin + '/disableMarketingOrder', mo).pipe(
-      map((response) => {
-        return response;
-      }),
-      catchError((err) => {
-        return throwError(err);
-      })
-    );
-  }
+  // saveMarketingOrderMarketing(dtmo: DetailMarketingOrder[]) {
+  //   return this.http.post<ApiResponse<any>>(environment.apiUrlWebAdmin + '/saveMarketingOrderMarketing', dtmo).pipe(
+  //     map((response) => {
+  //       return response;
+  //     }),
+  //     catchError((err) => {
+  //       return throwError(err);
+  //     })
+  //   );
+  // }
 }

@@ -45,6 +45,7 @@ import { DetailViewMoPpcComponent } from './views/transaksi/detail-view-mo-ppc/d
 import { EditMoPpcComponent } from './views/transaksi/edit-mo-ppc/edit-mo-ppc.component';
 import { ViewCuringSizeComponent } from './views/master-data/view-curing-size/view-curing-size.component';
 import { DetailViewMoMarketingComponent } from './views/transaksi/detail-view-mo-marketing/detail-view-mo-marketing.component';
+import { EditMoMarketingComponent } from './views/transaksi/edit-mo-marketing/edit-mo-marketing.component';
 
 export const routes: Routes = [
   {
@@ -358,6 +359,13 @@ export const routes: Routes = [
         },
       },
       {
+        path: 'transaksi/edit-mo-marketing/:idMo',
+        component: EditMoMarketingComponent,
+        data: {
+          title: 'Transaksi / Edit Marketing Order',
+        },
+      },
+      {
         path: 'base',
         loadChildren: () => import('./views/base/base.module').then((m) => m.BaseModule),
       },
@@ -406,4 +414,4 @@ export const routes: Routes = [
   imports: [RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy' })],
   exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

@@ -17,6 +17,7 @@ import { AddMoMarketingComponent } from './add-mo-marketing/add-mo-marketing.com
 import { EditMoPpcComponent } from './edit-mo-ppc/edit-mo-ppc.component';
 import { DetailViewMoPpcComponent } from './detail-view-mo-ppc/detail-view-mo-ppc.component';
 import { DetailViewMoMarketingComponent } from './detail-view-mo-marketing/detail-view-mo-marketing.component';
+import { EditMoMarketingComponent } from './edit-mo-marketing/edit-mo-marketing.component';
 
 
 
@@ -30,7 +31,8 @@ import { DetailViewMoMarketingComponent } from './detail-view-mo-marketing/detai
     AddMoMarketingComponent,
     EditMoPpcComponent,
     DetailViewMoPpcComponent,
-    DetailViewMoMarketingComponent
+    DetailViewMoMarketingComponent,
+    EditMoMarketingComponent
   ],
   imports: [
     CommonModule,

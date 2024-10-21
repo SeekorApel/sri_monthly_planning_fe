@@ -218,7 +218,8 @@
           </div>
         </div>
 
-        <div class="table-responsive" *ngIf="isTableVisible">
+        <!-- <div class="table-responsive" *ngIf="isTableVisible"> -->
+        <div class="table-responsive">
           <table class="table table-bordered table-striped table-sm">
             <thead>
               <!-- Head Header -->
@@ -269,22 +270,23 @@
                   <input type="number" class="form-control" [(ngModel)]="mo.initialStock" />
                 </td>
                 <td>
-                  <input type="number" class="form-control" [(ngModel)]="mo.sfMonth0" />
+                  <input type="number" class="form-control" [ngClass]="{ 'is-invalid': (mo.sfMonth0 < mo.minOrder || mo.sfMonth0 > mo.maxCapMonth0) && mo.sfMonth0 !== null && mo.sfMonth0 !== undefined }" [(ngModel)]="mo.sfMonth0" />
+                  <!-- <div *ngIf="mo.sfMonth0 < mo.minOrder" class="invalid-feedback" style="display: block">Invalid column.</div> -->
                 </td>
                 <td>
-                  <input type="number" class="form-control" [(ngModel)]="mo.sfMonth1" />
+                  <input type="number" class="form-control" [ngClass]="{ 'is-invalid': (mo.sfMonth1 < mo.minOrder || mo.sfMonth1 > mo.maxCapMonth1) && mo.sfMonth1 !== null && mo.sfMonth1 !== undefined }" [(ngModel)]="mo.sfMonth1" />
                 </td>
                 <td>
-                  <input type="number" class="form-control" [(ngModel)]="mo.sfMonth2" />
+                  <input type="number" class="form-control" [ngClass]="{ 'is-invalid': (mo.sfMonth2 < mo.minOrder || mo.sfMonth2 > mo.maxCapMonth2) && mo.sfMonth2 !== null && mo.sfMonth2 !== undefined }" [(ngModel)]="mo.sfMonth2" />
                 </td>
                 <td>
-                  <input type="number" class="form-control" [(ngModel)]="mo.moMonth0" />
+                  <input type="number" class="form-control" [ngClass]="{ 'is-invalid': (mo.moMonth0 < mo.minOrder || mo.moMonth0 > mo.maxCapMonth0) && mo.moMonth0 !== null && mo.moMonth0 !== undefined }" [(ngModel)]="mo.moMonth0" />
                 </td>
                 <td>
-                  <input type="number" class="form-control" [(ngModel)]="mo.moMonth1" />
+                  <input type="number" class="form-control" [ngClass]="{ 'is-invalid': (mo.moMonth1 < mo.minOrder || mo.moMonth1 > mo.maxCapMonth1) && mo.moMonth1 !== null && mo.moMonth1 !== undefined }" [(ngModel)]="mo.moMonth1" />
                 </td>
                 <td>
-                  <input type="number" class="form-control" [(ngModel)]="mo.moMonth2" />
+                  <input type="number" class="form-control" [ngClass]="{ 'is-invalid': (mo.moMonth2 < mo.minOrder || mo.moMonth2 > mo.maxCapMonth2) && mo.moMonth2 !== null && mo.moMonth2 !== undefined }" [(ngModel)]="mo.moMonth2" />
                 </td>
               </tr>
             </tbody>
