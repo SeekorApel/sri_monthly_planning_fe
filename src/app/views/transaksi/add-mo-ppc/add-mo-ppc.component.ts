@@ -30,7 +30,7 @@ export class AddMoPpcComponent implements OnInit {
   detailMarketingOrder: DetailMarketingOrder[];
   excelData: any[] = [];
   errorMessage: string | null = null;
-  lastIdMo: string = "";
+  lastIdMo: string = '';
 
   //Workday
   workDay_M0: any[] = [];
@@ -883,7 +883,6 @@ export class AddMoPpcComponent implements OnInit {
   }
 
   saveAllMo() {
-
     //Set data Save MO
     this.marketingOrder.moId = this.lastIdMo;
     this.marketingOrder.dateValid = this.formHeaderMo.get('date')?.value;
@@ -917,12 +916,10 @@ export class AddMoPpcComponent implements OnInit {
     const saveMo = {
       marketingOrder: this.marketingOrder,
       headerMarketingOrder: this.headerMo,
-      detailMarketingOrder: this.detailMarketingOrder
+      detailMarketingOrder: this.detailMarketingOrder,
     };
 
-    console.log("Save mo", saveMo);
-
-    this.moService.saveTemp(saveMo).subscribe(
+    this.moService.saveMarketingOrderPPC(saveMo).subscribe(
       (response) => {
         Swal.fire({
           title: 'Success!',
@@ -934,10 +931,11 @@ export class AddMoPpcComponent implements OnInit {
             this.navigateToViewMo();
           }
         });
-      }, (err) => {
+      },
+      (err) => {
         Swal.fire('Error!', 'Error insert data Marketing Order.', 'error');
       }
-    )
+    );
 
     // this.moService.saveMarketingOrder(this.marketingOrder).subscribe(
     //   (response) => {

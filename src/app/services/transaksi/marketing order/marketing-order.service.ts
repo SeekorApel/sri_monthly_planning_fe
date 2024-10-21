@@ -13,7 +13,7 @@ import { catchError, map } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class MarketingOrderService {
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   getLastIdMo(): Observable<ApiResponse<string>> {
     return this.http.get<ApiResponse<string>>(environment.apiUrlWebAdmin + '/getLastIdMo');
@@ -27,7 +27,7 @@ export class MarketingOrderService {
     return this.http.get<ApiResponse<any>>(environment.apiUrlWebAdmin + '/getMarketingOrderById/' + idMo);
   }
 
-  saveTemp(mo: any): Observable<ApiResponse<any>> {
+  saveMarketingOrderPPC(mo: any): Observable<ApiResponse<any>> {
     return this.http.post<ApiResponse<any>>(environment.apiUrlWebAdmin + '/saveMarketingOrderPPC', mo).pipe(
       map((response) => {
         return response;
@@ -38,6 +38,7 @@ export class MarketingOrderService {
     );
   }
 
+  //Not used
   saveMarketingOrder(mo: MarketingOrder): Observable<ApiResponse<MarketingOrder>> {
     return this.http.post<ApiResponse<MarketingOrder>>(environment.apiUrlWebAdmin + '/saveMarketingOrder', mo).pipe(
       map((response) => {
@@ -81,8 +82,8 @@ export class MarketingOrderService {
     return this.http.get<ApiResponse<any>>(environment.apiUrlWebAdmin + '/getDetailMoMarketing/' + idMo);
   }
 
-  addMarketingOrderMarketing(dtmo: DetailMarketingOrder[]) {
-    return this.http.post<ApiResponse<any>>(environment.apiUrlWebAdmin + '/updateDetailMOMarketing', dtmo).pipe(
+  saveMarketingOrderMarketing(dtmo: DetailMarketingOrder[]) {
+    return this.http.post<ApiResponse<any>>(environment.apiUrlWebAdmin + '/saveMarketingOrderMarketing', dtmo).pipe(
       map((response) => {
         return response;
       }),

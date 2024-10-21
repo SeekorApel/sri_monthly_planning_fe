@@ -801,7 +801,7 @@ export class AddMoMarketingComponent implements OnInit {
     //   });
     // }
 
-    this.moService.addMarketingOrderMarketing(this.detailMarketingOrder).subscribe(
+    this.moService.saveMarketingOrderMarketing(this.detailMarketingOrder).subscribe(
       (response) => {
         Swal.fire({
           title: 'Success!',
@@ -823,7 +823,6 @@ export class AddMoMarketingComponent implements OnInit {
         });
       }
     );
-
 
     // this.detailMarketingOrder.forEach((item, index) => {
     //   console.log(`Index: ${index}, Item:`, item);
