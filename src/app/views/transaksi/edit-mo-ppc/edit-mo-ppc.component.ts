@@ -11,7 +11,6 @@ import { ApiResponse } from 'src/app/response/Response';
 import { MarketingOrder } from 'src/app/models/MarketingOrder';
 import { HeaderMarketingOrder } from 'src/app/models/HeaderMarketingOrder';
 
-
 @Component({
   selector: 'app-edit-mo-ppc',
   templateUrl: './edit-mo-ppc.component.html',
@@ -24,6 +23,7 @@ export class EditMoPpcComponent implements OnInit {
   isReadOnly: boolean = true;
   monthNames: string[] = ['', '', ''];
   allData: any;
+  lastIdMo: string = '';
 
   marketingOrder: MarketingOrder = new MarketingOrder();
   headerMarketingOrder: any[] = [];
@@ -106,7 +106,7 @@ export class EditMoPpcComponent implements OnInit {
   ngOnInit(): void {
     this.idMo = this.activeRoute.snapshot.paramMap.get('idMo');
     this.getAllData(this.idMo);
-    this.marketingOrder.type = "FDR"
+    this.getLastIdMo();
   }
 
   getAllData(idMo: String) {
@@ -126,11 +126,26 @@ export class EditMoPpcComponent implements OnInit {
     );
   }
 
+  getLastIdMo(): void {
+    this.moService.getLastIdMo().subscribe(
+      (response: ApiResponse<string>) => {
+        this.lastIdMo = response.data;
+      },
+      (error) => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Failed to load data: ' + error.message,
+        });
+      }
+    );
+  }
+
   fillAllData(data: any) {
     this.headerMarketingOrder = data.dataHeaderMo;
     this.detailMarketingOrder = data.dataDetailMo;
-    let typeProduct = data.type;
 
+    let typeProduct = data.type;
     this.formHeaderMo.patchValue({
       date: new Date(data.dateValid).toISOString().split('T')[0],
       type: data.type,
@@ -209,80 +224,76 @@ export class EditMoPpcComponent implements OnInit {
 
   editMo(): void {
     const type = this.formHeaderMo.get('type')?.value;
+
+    //Set data Save MO
+    this.marketingOrder.moId = this.lastIdMo;
     this.marketingOrder.dateValid = this.formHeaderMo.get('date')?.value;
     this.marketingOrder.type = this.formHeaderMo.get('type')?.value;
+    this.marketingOrder.revisionPpc = this.formHeaderMo.get('revision')?.value;
     this.marketingOrder.month0 = new Date(this.formHeaderMo.get('month_0')?.value);
     this.marketingOrder.month1 = new Date(this.formHeaderMo.get('month_1')?.value);
     this.marketingOrder.month2 = new Date(this.formHeaderMo.get('month_2')?.value);
 
-    this.moService.saveMarketingOrder(this.marketingOrder).subscribe(
+    //Set data save Header Mo
+    this.headerMarketingOrder = [];
+    for (let i = 0; i < 3; i++) {
+      const tlField = type === 'FDR' ? `fdr_tl_m${i}` : `fed_tl_m${i}`;
+      const ttField = type === 'FDR' ? `fdr_tt_m${i}` : `fed_tt_m${i}`;
+
+      const tlFieldPercentage = type === 'FDR' ? `fdr_TL_percentage_m${i}` : `fed_TL_percentage_m${i}`;
+      const ttFieldPercentage = type === 'FDR' ? `fdr_TT_percentage_m${i}` : `fed_TT_percentage_m${i}`;
+
+      this.headerMarketingOrder.push({
+        moId: this.lastIdMo,
+        month: new Date(this.formHeaderMo.get(`month_${i}`)?.value),
+        wdNormal: this.formHeaderMo.get(`nwd_${i}`)?.value,
+        wdOtTl: this.formHeaderMo.get(`tl_ot_wd_${i}`)?.value,
+        wdOtTt: this.formHeaderMo.get(`tt_ot_wd_${i}`)?.value,
+        totalWdTl: this.formHeaderMo.get(`total_tlwd_${i}`)?.value,
+        totalWdTt: this.formHeaderMo.get(`total_ttwd_${i}`)?.value,
+        maxCapTube: this.formHeaderMo.get(`max_tube_capa_${i}`)?.value,
+        maxCapTl: this.formHeaderMo.get(`max_capa_tl_${i}`)?.value,
+        maxCapTt: this.formHeaderMo.get(`max_capa_tt_${i}`)?.value,
+        looping: this.formHeaderMo.get(`looping_m${i}`)?.value,
+        airbagMachine: this.formHeaderMo.get(`machine_airbag_m${i}`)?.value,
+        tl: this.formHeaderMo.get(tlField)?.value,
+        tt: this.formHeaderMo.get(ttField)?.value,
+        totalMo: this.formHeaderMo.get(`total_mo_m${i}`)?.value,
+        tlPercentage: this.formHeaderMo.get(tlFieldPercentage)?.value,
+        ttPercentage: this.formHeaderMo.get(ttFieldPercentage)?.value,
+        noteOrderTl: this.formHeaderMo.get(`note_tl_m${i}`)?.value,
+      });
+    }
+
+    //Set data save Detail Mo
+    this.detailMarketingOrder.forEach((item) => {
+      item.moId = this.lastIdMo;
+    });
+
+    const saveMo = {
+      marketingOrder: this.marketingOrder,
+      headerMarketingOrder: this.headerMarketingOrder,
+      detailMarketingOrder: this.detailMarketingOrder,
+    };
+
+    this.moService.saveMarketingOrderPPC(saveMo).subscribe(
       (response) => {
-        const lastIdMo = response.data.moId;
-        this.headerMarketingOrder = [];
-        for (let i = 0; i < 3; i++) {
-          const tlField = type === 'FDR' ? `fdr_tl_m${i}` : `fed_tl_m${i}`;
-          const ttField = type === 'FDR' ? `fdr_tt_m${i}` : `fed_tt_m${i}`;
-
-          const tlFieldPercentage = type === 'FDR' ? `fdr_TL_percentage_m${i}` : `fed_TL_percentage_m${i}`;
-          const ttFieldPercentage = type === 'FDR' ? `fdr_TT_percentage_m${i}` : `fed_TT_percentage_m${i}`;
-
-          this.headerMarketingOrder.push({
-            moId: lastIdMo,
-            month: new Date(this.formHeaderMo.get(`month_${i}`)?.value),
-            wdNormal: this.formHeaderMo.get(`nwd_${i}`)?.value,
-            wdOtTl: this.formHeaderMo.get(`tl_ot_wd_${i}`)?.value,
-            wdOtTt: this.formHeaderMo.get(`tt_ot_wd_${i}`)?.value,
-            totalWdTl: this.formHeaderMo.get(`total_tlwd_${i}`)?.value,
-            totalWdTt: this.formHeaderMo.get(`total_ttwd_${i}`)?.value,
-            maxCapTube: this.formHeaderMo.get(`max_tube_capa_${i}`)?.value,
-            maxCapTl: this.formHeaderMo.get(`max_capa_tl_${i}`)?.value,
-            maxCapTt: this.formHeaderMo.get(`max_capa_tt_${i}`)?.value,
-            looping: this.formHeaderMo.get(`looping_m${i}`)?.value,
-            airbagMachine: this.formHeaderMo.get(`machine_airbag_m${i}`)?.value,
-            tl: this.formHeaderMo.get(tlField)?.value,
-            tt: this.formHeaderMo.get(ttField)?.value,
-            totalMo: this.formHeaderMo.get(`total_mo_m${i}`)?.value,
-            tlPercentage: this.formHeaderMo.get(tlFieldPercentage)?.value,
-            ttPercentage: this.formHeaderMo.get(ttFieldPercentage)?.value,
-            noteOrderTl: this.formHeaderMo.get(`note_tl_m${i}`)?.value
-          });
-        }
-        this.moService.saveHeaderMarketingOrder(this.headerMarketingOrder).subscribe(
-          (response) => {
-            this.detailMarketingOrder.forEach((item) => {
-              item.moId = lastIdMo;
-            });
-
-            console.log("Edit", this.detailMarketingOrder);
-            this.moService.saveDetailRowMarketingOrder(this.detailMarketingOrder).subscribe(
-              (response) => {
-                Swal.fire({
-                  title: 'Success!',
-                  text: 'Data Marketing Order successfully Edited.',
-                  icon: 'success',
-                  confirmButtonText: 'OK',
-                }).then((result) => {
-                  if (result.isConfirmed) {
-                    this.navigateToViewMo();
-                  }
-                });
-              },
-              (err) => {
-                Swal.fire('Error!', 'Error insert data Detaill Marketing Order.', 'error');
-              }
-            );
-          },
-          (err) => {
-            Swal.fire('Error!', 'Error insert data Header Marketing Order.', 'error');
+        Swal.fire({
+          title: 'Success!',
+          text: 'Data Marketing Order successfully Revision.',
+          icon: 'success',
+          confirmButtonText: 'OK',
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.navigateToViewMo();
           }
-        );
+        });
       },
       (err) => {
         Swal.fire('Error!', 'Error insert data Marketing Order.', 'error');
       }
     );
   }
-
 
   formatDateToString(dateString) {
     const date = new Date(dateString);
@@ -310,7 +321,7 @@ export class EditMoPpcComponent implements OnInit {
 
   temptMtheod() {
     const type = this.formHeaderMo.get('type')?.value;
-    const lastIdMo = "MO-002"
+    const lastIdMo = 'MO-002';
     //Marketing Order
     this.marketingOrder.dateValid = this.formHeaderMo.get('date')?.value;
     this.marketingOrder.type = type;
@@ -345,12 +356,12 @@ export class EditMoPpcComponent implements OnInit {
         totalMo: this.formHeaderMo.get(`total_mo_m${i}`)?.value,
         tlPercentage: this.formHeaderMo.get(tlFieldPercentage)?.value,
         ttPercentage: this.formHeaderMo.get(ttFieldPercentage)?.value,
-        noteOrderTl: this.formHeaderMo.get(`note_tl_m${i}`)?.value
+        noteOrderTl: this.formHeaderMo.get(`note_tl_m${i}`)?.value,
       });
     }
 
     // Update moId in detailMarketingOrder
-    this.detailMarketingOrder.forEach(detail => {
+    this.detailMarketingOrder.forEach((detail) => {
       detail.moId = lastIdMo;
       detail.detailId = null;
     });
@@ -362,9 +373,9 @@ export class EditMoPpcComponent implements OnInit {
       confirmButtonText: 'OK',
     }).then((result) => {
       if (result.isConfirmed) {
-        console.log("data marketing order", this.marketingOrder);
-        console.log("data header marketing order", this.headerMarketingOrder);
-        console.log("data detail marketing order", this.detailMarketingOrder);
+        console.log('data marketing order', this.marketingOrder);
+        console.log('data header marketing order', this.headerMarketingOrder);
+        console.log('data detail marketing order', this.detailMarketingOrder);
         this.navigateToViewMo();
       }
     });
