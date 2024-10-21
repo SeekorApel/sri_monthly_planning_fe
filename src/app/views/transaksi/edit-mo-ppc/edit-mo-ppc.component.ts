@@ -293,6 +293,8 @@ export class EditMoPpcComponent implements OnInit {
         Swal.fire('Error!', 'Error insert data Marketing Order.', 'error');
       }
     );
+
+    console.log('k');
   }
 
   formatDateToString(dateString) {
