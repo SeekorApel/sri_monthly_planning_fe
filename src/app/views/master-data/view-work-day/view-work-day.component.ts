@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CalendarService } from 'src/app/services/master-data/calendar/calendar.service';
-import { Calendar, Event } from 'src/app/models/Calendar';
+import { Calendar, dayCalendar, Event } from 'src/app/models/Calendar';
+import { dA } from '@fullcalendar/core/internal-common';
 
 @Component({
   selector: 'app-view-work-day',
@@ -13,7 +14,7 @@ export class ViewWorkDayComponent implements OnInit {
     'September', 'Oktober', 'November', 'Desember'
   ];
   calendar: Calendar;
-  selectedDay: number | null = null;
+  selectedDay: dayCalendar = new dayCalendar(null,null);
   events: Event[] = [];
 
   constructor(private calendarService: CalendarService) {}
@@ -35,12 +36,11 @@ export class ViewWorkDayComponent implements OnInit {
   }
 
   isWeekend(): boolean {
-
     return false;
   }  
 
   previousMonth() {
-    this.selectedDay = null;
+    this.selectedDay = new dayCalendar(null,null);
     const { year, month } = this.calendar;
     const newMonth = month === 1 ? 12 : month - 1;
     const newYear = month === 1 ? year - 1 : year;
@@ -48,7 +48,7 @@ export class ViewWorkDayComponent implements OnInit {
   }
 
   nextMonth() {
-    this.selectedDay = null;
+    this.selectedDay = new dayCalendar(null,null);
     const { year, month } = this.calendar;
     const newMonth = month === 12 ? 1 : month + 1;
     const newYear = month === 12 ? year + 1 : year;
@@ -58,10 +58,11 @@ export class ViewWorkDayComponent implements OnInit {
   newEvent: Event = { title: '', description: '', date: null };
   showModal: boolean = false;
 
-  selectDay(day: number) {
-    if (day > 0) { // Only allow selection for valid days
+  selectDay(day: dayCalendar) {
+    if(day.days >0){
       this.selectedDay = day;
-      this.newEvent.date = new Date(this.calendar.year, this.calendar.month - 1, day);
+      // this.newEvent.title = this.monthNames[day.month];
+      this.newEvent.date = new Date(this.calendar.year, day.month - 1, day.days);
       this.showModal = true;
     }
   }

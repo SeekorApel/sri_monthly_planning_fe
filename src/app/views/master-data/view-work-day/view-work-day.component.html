@@ -32,10 +32,10 @@
                   'background-color': isWeekend() ? 'red' : 'inherit', 
                   'color': isWeekend() ? 'white' : 'inherit'
               }" 
-              [ngClass]="{ 'selected': day === selectedDay }" 
-              (click)="day !== 0 ? selectDay(day) : null">
-            {{ day }}
-            <div *ngFor="let event of getEventsForDay(day)">{{ event.title }}</div>
+              [ngClass]="{ 'selected': day.days === selectedDay.days && day.month=== selectedDay.month }" 
+              (click)="day.days !== 0 ? selectDay(day) : null">
+            {{ day.days }}
+            <div *ngFor="let event of getEventsForDay(day.days)">{{ event.title }}</div>
           </td>               
             </tr>
           </tbody>
@@ -45,13 +45,21 @@
       <!-- Detail Section -->
       <div class="event-details ml-4">
         <h3>Event Details</h3>
-        <div *ngIf="selectedDay">
-          <h4>Details for {{ selectedDay }}</h4>
+        <div *ngIf="selectedDay.days !== null">
+          <h4>Details for {{ selectedDay.days }} - {{ monthNames[selectedDay.month - 1] }}</h4>
           <div *ngFor="let event of getEventsForDay(selectedDay)">
-            <h5>{{ event.title }}</h5>
-            <p>{{ event.description }}</p>
+            <tabset>
+              <tab heading="Home">
+                1. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+              </tab>
+              <tab heading="Profile">
+                2. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+              </tab>
+              <tab heading="Messages">
+                3. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+              </tab>
+            </tabset>
           </div>
-          <button (click)="showModal = true">Add Event</button>
         </div>
         <div *ngIf="!selectedDay">
           <p>Please select a day to see event details.</p>

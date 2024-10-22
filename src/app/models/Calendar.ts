@@ -1,9 +1,9 @@
 export class Calendar {
   year: number;
   month: number;
-  days: dayCalendar;
+  days: dayCalendar[][];
 
-  constructor(year: number, month: number, days: dayCalendar) {
+  constructor(year: number, month: number, days: dayCalendar[][]) {
     this.year = year;
     this.month = month;
     this.days = days;
