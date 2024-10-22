@@ -19,11 +19,11 @@ export class DefaultLayoutComponent {
 
   constructor(private authenticationService: AuthenticationService, private router: Router) {
     //PERSONAL INFORMATION
-    // let currentUserSubject = JSON.parse(localStorage.getItem('currentUser'));
-    // console.log(currentUserSubject.userName);
-    // this.nrp = currentUserSubject.userName;
-    // this.name = currentUserSubject.fullName;
-    // this.role = currentUserSubject.roles.role_name;
+    let currentUserSubject = JSON.parse(localStorage.getItem('currentUser'));
+    // localStorage.clear();
+    this.nrp = currentUserSubject.userName;
+    this.name = currentUserSubject.fullName;
+    this.role = currentUserSubject.roles.role_name;
 
     this.navItems = navItems;
     this.navItems[1].children = [];
@@ -80,15 +80,14 @@ export class DefaultLayoutComponent {
     //   this.navItems[2].children.push(item);
     // });
     // Check the role of the user
-    this.masterPPC.forEach((item) => {
-      this.navItems[1].children.push(item);
-    });
-    this.transaksiPPC.forEach((item) => {
-      this.navItems[2].children.push(item);
-    });
     if (this.role === 'PPC') {
       // PPC: show Master Data and Transaksi
-
+      this.masterPPC.forEach((item) => {
+        this.navItems[1].children.push(item);
+      });
+      this.transaksiPPC.forEach((item) => {
+        this.navItems[2].children.push(item);
+      });
     } else if (this.role === 'Marketing') {
       this.transaksiMarketing.forEach((item) => {
         this.navItems[2].children.push(item);

@@ -22,49 +22,73 @@
       <link rel="stylesheet" href="view-max-capacity.component.scss">
       <!-- Table -->
       <div class="table-responsive table-wrapper">
-        <table class="table table-bordered table-striped table-sm">
-          <thead align="center">
-            <tr>
-              <th>No</th>
-              <th>Max Capacity ID</th>
-              <th>Product ID</th>
-              <th>Machine Curing Type ID</th>
-              <th>Cycle Time</th>
-              <th>Capacity Shift 1</th>
-              <th>Capacity Shift 2</th>
-              <th>Capacity Shift 3</th>
-              <th>Status</th>
-              <th style="min-width: 200px;">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr align="center" *ngFor="let maxCapacity of pageOfItems; let i = index">
-              <td>{{ i + 1 }}</td>
-              <td>{{ maxCapacity.max_CAP_ID}}</td>
-              <td>{{ maxCapacity.product_ID}}</td>
-              <td>{{ maxCapacity.machinecuringtype_ID}}</td>
-              <td>{{ maxCapacity.cycle_TIME}}</td>
-              <td>{{ maxCapacity.capacity_SHIFT_1}}</td>
-              <td>{{ maxCapacity.capacity_SHIFT_2}}</td>
-              <td>{{ maxCapacity.capacity_SHIFT_3}}</td>
-              <td [ngClass]="{ 'bg-success': maxCapacity.status === 1, 'bg-danger': maxCapacity.status !== 1 }">
-                {{ maxCapacity.status === 1 ? 'Active' : 'Deactive' }}
-              </td>
-              <td>
-                <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(maxCapacity.max_CAP_ID)">Update</button>
-                <button type="button" class="btn btn-md ml-2" [ngClass]="{ 'btn-danger': maxCapacity.status === 1, 'btn-success': maxCapacity.status !== 1 }" (click)="maxCapacity.status === 1 ? deleteData(maxCapacity) : activateData(maxCapacity)">
-                  {{ maxCapacity.status === 1 ? 'Delete' : 'Active' }}
-                </button>
-              </td>
-            </tr>
-          </tbody>
+        <table mat-table [dataSource]="dataSource" matSort class="table table-bordered table-striped table-sm">
+
+          <ng-container matColumnDef="no" >
+            <th *matHeaderCellDef >No</th>
+            <td  *matCellDef="let element; let i = index">{{ i + 1 }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="max_CAP_ID">
+            <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Max Cap ID</th>
+            <td  *matCellDef="let element">{{ element.max_CAP_ID }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="product_ID">
+            <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Product ID</th>
+            <td  *matCellDef="let element">{{ element.product_ID }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="machinecuringtype_ID">
+            <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Machine Curing Type ID</th>
+            <td  *matCellDef="let element">{{ element.machinecuringtype_ID }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="cycle_TIME">
+            <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Cycle Time</th>
+            <td  *matCellDef="let element">{{ element.cycle_TIME }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="capacity_SHIFT_1">
+            <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Capacity Shift 1</th>
+            <td  *matCellDef="let element">{{ element.capacity_SHIFT_1 }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="capacity_SHIFT_2">
+            <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Capacity Shift 2</th>
+            <td  *matCellDef="let element">{{ element.capacity_SHIFT_2 }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="capacity_SHIFT_3">
+            <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Capacity Shift 3</th>
+            <td  *matCellDef="let element">{{ element.capacity_SHIFT_3 }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="status">
+            <th  *matHeaderCellDef>Status</th>
+            <td *matCellDef="let element" [ngClass]="{ 'bg-success': element.status === 1, 'bg-danger': element.status !== 1 }">
+              {{ element.status === 1 ? 'Active' : 'Deactive' }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="action" >
+            <th *matHeaderCellDef style="min-width: 200px;">Action</th>
+            <td *matCellDef="let element">
+              <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(element.max_CAP_ID)">Update</button>
+              <button type="button" class="btn btn-md ml-2" [ngClass]="{ 'btn-danger': element.status === 1, 'btn-success': element.status !== 1 }" (click)="element.status === 1 ? deleteData(element) : activateData(element)">
+                {{ element.status === 1 ? 'Delete' : 'Active' }}
+              </button>
+            </td>
+          </ng-container>
+
+          <tr align="center" style="height: 20px;" mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr align="center" mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
         </table>
         <!-- Pagination -->
-        <nav>
-          <ul class="pagination">
-            <jw-pagination [items]="maxCapacitys" [pageSize]="pageSize" [maxPages]="totalPages" (changePage)="onChangePage($event)"> </jw-pagination>
-          </ul>
-        </nav>
+        <mat-paginator [pageSize]="pageSize"
+              [pageSizeOptions]="[5, 10, 20]"
+              showFirstLastButtons>
+        </mat-paginator>
       </div>
     </div>
   </div>

@@ -8,6 +8,10 @@ declare var $: any;
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSort } from '@angular/material/sort';
+import { MatPaginator } from '@angular/material/paginator';
+
 @Component({
   selector: 'app-view-max-capacity',
   templateUrl: './view-max-capacity.component.html',
@@ -28,6 +32,12 @@ export class ViewMaxCapacityComponent implements OnInit {
   pageOfItems: Array<any>;
   pageSize: number = 5;
   totalPages: number = 5;
+  sortBuffer: Array<any>;
+  displayedColumns: string[] = ['no', 'max_CAP_ID', 'product_ID','machinecuringtype_ID', 'cycle_TIME', 'capacity_SHIFT_1', 'capacity_SHIFT_2', 'capacity_SHIFT_3', 'status', 'action'];
+  dataSource: MatTableDataSource<Max_Capacity>;
+
+  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(private maxCapacityService: MaxCapacityService, private fb: FormBuilder) { 
     this.editMaxCapacityForm = this.fb.group({
@@ -49,7 +59,10 @@ export class ViewMaxCapacityComponent implements OnInit {
     this.maxCapacityService.getAllMaxCapacity().subscribe(
       (response: ApiResponse<Max_Capacity[]>) => {
         this.maxCapacitys = response.data;
-        this.onChangePage(this.maxCapacitys.slice(0, this.pageSize));
+        this.dataSource = new MatTableDataSource(this.maxCapacitys);
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+        this.onChangePage(this.dataSource.data.slice(0, this.pageSize));
       },
       (error) => {
         this.errorMessage = 'Failed to load max capacity: ' + error.message;
@@ -62,22 +75,23 @@ export class ViewMaxCapacityComponent implements OnInit {
   }
 
   onSearchChange(): void {
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
     // Lakukan filter berdasarkan nama plant yang mengandung text pencarian (case-insensitive)
-    const filteredMaxCapacity = this.maxCapacitys.filter(
-      (maxCapacity) =>
-        maxCapacity.max_CAP_ID
-          .toString()
-          .includes(this.searchText.toLowerCase()) ||
-          maxCapacity.product_ID.toString().includes(this.searchText)||
-          maxCapacity.machinecuringtype_ID.toLowerCase().toString().includes(this.searchText.toLowerCase()) ||
-          maxCapacity.cycle_TIME.toString().includes(this.searchText) ||
-          maxCapacity.capacity_SHIFT_1.toString().includes(this.searchText) ||
-          maxCapacity.capacity_SHIFT_2.toString().includes(this.searchText) ||
-          maxCapacity.capacity_SHIFT_3.toString().includes(this.searchText)
-    );
+    // const filteredMaxCapacity = this.maxCapacitys.filter(
+    //   (maxCapacity) =>
+    //     maxCapacity.max_CAP_ID
+    //       .toString()
+    //       .includes(this.searchText.toLowerCase()) ||
+    //       maxCapacity.product_ID.toString().includes(this.searchText)||
+    //       maxCapacity.machinecuringtype_ID.toLowerCase().toString().includes(this.searchText.toLowerCase()) ||
+    //       maxCapacity.cycle_TIME.toString().includes(this.searchText) ||
+    //       maxCapacity.capacity_SHIFT_1.toString().includes(this.searchText) ||
+    //       maxCapacity.capacity_SHIFT_2.toString().includes(this.searchText) ||
+    //       maxCapacity.capacity_SHIFT_3.toString().includes(this.searchText)
+    // );
 
-    // Tampilkan hasil filter pada halaman pertama
-    this.onChangePage(filteredMaxCapacity.slice(0, this.pageSize));
+    // // Tampilkan hasil filter pada halaman pertama
+    // this.onChangePage(filteredMaxCapacity.slice(0, this.pageSize));
   }
 
   resetSearch(): void {
