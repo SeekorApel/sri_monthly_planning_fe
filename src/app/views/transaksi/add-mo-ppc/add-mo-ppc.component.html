@@ -15,7 +15,7 @@
           </div>
 
           <div class="form-group row">
-            <label class="col-md-3 col-form-label" for="select1"> Type <span class="text-danger">*</span> </label>
+            <label class="col-md-3 col-form-label" for="select1"> Type <span class="text-danger">*</span></label>
             <div class="col-md-9">
               <select id="type" formControlName="type" class="form-control" [ngClass]="{ 'is-invalid': formHeaderMo.get('type')?.invalid && formHeaderMo.get('type')?.touched }">
                 <option value="" disabled selected>Please select</option>
@@ -75,21 +75,21 @@
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="text-input">Maximum Tube Capacity <span class="text-danger">*</span></label>
                 <div class="col-md-9">
-                  <input type="number" formControlName="max_tube_capa_0" name="text-input" class="form-control" placeholder="0,00" [ngClass]="{ 'is-invalid': formHeaderMo.get('max_tube_capa_0')?.invalid && formHeaderMo.get('max_tube_capa_0')?.touched }" />
+                  <input type="text" formControlName="max_tube_capa_0" name="text-input" class="form-control" placeholder="0,00" [ngClass]="{ 'is-invalid': formHeaderMo.get('max_tube_capa_0')?.invalid && formHeaderMo.get('max_tube_capa_0')?.touched }" />
                   <div *ngIf="formHeaderMo.get('max_tube_capa_0')?.invalid && formHeaderMo.get('max_tube_capa_0')?.touched" class="invalid-feedback">Maximum Tube Capacity is required.</div>
                 </div>
               </div>
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="text-input">Maximum Capacity Tire TL <span class="text-danger">*</span></label>
                 <div class="col-md-9">
-                  <input type="number" formControlName="max_capa_tl_0" name="text-input" class="form-control" placeholder="0,00" [ngClass]="{ 'is-invalid': formHeaderMo.get('max_capa_tl_0')?.invalid && formHeaderMo.get('max_capa_tl_0')?.touched }" />
+                  <input type="text" formControlName="max_capa_tl_0" name="text-input" class="form-control" placeholder="0,00" [ngClass]="{ 'is-invalid': formHeaderMo.get('max_capa_tl_0')?.invalid && formHeaderMo.get('max_capa_tl_0')?.touched }" />
                   <div *ngIf="formHeaderMo.get('max_capa_tl_0')?.invalid && formHeaderMo.get('max_capa_tl_0')?.touched" class="invalid-feedback">Maximum Capacity Tire TL is required.</div>
                 </div>
               </div>
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="text-input">Maximum Capacity Tire TT <span class="text-danger">*</span></label>
                 <div class="col-md-9">
-                  <input type="number" formControlName="max_capa_tt_0" name="text-input" class="form-control" placeholder="0,00" [ngClass]="{ 'is-invalid': formHeaderMo.get('max_capa_tt_0')?.invalid && formHeaderMo.get('max_capa_tt_0')?.touched }" />
+                  <input type="text" formControlName="max_capa_tt_0" name="text-input" class="form-control" placeholder="0,00" [ngClass]="{ 'is-invalid': formHeaderMo.get('max_capa_tt_0')?.invalid && formHeaderMo.get('max_capa_tt_0')?.touched }" />
                   <div *ngIf="formHeaderMo.get('max_capa_tt_0')?.invalid && formHeaderMo.get('max_capa_tt_0')?.touched" class="invalid-feedback">Maximum Capacity Tire TT is required.</div>
                 </div>
               </div>
@@ -146,23 +146,23 @@
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="text-input">Maximum Tube Capacity</label>
+                <label class="col-md-3 col-form-label" for="text-input">Maximum Tube Capacity<span class="text-danger"> *</span></label>
                 <div class="col-md-9">
-                  <input type="number" [ngClass]="{ 'is-invalid': formHeaderMo.get('max_tube_capa_1')?.invalid && formHeaderMo.get('max_tube_capa_1')?.touched }" formControlName="max_tube_capa_1" name="text-input" class="form-control" placeholder="0,00" />
+                  <input type="text" [ngClass]="{ 'is-invalid': formHeaderMo.get('max_tube_capa_1')?.invalid && formHeaderMo.get('max_tube_capa_1')?.touched }" formControlName="max_tube_capa_1" name="text-input" class="form-control" placeholder="0,00" />
                   <div *ngIf="formHeaderMo.get('max_tube_capa_1')?.invalid && formHeaderMo.get('max_tube_capa_1')?.touched" class="invalid-feedback">Maximum Tube Capacity is required.</div>
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="text-input">Maximum Capacity Tire TL</label>
+                <label class="col-md-3 col-form-label" for="text-input">Maximum Capacity Tire TL<span class="text-danger"> *</span></label>
                 <div class="col-md-9">
-                  <input type="number" [ngClass]="{ 'is-invalid': formHeaderMo.get('max_capa_tl_1')?.invalid && formHeaderMo.get('max_capa_tl_1')?.touched }" formControlName="max_capa_tl_1" name="text-input" class="form-control" placeholder="0,00" />
+                  <input type="text" [ngClass]="{ 'is-invalid': formHeaderMo.get('max_capa_tl_1')?.invalid && formHeaderMo.get('max_capa_tl_1')?.touched }" formControlName="max_capa_tl_1" name="text-input" class="form-control" placeholder="0,00" />
                   <div *ngIf="formHeaderMo.get('max_capa_tl_1')?.invalid && formHeaderMo.get('max_capa_tl_1')?.touched" class="invalid-feedback">Maximum Capacity Tire TL is required.</div>
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="text-input">Maximum Capacity Tire TT</label>
+                <label class="col-md-3 col-form-label" for="text-input">Maximum Capacity Tire TT<span class="text-danger"> *</span></label>
                 <div class="col-md-9">
-                  <input type="number" [ngClass]="{ 'is-invalid': formHeaderMo.get('max_capa_tt_1')?.invalid && formHeaderMo.get('max_capa_tt_1')?.touched }" formControlName="max_capa_tt_1" name="text-input" class="form-control" placeholder="0,00" />
+                  <input type="text" [ngClass]="{ 'is-invalid': formHeaderMo.get('max_capa_tt_1')?.invalid && formHeaderMo.get('max_capa_tt_1')?.touched }" formControlName="max_capa_tt_1" name="text-input" class="form-control" placeholder="0,00" />
                   <div *ngIf="formHeaderMo.get('max_capa_tt_1')?.invalid && formHeaderMo.get('max_capa_tt_1')?.touched" class="invalid-feedback">Maximum Capacity Tire TT is required.</div>
                 </div>
               </div>
@@ -219,30 +219,30 @@
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="text-input">Maximum Tube Capacity</label>
+                <label class="col-md-3 col-form-label" for="text-input">Maximum Tube Capacity<span class="text-danger"> *</span></label>
                 <div class="col-md-9">
-                  <input [ngClass]="{ 'is-invalid': formHeaderMo.get('max_tube_capa_2')?.invalid && formHeaderMo.get('max_tube_capa_2')?.touched }" type="number" formControlName="max_tube_capa_2" name="text-input" class="form-control" placeholder="0,00" />
+                  <input type="text" formControlName="max_tube_capa_2" name="text-input" class="form-control" placeholder="0,00" [ngClass]="{ 'is-invalid': formHeaderMo.get('max_tube_capa_2')?.invalid && formHeaderMo.get('max_tube_capa_2')?.touched }" />
                   <div *ngIf="formHeaderMo.get('max_tube_capa_2')?.invalid && formHeaderMo.get('max_tube_capa_2')?.touched" class="invalid-feedback">Maximum Tube Capacity is required.</div>
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="text-input">Maximum Capacity Tire TL</label>
+                <label class="col-md-3 col-form-label" for="text-input">Maximum Capacity Tire TL<span class="text-danger"> *</span></label>
                 <div class="col-md-9">
-                  <input [ngClass]="{ 'is-invalid': formHeaderMo.get('max_capa_tl_2')?.invalid && formHeaderMo.get('max_capa_tl_2')?.touched }" type="number" formControlName="max_capa_tl_2" name="text-input" class="form-control" placeholder="0,00" />
+                  <input type="text" formControlName="max_capa_tl_2" name="text-input" class="form-control" placeholder="0,00" [ngClass]="{ 'is-invalid': formHeaderMo.get('max_capa_tl_2')?.invalid && formHeaderMo.get('max_capa_tl_2')?.touched }" />
                   <div *ngIf="formHeaderMo.get('max_capa_tl_2')?.invalid && formHeaderMo.get('max_capa_tl_2')?.touched" class="invalid-feedback">Maximum Capacity Tire TL is required.</div>
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="text-input">Maximum Capacity Tire TT</label>
+                <label class="col-md-3 col-form-label" for="text-input">Maximum Capacity Tire TT<span class="text-danger"> *</span></label>
                 <div class="col-md-9">
-                  <input [ngClass]="{ 'is-invalid': formHeaderMo.get('max_capa_tt_2')?.invalid && formHeaderMo.get('max_capa_tt_2')?.touched }" type="number" formControlName="max_capa_tt_2" name="text-input" class="form-control" placeholder="0,00" />
+                  <input type="text" formControlName="max_capa_tt_2" name="text-input" class="form-control" placeholder="0,00" [ngClass]="{ 'is-invalid': formHeaderMo.get('max_capa_tt_2')?.invalid && formHeaderMo.get('max_capa_tt_2')?.touched }" />
                   <div *ngIf="formHeaderMo.get('max_capa_tt_2')?.invalid && formHeaderMo.get('max_capa_tt_2')?.touched" class="invalid-feedback">Maximum Capacity Tire TT is required.</div>
                 </div>
               </div>
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="text-input">Note Order TL</label>
                 <div class="col-md-9">
-                  <input type="text" formControlName="note_order_tl_2" name="text-input" class="form-control"/>
+                  <input type="text" formControlName="note_order_tl_2" name="text-input" class="form-control" />
                 </div>
               </div>
             </tab>
@@ -277,6 +277,7 @@
                 <th rowspan="2" style="min-width: 150px" class="align-middle">Quantity Per Rak</th>
                 <th rowspan="2" style="min-width: 150px" class="align-middle">Minimal Order</th>
                 <th colspan="3" style="min-width: 300px" class="align-middle">Maximum Capacity</th>
+                <th rowspan="2" style="min-width: 120px" class="align-middle">Status</th>
               </tr>
 
               <!-- Child Header -->
@@ -287,19 +288,22 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let mo of detailMarketingOrder; let i = index" align="center">
-                <td>{{ i + 1 }}</td>
-                <td>{{ mo.category }}</td>
-                <td>{{ mo.partNumber }}</td>
-                <td>{{ mo.description }}</td>
-                <td>{{ mo.machineType }}</td>
-                <td>{{ mo.capacity | number : '1.0-0' }}</td>
-                <td>{{ mo.qtyPerMould | number : '1.0-0' }}</td>
-                <td>{{ mo.qtyPerRak | number : '1.0-0' }}</td>
-                <td>{{ mo.minOrder | number : '1.0-0' }}</td>
-                <td>{{ mo.maxCapMonth0 | number : '1.0-0' }}</td>
-                <td>{{ mo.maxCapMonth1 | number : '1.0-0' }}</td>
-                <td>{{ mo.maxCapMonth2 | number : '1.0-0' }}</td>
+              <tr *ngFor="let mo of detailMarketingOrder; let i = index">
+                <td class="text-center">{{ i + 1 }}</td>
+                <td class="text-center">{{ mo.category }}</td>
+                <td class="text-center">{{ mo.partNumber }}</td>
+                <td class="text-center">{{ mo.description }}</td>
+                <td class="text-center">{{ mo.machineType }}</td>
+                <td class="text-right">{{ mo.capacity | number : '1.0-0' }}</td>
+                <td class="text-right">{{ mo.qtyPerMould | number : '1.0-0' }}</td>
+                <td class="text-right">{{ mo.qtyPerRak | number : '1.0-0' }}</td>
+                <td class="text-right">{{ mo.minOrder | number : '1.0-0' }}</td>
+                <td class="text-right">{{ mo.maxCapMonth0 | number : '1.0-0' }}</td>
+                <td class="text-right">{{ mo.maxCapMonth1 | number : '1.0-0' }}</td>
+                <td class="text-right">{{ mo.maxCapMonth2 | number : '1.0-0' }}</td>
+                <td align="center">
+                  <button type="button" class="btn btn-md btn-secondary">Lock</button>
+                </td>
               </tr>
             </tbody>
           </table>

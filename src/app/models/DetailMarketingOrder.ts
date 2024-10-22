@@ -22,4 +22,5 @@ export class DetailMarketingOrder {
   ppd: Number;
   cav: Number;
   status: Number;
+  statusLock: number;
 }

@@ -90,7 +90,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     P404Component,
     P500Component,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
     ],
   providers: [
     {
