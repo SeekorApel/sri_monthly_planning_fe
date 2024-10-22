@@ -110,6 +110,26 @@ export class AddMoMarketingComponent implements OnInit {
     this.getAllData(this.idMo);
   }
 
+  onInputChange(event: any, mo: any, field: string) {
+    let value = event.target.value;
+    value = value.replace(/[^0-9]/g, '');
+    value = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+    mo[field] = value;
+    event.target.value = value;
+  }
+
+  isInvalidValue(value: any | null | undefined, minOrder: number, maxCap: number): boolean {
+    if (value === null || value === undefined) {
+      return false;
+    }
+    // Mengonversi value ke string jika bukan string
+    const stringValue = typeof value === 'string' ? value : value.toString();
+    // Menghapus separator ribuan dan mengonversi menjadi angka
+    const numericValue = parseFloat(stringValue.replace(/\./g, ''));
+    return numericValue < minOrder || numericValue > maxCap;
+  }
+
+
   getAllData(idMo: String) {
     this.moService.getDetailMoMarketing(idMo).subscribe(
       (response: ApiResponse<any>) => {
@@ -138,39 +158,56 @@ export class AddMoMarketingComponent implements OnInit {
 
       // Header Month 1
       month_0: this.formatDateToString(this.headerMarketingOrder[0].month),
-      nwd_0: this.headerMarketingOrder[0].wdNormal,
-      tl_ot_wd_0: this.headerMarketingOrder[0].wdOtTl,
-      tt_ot_wd_0: this.headerMarketingOrder[0].wdOtTt,
-      total_tlwd_0: this.headerMarketingOrder[0].totalWdTl,
-      total_ttwd_0: this.headerMarketingOrder[0].totalWdTt,
-      max_tube_capa_0: this.headerMarketingOrder[0].maxCapTube,
-      max_capa_tl_0: this.headerMarketingOrder[0].maxCapTl,
-      max_capa_tt_0: this.headerMarketingOrder[0].maxCapTt,
+      nwd_0: this.formatNumber(this.headerMarketingOrder[0].wdNormal),
+      tl_ot_wd_0: this.formatNumber(this.headerMarketingOrder[0].wdOtTl),
+      tt_ot_wd_0: this.formatNumber(this.headerMarketingOrder[0].wdOtTt),
+      total_tlwd_0: this.formatNumber(this.headerMarketingOrder[0].totalWdTl),
+      total_ttwd_0: this.formatNumber(this.headerMarketingOrder[0].totalWdTt),
+      max_tube_capa_0: this.formatNumber(this.headerMarketingOrder[0].maxCapTube),
+      max_capa_tl_0: this.formatNumber(this.headerMarketingOrder[0].maxCapTl),
+      max_capa_tt_0: this.formatNumber(this.headerMarketingOrder[0].maxCapTt),
 
       // Header Month 2
       month_1: this.formatDateToString(this.headerMarketingOrder[1].month),
-      nwd_1: this.headerMarketingOrder[1].wdNormal,
-      tl_ot_wd_1: this.headerMarketingOrder[1].wdOtTl,
-      tt_ot_wd_1: this.headerMarketingOrder[1].wdOtTt,
-      total_tlwd_1: this.headerMarketingOrder[1].totalWdTl,
-      total_ttwd_1: this.headerMarketingOrder[1].totalWdTt,
-      max_tube_capa_1: this.headerMarketingOrder[1].maxCapTube,
-      max_capa_tl_1: this.headerMarketingOrder[1].maxCapTl,
-      max_capa_tt_1: this.headerMarketingOrder[1].maxCapTt,
+      nwd_1: this.formatNumber(this.headerMarketingOrder[1].wdNormal),
+      tl_ot_wd_1: this.formatNumber(this.headerMarketingOrder[1].wdOtTl),
+      tt_ot_wd_1: this.formatNumber(this.headerMarketingOrder[1].wdOtTt),
+      total_tlwd_1: this.formatNumber(this.headerMarketingOrder[1].totalWdTl),
+      total_ttwd_1: this.formatNumber(this.headerMarketingOrder[1].totalWdTt),
+      max_tube_capa_1: this.formatNumber(this.headerMarketingOrder[1].maxCapTube),
+      max_capa_tl_1: this.formatNumber(this.headerMarketingOrder[1].maxCapTl),
+      max_capa_tt_1: this.formatNumber(this.headerMarketingOrder[1].maxCapTt),
 
       // Header Month 3
       month_2: this.formatDateToString(this.headerMarketingOrder[2].month),
-      nwd_2: this.headerMarketingOrder[2].wdNormal,
-      tl_ot_wd_2: this.headerMarketingOrder[2].wdOtTl,
-      tt_ot_wd_2: this.headerMarketingOrder[2].wdOtTt,
-      total_tlwd_2: this.headerMarketingOrder[2].totalWdTl,
-      total_ttwd_2: this.headerMarketingOrder[2].totalWdTt,
-      max_tube_capa_2: this.headerMarketingOrder[2].maxCapTube,
-      max_capa_tl_2: this.headerMarketingOrder[2].maxCapTl,
-      max_capa_tt_2: this.headerMarketingOrder[2].maxCapTt,
+      nwd_2: this.formatNumber(this.headerMarketingOrder[2].wdNormal),
+      tl_ot_wd_2: this.formatNumber(this.headerMarketingOrder[2].wdOtTl),
+      tt_ot_wd_2: this.formatNumber(this.headerMarketingOrder[2].wdOtTt),
+      total_tlwd_2: this.formatNumber(this.headerMarketingOrder[2].totalWdTl),
+      total_ttwd_2: this.formatNumber(this.headerMarketingOrder[2].totalWdTt),
+      max_tube_capa_2: this.formatNumber(this.headerMarketingOrder[2].maxCapTube),
+      max_capa_tl_2: this.formatNumber(this.headerMarketingOrder[2].maxCapTl),
+      max_capa_tt_2: this.formatNumber(this.headerMarketingOrder[2].maxCapTt),
     });
 
     this.updateMonthNames(this.headerMarketingOrder);
+  }
+
+  formatNumber(value: number | null | undefined): string {
+    if (value !== null && value !== undefined && !isNaN(value)) {
+      let strValue = value.toString();
+
+      // Pisahkan bagian desimal dan bulat
+      const parts = strValue.split('.');
+      const integerPart = parts[0];
+      const decimalPart = parts[1] ? ',' + parts[1] : '';
+
+      // Tambahkan separator ribuan
+      const formattedInteger = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+
+      return formattedInteger + decimalPart;
+    }
+    return '';
   }
 
   downloadTemplate() {
@@ -661,13 +698,10 @@ export class AddMoMarketingComponent implements OnInit {
       // Membaca file Excel
       const reader = new FileReader();
       reader.onload = (e) => {
-        // Memastikan hasil pembacaan adalah ArrayBuffer
         const result = e.target.result;
         if (result instanceof ArrayBuffer) {
           const data = new Uint8Array(result);
           const workbook = XLSX.read(data, { type: 'array' });
-
-          // Ambil nama sheet pertama
           const firstSheetName = workbook.SheetNames[0];
           const worksheet = workbook.Sheets[firstSheetName];
 
@@ -690,12 +724,12 @@ export class AddMoMarketingComponent implements OnInit {
             const detail = this.detailMarketingOrder.find((item) => item.partNumber === partNumber);
             if (detail) {
               detail.initialStock = initialStockValue;
-              detail.sfMonth0 = sfMonth0Value;
-              detail.sfMonth1 = sfMonth1Value;
-              detail.sfMonth2 = sfMonth2Value;
-              detail.moMonth0 = moMonth0Value;
-              detail.moMonth1 = moMonth1Value;
-              detail.moMonth2 = moMonth2Value;
+              detail.sfMonth0 = sfMonth0Value; //tipe data number
+              detail.sfMonth1 = sfMonth1Value; //tipe data number
+              detail.sfMonth2 = sfMonth2Value; //tipe data number
+              detail.moMonth0 = moMonth0Value; //tipe data number
+              detail.moMonth1 = moMonth1Value; //tipe data number
+              detail.moMonth2 = moMonth2Value; //tipe data number
             }
           }
         } else {
@@ -709,8 +743,42 @@ export class AddMoMarketingComponent implements OnInit {
     }
   }
 
+  formatNumberChange(value: number | null | undefined): string {
+    return value != null ? value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : '';
+  }
+
+  onModelChange(value: string, mo: any, field: string) {
+    // Remove dots and convert the value to a number
+    const numberValue = value ? Number(value.replace(/\./g, '')) : null;
+    mo[field] = numberValue; // Update the model with the number value
+  }
+
+
   saveMo(): void {
-    const hasInvalidInput = this.detailMarketingOrder.some((mo) => mo.sfMonth0 < mo.minOrder || mo.sfMonth0 > mo.maxCapMonth0 || mo.sfMonth1 < mo.minOrder || mo.sfMonth1 > mo.maxCapMonth1 || mo.sfMonth2 < mo.minOrder || mo.sfMonth2 > mo.maxCapMonth2 || mo.moMonth0 < mo.minOrder || mo.moMonth0 > mo.maxCapMonth0 || mo.moMonth1 < mo.minOrder || mo.moMonth1 > mo.maxCapMonth1 || mo.moMonth2 < mo.minOrder || mo.moMonth2 > mo.maxCapMonth2);
+    const hasInvalidInput = this.detailMarketingOrder.some((mo) => {
+      // Mengubah inputan string menjadi number dengan menghapus karakter '.'
+      const sfMonth0 = parseFloat(mo.sfMonth0.toString().replace(/\./g, '')) || 0; // fallback ke 0 jika NaN
+      const sfMonth1 = parseFloat(mo.sfMonth1.toString().replace(/\./g, '')) || 0;
+      const sfMonth2 = parseFloat(mo.sfMonth2.toString().replace(/\./g, '')) || 0;
+      const moMonth0 = parseFloat(mo.moMonth0.toString().replace(/\./g, '')) || 0;
+      const moMonth1 = parseFloat(mo.moMonth1.toString().replace(/\./g, '')) || 0;
+      const moMonth2 = parseFloat(mo.moMonth2.toString().replace(/\./g, '')) || 0;
+
+      // Pastikan minOrder dan maxCapMonthX adalah number
+      const minOrder = Number(mo.minOrder);
+      const maxCapMonth0 = Number(mo.maxCapMonth0);
+      const maxCapMonth1 = Number(mo.maxCapMonth1);
+      const maxCapMonth2 = Number(mo.maxCapMonth2);
+
+      return (
+        sfMonth0 < minOrder || sfMonth0 > maxCapMonth0 ||
+        sfMonth1 < minOrder || sfMonth1 > maxCapMonth1 ||
+        sfMonth2 < minOrder || sfMonth2 > maxCapMonth2 ||
+        moMonth0 < minOrder || moMonth0 > maxCapMonth0 ||
+        moMonth1 < minOrder || moMonth1 > maxCapMonth1 ||
+        moMonth2 < minOrder || moMonth2 > maxCapMonth2
+      );
+    });
 
     // Jika terdapat input yang tidak valid, tampilkan SweetAlert dan hentikan fungsi
     if (hasInvalidInput) {
@@ -722,6 +790,16 @@ export class AddMoMarketingComponent implements OnInit {
       });
       return;
     }
+
+    this.detailMarketingOrder.forEach((mo) => {
+      // Mengubah setiap properti menjadi number dengan menghapus karakter '.'
+      mo.sfMonth0 = parseFloat(mo.sfMonth0.toString().replace(/\./g, '')) || 0;
+      mo.sfMonth1 = parseFloat(mo.sfMonth1.toString().replace(/\./g, '')) || 0;
+      mo.sfMonth2 = parseFloat(mo.sfMonth2.toString().replace(/\./g, '')) || 0;
+      mo.moMonth0 = parseFloat(mo.moMonth0.toString().replace(/\./g, '')) || 0;
+      mo.moMonth1 = parseFloat(mo.moMonth1.toString().replace(/\./g, '')) || 0;
+      mo.moMonth2 = parseFloat(mo.moMonth2.toString().replace(/\./g, '')) || 0;
+    });
 
     this.moService.saveMarketingOrderMarketing(this.detailMarketingOrder).subscribe(
       (response) => {
@@ -747,6 +825,14 @@ export class AddMoMarketingComponent implements OnInit {
     );
   }
 
+  private parseFormattedValue(formattedValue: string | null): number | null {
+    if (formattedValue && typeof formattedValue === 'string') {
+      const numericString = formattedValue.replace(/\./g, '').replace(/,/g, '.');
+      return parseFloat(numericString);
+    }
+    return null;
+  }
+
   onFileChange(event: Event) {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
@@ -768,4 +854,5 @@ export class AddMoMarketingComponent implements OnInit {
       }
     }
   }
+
 }

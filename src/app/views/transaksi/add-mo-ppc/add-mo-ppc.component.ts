@@ -138,6 +138,24 @@ export class AddMoPpcComponent implements OnInit {
     return null;
   }
 
+  formatNumber(value: number): string {
+    if (value !== null && value !== undefined) {
+      // Mengubah angka menjadi string
+      let strValue = value.toString();
+
+      // Memisahkan bagian desimal dan bagian bulat
+      const parts = strValue.split('.');
+      const integerPart = parts[0];
+      const decimalPart = parts[1] ? ',' + parts[1] : '';
+
+      // Menambahkan separator ribuan
+      const formattedInteger = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+
+      return formattedInteger + decimalPart;
+    }
+    return '';
+  }
+
   getLastIdMo(): void {
     this.moService.getLastIdMo().subscribe(
       (response: ApiResponse<string>) => {
@@ -290,35 +308,35 @@ export class AddMoPpcComponent implements OnInit {
     };
 
     //Debbguger
-    // Swal.fire({
-    //   title: 'Success!',
-    //   text: 'Data Marketing Order successfully Added.',
-    //   icon: 'success',
-    //   confirmButtonText: 'OK',
-    // }).then((result) => {
-    //   if (result.isConfirmed) {
-    //     console.log('Save data mo PPC', saveMo);
-    //     this.navigateToViewMo();
-    //   }
-    // });
-
-    this.moService.saveMarketingOrderPPC(saveMo).subscribe(
-      (response) => {
-        Swal.fire({
-          title: 'Success!',
-          text: 'Data Marketing Order successfully Added.',
-          icon: 'success',
-          confirmButtonText: 'OK',
-        }).then((result) => {
-          if (result.isConfirmed) {
-            this.navigateToViewMo();
-          }
-        });
-      },
-      (err) => {
-        Swal.fire('Error!', 'Error insert data Marketing Order.', 'error');
+    Swal.fire({
+      title: 'Success!',
+      text: 'Data Marketing Order successfully Added.',
+      icon: 'success',
+      confirmButtonText: 'OK',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        console.log('Save data mo PPC', saveMo);
+        this.navigateToViewMo();
       }
-    );
+    });
+
+    // this.moService.saveMarketingOrderPPC(saveMo).subscribe(
+    //   (response) => {
+    //     Swal.fire({
+    //       title: 'Success!',
+    //       text: 'Data Marketing Order successfully Added.',
+    //       icon: 'success',
+    //       confirmButtonText: 'OK',
+    //     }).then((result) => {
+    //       if (result.isConfirmed) {
+    //         this.navigateToViewMo();
+    //       }
+    //     });
+    //   },
+    //   (err) => {
+    //     Swal.fire('Error!', 'Error insert data Marketing Order.', 'error');
+    //   }
+    // );
   }
 
   navigateToViewMo() {

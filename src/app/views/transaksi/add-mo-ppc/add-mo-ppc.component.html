@@ -294,13 +294,13 @@
                 <td class="text-center">{{ mo.partNumber }}</td>
                 <td class="text-center">{{ mo.description }}</td>
                 <td class="text-center">{{ mo.machineType }}</td>
-                <td class="text-right">{{ mo.capacity | number : '1.0-0' }}</td>
-                <td class="text-right">{{ mo.qtyPerMould | number : '1.0-0' }}</td>
-                <td class="text-right">{{ mo.qtyPerRak | number : '1.0-0' }}</td>
-                <td class="text-right">{{ mo.minOrder | number : '1.0-0' }}</td>
-                <td class="text-right">{{ mo.maxCapMonth0 | number : '1.0-0' }}</td>
-                <td class="text-right">{{ mo.maxCapMonth1 | number : '1.0-0' }}</td>
-                <td class="text-right">{{ mo.maxCapMonth2 | number : '1.0-0' }}</td>
+                <td class="text-right">{{ formatNumber(mo.capacity) }}</td>
+                <td class="text-right">{{ formatNumber(mo.qtyPerMould) }}</td>
+                <td class="text-right">{{ formatNumber(mo.qtyPerRak) }}</td>
+                <td class="text-right">{{ formatNumber(mo.minOrder) }}</td>
+                <td class="text-right">{{ formatNumber(mo.maxCapMonth0) }}</td>
+                <td class="text-right">{{ formatNumber(mo.maxCapMonth1) }}</td>
+                <td class="text-right">{{ formatNumber(mo.maxCapMonth2) }}</td>
                 <td align="center">
                   <button type="button" class="btn btn-md btn-primary">Lock</button>
                 </td>
