@@ -109,6 +109,22 @@ export class EditMoPpcComponent implements OnInit {
     this.getLastIdMo();
   }
 
+  onInputChange(event: Event, controlName: string) {
+    const input = event.target as HTMLInputElement;
+    const value = input.value;
+
+    // Mengupdate nilai dan format dengan cara yang sama
+    const numericValue = value.replace(/[^0-9]/g, ''); // Menghapus karakter non-angka
+    if (numericValue) {
+      const formattedValue = new Intl.NumberFormat('id-ID').format(Number(numericValue));
+
+      // Set nilai pada form control
+      this.formHeaderMo.get(controlName)?.setValue(formattedValue, { emitEvent: false });
+    } else {
+      this.formHeaderMo.get(controlName)?.setValue(''); // Jika tidak ada input, set menjadi kosong
+    }
+  }
+
   getAllData(idMo: String) {
     this.moService.getDetailMarketingOrderById(idMo).subscribe(
       (response: ApiResponse<any>) => {
@@ -152,70 +168,70 @@ export class EditMoPpcComponent implements OnInit {
 
       // Header Month 1
       month_0: this.formatDateToString(this.headerMarketingOrder[0].month),
-      nwd_0: this.headerMarketingOrder[0].wdNormal,
-      tl_ot_wd_0: this.headerMarketingOrder[0].wdOtTl,
-      tt_ot_wd_0: this.headerMarketingOrder[0].wdOtTt,
-      total_tlwd_0: this.headerMarketingOrder[0].totalWdTl,
-      total_ttwd_0: this.headerMarketingOrder[0].totalWdTt,
-      max_tube_capa_0: this.headerMarketingOrder[0].maxCapTube,
-      max_capa_tl_0: this.headerMarketingOrder[0].maxCapTl,
-      max_capa_tt_0: this.headerMarketingOrder[0].maxCapTt,
-      looping_m0: this.headerMarketingOrder[0].looping,
-      machine_airbag_m0: this.headerMarketingOrder[0].airbagMachine,
-      fed_tl_m0: typeProduct === 'FED' ? this.headerMarketingOrder[0].tl : null,
-      fed_tt_m0: typeProduct === 'FED' ? this.headerMarketingOrder[0].tt : null,
-      fdr_tl_m0: typeProduct === 'FDR' ? this.headerMarketingOrder[0].tl : null,
-      fdr_tt_m0: typeProduct === 'FDR' ? this.headerMarketingOrder[0].tt : null,
-      fed_TL_percentage_m0: typeProduct === 'FED' ? this.headerMarketingOrder[0].tlPercentage : null,
-      fed_TT_percentage_m0: typeProduct === 'FED' ? this.headerMarketingOrder[0].ttPercentage : null,
-      fdr_TL_percentage_m0: typeProduct === 'FDR' ? this.headerMarketingOrder[0].tlPercentage : null,
-      fdr_TT_percentage_m0: typeProduct === 'FDR' ? this.headerMarketingOrder[0].ttPercentage : null,
-      total_mo_m0: this.headerMarketingOrder[0].totalMo,
+      nwd_0: this.formatNumber(this.headerMarketingOrder[0].wdNormal),
+      tl_ot_wd_0: this.formatNumber(this.headerMarketingOrder[0].wdOtTl),
+      tt_ot_wd_0: this.formatNumber(this.headerMarketingOrder[0].wdOtTt),
+      total_tlwd_0: this.formatNumber(this.headerMarketingOrder[0].totalWdTl),
+      total_ttwd_0: this.formatNumber(this.headerMarketingOrder[0].totalWdTt),
+      max_tube_capa_0: new Intl.NumberFormat('id-ID').format(this.headerMarketingOrder[0].maxCapTube),
+      max_capa_tl_0: new Intl.NumberFormat('id-ID').format(this.headerMarketingOrder[0].maxCapTl),
+      max_capa_tt_0: new Intl.NumberFormat('id-ID').format(this.headerMarketingOrder[0].maxCapTt),
+      looping_m0: this.formatNumber(this.headerMarketingOrder[0].looping),
+      machine_airbag_m0: this.formatNumber(this.headerMarketingOrder[0].airbagMachine),
+      fed_tl_m0: typeProduct === 'FED' ? this.formatNumber(this.headerMarketingOrder[0].tl) : null,
+      fed_tt_m0: typeProduct === 'FED' ? this.formatNumber(this.headerMarketingOrder[0].tt) : null,
+      fdr_tl_m0: typeProduct === 'FDR' ? this.formatNumber(this.headerMarketingOrder[0].tl) : null,
+      fdr_tt_m0: typeProduct === 'FDR' ? this.formatNumber(this.headerMarketingOrder[0].tt) : null,
+      fed_TL_percentage_m0: typeProduct === 'FED' ? this.formatNumber(this.headerMarketingOrder[0].tlPercentage) : null,
+      fed_TT_percentage_m0: typeProduct === 'FED' ? this.formatNumber(this.headerMarketingOrder[0].ttPercentage) : null,
+      fdr_TL_percentage_m0: typeProduct === 'FDR' ? this.formatNumber(this.headerMarketingOrder[0].tlPercentage) : null,
+      fdr_TT_percentage_m0: typeProduct === 'FDR' ? this.formatNumber(this.headerMarketingOrder[0].ttPercentage) : null,
+      total_mo_m0: this.formatNumber(this.headerMarketingOrder[0].totalMo),
       note_tl_m0: this.headerMarketingOrder[0].noteOrderTl,
       // Header Month 2
       month_1: this.formatDateToString(this.headerMarketingOrder[1].month),
-      nwd_1: this.headerMarketingOrder[1].wdNormal,
-      tl_ot_wd_1: this.headerMarketingOrder[1].wdOtTl,
-      tt_ot_wd_1: this.headerMarketingOrder[1].wdOtTt,
-      total_tlwd_1: this.headerMarketingOrder[1].totalWdTl,
-      total_ttwd_1: this.headerMarketingOrder[1].totalWdTt,
-      max_tube_capa_1: this.headerMarketingOrder[1].maxCapTube,
-      max_capa_tl_1: this.headerMarketingOrder[1].maxCapTl,
-      max_capa_tt_1: this.headerMarketingOrder[1].maxCapTt,
-      looping_m1: this.headerMarketingOrder[1].looping,
-      machine_airbag_m1: this.headerMarketingOrder[1].airbagMachine,
-      fed_tl_m1: typeProduct === 'FED' ? this.headerMarketingOrder[1].tl : null,
-      fed_tt_m1: typeProduct === 'FED' ? this.headerMarketingOrder[1].tt : null,
-      fdr_tl_m1: typeProduct === 'FDR' ? this.headerMarketingOrder[1].tl : null,
-      fdr_tt_m1: typeProduct === 'FDR' ? this.headerMarketingOrder[1].tt : null,
-      fed_TL_percentage_m1: typeProduct === 'FED' ? this.headerMarketingOrder[1].tlPercentage : null,
-      fed_TT_percentage_m1: typeProduct === 'FED' ? this.headerMarketingOrder[1].ttPercentage : null,
-      fdr_TL_percentage_m1: typeProduct === 'FDR' ? this.headerMarketingOrder[1].tlPercentage : null,
-      fdr_TT_percentage_m1: typeProduct === 'FDR' ? this.headerMarketingOrder[1].ttPercentage : null,
-      total_mo_m1: this.headerMarketingOrder[1].totalMo,
+      nwd_1: this.formatNumber(this.headerMarketingOrder[1].wdNormal),
+      tl_ot_wd_1: this.formatNumber(this.headerMarketingOrder[1].wdOtTl),
+      tt_ot_wd_1: this.formatNumber(this.headerMarketingOrder[1].wdOtTt),
+      total_tlwd_1: this.formatNumber(this.headerMarketingOrder[1].totalWdTl),
+      total_ttwd_1: this.formatNumber(this.headerMarketingOrder[1].totalWdTt),
+      max_tube_capa_1: new Intl.NumberFormat('id-ID').format(this.headerMarketingOrder[1].maxCapTube),
+      max_capa_tl_1: new Intl.NumberFormat('id-ID').format(this.headerMarketingOrder[1].maxCapTl),
+      max_capa_tt_1: new Intl.NumberFormat('id-ID').format(this.headerMarketingOrder[1].maxCapTt),
+      looping_m1: this.formatNumber(this.headerMarketingOrder[1].looping),
+      machine_airbag_m1: this.formatNumber(this.headerMarketingOrder[1].airbagMachine),
+      fed_tl_m1: typeProduct === 'FED' ? this.formatNumber(this.headerMarketingOrder[1].tl) : null,
+      fed_tt_m1: typeProduct === 'FED' ? this.formatNumber(this.headerMarketingOrder[1].tt) : null,
+      fdr_tl_m1: typeProduct === 'FDR' ? this.formatNumber(this.headerMarketingOrder[1].tl) : null,
+      fdr_tt_m1: typeProduct === 'FDR' ? this.formatNumber(this.headerMarketingOrder[1].tt) : null,
+      fed_TL_percentage_m1: typeProduct === 'FED' ? this.formatNumber(this.headerMarketingOrder[1].tlPercentage) : null,
+      fed_TT_percentage_m1: typeProduct === 'FED' ? this.formatNumber(this.headerMarketingOrder[1].ttPercentage) : null,
+      fdr_TL_percentage_m1: typeProduct === 'FDR' ? this.formatNumber(this.headerMarketingOrder[1].tlPercentage) : null,
+      fdr_TT_percentage_m1: typeProduct === 'FDR' ? this.formatNumber(this.headerMarketingOrder[1].ttPercentage) : null,
+      total_mo_m1: this.formatNumber(this.headerMarketingOrder[1].totalMo),
       note_tl_m1: this.headerMarketingOrder[1].noteOrderTl,
       // Header Month 3
       month_2: this.formatDateToString(this.headerMarketingOrder[2].month),
-      nwd_2: this.headerMarketingOrder[2].wdNormal,
-      tl_ot_wd_2: this.headerMarketingOrder[2].wdOtTl,
-      tt_ot_wd_2: this.headerMarketingOrder[2].wdOtTt,
-      total_tlwd_2: this.headerMarketingOrder[2].totalWdTl,
-      total_ttwd_2: this.headerMarketingOrder[2].totalWdTt,
-      max_tube_capa_2: this.headerMarketingOrder[2].maxCapTube,
-      max_capa_tl_2: this.headerMarketingOrder[2].maxCapTl,
-      max_capa_tt_2: this.headerMarketingOrder[2].maxCapTt,
-      looping_m2: this.headerMarketingOrder[2].looping,
-      machine_airbag_m2: this.headerMarketingOrder[2].airbagMachine,
-      fed_tl_m2: typeProduct === 'FED' ? this.headerMarketingOrder[2].tl : null,
-      fed_tt_m2: typeProduct === 'FED' ? this.headerMarketingOrder[2].tt : null,
-      fdr_tl_m2: typeProduct === 'FDR' ? this.headerMarketingOrder[2].tl : null,
-      fdr_tt_m2: typeProduct === 'FDR' ? this.headerMarketingOrder[2].tt : null,
-      fed_TL_percentage_m2: typeProduct === 'FED' ? this.headerMarketingOrder[2].tlPercentage : null,
-      fed_TT_percentage_m2: typeProduct === 'FED' ? this.headerMarketingOrder[2].ttPercentage : null,
-      fdr_TL_percentage_m2: typeProduct === 'FDR' ? this.headerMarketingOrder[2].tlPercentage : null,
-      fdr_TT_percentage_m2: typeProduct === 'FDR' ? this.headerMarketingOrder[2].ttPercentage : null,
-      total_mo_m2: this.headerMarketingOrder[1].totalMo,
-      note_tl_m2: this.headerMarketingOrder[1].noteOrderTl,
+      nwd_2: this.formatNumber(this.headerMarketingOrder[2].wdNormal),
+      tl_ot_wd_2: this.formatNumber(this.headerMarketingOrder[2].wdOtTl),
+      tt_ot_wd_2: this.formatNumber(this.headerMarketingOrder[2].wdOtTt),
+      total_tlwd_2: this.formatNumber(this.headerMarketingOrder[2].totalWdTl),
+      total_ttwd_2: this.formatNumber(this.headerMarketingOrder[2].totalWdTt),
+      max_tube_capa_2: new Intl.NumberFormat('id-ID').format(this.headerMarketingOrder[2].maxCapTube),
+      max_capa_tl_2: new Intl.NumberFormat('id-ID').format(this.headerMarketingOrder[2].maxCapTl),
+      max_capa_tt_2: new Intl.NumberFormat('id-ID').format(this.headerMarketingOrder[2].maxCapTt),
+      looping_m2: this.formatNumber(this.headerMarketingOrder[2].looping),
+      machine_airbag_m2: this.formatNumber(this.headerMarketingOrder[2].airbagMachine),
+      fed_tl_m2: typeProduct === 'FED' ? this.formatNumber(this.headerMarketingOrder[2].tl) : null,
+      fed_tt_m2: typeProduct === 'FED' ? this.formatNumber(this.headerMarketingOrder[2].tt) : null,
+      fdr_tl_m2: typeProduct === 'FDR' ? this.formatNumber(this.headerMarketingOrder[2].tl) : null,
+      fdr_tt_m2: typeProduct === 'FDR' ? this.formatNumber(this.headerMarketingOrder[2].tt) : null,
+      fed_TL_percentage_m2: typeProduct === 'FED' ? this.formatNumber(this.headerMarketingOrder[2].tlPercentage) : null,
+      fed_TT_percentage_m2: typeProduct === 'FED' ? this.formatNumber(this.headerMarketingOrder[2].ttPercentage) : null,
+      fdr_TL_percentage_m2: typeProduct === 'FDR' ? this.formatNumber(this.headerMarketingOrder[2].tlPercentage) : null,
+      fdr_TT_percentage_m2: typeProduct === 'FDR' ? this.formatNumber(this.headerMarketingOrder[2].ttPercentage) : null,
+      total_mo_m2: this.formatNumber(this.headerMarketingOrder[2].totalMo),
+      note_tl_m2: this.headerMarketingOrder[2].noteOrderTl,
     });
 
     this.updateMonthNames(this.headerMarketingOrder);
@@ -247,21 +263,21 @@ export class EditMoPpcComponent implements OnInit {
       this.headerMarketingOrder.push({
         moId: this.lastIdMo,
         month: new Date(this.formHeaderMo.get(`month_${i}`)?.value),
-        wdNormal: this.formHeaderMo.get(`nwd_${i}`)?.value,
-        wdOtTl: this.formHeaderMo.get(`tl_ot_wd_${i}`)?.value,
-        wdOtTt: this.formHeaderMo.get(`tt_ot_wd_${i}`)?.value,
-        totalWdTl: this.formHeaderMo.get(`total_tlwd_${i}`)?.value,
-        totalWdTt: this.formHeaderMo.get(`total_ttwd_${i}`)?.value,
-        maxCapTube: this.formHeaderMo.get(`max_tube_capa_${i}`)?.value,
-        maxCapTl: this.formHeaderMo.get(`max_capa_tl_${i}`)?.value,
-        maxCapTt: this.formHeaderMo.get(`max_capa_tt_${i}`)?.value,
-        looping: this.formHeaderMo.get(`looping_m${i}`)?.value,
-        airbagMachine: this.formHeaderMo.get(`machine_airbag_m${i}`)?.value,
-        tl: this.formHeaderMo.get(tlField)?.value,
-        tt: this.formHeaderMo.get(ttField)?.value,
-        totalMo: this.formHeaderMo.get(`total_mo_m${i}`)?.value,
-        tlPercentage: this.formHeaderMo.get(tlFieldPercentage)?.value,
-        ttPercentage: this.formHeaderMo.get(ttFieldPercentage)?.value,
+        wdNormal: this.parseFormattedValue(this.formHeaderMo.get(`nwd_${i}`)?.value),
+        wdOtTl: this.parseFormattedValue(this.formHeaderMo.get(`tl_ot_wd_${i}`)?.value),
+        wdOtTt: this.parseFormattedValue(this.formHeaderMo.get(`tt_ot_wd_${i}`)?.value),
+        totalWdTl: this.parseFormattedValue(this.formHeaderMo.get(`total_tlwd_${i}`)?.value || ''),
+        totalWdTt: this.parseFormattedValue(this.formHeaderMo.get(`total_ttwd_${i}`)?.value || ''),
+        maxCapTube: this.parseFormattedValue(this.formHeaderMo.get(`max_tube_capa_${i}`)?.value || ''),
+        maxCapTl: this.parseFormattedValue(this.formHeaderMo.get(`max_capa_tl_${i}`)?.value || ''),
+        maxCapTt: this.parseFormattedValue(this.formHeaderMo.get(`max_capa_tt_${i}`)?.value || ''),
+        looping: this.parseFormattedValue(this.formHeaderMo.get(`looping_m${i}`)?.value || ''),
+        airbagMachine: this.parseFormattedValue(this.formHeaderMo.get(`machine_airbag_m${i}`)?.value || ''),
+        tl: this.parseFormattedValue(this.formHeaderMo.get(tlField)?.value || ''),
+        tt: this.parseFormattedValue(this.formHeaderMo.get(ttField)?.value || ''),
+        totalMo: this.parseFormattedValue(this.formHeaderMo.get(`total_mo_m${i}`)?.value || ''),
+        tlPercentage: this.parseFormattedValue(this.formHeaderMo.get(tlFieldPercentage)?.value || ''),
+        ttPercentage: this.parseFormattedValue(this.formHeaderMo.get(ttFieldPercentage)?.value || ''),
         noteOrderTl: this.formHeaderMo.get(`note_tl_m${i}`)?.value,
       });
     }
@@ -294,6 +310,32 @@ export class EditMoPpcComponent implements OnInit {
         Swal.fire('Error!', 'Error insert data Marketing Order.', 'error');
       }
     );
+  }
+
+  private parseFormattedValue(formattedValue: string | null): number | null {
+    if (formattedValue && typeof formattedValue === 'string') {
+      const numericString = formattedValue.replace(/\./g, '').replace(/,/g, '.');
+      return parseFloat(numericString);
+    }
+    return null;
+  }
+
+  formatNumber(value: number): string {
+    if (value !== null && value !== undefined) {
+      // Mengubah angka menjadi string
+      let strValue = value.toString();
+
+      // Memisahkan bagian desimal dan bagian bulat
+      const parts = strValue.split('.');
+      const integerPart = parts[0];
+      const decimalPart = parts[1] ? ',' + parts[1] : '';
+
+      // Menambahkan separator ribuan
+      const formattedInteger = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+
+      return formattedInteger + decimalPart;
+    }
+    return '';
   }
 
   formatDateToString(dateString) {

@@ -46,118 +46,118 @@
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="text-input">Normal Working Day</label>
                 <div class="col-md-9">
-                  <input type="number" formControlName="nwd_0" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  <input type="text" formControlName="nwd_0" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
               </div>
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="text-input">TL Overtime Working Day</label>
                 <div class="col-md-9">
-                  <input type="number" formControlName="tl_ot_wd_0" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  <input type="text" formControlName="tl_ot_wd_0" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
               </div>
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="text-input">TT Overtime Working Day</label>
                 <div class="col-md-9">
-                  <input type="number" formControlName="tt_ot_wd_0" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  <input type="text" formControlName="tt_ot_wd_0" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
               </div>
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="text-input">Total TL Tire Working Day</label>
                 <div class="col-md-9">
-                  <input formControlName="total_tlwd_0" type="number" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  <input formControlName="total_tlwd_0" type="text" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
               </div>
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="text-input">Total TT Tire Working Day</label>
                 <div class="col-md-9">
-                  <input formControlName="total_ttwd_0" type="number" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  <input formControlName="total_ttwd_0" type="text" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
               </div>
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="text-input">Maximum Tube Capacity</label>
                 <div class="col-md-9">
-                  <input type="number" [ngClass]="{ 'is-invalid': formHeaderMo.get('max_tube_capa_0')?.invalid && formHeaderMo.get('max_tube_capa_0')?.touched }" formControlName="max_tube_capa_0" name="text-input" class="form-control" placeholder="0,00" />
+                  <input type="text" (input)="onInputChange($event, 'max_tube_capa_0')" [ngClass]="{ 'is-invalid': formHeaderMo.get('max_tube_capa_0')?.invalid && formHeaderMo.get('max_tube_capa_0')?.touched }" formControlName="max_tube_capa_0" name="text-input" class="form-control" placeholder="0,00" />
                   <div *ngIf="formHeaderMo.get('max_tube_capa_0')?.invalid && formHeaderMo.get('max_tube_capa_0')?.touched" class="invalid-feedback">Maximum Tube Capacity is required.</div>
                 </div>
               </div>
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="text-input">Maximum Capacity Tire TL</label>
                 <div class="col-md-9">
-                  <input type="number" [ngClass]="{ 'is-invalid': formHeaderMo.get('max_capa_tl_0')?.invalid && formHeaderMo.get('max_capa_tl_0')?.touched }" formControlName="max_capa_tl_0" name="text-input" class="form-control" placeholder="0,00" />
+                  <input type="text" (input)="onInputChange($event, 'max_capa_tl_0')" [ngClass]="{ 'is-invalid': formHeaderMo.get('max_capa_tl_0')?.invalid && formHeaderMo.get('max_capa_tl_0')?.touched }" formControlName="max_capa_tl_0" name="text-input" class="form-control" placeholder="0,00" />
                   <div *ngIf="formHeaderMo.get('max_capa_tl_0')?.invalid && formHeaderMo.get('max_capa_tl_0')?.touched" class="invalid-feedback">Maximum Capacity Tire TL is required.</div>
                 </div>
               </div>
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="text-input">Maximum Capacity Tire TT</label>
                 <div class="col-md-9">
-                  <input type="number" [ngClass]="{ 'is-invalid': formHeaderMo.get('max_capa_tt_0')?.invalid && formHeaderMo.get('max_capa_tt_0')?.touched }" formControlName="max_capa_tt_0" name="text-input" class="form-control" placeholder="0,00" />
+                  <input type="text" (input)="onInputChange($event, 'max_capa_tt_0')" [ngClass]="{ 'is-invalid': formHeaderMo.get('max_capa_tt_0')?.invalid && formHeaderMo.get('max_capa_tt_0')?.touched }" formControlName="max_capa_tt_0" name="text-input" class="form-control" placeholder="0,00" />
                   <div *ngIf="formHeaderMo.get('max_capa_tt_0')?.invalid && formHeaderMo.get('max_capa_tt_0')?.touched" class="invalid-feedback">Maximum Capacity Tire TT is required.</div>
                 </div>
               </div>
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="text-input">Looping</label>
                 <div class="col-md-9">
-                  <input type="number" formControlName="looping_m0" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  <input type="text" formControlName="looping_m0" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
               </div>
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="text-input">Machine Airbag</label>
                 <div class="col-md-9">
-                  <input type="number" formControlName="machine_airbag_m0" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  <input type="text" formControlName="machine_airbag_m0" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
               </div>
               <div class="form-group row" *ngIf="formHeaderMo.get('type')?.value !== 'FDR'">
                 <label class="col-md-3 col-form-label" for="text-input">FED TL</label>
                 <div class="col-md-9">
-                  <input type="number" formControlName="fed_tl_m0" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  <input type="text" formControlName="fed_tl_m0" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
               </div>
               <div class="form-group row" *ngIf="formHeaderMo.get('type')?.value !== 'FED'">
                 <label class="col-md-3 col-form-label" for="text-input">FDR TL</label>
                 <div class="col-md-9">
-                  <input type="number" formControlName="fdr_tl_m0" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  <input type="text" formControlName="fdr_tl_m0" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
               </div>
               <div class="form-group row" *ngIf="formHeaderMo.get('type')?.value !== 'FDR'">
                 <label class="col-md-3 col-form-label" for="text-input">FED TT</label>
                 <div class="col-md-9">
-                  <input type="number" formControlName="fed_tt_m0" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  <input type="text" formControlName="fed_tt_m0" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
               </div>
               <div class="form-group row" *ngIf="formHeaderMo.get('type')?.value !== 'FED'">
                 <label class="col-md-3 col-form-label" for="text-input">FDR TT</label>
                 <div class="col-md-9">
-                  <input type="number" formControlName="fdr_tt_m0" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  <input type="text" formControlName="fdr_tt_m0" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
               </div>
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="text-input">Total Marketing Order</label>
                 <div class="col-md-9">
-                  <input type="number" formControlName="total_mo_m0" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  <input type="text" formControlName="total_mo_m0" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
               </div>
               <div class="form-group row" *ngIf="formHeaderMo.get('type')?.value !== 'FDR'">
                 <label class="col-md-3 col-form-label" for="text-input">% FED TL</label>
                 <div class="col-md-9">
-                  <input type="number" formControlName="fed_TL_percentage_m0" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  <input type="text" formControlName="fed_TL_percentage_m0" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
               </div>
               <div class="form-group row" *ngIf="formHeaderMo.get('type')?.value !== 'FED'">
                 <label class="col-md-3 col-form-label" for="text-input">% FDR TL</label>
                 <div class="col-md-9">
-                  <input type="number" formControlName="fdr_TL_percentage_m0" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  <input type="text" formControlName="fdr_TL_percentage_m0" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
               </div>
               <div class="form-group row" *ngIf="formHeaderMo.get('type')?.value !== 'FDR'">
                 <label class="col-md-3 col-form-label" for="text-input">% FED TT</label>
                 <div class="col-md-9">
-                  <input type="number" formControlName="fed_TT_percentage_m0" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  <input type="text" formControlName="fed_TT_percentage_m0" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
               </div>
               <div class="form-group row" *ngIf="formHeaderMo.get('type')?.value !== 'FED'">
                 <label class="col-md-3 col-form-label" for="text-input">% FDR TT</label>
                 <div class="col-md-9">
-                  <input type="number" formControlName="fdr_TT_percentage_m0" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  <input type="text" formControlName="fdr_TT_percentage_m0" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
               </div>
               <div class="form-group row">
@@ -184,118 +184,118 @@
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="text-input">Normal Working Day</label>
                 <div class="col-md-9">
-                  <input type="number" formControlName="nwd_1" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  <input type="text" formControlName="nwd_1" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
               </div>
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="text-input">TL Overtime Working Day</label>
                 <div class="col-md-9">
-                  <input type="number" formControlName="tl_ot_wd_1" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  <input type="text" formControlName="tl_ot_wd_1" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
               </div>
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="text-input">TT Overtime Working Day</label>
                 <div class="col-md-9">
-                  <input type="number" formControlName="tt_ot_wd_1" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  <input type="text" formControlName="tt_ot_wd_1" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
               </div>
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="text-input">Total TL Tire Working Day</label>
                 <div class="col-md-9">
-                  <input formControlName="total_tlwd_1" type="number" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  <input formControlName="total_tlwd_1" type="text" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
               </div>
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="text-input">Total TT Tire Working Day</label>
                 <div class="col-md-9">
-                  <input formControlName="total_ttwd_1" type="number" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  <input formControlName="total_ttwd_1" type="text" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
               </div>
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="text-input">Maximum Tube Capacity</label>
                 <div class="col-md-9">
-                  <input type="number" [ngClass]="{ 'is-invalid': formHeaderMo.get('max_tube_capa_1')?.invalid && formHeaderMo.get('max_tube_capa_1')?.touched }" formControlName="max_tube_capa_1" name="text-input" class="form-control" placeholder="0,00" />
+                  <input type="text" (input)="onInputChange($event, 'max_tube_capa_1')" [ngClass]="{ 'is-invalid': formHeaderMo.get('max_tube_capa_1')?.invalid && formHeaderMo.get('max_tube_capa_1')?.touched }" formControlName="max_tube_capa_1" name="text-input" class="form-control" placeholder="0,00" />
                   <div *ngIf="formHeaderMo.get('max_tube_capa_1')?.invalid && formHeaderMo.get('max_tube_capa_1')?.touched" class="invalid-feedback">Maximum Tube Capacity is required.</div>
                 </div>
               </div>
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="text-input">Maximum Capacity Tire TL</label>
                 <div class="col-md-9">
-                  <input type="number" [ngClass]="{ 'is-invalid': formHeaderMo.get('max_capa_tl_1')?.invalid && formHeaderMo.get('max_capa_tl_1')?.touched }" formControlName="max_capa_tl_1" name="text-input" class="form-control" placeholder="0,00" />
+                  <input type="text" (input)="onInputChange($event, 'max_capa_tl_1')" [ngClass]="{ 'is-invalid': formHeaderMo.get('max_capa_tl_1')?.invalid && formHeaderMo.get('max_capa_tl_1')?.touched }" formControlName="max_capa_tl_1" name="text-input" class="form-control" placeholder="0,00" />
                   <div *ngIf="formHeaderMo.get('max_capa_tl_1')?.invalid && formHeaderMo.get('max_capa_tl_1')?.touched" class="invalid-feedback">Maximum Capacity Tire TL is required.</div>
                 </div>
               </div>
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="text-input">Maximum Capacity Tire TT</label>
                 <div class="col-md-9">
-                  <input type="number" [ngClass]="{ 'is-invalid': formHeaderMo.get('max_capa_tt_1')?.invalid && formHeaderMo.get('max_capa_tt_1')?.touched }" formControlName="max_capa_tt_1" name="text-input" class="form-control" placeholder="0,00" />
+                  <input type="text" (input)="onInputChange($event, 'max_capa_tt_1')" [ngClass]="{ 'is-invalid': formHeaderMo.get('max_capa_tt_1')?.invalid && formHeaderMo.get('max_capa_tt_1')?.touched }" formControlName="max_capa_tt_1" name="text-input" class="form-control" placeholder="0,00" />
                   <div *ngIf="formHeaderMo.get('max_capa_tt_1')?.invalid && formHeaderMo.get('max_capa_tt_1')?.touched" class="invalid-feedback">Maximum Capacity Tire TT is required.</div>
                 </div>
               </div>
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="text-input">Looping</label>
                 <div class="col-md-9">
-                  <input type="number" formControlName="looping_m1" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  <input type="text" formControlName="looping_m1" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
               </div>
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="text-input">Machine Airbag</label>
                 <div class="col-md-9">
-                  <input type="number" formControlName="machine_airbag_m1" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  <input type="text" formControlName="machine_airbag_m1" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
               </div>
               <div class="form-group row" *ngIf="formHeaderMo.get('type')?.value !== 'FDR'">
                 <label class="col-md-3 col-form-label" for="text-input">FED TL</label>
                 <div class="col-md-9">
-                  <input type="number" formControlName="fed_tl_m1" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  <input type="text" formControlName="fed_tl_m1" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
               </div>
               <div class="form-group row" *ngIf="formHeaderMo.get('type')?.value !== 'FED'">
                 <label class="col-md-3 col-form-label" for="text-input">FDR TL</label>
                 <div class="col-md-9">
-                  <input type="number" formControlName="fdr_tl_m1" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  <input type="text" formControlName="fdr_tl_m1" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
               </div>
               <div class="form-group row" *ngIf="formHeaderMo.get('type')?.value !== 'FDR'">
                 <label class="col-md-3 col-form-label" for="text-input">FED TT</label>
                 <div class="col-md-9">
-                  <input type="number" formControlName="fed_tt_m1" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  <input type="text" formControlName="fed_tt_m1" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
               </div>
               <div class="form-group row" *ngIf="formHeaderMo.get('type')?.value !== 'FED'">
                 <label class="col-md-3 col-form-label" for="text-input">FDR TT</label>
                 <div class="col-md-9">
-                  <input type="number" formControlName="fdr_tt_m1" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  <input type="text" formControlName="fdr_tt_m1" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
               </div>
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="text-input">Total Marketing Order</label>
                 <div class="col-md-9">
-                  <input type="number" formControlName="total_mo_m1" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  <input type="text" formControlName="total_mo_m1" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
               </div>
               <div class="form-group row" *ngIf="formHeaderMo.get('type')?.value !== 'FDR'">
                 <label class="col-md-3 col-form-label" for="text-input">% FED TL</label>
                 <div class="col-md-9">
-                  <input type="number" formControlName="fed_TL_percentage_m1" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  <input type="text" formControlName="fed_TL_percentage_m1" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
               </div>
               <div class="form-group row" *ngIf="formHeaderMo.get('type')?.value !== 'FED'">
                 <label class="col-md-3 col-form-label" for="text-input">% FDR TL</label>
                 <div class="col-md-9">
-                  <input type="number" formControlName="fdr_TL_percentage_m1" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  <input type="text" formControlName="fdr_TL_percentage_m1" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
               </div>
               <div class="form-group row" *ngIf="formHeaderMo.get('type')?.value !== 'FDR'">
                 <label class="col-md-3 col-form-label" for="text-input">% FED TT</label>
                 <div class="col-md-9">
-                  <input type="number" formControlName="fed_TT_percentage_m1" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  <input type="text" formControlName="fed_TT_percentage_m1" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
               </div>
               <div class="form-group row" *ngIf="formHeaderMo.get('type')?.value !== 'FED'">
                 <label class="col-md-3 col-form-label" for="text-input">% FDR TT</label>
                 <div class="col-md-9">
-                  <input type="number" formControlName="fdr_TT_percentage_m1" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  <input type="text" formControlName="fdr_TT_percentage_m1" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
               </div>
               <div class="form-group row">
@@ -322,118 +322,118 @@
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="text-input">Normal Working Day</label>
                 <div class="col-md-9">
-                  <input type="number" formControlName="nwd_2" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  <input type="text" formControlName="nwd_2" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
               </div>
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="text-input">TL Overtime Working Day</label>
                 <div class="col-md-9">
-                  <input type="number" formControlName="tl_ot_wd_2" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  <input type="text" formControlName="tl_ot_wd_2" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
               </div>
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="text-input">TT Overtime Working Day</label>
                 <div class="col-md-9">
-                  <input type="number" formControlName="tt_ot_wd_2" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  <input type="text" formControlName="tt_ot_wd_2" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
               </div>
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="text-input">Total TL Tire Working Day</label>
                 <div class="col-md-9">
-                  <input formControlName="total_tlwd_2" type="number" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  <input formControlName="total_tlwd_2" type="text" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
               </div>
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="text-input">Total TT Tire Working Day</label>
                 <div class="col-md-9">
-                  <input formControlName="total_ttwd_2" type="number" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  <input formControlName="total_ttwd_2" type="text" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
               </div>
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="text-input">Maximum Tube Capacity</label>
                 <div class="col-md-9">
-                  <input [ngClass]="{ 'is-invalid': formHeaderMo.get('max_tube_capa_2')?.invalid && formHeaderMo.get('max_tube_capa_2')?.touched }" type="number" formControlName="max_tube_capa_2" name="text-input" class="form-control" placeholder="0,00" />
+                  <input (input)="onInputChange($event, 'max_tube_capa_2')" [ngClass]="{ 'is-invalid': formHeaderMo.get('max_tube_capa_2')?.invalid && formHeaderMo.get('max_tube_capa_2')?.touched }" type="text" formControlName="max_tube_capa_2" name="text-input" class="form-control" placeholder="0,00" />
                   <div *ngIf="formHeaderMo.get('max_tube_capa_2')?.invalid && formHeaderMo.get('max_tube_capa_2')?.touched" class="invalid-feedback">Maximum Tube Capacity is required.</div>
                 </div>
               </div>
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="text-input">Maximum Capacity Tire TL</label>
                 <div class="col-md-9">
-                  <input [ngClass]="{ 'is-invalid': formHeaderMo.get('max_capa_tl_2')?.invalid && formHeaderMo.get('max_capa_tl_2')?.touched }" type="number" formControlName="max_capa_tl_2" name="text-input" class="form-control" placeholder="0,00" />
+                  <input (input)="onInputChange($event, 'max_capa_tl_2')" [ngClass]="{ 'is-invalid': formHeaderMo.get('max_capa_tl_2')?.invalid && formHeaderMo.get('max_capa_tl_2')?.touched }" type="text" formControlName="max_capa_tl_2" name="text-input" class="form-control" placeholder="0,00" />
                   <div *ngIf="formHeaderMo.get('max_capa_tl_2')?.invalid && formHeaderMo.get('max_capa_tl_2')?.touched" class="invalid-feedback">Maximum Capacity Tire TL is required.</div>
                 </div>
               </div>
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="text-input">Maximum Capacity Tire TT</label>
                 <div class="col-md-9">
-                  <input [ngClass]="{ 'is-invalid': formHeaderMo.get('max_capa_tt_2')?.invalid && formHeaderMo.get('max_capa_tt_2')?.touched }" type="number" formControlName="max_capa_tt_2" name="text-input" class="form-control" placeholder="0,00" />
+                  <input (input)="onInputChange($event, 'max_capa_tt_2')" [ngClass]="{ 'is-invalid': formHeaderMo.get('max_capa_tt_2')?.invalid && formHeaderMo.get('max_capa_tt_2')?.touched }" type="text" formControlName="max_capa_tt_2" name="text-input" class="form-control" placeholder="0,00" />
                   <div *ngIf="formHeaderMo.get('max_capa_tt_2')?.invalid && formHeaderMo.get('max_capa_tt_2')?.touched" class="invalid-feedback">Maximum Capacity Tire TT is required.</div>
                 </div>
               </div>
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="text-input">Looping</label>
                 <div class="col-md-9">
-                  <input type="number" formControlName="looping_m2" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  <input type="text" formControlName="looping_m2" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
               </div>
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="text-input">Machine Airbag</label>
                 <div class="col-md-9">
-                  <input type="number" formControlName="machine_airbag_m2" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  <input type="text" formControlName="machine_airbag_m2" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
               </div>
               <div class="form-group row" *ngIf="formHeaderMo.get('type')?.value !== 'FDR'">
                 <label class="col-md-3 col-form-label" for="text-input">FED TL</label>
                 <div class="col-md-9">
-                  <input type="number" formControlName="fed_tl_m2" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  <input type="text" formControlName="fed_tl_m2" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
               </div>
               <div class="form-group row" *ngIf="formHeaderMo.get('type')?.value !== 'FED'">
                 <label class="col-md-3 col-form-label" for="text-input">FDR TL</label>
                 <div class="col-md-9">
-                  <input type="number" formControlName="fdr_tl_m2" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  <input type="text" formControlName="fdr_tl_m2" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
               </div>
               <div class="form-group row" *ngIf="formHeaderMo.get('type')?.value !== 'FDR'">
                 <label class="col-md-3 col-form-label" for="text-input">FED TT</label>
                 <div class="col-md-9">
-                  <input type="number" formControlName="fed_tt_m2" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  <input type="text" formControlName="fed_tt_m2" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
               </div>
               <div class="form-group row" *ngIf="formHeaderMo.get('type')?.value !== 'FED'">
                 <label class="col-md-3 col-form-label" for="text-input">FDR TT</label>
                 <div class="col-md-9">
-                  <input type="number" formControlName="fdr_tt_m2" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  <input type="text" formControlName="fdr_tt_m2" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
               </div>
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="text-input">Total Marketing Order</label>
                 <div class="col-md-9">
-                  <input type="number" formControlName="total_mo_m2" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  <input type="text" formControlName="total_mo_m2" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
               </div>
               <div class="form-group row" *ngIf="formHeaderMo.get('type')?.value !== 'FDR'">
                 <label class="col-md-3 col-form-label" for="text-input">% FED TL</label>
                 <div class="col-md-9">
-                  <input type="number" formControlName="fed_TL_percentage_m2" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  <input type="text" formControlName="fed_TL_percentage_m2" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
               </div>
               <div class="form-group row" *ngIf="formHeaderMo.get('type')?.value !== 'FED'">
                 <label class="col-md-3 col-form-label" for="text-input">% FDR TL</label>
                 <div class="col-md-9">
-                  <input type="number" formControlName="fdr_TL_percentage_m2" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  <input type="text" formControlName="fdr_TL_percentage_m2" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
               </div>
               <div class="form-group row" *ngIf="formHeaderMo.get('type')?.value !== 'FDR'">
                 <label class="col-md-3 col-form-label" for="text-input">% FED TT</label>
                 <div class="col-md-9">
-                  <input type="number" formControlName="fed_TT_percentage_m2" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  <input type="text" formControlName="fed_TT_percentage_m2" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
               </div>
               <div class="form-group row" *ngIf="formHeaderMo.get('type')?.value !== 'FED'">
                 <label class="col-md-3 col-form-label" for="text-input">% FDR TT</label>
                 <div class="col-md-9">
-                  <input type="number" formControlName="fdr_TT_percentage_m2" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  <input type="text" formControlName="fdr_TT_percentage_m2" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
               </div>
               <div class="form-group row">
@@ -490,26 +490,26 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let mo of detailMarketingOrder; let i = index" align="center">
-                <td>{{ i + 1 }}</td>
-                <td>{{ mo.category }}</td>
-                <td>{{ mo.partNumber }}</td>
-                <td>{{ mo.description }}</td>
-                <td>{{ mo.machineType }}</td>
-                <td>{{ mo.capacity | number : '1.0-0' }}</td>
-                <td>{{ mo.qtyPerMould | number : '1.0-0' }}</td>
-                <td>{{ mo.qtyPerRak | number : '1.0-0' }}</td>
-                <td>{{ mo.minOrder | number : '1.0-0' }}</td>
-                <td>{{ mo.maxCapMonth0 | number : '1.0-0' }}</td>
-                <td>{{ mo.maxCapMonth1 | number : '1.0-0' }}</td>
-                <td>{{ mo.maxCapMonth2 | number : '1.0-0' }}</td>
-                <td>{{ mo.initialStock | number : '1.0-0' }}</td>
-                <td>{{ mo.sfMonth0 | number : '1.0-0' }}</td>
-                <td>{{ mo.sfMonth1 | number : '1.0-0' }}</td>
-                <td>{{ mo.sfMonth2 | number : '1.0-0' }}</td>
-                <td>{{ mo.moMonth0 | number : '1.0-0' }}</td>
-                <td>{{ mo.moMonth1 | number : '1.0-0' }}</td>
-                <td>{{ mo.moMonth2 | number : '1.0-0' }}</td>
+              <tr *ngFor="let mo of detailMarketingOrder; let i = index">
+                <td class="text-center">{{ i + 1 }}</td>
+                <td class="text-center">{{ mo.category }}</td>
+                <td class="text-center">{{ mo.partNumber }}</td>
+                <td class="text-center">{{ mo.description }}</td>
+                <td class="text-center">{{ mo.machineType }}</td>
+                <td class="text-right">{{ formatNumber(mo.capacity) }}</td>
+                <td class="text-right">{{ formatNumber(mo.qtyPerMould) }}</td>
+                <td class="text-right">{{ formatNumber(mo.qtyPerRak) }}</td>
+                <td class="text-right">{{ formatNumber(mo.minOrder) }}</td>
+                <td class="text-right">{{ formatNumber(mo.maxCapMonth0) }}</td>
+                <td class="text-right">{{ formatNumber(mo.maxCapMonth1) }}</td>
+                <td class="text-right">{{ formatNumber(mo.maxCapMonth2) }}</td>
+                <td class="text-right">{{ formatNumber(mo.initialStock) }}</td>
+                <td class="text-right">{{ formatNumber(mo.sfMonth0) }}</td>
+                <td class="text-right">{{ formatNumber(mo.sfMonth1) }}</td>
+                <td class="text-right">{{ formatNumber(mo.sfMonth2) }}</td>
+                <td class="text-right">{{ formatNumber(mo.moMonth0) }}</td>
+                <td class="text-right">{{ formatNumber(mo.moMonth1) }}</td>
+                <td class="text-right">{{ formatNumber(mo.moMonth2) }}</td>
                 <!-- <td>
                   <input type="number" class="form-control" [(ngModel)]="mo.initialStock" />
                 </td>
