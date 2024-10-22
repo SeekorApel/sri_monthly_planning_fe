@@ -15,14 +15,14 @@
           </div>
 
           <div class="form-group row">
-            <label class="col-md-3 col-form-label" for="select1">Type</label>
+            <label class="col-md-3 col-form-label" for="select1"> Type <span class="text-danger">*</span> </label>
             <div class="col-md-9">
               <select id="type" formControlName="type" class="form-control" [ngClass]="{ 'is-invalid': formHeaderMo.get('type')?.invalid && formHeaderMo.get('type')?.touched }">
                 <option value="" disabled selected>Please select</option>
                 <option value="FDR">FDR</option>
                 <option value="FED">FED</option>
               </select>
-              <div *ngIf="formHeaderMo.get('type')?.invalid && formHeaderMo.get('type')?.touched" class="invalid-feedback">Type is required.</div>
+              <div *ngIf="formHeaderMo.get('type')?.invalid && formHeaderMo.get('type')?.touched" class="invalid-feedback">Type is required</div>
             </div>
           </div>
 
@@ -30,9 +30,10 @@
           <tabset>
             <tab heading="Month 1">
               <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="month-input">Month And Year</label>
+                <label class="col-md-3 col-form-label" for="month-input">Month And Year <span class="text-danger">*</span></label>
                 <div class="col-md-9">
-                  <input class="form-control" formControlName="month_0" type="month" />
+                  <input class="form-control" formControlName="month_0" type="month" [ngClass]="{ 'is-invalid': formHeaderMo.get('month_0')?.invalid && formHeaderMo.get('month_0')?.touched }" />
+                  <div *ngIf="formHeaderMo.get('month_0')?.invalid && formHeaderMo.get('month_0')?.touched" class="invalid-feedback">Month And Year is required</div>
                 </div>
               </div>
               <!-- <div class="form-group row">
@@ -72,24 +73,30 @@
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="text-input">Maximum Tube Capacity</label>
+                <label class="col-md-3 col-form-label" for="text-input">Maximum Tube Capacity <span class="text-danger">*</span></label>
                 <div class="col-md-9">
-                  <input type="number" [ngClass]="{ 'is-invalid': formHeaderMo.get('max_tube_capa_0')?.invalid && formHeaderMo.get('max_tube_capa_0')?.touched }" formControlName="max_tube_capa_0" name="text-input" class="form-control" placeholder="0,00" />
+                  <input type="number" formControlName="max_tube_capa_0" name="text-input" class="form-control" placeholder="0,00" [ngClass]="{ 'is-invalid': formHeaderMo.get('max_tube_capa_0')?.invalid && formHeaderMo.get('max_tube_capa_0')?.touched }" />
                   <div *ngIf="formHeaderMo.get('max_tube_capa_0')?.invalid && formHeaderMo.get('max_tube_capa_0')?.touched" class="invalid-feedback">Maximum Tube Capacity is required.</div>
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="text-input">Maximum Capacity Tire TL</label>
+                <label class="col-md-3 col-form-label" for="text-input">Maximum Capacity Tire TL <span class="text-danger">*</span></label>
                 <div class="col-md-9">
-                  <input type="number" [ngClass]="{ 'is-invalid': formHeaderMo.get('max_capa_tl_0')?.invalid && formHeaderMo.get('max_capa_tl_0')?.touched }" formControlName="max_capa_tl_0" name="text-input" class="form-control" placeholder="0,00" />
+                  <input type="number" formControlName="max_capa_tl_0" name="text-input" class="form-control" placeholder="0,00" [ngClass]="{ 'is-invalid': formHeaderMo.get('max_capa_tl_0')?.invalid && formHeaderMo.get('max_capa_tl_0')?.touched }" />
                   <div *ngIf="formHeaderMo.get('max_capa_tl_0')?.invalid && formHeaderMo.get('max_capa_tl_0')?.touched" class="invalid-feedback">Maximum Capacity Tire TL is required.</div>
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="text-input">Maximum Capacity Tire TT</label>
+                <label class="col-md-3 col-form-label" for="text-input">Maximum Capacity Tire TT <span class="text-danger">*</span></label>
                 <div class="col-md-9">
-                  <input type="number" [ngClass]="{ 'is-invalid': formHeaderMo.get('max_capa_tt_0')?.invalid && formHeaderMo.get('max_capa_tt_0')?.touched }" formControlName="max_capa_tt_0" name="text-input" class="form-control" placeholder="0,00" />
+                  <input type="number" formControlName="max_capa_tt_0" name="text-input" class="form-control" placeholder="0,00" [ngClass]="{ 'is-invalid': formHeaderMo.get('max_capa_tt_0')?.invalid && formHeaderMo.get('max_capa_tt_0')?.touched }" />
                   <div *ngIf="formHeaderMo.get('max_capa_tt_0')?.invalid && formHeaderMo.get('max_capa_tt_0')?.touched" class="invalid-feedback">Maximum Capacity Tire TT is required.</div>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-3 col-form-label" for="text-input">Note Order TL</label>
+                <div class="col-md-9">
+                  <input type="text" formControlName="note_order_tl_0" name="text-input" class="form-control" />
                 </div>
               </div>
             </tab>
@@ -159,6 +166,12 @@
                   <div *ngIf="formHeaderMo.get('max_capa_tt_1')?.invalid && formHeaderMo.get('max_capa_tt_1')?.touched" class="invalid-feedback">Maximum Capacity Tire TT is required.</div>
                 </div>
               </div>
+              <div class="form-group row">
+                <label class="col-md-3 col-form-label" for="text-input">Note Order TL</label>
+                <div class="col-md-9">
+                  <input type="text" formControlName="note_order_tl_1" name="text-input" class="form-control" />
+                </div>
+              </div>
             </tab>
             <tab heading="Month 3">
               <div class="form-group row">
@@ -224,6 +237,12 @@
                 <div class="col-md-9">
                   <input [ngClass]="{ 'is-invalid': formHeaderMo.get('max_capa_tt_2')?.invalid && formHeaderMo.get('max_capa_tt_2')?.touched }" type="number" formControlName="max_capa_tt_2" name="text-input" class="form-control" placeholder="0,00" />
                   <div *ngIf="formHeaderMo.get('max_capa_tt_2')?.invalid && formHeaderMo.get('max_capa_tt_2')?.touched" class="invalid-feedback">Maximum Capacity Tire TT is required.</div>
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-3 col-form-label" for="text-input">Note Order TL</label>
+                <div class="col-md-9">
+                  <input type="text" formControlName="note_order_tl_2" name="text-input" class="form-control"/>
                 </div>
               </div>
             </tab>

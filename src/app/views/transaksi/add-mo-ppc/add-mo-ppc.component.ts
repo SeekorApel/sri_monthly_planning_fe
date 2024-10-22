@@ -63,33 +63,33 @@ export class AddMoPpcComponent implements OnInit {
       month_0: [null, Validators.required],
       month_1: [null, []],
       month_2: [null, []],
-      nwd_0: [22.33, Validators.required],
-      nwd_1: [19.67, Validators.required],
-      nwd_2: [23.00, Validators.required],
-      tl_ot_wd_0: [4.67, [Validators.required, Validators.min(0)]],
-      tt_ot_wd_0: [2.00, [Validators.required, Validators.min(0)]],
-      tl_ot_wd_1: [7.00, [Validators.required, Validators.min(0)]],
-      tt_ot_wd_1: [4.33, [Validators.required, Validators.min(0)]],
-      tl_ot_wd_2: [4.00, [Validators.required, Validators.min(0)]],
-      tt_ot_wd_2: [4.00, [Validators.required, Validators.min(0)]],
+      nwd_0: [22.33, []],
+      nwd_1: [19.67, []],
+      nwd_2: [23.0, []],
+      tl_ot_wd_0: [4.67, []],
+      tt_ot_wd_0: [2.0, []],
+      tl_ot_wd_1: [7.0, []],
+      tt_ot_wd_1: [4.33, []],
+      tl_ot_wd_2: [4.0, []],
+      tt_ot_wd_2: [4.0, []],
       total_tlwd_0: [27, []],
       total_ttwd_0: [24.33, []],
       total_tlwd_1: [26.67, []],
       total_ttwd_1: [24, []],
       total_tlwd_2: [27, []],
       total_ttwd_2: [27, []],
-      max_tube_capa_0: [80.388, [Validators.required, Validators.min(0)]],
-      max_tube_capa_1: [70.812, [Validators.required, Validators.min(0)]],
-      max_tube_capa_2: [82.800, [Validators.required, Validators.min(0)]],
-      max_capa_tl_0: [1214500, [Validators.required, Validators.min(0)]],
-      max_capa_tt_0: [383880, [Validators.required, Validators.min(0)]],
-      max_capa_tl_1: [1168300, [Validators.required, Validators.min(0)]],
-      max_capa_tt_1: [369640, [Validators.required, Validators.min(0)]],
-      max_capa_tl_2: [1188130, [Validators.required, Validators.min(0)]],
-      max_capa_tt_2: [363670, [Validators.required, Validators.min(0)]],
-      upload_file_m0: [null, []],
-      upload_file_m1: [null, []],
-      upload_file_m2: [null, []],
+      max_tube_capa_0: [null, [Validators.required]],
+      max_tube_capa_1: [null, [Validators.required]],
+      max_tube_capa_2: [null, [Validators.required]],
+      max_capa_tl_0: [null, [Validators.required]],
+      max_capa_tt_0: [null, [Validators.required]],
+      max_capa_tl_1: [null, [Validators.required]],
+      max_capa_tt_1: [null, [Validators.required]],
+      max_capa_tl_2: [null, [Validators.required]],
+      max_capa_tt_2: [null, [Validators.required]],
+      note_order_tl_0: [null, []],
+      note_order_tl_1: [null, []],
+      note_order_tl_2: [null, []],
     });
 
     this.formHeaderMo.valueChanges.subscribe((values) => {
@@ -846,16 +846,11 @@ export class AddMoPpcComponent implements OnInit {
 
   showDetailMo() {
     if (this.formHeaderMo.invalid) {
-      Swal.fire({
-        title: 'Incomplete Form',
-        text: 'Please fill in all required fields!',
-        icon: 'warning',
-        confirmButtonText: 'OK',
-      });
-    } else {
-      this.fillTheTableMo();
-      this.isTableVisible = true;
+      this.formHeaderMo.markAllAsTouched();
+      return;
     }
+    this.fillTheTableMo();
+    this.isTableVisible = true;
   }
 
   fillTheTableMo(): void {
