@@ -1,72 +1,86 @@
 import { Component, OnInit } from '@angular/core';
-import { CalendarOptions } from '@fullcalendar/core';
-import dayGridPlugin from '@fullcalendar/daygrid';
-import interactionPlugin from '@fullcalendar/interaction';
+import { CalendarService } from 'src/app/services/master-data/calendar/calendar.service';
+import { Calendar, Event } from 'src/app/models/Calendar';
 
 @Component({
   selector: 'app-view-work-day',
   templateUrl: './view-work-day.component.html',
-  styleUrls: ['./view-work-day.component.scss']
+  styleUrls: ['./view-work-day.component.scss'],
 })
 export class ViewWorkDayComponent implements OnInit {
-  
-  // Array to hold the event data
-  calendarEvents = [
-    { id: '1', title: 'event 1', description: 'Event 1 description', date: '2024-11-01', backgroundColor: '#ff0000', borderColor: '#ff0000' },
-    { id: '2', title: 'Ulang tahun', description: 'Birthday event', date: '2024-10-02', backgroundColor: '#0000ff', borderColor: '#0000ff' }
+  monthNames: string[] = [
+    'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus',
+    'September', 'Oktober', 'November', 'Desember'
   ];
-  calendarOptions: CalendarOptions = {
-    initialView: 'dayGridMonth',
-    plugins: [dayGridPlugin, interactionPlugin],
-    dateClick: (arg) => this.handleDateClick(arg),
-    events: this.calendarEvents,
-    eventClick: (arg) => this.deleteEvent(arg.event.id), // Handle event clicks for deleting
-    eventContent: this.renderEventContent // Custom render function to show title and description
-  };
+  calendar: Calendar;
+  selectedDay: number | null = null;
+  events: Event[] = [];
 
-  handleDateClick(arg) {
-    const title = prompt('Enter event title:');  // Prompt user for event title
-    if (title) {
-      const description = prompt('Enter event description:');  // Prompt user for event description
-      const color = prompt('Enter event color (e.g. #ff0000):') || '#00ff00';  // Default color if none provided
-      this.addNewEvent(title, description, arg.dateStr, color);
+  constructor(private calendarService: CalendarService) {}
+
+  ngOnInit() {
+    const currentDate = new Date();
+    const currentYear = currentDate.getFullYear();
+    const currentMonth = currentDate.getMonth() + 1; // JavaScript months are 0-indexed
+    this.calendar = this.calendarService.getCalendar(currentYear, currentMonth);
+  }
+
+  getEventsForDay(day: number): Event[] {
+    return this.events.filter(event => 
+      day > 0 && // Only check for valid days
+      event.date.getFullYear() === this.calendar.year &&
+      event.date.getMonth() + 1 === this.calendar.month && // Months are 0-indexed
+      event.date.getDate() === day
+    );
+  }
+
+  isWeekend(): boolean {
+
+    return false;
+  }  
+
+  previousMonth() {
+    this.selectedDay = null;
+    const { year, month } = this.calendar;
+    const newMonth = month === 1 ? 12 : month - 1;
+    const newYear = month === 1 ? year - 1 : year;
+    this.calendar = this.calendarService.getCalendar(newYear, newMonth);
+  }
+
+  nextMonth() {
+    this.selectedDay = null;
+    const { year, month } = this.calendar;
+    const newMonth = month === 12 ? 1 : month + 1;
+    const newYear = month === 12 ? year + 1 : year;
+    this.calendar = this.calendarService.getCalendar(newYear, newMonth);
+  }
+
+  newEvent: Event = { title: '', description: '', date: null };
+  showModal: boolean = false;
+
+  selectDay(day: number) {
+    if (day > 0) { // Only allow selection for valid days
+      this.selectedDay = day;
+      this.newEvent.date = new Date(this.calendar.year, this.calendar.month - 1, day);
+      this.showModal = true;
     }
   }
 
-  // Handle adding a new event manually
-  addNewEvent(eventTitle: string, eventDescription: string, eventDate: string, eventColor: string) {
-    const newEventId = (this.calendarEvents.length + 1).toString(); // Generate a new ID for the event
-    const newEvent = {
-      id: newEventId,
-      title: eventTitle,
-      description: eventDescription, // Store event description
-      date: eventDate,
-      backgroundColor: eventColor,
-      borderColor: eventColor
-    };
-    this.calendarEvents = [...this.calendarEvents, newEvent]; // Add event to the array
-    this.calendarOptions.events = this.calendarEvents; // Update FullCalendar
-    alert(`Event "${eventTitle}" added on ${eventDate}`);
+  createEvent() {
+    if (this.newEvent.title && this.newEvent.description) {
+      this.events.push(this.newEvent);
+      this.closeModal();
+      this.resetNewEvent();
+    } else {
+      alert('Title and description are required.');
+    }
   }
 
-  // Method to delete an event by ID
-  deleteEvent(eventId: string) {
-    this.calendarEvents = this.calendarEvents.filter(event => event.id !== eventId); // Remove event by ID
-    this.calendarOptions.events = this.calendarEvents; // Update calendar
-    alert('Event deleted');
+  closeModal() {
+    this.showModal = false;
   }
 
-  // Custom render function to display both title and description
-  renderEventContent(eventInfo) {
-    return {
-      html: `
-        <div class="fc-event-title">${eventInfo.event.title}</div>
-        <div class="fc-event-description">${eventInfo.event.extendedProps.description}</div>
-      `
-    };
+  resetNewEvent() {
+    this.newEvent = { title: '', description: '', date: null };
   }
-
-  constructor() { }
-
-  ngOnInit(): void { }
 }

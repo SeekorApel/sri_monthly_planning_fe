@@ -55,6 +55,7 @@
     "jquery": "^3.6.3",
     "jw-angular-pagination": "^1.2.0",
     "jw-paginate": "^1.0.4",
+    "luxon": "^3.5.0",
     "ng-select2": "^1.4.1",
     "ng2-charts": "^2.4.3",
     "ngx-bootstrap": "^6.2.0",

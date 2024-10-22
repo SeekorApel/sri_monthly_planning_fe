@@ -1,23 +1,62 @@
-<div>
-    <h3>Add New Event</h3>
-    
-    <label for="eventTitle">Event Title:</label>
-    <input type="text" id="eventTitle" #eventTitle placeholder="Enter event title">
-  
-    <label for="eventDescription">Event Description:</label>
-    <input type="text" id="eventDescription" #eventDescription placeholder="Enter event description">
-  
-    <label for="eventDate">Event Date:</label>
-    <input type="date" id="eventDate" #eventDate>
-  
-    <label for="eventColor">Event Color:</label>
-    <input type="color" id="eventColor" #eventColor value="#00ff00">
-  
-    <button (click)="addNewEvent(eventTitle.value, eventDescription.value, eventDate.value, eventColor.value)">
-      Add Event
-    </button>
+<div class="col-lg-12">
+  <div class="card-header">
+    <strong><i class="fa fa-bars"></i>&nbsp;Master Data Work Day</strong>
   </div>
-  
-  <!-- FullCalendar Integration -->
-  <full-calendar [options]="calendarOptions"></full-calendar>
-  
+  <div class="card">
+    <div class="card-body d-flex">
+      <!-- Calendar Table -->
+      <div class="calendar-table">
+        <div class="navigation d-flex justify-content-between align-items-center mb-3">
+          <button type="button" class="btn btn-primary" (click)="previousMonth()">Previous</button>
+          <div  align="center" class="mx-auto" style="min-width: 250px;max-width: 250px;">
+            <strong>{{ calendar.year }} - {{ monthNames[calendar.month - 1] }}</strong>
+          </div>
+          <button type="button" class="btn btn-primary" (click)="nextMonth()">Next</button>
+        </div>        
+        <table class="table table-bordered table-striped table-sm">
+          <thead align="center">
+            <tr>
+              <th>M</th>
+              <th>S</th>
+              <th>S</th>
+              <th>R</th>
+              <th>K</th>
+              <th>J</th>
+              <th>S</th>
+            </tr>
+          </thead>
+          <tbody align="center"> 
+            <tr *ngFor="let week of calendar.days; let i = index">
+              <td *ngFor="let day of week" 
+              [ngStyle]="{
+                  'background-color': isWeekend() ? 'red' : 'inherit', 
+                  'color': isWeekend() ? 'white' : 'inherit'
+              }" 
+              [ngClass]="{ 'selected': day === selectedDay }" 
+              (click)="day !== 0 ? selectDay(day) : null">
+            {{ day }}
+            <div *ngFor="let event of getEventsForDay(day)">{{ event.title }}</div>
+          </td>               
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Detail Section -->
+      <div class="event-details ml-4">
+        <h3>Event Details</h3>
+        <div *ngIf="selectedDay">
+          <h4>Details for {{ selectedDay }}</h4>
+          <div *ngFor="let event of getEventsForDay(selectedDay)">
+            <h5>{{ event.title }}</h5>
+            <p>{{ event.description }}</p>
+          </div>
+          <button (click)="showModal = true">Add Event</button>
+        </div>
+        <div *ngIf="!selectedDay">
+          <p>Please select a day to see event details.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
