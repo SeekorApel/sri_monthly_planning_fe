@@ -308,15 +308,28 @@ export class EditMoMarketingComponent implements OnInit {
     //Set data save Detail Mo
     this.detailMarketingOrder.forEach((item) => {
       item.moId = this.lastIdMo;
+      item.detailId = null;
     });
 
-    const saveMo = {
+    const revisionMo = {
       marketingOrder: this.marketingOrder,
       headerMarketingOrder: this.headerMarketingOrder,
       detailMarketingOrder: this.detailMarketingOrder,
     };
 
-    this.moService.updateMarketingOrderMarketing(saveMo).subscribe(
+    // Swal.fire({
+    //   title: 'Success!',
+    //   text: 'Data Marketing Order successfully Revision.',
+    //   icon: 'success',
+    //   confirmButtonText: 'OK',
+    // }).then((result) => {
+    //   if (result.isConfirmed) {
+    //     console.log(revisionMo);
+    //     this.navigateToViewMo();
+    //   }
+    // });
+
+    this.moService.updateMarketingOrderMarketing(revisionMo).subscribe(
       (response) => {
         Swal.fire({
           title: 'Success!',
