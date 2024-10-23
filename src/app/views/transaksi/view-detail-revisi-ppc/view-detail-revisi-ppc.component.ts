@@ -161,8 +161,6 @@ export class ViewDetailRevisiPpcComponent implements OnInit {
     this.detailMarketingOrder = data.dataDetailMo;
     let typeProduct = data.type;
 
-    console.log(data.revisionPpc);
-
     if (this.allData) {
       this.headerRevision = `Header Marketing Order Rev ${data.revisionPpc}`;
       this.detailMoRevision = `Detail Marketing Order Rev ${data.revisionPpc}`;
