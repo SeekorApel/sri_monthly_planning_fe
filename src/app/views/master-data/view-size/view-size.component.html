@@ -25,25 +25,25 @@
         <table mat-table [dataSource]="dataSource" matSort class="table table-bordered table-striped table-sm">
           <!-- No Column -->
           <ng-container matColumnDef="no" >
-            <th *matHeaderCellDef >No</th>
+            <th *matHeaderCellDef style="min-width: 10px;" >No</th>
             <td  *matCellDef="let element; let i = index">{{ i + 1 }}</td>
           </ng-container>
         
           <!-- Size ID Column -->
           <ng-container matColumnDef="size_ID">
-            <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Size ID</th>
+            <th  *matHeaderCellDef style="min-width: 100px;" mat-sort-header >Size ID</th>
             <td  *matCellDef="let element">{{ element.size_ID }}</td>
           </ng-container>
         
           <!-- Description Column -->
           <ng-container matColumnDef="description">
-            <th  *matHeaderCellDef mat-sort-header >Description</th>
+            <th  *matHeaderCellDef style="min-width: 100px;" mat-sort-header >Description</th>
             <td *matCellDef="let element">{{ element.description }}</td>
           </ng-container>
         
           <!-- Status Column -->
           <ng-container matColumnDef="status">
-            <th  *matHeaderCellDef>Status</th>
+            <th  *matHeaderCellDef style="min-width: 50px;" mat-sort-header>Status</th>
             <td *matCellDef="let element" [ngClass]="{ 'bg-success': element.status === 1, 'bg-danger': element.status !== 1 }">
               {{ element.status === 1 ? 'Active' : 'Deactive' }}
             </td>
@@ -63,11 +63,11 @@
           <tr align="center" style="height: 20px;" mat-header-row *matHeaderRowDef="displayedColumns"></tr>
           <tr align="center" mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
         </table>
-            <mat-paginator [pageSize]="pageSize"
-              [pageSizeOptions]="[5, 10, 20]"
-              showFirstLastButtons>
-            </mat-paginator>
       </div>
+      <mat-paginator [pageSize]="pageSize"
+        [pageSizeOptions]="[5, 10, 20]"
+        showFirstLastButtons>
+      </mat-paginator>
     </div>
   </div>
 </div>

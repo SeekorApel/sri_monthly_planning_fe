@@ -47,6 +47,8 @@ import { ViewCuringSizeComponent } from './views/master-data/view-curing-size/vi
 import { DetailViewMoMarketingComponent } from './views/transaksi/detail-view-mo-marketing/detail-view-mo-marketing.component';
 import { EditMoMarketingComponent } from './views/transaksi/edit-mo-marketing/edit-mo-marketing.component';
 import { ViewDetailRevisiPpcComponent } from './views/transaksi/view-detail-revisi-ppc/view-detail-revisi-ppc.component';
+import { ViewWorkDayComponent } from './views/master-data/view-work-day/view-work-day.component';
+
 
 export const routes: Routes = [
   {
@@ -245,6 +247,13 @@ export const routes: Routes = [
         component: ViewCtCuringComponent,
         data: {
           title: 'Master Data / View CT Curing',
+        },
+      },
+      {
+        path: 'master-data/view-work-day',
+        component: ViewWorkDayComponent,
+        data: {
+          title: 'Master Data / View Work Day',
         },
       },
       {
