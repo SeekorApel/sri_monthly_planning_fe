@@ -10,6 +10,7 @@ import { saveAs } from 'file-saver';
 import { DetailMarketingOrder } from 'src/app/models/DetailMarketingOrder';
 import { ApiResponse } from 'src/app/response/Response';
 import { HeaderMarketingOrder } from 'src/app/models/HeaderMarketingOrder';
+import { error } from '@angular/compiler/src/util';
 declare var $: any;
 
 @Component({
@@ -31,30 +32,7 @@ export class AddMoPpcComponent implements OnInit {
   excelData: any[] = [];
   errorMessage: string | null = null;
   lastIdMo: string = '';
-
-  //Workday
-  workDay_M0: any[] = [];
-  workDay_M1: any[] = [];
-  workDay_M2: any[] = [];
-
-  //Total Wd
-  total_wd_m0: any = {
-    total_wd: 0,
-    total_ot_tl: 0,
-    total_ot_tt: 0,
-  };
-
-  total_wd_m1: any = {
-    total_wd: 0,
-    total_ot_tl: 0,
-    total_ot_tt: 0,
-  };
-
-  total_wd_m2: any = {
-    total_wd: 0,
-    total_ot_tl: 0,
-    total_ot_tt: 0,
-  };
+  workDay: any[];
 
   constructor(private router: Router, private fb: FormBuilder, private moService: MarketingOrderService) {
     this.formHeaderMo = this.fb.group({
@@ -63,21 +41,21 @@ export class AddMoPpcComponent implements OnInit {
       month_0: [null, Validators.required],
       month_1: [null, []],
       month_2: [null, []],
-      nwd_0: [22.33, []],
-      nwd_1: [19.67, []],
-      nwd_2: [23.0, []],
-      tl_ot_wd_0: [4.67, []],
-      tt_ot_wd_0: [2.0, []],
-      tl_ot_wd_1: [7.0, []],
-      tt_ot_wd_1: [4.33, []],
-      tl_ot_wd_2: [4.0, []],
-      tt_ot_wd_2: [4.0, []],
-      total_tlwd_0: [27, []],
-      total_ttwd_0: [24.33, []],
-      total_tlwd_1: [26.67, []],
-      total_ttwd_1: [24, []],
-      total_tlwd_2: [27, []],
-      total_ttwd_2: [27, []],
+      nwd_0: [null, []],
+      nwd_1: [null, []],
+      nwd_2: [null, []],
+      tl_ot_wd_0: [null, []],
+      tt_ot_wd_0: [null, []],
+      tl_ot_wd_1: [null, []],
+      tt_ot_wd_1: [null, []],
+      tl_ot_wd_2: [null, []],
+      tt_ot_wd_2: [null, []],
+      total_tlwd_0: [null, []],
+      total_ttwd_0: [null, []],
+      total_tlwd_1: [null, []],
+      total_ttwd_1: [null, []],
+      total_tlwd_2: [null, []],
+      total_ttwd_2: [null, []],
       max_tube_capa_0: [null, [Validators.required]],
       max_tube_capa_1: [null, [Validators.required]],
       max_tube_capa_2: [null, [Validators.required]],
@@ -114,6 +92,44 @@ export class AddMoPpcComponent implements OnInit {
     this.subscribeToValueChanges('max_tube_capa_2');
     this.subscribeToValueChanges('max_capa_tl_2');
     this.subscribeToValueChanges('max_capa_tt_2');
+  }
+
+  onChangeWorkDay(): void {
+    const month0 = this.formHeaderMo.get('month_0')?.value;
+    const month1 = this.formHeaderMo.get('month_1')?.value;
+    const month2 = this.formHeaderMo.get('month_2')?.value;
+    const varWd = {
+      month0: month0,
+      month1: month1,
+      month2: month2,
+    };
+    this.getWorkDays(varWd);
+  }
+
+  getWorkDays(data: any) {
+    const months = [data.month0, data.month1, data.month2];
+    months.forEach((month, index) => {
+      const [year, monthValue] = month.split('-');
+      this.fetchWorkDay(monthValue, year, index);
+    });
+  }
+
+  fetchWorkDay(month: string, year: string, index: number) {
+    this.moService.getWorkDay(month, year).subscribe(
+      (response) => {
+        const workData = response.data[0];
+        this.formHeaderMo.patchValue({
+          [`nwd_${index}`]: this.formatNumber(workData.wdNormal),
+          [`tl_ot_wd_${index}`]: this.formatNumber(workData.wdOtTl),
+          [`tt_ot_wd_${index}`]: this.formatNumber(workData.wdOtTt),
+          [`total_tlwd_${index}`]: this.formatNumber(workData.totalWdTl),
+          [`total_ttwd_${index}`]: this.formatNumber(workData.totalWdTt),
+        });
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
   }
 
   toggleLockStatus(index: number) {
@@ -296,11 +312,11 @@ export class AddMoPpcComponent implements OnInit {
       this.headerMo.push({
         moId: this.lastIdMo,
         month: new Date(this.formHeaderMo.get(`month_${i}`)?.value),
-        wdNormal: this.formHeaderMo.get(`nwd_${i}`)?.value,
-        wdOtTl: this.formHeaderMo.get(`tl_ot_wd_${i}`)?.value,
-        wdOtTt: this.formHeaderMo.get(`tt_ot_wd_${i}`)?.value,
-        totalWdTl: this.formHeaderMo.get(`total_tlwd_${i}`)?.value,
-        totalWdTt: this.formHeaderMo.get(`total_ttwd_${i}`)?.value,
+        wdNormal: this.parseFormattedValue(this.formHeaderMo.get(`nwd_${i}`)?.value),
+        wdOtTl: this.parseFormattedValue(this.formHeaderMo.get(`tl_ot_wd_${i}`)?.value),
+        wdOtTt: this.parseFormattedValue(this.formHeaderMo.get(`tt_ot_wd_${i}`)?.value),
+        totalWdTl: this.parseFormattedValue(this.formHeaderMo.get(`total_tlwd_${i}`)?.value),
+        totalWdTt: this.parseFormattedValue(this.formHeaderMo.get(`total_ttwd_${i}`)?.value),
         maxCapTube: this.parseFormattedValue(this.formHeaderMo.get(`max_tube_capa_${i}`)?.value || ''),
         maxCapTl: this.parseFormattedValue(this.formHeaderMo.get(`max_capa_tl_${i}`)?.value || ''),
         maxCapTt: this.parseFormattedValue(this.formHeaderMo.get(`max_capa_tt_${i}`)?.value || ''),

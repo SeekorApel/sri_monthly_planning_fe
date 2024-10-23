@@ -46,6 +46,7 @@ import { EditMoPpcComponent } from './views/transaksi/edit-mo-ppc/edit-mo-ppc.co
 import { ViewCuringSizeComponent } from './views/master-data/view-curing-size/view-curing-size.component';
 import { DetailViewMoMarketingComponent } from './views/transaksi/detail-view-mo-marketing/detail-view-mo-marketing.component';
 import { EditMoMarketingComponent } from './views/transaksi/edit-mo-marketing/edit-mo-marketing.component';
+import { ViewDetailRevisiPpcComponent } from './views/transaksi/view-detail-revisi-ppc/view-detail-revisi-ppc.component';
 
 export const routes: Routes = [
   {
@@ -363,6 +364,13 @@ export const routes: Routes = [
         component: EditMoMarketingComponent,
         data: {
           title: 'Transaksi / Edit Marketing Order',
+        },
+      },
+      {
+        path: 'transaksi/view-revisi-mo-ppc/:idMo',
+        component: ViewDetailRevisiPpcComponent,
+        data: {
+          title: 'Transaksi / Revisi Marketing Order',
         },
       },
       {

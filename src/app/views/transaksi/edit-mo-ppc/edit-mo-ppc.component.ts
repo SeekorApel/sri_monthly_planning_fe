@@ -126,7 +126,7 @@ export class EditMoPpcComponent implements OnInit {
   }
 
   getAllData(idMo: String) {
-    this.moService.getDetailMarketingOrderById(idMo).subscribe(
+    this.moService.getAllMoPPCById(idMo).subscribe(
       (response: ApiResponse<any>) => {
         this.allData = response.data;
         this.fillAllData(this.allData);
@@ -160,6 +160,17 @@ export class EditMoPpcComponent implements OnInit {
   fillAllData(data: any) {
     this.headerMarketingOrder = data.dataHeaderMo;
     this.detailMarketingOrder = data.dataDetailMo;
+
+    this.detailMarketingOrder.forEach((item) => {
+      item.initialStock = item.initialStock !== null ? item.initialStock : 0;
+      item.sfMonth0 = item.sfMonth0 !== null ? item.sfMonth0 : 0;
+      item.sfMonth1 = item.sfMonth1 !== null ? item.sfMonth1 : 0;
+      item.sfMonth2 = item.sfMonth2 !== null ? item.sfMonth2 : 0;
+      item.moMonth0 = item.moMonth0 !== null ? item.moMonth0 : 0;
+      item.moMonth1 = item.moMonth1 !== null ? item.moMonth1 : 0;
+      item.moMonth2 = item.moMonth2 !== null ? item.moMonth2 : 0;
+    });
+
     let typeProduct = data.type;
     this.formHeaderMo.patchValue({
       date: new Date(data.dateValid).toISOString().split('T')[0],

@@ -20,11 +20,16 @@ export class MarketingOrderService {
   }
 
   getAllMarketingOrder(): Observable<ApiResponse<MarketingOrder[]>> {
-    return this.http.get<ApiResponse<[]>>(environment.apiUrlWebAdmin + '/getAllMarketingOrder');
+    return this.http.get<ApiResponse<[]>>(environment.apiUrlWebAdmin + '/getAllMarketingOrderLatest');
   }
 
-  getDetailMarketingOrderById(idMo: String): Observable<ApiResponse<any>> {
-    return this.http.get<ApiResponse<any>>(environment.apiUrlWebAdmin + '/getMarketingOrderById/' + idMo);
+  //using detail-view-mo-ppc
+  getAllMoPPCById(idMo: String): Observable<ApiResponse<any>> {
+    return this.http.get<ApiResponse<any>>(environment.apiUrlWebAdmin + '/getAllMoPPCById/' + idMo);
+  }
+
+  getAllMoMarketingById(idMo: String): Observable<ApiResponse<any>> {
+    return this.http.get<ApiResponse<any>>(environment.apiUrlWebAdmin + '/getAllMoMarketingById/' + idMo);
   }
 
   saveMarketingOrderPPC(mo: any): Observable<ApiResponse<any>> {
@@ -80,6 +85,11 @@ export class MarketingOrderService {
         return throwError(err);
       })
     );
+  }
+
+  getWorkDay(month: any, year: any): Observable<ApiResponse<any>> {
+    let params = new HttpParams().set('month', month).set('year', year);
+    return this.http.get<ApiResponse<any>>(environment.apiUrlWebAdmin + '/getMonthlyWorkData', { params });
   }
 
   //Not used

@@ -65,8 +65,7 @@ export class ViewMoPpcComponent implements OnInit {
   }
 
   navigateToDetail(idMo: String) {
-    console.log(idMo);
-    this.router.navigate(['/transaksi/detail-mo-ppc', idMo]);
+    this.router.navigate(['/transaksi/view-revisi-mo-ppc', idMo]);
   }
 
   navigateToEdit(idMo: String) {

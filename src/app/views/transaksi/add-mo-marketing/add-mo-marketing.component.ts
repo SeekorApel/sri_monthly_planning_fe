@@ -128,7 +128,7 @@ export class AddMoMarketingComponent implements OnInit {
   }
 
   getAllData(idMo: String) {
-    this.moService.getDetailMoMarketing(idMo).subscribe(
+    this.moService.getAllMoPPCById(idMo).subscribe(
       (response: ApiResponse<any>) => {
         this.allData = response.data;
         this.fillAllData(this.allData);
@@ -652,9 +652,9 @@ export class AddMoMarketingComponent implements OnInit {
   }
 
   updateMonthNames(hmo: HeaderMarketingOrder[]): void {
-    this.monthNames[0] = this.getMonthName(new Date(this.headerMarketingOrder[1].month));
-    this.monthNames[1] = this.getMonthName(new Date(this.headerMarketingOrder[2].month));
-    this.monthNames[2] = this.getMonthName(new Date(this.headerMarketingOrder[0].month));
+    this.monthNames[0] = this.getMonthName(new Date(this.headerMarketingOrder[0].month));
+    this.monthNames[1] = this.getMonthName(new Date(this.headerMarketingOrder[1].month));
+    this.monthNames[2] = this.getMonthName(new Date(this.headerMarketingOrder[2].month));
   }
 
   getMonthName(monthValue: Date): string {
@@ -777,14 +777,14 @@ export class AddMoMarketingComponent implements OnInit {
     }
 
     this.detailMarketingOrder.forEach((mo) => {
-      // Mengubah setiap properti menjadi number dengan menghapus karakter '.'
-      mo.initialStock = parseFloat(mo.initialStock.toString().replace(/\./g, '')) || 0;
-      mo.sfMonth0 = parseFloat(mo.sfMonth0.toString().replace(/\./g, '')) || 0;
-      mo.sfMonth1 = parseFloat(mo.sfMonth1.toString().replace(/\./g, '')) || 0;
-      mo.sfMonth2 = parseFloat(mo.sfMonth2.toString().replace(/\./g, '')) || 0;
-      mo.moMonth0 = parseFloat(mo.moMonth0.toString().replace(/\./g, '')) || 0;
-      mo.moMonth1 = parseFloat(mo.moMonth1.toString().replace(/\./g, '')) || 0;
-      mo.moMonth2 = parseFloat(mo.moMonth2.toString().replace(/\./g, '')) || 0;
+      // Mengubah setiap properti menjadi number dengan menghapus karakter '.' dan menangani nilai null
+      mo.initialStock = mo.initialStock !== null ? parseFloat(mo.initialStock.toString().replace(/\./g, '')) || 0 : 0;
+      mo.sfMonth0 = mo.sfMonth0 !== null ? parseFloat(mo.sfMonth0.toString().replace(/\./g, '')) || 0 : 0;
+      mo.sfMonth1 = mo.sfMonth1 !== null ? parseFloat(mo.sfMonth1.toString().replace(/\./g, '')) || 0 : 0;
+      mo.sfMonth2 = mo.sfMonth2 !== null ? parseFloat(mo.sfMonth2.toString().replace(/\./g, '')) || 0 : 0;
+      mo.moMonth0 = mo.moMonth0 !== null ? parseFloat(mo.moMonth0.toString().replace(/\./g, '')) || 0 : 0;
+      mo.moMonth1 = mo.moMonth1 !== null ? parseFloat(mo.moMonth1.toString().replace(/\./g, '')) || 0 : 0;
+      mo.moMonth2 = mo.moMonth2 !== null ? parseFloat(mo.moMonth2.toString().replace(/\./g, '')) || 0 : 0;
     });
 
     this.moService.saveMarketingOrderMarketing(this.detailMarketingOrder).subscribe(

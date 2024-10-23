@@ -11,10 +11,9 @@ import Swal from 'sweetalert2';
 @Component({
   selector: 'app-detail-view-mo-marketing',
   templateUrl: './detail-view-mo-marketing.component.html',
-  styleUrls: ['./detail-view-mo-marketing.component.scss']
+  styleUrls: ['./detail-view-mo-marketing.component.scss'],
 })
 export class DetailViewMoMarketingComponent implements OnInit {
-
   idMo: String;
   formHeaderMo: FormGroup;
   isReadOnly: boolean = true;
@@ -27,11 +26,7 @@ export class DetailViewMoMarketingComponent implements OnInit {
   headerMarketingOrder: HeaderMarketingOrder[];
   detailMarketingOrder: DetailMarketingOrder[];
 
-  constructor(
-    private router: Router,
-    private activeRoute: ActivatedRoute,
-    private fb: FormBuilder,
-    private moService: MarketingOrderService) {
+  constructor(private router: Router, private activeRoute: ActivatedRoute, private fb: FormBuilder, private moService: MarketingOrderService) {
     this.formHeaderMo = this.fb.group({
       date: [null, []],
       type: [null, []],
@@ -111,10 +106,10 @@ export class DetailViewMoMarketingComponent implements OnInit {
   }
 
   getAllData(idMo: String) {
-    this.moService.getDetailMoMarketing(idMo).subscribe(
+    this.moService.getAllMoMarketingById(idMo).subscribe(
       (response: ApiResponse<any>) => {
         this.allData = response.data;
-        console.log("Ini detail mo marketing ", this.allData)
+        console.log('Ini detail mo marketing ', this.allData);
         this.fillAllData(this.allData);
       },
       (error) => {
@@ -137,7 +132,6 @@ export class DetailViewMoMarketingComponent implements OnInit {
       date: new Date(data.dateValid).toISOString().split('T')[0],
       type: data.type,
       revision: data.revisionMarketing,
-
 
       // Header Month 1
       month_0: this.formatDateToString(this.headerMarketingOrder[0].month),
@@ -236,9 +230,9 @@ export class DetailViewMoMarketingComponent implements OnInit {
   }
 
   updateMonthNames(hm: HeaderMarketingOrder[]): void {
-    this.monthNames[0] = this.getMonthName(new Date(this.headerMarketingOrder[1].month));
-    this.monthNames[1] = this.getMonthName(new Date(this.headerMarketingOrder[2].month));
-    this.monthNames[2] = this.getMonthName(new Date(this.headerMarketingOrder[0].month));
+    this.monthNames[0] = this.getMonthName(new Date(this.headerMarketingOrder[0].month));
+    this.monthNames[1] = this.getMonthName(new Date(this.headerMarketingOrder[1].month));
+    this.monthNames[2] = this.getMonthName(new Date(this.headerMarketingOrder[2].month));
   }
 
   getMonthName(monthValue: Date): string {
@@ -255,5 +249,4 @@ export class DetailViewMoMarketingComponent implements OnInit {
   navigateToEdit() {
     this.router.navigate(['/transaksi/edit-mo-marketing', this.idMo]);
   }
-
 }

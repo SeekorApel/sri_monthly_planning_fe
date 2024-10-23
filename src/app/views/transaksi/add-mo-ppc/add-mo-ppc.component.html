@@ -32,7 +32,7 @@
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="month-input">Month And Year <span class="text-danger">*</span></label>
                 <div class="col-md-9">
-                  <input class="form-control" formControlName="month_0" type="month" [ngClass]="{ 'is-invalid': formHeaderMo.get('month_0')?.invalid && formHeaderMo.get('month_0')?.touched }" />
+                  <input class="form-control" formControlName="month_0" type="month" [ngClass]="{ 'is-invalid': formHeaderMo.get('month_0')?.invalid && formHeaderMo.get('month_0')?.touched }" (ngModelChange)="onChangeWorkDay()" />
                   <div *ngIf="formHeaderMo.get('month_0')?.invalid && formHeaderMo.get('month_0')?.touched" class="invalid-feedback">Month And Year is required</div>
                 </div>
               </div>
@@ -45,31 +45,31 @@
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="text-input">Normal Working Day</label>
                 <div class="col-md-9">
-                  <input type="number" formControlName="nwd_0" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  <input type="text" formControlName="nwd_0" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
               </div>
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="text-input">TL Overtime Working Day</label>
                 <div class="col-md-9">
-                  <input type="number" formControlName="tl_ot_wd_0" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  <input type="text" formControlName="tl_ot_wd_0" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
               </div>
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="text-input">TT Overtime Working Day</label>
                 <div class="col-md-9">
-                  <input type="number" formControlName="tt_ot_wd_0" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  <input type="text" formControlName="tt_ot_wd_0" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
               </div>
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="text-input">Total TL Tire Working Day</label>
                 <div class="col-md-9">
-                  <input formControlName="total_tlwd_0" type="number" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  <input formControlName="total_tlwd_0" type="text" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
               </div>
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="text-input">Total TT Tire Working Day</label>
                 <div class="col-md-9">
-                  <input formControlName="total_ttwd_0" type="number" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  <input formControlName="total_ttwd_0" type="text" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
               </div>
               <div class="form-group row">
@@ -118,31 +118,31 @@
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="text-input">Normal Working Day</label>
                 <div class="col-md-9">
-                  <input type="number" formControlName="nwd_1" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  <input type="text" formControlName="nwd_1" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
               </div>
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="text-input">TL Overtime Working Day</label>
                 <div class="col-md-9">
-                  <input type="number" formControlName="tl_ot_wd_1" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  <input type="text" formControlName="tl_ot_wd_1" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
               </div>
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="text-input">TT Overtime Working Day</label>
                 <div class="col-md-9">
-                  <input type="number" formControlName="tt_ot_wd_1" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  <input type="text" formControlName="tt_ot_wd_1" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
               </div>
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="text-input">Total TL Tire Working Day</label>
                 <div class="col-md-9">
-                  <input formControlName="total_tlwd_1" type="number" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  <input formControlName="total_tlwd_1" type="text" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
               </div>
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="text-input">Total TT Tire Working Day</label>
                 <div class="col-md-9">
-                  <input formControlName="total_ttwd_1" type="number" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  <input formControlName="total_ttwd_1" type="text" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
               </div>
               <div class="form-group row">
@@ -191,31 +191,31 @@
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="text-input">Normal Working Day</label>
                 <div class="col-md-9">
-                  <input type="number" formControlName="nwd_2" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  <input type="text" formControlName="nwd_2" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
               </div>
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="text-input">TL Overtime Working Day</label>
                 <div class="col-md-9">
-                  <input type="number" formControlName="tl_ot_wd_2" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  <input type="text" formControlName="tl_ot_wd_2" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
               </div>
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="text-input">TT Overtime Working Day</label>
                 <div class="col-md-9">
-                  <input type="number" formControlName="tt_ot_wd_2" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  <input type="text" formControlName="tt_ot_wd_2" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
               </div>
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="text-input">Total TL Tire Working Day</label>
                 <div class="col-md-9">
-                  <input formControlName="total_tlwd_2" type="number" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  <input formControlName="total_tlwd_2" type="text" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
               </div>
               <div class="form-group row">
                 <label class="col-md-3 col-form-label" for="text-input">Total TT Tire Working Day</label>
                 <div class="col-md-9">
-                  <input formControlName="total_ttwd_2" type="number" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  <input formControlName="total_ttwd_2" type="text" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
               </div>
               <div class="form-group row">
