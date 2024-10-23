@@ -376,7 +376,7 @@ export const routes: Routes = [
         },
       },
       {
-        path: 'transaksi/view-revisi-mo-ppc/:idMo',
+        path: 'transaksi/view-revisi-mo-ppc/:month0/:month1/:month2/:type',
         component: ViewDetailRevisiPpcComponent,
         data: {
           title: 'Transaksi / Revisi Marketing Order',
