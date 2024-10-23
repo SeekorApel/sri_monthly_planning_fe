@@ -122,13 +122,10 @@ export class AddMoMarketingComponent implements OnInit {
     if (value === null || value === undefined) {
       return false;
     }
-    // Mengonversi value ke string jika bukan string
     const stringValue = typeof value === 'string' ? value : value.toString();
-    // Menghapus separator ribuan dan mengonversi menjadi angka
     const numericValue = parseFloat(stringValue.replace(/\./g, ''));
     return numericValue < minOrder || numericValue > maxCap;
   }
-
 
   getAllData(idMo: String) {
     this.moService.getDetailMoMarketing(idMo).subscribe(
@@ -196,13 +193,9 @@ export class AddMoMarketingComponent implements OnInit {
   formatNumber(value: number | null | undefined): string {
     if (value !== null && value !== undefined && !isNaN(value)) {
       let strValue = value.toString();
-
-      // Pisahkan bagian desimal dan bulat
       const parts = strValue.split('.');
       const integerPart = parts[0];
       const decimalPart = parts[1] ? ',' + parts[1] : '';
-
-      // Tambahkan separator ribuan
       const formattedInteger = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 
       return formattedInteger + decimalPart;
@@ -753,7 +746,6 @@ export class AddMoMarketingComponent implements OnInit {
     mo[field] = numberValue; // Update the model with the number value
   }
 
-
   saveMo(): void {
     const hasInvalidInput = this.detailMarketingOrder.some((mo) => {
       // Mengubah inputan string menjadi number dengan menghapus karakter '.'
@@ -770,14 +762,7 @@ export class AddMoMarketingComponent implements OnInit {
       const maxCapMonth1 = Number(mo.maxCapMonth1);
       const maxCapMonth2 = Number(mo.maxCapMonth2);
 
-      return (
-        sfMonth0 < minOrder || sfMonth0 > maxCapMonth0 ||
-        sfMonth1 < minOrder || sfMonth1 > maxCapMonth1 ||
-        sfMonth2 < minOrder || sfMonth2 > maxCapMonth2 ||
-        moMonth0 < minOrder || moMonth0 > maxCapMonth0 ||
-        moMonth1 < minOrder || moMonth1 > maxCapMonth1 ||
-        moMonth2 < minOrder || moMonth2 > maxCapMonth2
-      );
+      return sfMonth0 < minOrder || sfMonth0 > maxCapMonth0 || sfMonth1 < minOrder || sfMonth1 > maxCapMonth1 || sfMonth2 < minOrder || sfMonth2 > maxCapMonth2 || moMonth0 < minOrder || moMonth0 > maxCapMonth0 || moMonth1 < minOrder || moMonth1 > maxCapMonth1 || moMonth2 < minOrder || moMonth2 > maxCapMonth2;
     });
 
     // Jika terdapat input yang tidak valid, tampilkan SweetAlert dan hentikan fungsi
@@ -793,6 +778,7 @@ export class AddMoMarketingComponent implements OnInit {
 
     this.detailMarketingOrder.forEach((mo) => {
       // Mengubah setiap properti menjadi number dengan menghapus karakter '.'
+      mo.initialStock = parseFloat(mo.initialStock.toString().replace(/\./g, '')) || 0;
       mo.sfMonth0 = parseFloat(mo.sfMonth0.toString().replace(/\./g, '')) || 0;
       mo.sfMonth1 = parseFloat(mo.sfMonth1.toString().replace(/\./g, '')) || 0;
       mo.sfMonth2 = parseFloat(mo.sfMonth2.toString().replace(/\./g, '')) || 0;
@@ -854,5 +840,4 @@ export class AddMoMarketingComponent implements OnInit {
       }
     }
   }
-
 }

@@ -254,7 +254,7 @@
             </thead>
             <tbody>
               <tr *ngFor="let mo of detailMarketingOrder; let i = index">
-                <td>{{ i + 1 }}</td>
+                <td class="text-center">{{ i + 1 }}</td>
                 <td class="text-center">{{ mo.category }}</td>
                 <td class="text-center">{{ mo.partNumber }}</td>
                 <td class="text-center">{{ mo.description }}</td>
@@ -266,7 +266,7 @@
                 <td class="text-right">{{ formatNumber(mo.maxCapMonth0) }}</td>
                 <td class="text-right">{{ formatNumber(mo.maxCapMonth1) }}</td>
                 <td class="text-right">{{ formatNumber(mo.maxCapMonth2) }}</td>
-                <td >
+                <td>
                   <input type="text" class="text-right form-control" [ngModel]="formatNumberChange(mo.initialStock)" (input)="onInputChange($event, mo, 'initialStock')" (ngModelChange)="onModelChange($event, mo, 'initialStock')" />
                 </td>
                 <td>
