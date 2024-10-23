@@ -56,6 +56,7 @@ export class DefaultLayoutComponent {
       { name: 'Item Assy', url: '/master-data/view-item-assy', icon: 'cil-minus' },
       { name: 'Machine Extruding', url: '/master-data/view-machine-extruding', icon: 'cil-minus' },
       { name: 'CT Kapa', url: '/master-data/view-ct-kapa', icon: 'cil-minus' },
+      { name: 'Work Day', url: '/master-data/view-work-day', icon: 'cil-minus' },
     ];
 
     this.transaksiPPC = [

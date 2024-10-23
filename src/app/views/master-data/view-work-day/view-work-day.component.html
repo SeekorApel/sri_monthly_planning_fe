@@ -1,0 +1,134 @@
+<div class="col-lg-12">
+  <div class="card-header">
+    <strong><i class="fa fa-bars"></i>&nbsp;Master Data Work Day</strong>
+  </div>
+  <div class="card">
+    <div class="card-body d-flex">
+      <!-- Calendar Table -->
+      <div class="calendar-table">
+        <div class="navigation d-flex justify-content-between align-items-center mb-3">
+          <button type="button" class="btn btn-primary" (click)="previousMonth()">Previous</button>
+          <div  align="center" class="mx-auto" style="min-width: 250px;max-width: 250px;">
+            <strong>{{ calendar.year }} - {{ monthNames[calendar.month - 1] }}</strong>
+          </div>
+          <button type="button" class="btn btn-primary" (click)="nextMonth()">Next</button>
+        </div>        
+        <table class="table table-bordered table-striped table-sm">
+          <thead align="center">
+            <tr>
+              <th>Su</th>
+              <th>Mo</th>
+              <th>Tu</th>
+              <th>We</th>
+              <th>Th</th>
+              <th>Fr</th>
+              <th>Sa</th>
+            </tr>
+          </thead>
+          <tbody align="center"> 
+            <tr *ngFor="let week of calendar.days; let i = index">
+              <td *ngFor="let day of week" 
+              [ngStyle]="{
+                  'background-color': day.weekend ? 'red' : 'inherit', 
+                  'color': day.weekend ? 'white' : 'inherit'
+              }" 
+              [ngClass]="{ 'selected': day.days === selectedDay.days && day.month=== selectedDay.month  }" 
+              (click)="selectDay(day)">
+            {{ day.days }}
+            <div *ngFor="let event of getEventsForDay(day.days)">{{ event.title }}</div>
+          </td>               
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Detail Section -->
+      <div class="event-details ml-4 ">
+        <div *ngIf="selectedDay.days !== null" >
+        <h3>{{title}}</h3>
+            <h4>Details for {{newEvent.title}} </h4>
+            <tabset #tabset>
+        
+              <!-- Tab 1: Summary -->
+              <tab heading="Summary">
+                <h4>Reason of deactive shift</h4>
+                <ul>
+                  <li>Shift 3: {{ shift1Reasons[2] ? shift1Reasons[2] : '-' }}</li>
+                  <li>Shift 1: {{ shift1Reasons[0] ? shift1Reasons[0] : '-' }}</li>
+                  <li>Shift 2: {{ shift1Reasons[1] ? shift1Reasons[1] : '-' }}</li>
+                </ul>
+              </tab>
+        
+              <!-- Tab 2: Shift -->
+              <tab heading="Shift" >
+                <div class="form-group">
+                  <!-- Shift 3 -->
+                  <div class="form-group ">
+                    <div class="per-hour-wrapper">
+                      <h4 style="min-width: 70px;">Shift 3</h4>
+                      <label class="switch switch-label switch-primary">
+                        <input type="checkbox" class="switch-input" [(ngModel)]="shift1Switches[2]" (ngModelChange)="handleShiftChange(2)">
+                        <span class="switch-slider" data-checked="On" data-unchecked="Off"></span>
+                      </label>
+                      <div *ngIf="isReasonRequired(shift1Switches[2])">
+                        <input type="text" placeholder="Reason" class="form-control"[(ngModel)]="shift1Reasons[2]" required>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Shift 1 -->
+                  <div class="form-group ">
+                    <div class="per-hour-wrapper">
+                      <h4 style="min-width: 70px;">Shift 1</h4>
+                      <label class="switch switch-label switch-primary">
+                        <input type="checkbox" class="switch-input" [(ngModel)]="shift1Switches[0]" (ngModelChange)="handleShiftChange(0)">
+                        <span class="switch-slider" data-checked="On" data-unchecked="Off"></span>
+                      </label>
+                      <div *ngIf="isReasonRequired(shift1Switches[0])" >
+                        <input type="text" placeholder="Reason" class="form-control" [(ngModel)]="shift1Reasons[0]" required>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Shift 2 -->
+                  <div class="form-group" >
+                    <div class="per-hour-wrapper" style="max-width: 200px;">
+                      <h4 style="min-width: 70px;">Shift 2</h4>
+                      <label class="switch switch-label switch-primary">
+                        <input type="checkbox" class="switch-input" [(ngModel)]="shift1Switches[1]" (ngModelChange)="handleShiftChange(1)">
+                        <span class="switch-slider" data-checked="On" data-unchecked="Off"></span>
+                      </label>
+                      <div *ngIf="isReasonRequired(shift1Switches[1])">
+                        <input type="text" placeholder="Reason" class="form-control" [(ngModel)]="shift1Reasons[1]" required>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </tab>
+              <!-- Tab 3: Per Hour -->
+              <tab heading="Per Hour">
+                <div class="form-group per-hour-wrapper">
+                  <div *ngFor="let hour of [].constructor(24); let i = index" class="per-hour-wrapper-item">
+                    <div class="form-group">
+                      <div class="per-hour-wrapper">
+                        <h6>{{ formatHourRange(i) }}</h6> 
+                        <label class="switch switch-label switch-primary" style="min-width: 10px;">
+                          <input type="checkbox" class="switch-input" [(ngModel)]="perHourSwitches[i]" [disabled]="isReasonRequiredPerHourSwitch(i)">
+                          <span class="switch-slider" data-checked="On" data-unchecked="Off"></span>
+                        </label>
+                        <!-- Reason input displayed if required -->
+                        <div *ngIf="isReasonRequiredPerHour(i)" class="reason-input">
+                          <input type="text" placeholder="Reason" class="form-control" [(ngModel)]="perHourReasons[i]" required>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </tab>                          
+            </tabset>
+        </div>
+      </div>             
+    </div>
+  </div>
+</div>
