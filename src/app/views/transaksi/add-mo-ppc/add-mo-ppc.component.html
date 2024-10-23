@@ -302,7 +302,9 @@
                 <td class="text-right">{{ formatNumber(mo.maxCapMonth1) }}</td>
                 <td class="text-right">{{ formatNumber(mo.maxCapMonth2) }}</td>
                 <td align="center">
-                  <button type="button" class="btn btn-md btn-primary">Lock</button>
+                  <button type="button" class="btn btn-md" [ngClass]="mo.lockStatus === 1 ? 'btn-warning' : 'btn-primary'" (click)="toggleLockStatus(i)">
+                    {{ mo.lockStatus === 1 ? 'Unlock' : 'Lock' }}
+                  </button>
                 </td>
               </tr>
             </tbody>

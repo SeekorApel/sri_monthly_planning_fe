@@ -2,7 +2,7 @@ export class DetailMarketingOrder {
   detailId: Number;
   moId: String;
   category: String;
-  partNumber: Number;
+  partNumber: number;
   description: String;
   machineType: String;
   capacity: Number;
@@ -22,5 +22,5 @@ export class DetailMarketingOrder {
   ppd: Number;
   cav: Number;
   status: Number;
-  statusLock: number;
+  lockStatus: number;
 }

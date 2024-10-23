@@ -116,6 +116,15 @@ export class AddMoPpcComponent implements OnInit {
     this.subscribeToValueChanges('max_capa_tt_2');
   }
 
+  toggleLockStatus(index: number) {
+    const currentStatus = this.detailMarketingOrder[index].lockStatus;
+    if (currentStatus === null || currentStatus === 1) {
+      this.detailMarketingOrder[index].lockStatus = 0;
+    } else {
+      this.detailMarketingOrder[index].lockStatus = 1;
+    }
+  }
+
   private subscribeToValueChanges(controlName: string) {
     this.formHeaderMo.get(controlName)?.valueChanges.subscribe((value) => {
       this.formatInputValue(value, controlName);
@@ -257,6 +266,9 @@ export class AddMoPpcComponent implements OnInit {
     this.moService.getRowDetailMarketingOrder(totalHKTT1, totalHKTT2, totalHKTT3, totalHKTL1, totalHKTL2, totalHKTL3, productMerk).subscribe(
       (response: ApiResponse<DetailMarketingOrder[]>) => {
         this.detailMarketingOrder = response.data;
+        this.detailMarketingOrder.forEach((item) => {
+          item.lockStatus = 0;
+        });
       },
       (error) => {
         Swal.fire({
@@ -308,35 +320,35 @@ export class AddMoPpcComponent implements OnInit {
     };
 
     //Debbguger
-    Swal.fire({
-      title: 'Success!',
-      text: 'Data Marketing Order successfully Added.',
-      icon: 'success',
-      confirmButtonText: 'OK',
-    }).then((result) => {
-      if (result.isConfirmed) {
-        console.log('Save data mo PPC', saveMo);
-        this.navigateToViewMo();
-      }
-    });
-
-    // this.moService.saveMarketingOrderPPC(saveMo).subscribe(
-    //   (response) => {
-    //     Swal.fire({
-    //       title: 'Success!',
-    //       text: 'Data Marketing Order successfully Added.',
-    //       icon: 'success',
-    //       confirmButtonText: 'OK',
-    //     }).then((result) => {
-    //       if (result.isConfirmed) {
-    //         this.navigateToViewMo();
-    //       }
-    //     });
-    //   },
-    //   (err) => {
-    //     Swal.fire('Error!', 'Error insert data Marketing Order.', 'error');
+    // Swal.fire({
+    //   title: 'Success!',
+    //   text: 'Data Marketing Order successfully Added.',
+    //   icon: 'success',
+    //   confirmButtonText: 'OK',
+    // }).then((result) => {
+    //   if (result.isConfirmed) {
+    //     console.log('Save data mo PPC', saveMo);
+    //     this.navigateToViewMo();
     //   }
-    // );
+    // });
+
+    this.moService.saveMarketingOrderPPC(saveMo).subscribe(
+      (response) => {
+        Swal.fire({
+          title: 'Success!',
+          text: 'Data Marketing Order successfully Added.',
+          icon: 'success',
+          confirmButtonText: 'OK',
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.navigateToViewMo();
+          }
+        });
+      },
+      (err) => {
+        Swal.fire('Error!', 'Error insert data Marketing Order.', 'error');
+      }
+    );
   }
 
   navigateToViewMo() {

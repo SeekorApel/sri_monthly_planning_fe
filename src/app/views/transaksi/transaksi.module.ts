@@ -18,6 +18,8 @@ import { EditMoPpcComponent } from './edit-mo-ppc/edit-mo-ppc.component';
 import { DetailViewMoPpcComponent } from './detail-view-mo-ppc/detail-view-mo-ppc.component';
 import { DetailViewMoMarketingComponent } from './detail-view-mo-marketing/detail-view-mo-marketing.component';
 import { EditMoMarketingComponent } from './edit-mo-marketing/edit-mo-marketing.component';
+import { ViewDetailRevisiPpcComponent } from './view-detail-revisi-ppc/view-detail-revisi-ppc.component';
+import { ViewDetailRevisiMarketingComponent } from './view-detail-revisi-marketing/view-detail-revisi-marketing.component';
 
 
 
@@ -32,7 +34,9 @@ import { EditMoMarketingComponent } from './edit-mo-marketing/edit-mo-marketing.
     EditMoPpcComponent,
     DetailViewMoPpcComponent,
     DetailViewMoMarketingComponent,
-    EditMoMarketingComponent
+    EditMoMarketingComponent,
+    ViewDetailRevisiPpcComponent,
+    ViewDetailRevisiMarketingComponent
   ],
   imports: [
     CommonModule,
