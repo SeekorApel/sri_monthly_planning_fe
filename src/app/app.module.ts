@@ -57,7 +57,6 @@ import {MatSortModule} from '@angular/material/sort';
 import {MatTableModule} from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 
-import { FullCalendarModule } from '@fullcalendar/angular';
 
 @NgModule({
   imports: [
@@ -85,7 +84,6 @@ import { FullCalendarModule } from '@fullcalendar/angular';
     MatSortModule,
     MatTableModule,
     MatPaginatorModule,
-    FullCalendarModule
   ],
   declarations: [
     AppComponent,

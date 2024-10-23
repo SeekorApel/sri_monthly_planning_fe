@@ -2,7 +2,6 @@ import { Component, OnInit, ViewChild  } from '@angular/core';
 import { CalendarService } from 'src/app/services/master-data/calendar/calendar.service';
 import { Calendar, dayCalendar, Event } from 'src/app/models/Calendar';
 import { TabsetComponent } from 'ngx-bootstrap/tabs';
-import { dA } from '@fullcalendar/core/internal-common';
 
 @Component({
   selector: 'app-view-work-day',

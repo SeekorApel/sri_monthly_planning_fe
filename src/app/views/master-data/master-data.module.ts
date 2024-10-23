@@ -37,7 +37,6 @@ import { ViewWorkDayComponent } from './view-work-day/view-work-day.component';
 import {MatSortModule} from '@angular/material/sort';
 import {MatTableModule} from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
-import { FullCalendarModule } from '@fullcalendar/angular';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 
 @NgModule({
@@ -83,7 +82,6 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
     MatSortModule,
     MatTableModule,
     MatPaginatorModule,
-    FullCalendarModule,
     TabsModule,
   ],
 })
