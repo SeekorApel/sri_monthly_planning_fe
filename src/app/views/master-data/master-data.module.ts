@@ -38,6 +38,7 @@ import {MatSortModule} from '@angular/material/sort';
 import {MatTableModule} from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { FullCalendarModule } from '@fullcalendar/angular';
+import { TabsModule } from 'ngx-bootstrap/tabs';
 
 @NgModule({
   declarations: [
@@ -67,7 +68,7 @@ import { FullCalendarModule } from '@fullcalendar/angular';
     ViewMachineAllowenceComponent,
     ViewItemAssyComponent,
     ViewCuringSizeComponent,
-    ViewWorkDayComponent
+    ViewWorkDayComponent,
   ],
   imports: [
     CommonModule,
@@ -83,7 +84,7 @@ import { FullCalendarModule } from '@fullcalendar/angular';
     MatTableModule,
     MatPaginatorModule,
     FullCalendarModule,
-
+    TabsModule,
   ],
 })
 export class MasterDataModule {}

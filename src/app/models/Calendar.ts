@@ -12,9 +12,11 @@ export class Calendar {
 export class dayCalendar{
   month: number;
   days: number;
-  constructor( days: number, month: number) {
+  weekend: boolean
+  constructor( days: number, month: number, weekend: boolean) {
     this.month = month;
     this.days = days;
+    this.weekend = weekend;
   }
 }
 export interface Event {

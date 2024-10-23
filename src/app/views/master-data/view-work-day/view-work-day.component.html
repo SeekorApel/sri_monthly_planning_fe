@@ -16,24 +16,24 @@
         <table class="table table-bordered table-striped table-sm">
           <thead align="center">
             <tr>
-              <th>M</th>
-              <th>S</th>
-              <th>S</th>
-              <th>R</th>
-              <th>K</th>
-              <th>J</th>
-              <th>S</th>
+              <th>Su</th>
+              <th>Mo</th>
+              <th>Tu</th>
+              <th>We</th>
+              <th>Th</th>
+              <th>Fr</th>
+              <th>Sa</th>
             </tr>
           </thead>
           <tbody align="center"> 
             <tr *ngFor="let week of calendar.days; let i = index">
               <td *ngFor="let day of week" 
               [ngStyle]="{
-                  'background-color': isWeekend() ? 'red' : 'inherit', 
-                  'color': isWeekend() ? 'white' : 'inherit'
+                  'background-color': day.weekend ? 'red' : 'inherit', 
+                  'color': day.weekend ? 'white' : 'inherit'
               }" 
-              [ngClass]="{ 'selected': day.days === selectedDay.days && day.month=== selectedDay.month }" 
-              (click)="day.days !== 0 ? selectDay(day) : null">
+              [ngClass]="{ 'selected': day.days === selectedDay.days && day.month=== selectedDay.month  }" 
+              (click)="selectDay(day)">
             {{ day.days }}
             <div *ngFor="let event of getEventsForDay(day.days)">{{ event.title }}</div>
           </td>               
@@ -43,28 +43,92 @@
       </div>
 
       <!-- Detail Section -->
-      <div class="event-details ml-4">
-        <h3>Event Details</h3>
-        <div *ngIf="selectedDay.days !== null">
-          <h4>Details for {{ selectedDay.days }} - {{ monthNames[selectedDay.month - 1] }}</h4>
-          <div *ngFor="let event of getEventsForDay(selectedDay)">
-            <tabset>
-              <tab heading="Home">
-                1. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+      <div class="event-details ml-4 ">
+        <div *ngIf="selectedDay.days !== null" >
+        <h3>{{title}}</h3>
+            <h4>Details for {{newEvent.title}} </h4>
+            <tabset #tabset>
+        
+              <!-- Tab 1: Summary -->
+              <tab heading="Summary">
+                <h4>Reason of deactive shift</h4>
+                <ul>
+                  <li>Shift 3: {{ shift1Reasons[2] ? shift1Reasons[2] : '-' }}</li>
+                  <li>Shift 1: {{ shift1Reasons[0] ? shift1Reasons[0] : '-' }}</li>
+                  <li>Shift 2: {{ shift1Reasons[1] ? shift1Reasons[1] : '-' }}</li>
+                </ul>
               </tab>
-              <tab heading="Profile">
-                2. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        
+              <!-- Tab 2: Shift -->
+              <tab heading="Shift" >
+                <div class="form-group">
+                  <!-- Shift 3 -->
+                  <div class="form-group ">
+                    <div class="per-hour-wrapper">
+                      <h4 style="min-width: 70px;">Shift 3</h4>
+                      <label class="switch switch-label switch-primary">
+                        <input type="checkbox" class="switch-input" [(ngModel)]="shift1Switches[2]" (ngModelChange)="handleShiftChange(2)">
+                        <span class="switch-slider" data-checked="On" data-unchecked="Off"></span>
+                      </label>
+                      <div *ngIf="isReasonRequired(shift1Switches[2])">
+                        <input type="text" placeholder="Reason" class="form-control"[(ngModel)]="shift1Reasons[2]" required>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Shift 1 -->
+                  <div class="form-group ">
+                    <div class="per-hour-wrapper">
+                      <h4 style="min-width: 70px;">Shift 1</h4>
+                      <label class="switch switch-label switch-primary">
+                        <input type="checkbox" class="switch-input" [(ngModel)]="shift1Switches[0]" (ngModelChange)="handleShiftChange(0)">
+                        <span class="switch-slider" data-checked="On" data-unchecked="Off"></span>
+                      </label>
+                      <div *ngIf="isReasonRequired(shift1Switches[0])" >
+                        <input type="text" placeholder="Reason" class="form-control" [(ngModel)]="shift1Reasons[0]" required>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Shift 2 -->
+                  <div class="form-group" >
+                    <div class="per-hour-wrapper" style="max-width: 200px;">
+                      <h4 style="min-width: 70px;">Shift 2</h4>
+                      <label class="switch switch-label switch-primary">
+                        <input type="checkbox" class="switch-input" [(ngModel)]="shift1Switches[1]" (ngModelChange)="handleShiftChange(1)">
+                        <span class="switch-slider" data-checked="On" data-unchecked="Off"></span>
+                      </label>
+                      <div *ngIf="isReasonRequired(shift1Switches[1])">
+                        <input type="text" placeholder="Reason" class="form-control" [(ngModel)]="shift1Reasons[1]" required>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
               </tab>
-              <tab heading="Messages">
-                3. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-              </tab>
+              <!-- Tab 3: Per Hour -->
+              <tab heading="Per Hour">
+                <div class="form-group per-hour-wrapper">
+                  <div *ngFor="let hour of [].constructor(24); let i = index" class="per-hour-wrapper-item">
+                    <div class="form-group">
+                      <div class="per-hour-wrapper">
+                        <h6>{{ formatHourRange(i) }}</h6> 
+                        <label class="switch switch-label switch-primary" style="min-width: 10px;">
+                          <input type="checkbox" class="switch-input" [(ngModel)]="perHourSwitches[i]" [disabled]="isReasonRequiredPerHourSwitch(i)">
+                          <span class="switch-slider" data-checked="On" data-unchecked="Off"></span>
+                        </label>
+                        <!-- Reason input displayed if required -->
+                        <div *ngIf="isReasonRequiredPerHour(i)" class="reason-input">
+                          <input type="text" placeholder="Reason" class="form-control" [(ngModel)]="perHourReasons[i]" required>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </tab>                          
             </tabset>
-          </div>
         </div>
-        <div *ngIf="!selectedDay">
-          <p>Please select a day to see event details.</p>
-        </div>
-      </div>
+      </div>             
     </div>
   </div>
 </div>

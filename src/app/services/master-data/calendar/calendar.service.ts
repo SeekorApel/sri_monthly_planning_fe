@@ -18,7 +18,11 @@ export class CalendarService {
       const daysToAdd = startingDayOfWeek; // Number of days to add from the previous month
       const startDate = lastDayOfPreviousMonth.getDate() - daysToAdd + 1;
       for (let j = startDate; j <= lastDayOfPreviousMonth.getDate(); j++) {
-        currentWeek.push(new dayCalendar(j, month - 1));
+        if(currentWeek.length === 0 || currentWeek.length === 6){
+          currentWeek.push(new dayCalendar(j, month -1,true));
+        }else{
+          currentWeek.push(new dayCalendar(j, month -1 ,false));
+        }
       }
     }
 
@@ -26,7 +30,12 @@ export class CalendarService {
     let fullweekofmonth = false;
     for (let i = 1; i <= daysInMonth; i++) {
       fullweekofmonth = false;
-      currentWeek.push(new dayCalendar(i, month ));
+
+      if(currentWeek.length === 0 || currentWeek.length === 6){
+        currentWeek.push(new dayCalendar(i, month,true));
+      }else{
+        currentWeek.push(new dayCalendar(i, month,false));
+      }
       if (currentWeek.length === 7 ) {
         fullweekofmonth = true;
         days.push(currentWeek);
@@ -40,7 +49,11 @@ export class CalendarService {
     
     let aftermothend = 1;
     while (currentWeek.length < 7) {
-      currentWeek.push(new dayCalendar(aftermothend, month + 1));
+      if(currentWeek.length === 0 || currentWeek.length === 6){
+        currentWeek.push(new dayCalendar(aftermothend, month + 1,true));
+      }else{
+        currentWeek.push(new dayCalendar(aftermothend, month + 1,false));
+      }
       aftermothend++;
     }
     if (currentWeek.length) {

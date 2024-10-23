@@ -1,6 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild  } from '@angular/core';
 import { CalendarService } from 'src/app/services/master-data/calendar/calendar.service';
 import { Calendar, dayCalendar, Event } from 'src/app/models/Calendar';
+import { TabsetComponent } from 'ngx-bootstrap/tabs';
 import { dA } from '@fullcalendar/core/internal-common';
 
 @Component({
@@ -9,13 +10,51 @@ import { dA } from '@fullcalendar/core/internal-common';
   styleUrls: ['./view-work-day.component.scss'],
 })
 export class ViewWorkDayComponent implements OnInit {
+
+  title = "Normal Work Day"
+  shift1Switches = Array(3).fill(true);
+  shift1Reasons = Array(3).fill(''); 
+  
+  perHourSwitches = Array(24).fill(true);
+  perHourReasons = Array(24).fill(''); 
+
+
+  isReasonRequired(shiftState: boolean): boolean {
+    return !shiftState; 
+  }
+  isReasonRequiredPerHourSwitch(hourIndex: number): boolean {
+    const shiftIndex = Math.floor(hourIndex / 8); 
+    return !this.shift1Switches[shiftIndex];
+  }
+  isReasonRequiredPerHour(hourIndex: number): boolean {
+    const shiftIndex = Math.floor(hourIndex / 8); 
+    const isShiftActive = this.shift1Switches[shiftIndex];
+    const isSwitchOff = !this.perHourSwitches[hourIndex]; 
+  
+    // If the hour index is in range and the shift is active, return true if the switch is off
+    return hourIndex < 24 && isShiftActive && isSwitchOff;
+  }
+  
+  handleShiftChange(shiftIndex: number) {
+    // Calculate the start and end indices for the 8-hour block based on the shift index
+    const startIndex = shiftIndex * 8;
+    const endIndex = startIndex + 8;
+  
+    // Loop over the 8-hour block and update perHourSwitches based on shift1Switches
+    for (let i = startIndex; i < endIndex; i++) {
+      this.perHourSwitches[i] = this.shift1Switches[shiftIndex] ? true : false;
+    }
+  }
+  
+  
   monthNames: string[] = [
     'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus',
     'September', 'Oktober', 'November', 'Desember'
   ];
   calendar: Calendar;
-  selectedDay: dayCalendar = new dayCalendar(null,null);
+  selectedDay: dayCalendar = new dayCalendar(null,null,null);
   events: Event[] = [];
+  @ViewChild('tabset', { static: false }) tabset: TabsetComponent;
 
   constructor(private calendarService: CalendarService) {}
 
@@ -40,7 +79,7 @@ export class ViewWorkDayComponent implements OnInit {
   }  
 
   previousMonth() {
-    this.selectedDay = new dayCalendar(null,null);
+    this.selectedDay = new dayCalendar(null,null,null);
     const { year, month } = this.calendar;
     const newMonth = month === 1 ? 12 : month - 1;
     const newYear = month === 1 ? year - 1 : year;
@@ -48,33 +87,58 @@ export class ViewWorkDayComponent implements OnInit {
   }
 
   nextMonth() {
-    this.selectedDay = new dayCalendar(null,null);
+    this.selectedDay = new dayCalendar(null,null,null);
     const { year, month } = this.calendar;
     const newMonth = month === 12 ? 1 : month + 1;
     const newYear = month === 12 ? year + 1 : year;
     this.calendar = this.calendarService.getCalendar(newYear, newMonth);
   }
-
+  formatHourRange(hourIndex: number): string {
+    const startHour = hourIndex.toString().padStart(2, '0'); // Format hour as 00
+    const endHour = (hourIndex + 1).toString().padStart(2, '0'); // Format next hour as 01
+    return `${startHour}:00 - ${endHour}:00`;
+  }
   newEvent: Event = { title: '', description: '', date: null };
   showModal: boolean = false;
-
   selectDay(day: dayCalendar) {
-    if(day.days >0){
-      this.selectedDay = day;
-      // this.newEvent.title = this.monthNames[day.month];
-      this.newEvent.date = new Date(this.calendar.year, day.month - 1, day.days);
-      this.showModal = true;
+    this.selectedDay = new dayCalendar(null, null, null);
+    if (day.days > 0) {
+        this.selectedDay = day;
+
+        // Create a date for the selected day
+        const eventDate = new Date(this.calendar.year, day.month - 1, day.days);
+        this.newEvent.date = eventDate;
+
+        // Get the day name in English
+        const options: Intl.DateTimeFormatOptions = { weekday: 'long' }; 
+        const dayName = eventDate.toLocaleDateString('en-US', options);
+
+        // Extract day, month, and year
+        const dayValue = eventDate.getDate(); // Get the day of the month (1-31)
+        const monthValue = eventDate.getMonth() + 1; // Get the month (0-11), add 1 for (1-12)
+        const yearValue = eventDate.getFullYear(); // Get the full year (YYYY)
+
+        // Set the title in the desired format
+        this.newEvent.title = `${dayName} - ${dayValue} - ${this.monthNames[monthValue]} - ${yearValue}`;
+        this.showModal = true;
+
+        this.shift1Switches = Array(3).fill(true);
+        this.shift1Reasons = Array(3).fill(''); 
+        this.perHourSwitches = Array(24).fill(true);
+        this.perHourReasons = Array(24).fill(''); 
+    }
+
+    if (day.weekend) {
+        this.title = "OverTime TT and TL";
+    } else {
+        this.title = "Normal Work Day";
     }
   }
 
-  createEvent() {
-    if (this.newEvent.title && this.newEvent.description) {
-      this.events.push(this.newEvent);
-      this.closeModal();
-      this.resetNewEvent();
-    } else {
-      alert('Title and description are required.');
-    }
+
+
+  clear(){
+
   }
 
   closeModal() {
