@@ -22,106 +22,128 @@
 
       <div class="table-responsive">
         <!-- Table -->
-        <table class="table table-bordered table-striped table-sm">
-          <thead  align="center">
-            <tr>
-              <th>No</th>
-              <th>Quadrant Distance ID</th>
-              <th>Quadrant ID 1</th>
-              <th>Quadrant ID 2</th>
-              <th>Distance</th>
-              <th>Status</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr align="center" *ngFor="let qdistance of pageOfItems; let i = index">
-              <td>{{ i + 1 }}</td>
-              <td>{{ qdistance.id_Q_DISTANCE }}</td>
-              <td>{{ qdistance.quadrant_ID_1 }}</td>
-              <td>{{ qdistance.quadrant_ID_2 }}</td>
-              <td>{{ qdistance.distance }}</td>
-              <td [ngClass]="{ 'bg-success': qdistance.status === 1, 'bg-danger': qdistance.status !== 1 }">{{ qdistance.status === 1 ? 'Active' : 'Deactive' }}</td>
-              <td>
-                <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(qdistance.id_Q_DISTANCE)">Update</button>
-                <button type="button" class="btn btn-md ml-2" [ngClass]="{ 'btn-danger': qdistance.status === 1, 'btn-success': qdistance.status !== 1 }" (click)="qdistance.status === 1 ? deleteData(qdistance) : activateData(qdistance)">
-                  {{ qdistance.status === 1 ? 'Delete' : 'Active' }}
-                </button>
-              </td>
-            </tr>
-          </tbody>
+        <table mat-table [dataSource]="dataSource" matSort class="table table-bordered table-striped table-sm">
+          <!-- No Column -->
+          <ng-container matColumnDef="no">
+            <th *matHeaderCellDef style="min-width: 50px" mat-sort-header>No</th>
+            <td *matCellDef="let qdistance; let i = index">{{ i + 1 }}</td>
+          </ng-container>
+
+          <!-- Quadrant Distance ID Column -->
+          <ng-container matColumnDef="id_Q_DISTANCE">
+            <th *matHeaderCellDef style="min-width: 200px" mat-sort-header>Quadrant Distance ID</th>
+            <td *matCellDef="let qdistance">{{ qdistance.id_Q_DISTANCE }}</td>
+          </ng-container>
+
+          <!-- Quadrant ID 1 Column -->
+          <ng-container matColumnDef="quadrant_ID_1">
+            <th *matHeaderCellDef style="min-width: 200px" mat-sort-header>Quadrant ID 1</th>
+            <td *matCellDef="let qdistance">{{ qdistance.quadrant_ID_1 }}</td>
+          </ng-container>
+
+          <!-- Quadrant ID 2 Column -->
+          <ng-container matColumnDef="quadrant_ID_2">
+            <th *matHeaderCellDef style="min-width: 200px" mat-sort-header>Quadrant ID 2</th>
+            <td *matCellDef="let qdistance">{{ qdistance.quadrant_ID_2 }}</td>
+          </ng-container>
+
+          <!-- Distance Column -->
+          <ng-container matColumnDef="distance">
+            <th *matHeaderCellDef style="min-width: 200px" mat-sort-header>Distance</th>
+            <td *matCellDef="let qdistance">{{ qdistance.distance }}</td>
+          </ng-container>
+
+          <!-- Status Column -->
+          <ng-container matColumnDef="status">
+            <th *matHeaderCellDef style="min-width: 100px" mat-sort-header>Status</th>
+            <td *matCellDef="let qdistance" [ngClass]="{ 'bg-success': qdistance.status === 1, 'bg-danger': qdistance.status !== 1 }">
+              {{ qdistance.status === 1 ? 'Active' : 'Deactive' }}
+            </td>
+          </ng-container>
+
+          <!-- Action Column -->
+          <ng-container matColumnDef="action">
+            <th *matHeaderCellDef style="min-width: 100px">Action</th>
+            <td *matCellDef="let qdistance">
+              <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(qdistance.id_Q_DISTANCE)">Update</button>
+              <button type="button" class="btn btn-md ml-3" [ngClass]="{ 'btn-danger': qdistance.status === 1, 'btn-success': qdistance.status !== 1 }" (click)="qdistance.status === 1 ? deleteData(qdistance) : activateData(qdistance)">
+                {{ qdistance.status === 1 ? 'Delete' : 'Active' }}
+              </button>
+            </td>
+          </ng-container>
+
+          <!-- Header and Row Definitions -->
+          <tr align="center" style="height: 20px" mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr align="center" mat-row *matRowDef="let row; columns: displayedColumns"></tr>
         </table>
+
         <!-- Pagination -->
-        <nav>
-          <ul class="pagination">
-            <jw-pagination [items]="qdistances" [pageSize]="pageSize" [maxPages]="totalPages" (changePage)="onChangePage($event)"> </jw-pagination>
-          </ul>
-        </nav>
+        <mat-paginator [pageSize]="pageSize" [pageSize]="pageSize" (page)="onChangePage($event)"> </mat-paginator>
       </div>
-    </div>
-  </div>
-</div>
 
-<!-- Modal edit -->
-<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="addModalLabel">Edit Quadrant Distance</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <!-- Form with Reactive Forms -->
-        <form [formGroup]="editQDistancesForm">
-          <div class="form-group">
-            <label for="quadrantID1">Quadrant 1</label>
-            <input [(ngModel)]="edtQDistancesObject.quadrant_ID_1" type="text" class="form-control" id="quadrantID1" formControlName="quadrantID1" [ngClass]="{ 'is-invalid': editQDistancesForm.get('quadrantID1').invalid && editQDistancesForm.get('quadrantID1').touched }" />
+      <!-- Modal edit -->
+      <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="addModalLabel">Edit Quadrant Distance</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <!-- Form with Reactive Forms -->
+              <form [formGroup]="editQDistancesForm">
+                <div class="form-group">
+                  <label for="quadrantID1">Quadrant 1</label>
+                  <input [(ngModel)]="edtQDistancesObject.quadrant_ID_1" type="text" class="form-control" id="quadrantID1" formControlName="quadrantID1" [ngClass]="{ 'is-invalid': editQDistancesForm.get('quadrantID1').invalid && editQDistancesForm.get('quadrantID1').touched }" />
 
-            <div *ngIf="editQDistancesForm.get('quadrantID1').invalid && editQDistancesForm.get('quadrantID1').touched" class="invalid-feedback">Quadrant 1 value is required.</div>
-            <label for="quadrantID2">Quadrant 2</label>
-            <input [(ngModel)]="edtQDistancesObject.quadrant_ID_2" type="text" class="form-control" id="quadrantID2" formControlName="quadrantID2" [ngClass]="{ 'is-invalid': editQDistancesForm.get('quadrantID2').invalid && editQDistancesForm.get('quadrantID2').touched }" />
+                  <div *ngIf="editQDistancesForm.get('quadrantID1').invalid && editQDistancesForm.get('quadrantID1').touched" class="invalid-feedback">Quadrant 1 value is required.</div>
+                  <label for="quadrantID2">Quadrant 2</label>
+                  <input [(ngModel)]="edtQDistancesObject.quadrant_ID_2" type="text" class="form-control" id="quadrantID2" formControlName="quadrantID2" [ngClass]="{ 'is-invalid': editQDistancesForm.get('quadrantID2').invalid && editQDistancesForm.get('quadrantID2').touched }" />
 
-            <div *ngIf="editQDistancesForm.get('quadrantID2').invalid && editQDistancesForm.get('quadrantID2').touched" class="invalid-feedback">Quadrant 2 value is required.</div>
+                  <div *ngIf="editQDistancesForm.get('quadrantID2').invalid && editQDistancesForm.get('quadrantID2').touched" class="invalid-feedback">Quadrant 2 value is required.</div>
 
-            <label for="distance">Distance</label>
-            <input [(ngModel)]="edtQDistancesObject.distance" type="text" class="form-control" id="distance" formControlName="distance" [ngClass]="{ 'is-invalid': editQDistancesForm.get('distance').invalid && editQDistancesForm.get('distance').touched }" />
+                  <label for="distance">Distance</label>
+                  <input [(ngModel)]="edtQDistancesObject.distance" type="text" class="form-control" id="distance" formControlName="distance" [ngClass]="{ 'is-invalid': editQDistancesForm.get('distance').invalid && editQDistancesForm.get('distance').touched }" />
 
-            <div *ngIf="editQDistancesForm.get('distance').invalid && editQDistancesForm.get('distance').touched" class="invalid-feedback">Distance value is required.</div>
+                  <div *ngIf="editQDistancesForm.get('distance').invalid && editQDistancesForm.get('distance').touched" class="invalid-feedback">Distance value is required.</div>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <!-- Disable Update button if form is invalid -->
+              <button type="button" class="btn btn-primary" [disabled]="editQDistancesForm.invalid" (click)="updateQuadrantDistance()">Update Quadrant Distance</button>
+            </div>
           </div>
-        </form>
+        </div>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <!-- Disable Update button if form is invalid -->
-        <button type="button" class="btn btn-primary" [disabled]="editQDistancesForm.invalid" (click)="updateQuadrantDistance()">Update Quadrant Distance</button>
-      </div>
-    </div>
-  </div>
-</div>
 
-<!-- Modal for Upload Excel -->
-<div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="uploadModalLabel">Upload Excel File</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form id="uploadForm">
-          <!-- Manual File Input -->
-          <div class="form-group mt-3">
-            <input type="file" class="form-control-file" id="manualFileInput" accept=".xls,.xlsx" (change)="onFileChange($event)" />
+      <!-- Modal for Upload Excel -->
+      <div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="uploadModalLabel">Upload Excel File</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form id="uploadForm">
+                <!-- Manual File Input -->
+                <div class="form-group mt-3">
+                  <input type="file" class="form-control-file" id="manualFileInput" accept=".xls,.xlsx" (change)="onFileChange($event)" />
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-md btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-md btn-primary" id="uploadButton" (click)="uploadFileExcel()">Upload</button>
+            </div>
           </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-md btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-md btn-primary" id="uploadButton" (click)="uploadFileExcel()">Upload</button>
+        </div>
       </div>
     </div>
   </div>

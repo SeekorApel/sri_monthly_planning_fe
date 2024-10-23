@@ -7,15 +7,16 @@ import Swal from 'sweetalert2';
 declare var $: any;
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
-
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSort } from '@angular/material/sort';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-view-bdistance',
   templateUrl: './view-bdistance.component.html',
-  styleUrls: ['./view-bdistance.component.scss']
+  styleUrls: ['./view-bdistance.component.scss'],
 })
 export class ViewBDistanceComponent implements OnInit {
-
   //Variable Declaration
   bdistances: BDistance[] = [];
   searchText: string = '';
@@ -29,9 +30,13 @@ export class ViewBDistanceComponent implements OnInit {
   pageOfItems: Array<any>;
   pageSize: number = 5;
   totalPages: number = 5;
+  displayedColumns: string[] = ['no', 'id_B_DISTANCE', 'building_ID_1', 'building_ID_2', 'distance', 'status', 'action'];
+  dataSource: MatTableDataSource<BDistance>;
   isDataEmpty: boolean = true; // Flag untuk mengecek apakah data kosong
+  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  constructor(private bdistanceService: BDistanceService, private fb: FormBuilder) { 
+  constructor(private bdistanceService: BDistanceService, private fb: FormBuilder) {
     this.editBDistanceForm = this.fb.group({
       building1: ['', Validators.required],
       building2: ['', Validators.required],
@@ -48,7 +53,10 @@ export class ViewBDistanceComponent implements OnInit {
       (response: ApiResponse<BDistance[]>) => {
         this.bdistances = response.data;
         this.isDataEmpty = this.bdistances.length === 0; // Update status data kosong
-        this.onChangePage(this.bdistances.slice(0, this.pageSize));
+        this.dataSource = new MatTableDataSource(this.bdistances);
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+        // this.onChangePage(this.bdistances.slice(0, this.pageSize));
       },
       (error) => {
         this.errorMessage = 'Failed to load building distances: ' + error.message;
@@ -62,19 +70,7 @@ export class ViewBDistanceComponent implements OnInit {
   }
 
   onSearchChange(): void {
-    
-    const filteredBDistances = this.bdistances.filter(
-      (bdistance) =>
-        bdistance.id_B_DISTANCE.toString()
-          .toLowerCase()
-          .includes(this.searchText.toLowerCase()) ||
-          bdistance.building_ID_1.toString().includes(this.searchText)||
-          bdistance.building_ID_2.toString().includes(this.searchText)||
-          bdistance.distance.toString().includes(this.searchText)
-    );
-
-    // Tampilkan hasil filter pada halaman pertama
-    this.onChangePage(filteredBDistances.slice(0, this.pageSize));
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
   }
 
   resetSearch(): void {
@@ -83,7 +79,6 @@ export class ViewBDistanceComponent implements OnInit {
   }
 
   updateBuildingDistance(): void {
-    
     this.bdistanceService.updateBuildingDistance(this.edtBDistanceObject).subscribe(
       (response) => {
         // SweetAlert setelah update berhasil
@@ -148,7 +143,6 @@ export class ViewBDistanceComponent implements OnInit {
     });
   }
 
-
   openModalUpload(): void {
     $('#uploadModal').modal('show');
   }
@@ -159,7 +153,6 @@ export class ViewBDistanceComponent implements OnInit {
     link.download = 'Layout_Building_Distance.xlsx';
     link.click();
   }
-
 
   onFileChange(event: Event) {
     const input = event.target as HTMLInputElement;
@@ -183,7 +176,6 @@ export class ViewBDistanceComponent implements OnInit {
       }
     }
   }
-
 
   uploadFileExcel() {
     if (this.file) {
@@ -257,7 +249,7 @@ export class ViewBDistanceComponent implements OnInit {
       },
       error: (err) => {
         console.error('Download error:', err);
-      }
+      },
     });
   }
 }
