@@ -108,22 +108,51 @@ export class AddMoPpcComponent implements OnInit {
 
   getWorkDays(data: any) {
     const months = [data.month0, data.month1, data.month2];
-    months.forEach((month, index) => {
-      const [year, monthValue] = month.split('-');
-      this.fetchWorkDay(monthValue, year, index);
-    });
-  }
+    const [year0, month0] = months[0].split('-');
+    const [year1, month1] = months[1].split('-');
+    const [year2, month2] = months[2].split('-');
 
-  fetchWorkDay(month: string, year: string, index: number) {
-    this.moService.getWorkDay(month, year).subscribe(
+    this.moService.getWorkDay(month0, year0).subscribe(
       (response) => {
-        const workData = response.data[0];
+        let workDataM1 = response.data[0];
         this.formHeaderMo.patchValue({
-          [`nwd_${index}`]: this.formatNumber(workData.wdNormal),
-          [`tl_ot_wd_${index}`]: this.formatNumber(workData.wdOtTl),
-          [`tt_ot_wd_${index}`]: this.formatNumber(workData.wdOtTt),
-          [`total_tlwd_${index}`]: this.formatNumber(workData.totalWdTl),
-          [`total_ttwd_${index}`]: this.formatNumber(workData.totalWdTt),
+          nwd_0: this.formatNumber(workDataM1.wdNormal),
+          tl_ot_wd_0: this.formatNumber(workDataM1.wdOtTl),
+          tt_ot_wd_0: this.formatNumber(workDataM1.wdOtTt),
+          total_tlwd_0: this.formatNumber(workDataM1.totalWdTl),
+          total_ttwd_0: this.formatNumber(workDataM1.totalWdTt),
+        });
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+
+    this.moService.getWorkDay(month1, year1).subscribe(
+      (response) => {
+        let workDataM2 = response.data[0];
+        this.formHeaderMo.patchValue({
+          nwd_1: this.formatNumber(workDataM2.wdNormal),
+          tl_ot_wd_1: this.formatNumber(workDataM2.wdOtTl),
+          tt_ot_wd_1: this.formatNumber(workDataM2.wdOtTt),
+          total_tlwd_1: this.formatNumber(workDataM2.totalWdTl),
+          total_ttwd_1: this.formatNumber(workDataM2.totalWdTt),
+        });
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+
+    this.moService.getWorkDay(month2, year2).subscribe(
+      (response) => {
+        let workDataM3 = response.data[0];
+        this.formHeaderMo.patchValue({
+          nwd_2: this.formatNumber(workDataM3.wdNormal),
+          tl_ot_wd_2: this.formatNumber(workDataM3.wdOtTl),
+          tt_ot_wd_2: this.formatNumber(workDataM3.wdOtTt),
+          total_tlwd_2: this.formatNumber(workDataM3.totalWdTl),
+          total_ttwd_2: this.formatNumber(workDataM3.totalWdTt),
         });
       },
       (error) => {
@@ -134,11 +163,28 @@ export class AddMoPpcComponent implements OnInit {
 
   toggleLockStatus(index: number) {
     const currentStatus = this.detailMarketingOrder[index].lockStatus;
-    if (currentStatus === null || currentStatus === 1) {
-      this.detailMarketingOrder[index].lockStatus = 0;
-    } else {
-      this.detailMarketingOrder[index].lockStatus = 1;
-    }
+    const action = currentStatus === null || currentStatus === 1 ? 'unlock' : 'lock';
+    const newStatus = action === 'lock' ? 1 : 0;
+
+    Swal.fire({
+      title: `Are you sure you want to ${action} this item?`,
+      text: `This will ${action === 'lock' ? 'lock' : 'unlock'} the item.`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: `Yes, ${action} it!`,
+      cancelButtonText: 'Cancel'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.detailMarketingOrder[index].lockStatus = newStatus;
+        Swal.fire(
+          `${action === 'lock' ? 'Locked' : 'Unlocked'}!`,
+          `The item has been ${action === 'lock' ? 'locked' : 'unlocked'}.`,
+          'success'
+        );
+      }
+    });
   }
 
   private subscribeToValueChanges(controlName: string) {
@@ -334,19 +380,6 @@ export class AddMoPpcComponent implements OnInit {
       headerMarketingOrder: this.headerMo,
       detailMarketingOrder: this.detailMarketingOrder,
     };
-
-    //Debbguger
-    // Swal.fire({
-    //   title: 'Success!',
-    //   text: 'Data Marketing Order successfully Added.',
-    //   icon: 'success',
-    //   confirmButtonText: 'OK',
-    // }).then((result) => {
-    //   if (result.isConfirmed) {
-    //     console.log('Save data mo PPC', saveMo);
-    //     this.navigateToViewMo();
-    //   }
-    // });
 
     this.moService.saveMarketingOrderPPC(saveMo).subscribe(
       (response) => {

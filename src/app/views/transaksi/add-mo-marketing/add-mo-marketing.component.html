@@ -21,13 +21,6 @@
             </div>
           </div>
 
-          <div class="form-group row">
-            <label class="col-md-3 col-form-label" for="revision">Revision</label>
-            <div class="col-md-9">
-              <input class="form-control" type="text" formControlName="revision" placeholder="1,2,3..." [readOnly]="isReadOnly" />
-            </div>
-          </div>
-
           <!-- Tabset -->
           <tabset>
             <tab heading="Month 1">
@@ -254,18 +247,18 @@
             </thead>
             <tbody>
               <tr *ngFor="let mo of detailMarketingOrder; let i = index">
-                <td class="text-center" *ngIf="mo.lockStatus !== 1">{{ i + 1 }}</td>
-                <td class="text-center" *ngIf="mo.lockStatus !== 1">{{ mo.category }}</td>
-                <td class="text-center" *ngIf="mo.lockStatus !== 1">{{ mo.partNumber }}</td>
-                <td class="text-center" *ngIf="mo.lockStatus !== 1">{{ mo.description }}</td>
-                <td class="text-center" *ngIf="mo.lockStatus !== 1">{{ mo.machineType }}</td>
-                <td class="text-right" *ngIf="mo.lockStatus !== 1">{{ formatNumber(mo.capacity) }}</td>
-                <td class="text-right" *ngIf="mo.lockStatus !== 1">{{ formatNumber(mo.qtyPerMould) }}</td>
-                <td class="text-right" *ngIf="mo.lockStatus !== 1">{{ formatNumber(mo.qtyPerRak) }}</td>
-                <td class="text-right" *ngIf="mo.lockStatus !== 1">{{ formatNumber(mo.minOrder) }}</td>
-                <td class="text-right" *ngIf="mo.lockStatus !== 1">{{ formatNumber(mo.maxCapMonth0) }}</td>
-                <td class="text-right" *ngIf="mo.lockStatus !== 1">{{ formatNumber(mo.maxCapMonth1) }}</td>
-                <td class="text-right" *ngIf="mo.lockStatus !== 1">{{ formatNumber(mo.maxCapMonth2) }}</td>
+                <td *ngIf="mo.lockStatus !== 1" class="text-center">{{ i + 1 }}</td>
+                <td *ngIf="mo.lockStatus !== 1" class="text-center">{{ mo.category }}</td>
+                <td *ngIf="mo.lockStatus !== 1" class="text-center">{{ mo.partNumber }}</td>
+                <td *ngIf="mo.lockStatus !== 1" class="text-center">{{ mo.description }}</td>
+                <td *ngIf="mo.lockStatus !== 1" class="text-center">{{ mo.machineType }}</td>
+                <td *ngIf="mo.lockStatus !== 1" class="text-right">{{ formatNumber(mo.capacity) }}</td>
+                <td *ngIf="mo.lockStatus !== 1" class="text-right">{{ formatNumber(mo.qtyPerMould) }}</td>
+                <td *ngIf="mo.lockStatus !== 1" class="text-right">{{ formatNumber(mo.qtyPerRak) }}</td>
+                <td *ngIf="mo.lockStatus !== 1" class="text-right">{{ formatNumber(mo.minOrder) }}</td>
+                <td *ngIf="mo.lockStatus !== 1" class="text-right">{{ formatNumber(mo.maxCapMonth0) }}</td>
+                <td *ngIf="mo.lockStatus !== 1" class="text-right">{{ formatNumber(mo.maxCapMonth1) }}</td>
+                <td *ngIf="mo.lockStatus !== 1" class="text-right">{{ formatNumber(mo.maxCapMonth2) }}</td>
                 <td *ngIf="mo.lockStatus !== 1">
                   <input type="text" class="text-right form-control" [ngModel]="formatNumberChange(mo.initialStock)" (input)="onInputChange($event, mo, 'initialStock')" (ngModelChange)="onModelChange($event, mo, 'initialStock')" />
                 </td>

@@ -107,7 +107,7 @@ export class DetailViewMoPpcComponent implements OnInit {
   }
 
   getAllData(idMo: String) {
-    this.moService.getAllMoPPCById(idMo).subscribe(
+    this.moService.getAllMoById(idMo).subscribe(
       (response: ApiResponse<any>) => {
         this.allData = response.data;
         this.fillAllData(this.allData);

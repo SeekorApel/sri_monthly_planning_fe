@@ -109,6 +109,32 @@ export class EditMoPpcComponent implements OnInit {
     this.getLastIdMo();
   }
 
+  toggleLockStatus(index: number) {
+    const currentStatus = this.detailMarketingOrder[index].lockStatus;
+    const action = currentStatus === null || currentStatus === 1 ? 'unlock' : 'lock';
+    const newStatus = action === 'lock' ? 1 : 0;
+
+    Swal.fire({
+      title: `Are you sure you want to ${action} this item?`,
+      text: `This will ${action === 'lock' ? 'lock' : 'unlock'} the item.`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: `Yes, ${action} it!`,
+      cancelButtonText: 'Cancel'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.detailMarketingOrder[index].lockStatus = newStatus;
+        Swal.fire(
+          `${action === 'lock' ? 'Locked' : 'Unlocked'}!`,
+          `The item has been ${action === 'lock' ? 'locked' : 'unlocked'}.`,
+          'success'
+        );
+      }
+    });
+  }
+
   onInputChange(event: Event, controlName: string) {
     const input = event.target as HTMLInputElement;
     const value = input.value;
@@ -126,7 +152,7 @@ export class EditMoPpcComponent implements OnInit {
   }
 
   getAllData(idMo: String) {
-    this.moService.getAllMoPPCById(idMo).subscribe(
+    this.moService.getAllMoById(idMo).subscribe(
       (response: ApiResponse<any>) => {
         this.allData = response.data;
         this.fillAllData(this.allData);

@@ -47,7 +47,7 @@
                   <button *ngIf="mo.statusFilled === 1" type="button" class="btn btn-md btn-danger ml-2" disabled>Disable</button>
                   <button *ngIf="mo.statusFilled === 2" type="button" class="btn btn-md btn-danger ml-2" (click)="disableMo(mo)">Disable</button>
                   <button *ngIf="mo.statusFilled === 3" type="button" class="btn btn-md btn-warning ml-2" (click)="enableMo(mo)">Enable</button>
-                  <button type="button" class="btn btn-md btn-success ml-2" (click)="navigateToEdit(mo.moId)">Print</button>
+                  <button type="button" class="btn btn-md btn-success ml-2" (click)="exportExcelMo(mo.moId)">Print</button>
                 </td>
               </tr>
             </tbody>

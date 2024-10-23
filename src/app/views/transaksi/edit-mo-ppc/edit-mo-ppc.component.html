@@ -474,6 +474,7 @@
                 <th rowspan="2" style="min-width: 150px" class="align-middle">Initial Stock</th>
                 <th colspan="3" style="min-width: 400px" class="align-middle">Sales Forecast</th>
                 <th colspan="3" style="min-width: 400px" class="align-middle">Marketing Order</th>
+                <th rowspan="2" style="min-width: 120px" class="align-middle">Status</th>
               </tr>
 
               <!-- Child Header -->
@@ -510,27 +511,11 @@
                 <td class="text-right">{{ formatNumber(mo.moMonth0) }}</td>
                 <td class="text-right">{{ formatNumber(mo.moMonth1) }}</td>
                 <td class="text-right">{{ formatNumber(mo.moMonth2) }}</td>
-                <!-- <td>
-                  <input type="number" class="form-control" [(ngModel)]="mo.initialStock" />
+                <td align="center">
+                  <button type="button" class="btn btn-md" [ngClass]="mo.lockStatus === 1 ? 'btn-warning' : 'btn-danger'" (click)="toggleLockStatus(i)">
+                    {{ mo.lockStatus === 1 ? 'Unlock' : 'Lock' }}
+                  </button>
                 </td>
-                <td>
-                  <input type="number" class="form-control" [(ngModel)]="mo.sfMonth0" />
-                </td>
-                <td>
-                  <input type="number" class="form-control" [(ngModel)]="mo.sfMonth1" />
-                </td>
-                <td>
-                  <input type="number" class="form-control" [(ngModel)]="mo.sfMonth2" />
-                </td>
-                <td>
-                  <input type="number" class="form-control" [(ngModel)]="mo.moMonth0" />
-                </td>
-                <td>
-                  <input type="number" class="form-control" [(ngModel)]="mo.moMonth1" />
-                </td>
-                <td>
-                  <input type="number" class="form-control" [(ngModel)]="mo.moMonth2" />
-                </td> -->
               </tr>
             </tbody>
           </table>

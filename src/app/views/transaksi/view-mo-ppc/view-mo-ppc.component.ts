@@ -33,6 +33,27 @@ export class ViewMoPpcComponent implements OnInit {
     this.getAllMarketingOrder();
   }
 
+  exportExcelMo(id: string): void {
+    this.moService.downloadExcelMo(id).subscribe(
+      (response: Blob) => {
+        const url = window.URL.createObjectURL(response);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `Marketing_Order_${id}.xlsx`; // Nama file yang diinginkan
+        a.click();
+        window.URL.revokeObjectURL(url);
+      },
+      error => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Gagal mendownload file. Silakan coba lagi!',
+        });
+        console.error('Error downloading file:', error);
+      }
+    );
+  }
+
   getAllMarketingOrder(): void {
     this.moService.getAllMarketingOrder().subscribe(
       (response: ApiResponse<MarketingOrder[]>) => {

@@ -106,7 +106,7 @@ export class DetailViewMoMarketingComponent implements OnInit {
   }
 
   getAllData(idMo: String) {
-    this.moService.getAllMoMarketingById(idMo).subscribe(
+    this.moService.getAllMoById(idMo).subscribe(
       (response: ApiResponse<any>) => {
         this.allData = response.data;
         console.log('Ini detail mo marketing ', this.allData);

@@ -13,7 +13,7 @@ import { catchError, map } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class MarketingOrderService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getLastIdMo(): Observable<ApiResponse<string>> {
     return this.http.get<ApiResponse<string>>(environment.apiUrlWebAdmin + '/getLastIdMo');
@@ -23,13 +23,9 @@ export class MarketingOrderService {
     return this.http.get<ApiResponse<[]>>(environment.apiUrlWebAdmin + '/getAllMarketingOrderLatest');
   }
 
-  //using detail-view-mo-ppc
-  getAllMoPPCById(idMo: String): Observable<ApiResponse<any>> {
-    return this.http.get<ApiResponse<any>>(environment.apiUrlWebAdmin + '/getAllMoPPCById/' + idMo);
-  }
-
-  getAllMoMarketingById(idMo: String): Observable<ApiResponse<any>> {
-    return this.http.get<ApiResponse<any>>(environment.apiUrlWebAdmin + '/getAllMoMarketingById/' + idMo);
+  //get (MO, Header, Detail)
+  getAllMoById(idMo: String): Observable<ApiResponse<any>> {
+    return this.http.get<ApiResponse<any>>(environment.apiUrlWebAdmin + '/getAllMoById/' + idMo);
   }
 
   saveMarketingOrderPPC(mo: any): Observable<ApiResponse<any>> {
@@ -92,7 +88,16 @@ export class MarketingOrderService {
     return this.http.get<ApiResponse<any>>(environment.apiUrlWebAdmin + '/getMonthlyWorkData', { params });
   }
 
-  //Not used
+  downloadExcelMo(idMo: string) {
+    return this.http.get(environment.apiUrlWebAdmin + '/exportMOExcel/' + idMo, { responseType: 'blob' });
+  }
+
+  getAllDetailRevision(month0: string, month1: string, month2: string, type: string): Observable<ApiResponse<MarketingOrder[]>> {
+    let params = new HttpParams().set('month0', month0).set('month1', month1).set('month2', month2).set('type', type);
+    return this.http.get<ApiResponse<[]>>(environment.apiUrlWebAdmin + '/getAllDetailRevisionMo', { params });
+  }
+
+  //Not used Alll
   saveMarketingOrder(mo: MarketingOrder): Observable<ApiResponse<MarketingOrder>> {
     return this.http.post<ApiResponse<MarketingOrder>>(environment.apiUrlWebAdmin + '/saveMarketingOrder', mo).pipe(
       map((response) => {

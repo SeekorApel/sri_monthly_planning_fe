@@ -128,8 +128,9 @@ export class AddMoMarketingComponent implements OnInit {
   }
 
   getAllData(idMo: String) {
-    this.moService.getAllMoPPCById(idMo).subscribe(
+    this.moService.getAllMoById(idMo).subscribe(
       (response: ApiResponse<any>) => {
+        console.log(response.data.dataDetailMo)
         this.allData = response.data;
         this.fillAllData(this.allData);
       },
@@ -151,7 +152,6 @@ export class AddMoMarketingComponent implements OnInit {
     this.formHeaderMo.patchValue({
       date: new Date(data.dateValid).toISOString().split('T')[0],
       type: data.type,
-      revision: data.revision,
 
       // Header Month 1
       month_0: this.formatDateToString(this.headerMarketingOrder[0].month),
@@ -197,7 +197,6 @@ export class AddMoMarketingComponent implements OnInit {
       const integerPart = parts[0];
       const decimalPart = parts[1] ? ',' + parts[1] : '';
       const formattedInteger = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-
       return formattedInteger + decimalPart;
     }
     return '';
@@ -300,6 +299,9 @@ export class AddMoMarketingComponent implements OnInit {
     worksheet.getCell('Q14').value = this.headerMarketingOrder[1].totalWdTt; // "Month 1"
     worksheet.getCell('R14').value = this.headerMarketingOrder[2].totalWdTt; // "Month 2"
     worksheet.getCell('S14').value = this.headerMarketingOrder[0].totalWdTt; // "Month 3"
+    worksheet.getCell('Q14').numFmt = '#,##0';
+    worksheet.getCell('R14').numFmt = '#,##0';
+    worksheet.getCell('S14').numFmt = '#,##0';
     ['Q14', 'R14', 'S14'].forEach((cell) => {
       worksheet.getCell(cell).alignment = { vertical: 'middle', horizontal: 'center' };
     });
@@ -311,6 +313,9 @@ export class AddMoMarketingComponent implements OnInit {
     worksheet.getCell('Q15').value = this.headerMarketingOrder[1].maxCapTube; // "Month 1"
     worksheet.getCell('R15').value = this.headerMarketingOrder[2].maxCapTube; // "Month 2"
     worksheet.getCell('S15').value = this.headerMarketingOrder[0].maxCapTube; // "Month 3"
+    worksheet.getCell('Q15').numFmt = '#,##0';
+    worksheet.getCell('R15').numFmt = '#,##0';
+    worksheet.getCell('S15').numFmt = '#,##0';
     ['Q15', 'R15', 'S15'].forEach((cell) => {
       worksheet.getCell(cell).alignment = { vertical: 'middle', horizontal: 'center' };
     });
@@ -322,6 +327,9 @@ export class AddMoMarketingComponent implements OnInit {
     worksheet.getCell('Q16').value = this.headerMarketingOrder[1].maxCapTl; // "Month 1"
     worksheet.getCell('R16').value = this.headerMarketingOrder[2].maxCapTl; // "Month 2"
     worksheet.getCell('S16').value = this.headerMarketingOrder[0].maxCapTl; // "Month 3"
+    worksheet.getCell('Q16').numFmt = '#,##0';
+    worksheet.getCell('R16').numFmt = '#,##0';
+    worksheet.getCell('S16').numFmt = '#,##0';
     ['Q16', 'R16', 'S16'].forEach((cell) => {
       worksheet.getCell(cell).alignment = { vertical: 'middle', horizontal: 'center' };
     });
@@ -333,6 +341,9 @@ export class AddMoMarketingComponent implements OnInit {
     worksheet.getCell('Q17').value = this.headerMarketingOrder[1].maxCapTt; // "Month 1"
     worksheet.getCell('R17').value = this.headerMarketingOrder[2].maxCapTt; // "Month 2"
     worksheet.getCell('S17').value = this.headerMarketingOrder[0].maxCapTt; // "Month 3"
+    worksheet.getCell('Q17').numFmt = '#,##0';
+    worksheet.getCell('R17').numFmt = '#,##0';
+    worksheet.getCell('S17').numFmt = '#,##0';
     ['Q17', 'R17', 'S17'].forEach((cell) => {
       worksheet.getCell(cell).alignment = { vertical: 'middle', horizontal: 'center' };
     });
@@ -550,78 +561,73 @@ export class AddMoMarketingComponent implements OnInit {
       };
     });
 
-    let rowIndex = 21; // Starting row for data
+    let rowIndex = 21;
     this.detailMarketingOrder.forEach((item) => {
-      worksheet.getCell(`B${rowIndex}`).value = item.category;
-      worksheet.getCell(`C${rowIndex}`).value = item.partNumber;
-      worksheet.getCell(`C${rowIndex}`).numFmt = '0';
+      if (item.lockStatus !== 1) {
+        worksheet.getCell(`B${rowIndex}`).value = item.category;
+        worksheet.getCell(`C${rowIndex}`).value = item.partNumber;
+        worksheet.getCell(`C${rowIndex}`).numFmt = '0';
 
-      worksheet.getCell(`D${rowIndex}`).value = item.description;
-      worksheet.getCell(`E${rowIndex}`).value = item.machineType;
+        worksheet.getCell(`D${rowIndex}`).value = item.description;
+        worksheet.getCell(`E${rowIndex}`).value = item.machineType;
 
-      worksheet.getCell(`F${rowIndex}`).value = item.capacity;
-      worksheet.getCell(`F${rowIndex}`).numFmt = '#,##0';
+        worksheet.getCell(`F${rowIndex}`).value = item.capacity;
+        worksheet.getCell(`F${rowIndex}`).numFmt = '#,##0';
 
-      worksheet.getCell(`G${rowIndex}`).value = item.qtyPerMould;
-      worksheet.getCell(`G${rowIndex}`).numFmt = '#,##0';
+        worksheet.getCell(`G${rowIndex}`).value = item.qtyPerMould;
+        worksheet.getCell(`G${rowIndex}`).numFmt = '#,##0';
 
-      worksheet.getCell(`H${rowIndex}`).value = item.qtyPerRak;
-      worksheet.getCell(`H${rowIndex}`).numFmt = '#,##0';
+        worksheet.getCell(`H${rowIndex}`).value = item.qtyPerRak;
+        worksheet.getCell(`H${rowIndex}`).numFmt = '#,##0';
 
-      worksheet.getCell(`I${rowIndex}`).value = item.minOrder;
-      worksheet.getCell(`I${rowIndex}`).numFmt = '#,##0';
+        worksheet.getCell(`I${rowIndex}`).value = item.minOrder;
+        worksheet.getCell(`I${rowIndex}`).numFmt = '#,##0';
 
-      worksheet.getCell(`J${rowIndex}`).value = item.maxCapMonth0;
-      worksheet.getCell(`J${rowIndex}`).numFmt = '#,##0';
+        worksheet.getCell(`J${rowIndex}`).value = item.maxCapMonth0;
+        worksheet.getCell(`J${rowIndex}`).numFmt = '#,##0';
 
-      worksheet.getCell(`K${rowIndex}`).value = item.maxCapMonth1;
-      worksheet.getCell(`K${rowIndex}`).numFmt = '#,##0';
+        worksheet.getCell(`K${rowIndex}`).value = item.maxCapMonth1;
+        worksheet.getCell(`K${rowIndex}`).numFmt = '#,##0';
 
-      worksheet.getCell(`L${rowIndex}`).value = item.maxCapMonth2;
-      worksheet.getCell(`L${rowIndex}`).numFmt = '#,##0';
+        worksheet.getCell(`L${rowIndex}`).value = item.maxCapMonth2;
+        worksheet.getCell(`L${rowIndex}`).numFmt = '#,##0';
 
-      worksheet.getCell(`M${rowIndex}`).value = item.initialStock;
-      worksheet.getCell(`M${rowIndex}`).numFmt = '#,##0';
+        worksheet.getCell(`M${rowIndex}`).value = item.initialStock;
+        worksheet.getCell(`M${rowIndex}`).numFmt = '#,##0';
 
-      worksheet.getCell(`N${rowIndex}`).value = item.sfMonth0;
-      worksheet.getCell(`N${rowIndex}`).numFmt = '#,##0';
+        worksheet.getCell(`N${rowIndex}`).value = item.sfMonth0;
+        worksheet.getCell(`N${rowIndex}`).numFmt = '#,##0';
 
-      worksheet.getCell(`O${rowIndex}`).value = item.sfMonth1;
-      worksheet.getCell(`O${rowIndex}`).numFmt = '#,##0';
+        worksheet.getCell(`O${rowIndex}`).value = item.sfMonth1;
+        worksheet.getCell(`O${rowIndex}`).numFmt = '#,##0';
 
-      worksheet.getCell(`P${rowIndex}`).value = item.sfMonth2;
-      worksheet.getCell(`P${rowIndex}`).numFmt = '#,##0';
+        worksheet.getCell(`P${rowIndex}`).value = item.sfMonth2;
+        worksheet.getCell(`P${rowIndex}`).numFmt = '#,##0';
 
-      worksheet.getCell(`Q${rowIndex}`).value = item.moMonth0;
-      worksheet.getCell(`Q${rowIndex}`).numFmt = '#,##0';
+        worksheet.getCell(`Q${rowIndex}`).value = item.moMonth0;
+        worksheet.getCell(`Q${rowIndex}`).numFmt = '#,##0';
 
-      worksheet.getCell(`R${rowIndex}`).value = item.moMonth1;
-      worksheet.getCell(`R${rowIndex}`).numFmt = '#,##0';
+        worksheet.getCell(`R${rowIndex}`).value = item.moMonth1;
+        worksheet.getCell(`R${rowIndex}`).numFmt = '#,##0';
 
-      worksheet.getCell(`S${rowIndex}`).value = item.moMonth2;
-      worksheet.getCell(`S${rowIndex}`).numFmt = '#,##0';
+        worksheet.getCell(`S${rowIndex}`).value = item.moMonth2;
+        worksheet.getCell(`S${rowIndex}`).numFmt = '#,##0';
 
-      ['B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S'].forEach((col) => {
-        const cell = worksheet.getCell(`${col}${rowIndex}`);
-        cell.alignment = { vertical: 'middle', horizontal: 'center' };
-        cell.border = {
-          top: { style: 'thin' },
-          left: { style: 'thin' },
-          bottom: { style: 'thin' },
-          right: { style: 'thin' },
-        };
-      });
+        ['B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S'].forEach((col) => {
+          const cell = worksheet.getCell(`${col}${rowIndex}`);
+          cell.alignment = { vertical: 'middle', horizontal: 'center' };
+          cell.border = {
+            top: { style: 'thin' },
+            left: { style: 'thin' },
+            bottom: { style: 'thin' },
+            right: { style: 'thin' },
+          };
+        });
 
-      worksheet.getCell(`M${rowIndex}`).numFmt = '#,##0';
-      worksheet.getCell(`N${rowIndex}`).numFmt = '#,##0';
-      worksheet.getCell(`O${rowIndex}`).numFmt = '#,##0';
-      worksheet.getCell(`P${rowIndex}`).numFmt = '#,##0';
-      worksheet.getCell(`Q${rowIndex}`).numFmt = '#,##0';
-      worksheet.getCell(`R${rowIndex}`).numFmt = '#,##0';
-      worksheet.getCell(`S${rowIndex}`).numFmt = '#,##0';
-
-      rowIndex++;
+        rowIndex++;
+      }
     });
+
 
     workbook.xlsx.writeBuffer().then((buffer) => {
       const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
@@ -747,23 +753,41 @@ export class AddMoMarketingComponent implements OnInit {
   }
 
   saveMo(): void {
+
+    this.detailMarketingOrder.forEach((mo) => {
+      if (mo.lockStatus === 1) {
+        mo.initialStock = 0;
+        mo.sfMonth0 = 0;
+        mo.sfMonth1 = 0;
+        mo.sfMonth2 = 0;
+        mo.moMonth0 = 0;
+        mo.moMonth1 = 0;
+        mo.moMonth2 = 0;
+      }
+    });
+
     const hasInvalidInput = this.detailMarketingOrder.some((mo) => {
-      // Mengubah inputan string menjadi number dengan menghapus karakter '.'
-      const sfMonth0 = parseFloat(mo.sfMonth0.toString().replace(/\./g, '')) || 0; // fallback ke 0 jika NaN
+      const sfMonth0 = parseFloat(mo.sfMonth0.toString().replace(/\./g, '')) || 0;
       const sfMonth1 = parseFloat(mo.sfMonth1.toString().replace(/\./g, '')) || 0;
       const sfMonth2 = parseFloat(mo.sfMonth2.toString().replace(/\./g, '')) || 0;
       const moMonth0 = parseFloat(mo.moMonth0.toString().replace(/\./g, '')) || 0;
       const moMonth1 = parseFloat(mo.moMonth1.toString().replace(/\./g, '')) || 0;
       const moMonth2 = parseFloat(mo.moMonth2.toString().replace(/\./g, '')) || 0;
 
-      // Pastikan minOrder dan maxCapMonthX adalah number
       const minOrder = Number(mo.minOrder);
       const maxCapMonth0 = Number(mo.maxCapMonth0);
       const maxCapMonth1 = Number(mo.maxCapMonth1);
       const maxCapMonth2 = Number(mo.maxCapMonth2);
 
-      return sfMonth0 < minOrder || sfMonth0 > maxCapMonth0 || sfMonth1 < minOrder || sfMonth1 > maxCapMonth1 || sfMonth2 < minOrder || sfMonth2 > maxCapMonth2 || moMonth0 < minOrder || moMonth0 > maxCapMonth0 || moMonth1 < minOrder || moMonth1 > maxCapMonth1 || moMonth2 < minOrder || moMonth2 > maxCapMonth2;
+      // Jika nilainya 0, maka dianggap valid, sehingga tidak masuk kategori input yang invalid
+      return (sfMonth0 !== 0 && (sfMonth0 < minOrder || sfMonth0 > maxCapMonth0)) ||
+        (sfMonth1 !== 0 && (sfMonth1 < minOrder || sfMonth1 > maxCapMonth1)) ||
+        (sfMonth2 !== 0 && (sfMonth2 < minOrder || sfMonth2 > maxCapMonth2)) ||
+        (moMonth0 !== 0 && (moMonth0 < minOrder || moMonth0 > maxCapMonth0)) ||
+        (moMonth1 !== 0 && (moMonth1 < minOrder || moMonth1 > maxCapMonth1)) ||
+        (moMonth2 !== 0 && (moMonth2 < minOrder || moMonth2 > maxCapMonth2));
     });
+
 
     // Jika terdapat input yang tidak valid, tampilkan SweetAlert dan hentikan fungsi
     if (hasInvalidInput) {
@@ -777,7 +801,6 @@ export class AddMoMarketingComponent implements OnInit {
     }
 
     this.detailMarketingOrder.forEach((mo) => {
-      // Mengubah setiap properti menjadi number dengan menghapus karakter '.' dan menangani nilai null
       mo.initialStock = mo.initialStock !== null ? parseFloat(mo.initialStock.toString().replace(/\./g, '')) || 0 : 0;
       mo.sfMonth0 = mo.sfMonth0 !== null ? parseFloat(mo.sfMonth0.toString().replace(/\./g, '')) || 0 : 0;
       mo.sfMonth1 = mo.sfMonth1 !== null ? parseFloat(mo.sfMonth1.toString().replace(/\./g, '')) || 0 : 0;

@@ -488,37 +488,37 @@
             </thead>
             <tbody>
               <tr *ngFor="let mo of detailMarketingOrder; let i = index">
-                <td class="text-center">{{ i + 1 }}</td>
-                <td class="text-center">{{ mo.category }}</td>
-                <td class="text-center">{{ mo.partNumber }}</td>
-                <td class="text-center">{{ mo.description }}</td>
-                <td class="text-center">{{ mo.machineType }}</td>
-                <td class="text-right">{{ formatNumber(mo.capacity) }}</td>
-                <td class="text-right">{{ formatNumber(mo.qtyPerMould) }}</td>
-                <td class="text-right">{{ formatNumber(mo.qtyPerRak) }}</td>
-                <td class="text-right">{{ formatNumber(mo.minOrder) }}</td>
-                <td class="text-right">{{ formatNumber(mo.maxCapMonth0) }}</td>
-                <td class="text-right">{{ formatNumber(mo.maxCapMonth1) }}</td>
-                <td class="text-right">{{ formatNumber(mo.maxCapMonth2) }}</td>
-                <td>
+                <td *ngIf="mo.lockStatus !== 1" class="text-center">{{ i + 1 }}</td>
+                <td *ngIf="mo.lockStatus !== 1" class="text-center">{{ mo.category }}</td>
+                <td *ngIf="mo.lockStatus !== 1" class="text-center">{{ mo.partNumber }}</td>
+                <td *ngIf="mo.lockStatus !== 1" class="text-center">{{ mo.description }}</td>
+                <td *ngIf="mo.lockStatus !== 1" class="text-center">{{ mo.machineType }}</td>
+                <td *ngIf="mo.lockStatus !== 1" class="text-right">{{ formatNumber(mo.capacity) }}</td>
+                <td *ngIf="mo.lockStatus !== 1" class="text-right">{{ formatNumber(mo.qtyPerMould) }}</td>
+                <td *ngIf="mo.lockStatus !== 1" class="text-right">{{ formatNumber(mo.qtyPerRak) }}</td>
+                <td *ngIf="mo.lockStatus !== 1" class="text-right">{{ formatNumber(mo.minOrder) }}</td>
+                <td *ngIf="mo.lockStatus !== 1" class="text-right">{{ formatNumber(mo.maxCapMonth0) }}</td>
+                <td *ngIf="mo.lockStatus !== 1" class="text-right">{{ formatNumber(mo.maxCapMonth1) }}</td>
+                <td *ngIf="mo.lockStatus !== 1" class="text-right">{{ formatNumber(mo.maxCapMonth2) }}</td>
+                <td *ngIf="mo.lockStatus !== 1">
                   <input type="text" class="text-right form-control" [ngModel]="formatNumberChange(mo.initialStock)" (input)="onInputChange($event, mo, 'initialStock')" (ngModelChange)="onModelChange($event, mo, 'initialStock')" />
                 </td>
-                <td>
+                <td *ngIf="mo.lockStatus !== 1">
                   <input type="text" class="text-right form-control" [ngClass]="{ 'is-invalid': isInvalidValue(mo.sfMonth0, mo.minOrder, mo.maxCapMonth0) }" [ngModel]="formatNumberChange(mo.sfMonth0)" (input)="onInputChange($event, mo, 'sfMonth0')" (ngModelChange)="onModelChange($event, mo, 'sfMonth0')" />
                 </td>
-                <td>
+                <td *ngIf="mo.lockStatus !== 1">
                   <input type="text" class="text-right form-control" [ngClass]="{ 'is-invalid': isInvalidValue(mo.sfMonth1, mo.minOrder, mo.maxCapMonth1) }" [ngModel]="formatNumberChange(mo.sfMonth1)" (input)="onInputChange($event, mo, 'sfMonth1')" />
                 </td>
-                <td>
+                <td *ngIf="mo.lockStatus !== 1">
                   <input type="text" class="text-right form-control" [ngClass]="{ 'is-invalid': isInvalidValue(mo.sfMonth2, mo.minOrder, mo.maxCapMonth2) }" [ngModel]="formatNumberChange(mo.sfMonth2)" (input)="onInputChange($event, mo, 'sfMonth2')" />
                 </td>
-                <td>
+                <td *ngIf="mo.lockStatus !== 1">
                   <input type="text" class="text-right form-control" [ngClass]="{ 'is-invalid': isInvalidValue(mo.moMonth0, mo.minOrder, mo.maxCapMonth0) }" [ngModel]="formatNumberChange(mo.moMonth0)" (input)="onInputChange($event, mo, 'moMonth0')" />
                 </td>
-                <td>
+                <td *ngIf="mo.lockStatus !== 1">
                   <input type="text" class="text-right form-control" [ngClass]="{ 'is-invalid': isInvalidValue(mo.moMonth1, mo.minOrder, mo.maxCapMonth1) }" [ngModel]="formatNumberChange(mo.moMonth1)" (input)="onInputChange($event, mo, 'moMonth1')" />
                 </td>
-                <td>
+                <td *ngIf="mo.lockStatus !== 1">
                   <input type="text" class="text-right form-control" [ngClass]="{ 'is-invalid': isInvalidValue(mo.moMonth2, mo.minOrder, mo.maxCapMonth2) }" [ngModel]="formatNumberChange(mo.moMonth2)" (input)="onInputChange($event, mo, 'moMonth2')" />
                 </td>
               </tr>
