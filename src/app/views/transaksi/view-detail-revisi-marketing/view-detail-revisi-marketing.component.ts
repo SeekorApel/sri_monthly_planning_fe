@@ -12,10 +12,9 @@ import Swal from 'sweetalert2';
 @Component({
   selector: 'app-view-detail-revisi-marketing',
   templateUrl: './view-detail-revisi-marketing.component.html',
-  styleUrls: ['./view-detail-revisi-marketing.component.scss']
+  styleUrls: ['./view-detail-revisi-marketing.component.scss'],
 })
 export class ViewDetailRevisiMarketingComponent implements OnInit {
-
   idMo: String;
   formHeaderMo: FormGroup;
   marketingOrders: MarketingOrder[] = [];
@@ -121,8 +120,29 @@ export class ViewDetailRevisiMarketingComponent implements OnInit {
     this.month2 = this.activeRoute.snapshot.paramMap.get('month2');
     this.type = this.activeRoute.snapshot.paramMap.get('type');
     this.getAllDetailRevision(this.month0, this.month1, this.month2, this.type);
-    this.headerRevision = "Header Marketing Order"
-    this.detailMoRevision = "Detail Marketing Order"
+    this.headerRevision = 'Header Marketing Order';
+    this.detailMoRevision = 'Detail Marketing Order';
+  }
+
+  exportExcelMo(id: string): void {
+    this.moService.downloadExcelMo(id).subscribe(
+      (response: Blob) => {
+        const url = window.URL.createObjectURL(response);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `Marketing_Order_${id}.xlsx`; // Nama file yang diinginkan
+        a.click();
+        window.URL.revokeObjectURL(url);
+      },
+      (error) => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Gagal mendownload file. Silakan coba lagi!',
+        });
+        console.error('Error downloading file:', error);
+      }
+    );
   }
 
   getAllDetailRevision(month0: string, month1: string, month2: string, type: string): void {
@@ -160,8 +180,6 @@ export class ViewDetailRevisiMarketingComponent implements OnInit {
     this.detailMarketingOrder = data.dataDetailMo;
     let typeProduct = data.type;
 
-    console.log(data.revisionMarketing);
-
     if (this.allData) {
       this.headerRevision = `Header Marketing Order Rev ${data.revisionMarketing}`;
       this.detailMoRevision = `Detail Marketing Order Rev ${data.revisionMarketing}`;
@@ -171,7 +189,6 @@ export class ViewDetailRevisiMarketingComponent implements OnInit {
       date: new Date(data.dateValid).toISOString().split('T')[0],
       type: data.type,
       revision: data.revisionMarketing,
-
 
       // Header Month 1
       month_0: this.formatDateToString(this.headerMarketingOrder[0].month),
@@ -240,7 +257,7 @@ export class ViewDetailRevisiMarketingComponent implements OnInit {
       total_mo_m2: this.formatNumber(this.headerMarketingOrder[2].totalMo),
       note_tl_m2: this.headerMarketingOrder[2].noteOrderTl,
     });
-
+    this.updateMonthNames(this.headerMarketingOrder);
   }
 
   formatNumber(value: number): string {
@@ -269,9 +286,9 @@ export class ViewDetailRevisiMarketingComponent implements OnInit {
   }
 
   updateMonthNames(hm: HeaderMarketingOrder[]): void {
-    this.monthNames[0] = this.getMonthName(new Date(this.headerMarketingOrder[1].month));
-    this.monthNames[1] = this.getMonthName(new Date(this.headerMarketingOrder[2].month));
-    this.monthNames[2] = this.getMonthName(new Date(this.headerMarketingOrder[0].month));
+    this.monthNames[0] = this.getMonthName(new Date(this.headerMarketingOrder[0].month));
+    this.monthNames[1] = this.getMonthName(new Date(this.headerMarketingOrder[1].month));
+    this.monthNames[2] = this.getMonthName(new Date(this.headerMarketingOrder[2].month));
   }
 
   getMonthName(monthValue: Date): string {
@@ -298,5 +315,4 @@ export class ViewDetailRevisiMarketingComponent implements OnInit {
   navigateToViewMo() {
     this.router.navigate(['/transaksi/view-mo-marketing']);
   }
-
 }

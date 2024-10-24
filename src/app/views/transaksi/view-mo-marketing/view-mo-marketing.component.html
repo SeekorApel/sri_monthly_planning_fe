@@ -42,7 +42,7 @@
                 <td>{{ dateUtil.parseMonthYear(mo.month2) }}</td>
                 <td>
                   <button *ngIf="mo.statusFilled === 1" type="button" (click)="navigateToAdd(mo.moId)" class="btn btn-md btn-success ml-2">Add</button>
-                  <button *ngIf="mo.statusFilled === 2" type="button" (click)="navigateToEdit(mo.moId)" class="btn btn-md btn-warning ml-2">Edit</button>
+                  <button *ngIf="mo.statusFilled === 2" type="button" (click)="navigateToEdit(mo.moId)" class="btn btn-md btn-warning ml-2">Revision</button>
                   <button *ngIf="mo.statusFilled === 3" type="button" (click)="navigateToDetail(mo.month0, mo.month1, mo.month2, mo.type)" class="btn btn-md btn-secondary ml-2">Detail</button>
                 </td>
               </tr>

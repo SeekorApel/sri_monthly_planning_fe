@@ -43,6 +43,7 @@
                 <td>{{ dateUtil.parseMonthYear(mo.month2) }}</td>
                 <td>
                   <button type="button" class="btn btn-md btn-secondary" (click)="showDataRevision(mo.moId)">Show</button>
+                  <button type="button" class="btn btn-md btn-success ml-2" (click)="exportExcelMo(mo.moId)">Print</button>
                 </td>
               </tr>
             </tbody>
@@ -548,10 +549,9 @@
           </table>
         </div>
       </div>
+      <div class="col-md-12 pb-4">
+        <button (click)="navigateToViewMo()" class="btn btn-primary justify-content-start mr-2">Back</button>
+      </div>
     </div>
-  </div>
-
-  <div class="col-md-12 pb-4">
-    <button (click)="navigateToViewMo()" class="btn btn-primary justify-content-start mr-2">Back</button>
   </div>
 </div>

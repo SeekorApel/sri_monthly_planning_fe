@@ -130,7 +130,7 @@ export class AddMoMarketingComponent implements OnInit {
   getAllData(idMo: String) {
     this.moService.getAllMoById(idMo).subscribe(
       (response: ApiResponse<any>) => {
-        console.log(response.data.dataDetailMo)
+        console.log(response.data.dataDetailMo);
         this.allData = response.data;
         this.fillAllData(this.allData);
       },
@@ -248,6 +248,11 @@ export class AddMoMarketingComponent implements OnInit {
     worksheet.getCell('N9').alignment = { vertical: 'middle', horizontal: 'left' };
     setBorder(worksheet.getCell('N9'));
     worksheet.getCell('N9').font = { name: 'Calibri Body', size: 11, bold: true, italic: true };
+    worksheet.getCell('N9').fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'FFDCE6F1' },
+    };
 
     worksheet.mergeCells('N10:P10');
     worksheet.getCell('N10').value = 'Workday Normal / Workday Tube';
@@ -316,8 +321,20 @@ export class AddMoMarketingComponent implements OnInit {
     worksheet.getCell('Q15').numFmt = '#,##0';
     worksheet.getCell('R15').numFmt = '#,##0';
     worksheet.getCell('S15').numFmt = '#,##0';
+    worksheet.getCell('N15').fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'FFD9D9D9' },
+    };
     ['Q15', 'R15', 'S15'].forEach((cell) => {
-      worksheet.getCell(cell).alignment = { vertical: 'middle', horizontal: 'center' };
+      const cellRef = worksheet.getCell(cell);
+      cellRef.alignment = { vertical: 'middle', horizontal: 'center' };
+
+      cellRef.fill = {
+        type: 'pattern',
+        pattern: 'solid',
+        fgColor: { argb: 'FFD9D9D9' },
+      };
     });
 
     worksheet.mergeCells('N16:P16');
@@ -330,8 +347,20 @@ export class AddMoMarketingComponent implements OnInit {
     worksheet.getCell('Q16').numFmt = '#,##0';
     worksheet.getCell('R16').numFmt = '#,##0';
     worksheet.getCell('S16').numFmt = '#,##0';
+    worksheet.getCell('N16').fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'FFD9D9D9' },
+    };
     ['Q16', 'R16', 'S16'].forEach((cell) => {
-      worksheet.getCell(cell).alignment = { vertical: 'middle', horizontal: 'center' };
+      const cellRef = worksheet.getCell(cell);
+      cellRef.alignment = { vertical: 'middle', horizontal: 'center' };
+
+      cellRef.fill = {
+        type: 'pattern',
+        pattern: 'solid',
+        fgColor: { argb: 'FFD9D9D9' },
+      };
     });
 
     worksheet.mergeCells('N17:P17');
@@ -344,8 +373,20 @@ export class AddMoMarketingComponent implements OnInit {
     worksheet.getCell('Q17').numFmt = '#,##0';
     worksheet.getCell('R17').numFmt = '#,##0';
     worksheet.getCell('S17').numFmt = '#,##0';
+    worksheet.getCell('N17').fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'FFD9D9D9' },
+    };
     ['Q17', 'R17', 'S17'].forEach((cell) => {
-      worksheet.getCell(cell).alignment = { vertical: 'middle', horizontal: 'center' };
+      const cellRef = worksheet.getCell(cell);
+      cellRef.alignment = { vertical: 'middle', horizontal: 'center' };
+
+      cellRef.fill = {
+        type: 'pattern',
+        pattern: 'solid',
+        fgColor: { argb: 'FFD9D9D9' },
+      };
     });
 
     worksheet.mergeCells('N18:P18');
@@ -380,6 +421,13 @@ export class AddMoMarketingComponent implements OnInit {
         size: 11,
         bold: true,
         italic: true,
+      };
+
+      // Menambahkan warna pada sel
+      cellRef.fill = {
+        type: 'pattern',
+        pattern: 'solid',
+        fgColor: { argb: 'FFDCE6F1' },
       };
     });
 
@@ -439,116 +487,221 @@ export class AddMoMarketingComponent implements OnInit {
     worksheet.getCell('B19').alignment = { vertical: 'middle', horizontal: 'center' };
     worksheet.getColumn('B').width = 20;
     setBorder(worksheet.getCell('B19'));
+    worksheet.getCell('B19').fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'FFDCE6F1' },
+    };
 
     worksheet.mergeCells('C19:C20');
     worksheet.getCell('C19').value = 'Item';
     worksheet.getCell('C19').alignment = { vertical: 'middle', horizontal: 'center' };
     worksheet.getColumn('C').width = 20;
     setBorder(worksheet.getCell('C19'));
+    worksheet.getCell('C19').fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'FFDCE6F1' },
+    };
 
     worksheet.mergeCells('D19:D20');
     worksheet.getCell('D19').value = 'Description';
     worksheet.getCell('D19').alignment = { vertical: 'middle', horizontal: 'center' };
     worksheet.getColumn('D').width = 41;
     setBorder(worksheet.getCell('D19'));
+    worksheet.getCell('D19').fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'FFDCE6F1' },
+    };
 
     worksheet.mergeCells('E19:E20');
     worksheet.getCell('E19').value = 'Machine Type';
     worksheet.getCell('E19').alignment = { vertical: 'middle', horizontal: 'center' };
     worksheet.getColumn('E').width = 15;
     setBorder(worksheet.getCell('E19'));
+    worksheet.getCell('E19').fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'FFDCE6F1' },
+    };
 
     worksheet.mergeCells('F19:F20');
     worksheet.getCell('F19').value = 'Capacity 99,5%';
     worksheet.getCell('F19').alignment = { vertical: 'middle', horizontal: 'center' };
     worksheet.getColumn('F').width = 18;
     setBorder(worksheet.getCell('F19'));
+    worksheet.getCell('F19').fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'FFDCE6F1' },
+    };
 
     worksheet.mergeCells('G19:G20');
     worksheet.getCell('G19').value = 'Qty Mould';
     worksheet.getCell('G19').alignment = { vertical: 'middle', horizontal: 'center' };
     worksheet.getColumn('G').width = 18;
     setBorder(worksheet.getCell('G19'));
+    worksheet.getCell('G19').fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'FFDCE6F1' },
+    };
 
     worksheet.mergeCells('H19:H20');
     worksheet.getCell('H19').value = 'Qty Per Rak';
     worksheet.getCell('H19').alignment = { vertical: 'middle', horizontal: 'center' };
     worksheet.getColumn('H').width = 18;
     setBorder(worksheet.getCell('H19'));
+    worksheet.getCell('H19').fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'FFDCE6F1' },
+    };
 
     worksheet.mergeCells('I19:I20');
     worksheet.getCell('I19').value = 'Minimal Order';
     worksheet.getCell('I19').alignment = { vertical: 'middle', horizontal: 'center' };
     worksheet.getColumn('I').width = 18;
     setBorder(worksheet.getCell('I19'));
+    worksheet.getCell('I19').fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'FFDCE6F1' },
+    };
 
     worksheet.mergeCells('J19:L19');
     worksheet.getCell('J19').value = 'Capacity Maximum';
     worksheet.getCell('J19').alignment = { vertical: 'middle', horizontal: 'center' };
     worksheet.getColumn('J').width = 15;
     setBorder(worksheet.getCell('J19'));
+    worksheet.getCell('J19').fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'FFDCE6F1' },
+    };
 
     worksheet.getCell('J20').value = month0;
     worksheet.getCell('J20').alignment = { vertical: 'middle', horizontal: 'center' };
     setBorder(worksheet.getCell('J20'));
+    worksheet.getCell('J20').fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'FFDCE6F1' },
+    };
 
     worksheet.getCell('K20').value = month1;
     worksheet.getCell('K20').alignment = { vertical: 'middle', horizontal: 'center' };
     worksheet.getColumn('K').width = 15;
     setBorder(worksheet.getCell('K20'));
+    worksheet.getCell('K20').fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'FFDCE6F1' },
+    };
 
     worksheet.getCell('L20').value = month2;
     worksheet.getCell('L20').alignment = { vertical: 'middle', horizontal: 'center' };
     worksheet.getColumn('L').width = 15;
     setBorder(worksheet.getCell('L20'));
+    worksheet.getCell('L20').fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'FFDCE6F1' },
+    };
 
     worksheet.mergeCells('M19:M20');
     worksheet.getCell('M19').value = 'Initial Stock';
     worksheet.getCell('M19').alignment = { vertical: 'middle', horizontal: 'center' };
     worksheet.getColumn('M').width = 20;
     setBorder(worksheet.getCell('M19'));
+    worksheet.getCell('M19').fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'FFDCE6F1' },
+    };
 
     worksheet.mergeCells('N19:P19');
     worksheet.getCell('N19').value = 'Sales Forecast';
     worksheet.getCell('N19').alignment = { vertical: 'middle', horizontal: 'center' };
     worksheet.getColumn('N').width = 20;
     setBorder(worksheet.getCell('N19'));
+    worksheet.getCell('N19').fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'FFDCE6F1' },
+    };
 
     worksheet.getCell('N20').value = month0;
     worksheet.getCell('N20').alignment = { vertical: 'middle', horizontal: 'center' };
     worksheet.getColumn('O').width = 20;
     setBorder(worksheet.getCell('N20'));
+    worksheet.getCell('N20').fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'FFDCE6F1' },
+    };
 
     worksheet.getCell('O20').value = month1;
     worksheet.getCell('O20').alignment = { vertical: 'middle', horizontal: 'center' };
     worksheet.getColumn('O').width = 20;
     setBorder(worksheet.getCell('O20'));
+    worksheet.getCell('O20').fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'FFDCE6F1' },
+    };
 
     worksheet.getCell('P20').value = month2;
     worksheet.getCell('P20').alignment = { vertical: 'middle', horizontal: 'center' };
     worksheet.getColumn('P').width = 20;
     setBorder(worksheet.getCell('P20'));
+    worksheet.getCell('P20').fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'FFDCE6F1' },
+    };
 
     worksheet.mergeCells('Q19:S19');
     worksheet.getCell('Q19').value = 'Marketing Order';
     worksheet.getCell('Q19').alignment = { vertical: 'middle', horizontal: 'center' };
     worksheet.getColumn('Q').width = 20;
     setBorder(worksheet.getCell('Q19'));
+    worksheet.getCell('Q19').fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'FFDCE6F1' },
+    };
 
     worksheet.getCell('Q20').value = month0;
     worksheet.getCell('Q20').alignment = { vertical: 'middle', horizontal: 'center' };
     worksheet.getColumn('Q').width = 20;
     setBorder(worksheet.getCell('Q20'));
+    worksheet.getCell('Q20').fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'FFDCE6F1' },
+    };
 
     worksheet.getCell('R20').value = month1;
     worksheet.getCell('R20').alignment = { vertical: 'middle', horizontal: 'center' };
     worksheet.getColumn('R').width = 20;
     setBorder(worksheet.getCell('R20'));
+    worksheet.getCell('R20').fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'FFDCE6F1' },
+    };
 
     worksheet.getCell('S20').value = month2;
     worksheet.getCell('S20').alignment = { vertical: 'middle', horizontal: 'center' };
     worksheet.getColumn('S').width = 20;
     setBorder(worksheet.getCell('S20'));
+    worksheet.getCell('S20').fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'FFDCE6F1' },
+    };
 
     //Styling Font Header Detail Markting Order
     ['B19', 'C19', 'D19', 'E19', 'F19', 'G19', 'H19', 'I19', 'J19', 'J20', 'K20', 'L20', 'M19', 'N19', 'N20', 'O20', 'P20', 'Q19', 'Q20', 'R20', 'S20'].forEach((cell) => {
@@ -613,7 +766,7 @@ export class AddMoMarketingComponent implements OnInit {
         worksheet.getCell(`S${rowIndex}`).value = item.moMonth2;
         worksheet.getCell(`S${rowIndex}`).numFmt = '#,##0';
 
-        ['B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S'].forEach((col) => {
+        ['B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'].forEach((col) => {
           const cell = worksheet.getCell(`${col}${rowIndex}`);
           cell.alignment = { vertical: 'middle', horizontal: 'center' };
           cell.border = {
@@ -624,10 +777,68 @@ export class AddMoMarketingComponent implements OnInit {
           };
         });
 
+        ['J', 'K', 'L'].forEach((col) => {
+          const cell = worksheet.getCell(`${col}${rowIndex}`);
+          cell.alignment = { vertical: 'middle', horizontal: 'right' };
+          cell.border = {
+            top: { style: 'thin' },
+            left: { style: 'thin' },
+            bottom: { style: 'thin' },
+            right: { style: 'thin' },
+          };
+        });
+
+        ['M'].forEach((col) => {
+          const cell = worksheet.getCell(`${col}${rowIndex}`);
+          cell.alignment = { vertical: 'middle', horizontal: 'right' };
+          cell.border = {
+            top: { style: 'thin' },
+            left: { style: 'thin' },
+            bottom: { style: 'thin' },
+            right: { style: 'thin' },
+          };
+          cell.fill = {
+            type: 'pattern',
+            pattern: 'solid',
+            fgColor: { argb: 'FFD9D9D9' },
+          };
+        });
+
+        ['N', 'O', 'P'].forEach((col) => {
+          const cell = worksheet.getCell(`${col}${rowIndex}`);
+          cell.alignment = { vertical: 'middle', horizontal: 'right' };
+          cell.border = {
+            top: { style: 'thin' },
+            left: { style: 'thin' },
+            bottom: { style: 'thin' },
+            right: { style: 'thin' },
+          };
+          cell.fill = {
+            type: 'pattern',
+            pattern: 'solid',
+            fgColor: { argb: 'FFFFF2CC' },
+          };
+        });
+
+        ['Q', 'R', 'S'].forEach((col) => {
+          const cell = worksheet.getCell(`${col}${rowIndex}`);
+          cell.alignment = { vertical: 'middle', horizontal: 'right' };
+          cell.border = {
+            top: { style: 'thin' },
+            left: { style: 'thin' },
+            bottom: { style: 'thin' },
+            right: { style: 'thin' },
+          };
+          cell.fill = {
+            type: 'pattern',
+            pattern: 'solid',
+            fgColor: { argb: 'FFFFC000' },
+          };
+        });
+
         rowIndex++;
       }
     });
-
 
     workbook.xlsx.writeBuffer().then((buffer) => {
       const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
@@ -753,7 +964,6 @@ export class AddMoMarketingComponent implements OnInit {
   }
 
   saveMo(): void {
-
     this.detailMarketingOrder.forEach((mo) => {
       if (mo.lockStatus === 1) {
         mo.initialStock = 0;
@@ -780,14 +990,8 @@ export class AddMoMarketingComponent implements OnInit {
       const maxCapMonth2 = Number(mo.maxCapMonth2);
 
       // Jika nilainya 0, maka dianggap valid, sehingga tidak masuk kategori input yang invalid
-      return (sfMonth0 !== 0 && (sfMonth0 < minOrder || sfMonth0 > maxCapMonth0)) ||
-        (sfMonth1 !== 0 && (sfMonth1 < minOrder || sfMonth1 > maxCapMonth1)) ||
-        (sfMonth2 !== 0 && (sfMonth2 < minOrder || sfMonth2 > maxCapMonth2)) ||
-        (moMonth0 !== 0 && (moMonth0 < minOrder || moMonth0 > maxCapMonth0)) ||
-        (moMonth1 !== 0 && (moMonth1 < minOrder || moMonth1 > maxCapMonth1)) ||
-        (moMonth2 !== 0 && (moMonth2 < minOrder || moMonth2 > maxCapMonth2));
+      return (sfMonth0 !== 0 && (sfMonth0 < minOrder || sfMonth0 > maxCapMonth0)) || (sfMonth1 !== 0 && (sfMonth1 < minOrder || sfMonth1 > maxCapMonth1)) || (sfMonth2 !== 0 && (sfMonth2 < minOrder || sfMonth2 > maxCapMonth2)) || (moMonth0 !== 0 && (moMonth0 < minOrder || moMonth0 > maxCapMonth0)) || (moMonth1 !== 0 && (moMonth1 < minOrder || moMonth1 > maxCapMonth1)) || (moMonth2 !== 0 && (moMonth2 < minOrder || moMonth2 > maxCapMonth2));
     });
-
 
     // Jika terdapat input yang tidak valid, tampilkan SweetAlert dan hentikan fungsi
     if (hasInvalidInput) {

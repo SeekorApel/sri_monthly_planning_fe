@@ -122,8 +122,29 @@ export class ViewDetailRevisiPpcComponent implements OnInit {
     this.month2 = this.activeRoute.snapshot.paramMap.get('month2');
     this.type = this.activeRoute.snapshot.paramMap.get('type');
     this.getAllDetailRevision(this.month0, this.month1, this.month2, this.type);
-    this.headerRevision = "Header Marketing Order"
-    this.detailMoRevision = "Detail Marketing Order"
+    this.headerRevision = 'Header Marketing Order';
+    this.detailMoRevision = 'Detail Marketing Order';
+  }
+
+  exportExcelMo(id: string): void {
+    this.moService.downloadExcelMo(id).subscribe(
+      (response: Blob) => {
+        const url = window.URL.createObjectURL(response);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `Marketing_Order_${id}.xlsx`; // Nama file yang diinginkan
+        a.click();
+        window.URL.revokeObjectURL(url);
+      },
+      error => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Gagal mendownload file. Silakan coba lagi!',
+        });
+        console.error('Error downloading file:', error);
+      }
+    );
   }
 
   getAllDetailRevision(month0: string, month1: string, month2: string, type: string): void {
@@ -170,7 +191,6 @@ export class ViewDetailRevisiPpcComponent implements OnInit {
       date: new Date(data.dateValid).toISOString().split('T')[0],
       type: data.type,
       revision: data.revisionPpc,
-
 
       // Header Month 1
       month_0: this.formatDateToString(this.headerMarketingOrder[0].month),
@@ -239,7 +259,7 @@ export class ViewDetailRevisiPpcComponent implements OnInit {
       total_mo_m2: this.formatNumber(this.headerMarketingOrder[2].totalMo),
       note_tl_m2: this.headerMarketingOrder[2].noteOrderTl,
     });
-
+    this.updateMonthNames(this.headerMarketingOrder);
   }
 
   formatNumber(value: number): string {
