@@ -7,11 +7,14 @@ import Swal from 'sweetalert2';
 import { saveAs } from 'file-saver';
 declare var $: any;
 import * as XLSX from 'xlsx';
+import { Select2OptionData } from 'ng-select2';
+import { Options } from 'select2';
+import { Building } from 'src/app/models/Building';
+import { BuildingService } from 'src/app/services/master-data/building/building.service';
 
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
-
 
 @Component({
   selector: 'app-view-machine-tass',
@@ -27,21 +30,26 @@ export class ViewMachineTassComponent implements OnInit {
   isEditMode: boolean = false;
   file: File | null = null;
   editMachineTassForm: FormGroup;
+  public uomOptionData: Array<Select2OptionData>;
+  public options: Options = {
+    width: '100%',
+    minimumResultsForSearch: 0,
+  };
 
   // Pagination
   pageOfItems: Array<any>;
   pageSize: number = 5;
   totalPages: number = 5;
-  displayedColumns: string[] = ['no', 'id_MACHINE_TASS', 'building_ID', 'floor','machine_NUMBER',
-    'type','work_CENTER_TEXT','status','action'
-  ];
+  displayedColumns: string[] = ['no', 'id_MACHINE_TASS', 'building_ID', 'floor', 'machine_NUMBER', 'type', 'work_CENTER_TEXT', 'status', 'action'];
   dataSource: MatTableDataSource<MachineTass>;
+  buildings: Building[];
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-
-  constructor(private machineTassService: MachineTassService, private fb: FormBuilder) {
+  constructor(private machineTassService: MachineTassService, 
+    private fb: FormBuilder, 
+    private buildingService: BuildingService) {
     this.editMachineTassForm = this.fb.group({
       type: ['', Validators.required],
       building: ['', Validators.required],
@@ -49,10 +57,31 @@ export class ViewMachineTassComponent implements OnInit {
       machineNum: ['', Validators.required],
       wct: ['', Validators.required],
     });
+    this.loadBuilding();
   }
 
   ngOnInit(): void {
     this.getAllMachineTass();
+  }
+
+  private loadBuilding(): void {
+    this.buildingService.getAllBuilding().subscribe(
+      (response: ApiResponse<Building[]>) => {
+        this.buildings = response.data;
+
+        if (!this.uomOptionData) {
+          this.uomOptionData = [];
+        }
+
+        this.uomOptionData = this.buildings.map((element) => ({
+          id: element.building_ID.toString(), // Ensure the ID is a string
+          text: element.building_NAME, // Set the text to the name (or other property)
+        }));
+      },
+      (error) => {
+        this.errorMessage = 'Failed to load Building: ' + error.message;
+      }
+    );
   }
 
   getAllMachineTass(): void {
@@ -75,8 +104,8 @@ export class ViewMachineTassComponent implements OnInit {
   }
 
   onSearchChange(): void {
-      this.dataSource.filter = this.searchText.trim().toLowerCase();
-    }
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
+  }
 
   resetSearch(): void {
     this.searchText = '';

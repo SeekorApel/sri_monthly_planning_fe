@@ -69,18 +69,18 @@
 
           <!-- Action Column -->
           <ng-container matColumnDef="action">
-            <th *matHeaderCellDef style="min-width: 150px">Action</th>
-            <td *matCellDef="let detail" align="center">
+            <th *matHeaderCellDef style="min-width: 200px">Action</th>
+            <td *matCellDef="let detail">
               <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(detail.detail_DS_ID)">Update</button>
-              <button type="button" class="btn btn-md ml-2" [ngClass]="{ 'btn-danger': detail.status === 1, 'btn-success': detail.status !== 1 }" (click)="detail.status === 1 ? deleteData(detail) : activateData(detail)">
+              <button type="button" class="btn btn-md ml-3" [ngClass]="{ 'btn-danger': detail.status === 1, 'btn-success': detail.status !== 1 }" (click)="detail.status === 1 ? deleteData(detail) : activateData(detail)">
                 {{ detail.status === 1 ? 'Delete' : 'Active' }}
               </button>
             </td>
           </ng-container>
 
           <!-- Add header and row declarations -->
-          <tr align="center" style="height: 20px" mat-header-row *matHeaderRowDef="displayedColumns" align="center"></tr>
-          <tr align="center" mat-row *matRowDef="let row; columns: displayedColumns" align="center"></tr>
+          <tr align="center" style="height: 20px" mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr align="center" mat-row *matRowDef="let row; columns: displayedColumns"></tr>
         </table>
 
         <!-- Pagination -->
@@ -88,7 +88,7 @@
       </div>
 
       <!-- Modal edit -->
-      <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+      <div class="modal fade" id="editModal" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
@@ -100,9 +100,10 @@
             <div class="modal-body">
               <form [formGroup]="editDDeliveryScheduleTypeForm">
                 <div class="form-group">
-                  <label for="dsID">Delivery Schedule</label>
-                  <input [(ngModel)]="editDDeliveryScheduleTypeObject.ds_ID" type="text" class="form-control" id="dsID" formControlName="dsID" [ngClass]="{ 'is-invalid': editDDeliveryScheduleTypeForm.get('dsID').invalid && editDDeliveryScheduleTypeForm.get('dsID').touched }" />
-                  <div *ngIf="editDDeliveryScheduleTypeForm.get('dsID').invalid && editDDeliveryScheduleTypeForm.get('dsID').touched" class="invalid-feedback">Delivery Schedule is required.</div>
+                  <h6 for="dsID">Delivery Schedule</h6>
+                  <div class="col-md-13">
+                    <ng-select2 id="dsID" name="dsID" formControlName="dsID" [(ngModel)]="editDDeliveryScheduleTypeObject.ds_ID" [data]="uomOptionData" [options]="options"> </ng-select2>
+                  </div>
                 </div>
                 <div class="form-group">
                   <label for="partNum">Part Number</label>

@@ -76,7 +76,7 @@
       </div>
 
       <!-- Modal edit -->
-      <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+      <div class="modal fade" id="editModal" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
@@ -89,10 +89,10 @@
               <!-- Form with Reactive Forms -->
               <form [formGroup]="editMachineExtrudingTypeForm">
                 <div class="form-group">
-                  <label for="buildingID">Building ID</label>
-                  <input [(ngModel)]="editMachineExtrudingTypeObject.building_ID" type="text" class="form-control" id="buildingID" formControlName="buildingID" [ngClass]="{ 'is-invalid': editMachineExtrudingTypeForm.get('buildingID').invalid && editMachineExtrudingTypeForm.get('buildingID').touched }" />
-                  <!-- Error message if plantName is empty -->
-                  <div *ngIf="editMachineExtrudingTypeForm.get('buildingID').invalid && editMachineExtrudingTypeForm.get('buildingID').touched" class="invalid-feedback">Machine Extruding Description name is required.</div>
+                  <h6 for="buildingID">Building</h6>
+                  <div class="col-md-13">
+                    <ng-select2 id="buildingID" name="buildingID" formControlName="buildingID" [(ngModel)]="editMachineExtrudingTypeObject.building_ID" [data]="uomOptionData" [options]="options"> </ng-select2>
+                  </div>
                 </div>
                 <div class="form-group">
                   <label for="Type">Type</label>

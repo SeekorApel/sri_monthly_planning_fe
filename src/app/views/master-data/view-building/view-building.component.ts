@@ -4,6 +4,10 @@ import { Building } from 'src/app/models/Building';
 import { ApiResponse } from 'src/app/response/Response';
 import { BuildingService } from 'src/app/services/master-data/building/building.service';
 import Swal from 'sweetalert2';
+import { Select2OptionData } from 'ng-select2';
+import { Options } from 'select2';
+import { PlantService } from 'src/app/services/master-data/plant/plant.service';
+import { Plant } from 'src/app/models/Plant';
 declare var $: any;
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
@@ -23,18 +27,63 @@ export class ViewBuildingComponent implements OnInit {
   isEditMode: boolean = false;
   file: File | null = null;
   editBuildingForm: FormGroup;
+  
+  public uomOptions: Array<Select2OptionData>;
+  public options: Options = {
+    width: '100%'
+  };
+
+  plant:Plant[];
+  // constructor(private plantService: PlantService) { 
+  //   plantService.getAllPlant().subscribe(
+  //     (response: ApiResponse<Plant[]>) => {
+  //       this.plant = response.data;
+  //       this.uomOptions = this.plant.map((element) => ({
+  //         id: element.plant_ID.toString(), // Ensure the ID is a string
+  //         text: element.plant_NAME // Set the text to the plant name
+  //       }));
+  //     },
+  //     (error) => {
+  //       this.errorMessage = 'Failed to load plants: ' + error.message;
+  //     }
+  //   );
+  // }
 
   // Pagination
   pageOfItems: Array<any>;
   pageSize: number = 5;
   totalPages: number = 5;
 
-  constructor(private buildingService: BuildingService, private fb: FormBuilder) { 
+  constructor(
+    private buildingService: BuildingService,
+    private fb: FormBuilder,
+    private plantService: PlantService // Fixed naming consistency for service
+  ) {
+    // Initialize the reactive form
     this.editBuildingForm = this.fb.group({
       plantID: ['', Validators.required],
       buildingName: ['', Validators.required],
     });
+  
+    // Fetch plant data and map it to the format needed for the ng-select2 options
+    this.loadPlants();
   }
+  
+  private loadPlants(): void {
+    this.plantService.getAllPlant().subscribe(
+      (response: ApiResponse<Plant[]>) => {
+        this.plant = response.data;
+        this.uomOptions = this.plant.map((element) => ({
+          id: element.plant_ID.toString(), // Ensure the ID is a string
+          text: element.plant_NAME // Set the text to the plant name
+        }));
+      },
+      (error) => {
+        this.errorMessage = 'Failed to load plants: ' + error.message;
+      }
+    );
+  }
+  
 
   ngOnInit(): void {
     this.getAllBuilding();

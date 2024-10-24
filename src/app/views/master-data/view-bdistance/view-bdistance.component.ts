@@ -4,6 +4,11 @@ import { BDistance } from 'src/app/models/BDistance';
 import { ApiResponse } from 'src/app/response/Response';
 import { BDistanceService } from 'src/app/services/master-data/Bdistance/Bdistance.service';
 import Swal from 'sweetalert2';
+import { Select2OptionData } from 'ng-select2';
+import { Options } from 'select2';
+import { Building } from 'src/app/models/Building';
+import { BuildingService } from 'src/app/services/master-data/building/building.service';
+
 declare var $: any;
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
@@ -25,6 +30,12 @@ export class ViewBDistanceComponent implements OnInit {
   isEditMode: boolean = false;
   file: File | null = null;
   editBDistanceForm: FormGroup;
+  buildings: Building[];
+  public uomOptionData: Array<Select2OptionData>;
+  public options: Options = {
+    width: '100%',
+    minimumResultsForSearch: 0,
+  };
 
   // Pagination
   pageOfItems: Array<any>;
@@ -36,12 +47,13 @@ export class ViewBDistanceComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  constructor(private bdistanceService: BDistanceService, private fb: FormBuilder) {
+  constructor(private bdistanceService: BDistanceService, private fb: FormBuilder, private buildingService: BuildingService) {
     this.editBDistanceForm = this.fb.group({
       building1: ['', Validators.required],
       building2: ['', Validators.required],
       distance: ['', Validators.required],
     });
+    this.loadBuilding();
   }
 
   ngOnInit(): void {
@@ -76,6 +88,25 @@ export class ViewBDistanceComponent implements OnInit {
   resetSearch(): void {
     this.searchText = '';
     this.onChangePage(this.bdistances.slice(0, this.pageSize));
+  }
+  private loadBuilding(): void {
+    this.buildingService.getAllBuilding().subscribe(
+      (response: ApiResponse<Building[]>) => {
+        this.buildings = response.data;
+
+        if (!this.uomOptionData) {
+          this.uomOptionData = [];
+        }
+
+        this.uomOptionData = this.buildings.map((element) => ({
+          id: element.building_ID.toString(), // Ensure the ID is a string
+          text: element.building_NAME, // Set the text to the name (or other property)
+        }));
+      },
+      (error) => {
+        this.errorMessage = 'Failed to load Building: ' + error.message;
+      }
+    );
   }
 
   updateBuildingDistance(): void {

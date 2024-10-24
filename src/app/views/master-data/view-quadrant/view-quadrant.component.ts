@@ -8,6 +8,8 @@ declare var $: any;
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 
+
+
 @Component({
   selector: 'app-view-quadrant',
   templateUrl: './view-quadrant.component.html',

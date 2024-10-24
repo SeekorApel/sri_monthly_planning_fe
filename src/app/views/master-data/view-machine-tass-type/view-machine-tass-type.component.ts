@@ -5,6 +5,10 @@ import { ApiResponse } from 'src/app/response/Response';
 import { MachineTassTypeService } from 'src/app/services/master-data/machine-tass-type/machine-tass-type.service';
 import Swal from 'sweetalert2';
 import { saveAs } from 'file-saver';
+import { Select2OptionData } from 'ng-select2';
+import { Options } from 'select2';
+import { Setting } from 'src/app/models/Setting';
+import { SettingService } from 'src/app/services/master-data/setting/setting.service';
 
 declare var $: any;
 import * as XLSX from 'xlsx';
@@ -27,25 +31,51 @@ export class ViewMachineTassTypeComponent implements OnInit {
   isEditMode: boolean = false;
   file: File | null = null;
   editMachineTassTypeForm: FormGroup;
+  public uomOptionData: Array<Select2OptionData>;
+  public options: Options = {
+    width: '100%',
+    minimumResultsForSearch: 0,
+  };
 
   // Pagination
   pageOfItems: Array<any>;
   pageSize: number = 5;
   totalPages: number = 5;
-  displayedColumns: string[] = ['no','machinetasstype_ID','setting_ID','description','status','action'];
+  displayedColumns: string[] = ['no', 'machinetasstype_ID', 'setting_ID', 'description', 'status', 'action'];
   dataSource: MatTableDataSource<MachineTassType>;
+  settings: Setting[];
 
-  constructor(private mttService: MachineTassTypeService, private fb: FormBuilder) {
+  constructor(private mttService: MachineTassTypeService, private fb: FormBuilder, private settingService: SettingService) {
     this.editMachineTassTypeForm = this.fb.group({
       description: ['', Validators.required],
       setting: ['', Validators.required],
     });
+    this.loadSetting();
   }
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   ngOnInit(): void {
     this.getAllMachineTassType();
+  }
+  private loadSetting(): void {
+    this.settingService.getAllSetting().subscribe(
+      (response: ApiResponse<Setting[]>) => {
+        this.settings = response.data;
+
+        if (!this.uomOptionData) {
+          this.uomOptionData = [];
+        }
+
+        this.uomOptionData = this.settings.map((element) => ({
+          id: element.setting_ID.toString(), // Ensure the ID is a string
+          text: element.description, // Set the text to the name (or other property)
+        }));
+      },
+      (error) => {
+        this.errorMessage = 'Failed to load Setting: ' + error.message;
+      }
+    );
   }
 
   getAllMachineTassType(): void {

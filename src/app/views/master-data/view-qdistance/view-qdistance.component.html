@@ -82,7 +82,7 @@
       </div>
 
       <!-- Modal edit -->
-      <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+      <div class="modal fade" id="editModal" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
@@ -95,19 +95,21 @@
               <!-- Form with Reactive Forms -->
               <form [formGroup]="editQDistancesForm">
                 <div class="form-group">
-                  <label for="quadrantID1">Quadrant 1</label>
-                  <input [(ngModel)]="edtQDistancesObject.quadrant_ID_1" type="text" class="form-control" id="quadrantID1" formControlName="quadrantID1" [ngClass]="{ 'is-invalid': editQDistancesForm.get('quadrantID1').invalid && editQDistancesForm.get('quadrantID1').touched }" />
-
-                  <div *ngIf="editQDistancesForm.get('quadrantID1').invalid && editQDistancesForm.get('quadrantID1').touched" class="invalid-feedback">Quadrant 1 value is required.</div>
-                  <label for="quadrantID2">Quadrant 2</label>
-                  <input [(ngModel)]="edtQDistancesObject.quadrant_ID_2" type="text" class="form-control" id="quadrantID2" formControlName="quadrantID2" [ngClass]="{ 'is-invalid': editQDistancesForm.get('quadrantID2').invalid && editQDistancesForm.get('quadrantID2').touched }" />
-
-                  <div *ngIf="editQDistancesForm.get('quadrantID2').invalid && editQDistancesForm.get('quadrantID2').touched" class="invalid-feedback">Quadrant 2 value is required.</div>
-
+                  <h6 for="quadrantID1">Quadrant 1</h6>
+                  <div class="col-md-13">
+                    <ng-select2 id="quadrantID1" name="quadrantID1" formControlName="quadrantID1" [(ngModel)]="edtQDistancesObject.quadrant_ID_1" [data]="uomOptionData" [options]="options"> </ng-select2>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <h6 for="quadrantID2">Quadrant 2</h6>
+                  <div class="col-md-13">
+                    <ng-select2 id="quadrantID2" name="quadrantID2" formControlName="quadrantID2" [(ngModel)]="edtQDistancesObject.quadrant_ID_2" [data]="uomOptionData" [options]="options"> </ng-select2>
+                  </div>
+                </div>
+                <div class="form-group">
                   <label for="distance">Distance</label>
                   <input [(ngModel)]="edtQDistancesObject.distance" type="text" class="form-control" id="distance" formControlName="distance" [ngClass]="{ 'is-invalid': editQDistancesForm.get('distance').invalid && editQDistancesForm.get('distance').touched }" />
-
-                  <div *ngIf="editQDistancesForm.get('distance').invalid && editQDistancesForm.get('distance').touched" class="invalid-feedback">Distance value is required.</div>
+                  <div *ngIf="editQDistancesForm.get('distance').invalid && editQDistancesForm.get('distance').touched" class="invalid-feedback">Distance Value is required.</div>
                 </div>
               </form>
             </div>

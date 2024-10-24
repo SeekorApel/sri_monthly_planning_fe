@@ -7,6 +7,11 @@ import Swal from 'sweetalert2';
 import { saveAs } from 'file-saver';
 declare var $: any;
 import * as XLSX from 'xlsx';
+import { Select2OptionData } from 'ng-select2';
+import { Options } from 'select2';
+import { Setting } from 'src/app/models/Setting';
+import { SettingService } from 'src/app/services/master-data/setting/setting.service';
+
 
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
@@ -26,6 +31,13 @@ export class ViewMachineCuringTypeComponent implements OnInit {
   isEditMode: boolean = false;
   file: File | null = null;
   editMCTForm: FormGroup;
+  public uomOptionData: Array<Select2OptionData>;
+  public options: Options = {
+    width: '100%',
+    minimumResultsForSearch: 0,
+  };
+  settings: Setting[];
+
 
   // Pagination
   pageOfItems: Array<any>;
@@ -37,16 +49,40 @@ export class ViewMachineCuringTypeComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  constructor(private machineCuringTypeService: MachineCuringTypeService, private fb: FormBuilder) {
+  constructor(
+    private machineCuringTypeService: MachineCuringTypeService, 
+    private fb: FormBuilder,
+    private  settingService: SettingService,
+  ) {
     this.editMCTForm = this.fb.group({
       description: ['', Validators.required],
       setting: ['', Validators.required],
       cavity: ['', Validators.required],
     });
+    this.loadSetting();
   }
 
   ngOnInit(): void {
     this.getAllMachineCuringType();
+  }
+  private loadSetting(): void {
+    this.settingService.getAllSetting().subscribe(
+      (response: ApiResponse<Setting[]>) => {
+        this.settings = response.data;
+
+        if (!this.uomOptionData) {
+          this.uomOptionData = [];
+        }
+
+        this.uomOptionData = this.settings.map((element) => ({
+          id: element.setting_ID.toString(), // Ensure the ID is a string
+          text: element.description, // Set the text to the name (or other property)
+        }));
+      },
+      (error) => {
+        this.errorMessage = 'Failed to load Setting: ' + error.message;
+      }
+    );
   }
 
   getAllMachineCuringType(): void {

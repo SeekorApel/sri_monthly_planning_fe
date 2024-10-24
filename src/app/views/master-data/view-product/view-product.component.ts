@@ -7,10 +7,21 @@ import Swal from 'sweetalert2';
 declare var $: any;
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
+import { Select2OptionData } from 'ng-select2';
+import { Options } from 'select2';
+import { PatternService } from 'src/app/services/master-data/pattern/pattern.service';
+import { Pattern } from 'src/app/models/Pattern';
+import { ItemCuringService } from 'src/app/services/master-data/item-curing/item-curing.service';
+import { Item_Curing } from 'src/app/models/Item_Curing';
+import { Size } from 'src/app/models/Size';
+import { SizeService } from 'src/app/services/master-data/size/size.service';
+import { ProductType } from 'src/app/models/ProductType';
+import { ProductTypeService } from 'src/app/services/master-data/productType/productType.service';
 
   import { MatTableDataSource } from '@angular/material/table';
   import { MatSort } from '@angular/material/sort';
   import { MatPaginator } from '@angular/material/paginator';
+
 
 @Component({
   selector: 'app-view-product',
@@ -26,7 +37,17 @@ export class ViewProductComponent implements OnInit {
   isEditMode: boolean = false;
   file: File | null = null;
   editProductTypeForm: FormGroup;
+  public uomOptionData:  Array<Array<Select2OptionData>>;
+  public options: Options = {
+    width: '100%',
+    minimumResultsForSearch: 0
+  };
+  itemCurings: Item_Curing[];
+  patterns: Pattern[];
+  sizes: Size[];
+  productTypes:  ProductType[];
 
+  
   // Pagination
   pageOfItems: Array<any>;
   pageSize: number = 5;
@@ -39,7 +60,15 @@ export class ViewProductComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  constructor(private productService: ProductService, private fb: FormBuilder) {
+  constructor(
+    private productService: ProductService,
+    private fb: FormBuilder,
+    private itemCuring: ItemCuringService,
+    private pattern: PatternService,
+    private size: SizeService,
+    private  productType: ProductTypeService,
+
+  ) {
     this.editProductTypeForm = this.fb.group({
       curing: ['', Validators.required],
       pattern: ['', Validators.required],
@@ -55,7 +84,85 @@ export class ViewProductComponent implements OnInit {
       rim: ['', Validators.required],
       description: ['', Validators.required],
     });
+
+    this.loadItemCuring();
+    this.loadPattern();
+    this.loadSize();
+    this.loadProductType();
   }
+
+  private loadItemCuring(): void {
+    this.itemCuring.getAllItemCuring().subscribe(
+      (response: ApiResponse<Item_Curing[]>) => {
+        this.itemCurings = response.data;
+  
+        if (!this.uomOptionData) {
+          this.uomOptionData = [];
+        }
+  
+        this.uomOptionData[0] = this.itemCurings.map((element) => ({
+          id: element.item_CURING.toString(), // Ensure the ID is a string
+          text: element.item_CURING           // Set the text to the name (or other property)
+        }));
+      },
+      (error) => {
+        this.errorMessage = 'Failed to load item curing: ' + error.message;
+      }
+    );
+  }
+  private loadSize(): void {
+    this.size.getAllSize().subscribe(
+      (response: ApiResponse<Size[]>) => {
+        this.sizes = response.data;  
+        if (!this.uomOptionData) {
+          this.uomOptionData = [];
+        }  
+        this.uomOptionData[2] = this.sizes.map((element) => ({
+          id: element.size_ID.toString(), // Ensure the ID is a string
+          text: element.size_ID,           // Set the text to the name (or other property)
+        }));
+      },
+      (error) => {
+        this.errorMessage = 'Failed to load size: ' + error.message;
+      }
+    );
+  }
+  private loadProductType(): void {
+    this.productType.getAllProductType().subscribe(
+      (response: ApiResponse<ProductType[]>) => {
+        this.productTypes = response.data;  
+        if (!this.uomOptionData) {
+          this.uomOptionData = [];
+        }  
+        this.uomOptionData[3] = this.productTypes.map((element) => ({
+          id: element.product_TYPE_ID.toString(), // Ensure the ID is a string
+          text: element.product_TYPE,           // Set the text to the name (or other property)
+        }));
+      },
+      (error) => {
+        this.errorMessage = 'Failed to load product type: ' + error.message;
+      }
+    );
+  }
+  
+  private loadPattern(): void {
+    this.pattern.getAllPattern().subscribe(
+      (response: ApiResponse<Pattern[]>) => {
+        this.patterns = response.data;  
+        if (!this.uomOptionData) {
+          this.uomOptionData = [];
+        }  
+        this.uomOptionData[1] = this.patterns.map((element) => ({
+          id: element.pattern_ID.toString(), // Ensure the ID is a string
+          text: element.pattern_NAME         // Set the text to the name
+        }));
+      },
+      (error) => {
+        this.errorMessage = 'Failed to load patterns: ' + error.message;
+      }
+    );
+  }
+  
   activateData(product: Product): void {
     Swal.fire({
       title: 'Are you sure?',

@@ -80,7 +80,7 @@
       </div>
 
       <!-- Modal edit -->
-      <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+      <div class="modal fade" id="editModal" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
@@ -93,14 +93,18 @@
               <!-- Form with Reactive Forms -->
               <form [formGroup]="editBDistanceForm">
                 <div class="form-group">
-                  <label for="building1">Building 1</label>
-                  <input [(ngModel)]="edtBDistanceObject.building_ID_1" type="text" class="form-control" id="building1" formControlName="building1" [ngClass]="{ 'is-invalid': editBDistanceForm.get('building1').invalid && editBDistanceForm.get('building1').touched }" />
-                  <div *ngIf="editBDistanceForm.get('building1').invalid && editBDistanceForm.get('building1').touched" class="invalid-feedback">Building 1 value is required.</div>
-
-                  <label for="building2">Building 2</label>
-                  <input [(ngModel)]="edtBDistanceObject.building_ID_2" type="text" class="form-control" id="building2" formControlName="building2" [ngClass]="{ 'is-invalid': editBDistanceForm.get('building2').invalid && editBDistanceForm.get('building2').touched }" />
-                  <div *ngIf="editBDistanceForm.get('building2').invalid && editBDistanceForm.get('building2').touched" class="invalid-feedback">Building 1 value is required.</div>
-
+                  <h6 for="building1">Building 1</h6>
+                  <div class="col-md-13">
+                    <ng-select2 id="building1" name="building1" formControlName="building1" [(ngModel)]="edtBDistanceObject.building_ID_1" [data]="uomOptionData" [options]="options"> </ng-select2>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <h6 for="building2">Building 2</h6>
+                  <div class="col-md-13">
+                    <ng-select2 id="building2" name="building2" formControlName="building2" [(ngModel)]="edtBDistanceObject.building_ID_2" [data]="uomOptionData" [options]="options"> </ng-select2>
+                  </div>
+                </div>
+                <div class="form-group">
                   <label for="distance">Distance</label>
                   <input [(ngModel)]="edtBDistanceObject.distance" type="text" class="form-control" id="distance" formControlName="distance" [ngClass]="{ 'is-invalid': editBDistanceForm.get('distance').invalid && editBDistanceForm.get('distance').touched }" />
                   <div *ngIf="editBDistanceForm.get('distance').invalid && editBDistanceForm.get('distance').touched" class="invalid-feedback">Distance Value is required.</div>

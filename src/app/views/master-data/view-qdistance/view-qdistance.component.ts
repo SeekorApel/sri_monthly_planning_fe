@@ -5,6 +5,11 @@ import { ApiResponse } from 'src/app/response/Response';
 import { QDistanceService } from 'src/app/services/master-data/Qdistance/Qdistance.service';
 import Swal from 'sweetalert2';
 declare var $: any;
+import { Select2OptionData } from 'ng-select2';
+import { Options } from 'select2';
+import { Quadrant } from 'src/app/models/quadrant';
+import { QuadrantService } from 'src/app/services/master-data/quadrant/quadrant.service';
+
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import { MatTableDataSource } from '@angular/material/table';
@@ -25,6 +30,12 @@ export class ViewQDistanceComponent implements OnInit {
   isEditMode: boolean = false;
   file: File | null = null;
   editQDistancesForm: FormGroup;
+  public uomOptionData: Array<Select2OptionData>;
+  public options: Options = {
+    width: '100%',
+    minimumResultsForSearch: 0,
+  };
+  quadrant: Quadrant[];
 
   // Pagination
   pageOfItems: Array<any>;
@@ -34,12 +45,13 @@ export class ViewQDistanceComponent implements OnInit {
   displayedColumns: string[] = ['no', 'id_Q_DISTANCE', 'quadrant_ID_1', 'quadrant_ID_2', 'distance', 'status', 'action'];
   dataSource: MatTableDataSource<QDistance>;
 
-  constructor(private qdistanceService: QDistanceService, private fb: FormBuilder) {
+  constructor(private qdistanceService: QDistanceService, private fb: FormBuilder, private quadrantService: QuadrantService) {
     this.editQDistancesForm = this.fb.group({
       quadrantID1: ['', Validators.required],
       quadrantID2: ['', Validators.required],
       distance: ['', Validators.required],
     });
+    this.loadQdistance();
   }
 
   ngOnInit(): void {
@@ -47,6 +59,26 @@ export class ViewQDistanceComponent implements OnInit {
   }
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
+
+  private loadQdistance(): void {
+    this.quadrantService.getAllQuadrant().subscribe(
+      (response: ApiResponse<Quadrant[]>) => {
+        this.quadrant = response.data;
+
+        if (!this.uomOptionData) {
+          this.uomOptionData = [];
+        }
+
+        this.uomOptionData = this.quadrant.map((element) => ({
+          id: element.quadrant_ID.toString(), // Ensure the ID is a string
+          text: element.quadrant_NAME, // Set the text to the name (or other property)
+        }));
+      },
+      (error) => {
+        this.errorMessage = 'Failed to load Quadrant: ' + error.message;
+      }
+    );
+  }
 
   getAllQuadrantDistance(): void {
     this.qdistanceService.getAllQuadrantDistance().subscribe(
