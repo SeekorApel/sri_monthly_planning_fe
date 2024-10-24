@@ -16,7 +16,11 @@ export class ViewWorkDayComponent implements OnInit {
   
   perHourSwitches = Array(24).fill(true);
   perHourReasons = Array(24).fill(''); 
+  ttSwitches = Array(3).fill(false); // TT switches
+  ttReasons = Array(3).fill(''); // TT reasons
 
+  tlSwitches = Array(3).fill(false); // TL switches
+  tlReasons = Array(3).fill(''); //
 
   isReasonRequired(shiftState: boolean): boolean {
     return !shiftState; 
@@ -118,7 +122,7 @@ export class ViewWorkDayComponent implements OnInit {
         const yearValue = eventDate.getFullYear(); // Get the full year (YYYY)
 
         // Set the title in the desired format
-        this.newEvent.title = `${dayName} - ${dayValue} - ${this.monthNames[monthValue]} - ${yearValue}`;
+        this.newEvent.title = `${dayName}, ${dayValue} - ${this.monthNames[monthValue]} - ${yearValue}`;
         this.showModal = true;
 
         this.shift1Switches = Array(3).fill(true);

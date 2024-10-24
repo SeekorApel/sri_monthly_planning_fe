@@ -16,13 +16,13 @@
         <table class="table table-bordered table-striped table-sm">
           <thead align="center">
             <tr>
-              <th>Su</th>
               <th>Mo</th>
               <th>Tu</th>
               <th>We</th>
               <th>Th</th>
               <th>Fr</th>
               <th>Sa</th>
+              <th>Su</th>
             </tr>
           </thead>
           <tbody align="center"> 
@@ -46,87 +46,191 @@
       <div class="event-details ml-4 ">
         <div *ngIf="selectedDay.days !== null" >
         <h3>{{title}}</h3>
-            <h4>Details for {{newEvent.title}} </h4>
-            <tabset #tabset>
-        
-              <!-- Tab 1: Summary -->
-              <tab heading="Summary">
-                <h4>Reason of deactive shift</h4>
-                <ul>
-                  <li>Shift 3: {{ shift1Reasons[2] ? shift1Reasons[2] : '-' }}</li>
-                  <li>Shift 1: {{ shift1Reasons[0] ? shift1Reasons[0] : '-' }}</li>
-                  <li>Shift 2: {{ shift1Reasons[1] ? shift1Reasons[1] : '-' }}</li>
-                </ul>
-              </tab>
-        
-              <!-- Tab 2: Shift -->
-              <tab heading="Shift" >
+          <h4>Details for {{newEvent.title}} </h4>
+          <tabset #tabset>
+      
+            <!-- Tab 1: Summary -->
+            <tab heading="Summary">
+              <h4>Reason of deactive shift</h4>
+              <ul>
+                <li>Shift 3: {{ shift1Reasons[2] ? shift1Reasons[2] : '-' }}</li>
+                <li>Shift 1: {{ shift1Reasons[0] ? shift1Reasons[0] : '-' }}</li>
+                <li>Shift 2: {{ shift1Reasons[1] ? shift1Reasons[1] : '-' }}</li>
+              </ul>
+            </tab>
+      
+            <!-- Tab 2: Shift -->
+            <tab heading="Shift">
+              <div class="form-group">
+            
+                <!-- Shift 1 -->
                 <div class="form-group">
-                  <!-- Shift 3 -->
-                  <div class="form-group ">
-                    <div class="per-hour-wrapper">
-                      <h4 style="min-width: 70px;">Shift 3</h4>
-                      <label class="switch switch-label switch-primary">
-                        <input type="checkbox" class="switch-input" [(ngModel)]="shift1Switches[2]" (ngModelChange)="handleShiftChange(2)">
-                        <span class="switch-slider" data-checked="On" data-unchecked="Off"></span>
-                      </label>
-                      <div *ngIf="isReasonRequired(shift1Switches[2])">
-                        <input type="text" placeholder="Reason" class="form-control"[(ngModel)]="shift1Reasons[2]" required>
-                      </div>
+                  <div class="per-hour-wrapper">
+                    <h4 style="min-width: 70px;">Shift 1</h4>
+                    <label class="switch switch-label switch-primary">
+                      <input type="checkbox" class="switch-input" [(ngModel)]="shift1Switches[0]" (ngModelChange)="handleShiftChange(0)" [disabled]="overTimeSwitch">
+                      <span class="switch-slider" data-checked="On" data-unchecked="Off"></span>
+                    </label>
+                    <div *ngIf="isReasonRequired(shift1Switches[0])">
+                      <input type="text" placeholder="Reason" class="form-control" [(ngModel)]="shift1Reasons[0]" required >
                     </div>
                   </div>
-
-                  <!-- Shift 1 -->
-                  <div class="form-group ">
-                    <div class="per-hour-wrapper">
-                      <h4 style="min-width: 70px;">Shift 1</h4>
-                      <label class="switch switch-label switch-primary">
-                        <input type="checkbox" class="switch-input" [(ngModel)]="shift1Switches[0]" (ngModelChange)="handleShiftChange(0)">
-                        <span class="switch-slider" data-checked="On" data-unchecked="Off"></span>
-                      </label>
-                      <div *ngIf="isReasonRequired(shift1Switches[0])" >
-                        <input type="text" placeholder="Reason" class="form-control" [(ngModel)]="shift1Reasons[0]" required>
-                      </div>
-                    </div>
-                  </div>
-
-                  <!-- Shift 2 -->
-                  <div class="form-group" >
-                    <div class="per-hour-wrapper" style="max-width: 200px;">
-                      <h4 style="min-width: 70px;">Shift 2</h4>
-                      <label class="switch switch-label switch-primary">
-                        <input type="checkbox" class="switch-input" [(ngModel)]="shift1Switches[1]" (ngModelChange)="handleShiftChange(1)">
-                        <span class="switch-slider" data-checked="On" data-unchecked="Off"></span>
-                      </label>
-                      <div *ngIf="isReasonRequired(shift1Switches[1])">
-                        <input type="text" placeholder="Reason" class="form-control" [(ngModel)]="shift1Reasons[1]" required>
-                      </div>
-                    </div>
-                  </div>
-
                 </div>
-              </tab>
-              <!-- Tab 3: Per Hour -->
-              <tab heading="Per Hour">
-                <div class="form-group per-hour-wrapper">
-                  <div *ngFor="let hour of [].constructor(24); let i = index" class="per-hour-wrapper-item">
+            
+                <!-- Shift 2 -->
+                <div class="form-group">
+                  <div class="per-hour-wrapper">
+                    <h4 style="min-width: 70px;">Shift 2</h4>
+                    <label class="switch switch-label switch-primary">
+                      <input type="checkbox" class="switch-input" [(ngModel)]="shift1Switches[1]" (ngModelChange)="handleShiftChange(1)" [disabled]="overTimeSwitch">
+                      <span class="switch-slider" data-checked="On" data-unchecked="Off"></span>
+                    </label>
+                    <div *ngIf="isReasonRequired(shift1Switches[1])">
+                      <input type="text" placeholder="Reason" class="form-control" [(ngModel)]="shift1Reasons[1]" required >
+                    </div>
+                  </div>
+                </div>
+            
+                <!-- Shift 3 -->
+                <div class="form-group">
+                  <div class="per-hour-wrapper">
+                    <h4 style="min-width: 70px;">Shift 3</h4>
+                    <label class="switch switch-label switch-primary">
+                      <input type="checkbox" class="switch-input" [(ngModel)]="shift1Switches[2]" (ngModelChange)="handleShiftChange(2)" [disabled]="overTimeSwitch">
+                      <span class="switch-slider" data-checked="On" data-unchecked="Off"></span>
+                    </label>
+                    <div *ngIf="isReasonRequired(shift1Switches[2])">
+                      <input type="text" placeholder="Reason" class="form-control" [(ngModel)]="shift1Reasons[2]" required >
+                    </div>
+                  </div>
+                </div>
+                                  
+                <!-- OverTime Switch -->
+                <div class="form-group">
+                  <div class="per-hour-wrapper">
+                    <h4 style="min-width: 70px;">OverTime</h4>
+                    <label class="switch switch-label switch-primary">
+                      <input type="checkbox" class="switch-input" [(ngModel)]="overTimeSwitch" (ngModelChange)="handleOverTimeChange()">
+                      <span class="switch-slider" data-checked="On" data-unchecked="Off"></span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <tabset>
+                <tab *ngIf="overTimeSwitch" heading="TT">
+                  <div class="form-group">
+                    <!-- TT Shift 1 -->
                     <div class="form-group">
                       <div class="per-hour-wrapper">
-                        <h6>{{ formatHourRange(i) }}</h6> 
-                        <label class="switch switch-label switch-primary" style="min-width: 10px;">
-                          <input type="checkbox" class="switch-input" [(ngModel)]="perHourSwitches[i]" [disabled]="isReasonRequiredPerHourSwitch(i)">
+                        <h4 style="min-width: 70px;">Shift 1</h4>
+                        <label class="switch switch-label switch-primary">
+                          <input type="checkbox" class="switch-input" [(ngModel)]="ttSwitches[0]" (ngModelChange)="handleTTSwitchChange(0)">
                           <span class="switch-slider" data-checked="On" data-unchecked="Off"></span>
                         </label>
-                        <!-- Reason input displayed if required -->
-                        <div *ngIf="isReasonRequiredPerHour(i)" class="reason-input">
-                          <input type="text" placeholder="Reason" class="form-control" [(ngModel)]="perHourReasons[i]" required>
+                        <div *ngIf="isReasonRequired(ttSwitches[0])">
+                          <input type="text" placeholder="Reason" class="form-control" [(ngModel)]="ttReasons[0]" required>
+                        </div>
+                      </div>
+                    </div>
+                
+                    <!-- TT Shift 2 -->
+                    <div class="form-group">
+                      <div class="per-hour-wrapper">
+                        <h4 style="min-width: 70px;">Shift 2</h4>
+                        <label class="switch switch-label switch-primary">
+                          <input type="checkbox" class="switch-input" [(ngModel)]="ttSwitches[1]" (ngModelChange)="handleTTSwitchChange(1)">
+                          <span class="switch-slider" data-checked="On" data-unchecked="Off"></span>
+                        </label>
+                        <div *ngIf="isReasonRequired(ttSwitches[1])">
+                          <input type="text" placeholder="Reason" class="form-control" [(ngModel)]="ttReasons[1]" required>
+                        </div>
+                      </div>
+                    </div>
+                
+                    <!-- TT Shift 3 -->
+                    <div class="form-group">
+                      <div class="per-hour-wrapper">
+                        <h4 style="min-width: 70px;">Shift 3</h4>
+                        <label class="switch switch-label switch-primary">
+                          <input type="checkbox" class="switch-input" [(ngModel)]="ttSwitches[2]" (ngModelChange)="handleTTSwitchChange(2)">
+                          <span class="switch-slider" data-checked="On" data-unchecked="Off"></span>
+                        </label>
+                        <div *ngIf="isReasonRequired(ttSwitches[2])">
+                          <input type="text" placeholder="Reason" class="form-control" [(ngModel)]="ttReasons[2]" required>
                         </div>
                       </div>
                     </div>
                   </div>
+                </tab>
+                
+                <tab *ngIf="overTimeSwitch" heading="TL">
+                  <div class="form-group">
+                    <!-- TL Shift 1 -->
+                    <div class="form-group">
+                      <div class="per-hour-wrapper">
+                        <h4 style="min-width: 70px;">Shift 1</h4>
+                        <label class="switch switch-label switch-primary">
+                          <input type="checkbox" class="switch-input" [(ngModel)]="tlSwitches[0]" (ngModelChange)="handleTLSwitchChange(0)">
+                          <span class="switch-slider" data-checked="On" data-unchecked="Off"></span>
+                        </label>
+                        <div *ngIf="isReasonRequired(tlSwitches[0])">
+                          <input type="text" placeholder="Reason" class="form-control" [(ngModel)]="tlReasons[0]" required>
+                        </div>
+                      </div>
+                    </div>
+                
+                    <!-- TL Shift 2 -->
+                    <div class="form-group">
+                      <div class="per-hour-wrapper">
+                        <h4 style="min-width: 70px;">Shift 2</h4>
+                        <label class="switch switch-label switch-primary">
+                          <input type="checkbox" class="switch-input" [(ngModel)]="tlSwitches[1]" (ngModelChange)="handleTLSwitchChange(1)">
+                          <span class="switch-slider" data-checked="On" data-unchecked="Off"></span>
+                        </label>
+                        <div *ngIf="isReasonRequired(tlSwitches[1])">
+                          <input type="text" placeholder="Reason" class="form-control" [(ngModel)]="tlReasons[1]" required>
+                        </div>
+                      </div>
+                    </div>
+                
+                    <!-- TL Shift 3 -->
+                    <div class="form-group">
+                      <div class="per-hour-wrapper">
+                        <h4 style="min-width: 70px;">Shift 3</h4>
+                        <label class="switch switch-label switch-primary">
+                          <input type="checkbox" class="switch-input" [(ngModel)]="tlSwitches[2]" (ngModelChange)="handleTLSwitchChange(2)">
+                          <span class="switch-slider" data-checked="On" data-unchecked="Off"></span>
+                        </label>
+                        <div *ngIf="isReasonRequired(tlSwitches[2])">
+                          <input type="text" placeholder="Reason" class="form-control" [(ngModel)]="tlReasons[2]" required>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </tab>
+              </tabset>              
+            </tab>                
+            <!-- Tab 3: Per Hour -->
+            <tab heading="Per Hour">
+              <div class="form-group per-hour-wrapper">
+                <div *ngFor="let hour of [].constructor(24); let i = index" class="per-hour-wrapper-item">
+                  <div class="form-group">
+                    <div class="per-hour-wrapper">
+                      <h6>{{ formatHourRange(i) }}</h6> 
+                      <label class="switch switch-label switch-primary" style="min-width: 10px;">
+                        <input type="checkbox" class="switch-input" [(ngModel)]="perHourSwitches[i]" [disabled]="isReasonRequiredPerHourSwitch(i)">
+                        <span class="switch-slider" data-checked="On" data-unchecked="Off"></span>
+                      </label>
+                      <!-- Reason input displayed if required -->
+                      <div *ngIf="isReasonRequiredPerHour(i)" class="reason-input">
+                        <input type="text" placeholder="Reason" class="form-control" [(ngModel)]="perHourReasons[i]" required>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              </tab>                          
-            </tabset>
+              </div>
+            </tab>                          
+          </tabset>
         </div>
       </div>             
     </div>
