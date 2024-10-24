@@ -20,7 +20,6 @@ export class DefaultLayoutComponent {
   constructor(private authenticationService: AuthenticationService, private router: Router) {
     //PERSONAL INFORMATION
     let currentUserSubject = JSON.parse(localStorage.getItem('currentUser'));
-localStorage.clear();
     this.nrp = currentUserSubject.userName;
     this.name = currentUserSubject.fullName;
     this.role = currentUserSubject.roles.role_name;

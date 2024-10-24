@@ -111,7 +111,8 @@ export class ViewProductComponent implements OnInit {
 
   resetSearch(): void {
     this.searchText = '';
-    this.onChangePage(this.products.slice(0, this.pageSize));
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
+    // this.onChangePage(this.products.slice(0, this.pageSize));
   }
 
   updateProduct(): void {
