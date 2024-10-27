@@ -7,8 +7,10 @@ export class DetailMarketingOrder {
   machineType: String;
   capacity: Number;
   qtyPerMould: Number;
+  spareMould: number;
+  mouldMonthlyPlan: number;
   qtyPerRak: Number;
-  minOrder: Number;
+  minOrder: number;
   maxCapMonth0: Number;
   maxCapMonth1: Number;
   maxCapMonth2: Number;
@@ -22,5 +24,7 @@ export class DetailMarketingOrder {
   ppd: Number;
   cav: Number;
   status: Number;
-  lockStatus: number;
+  lockStatusM0: number;
+  lockStatusM1: number;
+  lockStatusM2: number;
 }

@@ -110,7 +110,7 @@ export class EditMoPpcComponent implements OnInit {
   }
 
   toggleLockStatus(index: number) {
-    const currentStatus = this.detailMarketingOrder[index].lockStatus;
+    const currentStatus = this.detailMarketingOrder[index].lockStatusM0;
     const action = currentStatus === null || currentStatus === 1 ? 'unlock' : 'lock';
     const newStatus = action === 'lock' ? 1 : 0;
 
@@ -125,7 +125,7 @@ export class EditMoPpcComponent implements OnInit {
       cancelButtonText: 'Cancel'
     }).then((result) => {
       if (result.isConfirmed) {
-        this.detailMarketingOrder[index].lockStatus = newStatus;
+        this.detailMarketingOrder[index].lockStatusM0 = newStatus;
         Swal.fire(
           `${action === 'lock' ? 'Locked' : 'Unlocked'}!`,
           `The item has been ${action === 'lock' ? 'locked' : 'unlocked'}.`,

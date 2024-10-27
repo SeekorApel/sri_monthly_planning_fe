@@ -1,0 +1,15 @@
+::ng-deep .mat-sort-header-container {
+  justify-content: center;
+}
+
+::ng-deep th.mat-header-cell:first-of-type,
+::ng-deep td.mat-cell:first-of-type,
+::ng-deep td.mat-footer-cell:first-of-type {
+  padding-left: 0 !important;
+}
+
+::ng-deep th.mat-header-cell, 
+::ng-deep td.mat-cell, 
+::ng-deep td.mat-footer-cell{
+  padding: 0 !important;
+}

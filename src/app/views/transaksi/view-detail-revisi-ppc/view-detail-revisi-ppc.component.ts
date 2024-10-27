@@ -194,7 +194,7 @@ export class ViewDetailRevisiPpcComponent implements OnInit {
 
       // Header Month 1
       month_0: this.formatDateToString(this.headerMarketingOrder[0].month),
-      nwd_0: this.formatNumber(this.headerMarketingOrder[0].wdNormal),
+      nwd_0: this.formatNumber(this.headerMarketingOrder[0].wdNormalTire),
       tl_ot_wd_0: this.formatNumber(this.headerMarketingOrder[0].wdOtTl),
       tt_ot_wd_0: this.formatNumber(this.headerMarketingOrder[0].wdOtTt),
       total_tlwd_0: this.formatNumber(this.headerMarketingOrder[0].totalWdTl),
@@ -216,7 +216,7 @@ export class ViewDetailRevisiPpcComponent implements OnInit {
       note_tl_m0: this.headerMarketingOrder[0].noteOrderTl,
       // Header Month 2
       month_1: this.formatDateToString(this.headerMarketingOrder[1].month),
-      nwd_1: this.formatNumber(this.headerMarketingOrder[1].wdNormal),
+      nwd_1: this.formatNumber(this.headerMarketingOrder[1].wdNormalTire),
       tl_ot_wd_1: this.formatNumber(this.headerMarketingOrder[1].wdOtTl),
       tt_ot_wd_1: this.formatNumber(this.headerMarketingOrder[1].wdOtTt),
       total_tlwd_1: this.formatNumber(this.headerMarketingOrder[1].totalWdTl),
@@ -238,7 +238,7 @@ export class ViewDetailRevisiPpcComponent implements OnInit {
       note_tl_m1: this.headerMarketingOrder[1].noteOrderTl,
       // Header Month 3
       month_2: this.formatDateToString(this.headerMarketingOrder[2].month),
-      nwd_2: this.formatNumber(this.headerMarketingOrder[2].wdNormal),
+      nwd_2: this.formatNumber(this.headerMarketingOrder[2].wdNormalTire),
       tl_ot_wd_2: this.formatNumber(this.headerMarketingOrder[2].wdOtTl),
       tt_ot_wd_2: this.formatNumber(this.headerMarketingOrder[2].wdOtTt),
       total_tlwd_2: this.formatNumber(this.headerMarketingOrder[2].totalWdTl),

@@ -2,11 +2,14 @@ export class HeaderMarketingOrder {
   headerId: number;
   moId: String;
   month: Date;
-  wdNormal: number;
+  wdNormalTire: number;
   wdOtTl: number;
   wdOtTt: number;
+  wdNormalTube: number;
+  wdOtTube: number;
   totalWdTl: number;
   totalWdTt: number;
+  totalWdTube: number;
   maxCapTube: number;
   maxCapTl: number;
   maxCapTt: number;

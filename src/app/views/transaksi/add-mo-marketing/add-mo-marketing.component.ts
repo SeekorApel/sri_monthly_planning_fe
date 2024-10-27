@@ -155,7 +155,7 @@ export class AddMoMarketingComponent implements OnInit {
 
       // Header Month 1
       month_0: this.formatDateToString(this.headerMarketingOrder[0].month),
-      nwd_0: this.formatNumber(this.headerMarketingOrder[0].wdNormal),
+      nwd_0: this.formatNumber(this.headerMarketingOrder[0].wdNormalTire),
       tl_ot_wd_0: this.formatNumber(this.headerMarketingOrder[0].wdOtTl),
       tt_ot_wd_0: this.formatNumber(this.headerMarketingOrder[0].wdOtTt),
       total_tlwd_0: this.formatNumber(this.headerMarketingOrder[0].totalWdTl),
@@ -166,7 +166,7 @@ export class AddMoMarketingComponent implements OnInit {
 
       // Header Month 2
       month_1: this.formatDateToString(this.headerMarketingOrder[1].month),
-      nwd_1: this.formatNumber(this.headerMarketingOrder[1].wdNormal),
+      nwd_1: this.formatNumber(this.headerMarketingOrder[1].wdNormalTire),
       tl_ot_wd_1: this.formatNumber(this.headerMarketingOrder[1].wdOtTl),
       tt_ot_wd_1: this.formatNumber(this.headerMarketingOrder[1].wdOtTt),
       total_tlwd_1: this.formatNumber(this.headerMarketingOrder[1].totalWdTl),
@@ -177,7 +177,7 @@ export class AddMoMarketingComponent implements OnInit {
 
       // Header Month 3
       month_2: this.formatDateToString(this.headerMarketingOrder[2].month),
-      nwd_2: this.formatNumber(this.headerMarketingOrder[2].wdNormal),
+      nwd_2: this.formatNumber(this.headerMarketingOrder[2].wdNormalTire),
       tl_ot_wd_2: this.formatNumber(this.headerMarketingOrder[2].wdOtTl),
       tt_ot_wd_2: this.formatNumber(this.headerMarketingOrder[2].wdOtTt),
       total_tlwd_2: this.formatNumber(this.headerMarketingOrder[2].totalWdTl),
@@ -260,9 +260,9 @@ export class AddMoMarketingComponent implements OnInit {
     worksheet.getCell('N10').font = { name: 'Calibri Body', size: 11, bold: true, italic: true };
     setBorder(worksheet.getCell('N10'));
 
-    worksheet.getCell('Q10').value = this.headerMarketingOrder[1].wdNormal; // "Month 1"
-    worksheet.getCell('R10').value = this.headerMarketingOrder[2].wdNormal; // "Month 2"
-    worksheet.getCell('S10').value = this.headerMarketingOrder[0].wdNormal; // "Month 3"
+    worksheet.getCell('Q10').value = this.headerMarketingOrder[1].wdNormalTire; // "Month 1"
+    worksheet.getCell('R10').value = this.headerMarketingOrder[2].wdNormalTire; // "Month 2"
+    worksheet.getCell('S10').value = this.headerMarketingOrder[0].wdNormalTire; // "Month 3"
 
     worksheet.mergeCells('N11:P11');
     worksheet.getCell('N11').value = 'Workday Overtime TL';
@@ -716,7 +716,7 @@ export class AddMoMarketingComponent implements OnInit {
 
     let rowIndex = 21;
     this.detailMarketingOrder.forEach((item) => {
-      if (item.lockStatus !== 1) {
+      if (item.lockStatusM0 !== 1) {
         worksheet.getCell(`B${rowIndex}`).value = item.category;
         worksheet.getCell(`C${rowIndex}`).value = item.partNumber;
         worksheet.getCell(`C${rowIndex}`).numFmt = '0';
@@ -965,7 +965,7 @@ export class AddMoMarketingComponent implements OnInit {
 
   saveMo(): void {
     this.detailMarketingOrder.forEach((mo) => {
-      if (mo.lockStatus === 1) {
+      if (mo.lockStatusM0 === 1) {
         mo.initialStock = 0;
         mo.sfMonth0 = 0;
         mo.sfMonth1 = 0;

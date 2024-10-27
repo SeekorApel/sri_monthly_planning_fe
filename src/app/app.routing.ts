@@ -12,7 +12,7 @@ import { AuthGuard } from './services/auth.guard';
 import { DashboardComponent } from './views/dashboard/dashboard.component';
 import { ViewPlantComponent } from './views/master-data/view-plant/view-plant.component';
 import { ViewMoPpcComponent } from './views/transaksi/view/view-mo-ppc/view-mo-ppc.component';
-import { AddMoPpcComponent } from './views/transaksi/add-mo-ppc/add-mo-ppc.component';
+import { AddMoPpcComponent } from './views/transaksi/add/add-mo-ppc/add-mo-ppc.component';
 import { ViewSettingComponent } from './views/master-data/view-setting/view-setting.component';
 import { ViewQuadrantComponent } from './views/master-data/view-quadrant/view-quadrant.component';
 import { ViewProductTypeComponent } from './views/master-data/view-product-type/view-product-type.component';

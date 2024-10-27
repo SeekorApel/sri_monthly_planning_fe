@@ -786,7 +786,7 @@ export class EditMoMarketingComponent implements OnInit {
 
     let rowIndex = 21;
     this.detailMarketingOrder.forEach((item) => {
-      if (item.lockStatus !== 1) {
+      if (item.lockStatusM0 !== 1) {
         worksheet.getCell(`B${rowIndex}`).value = item.category;
         worksheet.getCell(`C${rowIndex}`).value = item.partNumber;
         worksheet.getCell(`C${rowIndex}`).numFmt = '0';
