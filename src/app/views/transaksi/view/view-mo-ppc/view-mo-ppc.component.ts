@@ -1,10 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { MarketingOrder } from 'src/app/models/MarketingOrder';
 import { ApiResponse } from 'src/app/response/Response';
 import { MarketingOrderService } from 'src/app/services/transaksi/marketing order/marketing-order.service';
-import { ParsingDate } from 'src/app/utils/ParsingDate';
 import Swal from 'sweetalert2';
+import { MatTableDataSource } from '@angular/material/table';
+import { ParsingDateService } from 'src/app/utils/parsing-date/parsing-date.service';
+import { MatSort } from '@angular/material/sort';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-view-mo-ppc',
@@ -14,57 +17,57 @@ import Swal from 'sweetalert2';
 export class ViewMoPpcComponent implements OnInit {
   //Declaration
   marketingOrders: MarketingOrder[] = [];
-  errorMessage: string | null = null;
   searchText: string = '';
-
-  dataTemp: any[];
-  dateUtil: typeof ParsingDate;
 
   // Pagination
   pageOfItems: Array<any>;
   pageSize: number = 5;
   totalPages: number = 5;
+  displayedColumns: string[] = ['no', 'moId', 'type', 'dateValid', 'revisionPpc', 'revisionMarketing', 'month0', 'month1', 'month2', 'action'];
+  dataSource: MatTableDataSource<MarketingOrder>;
+  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  constructor(private router: Router, private moService: MarketingOrderService) {
-    this.dateUtil = ParsingDate;
+  constructor(private router: Router, private moService: MarketingOrderService, private parseDateService: ParsingDateService) {
   }
 
   ngOnInit(): void {
     this.getAllMarketingOrder();
   }
 
-  exportExcelMo(id: string): void {
-    this.moService.downloadExcelMo(id).subscribe(
-      (response: Blob) => {
-        const url = window.URL.createObjectURL(response);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `Marketing_Order_${id}.xlsx`; // Nama file yang diinginkan
-        a.click();
-        window.URL.revokeObjectURL(url);
-      },
-      error => {
-        Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
-          text: 'Gagal mendownload file. Silakan coba lagi!',
-        });
-        console.error('Error downloading file:', error);
-      }
-    );
+  parseDate(dateParse: string): string {
+    return this.parseDateService.convertDateToString(dateParse);
   }
 
   getAllMarketingOrder(): void {
     this.moService.getAllMarketingOrder().subscribe(
       (response: ApiResponse<MarketingOrder[]>) => {
         this.marketingOrders = response.data;
-        this.onChangePage(this.marketingOrders.slice(0, this.pageSize));
+        if (this.marketingOrders.length === 0) {
+          Swal.fire({
+            icon: 'info',
+            title: 'No Data',
+            text: 'No marketing orders found.',
+            timer: 3000,
+            showConfirmButton: false
+          });
+        } else {
+          this.marketingOrders = response.data;
+          this.dataSource = new MatTableDataSource(this.marketingOrders);
+          this.dataSource.sort = this.sort;
+          this.dataSource.paginator = this.paginator;
+        }
       },
       (error) => {
-        this.errorMessage = 'Failed to load plants: ' + error.message;
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Failed to load marketing orders: ' + error.message,
+          timer: 3000,
+          showConfirmButton: false
+        });
       }
     );
-    this.onChangePage(this.marketingOrders.slice(0, this.pageSize));
   }
 
   onChangePage(pageOfItems: Array<any>) {
@@ -72,13 +75,12 @@ export class ViewMoPpcComponent implements OnInit {
   }
 
   onSearchChange(): void {
-    const filteredSearch = this.marketingOrders.filter((mo) => mo.moId.toString().includes(this.searchText) || mo.type.toLowerCase().includes(this.searchText.toLowerCase()));
-    this.onChangePage(filteredSearch.slice(0, this.pageSize));
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
   }
 
   resetSearch(): void {
     this.searchText = '';
-    this.onChangePage(this.marketingOrders.slice(0, this.pageSize));
+    this.dataSource.filter = '';
   }
 
   navigateToAdd() {
@@ -110,8 +112,6 @@ export class ViewMoPpcComponent implements OnInit {
     // Menggunakan string tanggal yang sudah dikonversi
     this.router.navigate(['/transaksi/view-revisi-mo-ppc/', month0, month1, month2, type]);
   }
-
-
 
   navigateToEdit(idMo: String) {
     this.router.navigate(['/transaksi/edit-mo-ppc', idMo]);
@@ -167,5 +167,26 @@ export class ViewMoPpcComponent implements OnInit {
         );
       }
     });
+  }
+
+  exportExcelMo(id: string): void {
+    this.moService.downloadExcelMo(id).subscribe(
+      (response: Blob) => {
+        const url = window.URL.createObjectURL(response);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `Marketing_Order_${id}.xlsx`; // Nama file yang diinginkan
+        a.click();
+        window.URL.revokeObjectURL(url);
+      },
+      error => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Gagal mendownload file. Silakan coba lagi!',
+        });
+        console.error('Error downloading file:', error);
+      }
+    );
   }
 }

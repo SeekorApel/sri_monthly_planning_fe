@@ -1,0 +1,13 @@
+.uniform-button {
+  min-width: 60px; /* Adjust the width as needed for consistency */
+}
+
+::ng-deep .mat-sort-header-container {
+  justify-content: center;
+}
+
+.pagination-container {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+}

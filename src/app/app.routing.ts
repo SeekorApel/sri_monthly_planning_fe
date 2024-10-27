@@ -11,7 +11,7 @@ import { RegisterComponent } from './views/register/register.component';
 import { AuthGuard } from './services/auth.guard';
 import { DashboardComponent } from './views/dashboard/dashboard.component';
 import { ViewPlantComponent } from './views/master-data/view-plant/view-plant.component';
-import { ViewMoPpcComponent } from './views/transaksi/view-mo-ppc/view-mo-ppc.component';
+import { ViewMoPpcComponent } from './views/transaksi/view/view-mo-ppc/view-mo-ppc.component';
 import { AddMoPpcComponent } from './views/transaksi/add-mo-ppc/add-mo-ppc.component';
 import { ViewSettingComponent } from './views/master-data/view-setting/view-setting.component';
 import { ViewQuadrantComponent } from './views/master-data/view-quadrant/view-quadrant.component';
@@ -39,7 +39,7 @@ import { ViewItemAssyComponent } from './views/master-data/view-item-assy/view-i
 import { ViewMachineExtrudingComponent } from './views/master-data/view-machine-extruding/view-machine-extruding.component';
 import { ViewCtKapaComponent } from './views/master-data/view-ct-kapa/view-ct-kapa.component';
 import { ViewDDeliveryScheduleComponent } from './views/master-data/view-d-deliveryschedule/view-d-deliveryschedule.component';
-import { ViewMoMarketingComponent } from './views/transaksi/view-mo-marketing/view-mo-marketing.component';
+import { ViewMoMarketingComponent } from './views/transaksi/view/view-mo-marketing/view-mo-marketing.component';
 import { AddMoMarketingComponent } from './views/transaksi/add-mo-marketing/add-mo-marketing.component';
 import { DetailViewMoPpcComponent } from './views/transaksi/detail-view-mo-ppc/detail-view-mo-ppc.component';
 import { EditMoPpcComponent } from './views/transaksi/edit-mo-ppc/edit-mo-ppc.component';
