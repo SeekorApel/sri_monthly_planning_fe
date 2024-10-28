@@ -302,7 +302,7 @@
 
             <!-- Machine Type Column -->
             <ng-container matColumnDef="machineType">
-              <th *matHeaderCellDef rowspan="2" style="min-width: 250px" mat-sort-header>Machine Type</th>
+              <th *matHeaderCellDef rowspan="2" style="min-width: 100px" mat-sort-header>Machine Type</th>
               <td class="text-center" *matCellDef="let mo">{{ mo.machineType }}</td>
             </ng-container>
 
@@ -315,7 +315,7 @@
             <!-- Mould Plan Column -->
             <ng-container matColumnDef="mouldMonthlyPlan">
               <th *matHeaderCellDef rowspan="2" style="min-width: 50px" mat-sort-header>Mould Plan</th>
-              <td class="text-right" *matCellDef="let mo">{{ separatorNumber(mo.mouldMonthlyPlan) }}</td>
+              <td class="text-right" *matCellDef="let mo">{{ mo.mouldMonthlyPlan }}</td>
             </ng-container>
 
             <!-- Qty PerRak Column -->
@@ -332,20 +332,23 @@
 
             <!-- Maximum Capacity Column -->
             <ng-container matColumnDef="maxCap">
-              <th mat-sort-header style="min-width: 350px" *matHeaderCellDef colspan="3" class="sticky-column">Maximum Capacity</th>
+              <th mat-sort-header style="min-width: 350px" *matHeaderCellDef colspan="3">Maximum Capacity</th>
             </ng-container>
 
             <!-- Initial Stock Column -->
             <ng-container matColumnDef="initialStock">
-              <th mat-sort-header style="min-width: 150px" *matHeaderCellDef rowspan="3" class="sticky-column">Initial Stock</th>
+              <th mat-sort-header style="min-width: 150px" rowspan="2" *matHeaderCellDef>Initial Stock</th>
+              <td *matCellDef="let mo; let i = index">
+                <input type="text" [ngModel]="formatNumber(mo.initialStock)" (ngModelChange)="onInputChange($event, mo, 'initialStock')" (input)="onInputFormat($event)" class="text-right form-control" />
+              </td>
             </ng-container>
 
             <!-- Sales Forecast Column -->
             <ng-container matColumnDef="salesForecast">
-              <th mat-sort-header style="min-width: 350px" *matHeaderCellDef colspan="3" class="sticky-column">Sales Forecast</th>
+              <th mat-sort-header style="min-width: 350px" *matHeaderCellDef colspan="3">Sales Forecast</th>
             </ng-container>
 
-            <!-- Sales Forecast Column -->
+            <!-- Marketing Order Column -->
             <ng-container matColumnDef="marketingOrder">
               <th mat-sort-header style="min-width: 350px" *matHeaderCellDef colspan="3" class="sticky-column">Marketing Order</th>
             </ng-container>
@@ -372,38 +375,80 @@
 
             <!-- sfMonth0 Column -->
             <ng-container matColumnDef="sfMonth0">
-              <th mat-sort-header *matHeaderCellDef style="min-width: 80px" class="child-column">{{ monthNames[0] || 'Month 1' }}</th>
-              <td mat-cell *matCellDef="let mo" class="text-right">{{ mo.sfMonth0 }}</td>
+              <th mat-sort-header *matHeaderCellDef style="min-width: 80px">{{ monthNames[0] || 'Month 1' }}</th>
+              <td mat-cell *matCellDef="let mo">
+                <input type="text" [ngModel]="formatNumber(mo.sfMonth0)" (ngModelChange)="onInputChange($event, mo, 'sfMonth0')" (input)="onInputFormat($event)" class="text-right form-control" />
+              </td>
             </ng-container>
 
             <!-- sfMonth1 Column -->
             <ng-container matColumnDef="sfMonth1">
-              <th mat-sort-header *matHeaderCellDef style="min-width: 80px" class="child-column">{{ monthNames[1] || 'Month 1' }}</th>
-              <td mat-cell *matCellDef="let mo" class="text-right">{{ mo.sfMonth1 }}</td>
+              <th mat-sort-header *matHeaderCellDef style="min-width: 80px">{{ monthNames[1] || 'Month 1' }}</th>
+              <td mat-cell *matCellDef="let mo">
+                <input type="text" [ngModel]="formatNumber(mo.sfMonth1)" (ngModelChange)="onInputChange($event, mo, 'sfMonth1')" (input)="onInputFormat($event)" class="text-right form-control" />
+              </td>
             </ng-container>
 
             <!-- sfMonth2 Column -->
             <ng-container matColumnDef="sfMonth2">
-              <th mat-sort-header *matHeaderCellDef style="min-width: 80px" class="child-column">{{ monthNames[2] || 'Month 1' }}</th>
-              <td mat-cell *matCellDef="let mo" class="text-right">{{ mo.sfMonth2 }}</td>
+              <th mat-sort-header *matHeaderCellDef style="min-width: 80px">{{ monthNames[2] || 'Month 1' }}</th>
+              <td mat-cell *matCellDef="let mo">
+                <input type="text" [ngModel]="formatNumber(mo.sfMonth2)" (ngModelChange)="onInputChange($event, mo, 'sfMonth2')" (input)="onInputFormat($event)" class="text-right form-control" />
+              </td>
             </ng-container>
 
             <!-- moMonth0 Column -->
             <ng-container matColumnDef="moMonth0">
               <th mat-sort-header *matHeaderCellDef style="min-width: 80px" class="child-column">{{ monthNames[0] || 'Month 1' }}</th>
-              <td mat-cell *matCellDef="let mo" class="text-right">{{ mo.moMonth0 }}</td>
+              <td mat-cell *matCellDef="let mo" class="text-right" [ngClass]="{ 'locked-background': mo.lockStatusM0 === 1 }">
+                <input
+                  *ngIf="mo.lockStatusM0 !== 1"
+                  type="text"
+                  [ngModel]="formatNumber(mo.moMonth0)"
+                  (ngModelChange)="onInputChange($event, mo, 'moMonth0')"
+                  (input)="onInputFormat($event)"
+                  class="text-right form-control"
+                  [ngClass]="{
+                    'is-invalid': isInvalidValue(mo.moMonth0, mo.MinimalOrder, mo.qtyPerRak, mo.maxCapMonth0)
+                  }"
+                />
+              </td>
             </ng-container>
 
             <!-- moMonth1 Column -->
             <ng-container matColumnDef="moMonth1">
               <th mat-sort-header *matHeaderCellDef style="min-width: 80px" class="child-column">{{ monthNames[1] || 'Month 1' }}</th>
-              <td mat-cell *matCellDef="let mo" class="text-right">{{ mo.moMonth1 }}</td>
+              <td mat-cell *matCellDef="let mo" class="text-right" [ngClass]="{ 'locked-background': mo.lockStatusM1 === 1 }">
+                <input
+                  *ngIf="mo.lockStatusM1 !== 1"
+                  type="text"
+                  [ngModel]="formatNumber(mo.moMonth1)"
+                  (ngModelChange)="onInputChange($event, mo, 'moMonth1')"
+                  (input)="onInputFormat($event)"
+                  class="text-right form-control"
+                  [ngClass]="{
+                    'is-invalid': isInvalidValue(mo.moMonth1, mo.MinimalOrder, mo.qtyPerRak, mo.maxCapMonth1)
+                  }"
+                />
+              </td>
             </ng-container>
 
             <!-- moMonth2 Column -->
             <ng-container matColumnDef="moMonth2">
               <th mat-sort-header *matHeaderCellDef style="min-width: 80px" class="child-column">{{ monthNames[2] || 'Month 2' }}</th>
-              <td mat-cell *matCellDef="let mo" class="text-right">{{ mo.moMonth2 }}</td>
+              <td mat-cell *matCellDef="let mo" class="text-right" [ngClass]="{ 'locked-background': mo.lockStatusM0 === 2 }">
+                <input
+                  *ngIf="mo.lockStatusM2 !== 1"
+                  type="text"
+                  [ngModel]="formatNumber(mo.moMonth2)"
+                  (ngModelChange)="onInputChange($event, mo, 'moMonth2')"
+                  (input)="onInputFormat($event)"
+                  class="text-right form-control"
+                  [ngClass]="{
+                    'is-invalid': isInvalidValue(mo.moMonth2, mo.MinimalOrder, mo.qtyPerRak, mo.maxCapMonth2)
+                  }"
+                />
+              </td>
             </ng-container>
 
             <tr align="center" style="height: 30px" mat-header-row *matHeaderRowDef="headersColumns; sticky: true"></tr>
@@ -411,6 +456,8 @@
             <tr style="height: 30px" mat-row *matRowDef="let row; columns: rowData"></tr>
           </table>
         </div>
+        <!-- Pagination -->
+        <mat-paginator [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
       </div>
       <div class="col-md-12 pb-4">
         <button (click)="navigateToViewMo()" class="btn btn-primary justify-content-start mr-2">Back</button>

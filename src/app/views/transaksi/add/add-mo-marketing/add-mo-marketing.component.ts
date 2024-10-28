@@ -26,6 +26,7 @@ export class AddMoMarketingComponent implements OnInit {
   idMo: String;
   searchText: string = '';
   monthNames: string[] = ['', '', ''];
+  touchedRows: boolean[] = [];
   formHeaderMo: FormGroup;
   isReadOnly: Boolean = true;
   isTableVisible: boolean = false;
@@ -43,7 +44,6 @@ export class AddMoMarketingComponent implements OnInit {
   headersColumns: string[] = ['no', 'category', 'partNumber', 'description', 'machineType', 'capacity', 'mouldMonthlyPlan', 'qtyPerRak', 'minOrder', 'maxCap', 'initialStock', 'salesForecast', 'marketingOrder'];
   childHeadersColumns: string[] = ['maxCapMonth0', 'maxCapMonth1', 'maxCapMonth2', 'sfMonth0', 'sfMonth1', 'sfMonth2', 'moMonth0', 'moMonth1', 'moMonth2'];
   rowData: string[] = ['no', 'category', 'partNumber', 'description', 'machineType', 'capacity', 'mouldMonthlyPlan', 'qtyPerRak', 'minOrder', 'maxCapMonth0', 'maxCapMonth1', 'maxCapMonth2', 'initialStock', 'sfMonth0', 'sfMonth1', 'sfMonth2', 'moMonth0', 'moMonth1', 'moMonth2'];
-
   dataSource: MatTableDataSource<DetailMarketingOrder>;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -136,6 +136,57 @@ export class AddMoMarketingComponent implements OnInit {
     this.getAllData(this.idMo);
   }
 
+  formatNumber(value: any): string {
+    if (value == null || value === '') {
+      return '';
+    }
+    return Number(value).toLocaleString('id-ID');
+  }
+
+  onInputChange(value: string, mo: any, field: string): void {
+    const numericValue = value.replace(/\./g, '').replace(/,/g, '.');
+    mo[field] = numericValue;
+  }
+
+  onInputFormat(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const value = input.value;
+    const numericValue = value.replace(/\./g, '').replace(/,/g, '.');
+    input.value = this.formatNumber(numericValue);
+  }
+
+
+  isInvalidValue(value: any | null | undefined, minimumOrder: number, qtyPerRak: number, maxCapacity: number): boolean {
+    // Jika nilai adalah null atau undefined, anggap tidak valid
+    console.log(value)
+
+    if (value == null ) {
+      return false;
+    }
+
+    // Hapus pemisah ribuan (.) dan ubah ke format numerik
+    const moValue = parseFloat(value.toString().replace(/\./g, '').replace(/,/g, '.'));
+
+    // Cek apakah nilai kurang dari minimum order
+    if (moValue < minimumOrder) {
+      return true;
+    }
+
+    // Cek apakah kelipatan qtyRak
+    if (moValue % qtyPerRak !== 0 && moValue !== 0) {
+      return true;
+    }
+
+    // Cek apakah nilai melebihi kapasitas maksimum
+    if (moValue > maxCapacity) {
+      return true;
+    }
+
+    // Jika semua kondisi di atas tidak terpenuhi, nilai valid
+    return false;
+  }
+
+
   separatorNumber(num: number): string {
     return this.parsingNumberService.separatorTableView(num);
   }
@@ -153,22 +204,22 @@ export class AddMoMarketingComponent implements OnInit {
     this.dataSource.filter = '';
   }
 
-  onInputChange(event: any, mo: any, field: string) {
-    let value = event.target.value;
-    value = value.replace(/[^0-9]/g, '');
-    value = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-    mo[field] = value;
-    event.target.value = value;
-  }
+  // onInputChange(event: any, mo: any, field: string) {
+  //   let value = event.target.value;
+  //   value = value.replace(/[^0-9]/g, '');
+  //   value = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  //   mo[field] = value;
+  //   event.target.value = value;
+  // }
 
-  isInvalidValue(value: any | null | undefined, minOrder: number, maxCap: number): boolean {
-    if (value === null || value === undefined) {
-      return false;
-    }
-    const stringValue = typeof value === 'string' ? value : value.toString();
-    const numericValue = parseFloat(stringValue.replace(/\./g, ''));
-    return numericValue < minOrder || numericValue > maxCap;
-  }
+  // isInvalidValue(value: any | null | undefined, minOrder: number, maxCap: number): boolean {
+  //   if (value === null || value === undefined) {
+  //     return false;
+  //   }
+  //   const stringValue = typeof value === 'string' ? value : value.toString();
+  //   const numericValue = parseFloat(stringValue.replace(/\./g, ''));
+  //   return numericValue < minOrder || numericValue > maxCap;
+  // }
 
   getAllData(idMo: String) {
     this.moService.getAllMoById(idMo).subscribe(
@@ -191,11 +242,12 @@ export class AddMoMarketingComponent implements OnInit {
     this.headerMarketingOrder = data.dataHeaderMo;
     this.detailMarketingOrder = data.dataDetailMo;
 
+    this.touchedRows = new Array(this.detailMarketingOrder.length).fill(false);
     this.dataSource = new MatTableDataSource(this.detailMarketingOrder);
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
 
-    console.log("Aaa",this.dataSource.data);
+    console.log("Aaa", this.dataSource.data);
 
     this.formHeaderMo.patchValue({
       date: new Date(data.dateValid).toISOString().split('T')[0],
@@ -251,17 +303,17 @@ export class AddMoMarketingComponent implements OnInit {
     return this.parsingNumberService.separatorAndDecimalView(value);
   }
 
-  formatNumber(value: number | null | undefined): string {
-    if (value !== null && value !== undefined && !isNaN(value)) {
-      let strValue = value.toString();
-      const parts = strValue.split('.');
-      const integerPart = parts[0];
-      const decimalPart = parts[1] ? ',' + parts[1] : '';
-      const formattedInteger = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-      return formattedInteger + decimalPart;
-    }
-    return '';
-  }
+  // formatNumber(value: number | null | undefined): string {
+  //   if (value !== null && value !== undefined && !isNaN(value)) {
+  //     let strValue = value.toString();
+  //     const parts = strValue.split('.');
+  //     const integerPart = parts[0];
+  //     const decimalPart = parts[1] ? ',' + parts[1] : '';
+  //     const formattedInteger = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  //     return formattedInteger + decimalPart;
+  //   }
+  //   return '';
+  // }
 
   downloadTemplate() {
     const workbook = new ExcelJS.Workbook();
@@ -324,6 +376,9 @@ export class AddMoMarketingComponent implements OnInit {
     worksheet.getCell('Q10').value = this.headerMarketingOrder[1].wdNormalTire; // "Month 1"
     worksheet.getCell('R10').value = this.headerMarketingOrder[2].wdNormalTire; // "Month 2"
     worksheet.getCell('S10').value = this.headerMarketingOrder[0].wdNormalTire; // "Month 3"
+    worksheet.getCell('Q10').numFmt = '0.00';
+    worksheet.getCell('R10').numFmt = '0.00';
+    worksheet.getCell('S10').numFmt = '0.00';
 
     worksheet.mergeCells('N11:P11');
     worksheet.getCell('N11').value = 'Workday Overtime TL';
@@ -332,9 +387,10 @@ export class AddMoMarketingComponent implements OnInit {
     worksheet.getCell('Q11').value = this.headerMarketingOrder[1].wdOtTl; // "Month 1"
     worksheet.getCell('R11').value = this.headerMarketingOrder[2].wdOtTl; // "Month 2"
     worksheet.getCell('S11').value = this.headerMarketingOrder[0].wdOtTl; // "Month 3"
-    ['Q11', 'R11', 'S11'].forEach((cell) => {
-      worksheet.getCell(cell).alignment = { vertical: 'middle', horizontal: 'center' };
-    });
+    worksheet.getCell('Q11').numFmt = '0.00';
+    worksheet.getCell('R11').numFmt = '0.00';
+    worksheet.getCell('S11').numFmt = '0.00';
+
 
     worksheet.mergeCells('N12:P12');
     worksheet.getCell('N12').value = 'Workday Overtime TT';
@@ -343,9 +399,10 @@ export class AddMoMarketingComponent implements OnInit {
     worksheet.getCell('Q12').value = this.headerMarketingOrder[1].wdOtTt; // "Month 1"
     worksheet.getCell('R12').value = this.headerMarketingOrder[2].wdOtTt; // "Month 2"
     worksheet.getCell('S12').value = this.headerMarketingOrder[0].wdOtTt; // "Month 3"
-    ['Q12', 'R12', 'S12'].forEach((cell) => {
-      worksheet.getCell(cell).alignment = { vertical: 'middle', horizontal: 'center' };
-    });
+    worksheet.getCell('Q12').numFmt = '0.00';
+    worksheet.getCell('R12').numFmt = '0.00';
+    worksheet.getCell('S12').numFmt = '0.00';
+
 
     worksheet.mergeCells('N13:P13');
     worksheet.getCell('N13').value = 'Total Workday Tire TL';
@@ -354,9 +411,9 @@ export class AddMoMarketingComponent implements OnInit {
     worksheet.getCell('Q13').value = this.headerMarketingOrder[1].totalWdTl; // "Month 1"
     worksheet.getCell('R13').value = this.headerMarketingOrder[2].totalWdTl; // "Month 2"
     worksheet.getCell('S13').value = this.headerMarketingOrder[0].totalWdTl; // "Month 3"
-    ['Q13', 'R13', 'S13'].forEach((cell) => {
-      worksheet.getCell(cell).alignment = { vertical: 'middle', horizontal: 'center' };
-    });
+    worksheet.getCell('Q13').numFmt = '0.00';
+    worksheet.getCell('R13').numFmt = '0.00';
+    worksheet.getCell('S13').numFmt = '0.00';
 
     worksheet.mergeCells('N14:P14');
     worksheet.getCell('N14').value = 'Total Workday Tire TT';
@@ -365,12 +422,9 @@ export class AddMoMarketingComponent implements OnInit {
     worksheet.getCell('Q14').value = this.headerMarketingOrder[1].totalWdTt; // "Month 1"
     worksheet.getCell('R14').value = this.headerMarketingOrder[2].totalWdTt; // "Month 2"
     worksheet.getCell('S14').value = this.headerMarketingOrder[0].totalWdTt; // "Month 3"
-    worksheet.getCell('Q14').numFmt = '#,##0';
-    worksheet.getCell('R14').numFmt = '#,##0';
-    worksheet.getCell('S14').numFmt = '#,##0';
-    ['Q14', 'R14', 'S14'].forEach((cell) => {
-      worksheet.getCell(cell).alignment = { vertical: 'middle', horizontal: 'center' };
-    });
+    worksheet.getCell('Q14').numFmt = '0.00';
+    worksheet.getCell('R14').numFmt = '0.00';
+    worksheet.getCell('S14').numFmt = '0.00';
 
     worksheet.mergeCells('N15:P15');
     worksheet.getCell('N15').value = 'Max Capacity Tube';
@@ -777,128 +831,178 @@ export class AddMoMarketingComponent implements OnInit {
 
     let rowIndex = 21;
     this.detailMarketingOrder.forEach((item) => {
-      if (item.lockStatusM0 !== 1) {
-        worksheet.getCell(`B${rowIndex}`).value = item.category;
-        worksheet.getCell(`C${rowIndex}`).value = item.partNumber;
-        worksheet.getCell(`C${rowIndex}`).numFmt = '0';
+      worksheet.getCell(`B${rowIndex}`).value = item.category;
+      worksheet.getCell(`C${rowIndex}`).value = item.partNumber;
+      worksheet.getCell(`C${rowIndex}`).numFmt = '0';
 
-        worksheet.getCell(`D${rowIndex}`).value = item.description;
-        worksheet.getCell(`E${rowIndex}`).value = item.machineType;
+      worksheet.getCell(`D${rowIndex}`).value = item.description;
+      worksheet.getCell(`E${rowIndex}`).value = item.machineType;
 
-        worksheet.getCell(`F${rowIndex}`).value = item.capacity;
-        worksheet.getCell(`F${rowIndex}`).numFmt = '#,##0';
+      worksheet.getCell(`F${rowIndex}`).value = item.capacity;
+      worksheet.getCell(`F${rowIndex}`).numFmt = '#,##0';
 
-        worksheet.getCell(`G${rowIndex}`).value = item.qtyPerMould;
-        worksheet.getCell(`G${rowIndex}`).numFmt = '#,##0';
+      worksheet.getCell(`G${rowIndex}`).value = item.qtyPerMould;
+      worksheet.getCell(`G${rowIndex}`).numFmt = '#,##0';
 
-        worksheet.getCell(`H${rowIndex}`).value = item.qtyPerRak;
-        worksheet.getCell(`H${rowIndex}`).numFmt = '#,##0';
+      worksheet.getCell(`H${rowIndex}`).value = item.qtyPerRak;
+      worksheet.getCell(`H${rowIndex}`).numFmt = '#,##0';
 
-        worksheet.getCell(`I${rowIndex}`).value = item.minOrder;
-        worksheet.getCell(`I${rowIndex}`).numFmt = '#,##0';
+      worksheet.getCell(`I${rowIndex}`).value = item.minOrder;
+      worksheet.getCell(`I${rowIndex}`).numFmt = '#,##0';
 
-        worksheet.getCell(`J${rowIndex}`).value = item.maxCapMonth0;
-        worksheet.getCell(`J${rowIndex}`).numFmt = '#,##0';
+      worksheet.getCell(`J${rowIndex}`).value = item.maxCapMonth0;
+      worksheet.getCell(`J${rowIndex}`).numFmt = '#,##0';
 
-        worksheet.getCell(`K${rowIndex}`).value = item.maxCapMonth1;
-        worksheet.getCell(`K${rowIndex}`).numFmt = '#,##0';
+      worksheet.getCell(`K${rowIndex}`).value = item.maxCapMonth1;
+      worksheet.getCell(`K${rowIndex}`).numFmt = '#,##0';
 
-        worksheet.getCell(`L${rowIndex}`).value = item.maxCapMonth2;
-        worksheet.getCell(`L${rowIndex}`).numFmt = '#,##0';
+      worksheet.getCell(`L${rowIndex}`).value = item.maxCapMonth2;
+      worksheet.getCell(`L${rowIndex}`).numFmt = '#,##0';
 
-        worksheet.getCell(`M${rowIndex}`).value = item.initialStock;
-        worksheet.getCell(`M${rowIndex}`).numFmt = '#,##0';
+      worksheet.getCell(`M${rowIndex}`).value = item.initialStock;
+      worksheet.getCell(`M${rowIndex}`).numFmt = '#,##0';
 
-        worksheet.getCell(`N${rowIndex}`).value = item.sfMonth0;
-        worksheet.getCell(`N${rowIndex}`).numFmt = '#,##0';
+      worksheet.getCell(`N${rowIndex}`).value = item.sfMonth0;
+      worksheet.getCell(`N${rowIndex}`).numFmt = '#,##0';
 
-        worksheet.getCell(`O${rowIndex}`).value = item.sfMonth1;
-        worksheet.getCell(`O${rowIndex}`).numFmt = '#,##0';
+      worksheet.getCell(`O${rowIndex}`).value = item.sfMonth1;
+      worksheet.getCell(`O${rowIndex}`).numFmt = '#,##0';
 
-        worksheet.getCell(`P${rowIndex}`).value = item.sfMonth2;
-        worksheet.getCell(`P${rowIndex}`).numFmt = '#,##0';
+      worksheet.getCell(`P${rowIndex}`).value = item.sfMonth2;
+      worksheet.getCell(`P${rowIndex}`).numFmt = '#,##0';
 
-        worksheet.getCell(`Q${rowIndex}`).value = item.moMonth0;
-        worksheet.getCell(`Q${rowIndex}`).numFmt = '#,##0';
+      worksheet.getCell(`Q${rowIndex}`).value = item.moMonth0;
+      worksheet.getCell(`Q${rowIndex}`).numFmt = '#,##0';
 
-        worksheet.getCell(`R${rowIndex}`).value = item.moMonth1;
-        worksheet.getCell(`R${rowIndex}`).numFmt = '#,##0';
+      worksheet.getCell(`R${rowIndex}`).value = item.moMonth1;
+      worksheet.getCell(`R${rowIndex}`).numFmt = '#,##0';
 
-        worksheet.getCell(`S${rowIndex}`).value = item.moMonth2;
-        worksheet.getCell(`S${rowIndex}`).numFmt = '#,##0';
+      worksheet.getCell(`S${rowIndex}`).value = item.moMonth2;
+      worksheet.getCell(`S${rowIndex}`).numFmt = '#,##0';
 
-        ['B', 'C', 'D', 'E', 'F', 'G', 'H', 'I'].forEach((col) => {
-          const cell = worksheet.getCell(`${col}${rowIndex}`);
-          cell.alignment = { vertical: 'middle', horizontal: 'center' };
-          cell.border = {
-            top: { style: 'thin' },
-            left: { style: 'thin' },
-            bottom: { style: 'thin' },
-            right: { style: 'thin' },
-          };
-        });
-
-        ['J', 'K', 'L'].forEach((col) => {
-          const cell = worksheet.getCell(`${col}${rowIndex}`);
-          cell.alignment = { vertical: 'middle', horizontal: 'right' };
-          cell.border = {
-            top: { style: 'thin' },
-            left: { style: 'thin' },
-            bottom: { style: 'thin' },
-            right: { style: 'thin' },
-          };
-        });
-
-        ['M'].forEach((col) => {
-          const cell = worksheet.getCell(`${col}${rowIndex}`);
-          cell.alignment = { vertical: 'middle', horizontal: 'right' };
-          cell.border = {
-            top: { style: 'thin' },
-            left: { style: 'thin' },
-            bottom: { style: 'thin' },
-            right: { style: 'thin' },
-          };
-          cell.fill = {
-            type: 'pattern',
-            pattern: 'solid',
-            fgColor: { argb: 'FFD9D9D9' },
-          };
-        });
-
-        ['N', 'O', 'P'].forEach((col) => {
-          const cell = worksheet.getCell(`${col}${rowIndex}`);
-          cell.alignment = { vertical: 'middle', horizontal: 'right' };
-          cell.border = {
-            top: { style: 'thin' },
-            left: { style: 'thin' },
-            bottom: { style: 'thin' },
-            right: { style: 'thin' },
-          };
-          cell.fill = {
-            type: 'pattern',
-            pattern: 'solid',
-            fgColor: { argb: 'FFFFF2CC' },
-          };
-        });
-
-        ['Q', 'R', 'S'].forEach((col) => {
-          const cell = worksheet.getCell(`${col}${rowIndex}`);
-          cell.alignment = { vertical: 'middle', horizontal: 'right' };
-          cell.border = {
-            top: { style: 'thin' },
-            left: { style: 'thin' },
-            bottom: { style: 'thin' },
-            right: { style: 'thin' },
-          };
-          cell.fill = {
-            type: 'pattern',
-            pattern: 'solid',
-            fgColor: { argb: 'FFFFC000' },
-          };
-        });
-
-        rowIndex++;
+      // Cek status lockStatusM0
+      if (item.lockStatusM0 === 1) {
+        worksheet.getCell(`Q${rowIndex}`).fill = {
+          type: 'pattern',
+          pattern: 'solid',
+          fgColor: { argb: 'FFFF0000' },
+        };
+      } else {
+        worksheet.getCell(`Q${rowIndex}`).fill = {
+          type: 'pattern',
+          pattern: 'solid',
+          fgColor: { argb: 'FFFFC000' },
+        };
       }
+
+      if (item.lockStatusM1 === 1) {
+        worksheet.getCell(`R${rowIndex}`).fill = {
+          type: 'pattern',
+          pattern: 'solid',
+          fgColor: { argb: 'FFFF0000' },
+        };
+      } else {
+        worksheet.getCell(`R${rowIndex}`).fill = {
+          type: 'pattern',
+          pattern: 'solid',
+          fgColor: { argb: 'FFFFC000' },
+        };
+      }
+
+
+      if (item.lockStatusM2 === 1) {
+        worksheet.getCell(`S${rowIndex}`).fill = {
+          type: 'pattern',
+          pattern: 'solid',
+          fgColor: { argb: 'FFFF0000' },
+        };
+      } else {
+        worksheet.getCell(`S${rowIndex}`).fill = {
+          type: 'pattern',
+          pattern: 'solid',
+          fgColor: { argb: 'FFFFC000' },
+        };
+      }
+
+      ['B', 'C', 'D', 'E'].forEach((col) => {
+        const cell = worksheet.getCell(`${col}${rowIndex}`);
+        cell.alignment = { vertical: 'middle', horizontal: 'center' };
+        cell.border = {
+          top: { style: 'thin' },
+          left: { style: 'thin' },
+          bottom: { style: 'thin' },
+          right: { style: 'thin' },
+        };
+      });
+
+      ['F', 'G', 'H', 'I', 'J', 'K', 'L'].forEach((col) => {
+        const cell = worksheet.getCell(`${col}${rowIndex}`);
+        cell.alignment = { vertical: 'middle', horizontal: 'right' };
+        cell.border = {
+          top: { style: 'thin' },
+          left: { style: 'thin' },
+          bottom: { style: 'thin' },
+          right: { style: 'thin' },
+        };
+      });
+
+      ['M'].forEach((col) => {
+        const cell = worksheet.getCell(`${col}${rowIndex}`);
+        cell.alignment = { vertical: 'middle', horizontal: 'right' };
+        cell.border = {
+          top: { style: 'thin' },
+          left: { style: 'thin' },
+          bottom: { style: 'thin' },
+          right: { style: 'thin' },
+        };
+        cell.fill = {
+          type: 'pattern',
+          pattern: 'solid',
+          fgColor: { argb: 'FFD9D9D9' },
+        };
+      });
+
+      ['N', 'O', 'P'].forEach((col) => {
+        const cell = worksheet.getCell(`${col}${rowIndex}`);
+        cell.alignment = { vertical: 'middle', horizontal: 'right' };
+        cell.border = {
+          top: { style: 'thin' },
+          left: { style: 'thin' },
+          bottom: { style: 'thin' },
+          right: { style: 'thin' },
+        };
+        cell.fill = {
+          type: 'pattern',
+          pattern: 'solid',
+          fgColor: { argb: 'FFFFF2CC' },
+        };
+      });
+
+      ['Q', 'R', 'S'].forEach((col) => {
+        const cell = worksheet.getCell(`${col}${rowIndex}`);
+        cell.alignment = { vertical: 'middle', horizontal: 'right' };
+        cell.border = {
+          top: { style: 'thin' },
+          left: { style: 'thin' },
+          bottom: { style: 'thin' },
+          right: { style: 'thin' },
+        };
+      });
+
+      // Pengaturan alignment dan border untuk Q, R, dan S
+      ['Q', 'R', 'S'].forEach((col) => {
+        const cell = worksheet.getCell(`${col}${rowIndex}`);
+        cell.alignment = { vertical: 'middle', horizontal: 'right' };
+        cell.border = {
+          top: { style: 'thin' },
+          left: { style: 'thin' },
+          bottom: { style: 'thin' },
+          right: { style: 'thin' },
+        };
+      });
+
+      rowIndex++;
+
     });
 
     workbook.xlsx.writeBuffer().then((buffer) => {

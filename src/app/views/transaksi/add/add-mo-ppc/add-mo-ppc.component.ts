@@ -515,7 +515,11 @@ export class AddMoPpcComponent implements OnInit {
     return new Promise((resolve) => {
       this.moService.getAvaiableMonth(varWd).subscribe(
         (response) => {
-          if (response.data === 1) {
+          if (response.data === 0) {
+            // Jika response.data adalah 0, maka validasi berhasil
+            resolve(true); // Validation passed
+          } else if (response.data === 1) {
+            // Jika response.data adalah 1, tampilkan pesan kesalahan
             Swal.fire({
               title: 'Error',
               text: 'Marketing Order data for the same month and year already exists.',
@@ -527,7 +531,7 @@ export class AddMoPpcComponent implements OnInit {
               }
             });
           } else {
-            resolve(true); // Validation passed
+            resolve(false); // Bisa juga menangani kondisi lain di sini jika perlu
           }
         },
         (err) => {
