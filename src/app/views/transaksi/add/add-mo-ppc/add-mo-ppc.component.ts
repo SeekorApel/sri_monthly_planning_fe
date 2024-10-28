@@ -6,7 +6,7 @@ import { MarketingOrderService } from 'src/app/services/transaksi/marketing orde
 import Swal from 'sweetalert2';
 import { DetailMarketingOrder } from 'src/app/models/DetailMarketingOrder';
 import { ApiResponse } from 'src/app/response/Response';
-import { ParsingNumberService } from 'src/app/utils/parsing-number/parsing-number.service'
+import { ParsingNumberService } from 'src/app/utils/parsing-number/parsing-number.service';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
@@ -39,9 +39,9 @@ export class AddMoPpcComponent implements OnInit {
   pageOfItems: Array<any>;
   pageSize: number = 5;
   totalPages: number = 5;
-  headersColumns: string[] = ['no', 'category', 'partNumber', 'description', 'machineType', 'capacity', 'qtyPerMould', 'spareMould', 'mouldMonthlyPlan', 'qtyPerRak', 'minOrder', 'maxCap', 'status']
+  headersColumns: string[] = ['no', 'category', 'partNumber', 'description', 'machineType', 'capacity', 'qtyPerMould', 'spareMould', 'mouldMonthlyPlan', 'qtyPerRak', 'minOrder', 'maxCap', 'status'];
   childHeadersColumns: string[] = ['maxCapMonth0', 'maxCapMonth1', 'maxCapMonth2', 'lockStatusM0', 'lockStatusM1', 'lockStatusM2'];
-  rowData: string[] = ['no', 'category', 'partNumber', 'description', 'machineType', 'capacity', 'qtyPerMould', 'spareMould', 'mouldMonthlyPlan', 'qtyPerRak', 'minOrder', 'maxCapMonth0', 'maxCapMonth1', 'maxCapMonth2', 'lockStatusM0', 'lockStatusM1', 'lockStatusM2']
+  rowData: string[] = ['no', 'category', 'partNumber', 'description', 'machineType', 'capacity', 'qtyPerMould', 'spareMould', 'mouldMonthlyPlan', 'qtyPerRak', 'minOrder', 'maxCapMonth0', 'maxCapMonth1', 'maxCapMonth2', 'lockStatusM0', 'lockStatusM1', 'lockStatusM2'];
 
   dataSource: MatTableDataSource<DetailMarketingOrder>;
   @ViewChild(MatSort) sort: MatSort;
@@ -121,7 +121,7 @@ export class AddMoPpcComponent implements OnInit {
     this.subscribeToValueChanges('max_capa_tt_2');
   }
 
-  onInputChangeMinimumOrder(event: any, mo: any, field: string) {
+  onInputChangeMinimumOrder(event: any, mo: any, field: string, index: number) {
     let value = event.target.value;
     value = value.replace(/[^0-9]/g, '');
     value = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
@@ -130,7 +130,7 @@ export class AddMoPpcComponent implements OnInit {
   }
 
   lockUpdate(partNumber: number, lockStatusField: string) {
-    const data = this.detailMarketingOrder.find(dmo => dmo.partNumber === partNumber);
+    const data = this.detailMarketingOrder.find((dmo) => dmo.partNumber === partNumber);
     if (data) {
       Swal.fire({
         title: 'Confirmation',
@@ -138,16 +138,16 @@ export class AddMoPpcComponent implements OnInit {
         icon: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Yes',
-        cancelButtonText: 'Cancel'
+        cancelButtonText: 'Cancel',
       }).then((result) => {
         if (result.isConfirmed) {
           // If confirmed, toggle the lock status
           if (lockStatusField === 'lockStatusM0') {
-            data.lockStatusM0 = (data.lockStatusM0 === 0) ? 1 : 0;
+            data.lockStatusM0 = data.lockStatusM0 === 0 ? 1 : 0;
           } else if (lockStatusField === 'lockStatusM1') {
-            data.lockStatusM1 = (data.lockStatusM1 === 0) ? 1 : 0;
+            data.lockStatusM1 = data.lockStatusM1 === 0 ? 1 : 0;
           } else if (lockStatusField === 'lockStatusM2') {
-            data.lockStatusM2 = (data.lockStatusM2 === 0) ? 1 : 0;
+            data.lockStatusM2 = data.lockStatusM2 === 0 ? 1 : 0;
           } else {
             console.error(`Field ${lockStatusField} is not valid`);
           }
@@ -160,7 +160,7 @@ export class AddMoPpcComponent implements OnInit {
         title: 'Error',
         text: `Part number ${partNumber} not found.`,
         icon: 'error',
-        confirmButtonText: 'OK'
+        confirmButtonText: 'OK',
       });
     }
   }
@@ -226,6 +226,8 @@ export class AddMoPpcComponent implements OnInit {
       year3: year3Val,
     };
 
+    console.log(varWd);
+
     this.getWorkDays(varWd);
   }
 
@@ -256,7 +258,6 @@ export class AddMoPpcComponent implements OnInit {
             total_tlwd_2: this.parsingNumberService.separatorAndDecimalView(workDataM2.totalWdTl),
             total_ttwd_2: this.parsingNumberService.separatorAndDecimalView(workDataM2.totalWdTt),
           });
-
         } else {
           Swal.fire({
             icon: 'warning',
@@ -276,39 +277,13 @@ export class AddMoPpcComponent implements OnInit {
     );
   }
 
-  toggleLockStatus(index: number) {
-    const currentStatus = this.detailMarketingOrder[index].lockStatusM0;
-    const action = currentStatus === null || currentStatus === 1 ? 'unlock' : 'lock';
-    const newStatus = action === 'lock' ? 1 : 0;
-
-    Swal.fire({
-      title: `Are you sure you want to ${action} this item?`,
-      text: `This will ${action === 'lock' ? 'lock' : 'unlock'} the item.`,
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: `Yes, ${action} it!`,
-      cancelButtonText: 'Cancel'
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.detailMarketingOrder[index].lockStatusM0 = newStatus;
-        Swal.fire(
-          `${action === 'lock' ? 'Locked' : 'Unlocked'}!`,
-          `The item has been ${action === 'lock' ? 'locked' : 'unlocked'}.`,
-          'success'
-        );
-      }
-    });
-  }
-
-  private subscribeToValueChanges(controlName: string) {
+  subscribeToValueChanges(controlName: string) {
     this.formHeaderMo.get(controlName)?.valueChanges.subscribe((value) => {
       this.formatInputValue(value, controlName);
     });
   }
 
-  private formatInputValue(value: string | null, controlName: string) {
+  formatInputValue(value: string | null, controlName: string) {
     if (value) {
       const numericValue = value.replace(/[^0-9]/g, '');
       const formattedValue = new Intl.NumberFormat('id-ID').format(Number(numericValue));
@@ -316,7 +291,7 @@ export class AddMoPpcComponent implements OnInit {
     }
   }
 
-  private parseFormattedValue(formattedValue: string | null): number | null {
+  parseFormattedValue(formattedValue: string | null): number | null {
     if (formattedValue && typeof formattedValue === 'string') {
       const numericString = formattedValue.replace(/\./g, '').replace(',', '.');
       return parseFloat(numericString);
@@ -443,7 +418,6 @@ export class AddMoPpcComponent implements OnInit {
     this.moService.getDetailMarketingOrder(totalHKTT1, totalHKTT2, totalHKTT3, totalHKTL1, totalHKTL2, totalHKTL3, productMerk).subscribe(
       (response: ApiResponse<DetailMarketingOrder[]>) => {
         this.detailMarketingOrder = response.data;
-        console.log(this.detailMarketingOrder);
         this.dataSource = new MatTableDataSource(this.detailMarketingOrder);
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
@@ -465,26 +439,107 @@ export class AddMoPpcComponent implements OnInit {
   }
 
   saveAllMo() {
-
     this.isSubmitted = true;
 
-    // Validasi untuk field minOrder
-    const hasInvalidMinOrder = this.detailMarketingOrder.some(item =>
-      item.minOrder === null || item.minOrder === undefined
-    );
+    const hasInvalidMinOrderOrMachineType = this.detailMarketingOrder.some((item) => item.minOrder === null || item.machineType === null);
 
-    if (hasInvalidMinOrder) {
+    if (hasInvalidMinOrderOrMachineType) {
       Swal.fire({
         title: 'Warning!',
-        text: 'Please fill in all Minimum Order fields.',
+        text: 'Please fill in all Minimum Order and Machine Type fields.',
         icon: 'warning',
         confirmButtonText: 'OK',
       });
       return;
     }
 
+    const month0 = this.formHeaderMo.get('month_0')?.value;
+    const month1 = this.formHeaderMo.get('month_1')?.value;
+    const month2 = this.formHeaderMo.get('month_2')?.value;
+    const type = this.formHeaderMo.get('type')?.value;
+    const extractMonthYear = (monthYear: string) => {
+      const [year, month] = monthYear.split('-'); // Pisahkan tahun dan bulan
+      return { year: Number(year), month: Number(month) };
+    };
 
-    //Set data Save MO
+    const { month: month1Val, year: year1Val } = extractMonthYear(month0);
+    const { month: month2Val, year: year2Val } = extractMonthYear(month1);
+    const { month: month3Val, year: year3Val } = extractMonthYear(month2);
+
+    const varWd = {
+      month1: month1Val,
+      year1: year1Val,
+      month2: month2Val,
+      year2: year2Val,
+      month3: month3Val,
+      year3: year3Val,
+      type: type,
+    };
+
+    // Validate available months before proceeding
+    this.validateAvailableMonths(varWd).then((isValid) => {
+      if (!isValid) {
+        return; // Exit if validation fails
+      }
+
+      // Proceed with data preparation and saving if validation passes
+      this.setDataSaveMo();
+
+      const saveMo = {
+        marketingOrder: this.marketingOrder,
+        headerMarketingOrder: this.headerMo,
+        detailMarketingOrder: this.detailMarketingOrder,
+      };
+
+      this.moService.saveMarketingOrderPPC(saveMo).subscribe(
+        (response) => {
+          Swal.fire({
+            title: 'Success!',
+            text: 'Data Marketing Order successfully Added.',
+            icon: 'success',
+            confirmButtonText: 'OK',
+          }).then((result) => {
+            if (result.isConfirmed) {
+              this.navigateToViewMo();
+            }
+          });
+        },
+        (err) => {
+          Swal.fire('Error!', 'Error insert data Marketing Order.', 'error');
+        }
+      );
+    });
+  }
+
+  validateAvailableMonths(varWd): Promise<boolean> {
+    return new Promise((resolve) => {
+      this.moService.getAvaiableMonth(varWd).subscribe(
+        (response) => {
+          if (response.data === 1) {
+            Swal.fire({
+              title: 'Error',
+              text: 'Marketing Order data for the same month and year already exists.',
+              icon: 'error',
+              confirmButtonText: 'OK',
+            }).then((result) => {
+              if (result.isConfirmed) {
+                resolve(false); // Validation failed
+              }
+            });
+          } else {
+            resolve(true); // Validation passed
+          }
+        },
+        (err) => {
+          Swal.fire('Error!', 'Error getting available month validation.', 'error');
+          resolve(false); // Validation failed due to error
+        }
+      );
+    });
+  }
+
+  setDataSaveMo() {
+    // Set data Save MO
     this.marketingOrder.moId = this.lastIdMo;
     this.marketingOrder.dateValid = this.formHeaderMo.get('date')?.value;
     this.marketingOrder.type = this.formHeaderMo.get('type')?.value;
@@ -492,18 +547,30 @@ export class AddMoPpcComponent implements OnInit {
     this.marketingOrder.month1 = new Date(this.formHeaderMo.get('month_1')?.value);
     this.marketingOrder.month2 = new Date(this.formHeaderMo.get('month_2')?.value);
 
-    //Set data save Header Mo
+    // Set data save Header Mo
     this.headerMo = [];
     for (let i = 0; i < 3; i++) {
+      let nwdValue = this.parseFormattedValue(this.formHeaderMo.get(`nwd_${i}`)?.value);
+      let nwtValue = this.parseFormattedValue(this.formHeaderMo.get(`nwt_${i}`)?.value);
+      let otWdTubeValue = this.parseFormattedValue(this.formHeaderMo.get(`ot_wt_${i}`)?.value);
+      let totalWdTube = this.parseFormattedValue(this.formHeaderMo.get(`total_wt_${i}`)?.value);
+
+      // Validate: if nwt is null or not filled, set it to nwd
+      if (nwtValue === null) {
+        nwtValue = nwdValue;
+        otWdTubeValue = 0;
+        totalWdTube = nwtValue + otWdTubeValue;
+      }
+
       this.headerMo.push({
         moId: this.lastIdMo,
         month: new Date(this.formHeaderMo.get(`month_${i}`)?.value),
         wdNormalTire: this.parseFormattedValue(this.formHeaderMo.get(`nwd_${i}`)?.value),
-        wdNormalTube: this.parseFormattedValue(this.formHeaderMo.get(`nwt_${i}`)?.value),
-        wdOtTube: this.parseFormattedValue(this.formHeaderMo.get(`ot_wt_${i}`)?.value),
+        wdNormalTube: nwtValue,
+        wdOtTube: otWdTubeValue,
         wdOtTl: this.parseFormattedValue(this.formHeaderMo.get(`tl_ot_wd_${i}`)?.value),
         wdOtTt: this.parseFormattedValue(this.formHeaderMo.get(`tt_ot_wd_${i}`)?.value),
-        totalWdTube: this.parseFormattedValue(this.formHeaderMo.get(`total_tlwt_${i}`)?.value),
+        totalWdTube: totalWdTube,
         totalWdTl: this.parseFormattedValue(this.formHeaderMo.get(`total_tlwd_${i}`)?.value),
         totalWdTt: this.parseFormattedValue(this.formHeaderMo.get(`total_ttwd_${i}`)?.value),
         maxCapTube: this.parseFormattedValue(this.formHeaderMo.get(`max_tube_capa_${i}`)?.value || ''),
@@ -513,35 +580,11 @@ export class AddMoPpcComponent implements OnInit {
       });
     }
 
-    //Set data save Detail Mo
+    // Set data save Detail Mo
     this.detailMarketingOrder.forEach((item) => {
       item.moId = this.lastIdMo;
       item.minOrder = Number(item.minOrder.toString().replace('.', ''));
     });
-
-    const saveMo = {
-      marketingOrder: this.marketingOrder,
-      headerMarketingOrder: this.headerMo,
-      detailMarketingOrder: this.detailMarketingOrder,
-    };
-
-    this.moService.saveMarketingOrderPPC(saveMo).subscribe(
-      (response) => {
-        Swal.fire({
-          title: 'Success!',
-          text: 'Data Marketing Order successfully Added.',
-          icon: 'success',
-          confirmButtonText: 'OK',
-        }).then((result) => {
-          if (result.isConfirmed) {
-            this.navigateToViewMo();
-          }
-        });
-      },
-      (err) => {
-        Swal.fire('Error!', 'Error insert data Marketing Order.', 'error');
-      }
-    );
   }
 
   navigateToViewMo() {

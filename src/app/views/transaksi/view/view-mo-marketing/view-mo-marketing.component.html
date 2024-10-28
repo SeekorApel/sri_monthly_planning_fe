@@ -14,47 +14,76 @@
 
         <!-- Table -->
         <div class="table-responsive">
-          <table class="table table-bordered table-striped table-sm">
-            <thead>
-              <tr align="center">
-                <th class="align-middle">No</th>
-                <th class="align-middle" style="min-width: 150px">Marketing Order ID</th>
-                <th class="align-middle">Type</th>
-                <th class="align-middle" style="min-width: 120px">Date</th>
-                <th class="align-middle" style="min-width: 150px">Revision by PPC</th>
-                <th class="align-middle" style="min-width: 200px">Revision by Marketing</th>
-                <th class="align-middle" style="min-width: 150px">Month 1</th>
-                <th class="align-middle" style="min-width: 150px">Month 2</th>
-                <th class="align-middle" style="min-width: 150px">Month 3</th>
-                <th class="align-middle" style="min-width: 100px">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let mo of marketingOrders; let i = index" align="center">
-                <td>{{ i + 1 }}</td>
-                <td>{{ mo.moId }}</td>
-                <td>{{ mo.type }}</td>
-                <td>{{ dateUtil.parseFullDate(mo.dateValid) }}</td>
-                <td>{{ mo.revisionPpc }}</td>
-                <td>{{ mo.revisionMarketing }}</td>
-                <td>{{ dateUtil.parseMonthYear(mo.month0) }}</td>
-                <td>{{ dateUtil.parseMonthYear(mo.month1) }}</td>
-                <td>{{ dateUtil.parseMonthYear(mo.month2) }}</td>
-                <td>
-                  <button *ngIf="mo.statusFilled === 1" type="button" (click)="navigateToAdd(mo.moId)" class="btn btn-md btn-success ml-2">Add</button>
-                  <button *ngIf="mo.statusFilled === 2" type="button" (click)="navigateToEdit(mo.moId)" class="btn btn-md btn-warning ml-2">Revision</button>
-                  <button *ngIf="mo.statusFilled === 3" type="button" (click)="navigateToDetail(mo.month0, mo.month1, mo.month2, mo.type)" class="btn btn-md btn-secondary ml-2">Detail</button>
-                </td>
-              </tr>
-            </tbody>
+          <table mat-table [dataSource]="dataSource" matSort class="table table-bordered table-striped table-sm">
+            <!-- No Column -->
+            <ng-container matColumnDef="no">
+              <th *matHeaderCellDef style="min-width: 50px">No</th>
+              <td *matCellDef="let mo; let i = index">{{ i + 1 }}</td>
+            </ng-container>
+
+            <!-- Marketing Order ID Column -->
+            <ng-container matColumnDef="moId">
+              <th *matHeaderCellDef style="min-width: 150px" mat-sort-header>Marketing Order ID</th>
+              <td *matCellDef="let mo">{{ mo.moId }}</td>
+            </ng-container>
+
+            <!-- Type Column -->
+            <ng-container matColumnDef="type">
+              <th *matHeaderCellDef style="min-width: 80px" mat-sort-header>Type</th>
+              <td *matCellDef="let mo">{{ mo.type }}</td>
+            </ng-container>
+
+            <!-- Date Column -->
+            <ng-container matColumnDef="dateValid">
+              <th *matHeaderCellDef style="min-width: 150px" mat-sort-header>Date</th>
+              <td *matCellDef="let mo">{{ parseDate(mo.dateValid) }}</td>
+            </ng-container>
+
+            <!-- Revision PPC Column -->
+            <ng-container matColumnDef="revisionPpc">
+              <th *matHeaderCellDef style="min-width: 100px" mat-sort-header>Revision PPC</th>
+              <td *matCellDef="let mo">{{ mo.revisionPpc }}</td>
+            </ng-container>
+
+            <!-- Revision Marketing Column -->
+            <ng-container matColumnDef="revisionMarketing">
+              <th *matHeaderCellDef style="min-width: 100px" mat-sort-header>Revision Marketing</th>
+              <td *matCellDef="let mo">{{ mo.revisionMarketing }}</td>
+            </ng-container>
+
+            <!-- Month 1 Column -->
+            <ng-container matColumnDef="month0">
+              <th *matHeaderCellDef style="min-width: 150px" mat-sort-header>Month 1</th>
+              <td *matCellDef="let mo">{{ parseDate(mo.month0) }}</td>
+            </ng-container>
+
+            <!-- Month 1 Column -->
+            <ng-container matColumnDef="month1">
+              <th *matHeaderCellDef style="min-width: 150px" mat-sort-header>Month 1</th>
+              <td *matCellDef="let mo">{{ parseDate(mo.month1) }}</td>
+            </ng-container>
+
+            <!-- Month 1 Column -->
+            <ng-container matColumnDef="month2">
+              <th *matHeaderCellDef style="min-width: 150px" mat-sort-header>Month 2</th>
+              <td *matCellDef="let mo">{{ parseDate(mo.month2) }}</td>
+            </ng-container>
+
+            <!-- Action Column -->
+            <ng-container matColumnDef="action">
+              <th *matHeaderCellDef style="min-width: 120px">Action</th>
+              <td *matCellDef="let mo">
+                <button *ngIf="mo.statusFilled === 1" type="button" (click)="navigateToAdd(mo.moId)" class="btn btn-md btn-success ml-2">Add</button>
+                <button *ngIf="mo.statusFilled === 2" type="button" (click)="navigateToEdit(mo.moId)" class="btn btn-md btn-warning ml-2">Revision</button>
+                <button *ngIf="mo.statusFilled === 3" type="button" (click)="navigateToDetail(mo.month0, mo.month1, mo.month2, mo.type)" class="btn btn-md btn-secondary ml-2">Detail</button>
+              </td>
+            </ng-container>
+            <tr align="center" style="height: 20px" mat-header-row *matHeaderRowDef="headersColumns"></tr>
+            <tr align="center" mat-row *matRowDef="let row; columns: headersColumns"></tr>
           </table>
-          <!-- Pagination -->
-          <nav>
-            <ul class="pagination">
-              <jw-pagination [items]="marketingOrders" [pageSize]="pageSize" [maxPages]="totalPages" (changePage)="onChangePage($event)"> </jw-pagination>
-            </ul>
-          </nav>
         </div>
+        <!-- Pagination -->
+        <mat-paginator [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
       </div>
     </div>
   </div>

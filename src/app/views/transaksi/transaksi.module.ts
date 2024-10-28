@@ -13,7 +13,7 @@ import { TabsModule } from 'ngx-bootstrap/tabs';
 import { ViewMonthlyPlanningComponent } from './view-monthly-planning/view-monthly-planning.component';
 import { AddMonthlyPlanningComponent } from './add-monthly-planning/add-monthly-planning.component';
 import { ViewMoMarketingComponent } from './view/view-mo-marketing/view-mo-marketing.component';
-import { AddMoMarketingComponent } from './add-mo-marketing/add-mo-marketing.component';
+import { AddMoMarketingComponent } from './add/add-mo-marketing/add-mo-marketing.component';
 import { EditMoPpcComponent } from './edit-mo-ppc/edit-mo-ppc.component';
 import { DetailViewMoPpcComponent } from './detail-view-mo-ppc/detail-view-mo-ppc.component';
 import { DetailViewMoMarketingComponent } from './detail-view-mo-marketing/detail-view-mo-marketing.component';
@@ -24,37 +24,8 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 
-
-
 @NgModule({
-  declarations: [
-    ViewMoPpcComponent,
-    AddMoPpcComponent,
-    ViewMonthlyPlanningComponent,
-    AddMonthlyPlanningComponent,
-    ViewMoMarketingComponent,
-    AddMoMarketingComponent,
-    EditMoPpcComponent,
-    DetailViewMoPpcComponent,
-    DetailViewMoMarketingComponent,
-    EditMoMarketingComponent,
-    ViewDetailRevisiPpcComponent,
-    ViewDetailRevisiMarketingComponent
-  ],
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    NgxSpinnerModule,
-    NgSelect2Module,
-    JwPaginationModule,
-    TransaksiRoutingModule,
-    TabsModule,
-    ModalModule.forRoot(),
-    ToastrModule.forRoot(),
-    MatSortModule,
-    MatTableModule,
-    MatPaginatorModule
-  ]
+  declarations: [ViewMoPpcComponent, AddMoPpcComponent, ViewMonthlyPlanningComponent, AddMonthlyPlanningComponent, ViewMoMarketingComponent, AddMoMarketingComponent, EditMoPpcComponent, DetailViewMoPpcComponent, DetailViewMoMarketingComponent, EditMoMarketingComponent, ViewDetailRevisiPpcComponent, ViewDetailRevisiMarketingComponent],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, NgxSpinnerModule, NgSelect2Module, JwPaginationModule, TransaksiRoutingModule, TabsModule, ModalModule.forRoot(), ToastrModule.forRoot(), MatSortModule, MatTableModule, MatPaginatorModule],
 })
-export class TransaksiModule { }
+export class TransaksiModule {}

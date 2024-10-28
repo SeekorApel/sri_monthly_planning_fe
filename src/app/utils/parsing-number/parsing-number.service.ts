@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ParsingNumberService {
-
-  constructor() { }
+  constructor() {}
 
   separatorAndDecimalInput(value: string): string {
     let formattedValue = value.replace(/[^\d,]/g, '');
@@ -21,21 +20,27 @@ export class ParsingNumberService {
 
   separatorAndDecimalView(value: number): string {
     if (value !== null && value !== undefined) {
+      // Jika nilai adalah 0, kembalikan '0' saja
+      if (value === 0) {
+        return '0';
+      }
+
       let strValue = value.toString();
 
       const parts = strValue.split('.');
       const integerPart = parts[0];
       const decimalPart = parts[1] ? ',' + parts[1].padEnd(2, '0') : ',00';
 
+      // Jika angkanya tunggal (1 digit) dan tidak memiliki bagian desimal, tambahkan ,00
       if (integerPart.length === 1 && !parts[1]) {
         return `${integerPart},00`;
       }
 
+      // Format bagian integer dengan pemisah ribuan
       const formattedInteger = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 
-      if (decimalPart === ',00' || decimalPart !== ',00') {
-        return formattedInteger + decimalPart;
-      }
+      // Gabungkan bagian integer dan bagian desimal
+      return formattedInteger + decimalPart;
     }
     return '';
   }
@@ -43,6 +48,4 @@ export class ParsingNumberService {
   separatorTableView(value: number): string {
     return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.');
   }
-
-
 }

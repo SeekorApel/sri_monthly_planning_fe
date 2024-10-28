@@ -330,8 +330,9 @@
             <!-- Machine Type Column -->
             <ng-container matColumnDef="machineType">
               <th *matHeaderCellDef rowspan="2" style="min-width: 100px" mat-sort-header>Machine Type</th>
-              <td *matCellDef="let mo">
-                <select [(ngModel)]="mo.machineType" class="form-control">
+              <td *matCellDef="let mo; let i = index">
+                <select [(ngModel)]="mo.machineType" class="form-control" [class.is-invalid]="isSubmitted && (mo.machineType === null || mo.machineType === undefined)">
+                  <option [ngValue]="null" disabled></option>
                   <option value="A/B">A/B</option>
                   <option value="BOM">BOM</option>
                 </select>
@@ -368,14 +369,11 @@
               <td class="text-right" *matCellDef="let mo">{{ separatorNumber(mo.qtyPerRak) }}</td>
             </ng-container>
 
-            <!-- Mould Plan Column -->
+            <!-- Minimum Order Column -->
             <ng-container matColumnDef="minOrder">
               <th *matHeaderCellDef rowspan="2" mat-sort-header style="min-width: 150px">Minimum Order</th>
               <td *matCellDef="let mo; let i = index">
-                <input type="text" 
-                [class.is-invalid]="isSubmitted && (mo.minOrder === null || mo.minOrder === undefined)" 
-                [(ngModel)]="mo.minOrder" class="text-right form-control" style="width: 100%" 
-                (input)="onInputChangeMinimumOrder($event, mo, 'minOrder')" />
+                <input type="text" [(ngModel)]="mo.minOrder" class="text-right form-control" [class.is-invalid]="isSubmitted && (mo.minOrder === null || mo.minOrder === undefined)" style="width: 100%" (input)="onInputChangeMinimumOrder($event, mo, 'minOrder', i)" />
               </td>
             </ng-container>
 

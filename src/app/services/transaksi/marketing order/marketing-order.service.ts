@@ -13,7 +13,18 @@ import { catchError, map } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class MarketingOrderService {
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
+
+  getAvaiableMonth(data: any): Observable<ApiResponse<any>> {
+    return this.http.post<ApiResponse<any>>(environment.apiUrlWebAdmin + '/getMonthAvailable', data).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((err) => {
+        return throwError(err);
+      })
+    );
+  }
 
   getLastIdMo(): Observable<ApiResponse<string>> {
     return this.http.get<ApiResponse<string>>(environment.apiUrlWebAdmin + '/getLastIdMo');
@@ -23,7 +34,7 @@ export class MarketingOrderService {
     return this.http.get<ApiResponse<[]>>(environment.apiUrlWebAdmin + '/getAllMarketingOrderLatest');
   }
 
-  //get (MO, Header, Detail)
+  //get all data mo (MO, Header, Detail)
   getAllMoById(idMo: String): Observable<ApiResponse<any>> {
     return this.http.get<ApiResponse<any>>(environment.apiUrlWebAdmin + '/getAllMoById/' + idMo);
   }

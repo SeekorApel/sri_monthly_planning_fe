@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Route, Router } from '@angular/router';
 import { DetailMarketingOrder } from 'src/app/models/DetailMarketingOrder';
@@ -11,6 +11,10 @@ import * as ExcelJS from 'exceljs/dist/exceljs.min.js';
 import * as XLSX from 'xlsx';
 declare var $: any;
 import { saveAs } from 'file-saver';
+import { ParsingNumberService } from 'src/app/utils/parsing-number/parsing-number.service';
+import { MatSort } from '@angular/material/sort';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-add-mo-marketing',
@@ -20,6 +24,7 @@ import { saveAs } from 'file-saver';
 export class AddMoMarketingComponent implements OnInit {
   //Variable Declaration
   idMo: String;
+  searchText: string = '';
   monthNames: string[] = ['', '', ''];
   formHeaderMo: FormGroup;
   isReadOnly: Boolean = true;
@@ -31,7 +36,19 @@ export class AddMoMarketingComponent implements OnInit {
   headerMarketingOrder: HeaderMarketingOrder[];
   detailMarketingOrderUpdate: DetailMarketingOrder[];
 
-  constructor(private router: Router, private activeRoute: ActivatedRoute, private moService: MarketingOrderService, private fb: FormBuilder) {
+  //Pagination
+  pageOfItems: Array<any>;
+  pageSize: number = 5;
+  totalPages: number = 5;
+  headersColumns: string[] = ['no', 'category', 'partNumber', 'description', 'machineType', 'capacity', 'mouldMonthlyPlan', 'qtyPerRak', 'minOrder', 'maxCap', 'initialStock', 'salesForecast', 'marketingOrder'];
+  childHeadersColumns: string[] = ['maxCapMonth0', 'maxCapMonth1', 'maxCapMonth2', 'sfMonth0', 'sfMonth1', 'sfMonth2', 'moMonth0', 'moMonth1', 'moMonth2'];
+  rowData: string[] = ['no', 'category', 'partNumber', 'description', 'machineType', 'capacity', 'mouldMonthlyPlan', 'qtyPerRak', 'minOrder', 'maxCapMonth0', 'maxCapMonth1', 'maxCapMonth2', 'initialStock', 'sfMonth0', 'sfMonth1', 'sfMonth2', 'moMonth0', 'moMonth1', 'moMonth2'];
+
+  dataSource: MatTableDataSource<DetailMarketingOrder>;
+  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+
+  constructor(private router: Router, private activeRoute: ActivatedRoute, private moService: MarketingOrderService, private fb: FormBuilder, private parsingNumberService: ParsingNumberService) {
     this.formHeaderMo = this.fb.group({
       date: [null, []],
       type: [null, []],
@@ -39,6 +56,15 @@ export class AddMoMarketingComponent implements OnInit {
       month_0: [null, []],
       month_1: [null, []],
       month_2: [null, []],
+      nwt_0: [null, []],
+      nwt_1: [null, []],
+      nwt_2: [null, []],
+      ot_wt_0: [null, []],
+      ot_wt_1: [null, []],
+      ot_wt_2: [null, []],
+      total_wt_0: [null, []],
+      total_wt_1: [null, []],
+      total_wt_2: [null, []],
       nwd_0: [null, []],
       nwd_1: [null, []],
       nwd_2: [null, []],
@@ -110,6 +136,23 @@ export class AddMoMarketingComponent implements OnInit {
     this.getAllData(this.idMo);
   }
 
+  separatorNumber(num: number): string {
+    return this.parsingNumberService.separatorTableView(num);
+  }
+
+  onChangePage(pageOfItems: Array<any>) {
+    this.pageOfItems = pageOfItems;
+  }
+
+  onSearchChange(): void {
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
+  }
+
+  resetSearch(): void {
+    this.searchText = '';
+    this.dataSource.filter = '';
+  }
+
   onInputChange(event: any, mo: any, field: string) {
     let value = event.target.value;
     value = value.replace(/[^0-9]/g, '');
@@ -130,7 +173,6 @@ export class AddMoMarketingComponent implements OnInit {
   getAllData(idMo: String) {
     this.moService.getAllMoById(idMo).subscribe(
       (response: ApiResponse<any>) => {
-        console.log(response.data.dataDetailMo);
         this.allData = response.data;
         this.fillAllData(this.allData);
       },
@@ -149,45 +191,64 @@ export class AddMoMarketingComponent implements OnInit {
     this.headerMarketingOrder = data.dataHeaderMo;
     this.detailMarketingOrder = data.dataDetailMo;
 
+    this.dataSource = new MatTableDataSource(this.detailMarketingOrder);
+    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
+
+    console.log("Aaa",this.dataSource.data);
+
     this.formHeaderMo.patchValue({
       date: new Date(data.dateValid).toISOString().split('T')[0],
       type: data.type,
 
       // Header Month 1
       month_0: this.formatDateToString(this.headerMarketingOrder[0].month),
-      nwd_0: this.formatNumber(this.headerMarketingOrder[0].wdNormalTire),
-      tl_ot_wd_0: this.formatNumber(this.headerMarketingOrder[0].wdOtTl),
-      tt_ot_wd_0: this.formatNumber(this.headerMarketingOrder[0].wdOtTt),
-      total_tlwd_0: this.formatNumber(this.headerMarketingOrder[0].totalWdTl),
-      total_ttwd_0: this.formatNumber(this.headerMarketingOrder[0].totalWdTt),
-      max_tube_capa_0: this.formatNumber(this.headerMarketingOrder[0].maxCapTube),
-      max_capa_tl_0: this.formatNumber(this.headerMarketingOrder[0].maxCapTl),
-      max_capa_tt_0: this.formatNumber(this.headerMarketingOrder[0].maxCapTt),
+      nwd_0: this.formatNumberView(this.headerMarketingOrder[0].wdNormalTire),
+      nwt_0: this.formatNumberView(this.headerMarketingOrder[0].wdNormalTube),
+      ot_wt_0: this.formatNumberView(this.headerMarketingOrder[0].wdOtTube),
+      tl_ot_wd_0: this.formatNumberView(this.headerMarketingOrder[0].wdOtTl),
+      tt_ot_wd_0: this.formatNumberView(this.headerMarketingOrder[0].wdOtTt),
+      total_wt_0: this.formatNumberView(this.headerMarketingOrder[0].totalWdTube),
+      total_tlwd_0: this.formatNumberView(this.headerMarketingOrder[0].totalWdTl),
+      total_ttwd_0: this.formatNumberView(this.headerMarketingOrder[0].totalWdTt),
+      max_tube_capa_0: this.formatNumberView(this.headerMarketingOrder[0].maxCapTube),
+      max_capa_tl_0: this.formatNumberView(this.headerMarketingOrder[0].maxCapTl),
+      max_capa_tt_0: this.formatNumberView(this.headerMarketingOrder[0].maxCapTt),
 
       // Header Month 2
       month_1: this.formatDateToString(this.headerMarketingOrder[1].month),
-      nwd_1: this.formatNumber(this.headerMarketingOrder[1].wdNormalTire),
-      tl_ot_wd_1: this.formatNumber(this.headerMarketingOrder[1].wdOtTl),
-      tt_ot_wd_1: this.formatNumber(this.headerMarketingOrder[1].wdOtTt),
-      total_tlwd_1: this.formatNumber(this.headerMarketingOrder[1].totalWdTl),
-      total_ttwd_1: this.formatNumber(this.headerMarketingOrder[1].totalWdTt),
-      max_tube_capa_1: this.formatNumber(this.headerMarketingOrder[1].maxCapTube),
-      max_capa_tl_1: this.formatNumber(this.headerMarketingOrder[1].maxCapTl),
-      max_capa_tt_1: this.formatNumber(this.headerMarketingOrder[1].maxCapTt),
+      nwd_1: this.formatNumberView(this.headerMarketingOrder[1].wdNormalTire),
+      nwt_1: this.formatNumberView(this.headerMarketingOrder[1].wdNormalTube),
+      ot_wt_1: this.formatNumberView(this.headerMarketingOrder[1].wdOtTube),
+      tl_ot_wd_1: this.formatNumberView(this.headerMarketingOrder[1].wdOtTl),
+      tt_ot_wd_1: this.formatNumberView(this.headerMarketingOrder[1].wdOtTt),
+      total_wt_1: this.formatNumberView(this.headerMarketingOrder[1].totalWdTube),
+      total_tlwd_1: this.formatNumberView(this.headerMarketingOrder[1].totalWdTl),
+      total_ttwd_1: this.formatNumberView(this.headerMarketingOrder[1].totalWdTt),
+      max_tube_capa_1: this.formatNumberView(this.headerMarketingOrder[1].maxCapTube),
+      max_capa_tl_1: this.formatNumberView(this.headerMarketingOrder[1].maxCapTl),
+      max_capa_tt_1: this.formatNumberView(this.headerMarketingOrder[1].maxCapTt),
 
       // Header Month 3
       month_2: this.formatDateToString(this.headerMarketingOrder[2].month),
-      nwd_2: this.formatNumber(this.headerMarketingOrder[2].wdNormalTire),
-      tl_ot_wd_2: this.formatNumber(this.headerMarketingOrder[2].wdOtTl),
-      tt_ot_wd_2: this.formatNumber(this.headerMarketingOrder[2].wdOtTt),
-      total_tlwd_2: this.formatNumber(this.headerMarketingOrder[2].totalWdTl),
-      total_ttwd_2: this.formatNumber(this.headerMarketingOrder[2].totalWdTt),
-      max_tube_capa_2: this.formatNumber(this.headerMarketingOrder[2].maxCapTube),
-      max_capa_tl_2: this.formatNumber(this.headerMarketingOrder[2].maxCapTl),
-      max_capa_tt_2: this.formatNumber(this.headerMarketingOrder[2].maxCapTt),
+      nwd_2: this.formatNumberView(this.headerMarketingOrder[2].wdNormalTire),
+      nwt_2: this.formatNumberView(this.headerMarketingOrder[2].wdNormalTube),
+      ot_wt_2: this.formatNumberView(this.headerMarketingOrder[2].wdOtTube),
+      tl_ot_wd_2: this.formatNumberView(this.headerMarketingOrder[2].wdOtTl),
+      tt_ot_wd_2: this.formatNumberView(this.headerMarketingOrder[2].wdOtTt),
+      total_wt_2: this.formatNumberView(this.headerMarketingOrder[2].totalWdTube),
+      total_tlwd_2: this.formatNumberView(this.headerMarketingOrder[2].totalWdTl),
+      total_ttwd_2: this.formatNumberView(this.headerMarketingOrder[2].totalWdTt),
+      max_tube_capa_2: this.formatNumberView(this.headerMarketingOrder[2].maxCapTube),
+      max_capa_tl_2: this.formatNumberView(this.headerMarketingOrder[2].maxCapTl),
+      max_capa_tt_2: this.formatNumberView(this.headerMarketingOrder[2].maxCapTt),
     });
 
     this.updateMonthNames(this.headerMarketingOrder);
+  }
+
+  formatNumberView(value: number) {
+    return this.parsingNumberService.separatorAndDecimalView(value);
   }
 
   formatNumber(value: number | null | undefined): string {

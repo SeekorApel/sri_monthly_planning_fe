@@ -1,0 +1,11 @@
+.custom-height {
+  height: 28px;
+}
+
+::ng-deep .mat-sort-header-container {
+  justify-content: center;
+}
+
+.invalid-feedback-custome {
+  border-color: red;
+}

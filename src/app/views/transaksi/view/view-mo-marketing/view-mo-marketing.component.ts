@@ -1,10 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { MarketingOrder } from 'src/app/models/MarketingOrder';
 import { ApiResponse } from 'src/app/response/Response';
 import { MarketingOrderService } from 'src/app/services/transaksi/marketing order/marketing-order.service';
 import { ParsingDate } from 'src/app/utils/ParsingDate';
 import Swal from 'sweetalert2';
+import { MatTableDataSource } from '@angular/material/table';
+import { ParsingDateService } from 'src/app/utils/parsing-date/parsing-date.service';
+import { MatSort } from '@angular/material/sort';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-view-mo-marketing',
@@ -21,8 +25,12 @@ export class ViewMoMarketingComponent implements OnInit {
   pageOfItems: Array<any>;
   pageSize: number = 5;
   totalPages: number = 5;
+  headersColumns: string[] = ['no', 'moId', 'type', 'dateValid', 'revisionPpc', 'revisionMarketing', 'month0', 'month1', 'month2', 'action'];
+  dataSource: MatTableDataSource<MarketingOrder>;
+  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  constructor(private router: Router, private moService: MarketingOrderService) {
+  constructor(private router: Router, private moService: MarketingOrderService, private parseDateService: ParsingDateService) {
     this.dateUtil = ParsingDate;
   }
 
@@ -30,6 +38,9 @@ export class ViewMoMarketingComponent implements OnInit {
     this.getAllMarketingOrder();
   }
 
+  parseDate(dateParse: string): string {
+    return this.parseDateService.convertDateToString(dateParse);
+  }
 
   getAllMarketingOrder(): void {
     this.moService.getAllMarketingOrder().subscribe(
@@ -42,9 +53,10 @@ export class ViewMoMarketingComponent implements OnInit {
             text: 'There are no marketing orders available.',
           });
         } else {
-          console.log('data', response.data);
           this.marketingOrders = response.data;
-          this.onChangePage(this.marketingOrders.slice(0, this.pageSize));
+          this.dataSource = new MatTableDataSource(this.marketingOrders);
+          this.dataSource.sort = this.sort;
+          this.dataSource.paginator = this.paginator;
         }
       },
       (error) => {
@@ -61,14 +73,13 @@ export class ViewMoMarketingComponent implements OnInit {
     this.pageOfItems = pageOfItems;
   }
 
-  resetSearch(): void {
-    this.searchText = '';
-    this.onChangePage(this.marketingOrders.slice(0, this.pageSize));
+  onSearchChange(): void {
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
   }
 
-  onSearchChange(): void {
-    const filteredSearch = this.marketingOrders.filter((mo) => mo.moId.toString().includes(this.searchText) || mo.type.toLowerCase().includes(this.searchText.toLowerCase()));
-    this.onChangePage(filteredSearch.slice(0, this.pageSize));
+  resetSearch(): void {
+    this.searchText = '';
+    this.dataSource.filter = '';
   }
 
   navigateToAdd(idMo: String) {
@@ -81,7 +92,7 @@ export class ViewMoMarketingComponent implements OnInit {
 
   navigateToDetail(m0: any, m1: any, m3: any, typeProduct: string) {
     const formatDate = (date: any): string => {
-      const dateObj = (date instanceof Date) ? date : new Date(date);
+      const dateObj = date instanceof Date ? date : new Date(date);
 
       // Pastikan dateObj adalah tanggal yang valid
       if (isNaN(dateObj.getTime())) {
@@ -99,7 +110,7 @@ export class ViewMoMarketingComponent implements OnInit {
     const month0 = formatDate(m0);
     const month1 = formatDate(m1);
     const month2 = formatDate(m3);
-    const type = typeProduct
+    const type = typeProduct;
 
     // Menggunakan string tanggal yang sudah dikonversi
     this.router.navigate(['/transaksi/view-revisi-mo-marketing/', month0, month1, month2, type]);
