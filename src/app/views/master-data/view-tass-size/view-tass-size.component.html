@@ -22,42 +22,58 @@
 
       <!-- Table -->
        <div class="table-responsive">
-         <table class="table table-bordered table-striped table-sm">
-           <thead align="center">
-             <tr>
-               <th>No</th>
-               <th>Tass Size ID</th>
-               <th>Machine Tass Type ID</th>
-               <th>Size ID</th>
-               <th>Capacity</th>
-               <th>Status</th>
-               <th>Action</th>
-             </tr>
-           </thead>
-           <tbody>
-             <tr align="center" *ngFor="let tass_sizes of pageOfItems; let i = index">
-               <td>{{ i + 1 }}</td>
-               <td>{{ tass_sizes.tassize_ID }}</td>
-               <td>{{ tass_sizes.machinetasstype_ID }}</td>
-               <td>{{ tass_sizes.size_ID }}</td>
-               <td>{{ tass_sizes.capacity }}</td>
-               <td [ngClass]="{ 'bg-success': tass_sizes.status === 1, 'bg-danger': tass_sizes.status !== 1 }" >{{ tass_sizes.status === 1 ? 'Active' : 'Deactive' }}</td>
-               <td>
-                 <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(tass_sizes.tassize_ID)">Update</button>
-                 <button type="button" class="btn btn-md ml-2" [ngClass]="{ 'btn-danger': tass_sizes.status === 1, 'btn-success': tass_sizes.status !== 1 }" (click)="tass_sizes.status === 1 ? deleteData(tass_sizes) : activateData(tass_sizes)">
-                  {{ tass_sizes.status === 1 ? 'Delete' : 'Active' }}
-                </button>
-               </td>
-             </tr>
-           </tbody>
+         <table mat-table [dataSource]="dataSource" matSort class="table table-bordered table-striped table-sm">
+          <ng-container matColumnDef="no" >
+            <th *matHeaderCellDef >No</th>
+            <td  *matCellDef="let element; let i = index">{{ i + 1 }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="tassize_ID">
+            <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Tass Size ID</th>
+            <td  *matCellDef="let element">{{ element.tassize_ID }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="machinetasstype_ID">
+            <th  *matHeaderCellDef mat-sort-header >Machine Tass Type ID</th>
+            <td *matCellDef="let element">{{ element.machinetasstype_ID }}</td>
+          </ng-container>
+          
+          <ng-container matColumnDef="size_ID">
+            <th  *matHeaderCellDef mat-sort-header >Size ID</th>
+            <td *matCellDef="let element">{{ element.size_ID }}</td>
+          </ng-container>
+          
+          <ng-container matColumnDef="capacity">
+            <th  *matHeaderCellDef mat-sort-header >Capacity</th>
+            <td *matCellDef="let element">{{ element.capacity }}</td>
+          </ng-container>
+          
+          <ng-container matColumnDef="status">
+            <th  *matHeaderCellDef>Status</th>
+            <td *matCellDef="let element" [ngClass]="{ 'bg-success': element.status === 1, 'bg-danger': element.status !== 1 }">
+              {{ element.status === 1 ? 'Active' : 'Deactive' }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="action" >
+            <th *matHeaderCellDef style="min-width: 200px;">Action</th>
+            <td *matCellDef="let element">
+              <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(element.tassize_ID)">Update</button>
+              <button type="button" class="btn btn-md ml-2" [ngClass]="{ 'btn-danger': element.status === 1, 'btn-success': element.status !== 1 }" (click)="element.status === 1 ? deleteData(element) : activateData(element)">
+                {{ element.status === 1 ? 'Delete' : 'Active' }}
+              </button>
+            </td>
+          </ng-container>
+
+          <tr align="center" style="height: 20px;" mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr align="center" mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
          </table>
          <!-- Pagination -->
-         <nav>
-           <ul class="pagination">
-             <jw-pagination [items]="tass_sizes" [pageSize]="pageSize" [maxPages]="totalPages" (changePage)="onChangePage($event)"> </jw-pagination>
-           </ul>
-         </nav>
-       </div>
+        </div>
+        <mat-paginator [pageSize]="pageSize"
+             [pageSizeOptions]="[5, 10, 20]"
+             showFirstLastButtons>
+       </mat-paginator>
     </div>
   </div>
 </div>

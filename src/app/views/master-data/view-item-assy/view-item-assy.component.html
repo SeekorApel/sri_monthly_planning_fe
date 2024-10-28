@@ -43,7 +43,6 @@
           <ng-container matColumnDef="action" >
             <th *matHeaderCellDef style="min-width: 200px;">Action</th>
             <td *matCellDef="let element">
-              <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(element.item_ASSY)">Update</button>
               <button type="button" class="btn btn-md ml-2" [ngClass]="{ 'btn-danger': element.status === 1, 'btn-success': element.status !== 1 }" (click)="element.status === 1 ? deleteData(element) : activateData(element)">
                 {{ element.status === 1 ? 'Delete' : 'Active' }}
               </button>
@@ -54,11 +53,11 @@
           <tr align="center" mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
         </table>
         <!-- Pagination -->
-        <mat-paginator [pageSize]="pageSize"
-              [pageSizeOptions]="[5, 10, 20]"
-              showFirstLastButtons>
-        </mat-paginator>
       </div>
+      <mat-paginator [pageSize]="pageSize"
+            [pageSizeOptions]="[5, 10, 20]"
+            showFirstLastButtons>
+      </mat-paginator>
     </div>
   </div>
 </div>

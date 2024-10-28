@@ -69,11 +69,11 @@
             <tr align="center" mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
           </table>
           <!-- Pagination -->
-          <mat-paginator [pageSize]="pageSize"
-              [pageSizeOptions]="[5, 10, 20]"
-              showFirstLastButtons>
-        </mat-paginator>
         </div>
+        <mat-paginator [pageSize]="pageSize"
+            [pageSizeOptions]="[5, 10, 20]"
+            showFirstLastButtons>
+      </mat-paginator>
       </div>
     </div>
   </div>

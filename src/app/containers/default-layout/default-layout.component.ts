@@ -20,7 +20,6 @@ export class DefaultLayoutComponent {
   constructor(private authenticationService: AuthenticationService, private router: Router) {
     //PERSONAL INFORMATION
     let currentUserSubject = JSON.parse(localStorage.getItem('currentUser'));
-    // localStorage.clear();
     this.nrp = currentUserSubject.userName;
     this.name = currentUserSubject.fullName;
     this.role = currentUserSubject.roles.role_name;
@@ -46,7 +45,7 @@ export class DefaultLayoutComponent {
       { name: 'Building Distance', url: '/master-data/view-bdistance', icon: 'cil-minus' },
       { name: 'Quadrant Distance', url: '/master-data/view-qdistance', icon: 'cil-minus' },
       { name: 'Size', url: '/master-data/view-size', icon: 'cil-minus' },
-      { name: 'Routing Machine', url: '/master-data/view-routing-machine', icon: 'cil-minus' },
+      { name: 'Cycle Time Assy', url: '/master-data/view-routing-machine', icon: 'cil-minus' },
       { name: 'Delivery Schedule', url: '/master-data/view-delivery-schedule', icon: 'cil-minus' },
       { name: 'Tass Size', url: '/master-data/view-tass-size', icon: 'cil-minus' },
       { name: 'Item Curing', url: '/master-data/view-item-curing', icon: 'cil-minus' },

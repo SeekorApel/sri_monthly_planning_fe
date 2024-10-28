@@ -85,11 +85,11 @@
             <tr align="center" mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
         </table>
         <!-- Pagination -->
-        <mat-paginator [pageSize]="pageSize"
-              [pageSizeOptions]="[5, 10, 20]"
-              showFirstLastButtons>
-        </mat-paginator>
       </div>
+      <mat-paginator [pageSize]="pageSize"
+            [pageSizeOptions]="[5, 10, 20]"
+            showFirstLastButtons>
+      </mat-paginator>
     </div>
   </div>
 </div>
@@ -108,41 +108,55 @@
         <!-- Form with Reactive Forms -->
         <form [formGroup]="editMaxCapacityForm">
           <div class="form-group">
-            <label for="productID">Product ID</label>
-            <input [(ngModel)]="edtMaxCapacityObject.product_ID" type="text" class="form-control" id="productID" formControlName="productID" [ngClass]="{ 'is-invalid': editMaxCapacityForm.get('productID').invalid && editMaxCapacityForm.get('productID').touched }" />
-            <!-- Error message if plantName is empty -->
-            <div *ngIf="editMaxCapacityForm.get('productID').invalid && editMaxCapacityForm.get('productID').touched" class="invalid-feedback">Product ID is required.</div>
+            <label for="buildingID" style="min-width: 150px;">Building Name</label>
+            <div>
+              <ng-select2
+                formControlName="buildingID" 
+                id="buildingID"
+                name = "buildingID"
+                [(ngModel)]="edtCuringMachineObject.building_ID"
+                [data]="uomOptions"
+                [options]="options"
+                [placeholder]="'Please Select'">
+              </ng-select2>
+            </div>
           </div>
+
           <div class="form-group">
             <label for="machineCuringTypeID">Machine Curing Type ID</label>
             <input [(ngModel)]="edtMaxCapacityObject.machinecuringtype_ID" type="text" class="form-control" id="productID" formControlName="machineCuringTypeID" [ngClass]="{ 'is-invalid': editMaxCapacityForm.get('machineCuringTypeID').invalid && editMaxCapacityForm.get('machineCuringTypeID').touched }" />
             <!-- Error message if plantName is empty -->
             <div *ngIf="editMaxCapacityForm.get('machineCuringTypeID').invalid && editMaxCapacityForm.get('machineCuringTypeID').touched" class="invalid-feedback">Machine Curing Type ID is required.</div>
           </div>
+
           <div class="form-group">
             <label for="cycleTime">Cycle Time</label>
             <input [(ngModel)]="edtMaxCapacityObject.cycle_TIME" type="text" class="form-control" id="cycleTime" formControlName="cycleTime" [ngClass]="{ 'is-invalid': editMaxCapacityForm.get('cycleTime').invalid && editMaxCapacityForm.get('cycleTime').touched }" />
             <!-- Error message if plantName is empty -->
             <div *ngIf="editMaxCapacityForm.get('cycleTime').invalid && editMaxCapacityForm.get('cycleTime').touched" class="invalid-feedback">Cycle Time is required.</div>
           </div>
+
           <div class="form-group">
             <label for="capacityShift1">Capacity Shift 1</label>
             <input [(ngModel)]="edtMaxCapacityObject.capacity_SHIFT_1" type="text" class="form-control" id="capacityShift1" formControlName="capacityShift1" [ngClass]="{ 'is-invalid': editMaxCapacityForm.get('capacityShift1').invalid && editMaxCapacityForm.get('capacityShift1').touched }" />
             <!-- Error message if plantName is empty -->
             <div *ngIf="editMaxCapacityForm.get('capacityShift1').invalid && editMaxCapacityForm.get('capacityShift1').touched" class="invalid-feedback">Capacity Shift 1 is required.</div>
           </div>
+
           <div class="form-group">
             <label for="capacityShift2">Capacity Shift 2</label>
             <input [(ngModel)]="edtMaxCapacityObject.capacity_SHIFT_2" type="text" class="form-control" id="capacityShift2" formControlName="capacityShift2" [ngClass]="{ 'is-invalid': editMaxCapacityForm.get('capacityShift2').invalid && editMaxCapacityForm.get('capacityShift2').touched }" />
             <!-- Error message if plantName is empty -->
             <div *ngIf="editMaxCapacityForm.get('capacityShift2').invalid && editMaxCapacityForm.get('capacityShift2').touched" class="invalid-feedback">Capacity Shift 2 is required.</div>
           </div>
+
           <div class="form-group">
             <label for="capacityShift3">Capacity Shift 3</label>
             <input [(ngModel)]="edtMaxCapacityObject.capacity_SHIFT_3" type="text" class="form-control" id="capacityShift3" formControlName="capacityShift3" [ngClass]="{ 'is-invalid': editMaxCapacityForm.get('capacityShift3').invalid && editMaxCapacityForm.get('capacityShift3').touched }" />
             <!-- Error message if plantName is empty -->
             <div *ngIf="editMaxCapacityForm.get('capacityShift3').invalid && editMaxCapacityForm.get('capacityShift3').touched" class="invalid-feedback">Capacity Shift 3 is required.</div>
           </div>
+          
         </form>
       </div>
       <div class="modal-footer">

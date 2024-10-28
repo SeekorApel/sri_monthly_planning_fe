@@ -7,10 +7,14 @@ import Swal from 'sweetalert2';
 declare var $: any;
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
+import { Select2OptionData } from 'ng-select2';
+import { Options } from 'select2';
 
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
+import { Product } from 'src/app/models/Product';
+import { ProductService } from 'src/app/services/master-data/product/product.service';
 
 @Component({
   selector: 'app-view-max-capacity',
@@ -39,16 +43,30 @@ export class ViewMaxCapacityComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  constructor(private maxCapacityService: MaxCapacityService, private fb: FormBuilder) { 
-    this.editMaxCapacityForm = this.fb.group({
-      productID: ['', Validators.required],
-      machineCuringTypeID: ['', Validators.required],
-      cycleTime: ['', Validators.required],
-      capacityShift1: ['', Validators.required],
-      capacityShift2: ['', Validators.required],
-      capacityShift3: ['', Validators.required]
+  public uomOptions: Array<Select2OptionData>;
+  public options: Options = { width: '100%'};
+  uom: any;
+  product: Product[] =[];
 
+  constructor(private maxcapacityService: MaxCapacityService, private fb: FormBuilder, private productService: ProductService) { 
+    this.editMaxCapacityForm = this.fb.group({
+      machinetype: ['', Validators.required],
+      buildingID: ['', Validators.required],
+      cavity: ['', Validators.required],
+      statusUsage: ['', Validators.required],
     });
+    productService.getAllProduct().subscribe(
+      (response: ApiResponse<Product[]>) => {
+        this.product = response.data;
+        this.uomOptions = this.product.map((element) => ({
+          id: element.part_NUMBER.toString(), // Ensure the ID is a string
+          text: element.building_NAME // Set the text to the plant name
+        }));
+      },
+      (error) => {
+        this.errorMessage = 'Failed to load building: ' + error.message;
+      }
+    );
   }
 
   ngOnInit(): void {

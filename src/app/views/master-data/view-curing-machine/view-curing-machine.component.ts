@@ -7,6 +7,14 @@ import Swal from 'sweetalert2';
 declare var $: any;
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
+import { Select2OptionData } from 'ng-select2';
+import { Options } from 'select2';
+
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSort } from '@angular/material/sort';
+import { MatPaginator } from '@angular/material/paginator';
+import { BuildingService } from 'src/app/services/master-data/building/building.service';
+import { Building } from 'src/app/models/Building';
 
 @Component({
   selector: 'app-view-curing-machine',
@@ -28,14 +36,37 @@ export class ViewCuringMachineComponent implements OnInit {
   pageOfItems: Array<any>;
   pageSize: number = 5;
   totalPages: number = 5;
+  sortBuffer: Array<any>;
+  displayedColumns: string[] = ['no', 'machine_TYPE', 'building_ID','cavity','work_CENTER_TEXT', 'status_USAGE', 'status', 'action'];
+  dataSource: MatTableDataSource<Curing_Machine>;
 
-  constructor(private curingmachineService: CuringMachineService, private fb: FormBuilder) { 
+  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+
+  public uomOptions: Array<Select2OptionData>;
+  public options: Options = { width: '100%'};
+  uom: any;
+  building: Building[] =[];
+
+  constructor(private curingmachineService: CuringMachineService, private fb: FormBuilder, private buildingService: BuildingService) { 
     this.editCuringMachineForm = this.fb.group({
-      buildingID: ['', Validators.required],
       machinetype: ['', Validators.required],
+      buildingID: ['', Validators.required],
       cavity: ['', Validators.required],
       statusUsage: ['', Validators.required],
     });
+    buildingService.getAllBuilding().subscribe(
+      (response: ApiResponse<Building[]>) => {
+        this.building = response.data;
+        this.uomOptions = this.building.map((element) => ({
+          id: element.building_ID.toString(), // Ensure the ID is a string
+          text: element.building_NAME // Set the text to the plant name
+        }));
+      },
+      (error) => {
+        this.errorMessage = 'Failed to load building: ' + error.message;
+      }
+    );
   }
 
   ngOnInit(): void {
@@ -46,7 +77,10 @@ export class ViewCuringMachineComponent implements OnInit {
     this.curingmachineService.getAllMachineCuring().subscribe(
       (response: ApiResponse<Curing_Machine[]>) => {
         this.curingmachines = response.data;
-        this.onChangePage(this.curingmachines.slice(0, this.pageSize));
+        this.dataSource = new MatTableDataSource(this.curingmachines);
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+        this.onChangePage(this.dataSource.data.slice(0, this.pageSize));
       },
       (error) => {
         this.errorMessage = 'Failed to load curing machines: ' + error.message;
@@ -59,19 +93,20 @@ export class ViewCuringMachineComponent implements OnInit {
   }
 
   onSearchChange(): void {
-    const filteredCuringMachines = this.curingmachines.filter(
-      (curingmachine) =>
-        curingmachine.machine_TYPE
-          .toLowerCase()
-          .includes(this.searchText.toLowerCase()) ||
-          curingmachine.building_ID.toString().includes(this.searchText)||
-          curingmachine.cavity.toString().includes(this.searchText)||
-          curingmachine.work_CENTER_TEXT.includes(this.searchText)||
-          curingmachine.status_USAGE.toString().includes(this.searchText)
-    );
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
+    // const filteredCuringMachines = this.curingmachines.filter(
+    //   (curingmachine) =>
+    //     curingmachine.machine_TYPE
+    //       .toLowerCase()
+    //       .includes(this.searchText.toLowerCase()) ||
+    //       curingmachine.building_ID.toString().includes(this.searchText)||
+    //       curingmachine.cavity.toString().includes(this.searchText)||
+    //       curingmachine.work_CENTER_TEXT.includes(this.searchText)||
+    //       curingmachine.status_USAGE.toString().includes(this.searchText)
+    // );
 
-    // Tampilkan hasil filter pada halaman pertama
-    this.onChangePage(filteredCuringMachines.slice(0, this.pageSize));
+    // // Tampilkan hasil filter pada halaman pertama
+    // this.onChangePage(filteredCuringMachines.slice(0, this.pageSize));
   }
 
   resetSearch(): void {

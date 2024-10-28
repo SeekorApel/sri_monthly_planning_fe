@@ -7,10 +7,15 @@ import Swal from 'sweetalert2';
 declare var $: any;
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
+import { Select2OptionData } from 'ng-select2';
+import { Options } from 'select2';
+
 
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
+import { Building } from 'src/app/models/Building';
+import { BuildingService } from 'src/app/services/master-data/building/building.service';
 
 @Component({
   selector: 'app-view-quadrant',
@@ -38,11 +43,28 @@ export class ViewQuadrantComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  constructor(private quadrantService: QuadrantService, private fb: FormBuilder) {
+  public uomOptions: Array<Select2OptionData>;
+  public options: Options = { width: '100%'};
+  uom: any;
+  building: Building[] =[];
+
+  constructor(private quadrantService: QuadrantService, private fb: FormBuilder, private buildingService: BuildingService) { 
     this.editQuadrantForm = this.fb.group({
       quadrantName: ['', Validators.required],
       buildingID: ['', Validators.required],
     });
+    buildingService.getAllBuilding().subscribe(
+      (response: ApiResponse<Building[]>) => {
+        this.building = response.data;
+        this.uomOptions = this.building.map((element) => ({
+          id: element.building_ID.toString(), // Ensure the ID is a string
+          text: element.building_NAME // Set the text to the plant name
+        }));
+      },
+      (error) => {
+        this.errorMessage = 'Failed to load building: ' + error.message;
+      }
+    );
   }
 
   ngOnInit(): void {

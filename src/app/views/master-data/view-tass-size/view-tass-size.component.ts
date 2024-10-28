@@ -7,6 +7,11 @@ import Swal from 'sweetalert2';
 declare var $: any;
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
+
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSort } from '@angular/material/sort';
+import { MatPaginator } from '@angular/material/paginator';
+
 @Component({
   selector: 'app-view-tass-size',
   templateUrl: './view-tass-size.component.html',
@@ -27,6 +32,12 @@ export class ViewTassSizeComponent implements OnInit {
   pageOfItems: Array<any>;
   pageSize: number = 5;
   totalPages: number = 5;
+  sortBuffer: Array<any>;
+  displayedColumns: string[] = ['no', 'tassize_ID', 'machinetasstype_ID','size_ID','capacity', 'status', 'action'];
+  dataSource: MatTableDataSource<Tass_Size>;
+
+  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(private tass_sizeService: TassSizeService, private fb: FormBuilder) { 
     this.editTassSizeForm = this.fb.group({
@@ -44,7 +55,10 @@ export class ViewTassSizeComponent implements OnInit {
     this.tass_sizeService.getAllTassSize().subscribe(
       (response: ApiResponse<Tass_Size[]>) => {
         this.tass_sizes = response.data;
-        this.onChangePage(this.tass_sizes.slice(0, this.pageSize));
+        this.dataSource = new MatTableDataSource(this.tass_sizes);
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+        this.onChangePage(this.dataSource.data.slice(0, this.pageSize));
       },
       (error) => {
         this.errorMessage = 'Failed to load tass sizes: ' + error.message;
@@ -57,19 +71,20 @@ export class ViewTassSizeComponent implements OnInit {
   }
 
   onSearchChange(): void {
-    const filteredTassSizes = this.tass_sizes.filter(
-      (tass_size) =>
-        tass_size.machinetasstype_ID
-          .toLowerCase()
-          .includes(this.searchText.toLowerCase()) ||
-        tass_size.tassize_ID.toString().includes(this.searchText)||
-        tass_size.size_ID.toLowerCase().includes(this.searchText.toLowerCase())||
-        tass_size.capacity.toString().includes(this.searchText.toLowerCase())
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
+    // const filteredTassSizes = this.tass_sizes.filter(
+    //   (tass_size) =>
+    //     tass_size.machinetasstype_ID
+    //       .toLowerCase()
+    //       .includes(this.searchText.toLowerCase()) ||
+    //     tass_size.tassize_ID.toString().includes(this.searchText)||
+    //     tass_size.size_ID.toLowerCase().includes(this.searchText.toLowerCase())||
+    //     tass_size.capacity.toString().includes(this.searchText.toLowerCase())
         
-    );
+    // );
 
-    // Tampilkan hasil filter pada halaman pertama
-    this.onChangePage(filteredTassSizes.slice(0, this.pageSize));
+    // // Tampilkan hasil filter pada halaman pertama
+    // this.onChangePage(filteredTassSizes.slice(0, this.pageSize));
   }
 
   resetSearch(): void {

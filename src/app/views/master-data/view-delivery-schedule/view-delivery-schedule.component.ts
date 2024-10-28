@@ -8,6 +8,10 @@ declare var $: any;
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSort } from '@angular/material/sort';
+import { MatPaginator } from '@angular/material/paginator';
+
 @Component({
   selector: 'app-view-delivery-schedule',
   templateUrl: './view-delivery-schedule.component.html',
@@ -27,6 +31,12 @@ export class ViewDeliveryScheduleComponent implements OnInit {
   pageOfItems: Array<any>;
   pageSize: number = 5;
   totalPages: number = 5;
+  sortBuffer: Array<any>;
+  displayedColumns: string[] = ['no', 'ds_ID', 'effective_TIME','date_ISSUED', 'category', 'status', 'action'];
+  dataSource: MatTableDataSource<DeliverySchedule>;
+
+  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(private deliveryScheduleService: DeliveryScheduleService, private fb: FormBuilder) {
     this.editDeliveryScheduleForm = this.fb.group({
@@ -44,7 +54,10 @@ export class ViewDeliveryScheduleComponent implements OnInit {
     this.deliveryScheduleService.getAllDeliverySchedule().subscribe(
       (response: ApiResponse<DeliverySchedule[]>) => {
         this.deliverySchedules = response.data;
-        this.onChangePage(this.deliverySchedules.slice(0, this.pageSize));
+        this.dataSource = new MatTableDataSource(this.deliverySchedules);
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+        this.onChangePage(this.dataSource.data.slice(0, this.pageSize));
       },
       (error) => {
         this.errorMessage = 'Failed to load delivery schedule: ' + error.message;
@@ -57,19 +70,21 @@ export class ViewDeliveryScheduleComponent implements OnInit {
   }
 
   onSearchChange(): void {
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
     // Lakukan filter berdasarkan nama plant yang mengandung text pencarian (case-insensitive)
-    const filteredDeliverySchedul = this.deliverySchedules.filter((deliverySchedule) => 
-    deliverySchedule.effective_TIME.toString().includes(this.searchText) ||
-    deliverySchedule.date_ISSUED.toString().includes(this.searchText) ||
-    deliverySchedule.category.toLowerCase().includes(this.searchText.toLowerCase()));
+    // const filteredDeliverySchedul = this.deliverySchedules.filter((deliverySchedule) => 
+    // deliverySchedule.effective_TIME.toString().includes(this.searchText) ||
+    // deliverySchedule.date_ISSUED.toString().includes(this.searchText) ||
+    // deliverySchedule.category.toLowerCase().includes(this.searchText.toLowerCase()));
 
-    // Tampilkan hasil filter pada halaman pertama
-    this.onChangePage(filteredDeliverySchedul.slice(0, this.pageSize));
+    // // Tampilkan hasil filter pada halaman pertama
+    // this.onChangePage(filteredDeliverySchedul.slice(0, this.pageSize));
   }
 
   resetSearch(): void {
     this.searchText = '';
-    this.onChangePage(this.deliverySchedules.slice(0, this.pageSize));
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
+    //this.dataSource.sort = this.sort;// this.onChangePage(this.deliverySchedules.slice(0, this.pageSize));
   }
 
   updateDeliverySchedule(): void {
