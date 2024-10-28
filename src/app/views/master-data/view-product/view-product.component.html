@@ -137,10 +137,9 @@
           <tr align="center" style="height: 20px" mat-header-row *matHeaderRowDef="displayedColumns"></tr>
           <tr align="center" mat-row *matRowDef="let row; columns: displayedColumns"></tr>
         </table>
-
-        <!-- Pagination -->
-        <mat-paginator [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
       </div>
+      <!-- Pagination -->
+      <mat-paginator [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
     </div>
   </div>
 </div>

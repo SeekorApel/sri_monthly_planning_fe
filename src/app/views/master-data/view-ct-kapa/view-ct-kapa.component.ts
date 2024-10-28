@@ -7,6 +7,10 @@ import Swal from 'sweetalert2';
 import { saveAs } from 'file-saver';
 declare var $: any;
 import * as XLSX from 'xlsx';
+import { Select2OptionData } from 'ng-select2';
+import { Options } from 'select2';
+import { ItemCuringService } from 'src/app/services/master-data/item-curing/item-curing.service';
+import { Item_Curing } from 'src/app/models/Item_Curing';
 
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
@@ -26,18 +30,20 @@ export class ViewCtKapaComponent implements OnInit {
   isEditMode: boolean = false;
   file: File | null = null;
   editCtKapaForm: FormGroup;
-
+  public uomOptionData: Array<Select2OptionData>;
+  public options: Options = {
+    width: '100%',
+    minimumResultsForSearch: 0,
+  };
+  itemCurings: Item_Curing[];
   // Pagination
   pageOfItems: Array<any>;
   pageSize: number = 5;
   totalPages: number = 5;
-  displayedColumns: string[] = ['no','id_CT_KAPA','item_CURING','type_CURING',
-    'description','cycle_TIME','shift','kapa_PERSHIFT','last_UPDATE_DATA','machine',
-    'status','action'
-  ];
+  displayedColumns: string[] = ['no', 'id_CT_KAPA', 'item_CURING', 'type_CURING', 'description', 'cycle_TIME', 'shift', 'kapa_PERSHIFT', 'last_UPDATE_DATA', 'machine', 'status', 'action'];
   dataSource: MatTableDataSource<CtKapa>;
 
-  constructor(private ctkapaService: CtKapaService, private fb: FormBuilder) {
+  constructor(private ctkapaService: CtKapaService, private ItemCuring: ItemCuringService, private fb: FormBuilder) {
     this.editCtKapaForm = this.fb.group({
       itemCuring: ['', Validators.required],
       typeCuring: ['', Validators.required],
@@ -48,6 +54,26 @@ export class ViewCtKapaComponent implements OnInit {
       lastUpdateData: ['', Validators.required],
       machine: ['', Validators.required],
     });
+    this.loadItemCuring();
+  }
+  private loadItemCuring(): void {
+    this.ItemCuring.getAllItemCuring().subscribe(
+      (response: ApiResponse<Item_Curing[]>) => {
+        this.itemCurings = response.data;
+
+        if (!this.uomOptionData) {
+          this.uomOptionData = [];
+        }
+
+        this.uomOptionData = this.itemCurings.map((element) => ({
+          id: element.item_CURING.toString(), // Ensure the ID is a string
+          text: element.item_CURING, // Set the text to the name (or other property)
+        }));
+      },
+      (error) => {
+        this.errorMessage = 'Failed to load item curing: ' + error.message;
+      }
+    );
   }
   activateData(ctkapa: CtKapa): void {
     Swal.fire({

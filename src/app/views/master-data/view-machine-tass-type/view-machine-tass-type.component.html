@@ -72,8 +72,8 @@
         </table>
 
         <!-- Pagination -->
-        <mat-paginator [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
       </div>
+      <mat-paginator [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
 
       <!-- Modal edit -->
       <div class="modal fade" id="editModal" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
@@ -95,7 +95,7 @@
                   </div>
                 </div>
                 <div class="form-group">
-                  <label for="description">Description</label>
+                  <h6 for="description">Description</h6>
                   <input [(ngModel)]="edtMachineTassTypeObject.description" type="text" class="form-control" id="description" formControlName="description" [ngClass]="{ 'is-invalid': editMachineTassTypeForm.get('description').invalid && editMachineTassTypeForm.get('description').touched }" />
                   <!-- Error message if plantName is empty -->
                   <div *ngIf="editMachineTassTypeForm.get('description').invalid && editMachineTassTypeForm.get('description').touched" class="invalid-feedback">Machine Tass Type Description name is required.</div>

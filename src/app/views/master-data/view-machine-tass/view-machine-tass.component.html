@@ -88,8 +88,8 @@
         </table>
 
         <!-- Pagination -->
-        <mat-paginator [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
       </div>
+      <mat-paginator [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
 
       <!-- Modal edit -->
       <div class="modal fade" id="editModal" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
@@ -111,22 +111,22 @@
                   </div>
                 </div>
                 <div class="form-group">
-                  <label for="floor">Floor</label>
+                  <h6 for="floor">Floor</h6>
                   <input [(ngModel)]="editMachineTassObject.floor" type="text" class="form-control" id="floor" formControlName="floor" [ngClass]="{ 'is-invalid': editMachineTassForm.get('floor').invalid && editMachineTassForm.get('floor').touched }" />
                   <div *ngIf="editMachineTassForm.get('floor').invalid && editMachineTassForm.get('floor').touched" class="invalid-feedback">Floor is required.</div>
                 </div>
                 <div class="form-group">
-                  <label for="machineNum">Machine Number</label>
+                  <h6 for="machineNum">Machine Number</h6>
                   <input [(ngModel)]="editMachineTassObject.machine_NUMBER" type="text" class="form-control" id="machineNum" formControlName="machineNum" [ngClass]="{ 'is-invalid': editMachineTassForm.get('machineNum').invalid && editMachineTassForm.get('machineNum').touched }" />
                   <div *ngIf="editMachineTassForm.get('machineNum').invalid && editMachineTassForm.get('machineNum').touched" class="invalid-feedback">Machine Number is required.</div>
                 </div>
                 <div class="form-group">
-                  <label for="type">Type</label>
+                  <h6 for="type">Type</h6>
                   <input [(ngModel)]="editMachineTassObject.type" type="text" class="form-control" id="type" formControlName="type" [ngClass]="{ 'is-invalid': editMachineTassForm.get('type').invalid && editMachineTassForm.get('type').touched }" />
                   <div *ngIf="editMachineTassForm.get('type').invalid && editMachineTassForm.get('type').touched" class="invalid-feedback">Type is required.</div>
                 </div>
                 <div class="form-group">
-                  <label for="wct">Work Center Text</label>
+                  <h6 for="wct">Work Center Text</h6>
                   <input [(ngModel)]="editMachineTassObject.work_CENTER_TEXT" type="text" class="form-control" id="wct" formControlName="wct" [ngClass]="{ 'is-invalid': editMachineTassForm.get('wct').invalid && editMachineTassForm.get('wct').touched }" />
                   <div *ngIf="editMachineTassForm.get('wct').invalid && editMachineTassForm.get('wct').touched" class="invalid-feedback">Work Center Text is required.</div>
                 </div>

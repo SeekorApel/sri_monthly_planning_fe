@@ -65,9 +65,9 @@
           <tr align="center" mat-row *matRowDef="let row; columns: displayedColumns"></tr>
         </table>
 
-        <!-- Pagination -->
-        <mat-paginator [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
       </div>
+      <!-- Pagination -->
+      <mat-paginator [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
 
       <!-- Modal edit -->
       <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
@@ -83,7 +83,7 @@
               <!-- Form with Reactive Forms -->
               <form [formGroup]="editPatternForm">
                 <div class="form-group">
-                  <label for="patternName">Pattern Name</label>
+                  <h6 for="patternName">Pattern Name</h6>
                   <input [(ngModel)]="edtPatternObject.pattern_NAME" type="text" class="form-control" id="patternName" formControlName="patternName" [ngClass]="{ 'is-invalid': editPatternForm.get('patternName').invalid && editPatternForm.get('patternName').touched }" />
                   <!-- Error message if plantName is empty -->
                   <div *ngIf="editPatternForm.get('patternName').invalid && editPatternForm.get('patternName').touched" class="invalid-feedback">Pattern name is required.</div>

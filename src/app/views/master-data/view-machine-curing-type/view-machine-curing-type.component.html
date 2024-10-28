@@ -76,10 +76,9 @@
           <tr align="center" style="height: 20px" mat-header-row *matHeaderRowDef="displayedColumns" align="center"></tr>
           <tr align="center" mat-row *matRowDef="let row; columns: displayedColumns" align="center"></tr>
         </table>
-
-        <!-- Pagination -->
-        <mat-paginator [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
       </div>
+      <!-- Pagination -->
+      <mat-paginator [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
 
       <!-- Modal edit -->
       <div class="modal fade" id="editModal" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
@@ -98,9 +97,9 @@
                 <div class="col-md-13">
                   <ng-select2 id="setting" name="setting" formControlName="setting" [(ngModel)]="edtMCTObject.setting_ID" [data]="uomOptionData" [options]="options"> </ng-select2>
                 </div>
-                <label for="description">Description</label>
+                <h6 for="description">Description</h6>
                 <input [(ngModel)]="edtMCTObject.description" type="text" class="form-control" id="description" formControlName="description" [ngClass]="{ 'is-invalid': editMCTForm.get('description').invalid && editMCTForm.get('description').touched }" />
-                <label for="cavity">Cavity</label>
+                <h6 for="cavity">Cavity</h6>
                 <input [(ngModel)]="edtMCTObject.cavity" type="text" class="form-control" id="cavity" formControlName="cavity" [ngClass]="{ 'is-invalid': editMCTForm.get('cavity').invalid && editMCTForm.get('cavity').touched }" />
                 <!-- Error message if description is empty -->
                 <div *ngIf="editMCTForm.get('description').invalid && editMCTForm.get('description').touched" class="invalid-feedback">Machine Curing Type description is required.</div>

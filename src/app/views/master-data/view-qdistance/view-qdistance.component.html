@@ -76,10 +76,9 @@
           <tr align="center" style="height: 20px" mat-header-row *matHeaderRowDef="displayedColumns"></tr>
           <tr align="center" mat-row *matRowDef="let row; columns: displayedColumns"></tr>
         </table>
-
-        <!-- Pagination -->
-        <mat-paginator [pageSize]="pageSize" [pageSize]="pageSize" (page)="onChangePage($event)"> </mat-paginator>
       </div>
+      <!-- Pagination -->
+      <mat-paginator [pageSize]="pageSize" [pageSize]="pageSize" (page)="onChangePage($event)"> </mat-paginator>
 
       <!-- Modal edit -->
       <div class="modal fade" id="editModal" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
@@ -107,7 +106,7 @@
                   </div>
                 </div>
                 <div class="form-group">
-                  <label for="distance">Distance</label>
+                  <h6 for="distance">Distance</h6>
                   <input [(ngModel)]="edtQDistancesObject.distance" type="text" class="form-control" id="distance" formControlName="distance" [ngClass]="{ 'is-invalid': editQDistancesForm.get('distance').invalid && editQDistancesForm.get('distance').touched }" />
                   <div *ngIf="editQDistancesForm.get('distance').invalid && editQDistancesForm.get('distance').touched" class="invalid-feedback">Distance Value is required.</div>
                 </div>
