@@ -21,3 +21,7 @@
   border: 1px solid black; // Menambahkan border hitam pada sel
   padding: 8px; // Memberikan padding dalam sel
 }
+
+::ng-deep .mat-sort-header-container {
+  justify-content: center;
+}

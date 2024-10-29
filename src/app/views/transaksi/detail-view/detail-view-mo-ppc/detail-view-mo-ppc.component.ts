@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DetailMarketingOrder } from 'src/app/models/DetailMarketingOrder';
@@ -7,6 +7,10 @@ import { MarketingOrder } from 'src/app/models/MarketingOrder';
 import { ApiResponse } from 'src/app/response/Response';
 import { MarketingOrderService } from 'src/app/services/transaksi/marketing order/marketing-order.service';
 import Swal from 'sweetalert2';
+import { MatTableDataSource } from '@angular/material/table';
+import { ParsingDateService } from 'src/app/utils/parsing-date/parsing-date.service';
+import { MatSort } from '@angular/material/sort';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-detail-view-mo-ppc',
@@ -23,11 +27,27 @@ export class DetailViewMoPpcComponent implements OnInit {
   monthNames: string[] = ['', '', ''];
   allData: any;
 
-  marketingOrder: MarketingOrder;
+  marketingOrders: MarketingOrder[] = [];
   headerMarketingOrder: HeaderMarketingOrder[];
   detailMarketingOrder: DetailMarketingOrder[];
 
-  constructor(private router: Router, private activeRoute: ActivatedRoute, private fb: FormBuilder, private moService: MarketingOrderService) {
+  searchText: string = '';
+
+  // Pagination
+  pageOfItems: Array<any>;
+  pageSize: number = 5;
+  totalPages: number = 5;
+  displayedColumns: string[] = ['no', 'moId', 'type', 'dateValid', 'revisionPpc', 'revisionMarketing', 'month0', 'month1', 'month2', 'action'];
+  dataSource: MatTableDataSource<MarketingOrder>;
+  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+
+  constructor(
+    private router: Router,
+    private activeRoute: ActivatedRoute,
+    private fb: FormBuilder,
+    private moService: MarketingOrderService,
+    private parseDateService: ParsingDateService) {
     this.formHeaderMo = this.fb.group({
       date: [null, []],
       type: [null, []],
@@ -106,6 +126,23 @@ export class DetailViewMoPpcComponent implements OnInit {
     this.getAllData(this.idMo);
   }
 
+  onChangePage(pageOfItems: Array<any>) {
+    this.pageOfItems = pageOfItems;
+  }
+
+  onSearchChange(): void {
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
+  }
+
+  resetSearch(): void {
+    this.searchText = '';
+    this.dataSource.filter = '';
+  }
+
+  parseDate(dateParse: string): string {
+    return this.parseDateService.convertDateToString(dateParse);
+  }
+
   getAllData(idMo: String) {
     this.moService.getAllMoById(idMo).subscribe(
       (response: ApiResponse<any>) => {
@@ -124,6 +161,11 @@ export class DetailViewMoPpcComponent implements OnInit {
   }
 
   fillAllData(data: any) {
+    console.log(data);
+    // this.dataSource = new MatTableDataSource(this.marketingOrders);
+    // this.dataSource.sort = this.sort;
+    // this.dataSource.paginator = this.paginator;
+
     this.headerMarketingOrder = data.dataHeaderMo;
     this.detailMarketingOrder = data.dataDetailMo;
     let typeProduct = data.type;

@@ -527,16 +527,16 @@ export class AddMoPpcComponent implements OnInit {
               confirmButtonText: 'OK',
             }).then((result) => {
               if (result.isConfirmed) {
-                resolve(false); // Validation failed
+                resolve(false);
               }
             });
           } else {
-            resolve(false); // Bisa juga menangani kondisi lain di sini jika perlu
+            resolve(false);
           }
         },
         (err) => {
           Swal.fire('Error!', 'Error getting available month validation.', 'error');
-          resolve(false); // Validation failed due to error
+          resolve(false);
         }
       );
     });

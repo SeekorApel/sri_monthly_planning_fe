@@ -157,10 +157,7 @@ export class AddMoMarketingComponent implements OnInit {
 
 
   isInvalidValue(value: any | null | undefined, minimumOrder: number, qtyPerRak: number, maxCapacity: number): boolean {
-    // Jika nilai adalah null atau undefined, anggap tidak valid
-    console.log(value)
-
-    if (value == null ) {
+    if (value == null) {
       return false;
     }
 
@@ -1131,34 +1128,47 @@ export class AddMoMarketingComponent implements OnInit {
   saveMo(): void {
     this.detailMarketingOrder.forEach((mo) => {
       if (mo.lockStatusM0 === 1) {
-        mo.initialStock = 0;
-        mo.sfMonth0 = 0;
-        mo.sfMonth1 = 0;
-        mo.sfMonth2 = 0;
         mo.moMonth0 = 0;
+      }
+      if (mo.lockStatusM1 === 1) {
         mo.moMonth1 = 0;
+      }
+      if (mo.lockStatusM2 === 1) {
         mo.moMonth2 = 0;
       }
     });
 
     const hasInvalidInput = this.detailMarketingOrder.some((mo) => {
-      const sfMonth0 = parseFloat(mo.sfMonth0.toString().replace(/\./g, '')) || 0;
-      const sfMonth1 = parseFloat(mo.sfMonth1.toString().replace(/\./g, '')) || 0;
-      const sfMonth2 = parseFloat(mo.sfMonth2.toString().replace(/\./g, '')) || 0;
-      const moMonth0 = parseFloat(mo.moMonth0.toString().replace(/\./g, '')) || 0;
-      const moMonth1 = parseFloat(mo.moMonth1.toString().replace(/\./g, '')) || 0;
-      const moMonth2 = parseFloat(mo.moMonth2.toString().replace(/\./g, '')) || 0;
+      const moMonth0 = mo.moMonth0 ? parseFloat(mo.moMonth0.toString().replace(/\./g, '')) : 0;
+      const moMonth1 = mo.moMonth1 ? parseFloat(mo.moMonth1.toString().replace(/\./g, '')) : 0;
+      const moMonth2 = mo.moMonth2 ? parseFloat(mo.moMonth2.toString().replace(/\./g, '')) : 0;
 
       const minOrder = Number(mo.minOrder);
       const maxCapMonth0 = Number(mo.maxCapMonth0);
       const maxCapMonth1 = Number(mo.maxCapMonth1);
       const maxCapMonth2 = Number(mo.maxCapMonth2);
+      const qtyPerRak = Number(mo.qtyPerRak);
 
-      // Jika nilainya 0, maka dianggap valid, sehingga tidak masuk kategori input yang invalid
-      return (sfMonth0 !== 0 && (sfMonth0 < minOrder || sfMonth0 > maxCapMonth0)) || (sfMonth1 !== 0 && (sfMonth1 < minOrder || sfMonth1 > maxCapMonth1)) || (sfMonth2 !== 0 && (sfMonth2 < minOrder || sfMonth2 > maxCapMonth2)) || (moMonth0 !== 0 && (moMonth0 < minOrder || moMonth0 > maxCapMonth0)) || (moMonth1 !== 0 && (moMonth1 < minOrder || moMonth1 > maxCapMonth1)) || (moMonth2 !== 0 && (moMonth2 < minOrder || moMonth2 > maxCapMonth2));
+      const lockStatusM0 = Number(mo.lockStatusM0);
+      const lockStatusM1 = Number(mo.lockStatusM1);
+      const lockStatusM2 = Number(mo.lockStatusM2);
+
+      const isInvalidMoMonth0 =
+        (moMonth0 !== 0 && (moMonth0 < minOrder || moMonth0 > maxCapMonth0 || moMonth0 % qtyPerRak !== 0)) ||
+        (lockStatusM0 !== 1 && moMonth0 === 0);
+
+
+      const isInvalidMoMonth1 =
+        (moMonth1 !== 0 && (moMonth1 < minOrder || moMonth1 > maxCapMonth1 || moMonth1 % qtyPerRak !== 0)) ||
+        (lockStatusM1 !== 1 && moMonth1 === 0);
+
+      const isInvalidMoMonth2 =
+        (moMonth2 !== 0 && (moMonth2 < minOrder || moMonth2 > maxCapMonth2 || moMonth2 % qtyPerRak !== 0)) ||
+        (lockStatusM2 !== 1 && moMonth2 === 0);
+
+      return isInvalidMoMonth0 || isInvalidMoMonth1 || isInvalidMoMonth2;
     });
 
-    // Jika terdapat input yang tidak valid, tampilkan SweetAlert dan hentikan fungsi
     if (hasInvalidInput) {
       Swal.fire({
         title: 'Warning!',
@@ -1169,14 +1179,15 @@ export class AddMoMarketingComponent implements OnInit {
       return;
     }
 
+    //Parsing data text to number
     this.detailMarketingOrder.forEach((mo) => {
-      mo.initialStock = mo.initialStock !== null ? parseFloat(mo.initialStock.toString().replace(/\./g, '')) || 0 : 0;
-      mo.sfMonth0 = mo.sfMonth0 !== null ? parseFloat(mo.sfMonth0.toString().replace(/\./g, '')) || 0 : 0;
-      mo.sfMonth1 = mo.sfMonth1 !== null ? parseFloat(mo.sfMonth1.toString().replace(/\./g, '')) || 0 : 0;
-      mo.sfMonth2 = mo.sfMonth2 !== null ? parseFloat(mo.sfMonth2.toString().replace(/\./g, '')) || 0 : 0;
-      mo.moMonth0 = mo.moMonth0 !== null ? parseFloat(mo.moMonth0.toString().replace(/\./g, '')) || 0 : 0;
-      mo.moMonth1 = mo.moMonth1 !== null ? parseFloat(mo.moMonth1.toString().replace(/\./g, '')) || 0 : 0;
-      mo.moMonth2 = mo.moMonth2 !== null ? parseFloat(mo.moMonth2.toString().replace(/\./g, '')) || 0 : 0;
+      mo.initialStock = mo.initialStock !== null ? parseFloat(mo.initialStock.toString().replace(/\./g, '')) : 0;
+      mo.sfMonth0 = mo.sfMonth0 !== null ? parseFloat(mo.sfMonth0.toString().replace(/\./g, '')) : 0;
+      mo.sfMonth1 = mo.sfMonth1 !== null ? parseFloat(mo.sfMonth1.toString().replace(/\./g, '')) : 0;
+      mo.sfMonth2 = mo.sfMonth2 !== null ? parseFloat(mo.sfMonth2.toString().replace(/\./g, '')) : 0;
+      mo.moMonth0 = mo.moMonth0 !== null ? parseFloat(mo.moMonth0.toString().replace(/\./g, '')) : 0;
+      mo.moMonth1 = mo.moMonth1 !== null ? parseFloat(mo.moMonth1.toString().replace(/\./g, '')) : 0;
+      mo.moMonth2 = mo.moMonth2 !== null ? parseFloat(mo.moMonth2.toString().replace(/\./g, '')) : 0;
     });
 
     this.moService.saveMarketingOrderMarketing(this.detailMarketingOrder).subscribe(
@@ -1201,14 +1212,6 @@ export class AddMoMarketingComponent implements OnInit {
         });
       }
     );
-  }
-
-  private parseFormattedValue(formattedValue: string | null): number | null {
-    if (formattedValue && typeof formattedValue === 'string') {
-      const numericString = formattedValue.replace(/\./g, '').replace(/,/g, '.');
-      return parseFloat(numericString);
-    }
-    return null;
   }
 
   onFileChange(event: Event) {
