@@ -48,23 +48,25 @@ export class ViewMaxCapacityComponent implements OnInit {
   uom: any;
   product: Product[] =[];
 
-  constructor(private maxcapacityService: MaxCapacityService, private fb: FormBuilder, private productService: ProductService) { 
+  constructor(private maxCapacityService: MaxCapacityService, private fb: FormBuilder, private productService: ProductService) { 
     this.editMaxCapacityForm = this.fb.group({
-      machinetype: ['', Validators.required],
-      buildingID: ['', Validators.required],
-      cavity: ['', Validators.required],
-      statusUsage: ['', Validators.required],
+      productID: ['', Validators.required],
+      machineCuringTypeID: ['', Validators.required],
+      cycleTime: ['', Validators.required],
+      capacityShift1: ['', Validators.required],
+      capacityShift2: ['', Validators.required],
+      capacityShift3: ['', Validators.required]
     });
     productService.getAllProduct().subscribe(
       (response: ApiResponse<Product[]>) => {
         this.product = response.data;
         this.uomOptions = this.product.map((element) => ({
           id: element.part_NUMBER.toString(), // Ensure the ID is a string
-          text: element.building_NAME // Set the text to the plant name
+          text: element.part_NUMBER.toString() // Set the text to the plant name
         }));
       },
       (error) => {
-        this.errorMessage = 'Failed to load building: ' + error.message;
+        this.errorMessage = 'Failed to load product: ' + error.message;
       }
     );
   }

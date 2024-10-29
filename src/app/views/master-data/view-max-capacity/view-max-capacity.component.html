@@ -35,7 +35,7 @@
           </ng-container>
 
           <ng-container matColumnDef="product_ID">
-            <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Product ID</th>
+            <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Product Part Number</th>
             <td  *matCellDef="let element">{{ element.product_ID }}</td>
           </ng-container>
 
@@ -108,13 +108,13 @@
         <!-- Form with Reactive Forms -->
         <form [formGroup]="editMaxCapacityForm">
           <div class="form-group">
-            <label for="buildingID" style="min-width: 150px;">Building Name</label>
+            <label for="productID" style="min-width: 150px;">Part Number</label>
             <div>
               <ng-select2
-                formControlName="buildingID" 
-                id="buildingID"
-                name = "buildingID"
-                [(ngModel)]="edtCuringMachineObject.building_ID"
+                formControlName="productID" 
+                id="productID"
+                name = "productID"
+                [(ngModel)]="edtMaxCapacityObject.product_ID"
                 [data]="uomOptions"
                 [options]="options"
                 [placeholder]="'Please Select'">
@@ -156,7 +156,7 @@
             <!-- Error message if plantName is empty -->
             <div *ngIf="editMaxCapacityForm.get('capacityShift3').invalid && editMaxCapacityForm.get('capacityShift3').touched" class="invalid-feedback">Capacity Shift 3 is required.</div>
           </div>
-          
+
         </form>
       </div>
       <div class="modal-footer">
