@@ -71,7 +71,7 @@
                     <td>{{ i + 1 }}</td>
                     <td>{{ ctcuring.ct_CURING_ID }}</td>
                     <td>{{ ctcuring.wip }}</td>
-                    <td>{{ ctcuring.description }}</td>
+                    <td>{{ ctcuring.part_NUMBER }}</td>
                     <td>{{ ctcuring.group_COUNTER }}</td>
                     <td>{{ ctcuring.var_GROUP_COUNTER }}</td>
                     <td>{{ ctcuring.sequence }}</td>
@@ -96,7 +96,7 @@
                     <td>{{ ctcuring.op_TIME_NORMAL_SHIFT_1 }}</td>
                     <td>{{ ctcuring.op_TIME_NORMAL_SHIFT_2 }}</td>
                     <td>{{ ctcuring.op_TIME_SHIFT_FRIDAY }}</td>
-                    <td>{{ ctcuring.op_TIME_TOTAL_NORMAL_SHIFT }}</td>
+                    <td>{{ ctcuring.op_TIME_NORMAL_SHIFT }}</td>
                     <td>{{ ctcuring.op_TIME_TOTAL_SHIFT_FRIDAY }}</td>
                     <td>{{ ctcuring.kaps_NORMAL_SHIFT_0 }}</td>
                     <td>{{ ctcuring.kaps_NORMAL_SHIFT_1 }}</td>
@@ -146,7 +146,7 @@
               <div *ngIf="editCTCuringForm.get('wip').invalid && editCTCuringForm.get('wip').touched" class="invalid-feedback">WIP is required.</div>
 
               <label for="description">Description</label>
-              <input [(ngModel)]="edtCTCuringObject.description" type="text" class="form-control" id="description" formControlName="description" [ngClass]="{ 'is-invalid': editCTCuringForm.get('description').invalid && editCTCuringForm.get('description').touched }" />
+              <input [(ngModel)]="edtCTCuringObject.part_NUMBER" type="text" class="form-control" id="description" formControlName="description" [ngClass]="{ 'is-invalid': editCTCuringForm.get('description').invalid && editCTCuringForm.get('description').touched }" />
               <div *ngIf="editCTCuringForm.get('description').invalid && editCTCuringForm.get('description').touched" class="invalid-feedback">Description is required.</div>
 
               <label for="groupcounter">Group Counter</label>
@@ -245,8 +245,8 @@
               <input [(ngModel)]="edtCTCuringObject.op_TIME_SHIFT_FRIDAY" type="number" class="form-control" id="optimeshiftfriday" formControlName="optimeshiftfriday" [ngClass]="{ 'is-invalid': editCTCuringForm.get('optimeshiftfriday').invalid && editCTCuringForm.get('optimeshiftfriday').touched }" />
               <div *ngIf="editCTCuringForm.get('optimeshiftfriday').invalid && editCTCuringForm.get('optimeshiftfriday').touched" class="invalid-feedback">OP Time Shift Friday is required.</div>
 
-              <label for="optimenormalshift">OP Time Total Normal Shift</label>
-              <input [(ngModel)]="edtCTCuringObject.op_TIME_TOTAL_NORMAL_SHIFT" type="number" class="form-control" id="optimenormalshift" formControlName="optimenormalshift" [ngClass]="{ 'is-invalid': editCTCuringForm.get('optimenormalshift').invalid && editCTCuringForm.get('optimenormalshift').touched }" />
+              <label for="optimenormalshift">OP Time Normal Shift</label>
+              <input [(ngModel)]="edtCTCuringObject.op_TIME_NORMAL_SHIFT" type="number" class="form-control" id="optimenormalshift" formControlName="optimenormalshift" [ngClass]="{ 'is-invalid': editCTCuringForm.get('optimenormalshift').invalid && editCTCuringForm.get('optimenormalshift').touched }" />
               <div *ngIf="editCTCuringForm.get('optimenormalshift').invalid && editCTCuringForm.get('optimenormalshift').touched" class="invalid-feedback">OP Time Total Normal Shift is required.</div>
 
               <label for="optimetotalshiftfriday">OP Time Total Shift Friday</label>

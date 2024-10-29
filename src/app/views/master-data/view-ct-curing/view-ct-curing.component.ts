@@ -95,7 +95,7 @@ export class ViewCtCuringComponent  implements OnInit {
       (ctcuring) =>
         ctcuring.ct_CURING_ID.toString().toLowerCase().includes(this.searchText.toLowerCase()) ||
         ctcuring.wip.toLowerCase().includes(this.searchText.toLowerCase())||
-        ctcuring.description.toLowerCase().includes(this.searchText.toLowerCase())||
+        ctcuring.part_NUMBER.toString().toLowerCase().includes(this.searchText.toLowerCase())||
         ctcuring.group_COUNTER.toLowerCase().includes(this.searchText.toLowerCase())||
         ctcuring.var_GROUP_COUNTER.toLowerCase().includes(this.searchText.toLowerCase())||
         ctcuring.sequence.toString().toLowerCase().includes(this.searchText.toLowerCase())||

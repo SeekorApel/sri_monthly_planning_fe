@@ -16,12 +16,26 @@ export class ViewWorkDayComponent implements OnInit {
   
   perHourSwitches = Array(24).fill(true);
   perHourReasons = Array(24).fill(''); 
-  ttSwitches = Array(3).fill(false); // TT switches
-  ttReasons = Array(3).fill(''); // TT reasons
 
-  tlSwitches = Array(3).fill(false); // TL switches
-  tlReasons = Array(3).fill(''); //
+  ttSwitches = Array(3).fill(true);
+  ttReasons = Array(3).fill('');
+  ttperHourSwitches = Array(24).fill(true);
+  ttperHourReasons = Array(24).fill(''); 
+  
+  tlSwitches = Array(3).fill(true);
+  tlReasons = Array(3).fill(''); 
+  tlperHourSwitches = Array(24).fill(true);
+  tlperHourReasons = Array(24).fill(''); 
+  overTimeSwitch = false;
+  
+  newEvent: Event = { title: '', description: '', date: null };
+  showModal: boolean = false;
+  weekend: boolean = false;
 
+  handleOverTimeChange(){
+    this.shift1Switches = Array(3).fill(!this.overTimeSwitch);
+    this.perHourSwitches = Array(24).fill(!this.overTimeSwitch);
+  }
   isReasonRequired(shiftState: boolean): boolean {
     return !shiftState; 
   }
@@ -37,7 +51,6 @@ export class ViewWorkDayComponent implements OnInit {
     // If the hour index is in range and the shift is active, return true if the switch is off
     return hourIndex < 24 && isShiftActive && isSwitchOff;
   }
-  
   handleShiftChange(shiftIndex: number) {
     // Calculate the start and end indices for the 8-hour block based on the shift index
     const startIndex = shiftIndex * 8;
@@ -46,6 +59,54 @@ export class ViewWorkDayComponent implements OnInit {
     // Loop over the 8-hour block and update perHourSwitches based on shift1Switches
     for (let i = startIndex; i < endIndex; i++) {
       this.perHourSwitches[i] = this.shift1Switches[shiftIndex] ? true : false;
+    }
+  }
+
+  // TL overtime
+  isReasonRequiredPerHourSwitchTL(hourIndex: number): boolean {
+    const shiftIndex = Math.floor(hourIndex / 8); 
+    return !this.tlSwitches[shiftIndex];
+  }
+  isReasonRequiredTL(hourIndex: number): boolean {
+    const shiftIndex = Math.floor(hourIndex / 8); 
+    const isShiftActive = this.tlSwitches[shiftIndex];
+    const isSwitchOff = !this.tlperHourSwitches[hourIndex]; 
+  
+    // If the hour index is in range and the shift is active, return true if the switch is off
+    return hourIndex < 24 && isShiftActive && isSwitchOff;
+  }
+  handleShiftChangeTL(shiftIndex: number) {
+    // Calculate the start and end indices for the 8-hour block based on the shift index
+    const startIndex = shiftIndex * 8;
+    const endIndex = startIndex + 8;
+  
+    // Loop over the 8-hour block and update perHourSwitches based on shift1Switches
+    for (let i = startIndex; i < endIndex; i++) {
+      this.tlperHourSwitches[i] = this.tlSwitches[shiftIndex] ? true : false;
+    }
+  }
+
+  // TT Overtime
+  isReasonRequiredPerHourSwitchTT(hourIndex: number): boolean {
+    const shiftIndex = Math.floor(hourIndex / 8); 
+    return !this.ttSwitches[shiftIndex];
+  }
+  isReasonRequiredTT(hourIndex: number): boolean {
+    const shiftIndex = Math.floor(hourIndex / 8); 
+    const isShiftActive = this.ttSwitches[shiftIndex];
+    const isSwitchOff = !this.ttperHourSwitches[hourIndex]; 
+  
+    // If the hour index is in range and the shift is active, return true if the switch is off
+    return hourIndex < 24 && isShiftActive && isSwitchOff;
+  }
+  handleShiftChangeTT(shiftIndex: number) {
+    // Calculate the start and end indices for the 8-hour block based on the shift index
+    const startIndex = shiftIndex * 8;
+    const endIndex = startIndex + 8;
+  
+    // Loop over the 8-hour block and update perHourSwitches based on shift1Switches
+    for (let i = startIndex; i < endIndex; i++) {
+      this.ttperHourSwitches[i] = this.ttSwitches[shiftIndex] ? true : false;
     }
   }
   
@@ -101,8 +162,6 @@ export class ViewWorkDayComponent implements OnInit {
     const endHour = (hourIndex + 1).toString().padStart(2, '0'); // Format next hour as 01
     return `${startHour}:00 - ${endHour}:00`;
   }
-  newEvent: Event = { title: '', description: '', date: null };
-  showModal: boolean = false;
   selectDay(day: dayCalendar) {
     this.selectedDay = new dayCalendar(null, null, null);
     if (day.days > 0) {
@@ -127,13 +186,32 @@ export class ViewWorkDayComponent implements OnInit {
 
         this.shift1Switches = Array(3).fill(true);
         this.shift1Reasons = Array(3).fill(''); 
+
         this.perHourSwitches = Array(24).fill(true);
         this.perHourReasons = Array(24).fill(''); 
+      
+        this.ttSwitches = Array(3).fill(true);
+        this.ttReasons = Array(3).fill('');
+        this.ttperHourSwitches = Array(24).fill(true);
+        this.ttperHourReasons = Array(24).fill(''); 
+        
+        this.tlSwitches = Array(3).fill(true);
+        this.tlReasons = Array(3).fill(''); 
+        this.tlperHourSwitches = Array(24).fill(true);
+        this.tlperHourReasons = Array(24).fill(''); 
+        this.overTimeSwitch = false;
+
+        this.weekend = false;
+        this.overTimeSwitch = false; 
     }
 
     if (day.weekend) {
+        this.weekend = true;
+        this.overTimeSwitch = true;
+        this.handleOverTimeChange();
         this.title = "OverTime TT and TL";
-    } else {
+      } else {
+        this.weekend = false;
         this.title = "Normal Work Day";
     }
   }
