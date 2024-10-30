@@ -25,21 +25,40 @@
               <th>Su</th>
             </tr>
           </thead>
-          <tbody align="center"> 
+          <tbody align="center" *ngIf="readytoload"> 
             <tr *ngFor="let week of calendar.days; let i = index">
               <td *ngFor="let day of week" 
               [ngStyle]="{
-                  'background-color': day.weekend ? 'red' : 'inherit', 
-                  'color': day.weekend ? 'white' : 'inherit'
+                'background-color': 
+                  day.detail.off === 1 ? 'red' : 
+                  day.detail.semi_OFF === 1 ? 'yellow' : 
+                  day.detail.off === 0 && day.detail.semi_OFF === 0 ? 'green' : 'inherit', 
+                'color': 
+                  day.detail.off === 1|| (day.detail.off === 0 && day.detail.semi_OFF === 0) ? 'white': 
+                  day.detail.semi_OFF === 1 ? 'black' : 'inherit'
               }" 
               [ngClass]="{ 'selected': day.days === selectedDay.days && day.month=== selectedDay.month  }" 
-              (click)="selectDay(day)">
+              (click)="selectDay(day)" >
             {{ day.days }}
             <div *ngFor="let event of getEventsForDay(day.days)">{{ event.title }}</div>
           </td>               
             </tr>
           </tbody>
         </table>
+        <div class="d-flex justify-content-center mb-2">
+          <div class="legend-item d-flex align-items-center mx-3 ">
+            <div class="legend-color" style="width: 15px; height: 15px; background-color: red; margin-right: 5px;"></div>
+            <span>Off</span>
+          </div>
+          <div class="legend-item d-flex align-items-center mx-3 ">
+            <div class="legend-color" style="width: 15px; height: 15px; background-color: yellow; margin-right: 5px;"></div>
+            <span>Semi-Off</span>
+          </div>
+          <div class="legend-item d-flex align-items-center mx-3 ">
+            <div class="legend-color" style="width: 15px; height: 15px; background-color: green; margin-right: 5px;"></div>
+            <span>On</span>
+          </div>
+        </div>
       </div>
 
       <!-- Detail Section -->
@@ -51,26 +70,26 @@
       
             <!-- Tab 1: Summary -->
             <tab heading="Summary">
-              <div *ngIf="!weekend">
+              <div *ngIf="!weekend && !overTimeSwitch">
                 <h4>Reason of deactive shift</h4>
                 <ul>
-                  <li>Shift 3: {{ shift1Reasons[2] ? shift1Reasons[2] : '-' }}</li>
-                  <li>Shift 1: {{ shift1Reasons[0] ? shift1Reasons[0] : '-' }}</li>
-                  <li>Shift 2: {{ shift1Reasons[1] ? shift1Reasons[1] : '-' }}</li>
+                  <li>Shift 3: {{ shift1Reasons[0] ? shift1Reasons[0] : '-' }}</li>
+                  <li>Shift 1: {{ shift1Reasons[1] ? shift1Reasons[1] : '-' }}</li>
+                  <li>Shift 2: {{ shift1Reasons[2] ? shift1Reasons[2] : '-' }}</li>
                 </ul>
               </div>
-              <div *ngIf="weekend">
+              <div *ngIf="weekend || overTimeSwitch">
                 <h4>Reason of deactive shift of TT</h4>
                 <ul>
-                  <li>Shift 3: {{ ttReasons[2] ? ttReasons[2] : '-' }}</li>
-                  <li>Shift 1: {{ ttReasons[0] ? ttReasons[0] : '-' }}</li>
-                  <li>Shift 2: {{ ttReasons[1] ? ttReasons[1] : '-' }}</li>
+                  <li>Shift 3: {{ ttReasons[0] ? ttReasons[0] : '-' }}</li>
+                  <li>Shift 1: {{ ttReasons[1] ? ttReasons[1] : '-' }}</li>
+                  <li>Shift 2: {{ ttReasons[2] ? ttReasons[2] : '-' }}</li>
                 </ul>                
                 <h4>Reason of deactive shift of TL</h4>
                 <ul>
-                  <li>Shift 3: {{ tlReasons[2] ? tlReasons[2] : '-' }}</li>
-                  <li>Shift 1: {{ tlReasons[0] ? tlReasons[0] : '-' }}</li>
-                  <li>Shift 2: {{ tlReasons[1] ? tlReasons[1] : '-' }}</li>
+                  <li>Shift 3: {{ tlReasons[0] ? tlReasons[0] : '-' }}</li>
+                  <li>Shift 1: {{ tlReasons[1] ? tlReasons[1] : '-' }}</li>
+                  <li>Shift 2: {{ tlReasons[2] ? tlReasons[2] : '-' }}</li>
                 </ul>
               </div>
               
@@ -85,7 +104,7 @@
                   <div class="per-hour-wrapper">
                     <h4 style="min-width: 70px;">Shift 3</h4>
                     <label class="switch switch-label switch-primary">
-                      <input type="checkbox" class="switch-input" [(ngModel)]="shift1Switches[0]" (ngModelChange)="handleShiftChange(0)" [disabled]="overTimeSwitch">
+                      <input type="checkbox" class="switch-input" [(ngModel)]="shift1Switches[0]" (ngModelChange)="handleShiftChange(0,'SHIFT 3')" [disabled]="overTimeSwitch">
                       <span class="switch-slider" data-checked="On" data-unchecked="Off"></span>
                     </label>
                     <div *ngIf="isReasonRequired(shift1Switches[0]) && !overTimeSwitch">
@@ -99,7 +118,7 @@
                   <div class="per-hour-wrapper">
                     <h4 style="min-width: 70px;">Shift 1</h4>
                     <label class="switch switch-label switch-primary">
-                      <input type="checkbox" class="switch-input" [(ngModel)]="shift1Switches[1]" (ngModelChange)="handleShiftChange(1)" [disabled]="overTimeSwitch">
+                      <input type="checkbox" class="switch-input" [(ngModel)]="shift1Switches[1]" (ngModelChange)="handleShiftChange(1,'SHIFT 1')" [disabled]="overTimeSwitch">
                       <span class="switch-slider" data-checked="On" data-unchecked="Off"></span>
                     </label>
                     <div *ngIf="isReasonRequired(shift1Switches[1]) && !overTimeSwitch">
@@ -113,7 +132,7 @@
                   <div class="per-hour-wrapper">
                     <h4 style="min-width: 70px;">Shift 2</h4>
                     <label class="switch switch-label switch-primary">
-                      <input type="checkbox" class="switch-input" [(ngModel)]="shift1Switches[2]" (ngModelChange)="handleShiftChange(2)" [disabled]="overTimeSwitch">
+                      <input type="checkbox" class="switch-input" [(ngModel)]="shift1Switches[2]" (ngModelChange)="handleShiftChange(2, 'SHIFT 2')" [disabled]="overTimeSwitch">
                       <span class="switch-slider" data-checked="On" data-unchecked="Off"></span>
                     </label>
                     <div *ngIf="isReasonRequired(shift1Switches[2]) && !overTimeSwitch">
