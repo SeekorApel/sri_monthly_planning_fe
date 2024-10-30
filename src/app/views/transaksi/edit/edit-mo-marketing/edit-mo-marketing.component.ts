@@ -31,23 +31,13 @@ export class EditMoMarketingComponent implements OnInit {
   allData: any;
   lastIdMo: string = '';
   file: File | null = null;
+  errorMessagesM0: string[] = [];
+  errorMessagesM1: string[] = [];
+  errorMessagesM2: string[] = [];
 
   marketingOrder: MarketingOrder = new MarketingOrder();
   headerMarketingOrder: any[] = [];
   detailMarketingOrder: DetailMarketingOrder[] = [];
-  validationErrors: boolean[] = [];
-
-  // validationErrors: { [key: string]: boolean } = {
-  //   moMonth0: false,
-  //   moMonth1: false,
-  //   moMonth2: false
-  // };
-
-  // validationErrors: { [key: string]: boolean }[] = this.detailMarketingOrder.map(() => ({
-  //   moMonth0: false,
-  //   moMonth1: false,
-  //   moMonth2: false
-  // }));
 
   headersColumns: string[] = ['no', 'category', 'partNumber', 'description', 'machineType', 'capacity', 'mouldMonthlyPlan', 'qtyPerRak', 'minOrder', 'maxCap', 'initialStock', 'salesForecast', 'marketingOrder'];
   childHeadersColumns: string[] = ['maxCapMonth0', 'maxCapMonth1', 'maxCapMonth2', 'sfMonth0', 'sfMonth1', 'sfMonth2', 'moMonth0', 'moMonth1', 'moMonth2'];
@@ -145,36 +135,37 @@ export class EditMoMarketingComponent implements OnInit {
     this.getLastIdMo();
   }
 
-  // testValidate(index: number, value: any, field: string): void {
-  //   const parsedValue = Number(value);
-  //   const data = this.detailMarketingOrder[index];
-  //   const fieldKey = `moMonth${field.charAt(field.length - 1)}`;
+  onInputChangeM0(event: Event, index: number): void {
+    const input = event.target as HTMLInputElement;
+    const value = input.value;
+    const numericValue = value.replace(/[^0-9]/g, '');
+    this.detailMarketingOrder[index].moMonth0 = parseFloat(numericValue) || 0;
+    input.value = this.detailMarketingOrder[index].moMonth0.toLocaleString('id-ID');
+  }
 
-  //   if (!isNaN(parsedValue)) {
-  //     if (parsedValue < data.minOrder || parsedValue > data[field]) {
-  //       this.validationErrors[fieldKey] = true;
-  //     } else {
-  //       this.validationErrors[fieldKey] = false;
-  //     }
-  //   } else {
-  //     console.error("Nilai input tidak valid");
-  //     this.validationErrors[fieldKey] = true;
-  //   }
-  // }
+  validateM0(value: any | null | undefined, partNumber: number): string | null {
+    const data = this.detailMarketingOrder.find((dmo) => dmo.partNumber === partNumber);
+    if (value < data.minOrder) {
+      return "MO must not be less than the minimum order.";
+    }
 
-  testValidate(index: number, value: any, field: string): void {
-    // let parsedValue = Number(value);
-    // let data = this.detailMarketingOrder[index];
-    // if (!isNaN(parsedValue)) {
-    //   if (parsedValue < data.minOrder || parsedValue > data[field]) {
-    //     this.validationErrors[index] = true;
-    //   } else {
-    //     this.validationErrors[index] = false;
-    //   }
-    // } else {
-    //   console.error("Nilai input tidak valid");
-    //   this.validationErrors[index] = true;
-    // }
+    if (value > data.maxCapMonth0) {
+      return "MO cannot be more than the maximum order M1.";
+    }
+
+    if (value % data.qtyPerRak !== 0) {
+      return `MO must be a multiple of ${data.qtyPerRak}.`;
+    }
+
+    return null;
+  }
+
+
+  formatNumber(value: any): string {
+    if (value == null || value === '') {
+      return '';
+    }
+    return Number(value).toLocaleString('id-ID');
   }
 
   onSearchChange(): void {
@@ -184,14 +175,6 @@ export class EditMoMarketingComponent implements OnInit {
   resetSearch(): void {
     this.searchTextDmo = '';
     this.dataSource.filter = '';
-  }
-
-  onInputChange(event: any, mo: any, field: string) {
-    let value = event.target.value;
-    value = value.replace(/[^0-9]/g, '');
-    value = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-    mo[field] = value;
-    event.target.value = value;
   }
 
   onModelChange(value: string, mo: any, field: string) {
@@ -209,23 +192,23 @@ export class EditMoMarketingComponent implements OnInit {
     return value != null ? value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : '';
   }
 
-  formatNumber(value: number): string {
-    if (value !== null && value !== undefined) {
-      // Mengubah angka menjadi string
-      let strValue = value.toString();
+  // formatNumber(value: number): string {
+  //   if (value !== null && value !== undefined) {
+  //     // Mengubah angka menjadi string
+  //     let strValue = value.toString();
 
-      // Memisahkan bagian desimal dan bagian bulat
-      const parts = strValue.split('.');
-      const integerPart = parts[0];
-      const decimalPart = parts[1] ? ',' + parts[1] : '';
+  //     // Memisahkan bagian desimal dan bagian bulat
+  //     const parts = strValue.split('.');
+  //     const integerPart = parts[0];
+  //     const decimalPart = parts[1] ? ',' + parts[1] : '';
 
-      // Menambahkan separator ribuan
-      const formattedInteger = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  //     // Menambahkan separator ribuan
+  //     const formattedInteger = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 
-      return formattedInteger + decimalPart;
-    }
-    return '';
-  }
+  //     return formattedInteger + decimalPart;
+  //   }
+  //   return '';
+  // }
 
   parseFormattedValue(formattedValue: string | null): number | null {
     if (formattedValue && typeof formattedValue === 'string') {

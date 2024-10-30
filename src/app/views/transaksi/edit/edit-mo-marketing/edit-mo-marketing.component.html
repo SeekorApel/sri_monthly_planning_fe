@@ -611,11 +611,16 @@
               </th>
               <td mat-cell *matCellDef="let mo; let i = index" class="text-right" [ngClass]="{ 'locked-background': mo.lockStatusM0 === 1 }">
                 <input
-                *ngIf="mo.lockStatusM0 !== 1"
-                type="text" [ngModel]="mo.moMonth0"
-                (ngModelChange)="testValidate(i, $event, 'maxCapMonth0')"
-                class="text-right form-control"
-                [ngClass]="{ 'is-invalid': validationErrors[i] }"
+                  *ngIf="mo.lockStatusM0 !== 1"
+                  type="text"
+                  [ngModel]="formatNumber(mo.moMonth0)"
+                  (input)="onInputChangeM0($event, i)"
+                  [ngClass]="{
+                    'is-invalid': validateM0(mo.moMonth0, mo.partNumber) !== null
+                  }"
+                  [matTooltip]="validateM0(mo.moMonth0, mo.partNumber)"
+                  matTooltipPosition="right"
+                  class="text-right form-control"
                 />
               </td>
             </ng-container>
@@ -623,19 +628,16 @@
             <!-- moMonth1 Column -->
             <ng-container matColumnDef="moMonth1">
               <th mat-sort-header *matHeaderCellDef style="min-width: 80px" class="child-column">{{ monthNames[1] || 'Month 1' }}</th>
-              <td mat-cell *matCellDef="let mo" class="text-right" [ngClass]="{ 'locked-background': mo.lockStatusM1 === 1 }">
-                <input
-                *ngIf="mo.lockStatusM1 !== 1"
-                type="text" [ngModel]="mo.moMonth1"
-                class="text-right form-control" />
+              <td mat-cell *matCellDef="let mo; let i = index" class="text-right" [ngClass]="{ 'locked-background': mo.lockStatusM1 === 1 }">
+                <input *ngIf="mo.lockStatusM1 !== 1" type="text" [ngModel]="formatNumber(mo.moMonth1)" class="text-right form-control" />
               </td>
             </ng-container>
 
             <!-- moMonth2 Column -->
             <ng-container matColumnDef="moMonth2">
               <th mat-sort-header *matHeaderCellDef style="min-width: 80px" class="child-column">{{ monthNames[2] || 'Month 2' }}</th>
-              <td mat-cell *matCellDef="let mo" class="text-right" [ngClass]="{ 'locked-background': mo.lockStatusM2 === 1 }">
-                <input *ngIf="mo.lockStatusM2 !== 1" type="text" [ngModel]="mo.moMonth2" class="text-right form-control" />
+              <td mat-cell *matCellDef="let mo; let i = index" class="text-right" [ngClass]="{ 'locked-background': mo.lockStatusM2 === 1 }">
+                <input *ngIf="mo.lockStatusM2 !== 1" type="text" [ngModel]="formatNumber(mo.moMonth2)" (input)="onInputChangeM2($event, i)" class="text-right form-control" />
               </td>
             </ng-container>
 
