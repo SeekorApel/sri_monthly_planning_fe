@@ -42,10 +42,10 @@ import { ViewDDeliveryScheduleComponent } from './views/master-data/view-d-deliv
 import { ViewMoMarketingComponent } from './views/transaksi/view/view-mo-marketing/view-mo-marketing.component';
 import { AddMoMarketingComponent } from './views/transaksi/add/add-mo-marketing/add-mo-marketing.component';
 import { DetailViewMoPpcComponent } from './views/transaksi/detail-view/detail-view-mo-ppc/detail-view-mo-ppc.component';
-import { EditMoPpcComponent } from './views/transaksi/edit-mo-ppc/edit-mo-ppc.component';
+import { EditMoPpcComponent } from './views/transaksi/edit/edit-mo-ppc/edit-mo-ppc.component';
 import { ViewCuringSizeComponent } from './views/master-data/view-curing-size/view-curing-size.component';
 import { DetailViewMoMarketingComponent } from './views/transaksi/detail-view-mo-marketing/detail-view-mo-marketing.component';
-import { EditMoMarketingComponent } from './views/transaksi/edit-mo-marketing/edit-mo-marketing.component';
+import { EditMoMarketingComponent } from './views/transaksi/edit/edit-mo-marketing/edit-mo-marketing.component';
 import { ViewDetailRevisiPpcComponent } from './views/transaksi/detail-view-revisi/view-detail-revisi-ppc/view-detail-revisi-ppc.component';
 import { ViewWorkDayComponent } from './views/master-data/view-work-day/view-work-day.component';
 import { ViewDetailRevisiMarketingComponent } from './views/transaksi/view-detail-revisi-marketing/view-detail-revisi-marketing.component';
@@ -438,4 +438,4 @@ export const routes: Routes = [
   imports: [RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy' })],
   exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

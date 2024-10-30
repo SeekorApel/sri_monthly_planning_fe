@@ -8,6 +8,10 @@ export class ParsingNumberService {
 
   separatorAndDecimalInput(value: string): string {
     let formattedValue = value.replace(/[^\d,]/g, '');
+    const commaIndex = formattedValue.indexOf(',');
+    if (commaIndex !== -1) {
+      formattedValue = formattedValue.slice(0, commaIndex + 1) + formattedValue.slice(commaIndex + 1).replace(/,/g, '');
+    }
     if (formattedValue.includes(',')) {
       const parts = formattedValue.split(',');
       parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, '.');

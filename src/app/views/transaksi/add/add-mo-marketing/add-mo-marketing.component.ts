@@ -155,34 +155,26 @@ export class AddMoMarketingComponent implements OnInit {
     input.value = this.formatNumber(numericValue);
   }
 
-
   isInvalidValue(value: any | null | undefined, minimumOrder: number, qtyPerRak: number, maxCapacity: number): boolean {
     if (value == null) {
       return false;
     }
-
-    // Hapus pemisah ribuan (.) dan ubah ke format numerik
     const moValue = parseFloat(value.toString().replace(/\./g, '').replace(/,/g, '.'));
 
-    // Cek apakah nilai kurang dari minimum order
     if (moValue < minimumOrder) {
       return true;
     }
 
-    // Cek apakah kelipatan qtyRak
     if (moValue % qtyPerRak !== 0 && moValue !== 0) {
       return true;
     }
 
-    // Cek apakah nilai melebihi kapasitas maksimum
     if (moValue > maxCapacity) {
       return true;
     }
 
-    // Jika semua kondisi di atas tidak terpenuhi, nilai valid
     return false;
   }
-
 
   separatorNumber(num: number): string {
     return this.parsingNumberService.separatorTableView(num);
@@ -200,23 +192,6 @@ export class AddMoMarketingComponent implements OnInit {
     this.searchText = '';
     this.dataSource.filter = '';
   }
-
-  // onInputChange(event: any, mo: any, field: string) {
-  //   let value = event.target.value;
-  //   value = value.replace(/[^0-9]/g, '');
-  //   value = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-  //   mo[field] = value;
-  //   event.target.value = value;
-  // }
-
-  // isInvalidValue(value: any | null | undefined, minOrder: number, maxCap: number): boolean {
-  //   if (value === null || value === undefined) {
-  //     return false;
-  //   }
-  //   const stringValue = typeof value === 'string' ? value : value.toString();
-  //   const numericValue = parseFloat(stringValue.replace(/\./g, ''));
-  //   return numericValue < minOrder || numericValue > maxCap;
-  // }
 
   getAllData(idMo: String) {
     this.moService.getAllMoById(idMo).subscribe(
@@ -244,7 +219,7 @@ export class AddMoMarketingComponent implements OnInit {
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
 
-    console.log("Aaa", this.dataSource.data);
+    console.log('Aaa', this.dataSource.data);
 
     this.formHeaderMo.patchValue({
       date: new Date(data.dateValid).toISOString().split('T')[0],
@@ -299,18 +274,6 @@ export class AddMoMarketingComponent implements OnInit {
   formatNumberView(value: number) {
     return this.parsingNumberService.separatorAndDecimalView(value);
   }
-
-  // formatNumber(value: number | null | undefined): string {
-  //   if (value !== null && value !== undefined && !isNaN(value)) {
-  //     let strValue = value.toString();
-  //     const parts = strValue.split('.');
-  //     const integerPart = parts[0];
-  //     const decimalPart = parts[1] ? ',' + parts[1] : '';
-  //     const formattedInteger = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-  //     return formattedInteger + decimalPart;
-  //   }
-  //   return '';
-  // }
 
   downloadTemplate() {
     const workbook = new ExcelJS.Workbook();
@@ -388,7 +351,6 @@ export class AddMoMarketingComponent implements OnInit {
     worksheet.getCell('R11').numFmt = '0.00';
     worksheet.getCell('S11').numFmt = '0.00';
 
-
     worksheet.mergeCells('N12:P12');
     worksheet.getCell('N12').value = 'Workday Overtime TT';
     worksheet.getCell('N12').alignment = { vertical: 'middle', horizontal: 'left' };
@@ -399,7 +361,6 @@ export class AddMoMarketingComponent implements OnInit {
     worksheet.getCell('Q12').numFmt = '0.00';
     worksheet.getCell('R12').numFmt = '0.00';
     worksheet.getCell('S12').numFmt = '0.00';
-
 
     worksheet.mergeCells('N13:P13');
     worksheet.getCell('N13').value = 'Total Workday Tire TL';
@@ -906,7 +867,6 @@ export class AddMoMarketingComponent implements OnInit {
         };
       }
 
-
       if (item.lockStatusM2 === 1) {
         worksheet.getCell(`S${rowIndex}`).fill = {
           type: 'pattern',
@@ -999,7 +959,6 @@ export class AddMoMarketingComponent implements OnInit {
       });
 
       rowIndex++;
-
     });
 
     workbook.xlsx.writeBuffer().then((buffer) => {
@@ -1153,18 +1112,11 @@ export class AddMoMarketingComponent implements OnInit {
       const lockStatusM1 = Number(mo.lockStatusM1);
       const lockStatusM2 = Number(mo.lockStatusM2);
 
-      const isInvalidMoMonth0 =
-        (moMonth0 !== 0 && (moMonth0 < minOrder || moMonth0 > maxCapMonth0 || moMonth0 % qtyPerRak !== 0)) ||
-        (lockStatusM0 !== 1 && moMonth0 === 0);
+      const isInvalidMoMonth0 = (moMonth0 !== 0 && (moMonth0 < minOrder || moMonth0 > maxCapMonth0 || moMonth0 % qtyPerRak !== 0)) || (lockStatusM0 !== 1 && moMonth0 === 0);
 
+      const isInvalidMoMonth1 = (moMonth1 !== 0 && (moMonth1 < minOrder || moMonth1 > maxCapMonth1 || moMonth1 % qtyPerRak !== 0)) || (lockStatusM1 !== 1 && moMonth1 === 0);
 
-      const isInvalidMoMonth1 =
-        (moMonth1 !== 0 && (moMonth1 < minOrder || moMonth1 > maxCapMonth1 || moMonth1 % qtyPerRak !== 0)) ||
-        (lockStatusM1 !== 1 && moMonth1 === 0);
-
-      const isInvalidMoMonth2 =
-        (moMonth2 !== 0 && (moMonth2 < minOrder || moMonth2 > maxCapMonth2 || moMonth2 % qtyPerRak !== 0)) ||
-        (lockStatusM2 !== 1 && moMonth2 === 0);
+      const isInvalidMoMonth2 = (moMonth2 !== 0 && (moMonth2 < minOrder || moMonth2 > maxCapMonth2 || moMonth2 % qtyPerRak !== 0)) || (lockStatusM2 !== 1 && moMonth2 === 0);
 
       return isInvalidMoMonth0 || isInvalidMoMonth1 || isInvalidMoMonth2;
     });

@@ -41,31 +41,20 @@ export class ViewDetailRevisiPpcComponent implements OnInit {
   detailMoRevision: string;
 
   // Pagination Marketing Order
-  pageOfItemsMo: Array<any>;
-  pageSizeMo: number = 5;
-  totalPagesMo: number = 5;
   displayedColumnsMo: string[] = ['no', 'moId', 'type', 'dateValid', 'revisionPpc', 'revisionMarketing', 'month0', 'month1', 'month2', 'action'];
   dataSourceMo: MatTableDataSource<MarketingOrder>;
-  @ViewChild(MatSort) sortMo: MatSort;
-  @ViewChild(MatPaginator) paginatorMo: MatPaginator;
+  @ViewChild('sortMo') sortMo = new MatSort();
+  @ViewChild('paginatorMo') paginatorMo: MatPaginator;
 
   // Pagination Detail Marketing Order
-  pageOfItemsDmo: Array<any>;
-  pageSizeDmo: number = 5;
-  totalPagesDmo: number = 5;
   headersColumnsDmo: string[] = ['no', 'category', 'partNumber', 'description', 'machineType', 'capacity', 'qtyPerMould', 'spareMould', 'mouldMonthlyPlan', 'qtyPerRak', 'minOrder', 'maxCap', 'initialStock', 'salesForecast', 'marketingOrder'];
   childHeadersColumnsDmo: string[] = ['maxCapMonth0', 'maxCapMonth1', 'maxCapMonth2', 'sfMonth0', 'sfMonth1', 'sfMonth2', 'moMonth0', 'moMonth1', 'moMonth2'];
   rowDataDmo: string[] = ['no', 'category', 'partNumber', 'description', 'machineType', 'capacity', 'qtyPerMould', 'spareMould', 'mouldMonthlyPlan', 'qtyPerRak', 'minOrder', 'maxCapMonth0', 'maxCapMonth1', 'maxCapMonth2', 'initialStock', 'sfMonth0', 'sfMonth1', 'sfMonth2', 'moMonth0', 'moMonth1', 'moMonth2'];
   dataSourceDmo: MatTableDataSource<DetailMarketingOrder>;
-  @ViewChild(MatSort) sortDmo: MatSort;
-  @ViewChild(MatPaginator) paginatorDmo: MatPaginator;
+  @ViewChild('sortDmo') sortDmo = new MatSort();
+  @ViewChild('paginatorDmo') paginatorDmo: MatPaginator;
 
-  constructor(
-    private router: Router,
-    private moService: MarketingOrderService,
-    private activeRoute: ActivatedRoute,
-    private fb: FormBuilder,
-    private parseDateService: ParsingDateService) {
+  constructor(private router: Router, private moService: MarketingOrderService, private activeRoute: ActivatedRoute, private fb: FormBuilder, private parseDateService: ParsingDateService) {
     this.dateUtil = ParsingDate;
     this.formHeaderMo = this.fb.group({
       date: [null, []],
@@ -159,10 +148,6 @@ export class ViewDetailRevisiPpcComponent implements OnInit {
     this.detailMoRevision = 'Detail Marketing Order';
   }
 
-  onChangePageMo(pageOfItemsMo: Array<any>) {
-    this.pageOfItemsMo = pageOfItemsMo;
-  }
-
   onSearchChangeMo(): void {
     this.dataSourceMo.filter = this.searchText.trim().toLowerCase();
   }
@@ -186,10 +171,9 @@ export class ViewDetailRevisiPpcComponent implements OnInit {
             title: 'No Data',
             text: 'No marketing orders found.',
             timer: 3000,
-            showConfirmButton: false
+            showConfirmButton: false,
           });
         } else {
-          this.marketingOrders = response.data;
           this.dataSourceMo = new MatTableDataSource(this.marketingOrders);
           this.dataSourceMo.sort = this.sortMo;
           this.dataSourceMo.paginator = this.paginatorMo;
@@ -201,7 +185,7 @@ export class ViewDetailRevisiPpcComponent implements OnInit {
           title: 'Error',
           text: 'Failed to load marketing orders: ' + error.message,
           timer: 3000,
-          showConfirmButton: false
+          showConfirmButton: false,
         });
       }
     );
@@ -323,13 +307,13 @@ export class ViewDetailRevisiPpcComponent implements OnInit {
 
   formatDecimal(value: number | null | undefined): string {
     if (value === undefined || value === null || value === 0) {
-      return "0";
+      return '0';
     }
     return value.toFixed(2).replace('.', ',');
   }
 
   formatSeparator(value: number | null | undefined): string {
-    return value != null ? value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".") : "0";
+    return value != null ? value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : '0';
   }
 
   formatDateToString(dateString) {
@@ -366,7 +350,7 @@ export class ViewDetailRevisiPpcComponent implements OnInit {
         a.click();
         window.URL.revokeObjectURL(url);
       },
-      error => {
+      (error) => {
         Swal.fire({
           icon: 'error',
           title: 'Oops...',

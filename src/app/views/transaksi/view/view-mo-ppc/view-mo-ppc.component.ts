@@ -28,8 +28,7 @@ export class ViewMoPpcComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  constructor(private router: Router, private moService: MarketingOrderService, private parseDateService: ParsingDateService) {
-  }
+  constructor(private router: Router, private moService: MarketingOrderService, private parseDateService: ParsingDateService) {}
 
   ngOnInit(): void {
     this.getAllMarketingOrder();
@@ -48,8 +47,9 @@ export class ViewMoPpcComponent implements OnInit {
             icon: 'info',
             title: 'No Data',
             text: 'No marketing orders found.',
-            timer: 3000,
-            showConfirmButton: false
+            timer: null,
+            showConfirmButton: true,
+            confirmButtonText: 'Ok',
           });
         } else {
           this.marketingOrders = response.data;
@@ -64,7 +64,7 @@ export class ViewMoPpcComponent implements OnInit {
           title: 'Error',
           text: 'Failed to load marketing orders: ' + error.message,
           timer: 3000,
-          showConfirmButton: false
+          showConfirmButton: false,
         });
       }
     );
@@ -89,7 +89,7 @@ export class ViewMoPpcComponent implements OnInit {
 
   navigateToDetail(m0: any, m1: any, m3: any, typeProduct: string) {
     const formatDate = (date: any): string => {
-      const dateObj = (date instanceof Date) ? date : new Date(date);
+      const dateObj = date instanceof Date ? date : new Date(date);
 
       // Pastikan dateObj adalah tanggal yang valid
       if (isNaN(dateObj.getTime())) {
@@ -107,7 +107,7 @@ export class ViewMoPpcComponent implements OnInit {
     const month0 = formatDate(m0);
     const month1 = formatDate(m1);
     const month2 = formatDate(m3);
-    const type = typeProduct
+    const type = typeProduct;
 
     // Menggunakan string tanggal yang sudah dikonversi
     this.router.navigate(['/transaksi/view-revisi-mo-ppc/', month0, month1, month2, type]);
@@ -179,7 +179,7 @@ export class ViewMoPpcComponent implements OnInit {
         a.click();
         window.URL.revokeObjectURL(url);
       },
-      error => {
+      (error) => {
         Swal.fire({
           icon: 'error',
           title: 'Oops...',

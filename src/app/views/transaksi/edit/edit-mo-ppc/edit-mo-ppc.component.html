@@ -37,28 +37,40 @@
                   <input class="form-control" formControlName="month_0" type="month" [readOnly]="isReadOnly" />
                 </div>
               </div>
-              <!-- <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="file-input">Upload File</label>
-                <div class="col-md-9 d-flex align-items-center">
-                  <input class="form-control-file" formControlName="upload_file_m0" type="file" id="file-input" (change)="readExcel_M1($event)" />
-                </div>
-              </div> -->
               <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="text-input">Normal Working Day</label>
+                <label class="col-md-3 col-form-label" for="text-input">Normal Working Day Tire</label>
                 <div class="col-md-9">
                   <input type="text" formControlName="nwd_0" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="text-input">TL Overtime Working Day</label>
+                <label class="col-md-3 col-form-label" for="text-input">Normal Working Day Tube</label>
+                <div class="col-md-9">
+                  <input type="text" formControlName="nwt_0" name="text-input" class="form-control" placeholder="0,00" (input)="onInputChange($event, 'nwt_0')" (input)="calculateTotalTube('nwt_0')" />
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-3 col-form-label" for="text-input">Overtime Working Day Tube</label>
+                <div class="col-md-9">
+                  <input type="text" formControlName="ot_wt_0" name="text-input" class="form-control" placeholder="0,00" (input)="onInputChange($event, 'ot_wt_0')" (input)="calculateTotalTube('ot_wt_0')" />
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-3 col-form-label" for="text-input">TL Overtime Working Day Tire</label>
                 <div class="col-md-9">
                   <input type="text" formControlName="tl_ot_wd_0" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="text-input">TT Overtime Working Day</label>
+                <label class="col-md-3 col-form-label" for="text-input">TT Overtime Working Day Tire</label>
                 <div class="col-md-9">
                   <input type="text" formControlName="tt_ot_wd_0" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-3 col-form-label" for="text-input">Total Tube Working Day</label>
+                <div class="col-md-9">
+                  <input formControlName="total_wt_0" type="text" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
               </div>
               <div class="form-group row">
@@ -95,13 +107,7 @@
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="text-input">Looping</label>
-                <div class="col-md-9">
-                  <input type="text" formControlName="looping_m0" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
-                </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="text-input">Machine Airbag</label>
+                <label class="col-md-3 col-form-label" for="text-input">Capacity Machine Airbag</label>
                 <div class="col-md-9">
                   <input type="text" formControlName="machine_airbag_m0" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
@@ -174,29 +180,40 @@
                   <input class="form-control" formControlName="month_1" type="month" [readOnly]="true" />
                 </div>
               </div>
-              <!-- <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="file-input">Upload File</label>
-                <div class="col-md-9 d-flex align-items-center">
-                  <input class="form-control-file" [ngClass]="{ 'is-invalid': formHeaderMo.get('upload_file_m1')?.invalid && formHeaderMo.get('upload_file_m1')?.touched }" formControlName="upload_file_m1" type="file" id="file-input" (change)="readExcel_M2($event)" />
-                  <div *ngIf="formHeaderMo.get('upload_file_m1')?.invalid && formHeaderMo.get('upload_file_m1')?.touched" class="invalid-feedback">Upload File is required.</div>
-                </div>
-              </div> -->
               <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="text-input">Normal Working Day</label>
+                <label class="col-md-3 col-form-label" for="text-input">Normal Working Day Tire</label>
                 <div class="col-md-9">
                   <input type="text" formControlName="nwd_1" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="text-input">TL Overtime Working Day</label>
+                <label class="col-md-3 col-form-label" for="text-input">Normal Working Day Tube</label>
+                <div class="col-md-9">
+                  <input type="text" formControlName="nwt_1" name="text-input" class="form-control" placeholder="0,00" (input)="onInputChange($event, 'nwt_1')" (input)="calculateTotalTube('nwt_1')" />
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-3 col-form-label" for="text-input">Overtime Working Day Tube</label>
+                <div class="col-md-9">
+                  <input type="text" formControlName="ot_wt_1" name="text-input" class="form-control" placeholder="0,00" (input)="onInputChange($event, 'ot_wt_1')" (input)="calculateTotalTube('ot_wt_1')" />
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-3 col-form-label" for="text-input">TL Overtime Working Day Tire</label>
                 <div class="col-md-9">
                   <input type="text" formControlName="tl_ot_wd_1" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="text-input">TT Overtime Working Day</label>
+                <label class="col-md-3 col-form-label" for="text-input">TT Overtime Working Day Tire</label>
                 <div class="col-md-9">
                   <input type="text" formControlName="tt_ot_wd_1" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-3 col-form-label" for="text-input">Total Tube Working Day</label>
+                <div class="col-md-9">
+                  <input formControlName="total_wt_1" type="text" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
               </div>
               <div class="form-group row">
@@ -312,29 +329,40 @@
                   <input class="form-control" formControlName="month_2" type="month" [readOnly]="true" />
                 </div>
               </div>
-              <!-- <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="file-input">Upload File</label>
-                <div class="col-md-9 d-flex align-items-center">
-                  <input class="form-control-file" [ngClass]="{ 'is-invalid': formHeaderMo.get('upload_file_m2')?.invalid && formHeaderMo.get('upload_file_m2')?.touched }" formControlName="upload_file_m2" type="file" id="file-input" (change)="readExcel_M3($event)" />
-                  <div *ngIf="formHeaderMo.get('upload_file_m2')?.invalid && formHeaderMo.get('upload_file_m2')?.touched" class="invalid-feedback">Upload File is required.</div>
-                </div>
-              </div> -->
               <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="text-input">Normal Working Day</label>
+                <label class="col-md-3 col-form-label" for="text-input">Normal Working Day Tire</label>
                 <div class="col-md-9">
                   <input type="text" formControlName="nwd_2" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="text-input">TL Overtime Working Day</label>
+                <label class="col-md-3 col-form-label" for="text-input">Normal Working Day Tube</label>
+                <div class="col-md-9">
+                  <input type="text" formControlName="nwt_2" name="text-input" class="form-control" placeholder="0,00" (input)="onInputChange($event, 'nwt_2')" (input)="calculateTotalTube('nwt_2')" />
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-3 col-form-label" for="text-input">Overtime Working Day Tube</label>
+                <div class="col-md-9">
+                  <input type="text" formControlName="ot_wt_2" name="text-input" class="form-control" placeholder="0,00" (input)="onInputChange($event, 'ot_wt_2')" (input)="calculateTotalTube('ot_wt_2')" />
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-3 col-form-label" for="text-input">TL Overtime Working Day Tire</label>
                 <div class="col-md-9">
                   <input type="text" formControlName="tl_ot_wd_2" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="text-input">TT Overtime Working Day</label>
+                <label class="col-md-3 col-form-label" for="text-input">TT Overtime Working Day Tire</label>
                 <div class="col-md-9">
                   <input type="text" formControlName="tt_ot_wd_2" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                </div>
+              </div>
+              <div class="form-group row">
+                <label class="col-md-3 col-form-label" for="text-input">Total Tube Working Day</label>
+                <div class="col-md-9">
+                  <input formControlName="total_wt_2" type="text" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
               </div>
               <div class="form-group row">
@@ -371,13 +399,7 @@
                 </div>
               </div>
               <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="text-input">Looping</label>
-                <div class="col-md-9">
-                  <input type="text" formControlName="looping_m2" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
-                </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="text-input">Machine Airbag</label>
+                <label class="col-md-3 col-form-label" for="text-input">Capacity Machine Airbag</label>
                 <div class="col-md-9">
                   <input type="text" formControlName="machine_airbag_m2" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
@@ -456,70 +478,207 @@
         <strong>Edit Detail Marketing Order</strong>
       </div>
       <div class="card-body">
+        <div class="d-flex justify-content-between mb-3">
+          <div class="d-flex align-items-center">
+            <input type="text" class="form-control col-md-12 col-lg-12" [(ngModel)]="searchTextDmo" (input)="onSearchChangeDmo()" placeholder="Find here..." />
+            <button type="submit" class="btn btn-primary ml-2" (click)="resetSearchDmo()">Reset</button>
+          </div>
+        </div>
+        <!-- Table -->
         <div class="table-responsive">
-          <table class="table table-bordered table-striped table-sm">
-            <thead>
-              <!-- Head Header -->
-              <tr align="center">
-                <th rowspan="2" class="align-middle">No</th>
-                <th rowspan="2" style="min-width: 150px" class="align-middle">Category</th>
-                <th rowspan="2" style="min-width: 150px" class="align-middle">Item</th>
-                <th rowspan="2" style="min-width: 350px" class="align-middle">Description</th>
-                <th rowspan="2" style="min-width: 120px" class="align-middle">Type Machine</th>
-                <th rowspan="2" style="min-width: 150px" class="align-middle">Capacity 99,5%</th>
-                <th rowspan="2" style="min-width: 150px" class="align-middle">Quantity Mould</th>
-                <th rowspan="2" style="min-width: 150px" class="align-middle">Quantity Per Rak</th>
-                <th rowspan="2" style="min-width: 150px" class="align-middle">Minimal Order</th>
-                <th colspan="3" style="min-width: 300px" class="align-middle">Maximum Capacity</th>
-                <th rowspan="2" style="min-width: 150px" class="align-middle">Initial Stock</th>
-                <th colspan="3" style="min-width: 400px" class="align-middle">Sales Forecast</th>
-                <th colspan="3" style="min-width: 400px" class="align-middle">Marketing Order</th>
-                <th rowspan="2" style="min-width: 120px" class="align-middle">Status</th>
-              </tr>
+          <table mat-table matSort #sortDmo="matSort" [dataSource]="dataSourceDmo" class="table table-bordered table-sm">
+            <ng-container matColumnDef="no" sticky>
+              <th *matHeaderCellDef style="min-width: 50px" rowspan="2">No</th>
+              <td mat-cell class="text-center" *matCellDef="let mo; let i = index">{{ i + 1 }}</td>
+            </ng-container>
 
-              <!-- Child Header -->
-              <tr align="center">
-                <th class="align-middle">{{ monthNames[0] || 'Month 1' }}</th>
-                <th class="align-middle">{{ monthNames[1] || 'Month 2' }}</th>
-                <th class="align-middle">{{ monthNames[2] || 'Month 3' }}</th>
-                <th class="align-middle">{{ monthNames[0] || 'Month 1' }}</th>
-                <th class="align-middle">{{ monthNames[1] || 'Month 2' }}</th>
-                <th class="align-middle">{{ monthNames[2] || 'Month 3' }}</th>
-                <th class="align-middle">{{ monthNames[0] || 'Month 1' }}</th>
-                <th class="align-middle">{{ monthNames[1] || 'Month 2' }}</th>
-                <th class="align-middle">{{ monthNames[2] || 'Month 3' }}</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let mo of detailMarketingOrder; let i = index">
-                <td class="text-center">{{ i + 1 }}</td>
-                <td class="text-center">{{ mo.category }}</td>
-                <td class="text-center">{{ mo.partNumber }}</td>
-                <td class="text-center">{{ mo.description }}</td>
-                <td class="text-center">{{ mo.machineType }}</td>
-                <td class="text-right">{{ formatNumber(mo.capacity) }}</td>
-                <td class="text-right">{{ formatNumber(mo.qtyPerMould) }}</td>
-                <td class="text-right">{{ formatNumber(mo.qtyPerRak) }}</td>
-                <td class="text-right">{{ formatNumber(mo.minOrder) }}</td>
-                <td class="text-right">{{ formatNumber(mo.maxCapMonth0) }}</td>
-                <td class="text-right">{{ formatNumber(mo.maxCapMonth1) }}</td>
-                <td class="text-right">{{ formatNumber(mo.maxCapMonth2) }}</td>
-                <td class="text-right">{{ formatNumber(mo.initialStock) }}</td>
-                <td class="text-right">{{ formatNumber(mo.sfMonth0) }}</td>
-                <td class="text-right">{{ formatNumber(mo.sfMonth1) }}</td>
-                <td class="text-right">{{ formatNumber(mo.sfMonth2) }}</td>
-                <td class="text-right">{{ formatNumber(mo.moMonth0) }}</td>
-                <td class="text-right">{{ formatNumber(mo.moMonth1) }}</td>
-                <td class="text-right">{{ formatNumber(mo.moMonth2) }}</td>
-                <td align="center">
-                  <button type="button" class="btn btn-md" [ngClass]="mo.lockStatus === 1 ? 'btn-warning' : 'btn-danger'" (click)="toggleLockStatus(i)">
-                    {{ mo.lockStatus === 1 ? 'Unlock' : 'Lock' }}
-                  </button>
-                </td>
-              </tr>
-            </tbody>
+            <!-- Category Column -->
+            <ng-container matColumnDef="category" sticky>
+              <th *matHeaderCellDef rowspan="2" style="min-width: 150px" mat-sort-header>Category</th>
+              <td mat-cell class="text-center" *matCellDef="let element">{{ element.category }}</td>
+            </ng-container>
+
+            <!-- Partnumber Column -->
+            <ng-container matColumnDef="partNumber" sticky>
+              <th *matHeaderCellDef rowspan="2" style="min-width: 150px" mat-sort-header>Item</th>
+              <td mat-cell class="text-center" *matCellDef="let mo">{{ mo.partNumber }}</td>
+            </ng-container>
+
+            <!-- Description Column -->
+            <ng-container matColumnDef="description" sticky>
+              <th *matHeaderCellDef rowspan="2" style="min-width: 250px" mat-sort-header>Description</th>
+              <td class="text-center" *matCellDef="let mo">{{ mo.description }}</td>
+            </ng-container>
+
+            <!-- Machine Type Column -->
+            <ng-container matColumnDef="machineType">
+              <th *matHeaderCellDef rowspan="2" style="min-width: 100px" mat-sort-header>Machine Type</th>
+              <td class="text-center" *matCellDef="let mo">
+                <select [(ngModel)]="mo.machineType" class="form-control">
+                  <option [ngValue]="null" disabled></option>
+                  <option value="A/B">A/B</option>
+                  <option value="BOM">BOM</option>
+                </select>
+              </td>
+            </ng-container>
+
+            <!-- Capacity 99,5% Column -->
+            <ng-container matColumnDef="capacity">
+              <th *matHeaderCellDef rowspan="2" style="min-width: 50px" mat-sort-header>Capacity 99,5%</th>
+              <td class="text-right" *matCellDef="let mo">{{ formatSeparatorView(mo.capacity) }}</td>
+            </ng-container>
+
+            <!-- Quantity mould Column -->
+            <ng-container matColumnDef="qtyPerMould">
+              <th *matHeaderCellDef rowspan="2" style="min-width: 50px" mat-sort-header>Qty Mould</th>
+              <td class="text-right" *matCellDef="let mo">{{ formatSeparatorView(mo.qtyPerMould) }}</td>
+            </ng-container>
+
+            <!-- Mould Spare Column -->
+            <ng-container matColumnDef="spareMould">
+              <th *matHeaderCellDef rowspan="2" style="min-width: 50px" mat-sort-header>Mould Spare</th>
+              <td class="text-right" *matCellDef="let mo">{{ formatSeparatorView(mo.spareMould) }}</td>
+            </ng-container>
+
+            <!-- Mould Plan Column -->
+            <ng-container matColumnDef="mouldMonthlyPlan">
+              <th *matHeaderCellDef rowspan="2" style="min-width: 50px" mat-sort-header>Mould Plan</th>
+              <td class="text-right" *matCellDef="let mo">{{ formatSeparatorView(mo.mouldMonthlyPlan) }}</td>
+            </ng-container>
+
+            <!-- Qty PerRak Column -->
+            <ng-container matColumnDef="qtyPerRak">
+              <th *matHeaderCellDef rowspan="2" style="min-width: 50px" mat-sort-header>Qty PerRak</th>
+              <td class="text-right" *matCellDef="let mo">{{ formatSeparatorView(mo.qtyPerRak) }}</td>
+            </ng-container>
+
+            <!-- Minimum Order Column -->
+            <ng-container matColumnDef="minOrder">
+              <th *matHeaderCellDef rowspan="2" mat-sort-header style="min-width: 150px">Minimum Order</th>
+              <td class="text-right" *matCellDef="let mo">
+                <input type="text" [ngModel]="formatSeparatorView(mo.minOrder)" class="text-right form-control" (input)="onInputChangeMinimumOrder($event, mo, 'minOrder', i)" />
+              </td>
+            </ng-container>
+
+            <!-- Maximum Capacity Column -->
+            <ng-container matColumnDef="maxCap">
+              <th mat-sort-header style="min-width: 350px" *matHeaderCellDef colspan="3">Maximum Capacity</th>
+            </ng-container>
+
+            <!-- Initial Stock Column -->
+            <ng-container matColumnDef="initialStock">
+              <th mat-sort-header style="min-width: 150px" rowspan="2" *matHeaderCellDef>Initial Stock</th>
+              <td class="text-right" *matCellDef="let mo">{{ formatSeparatorView(mo.initialStock) }}</td>
+            </ng-container>
+
+            <!-- Sales Forecast Column -->
+            <ng-container matColumnDef="salesForecast">
+              <th mat-sort-header style="min-width: 350px" *matHeaderCellDef colspan="3">Sales Forecast</th>
+            </ng-container>
+
+            <!-- Marketing Order Column -->
+            <ng-container matColumnDef="marketingOrder">
+              <th mat-sort-header style="min-width: 350px" *matHeaderCellDef colspan="3" class="sticky-column">Marketing Order</th>
+            </ng-container>
+
+            <!-- Status Column -->
+            <ng-container matColumnDef="status">
+              <th *matHeaderCellDef colspan="3" style="min-width: 350px" mat-sort-header class="sticky-column">Status</th>
+            </ng-container>
+
+            <!-- Child header Column -->
+
+            <!-- maxCapMonth0 Column -->
+            <ng-container matColumnDef="maxCapMonth0">
+              <th mat-sort-header *matHeaderCellDef style="min-width: 80px" class="child-column">{{ monthNames[0] || 'Month 1' }}</th>
+              <td mat-cell *matCellDef="let mo" class="text-right">{{ formatSeparatorView(mo.maxCapMonth0) }}</td>
+            </ng-container>
+
+            <!-- maxCapMonth1 Column -->
+            <ng-container matColumnDef="maxCapMonth1">
+              <th mat-sort-header *matHeaderCellDef style="min-width: 80px" class="child-column">{{ monthNames[1] || 'Month 2' }}</th>
+              <td mat-cell *matCellDef="let mo" class="text-right">{{ formatSeparatorView(mo.maxCapMonth1) }}</td>
+            </ng-container>
+
+            <!-- maxCapMonth2 Column -->
+            <ng-container matColumnDef="maxCapMonth2">
+              <th mat-sort-header *matHeaderCellDef style="min-width: 80px" class="child-column">{{ monthNames[2] || 'Month 3' }}</th>
+              <td mat-cell *matCellDef="let mo" class="text-right">{{ formatSeparatorView(mo.maxCapMonth2) }}</td>
+            </ng-container>
+
+            <!-- sfMonth0 Column -->
+            <ng-container matColumnDef="sfMonth0">
+              <th mat-sort-header *matHeaderCellDef style="min-width: 80px">{{ monthNames[0] || 'Month 1' }}</th>
+              <td mat-cell *matCellDef="let mo" class="text-right">{{ formatSeparatorView(mo.sfMonth0) }}</td>
+            </ng-container>
+
+            <!-- sfMonth1 Column -->
+            <ng-container matColumnDef="sfMonth1">
+              <th mat-sort-header *matHeaderCellDef style="min-width: 80px">{{ monthNames[1] || 'Month 1' }}</th>
+              <td mat-cell *matCellDef="let mo" class="text-right">{{ formatSeparatorView(mo.sfMonth1) }}</td>
+            </ng-container>
+
+            <!-- sfMonth2 Column -->
+            <ng-container matColumnDef="sfMonth2">
+              <th mat-sort-header *matHeaderCellDef style="min-width: 80px">{{ monthNames[2] || 'Month 1' }}</th>
+              <td mat-cell *matCellDef="let mo" class="text-right">{{ formatSeparatorView(mo.sfMonth2) }}</td>
+            </ng-container>
+
+            <!-- moMonth0 Column -->
+            <ng-container matColumnDef="moMonth0">
+              <th mat-sort-header *matHeaderCellDef style="min-width: 80px" class="child-column">{{ monthNames[0] || 'Month 1' }}</th>
+              <td mat-cell *matCellDef="let mo" class="text-right">{{ formatSeparatorView(mo.moMonth0) }}</td>
+            </ng-container>
+
+            <!-- moMonth1 Column -->
+            <ng-container matColumnDef="moMonth1">
+              <th mat-sort-header *matHeaderCellDef style="min-width: 80px" class="child-column">{{ monthNames[1] || 'Month 1' }}</th>
+              <td mat-cell *matCellDef="let mo" class="text-right">{{ formatSeparatorView(mo.moMonth1) }}</td>
+            </ng-container>
+
+            <!-- moMonth2 Column -->
+            <ng-container matColumnDef="moMonth2">
+              <th mat-sort-header *matHeaderCellDef style="min-width: 80px" class="child-column">{{ monthNames[2] || 'Month 2' }}</th>
+              <td mat-cell *matCellDef="let mo" class="text-right">{{ formatSeparatorView(mo.moMonth2) }}</td>
+            </ng-container>
+
+            <!-- lockStatusM0 Column -->
+            <ng-container matColumnDef="lockStatusM0">
+              <th mat-sort-header *matHeaderCellDef style="min-width: 80px">{{ monthNames[0] || 'Month 1' }}</th>
+              <td align="center" mat-cell *matCellDef="let mo">
+                <button type="button" class="btn btn-md" [ngClass]="mo.lockStatusM0 === 1 ? 'btn-warning' : 'btn-danger'" (click)="lockUpdate(mo.partNumber, 'lockStatusM0')">
+                  {{ mo.lockStatusM0 === 1 ? 'Unlock' : 'Lock' }}
+                </button>
+              </td>
+            </ng-container>
+
+            <!-- lockStatusM1 Column -->
+            <ng-container matColumnDef="lockStatusM1">
+              <th mat-sort-header *matHeaderCellDef style="min-width: 80px">{{ monthNames[1] || 'Month 2' }}</th>
+              <td align="center" mat-cell *matCellDef="let mo">
+                <button type="button" class="btn btn-md" [ngClass]="mo.lockStatusM1 === 1 ? 'btn-warning' : 'btn-danger'" (click)="lockUpdate(mo.partNumber, 'lockStatusM1')">
+                  {{ mo.lockStatusM1 === 1 ? 'Unlock' : 'Lock' }}
+                </button>
+              </td>
+            </ng-container>
+
+            <!-- lockStatusM2 Column -->
+            <ng-container matColumnDef="lockStatusM2">
+              <th mat-sort-header *matHeaderCellDef style="min-width: 80px">{{ monthNames[2] || 'Month 3' }}</th>
+              <td align="center" mat-cell *matCellDef="let mo">
+                <button type="button" class="btn btn-md" [ngClass]="mo.lockStatusM2 === 1 ? 'btn-warning' : 'btn-danger'" (click)="lockUpdate(mo.partNumber, 'lockStatusM2')">
+                  {{ mo.lockStatusM2 === 1 ? 'Unlock' : 'Lock' }}
+                </button>
+              </td>
+            </ng-container>
+
+            <tr align="center" style="height: 30px" mat-header-row *matHeaderRowDef="headersColumnsDmo; sticky: true"></tr>
+            <tr align="center" style="height: 30px" mat-header-row *matHeaderRowDef="childHeadersColumnsDmo; sticky: true"></tr>
+            <tr style="height: 30px" mat-row *matRowDef="let row; columns: rowDataDmo"></tr>
           </table>
         </div>
+        <!-- Pagination -->
+        <mat-paginator #paginatorDmo [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
       </div>
     </div>
   </div>
