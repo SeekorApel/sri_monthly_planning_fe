@@ -136,6 +136,17 @@ export class AddMoMarketingComponent implements OnInit {
     this.getAllData(this.idMo);
   }
 
+  formatDecimal(value: number | null | undefined): string {
+    if (value === undefined || value === null || value === 0) {
+      return '0';
+    }
+    return value.toFixed(2).replace('.', ',');
+  }
+
+  formatSeparator(value: number | null | undefined): string {
+    return value != null ? value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : '0';
+  }
+
   formatNumber(value: any): string {
     if (value == null || value === '') {
       return '';
@@ -219,53 +230,51 @@ export class AddMoMarketingComponent implements OnInit {
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
 
-    console.log('Aaa', this.dataSource.data);
-
     this.formHeaderMo.patchValue({
       date: new Date(data.dateValid).toISOString().split('T')[0],
       type: data.type,
 
       // Header Month 1
       month_0: this.formatDateToString(this.headerMarketingOrder[0].month),
-      nwd_0: this.formatNumberView(this.headerMarketingOrder[0].wdNormalTire),
-      nwt_0: this.formatNumberView(this.headerMarketingOrder[0].wdNormalTube),
-      ot_wt_0: this.formatNumberView(this.headerMarketingOrder[0].wdOtTube),
-      tl_ot_wd_0: this.formatNumberView(this.headerMarketingOrder[0].wdOtTl),
-      tt_ot_wd_0: this.formatNumberView(this.headerMarketingOrder[0].wdOtTt),
-      total_wt_0: this.formatNumberView(this.headerMarketingOrder[0].totalWdTube),
-      total_tlwd_0: this.formatNumberView(this.headerMarketingOrder[0].totalWdTl),
-      total_ttwd_0: this.formatNumberView(this.headerMarketingOrder[0].totalWdTt),
-      max_tube_capa_0: this.formatNumberView(this.headerMarketingOrder[0].maxCapTube),
-      max_capa_tl_0: this.formatNumberView(this.headerMarketingOrder[0].maxCapTl),
-      max_capa_tt_0: this.formatNumberView(this.headerMarketingOrder[0].maxCapTt),
+      nwd_0: this.formatDecimal(this.headerMarketingOrder[0].wdNormalTire),
+      nwt_0: this.formatDecimal(this.headerMarketingOrder[0].wdNormalTube),
+      ot_wt_0: this.formatDecimal(this.headerMarketingOrder[0].wdOtTube),
+      tl_ot_wd_0: this.formatDecimal(this.headerMarketingOrder[0].wdOtTl),
+      tt_ot_wd_0: this.formatDecimal(this.headerMarketingOrder[0].wdOtTt),
+      total_wt_0: this.formatDecimal(this.headerMarketingOrder[0].totalWdTube),
+      total_tlwd_0: this.formatDecimal(this.headerMarketingOrder[0].totalWdTl),
+      total_ttwd_0: this.formatDecimal(this.headerMarketingOrder[0].totalWdTt),
+      max_tube_capa_0: this.formatSeparator(this.headerMarketingOrder[0].maxCapTube),
+      max_capa_tl_0: this.formatSeparator(this.headerMarketingOrder[0].maxCapTl),
+      max_capa_tt_0: this.formatSeparator(this.headerMarketingOrder[0].maxCapTt),
 
       // Header Month 2
       month_1: this.formatDateToString(this.headerMarketingOrder[1].month),
-      nwd_1: this.formatNumberView(this.headerMarketingOrder[1].wdNormalTire),
-      nwt_1: this.formatNumberView(this.headerMarketingOrder[1].wdNormalTube),
-      ot_wt_1: this.formatNumberView(this.headerMarketingOrder[1].wdOtTube),
-      tl_ot_wd_1: this.formatNumberView(this.headerMarketingOrder[1].wdOtTl),
-      tt_ot_wd_1: this.formatNumberView(this.headerMarketingOrder[1].wdOtTt),
-      total_wt_1: this.formatNumberView(this.headerMarketingOrder[1].totalWdTube),
-      total_tlwd_1: this.formatNumberView(this.headerMarketingOrder[1].totalWdTl),
-      total_ttwd_1: this.formatNumberView(this.headerMarketingOrder[1].totalWdTt),
-      max_tube_capa_1: this.formatNumberView(this.headerMarketingOrder[1].maxCapTube),
-      max_capa_tl_1: this.formatNumberView(this.headerMarketingOrder[1].maxCapTl),
-      max_capa_tt_1: this.formatNumberView(this.headerMarketingOrder[1].maxCapTt),
+      nwd_1: this.formatDecimal(this.headerMarketingOrder[1].wdNormalTire),
+      nwt_1: this.formatDecimal(this.headerMarketingOrder[1].wdNormalTube),
+      ot_wt_1: this.formatDecimal(this.headerMarketingOrder[1].wdOtTube),
+      tl_ot_wd_1: this.formatDecimal(this.headerMarketingOrder[1].wdOtTl),
+      tt_ot_wd_1: this.formatDecimal(this.headerMarketingOrder[1].wdOtTt),
+      total_wt_1: this.formatDecimal(this.headerMarketingOrder[1].totalWdTube),
+      total_tlwd_1: this.formatDecimal(this.headerMarketingOrder[1].totalWdTl),
+      total_ttwd_1: this.formatDecimal(this.headerMarketingOrder[1].totalWdTt),
+      max_tube_capa_1: this.formatSeparator(this.headerMarketingOrder[1].maxCapTube),
+      max_capa_tl_1: this.formatSeparator(this.headerMarketingOrder[1].maxCapTl),
+      max_capa_tt_1: this.formatSeparator(this.headerMarketingOrder[1].maxCapTt),
 
       // Header Month 3
       month_2: this.formatDateToString(this.headerMarketingOrder[2].month),
-      nwd_2: this.formatNumberView(this.headerMarketingOrder[2].wdNormalTire),
-      nwt_2: this.formatNumberView(this.headerMarketingOrder[2].wdNormalTube),
-      ot_wt_2: this.formatNumberView(this.headerMarketingOrder[2].wdOtTube),
-      tl_ot_wd_2: this.formatNumberView(this.headerMarketingOrder[2].wdOtTl),
-      tt_ot_wd_2: this.formatNumberView(this.headerMarketingOrder[2].wdOtTt),
-      total_wt_2: this.formatNumberView(this.headerMarketingOrder[2].totalWdTube),
-      total_tlwd_2: this.formatNumberView(this.headerMarketingOrder[2].totalWdTl),
-      total_ttwd_2: this.formatNumberView(this.headerMarketingOrder[2].totalWdTt),
-      max_tube_capa_2: this.formatNumberView(this.headerMarketingOrder[2].maxCapTube),
-      max_capa_tl_2: this.formatNumberView(this.headerMarketingOrder[2].maxCapTl),
-      max_capa_tt_2: this.formatNumberView(this.headerMarketingOrder[2].maxCapTt),
+      nwd_2: this.formatDecimal(this.headerMarketingOrder[2].wdNormalTire),
+      nwt_2: this.formatDecimal(this.headerMarketingOrder[2].wdNormalTube),
+      ot_wt_2: this.formatDecimal(this.headerMarketingOrder[2].wdOtTube),
+      tl_ot_wd_2: this.formatDecimal(this.headerMarketingOrder[2].wdOtTl),
+      tt_ot_wd_2: this.formatDecimal(this.headerMarketingOrder[2].wdOtTt),
+      total_wt_2: this.formatDecimal(this.headerMarketingOrder[2].totalWdTube),
+      total_tlwd_2: this.formatDecimal(this.headerMarketingOrder[2].totalWdTl),
+      total_ttwd_2: this.formatDecimal(this.headerMarketingOrder[2].totalWdTt),
+      max_tube_capa_2: this.formatSeparator(this.headerMarketingOrder[2].maxCapTube),
+      max_capa_tl_2: this.formatSeparator(this.headerMarketingOrder[2].maxCapTl),
+      max_capa_tt_2: this.formatSeparator(this.headerMarketingOrder[2].maxCapTt),
     });
 
     this.updateMonthNames(this.headerMarketingOrder);

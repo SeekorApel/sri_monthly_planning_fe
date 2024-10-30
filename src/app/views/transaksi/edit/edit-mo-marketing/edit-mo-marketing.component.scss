@@ -1,23 +1,22 @@
-.table-responsive {
-  max-height: 400px; /* Set tinggi maksimum untuk tampilan scroll */
-  overflow-y: auto; /* Mengizinkan scroll vertikal */
+::ng-deep .mat-sort-header-container {
+  justify-content: center;
 }
 
-.table thead th {
-  position: sticky; /* Membuat header sticky */
-  top: 0; /* Menjaga header di bagian atas saat menggulir */
-  background-color: #f8f9fa; /* Warna latar belakang untuk header */
-  z-index: 1; /* Pastikan header berada di atas konten */
+.locked-background {
+  background-color: red;
 }
 
-.table thead tr:nth-child(2)  th {
-  position: sticky; /* Membuat sub-header sticky */
-  top: 30px; /* Atur jarak sesuai tinggi header utama */
-  background-color: #f8f9fa; /* Warna latar belakang untuk sub-header */
-  z-index: 1; /* Pastikan sub-header di atas konten dan di bawah header utama */
+.mat-cell {
+  padding-top: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+  border-bottom: 1;
 }
 
-.th, .td {
-  border: 1px solid black; // Menambahkan border hitam pada sel
-  padding: 8px; // Memberikan padding dalam sel
+.mat-cell:last-of-type{
+  padding-right: 5px;
+}
+
+.mat-cell:first-of-type{
+  padding-left: 5px;
 }

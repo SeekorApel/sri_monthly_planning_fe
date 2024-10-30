@@ -271,7 +271,7 @@
           </div>
         </div>
 
-        <!-- <div class="table-responsive" *ngIf="isTableVisible"> -->
+        <!-- Table -->
         <div class="table-responsive">
           <table mat-table [dataSource]="dataSource" matSort class="table table-bordered table-sm">
             <!-- Header Column -->
@@ -436,7 +436,7 @@
             <!-- moMonth2 Column -->
             <ng-container matColumnDef="moMonth2">
               <th mat-sort-header *matHeaderCellDef style="min-width: 80px" class="child-column">{{ monthNames[2] || 'Month 2' }}</th>
-              <td mat-cell *matCellDef="let mo" class="text-right" [ngClass]="{ 'locked-background': mo.lockStatusM0 === 2 }">
+              <td mat-cell *matCellDef="let mo" class="text-right" [ngClass]="{ 'locked-background': mo.lockStatusM2 === 1 }">
                 <input
                   *ngIf="mo.lockStatusM2 !== 1"
                   type="text"

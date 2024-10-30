@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DetailMarketingOrder } from 'src/app/models/DetailMarketingOrder';
@@ -11,6 +11,10 @@ import * as ExcelJS from 'exceljs/dist/exceljs.min.js';
 import * as XLSX from 'xlsx';
 declare var $: any;
 import { saveAs } from 'file-saver';
+import { ParsingNumberService } from 'src/app/utils/parsing-number/parsing-number.service';
+import { MatSort } from '@angular/material/sort';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 
 @Component({
   selector: 'app-edit-mo-marketing',
@@ -20,6 +24,7 @@ import { saveAs } from 'file-saver';
 export class EditMoMarketingComponent implements OnInit {
   //Variable Declaration
   idMo: String;
+  searchTextDmo: string = '';
   formHeaderMo: FormGroup;
   isReadOnly: boolean = true;
   monthNames: string[] = ['', '', ''];
@@ -29,9 +34,29 @@ export class EditMoMarketingComponent implements OnInit {
 
   marketingOrder: MarketingOrder = new MarketingOrder();
   headerMarketingOrder: any[] = [];
-  detailMarketingOrder: DetailMarketingOrder[];
+  detailMarketingOrder: DetailMarketingOrder[] = [];
+  validationErrors: boolean[] = [];
 
-  constructor(private router: Router, private activeRoute: ActivatedRoute, private fb: FormBuilder, private moService: MarketingOrderService) {
+  // validationErrors: { [key: string]: boolean } = {
+  //   moMonth0: false,
+  //   moMonth1: false,
+  //   moMonth2: false
+  // };
+
+  // validationErrors: { [key: string]: boolean }[] = this.detailMarketingOrder.map(() => ({
+  //   moMonth0: false,
+  //   moMonth1: false,
+  //   moMonth2: false
+  // }));
+
+  headersColumns: string[] = ['no', 'category', 'partNumber', 'description', 'machineType', 'capacity', 'mouldMonthlyPlan', 'qtyPerRak', 'minOrder', 'maxCap', 'initialStock', 'salesForecast', 'marketingOrder'];
+  childHeadersColumns: string[] = ['maxCapMonth0', 'maxCapMonth1', 'maxCapMonth2', 'sfMonth0', 'sfMonth1', 'sfMonth2', 'moMonth0', 'moMonth1', 'moMonth2'];
+  rowData: string[] = ['no', 'category', 'partNumber', 'description', 'machineType', 'capacity', 'mouldMonthlyPlan', 'qtyPerRak', 'minOrder', 'maxCapMonth0', 'maxCapMonth1', 'maxCapMonth2', 'initialStock', 'sfMonth0', 'sfMonth1', 'sfMonth2', 'moMonth0', 'moMonth1', 'moMonth2'];
+  dataSource: MatTableDataSource<DetailMarketingOrder>;
+  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+
+  constructor(private router: Router, private activeRoute: ActivatedRoute, private fb: FormBuilder, private moService: MarketingOrderService, private parsingNumberService: ParsingNumberService) {
     this.formHeaderMo = this.fb.group({
       date: [null, []],
       type: [null, []],
@@ -39,6 +64,15 @@ export class EditMoMarketingComponent implements OnInit {
       month_0: [null, Validators.required],
       month_1: [null, []],
       month_2: [null, []],
+      nwt_0: [null, []],
+      nwt_1: [null, []],
+      nwt_2: [null, []],
+      ot_wt_0: [null, []],
+      ot_wt_1: [null, []],
+      ot_wt_2: [null, []],
+      total_wt_0: [null, []],
+      total_wt_1: [null, []],
+      total_wt_2: [null, []],
       nwd_0: [null, Validators.required],
       nwd_1: [null, Validators.required],
       nwd_2: [null, Validators.required],
@@ -111,6 +145,47 @@ export class EditMoMarketingComponent implements OnInit {
     this.getLastIdMo();
   }
 
+  // testValidate(index: number, value: any, field: string): void {
+  //   const parsedValue = Number(value);
+  //   const data = this.detailMarketingOrder[index];
+  //   const fieldKey = `moMonth${field.charAt(field.length - 1)}`;
+
+  //   if (!isNaN(parsedValue)) {
+  //     if (parsedValue < data.minOrder || parsedValue > data[field]) {
+  //       this.validationErrors[fieldKey] = true;
+  //     } else {
+  //       this.validationErrors[fieldKey] = false;
+  //     }
+  //   } else {
+  //     console.error("Nilai input tidak valid");
+  //     this.validationErrors[fieldKey] = true;
+  //   }
+  // }
+
+  testValidate(index: number, value: any, field: string): void {
+    // let parsedValue = Number(value);
+    // let data = this.detailMarketingOrder[index];
+    // if (!isNaN(parsedValue)) {
+    //   if (parsedValue < data.minOrder || parsedValue > data[field]) {
+    //     this.validationErrors[index] = true;
+    //   } else {
+    //     this.validationErrors[index] = false;
+    //   }
+    // } else {
+    //   console.error("Nilai input tidak valid");
+    //   this.validationErrors[index] = true;
+    // }
+  }
+
+  onSearchChange(): void {
+    this.dataSource.filter = this.searchTextDmo.trim().toLowerCase();
+  }
+
+  resetSearch(): void {
+    this.searchTextDmo = '';
+    this.dataSource.filter = '';
+  }
+
   onInputChange(event: any, mo: any, field: string) {
     let value = event.target.value;
     value = value.replace(/[^0-9]/g, '');
@@ -124,13 +199,10 @@ export class EditMoMarketingComponent implements OnInit {
     mo[field] = numberValue;
   }
 
-  isInvalidValue(value: any | null | undefined, minOrder: number, maxCap: number): boolean {
-    if (value === null || value === undefined) {
-      return false;
-    }
-    const stringValue = typeof value === 'string' ? value : value.toString();
-    const numericValue = parseFloat(stringValue.replace(/\./g, ''));
-    return numericValue < minOrder || numericValue > maxCap;
+  isInvalidValue(value: any | null | undefined, index: number): boolean {
+    let data = this.detailMarketingOrder[index];
+    console.log(data);
+    return false;
   }
 
   formatNumberChange(value: number | null | undefined): string {
@@ -198,6 +270,10 @@ export class EditMoMarketingComponent implements OnInit {
   fillAllData(data: any) {
     this.headerMarketingOrder = data.dataHeaderMo;
     this.detailMarketingOrder = data.dataDetailMo;
+    this.dataSource = new MatTableDataSource(this.detailMarketingOrder);
+    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
+
     let typeProduct = data.type;
     this.formHeaderMo.patchValue({
       date: new Date(data.dateValid).toISOString().split('T')[0],
@@ -206,69 +282,77 @@ export class EditMoMarketingComponent implements OnInit {
 
       // Header Month 1
       month_0: this.formatDateToString(this.headerMarketingOrder[0].month),
-      nwd_0: this.formatNumber(this.headerMarketingOrder[0].wdNormal),
-      tl_ot_wd_0: this.formatNumber(this.headerMarketingOrder[0].wdOtTl),
-      tt_ot_wd_0: this.formatNumber(this.headerMarketingOrder[0].wdOtTt),
-      total_tlwd_0: this.formatNumber(this.headerMarketingOrder[0].totalWdTl),
-      total_ttwd_0: this.formatNumber(this.headerMarketingOrder[0].totalWdTt),
-      max_tube_capa_0: new Intl.NumberFormat('id-ID').format(this.headerMarketingOrder[0].maxCapTube),
-      max_capa_tl_0: new Intl.NumberFormat('id-ID').format(this.headerMarketingOrder[0].maxCapTl),
-      max_capa_tt_0: new Intl.NumberFormat('id-ID').format(this.headerMarketingOrder[0].maxCapTt),
-      looping_m0: this.formatNumber(this.headerMarketingOrder[0].looping),
-      machine_airbag_m0: this.formatNumber(this.headerMarketingOrder[0].airbagMachine),
-      fed_tl_m0: typeProduct === 'FED' ? this.formatNumber(this.headerMarketingOrder[0].tl) : null,
-      fed_tt_m0: typeProduct === 'FED' ? this.formatNumber(this.headerMarketingOrder[0].tt) : null,
-      fdr_tl_m0: typeProduct === 'FDR' ? this.formatNumber(this.headerMarketingOrder[0].tl) : null,
-      fdr_tt_m0: typeProduct === 'FDR' ? this.formatNumber(this.headerMarketingOrder[0].tt) : null,
-      fed_TL_percentage_m0: typeProduct === 'FED' ? this.formatNumber(this.headerMarketingOrder[0].tlPercentage) : null,
-      fed_TT_percentage_m0: typeProduct === 'FED' ? this.formatNumber(this.headerMarketingOrder[0].ttPercentage) : null,
-      fdr_TL_percentage_m0: typeProduct === 'FDR' ? this.formatNumber(this.headerMarketingOrder[0].tlPercentage) : null,
-      fdr_TT_percentage_m0: typeProduct === 'FDR' ? this.formatNumber(this.headerMarketingOrder[0].ttPercentage) : null,
-      total_mo_m0: this.formatNumber(this.headerMarketingOrder[0].totalMo),
+      nwd_0: this.formatDecimalView(this.headerMarketingOrder[0].wdNormalTire),
+      nwt_0: this.formatDecimalView(this.headerMarketingOrder[0].wdNormalTube),
+      ot_wt_0: this.formatDecimalView(this.headerMarketingOrder[0].wdOtTube),
+      tl_ot_wd_0: this.formatDecimalView(this.headerMarketingOrder[0].wdOtTl),
+      tt_ot_wd_0: this.formatDecimalView(this.headerMarketingOrder[0].wdOtTt),
+      total_wt_0: this.formatDecimalView(this.headerMarketingOrder[0].totalWdTube),
+      total_tlwd_0: this.formatDecimalView(this.headerMarketingOrder[0].totalWdTl),
+      total_ttwd_0: this.formatDecimalView(this.headerMarketingOrder[0].totalWdTt),
+      max_tube_capa_0: this.formatSeparatorView(this.headerMarketingOrder[0].maxCapTube),
+      max_capa_tl_0: this.formatSeparatorView(this.headerMarketingOrder[0].maxCapTl),
+      max_capa_tt_0: this.formatSeparatorView(this.headerMarketingOrder[0].maxCapTt),
+      machine_airbag_m0: this.formatSeparatorView(this.headerMarketingOrder[0].airbagMachine),
+      fed_tl_m0: typeProduct === 'FED' ? this.formatSeparatorView(this.headerMarketingOrder[0].tl) : null,
+      fed_tt_m0: typeProduct === 'FED' ? this.formatSeparatorView(this.headerMarketingOrder[0].tt) : null,
+      fdr_tl_m0: typeProduct === 'FDR' ? this.formatSeparatorView(this.headerMarketingOrder[0].tl) : null,
+      fdr_tt_m0: typeProduct === 'FDR' ? this.formatSeparatorView(this.headerMarketingOrder[0].tt) : null,
+      fed_TL_percentage_m0: typeProduct === 'FED' ? this.formatDecimalView(this.headerMarketingOrder[0].tlPercentage) : null,
+      fed_TT_percentage_m0: typeProduct === 'FED' ? this.formatDecimalView(this.headerMarketingOrder[0].ttPercentage) : null,
+      fdr_TL_percentage_m0: typeProduct === 'FDR' ? this.formatDecimalView(this.headerMarketingOrder[0].tlPercentage) : null,
+      fdr_TT_percentage_m0: typeProduct === 'FDR' ? this.formatDecimalView(this.headerMarketingOrder[0].ttPercentage) : null,
+      total_mo_m0: this.formatSeparatorView(this.headerMarketingOrder[0].totalMo),
       note_tl_m0: this.headerMarketingOrder[0].noteOrderTl,
+
       // Header Month 2
       month_1: this.formatDateToString(this.headerMarketingOrder[1].month),
-      nwd_1: this.formatNumber(this.headerMarketingOrder[1].wdNormal),
-      tl_ot_wd_1: this.formatNumber(this.headerMarketingOrder[1].wdOtTl),
-      tt_ot_wd_1: this.formatNumber(this.headerMarketingOrder[1].wdOtTt),
-      total_tlwd_1: this.formatNumber(this.headerMarketingOrder[1].totalWdTl),
-      total_ttwd_1: this.formatNumber(this.headerMarketingOrder[1].totalWdTt),
-      max_tube_capa_1: new Intl.NumberFormat('id-ID').format(this.headerMarketingOrder[1].maxCapTube),
-      max_capa_tl_1: new Intl.NumberFormat('id-ID').format(this.headerMarketingOrder[1].maxCapTl),
-      max_capa_tt_1: new Intl.NumberFormat('id-ID').format(this.headerMarketingOrder[1].maxCapTt),
-      looping_m1: this.formatNumber(this.headerMarketingOrder[1].looping),
-      machine_airbag_m1: this.formatNumber(this.headerMarketingOrder[1].airbagMachine),
-      fed_tl_m1: typeProduct === 'FED' ? this.formatNumber(this.headerMarketingOrder[1].tl) : null,
-      fed_tt_m1: typeProduct === 'FED' ? this.formatNumber(this.headerMarketingOrder[1].tt) : null,
-      fdr_tl_m1: typeProduct === 'FDR' ? this.formatNumber(this.headerMarketingOrder[1].tl) : null,
-      fdr_tt_m1: typeProduct === 'FDR' ? this.formatNumber(this.headerMarketingOrder[1].tt) : null,
-      fed_TL_percentage_m1: typeProduct === 'FED' ? this.formatNumber(this.headerMarketingOrder[1].tlPercentage) : null,
-      fed_TT_percentage_m1: typeProduct === 'FED' ? this.formatNumber(this.headerMarketingOrder[1].ttPercentage) : null,
-      fdr_TL_percentage_m1: typeProduct === 'FDR' ? this.formatNumber(this.headerMarketingOrder[1].tlPercentage) : null,
-      fdr_TT_percentage_m1: typeProduct === 'FDR' ? this.formatNumber(this.headerMarketingOrder[1].ttPercentage) : null,
-      total_mo_m1: this.formatNumber(this.headerMarketingOrder[1].totalMo),
+      nwd_1: this.formatDecimalView(this.headerMarketingOrder[1].wdNormalTire),
+      nwt_1: this.formatDecimalView(this.headerMarketingOrder[1].wdNormalTube),
+      ot_wt_1: this.formatDecimalView(this.headerMarketingOrder[1].wdOtTube),
+      tl_ot_wd_1: this.formatDecimalView(this.headerMarketingOrder[1].wdOtTl),
+      tt_ot_wd_1: this.formatDecimalView(this.headerMarketingOrder[1].wdOtTt),
+      total_wt_1: this.formatDecimalView(this.headerMarketingOrder[1].totalWdTube),
+      total_tlwd_1: this.formatDecimalView(this.headerMarketingOrder[1].totalWdTl),
+      total_ttwd_1: this.formatDecimalView(this.headerMarketingOrder[1].totalWdTt),
+      max_tube_capa_1: this.formatSeparatorView(this.headerMarketingOrder[1].maxCapTube),
+      max_capa_tl_1: this.formatSeparatorView(this.headerMarketingOrder[1].maxCapTl),
+      max_capa_tt_1: this.formatSeparatorView(this.headerMarketingOrder[1].maxCapTt),
+      machine_airbag_m1: this.formatSeparatorView(this.headerMarketingOrder[1].airbagMachine),
+      fed_tl_m1: typeProduct === 'FED' ? this.formatSeparatorView(this.headerMarketingOrder[1].tl) : null,
+      fed_tt_m1: typeProduct === 'FED' ? this.formatSeparatorView(this.headerMarketingOrder[1].tt) : null,
+      fdr_tl_m1: typeProduct === 'FDR' ? this.formatSeparatorView(this.headerMarketingOrder[1].tl) : null,
+      fdr_tt_m1: typeProduct === 'FDR' ? this.formatSeparatorView(this.headerMarketingOrder[1].tt) : null,
+      fed_TL_percentage_m1: typeProduct === 'FED' ? this.formatDecimalView(this.headerMarketingOrder[1].tlPercentage) : null,
+      fed_TT_percentage_m1: typeProduct === 'FED' ? this.formatDecimalView(this.headerMarketingOrder[1].ttPercentage) : null,
+      fdr_TL_percentage_m1: typeProduct === 'FDR' ? this.formatDecimalView(this.headerMarketingOrder[1].tlPercentage) : null,
+      fdr_TT_percentage_m1: typeProduct === 'FDR' ? this.formatDecimalView(this.headerMarketingOrder[1].ttPercentage) : null,
+      total_mo_m1: this.formatSeparatorView(this.headerMarketingOrder[1].totalMo),
       note_tl_m1: this.headerMarketingOrder[1].noteOrderTl,
+
       // Header Month 3
       month_2: this.formatDateToString(this.headerMarketingOrder[2].month),
-      nwd_2: this.formatNumber(this.headerMarketingOrder[2].wdNormal),
-      tl_ot_wd_2: this.formatNumber(this.headerMarketingOrder[2].wdOtTl),
-      tt_ot_wd_2: this.formatNumber(this.headerMarketingOrder[2].wdOtTt),
-      total_tlwd_2: this.formatNumber(this.headerMarketingOrder[2].totalWdTl),
-      total_ttwd_2: this.formatNumber(this.headerMarketingOrder[2].totalWdTt),
-      max_tube_capa_2: new Intl.NumberFormat('id-ID').format(this.headerMarketingOrder[2].maxCapTube),
-      max_capa_tl_2: new Intl.NumberFormat('id-ID').format(this.headerMarketingOrder[2].maxCapTl),
-      max_capa_tt_2: new Intl.NumberFormat('id-ID').format(this.headerMarketingOrder[2].maxCapTt),
-      looping_m2: this.formatNumber(this.headerMarketingOrder[2].looping),
-      machine_airbag_m2: this.formatNumber(this.headerMarketingOrder[2].airbagMachine),
-      fed_tl_m2: typeProduct === 'FED' ? this.formatNumber(this.headerMarketingOrder[2].tl) : null,
-      fed_tt_m2: typeProduct === 'FED' ? this.formatNumber(this.headerMarketingOrder[2].tt) : null,
-      fdr_tl_m2: typeProduct === 'FDR' ? this.formatNumber(this.headerMarketingOrder[2].tl) : null,
-      fdr_tt_m2: typeProduct === 'FDR' ? this.formatNumber(this.headerMarketingOrder[2].tt) : null,
-      fed_TL_percentage_m2: typeProduct === 'FED' ? this.formatNumber(this.headerMarketingOrder[2].tlPercentage) : null,
-      fed_TT_percentage_m2: typeProduct === 'FED' ? this.formatNumber(this.headerMarketingOrder[2].ttPercentage) : null,
-      fdr_TL_percentage_m2: typeProduct === 'FDR' ? this.formatNumber(this.headerMarketingOrder[2].tlPercentage) : null,
-      fdr_TT_percentage_m2: typeProduct === 'FDR' ? this.formatNumber(this.headerMarketingOrder[2].ttPercentage) : null,
-      total_mo_m2: this.formatNumber(this.headerMarketingOrder[2].totalMo),
+      nwd_2: this.formatDecimalView(this.headerMarketingOrder[2].wdNormalTire),
+      nwt_2: this.formatDecimalView(this.headerMarketingOrder[2].wdNormalTube),
+      ot_wt_2: this.formatDecimalView(this.headerMarketingOrder[2].wdOtTube),
+      tl_ot_wd_2: this.formatDecimalView(this.headerMarketingOrder[2].wdOtTl),
+      tt_ot_wd_2: this.formatDecimalView(this.headerMarketingOrder[2].wdOtTt),
+      total_wt_2: this.formatDecimalView(this.headerMarketingOrder[2].totalWdTube),
+      total_tlwd_2: this.formatDecimalView(this.headerMarketingOrder[2].totalWdTl),
+      total_ttwd_2: this.formatDecimalView(this.headerMarketingOrder[2].totalWdTt),
+      max_tube_capa_2: this.formatSeparatorView(this.headerMarketingOrder[2].maxCapTube),
+      max_capa_tl_2: this.formatSeparatorView(this.headerMarketingOrder[2].maxCapTl),
+      max_capa_tt_2: this.formatSeparatorView(this.headerMarketingOrder[2].maxCapTt),
+      machine_airbag_m2: this.formatSeparatorView(this.headerMarketingOrder[2].airbagMachine),
+      fed_tl_m2: typeProduct === 'FED' ? this.formatSeparatorView(this.headerMarketingOrder[2].tl) : null,
+      fed_tt_m2: typeProduct === 'FED' ? this.formatSeparatorView(this.headerMarketingOrder[2].tt) : null,
+      fdr_tl_m2: typeProduct === 'FDR' ? this.formatSeparatorView(this.headerMarketingOrder[2].tl) : null,
+      fdr_tt_m2: typeProduct === 'FDR' ? this.formatSeparatorView(this.headerMarketingOrder[2].tt) : null,
+      fed_TL_percentage_m2: typeProduct === 'FED' ? this.formatDecimalView(this.headerMarketingOrder[2].tlPercentage) : null,
+      fed_TT_percentage_m2: typeProduct === 'FED' ? this.formatDecimalView(this.headerMarketingOrder[2].ttPercentage) : null,
+      fdr_TL_percentage_m2: typeProduct === 'FDR' ? this.formatDecimalView(this.headerMarketingOrder[2].tlPercentage) : null,
+      fdr_TT_percentage_m2: typeProduct === 'FDR' ? this.formatDecimalView(this.headerMarketingOrder[2].ttPercentage) : null,
+      total_mo_m2: this.formatSeparatorView(this.headerMarketingOrder[2].totalMo),
       note_tl_m2: this.headerMarketingOrder[2].noteOrderTl,
     });
 
@@ -300,38 +384,33 @@ export class EditMoMarketingComponent implements OnInit {
   }
 
   editMo(): void {
-    const hasInvalidInput = this.detailMarketingOrder.some((mo) => {
-      const sfMonth0 = parseFloat(mo.sfMonth0.toString().replace(/\./g, '')) || 0;
-      const sfMonth1 = parseFloat(mo.sfMonth1.toString().replace(/\./g, '')) || 0;
-      const sfMonth2 = parseFloat(mo.sfMonth2.toString().replace(/\./g, '')) || 0;
-      const moMonth0 = parseFloat(mo.moMonth0.toString().replace(/\./g, '')) || 0;
-      const moMonth1 = parseFloat(mo.moMonth1.toString().replace(/\./g, '')) || 0;
-      const moMonth2 = parseFloat(mo.moMonth2.toString().replace(/\./g, '')) || 0;
+    // const hasInvalidInput = this.detailMarketingOrder.some((mo) => {
+    //   const sfMonth0 = parseFloat(mo.sfMonth0.toString().replace(/\./g, '')) || 0;
+    //   const sfMonth1 = parseFloat(mo.sfMonth1.toString().replace(/\./g, '')) || 0;
+    //   const sfMonth2 = parseFloat(mo.sfMonth2.toString().replace(/\./g, '')) || 0;
+    //   const moMonth0 = parseFloat(mo.moMonth0.toString().replace(/\./g, '')) || 0;
+    //   const moMonth1 = parseFloat(mo.moMonth1.toString().replace(/\./g, '')) || 0;
+    //   const moMonth2 = parseFloat(mo.moMonth2.toString().replace(/\./g, '')) || 0;
 
-      const minOrder = Number(mo.minOrder);
-      const maxCapMonth0 = Number(mo.maxCapMonth0);
-      const maxCapMonth1 = Number(mo.maxCapMonth1);
-      const maxCapMonth2 = Number(mo.maxCapMonth2);
+    //   const minOrder = Number(mo.minOrder);
+    //   const maxCapMonth0 = Number(mo.maxCapMonth0);
+    //   const maxCapMonth1 = Number(mo.maxCapMonth1);
+    //   const maxCapMonth2 = Number(mo.maxCapMonth2);
 
-      // Jika nilainya 0, maka dianggap valid, sehingga tidak masuk kategori input yang invalid
-      return (sfMonth0 !== 0 && (sfMonth0 < minOrder || sfMonth0 > maxCapMonth0)) ||
-        (sfMonth1 !== 0 && (sfMonth1 < minOrder || sfMonth1 > maxCapMonth1)) ||
-        (sfMonth2 !== 0 && (sfMonth2 < minOrder || sfMonth2 > maxCapMonth2)) ||
-        (moMonth0 !== 0 && (moMonth0 < minOrder || moMonth0 > maxCapMonth0)) ||
-        (moMonth1 !== 0 && (moMonth1 < minOrder || moMonth1 > maxCapMonth1)) ||
-        (moMonth2 !== 0 && (moMonth2 < minOrder || moMonth2 > maxCapMonth2));
-    });
+    //   // Jika nilainya 0, maka dianggap valid, sehingga tidak masuk kategori input yang invalid
+    //   return (sfMonth0 !== 0 && (sfMonth0 < minOrder || sfMonth0 > maxCapMonth0)) || (sfMonth1 !== 0 && (sfMonth1 < minOrder || sfMonth1 > maxCapMonth1)) || (sfMonth2 !== 0 && (sfMonth2 < minOrder || sfMonth2 > maxCapMonth2)) || (moMonth0 !== 0 && (moMonth0 < minOrder || moMonth0 > maxCapMonth0)) || (moMonth1 !== 0 && (moMonth1 < minOrder || moMonth1 > maxCapMonth1)) || (moMonth2 !== 0 && (moMonth2 < minOrder || moMonth2 > maxCapMonth2));
+    // });
 
-    // Jika terdapat input yang tidak valid, tampilkan SweetAlert dan hentikan fungsi
-    if (hasInvalidInput) {
-      Swal.fire({
-        title: 'Warning!',
-        text: 'There is an invalid input on the marketing order form.',
-        icon: 'warning',
-        confirmButtonText: 'OK',
-      });
-      return;
-    }
+    // // Jika terdapat input yang tidak valid, tampilkan SweetAlert dan hentikan fungsi
+    // if (hasInvalidInput) {
+    //   Swal.fire({
+    //     title: 'Warning!',
+    //     text: 'There is an invalid input on the marketing order form.',
+    //     icon: 'warning',
+    //     confirmButtonText: 'OK',
+    //   });
+    //   return;
+    // }
 
     const type = this.formHeaderMo.get('type')?.value;
 
@@ -377,15 +456,27 @@ export class EditMoMarketingComponent implements OnInit {
       });
     }
 
+    // this.detailMarketingOrder.forEach((mo) => {
+    //   mo.moId = this.lastIdMo;
+    //   mo.initialStock = parseFloat(mo.initialStock.toString().replace(/\./g, '')) || 0;
+    //   mo.sfMonth0 = parseFloat(mo.sfMonth0.toString().replace(/\./g, '')) || 0;
+    //   mo.sfMonth1 = parseFloat(mo.sfMonth1.toString().replace(/\./g, '')) || 0;
+    //   mo.sfMonth2 = parseFloat(mo.sfMonth2.toString().replace(/\./g, '')) || 0;
+    //   mo.moMonth0 = parseFloat(mo.moMonth0.toString().replace(/\./g, '')) || 0;
+    //   mo.moMonth1 = parseFloat(mo.moMonth1.toString().replace(/\./g, '')) || 0;
+    //   mo.moMonth2 = parseFloat(mo.moMonth2.toString().replace(/\./g, '')) || 0;
+    // });
+
     this.detailMarketingOrder.forEach((mo) => {
       mo.moId = this.lastIdMo;
-      mo.initialStock = parseFloat(mo.initialStock.toString().replace(/\./g, '')) || 0;
-      mo.sfMonth0 = parseFloat(mo.sfMonth0.toString().replace(/\./g, '')) || 0;
-      mo.sfMonth1 = parseFloat(mo.sfMonth1.toString().replace(/\./g, '')) || 0;
-      mo.sfMonth2 = parseFloat(mo.sfMonth2.toString().replace(/\./g, '')) || 0;
-      mo.moMonth0 = parseFloat(mo.moMonth0.toString().replace(/\./g, '')) || 0;
-      mo.moMonth1 = parseFloat(mo.moMonth1.toString().replace(/\./g, '')) || 0;
-      mo.moMonth2 = parseFloat(mo.moMonth2.toString().replace(/\./g, '')) || 0;
+
+      mo.initialStock = parseFloat(mo.initialStock?.toString().replace(/\./g, '') || '0') || 0;
+      mo.sfMonth0 = parseFloat(mo.sfMonth0?.toString().replace(/\./g, '') || '0') || 0;
+      mo.sfMonth1 = parseFloat(mo.sfMonth1?.toString().replace(/\./g, '') || '0') || 0;
+      mo.sfMonth2 = parseFloat(mo.sfMonth2?.toString().replace(/\./g, '') || '0') || 0;
+      mo.moMonth0 = parseFloat(mo.moMonth0?.toString().replace(/\./g, '') || '0') || 0;
+      mo.moMonth1 = parseFloat(mo.moMonth1?.toString().replace(/\./g, '') || '0') || 0;
+      mo.moMonth2 = parseFloat(mo.moMonth2?.toString().replace(/\./g, '') || '0') || 0;
     });
 
     const revisionMo = {
@@ -947,5 +1038,16 @@ export class EditMoMarketingComponent implements OnInit {
 
   openModalUpload(): void {
     $('#uploadModal').modal('show');
+  }
+
+  formatDecimalView(value: number | null | undefined): string {
+    if (value === undefined || value === null || value === 0) {
+      return '0';
+    }
+    return value.toFixed(2).replace('.', ',');
+  }
+
+  formatSeparatorView(value: number | null | undefined): string {
+    return value != null ? value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : '0';
   }
 }

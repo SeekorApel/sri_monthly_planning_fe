@@ -11,7 +11,7 @@ export class DetailMarketingOrder {
   mouldMonthlyPlan: number;
   qtyPerRak: Number;
   minOrder: number;
-  maxCapMonth0: Number;
+  maxCapMonth0: number;
   maxCapMonth1: Number;
   maxCapMonth2: Number;
   initialStock: Number;
