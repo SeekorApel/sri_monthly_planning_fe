@@ -61,6 +61,7 @@ export class CalendarService {
     }
     if (currentWeek.length) {
       days.push(currentWeek);
+
     }
 
     return new Calendar(year, month, days);
