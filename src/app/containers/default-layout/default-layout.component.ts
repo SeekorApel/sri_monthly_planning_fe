@@ -68,17 +68,6 @@ export class DefaultLayoutComponent {
   }
 
   ngOnInit(): void {
-    // this.navItems[1].children = [];
-    // this.navItems[2].children = [];
-
-    // this.masterPPC.forEach((item) => {
-    //   this.navItems[1].children.push(item);
-    // });
-
-    // this.transaksiPPC.forEach((item) => {
-    //   this.navItems[2].children.push(item);
-    // });
-    // Check the role of the user
     if (this.role === 'PPC') {
       // PPC: show Master Data and Transaksi
       this.masterPPC.forEach((item) => {
@@ -87,7 +76,7 @@ export class DefaultLayoutComponent {
       this.transaksiPPC.forEach((item) => {
         this.navItems[2].children.push(item);
       });
-    } else if (this.role === 'Marketing') {
+    } else if (this.role === 'Marketing FED' || this.role === 'Marketing FDR') {
       this.transaksiMarketing.forEach((item) => {
         this.navItems[2].children.push(item);
       });

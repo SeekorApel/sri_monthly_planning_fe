@@ -48,6 +48,14 @@ export class AddMoMarketingComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
+  //Error message
+  errorMessagesM0: string[] = [];
+  errorMessagesM1: string[] = [];
+  errorMessagesM2: string[] = [];
+
+  //Touch status
+  touchStatus: { [key: number]: { isTouchedM0: boolean } } = {};
+
   constructor(private router: Router, private activeRoute: ActivatedRoute, private moService: MarketingOrderService, private fb: FormBuilder, private parsingNumberService: ParsingNumberService) {
     this.formHeaderMo = this.fb.group({
       date: [null, []],
@@ -136,6 +144,131 @@ export class AddMoMarketingComponent implements OnInit {
     this.getAllData(this.idMo);
   }
 
+  onBlurFieldM0(index: number): void {
+    let mo = this.detailMarketingOrder[index];
+    if (mo.moMonth0 != null && mo.moMonth0 !== 0) {
+      this.validateM0(mo.moMonth0, mo.partNumber);
+    }
+  }
+
+  onBlurFieldM1(index: number): void {
+    let mo = this.detailMarketingOrder[index];
+    if (mo.moMonth1 != null && mo.moMonth1 !== 0) {
+      this.validateM1(mo.moMonth1, mo.partNumber);
+    }
+  }
+
+  onBlurFieldM2(index: number): void {
+    let mo = this.detailMarketingOrder[index];
+    if (mo.moMonth2 != null && mo.moMonth2 !== 0) {
+      this.validateM2(mo.moMonth2, mo.partNumber);
+    }
+  }
+
+  validateM0(value: any | null | 0, partNumber: number): string {
+    let data = this.detailMarketingOrder.find((dmo) => dmo.partNumber === partNumber);
+    if (data?.isTouchedM0) {
+      if (value < data.minOrder) {
+        return 'MO must not be less than the minimum order.';
+      }
+
+      if (value > data.maxCapMonth0) {
+        return 'MO cannot be more than the maximum order M1.';
+      }
+
+      if (value % data.qtyPerRak !== 0) {
+        return `MO must be a multiple of ${data.qtyPerRak}.`;
+      }
+    }
+    return null;
+  }
+
+  validateM1(value: any | null | 0, partNumber: number): string {
+    let data = this.detailMarketingOrder.find((dmo) => dmo.partNumber === partNumber);
+    if (data?.isTouchedM1) {
+      if (value < data.minOrder) {
+        return 'MO must not be less than the minimum order.';
+      }
+
+      if (value > data.maxCapMonth1) {
+        return 'MO cannot be more than the maximum order M2.';
+      }
+
+      if (value % data.qtyPerRak !== 0) {
+        return `MO must be a multiple of ${data.qtyPerRak}.`;
+      }
+    }
+    return null;
+  }
+
+  validateM2(value: any | null | 0, partNumber: number): string {
+    let data = this.detailMarketingOrder.find((dmo) => dmo.partNumber === partNumber);
+    if (data?.isTouchedM2) {
+      if (value < data.minOrder) {
+        return 'MO must not be less than the minimum order.';
+      }
+
+      if (value > data.maxCapMonth2) {
+        return 'MO cannot be more than the maximum order M3.';
+      }
+
+      if (value % data.qtyPerRak !== 0) {
+        return `MO must be a multiple of ${data.qtyPerRak}.`;
+      }
+    }
+    return null;
+  }
+
+  onInputChangeM0(event: Event, partNumber: number): void {
+    let input = event.target as HTMLInputElement;
+    let value = input.value;
+    let numericValue = value.replace(/[^0-9]/g, '');
+    let data = this.detailMarketingOrder.find((dmo) => dmo.partNumber === partNumber);
+    if (data) {
+      data.moMonth0 = parseFloat(numericValue) || 0;
+      data.isTouchedM0 = true;
+      input.value = data.moMonth0.toLocaleString('id-ID');
+    }
+  }
+
+  onInputChangeM1(event: Event, partNumber: number): void {
+    let input = event.target as HTMLInputElement;
+    let value = input.value;
+    let numericValue = value.replace(/[^0-9]/g, '');
+    let data = this.detailMarketingOrder.find((dmo) => dmo.partNumber === partNumber);
+    if (data) {
+      data.moMonth1 = parseFloat(numericValue) || 0;
+      data.isTouchedM1 = true;
+      input.value = data.moMonth1.toLocaleString('id-ID');
+    }
+  }
+
+  onInputChangeM2(event: Event, partNumber: number): void {
+    let input = event.target as HTMLInputElement;
+    let value = input.value;
+    let numericValue = value.replace(/[^0-9]/g, '');
+    let data = this.detailMarketingOrder.find((dmo) => dmo.partNumber === partNumber);
+    if (data) {
+      data.moMonth2 = parseFloat(numericValue) || 0;
+      data.isTouchedM2 = true;
+      input.value = data.moMonth2.toLocaleString('id-ID');
+    }
+  }
+
+  formatNumber(value: any): string {
+    if (value == null || value === '') {
+      return '';
+    }
+    return Number(value).toLocaleString('id-ID');
+  }
+
+  onInputFormat(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const value = input.value;
+    const numericValue = value.replace(/\./g, '').replace(/,/g, '.');
+    input.value = this.formatNumber(numericValue);
+  }
+
   formatDecimal(value: number | null | undefined): string {
     if (value === undefined || value === null || value === 0) {
       return '0';
@@ -147,23 +280,9 @@ export class AddMoMarketingComponent implements OnInit {
     return value != null ? value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : '0';
   }
 
-  formatNumber(value: any): string {
-    if (value == null || value === '') {
-      return '';
-    }
-    return Number(value).toLocaleString('id-ID');
-  }
-
   onInputChange(value: string, mo: any, field: string): void {
     const numericValue = value.replace(/\./g, '').replace(/,/g, '.');
     mo[field] = numericValue;
-  }
-
-  onInputFormat(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    const value = input.value;
-    const numericValue = value.replace(/\./g, '').replace(/,/g, '.');
-    input.value = this.formatNumber(numericValue);
   }
 
   isInvalidValue(value: any | null | undefined, minimumOrder: number, qtyPerRak: number, maxCapacity: number): boolean {
@@ -342,9 +461,9 @@ export class AddMoMarketingComponent implements OnInit {
     worksheet.getCell('N10').font = { name: 'Calibri Body', size: 11, bold: true, italic: true };
     setBorder(worksheet.getCell('N10'));
 
-    worksheet.getCell('Q10').value = this.headerMarketingOrder[1].wdNormalTire; // "Month 1"
-    worksheet.getCell('R10').value = this.headerMarketingOrder[2].wdNormalTire; // "Month 2"
-    worksheet.getCell('S10').value = this.headerMarketingOrder[0].wdNormalTire; // "Month 3"
+    worksheet.getCell('Q10').value = this.headerMarketingOrder[0].wdNormalTire; // "Month 1"
+    worksheet.getCell('R10').value = this.headerMarketingOrder[1].wdNormalTire; // "Month 2"
+    worksheet.getCell('S10').value = this.headerMarketingOrder[2].wdNormalTire; // "Month 3"
     worksheet.getCell('Q10').numFmt = '0.00';
     worksheet.getCell('R10').numFmt = '0.00';
     worksheet.getCell('S10').numFmt = '0.00';
@@ -353,9 +472,9 @@ export class AddMoMarketingComponent implements OnInit {
     worksheet.getCell('N11').value = 'Workday Overtime TL';
     worksheet.getCell('N11').alignment = { vertical: 'middle', horizontal: 'left' };
     setBorder(worksheet.getCell('N11'));
-    worksheet.getCell('Q11').value = this.headerMarketingOrder[1].wdOtTl; // "Month 1"
-    worksheet.getCell('R11').value = this.headerMarketingOrder[2].wdOtTl; // "Month 2"
-    worksheet.getCell('S11').value = this.headerMarketingOrder[0].wdOtTl; // "Month 3"
+    worksheet.getCell('Q11').value = this.headerMarketingOrder[0].wdOtTl; // "Month 1"
+    worksheet.getCell('R11').value = this.headerMarketingOrder[1].wdOtTl; // "Month 2"
+    worksheet.getCell('S11').value = this.headerMarketingOrder[2].wdOtTl; // "Month 3"
     worksheet.getCell('Q11').numFmt = '0.00';
     worksheet.getCell('R11').numFmt = '0.00';
     worksheet.getCell('S11').numFmt = '0.00';
@@ -408,6 +527,7 @@ export class AddMoMarketingComponent implements OnInit {
       pattern: 'solid',
       fgColor: { argb: 'FFD9D9D9' },
     };
+
     ['Q15', 'R15', 'S15'].forEach((cell) => {
       const cellRef = worksheet.getCell(cell);
       cellRef.alignment = { vertical: 'middle', horizontal: 'center' };
@@ -423,9 +543,9 @@ export class AddMoMarketingComponent implements OnInit {
     worksheet.getCell('N16').value = 'Max Capacity Tire TL';
     worksheet.getCell('N16').alignment = { vertical: 'middle', horizontal: 'left' };
     setBorder(worksheet.getCell('N16'));
-    worksheet.getCell('Q16').value = this.headerMarketingOrder[1].maxCapTl; // "Month 1"
-    worksheet.getCell('R16').value = this.headerMarketingOrder[2].maxCapTl; // "Month 2"
-    worksheet.getCell('S16').value = this.headerMarketingOrder[0].maxCapTl; // "Month 3"
+    worksheet.getCell('Q16').value = this.headerMarketingOrder[0].maxCapTl; // "Month 1"
+    worksheet.getCell('R16').value = this.headerMarketingOrder[1].maxCapTl; // "Month 2"
+    worksheet.getCell('S16').value = this.headerMarketingOrder[2].maxCapTl; // "Month 3"
     worksheet.getCell('Q16').numFmt = '#,##0';
     worksheet.getCell('R16').numFmt = '#,##0';
     worksheet.getCell('S16').numFmt = '#,##0';
@@ -449,9 +569,9 @@ export class AddMoMarketingComponent implements OnInit {
     worksheet.getCell('N17').value = 'Max Capacity Tire TT';
     worksheet.getCell('N17').alignment = { vertical: 'middle', horizontal: 'left' };
     setBorder(worksheet.getCell('N17'));
-    worksheet.getCell('Q17').value = this.headerMarketingOrder[1].maxCapTt; // "Month 1"
-    worksheet.getCell('R17').value = this.headerMarketingOrder[2].maxCapTt; // "Month 2"
-    worksheet.getCell('S17').value = this.headerMarketingOrder[0].maxCapTt; // "Month 3"
+    worksheet.getCell('Q17').value = this.headerMarketingOrder[0].maxCapTt; // "Month 1"
+    worksheet.getCell('R17').value = this.headerMarketingOrder[1].maxCapTt; // "Month 2"
+    worksheet.getCell('S17').value = this.headerMarketingOrder[2].maxCapTt; // "Month 3"
     worksheet.getCell('Q17').numFmt = '#,##0';
     worksheet.getCell('R17').numFmt = '#,##0';
     worksheet.getCell('S17').numFmt = '#,##0';
@@ -620,7 +740,7 @@ export class AddMoMarketingComponent implements OnInit {
     };
 
     worksheet.mergeCells('G19:G20');
-    worksheet.getCell('G19').value = 'Qty Mould';
+    worksheet.getCell('G19').value = 'Mould Plan';
     worksheet.getCell('G19').alignment = { vertical: 'middle', horizontal: 'center' };
     worksheet.getColumn('G').width = 18;
     setBorder(worksheet.getCell('G19'));
@@ -1064,12 +1184,15 @@ export class AddMoMarketingComponent implements OnInit {
             const detail = this.detailMarketingOrder.find((item) => item.partNumber === partNumber);
             if (detail) {
               detail.initialStock = initialStockValue;
-              detail.sfMonth0 = sfMonth0Value; //tipe data number
-              detail.sfMonth1 = sfMonth1Value; //tipe data number
-              detail.sfMonth2 = sfMonth2Value; //tipe data number
-              detail.moMonth0 = moMonth0Value; //tipe data number
-              detail.moMonth1 = moMonth1Value; //tipe data number
-              detail.moMonth2 = moMonth2Value; //tipe data number
+              detail.sfMonth0 = sfMonth0Value;
+              detail.sfMonth1 = sfMonth1Value;
+              detail.sfMonth2 = sfMonth2Value;
+              detail.moMonth0 = detail.lockStatusM0 === 1 ? 0 : moMonth0Value;
+              detail.moMonth1 = detail.lockStatusM1 === 1 ? 0 : moMonth1Value;
+              detail.moMonth2 = detail.lockStatusM2 === 1 ? 0 : moMonth2Value;
+              detail.isTouchedM0 = true;
+              detail.isTouchedM1 = true;
+              detail.isTouchedM2 = true;
             }
           }
         } else {
@@ -1088,24 +1211,11 @@ export class AddMoMarketingComponent implements OnInit {
   }
 
   onModelChange(value: string, mo: any, field: string) {
-    // Remove dots and convert the value to a number
     const numberValue = value ? Number(value.replace(/\./g, '')) : null;
-    mo[field] = numberValue; // Update the model with the number value
+    mo[field] = numberValue;
   }
 
   saveMo(): void {
-    this.detailMarketingOrder.forEach((mo) => {
-      if (mo.lockStatusM0 === 1) {
-        mo.moMonth0 = 0;
-      }
-      if (mo.lockStatusM1 === 1) {
-        mo.moMonth1 = 0;
-      }
-      if (mo.lockStatusM2 === 1) {
-        mo.moMonth2 = 0;
-      }
-    });
-
     const hasInvalidInput = this.detailMarketingOrder.some((mo) => {
       const moMonth0 = mo.moMonth0 ? parseFloat(mo.moMonth0.toString().replace(/\./g, '')) : 0;
       const moMonth1 = mo.moMonth1 ? parseFloat(mo.moMonth1.toString().replace(/\./g, '')) : 0;

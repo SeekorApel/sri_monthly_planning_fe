@@ -31,6 +31,8 @@ export class EditMoMarketingComponent implements OnInit {
   allData: any;
   lastIdMo: string = '';
   file: File | null = null;
+
+  //Error message
   errorMessagesM0: string[] = [];
   errorMessagesM1: string[] = [];
   errorMessagesM2: string[] = [];
@@ -146,11 +148,11 @@ export class EditMoMarketingComponent implements OnInit {
   validateM0(value: any | null | undefined, partNumber: number): string | null {
     const data = this.detailMarketingOrder.find((dmo) => dmo.partNumber === partNumber);
     if (value < data.minOrder) {
-      return "MO must not be less than the minimum order.";
+      return 'MO must not be less than the minimum order.';
     }
 
     if (value > data.maxCapMonth0) {
-      return "MO cannot be more than the maximum order M1.";
+      return 'MO cannot be more than the maximum order M1.';
     }
 
     if (value % data.qtyPerRak !== 0) {
@@ -159,7 +161,6 @@ export class EditMoMarketingComponent implements OnInit {
 
     return null;
   }
-
 
   formatNumber(value: any): string {
     if (value == null || value === '') {
@@ -545,6 +546,11 @@ export class EditMoMarketingComponent implements OnInit {
     worksheet.getCell('N9').alignment = { vertical: 'middle', horizontal: 'left' };
     setBorder(worksheet.getCell('N9'));
     worksheet.getCell('N9').font = { name: 'Calibri Body', size: 11, bold: true, italic: true };
+    worksheet.getCell('N9').fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'FFDCE6F1' },
+    };
 
     worksheet.mergeCells('N10:P10');
     worksheet.getCell('N10').value = 'Workday Normal / Workday Tube';
@@ -552,9 +558,12 @@ export class EditMoMarketingComponent implements OnInit {
     worksheet.getCell('N10').font = { name: 'Calibri Body', size: 11, bold: true, italic: true };
     setBorder(worksheet.getCell('N10'));
 
-    worksheet.getCell('Q10').value = this.headerMarketingOrder[0].wdNormal; // "Month 1"
-    worksheet.getCell('R10').value = this.headerMarketingOrder[1].wdNormal; // "Month 2"
-    worksheet.getCell('S10').value = this.headerMarketingOrder[2].wdNormal; // "Month 3"
+    worksheet.getCell('Q10').value = this.headerMarketingOrder[0].wdNormalTire; // "Month 1"
+    worksheet.getCell('R10').value = this.headerMarketingOrder[1].wdNormalTire; // "Month 2"
+    worksheet.getCell('S10').value = this.headerMarketingOrder[2].wdNormalTire; // "Month 3"
+    worksheet.getCell('Q10').numFmt = '0.00';
+    worksheet.getCell('R10').numFmt = '0.00';
+    worksheet.getCell('S10').numFmt = '0.00';
 
     worksheet.mergeCells('N11:P11');
     worksheet.getCell('N11').value = 'Workday Overtime TL';
@@ -563,9 +572,10 @@ export class EditMoMarketingComponent implements OnInit {
     worksheet.getCell('Q11').value = this.headerMarketingOrder[0].wdOtTl; // "Month 1"
     worksheet.getCell('R11').value = this.headerMarketingOrder[1].wdOtTl; // "Month 2"
     worksheet.getCell('S11').value = this.headerMarketingOrder[2].wdOtTl; // "Month 3"
-    ['Q11', 'R11', 'S11'].forEach((cell) => {
-      worksheet.getCell(cell).alignment = { vertical: 'middle', horizontal: 'center' };
-    });
+    worksheet.getCell('Q11').numFmt = '0.00';
+    worksheet.getCell('R11').numFmt = '0.00';
+    worksheet.getCell('S11').numFmt = '0.00';
+
 
     worksheet.mergeCells('N12:P12');
     worksheet.getCell('N12').value = 'Workday Overtime TT';
@@ -574,20 +584,20 @@ export class EditMoMarketingComponent implements OnInit {
     worksheet.getCell('Q12').value = this.headerMarketingOrder[0].wdOtTt; // "Month 1"
     worksheet.getCell('R12').value = this.headerMarketingOrder[1].wdOtTt; // "Month 2"
     worksheet.getCell('S12').value = this.headerMarketingOrder[2].wdOtTt; // "Month 3"
-    ['Q12', 'R12', 'S12'].forEach((cell) => {
-      worksheet.getCell(cell).alignment = { vertical: 'middle', horizontal: 'center' };
-    });
+    worksheet.getCell('Q12').numFmt = '0.00';
+    worksheet.getCell('R12').numFmt = '0.00';
+    worksheet.getCell('S12').numFmt = '0.00';
 
     worksheet.mergeCells('N13:P13');
     worksheet.getCell('N13').value = 'Total Workday Tire TL';
     worksheet.getCell('N13').alignment = { vertical: 'middle', horizontal: 'left' };
     setBorder(worksheet.getCell('N13'));
-    worksheet.getCell('Q13').value = this.headerMarketingOrder[0].totalWdTl; // "Month 1"
-    worksheet.getCell('R13').value = this.headerMarketingOrder[1].totalWdTl; // "Month 2"
-    worksheet.getCell('S13').value = this.headerMarketingOrder[2].totalWdTl; // "Month 3"
-    ['Q13', 'R13', 'S13'].forEach((cell) => {
-      worksheet.getCell(cell).alignment = { vertical: 'middle', horizontal: 'center' };
-    });
+    worksheet.getCell('Q13').value = this.headerMarketingOrder[1].totalWdTl; // "Month 1"
+    worksheet.getCell('R13').value = this.headerMarketingOrder[2].totalWdTl; // "Month 2"
+    worksheet.getCell('S13').value = this.headerMarketingOrder[0].totalWdTl; // "Month 3"
+    worksheet.getCell('Q13').numFmt = '0.00';
+    worksheet.getCell('R13').numFmt = '0.00';
+    worksheet.getCell('S13').numFmt = '0.00';
 
     worksheet.mergeCells('N14:P14');
     worksheet.getCell('N14').value = 'Total Workday Tire TT';
@@ -596,12 +606,9 @@ export class EditMoMarketingComponent implements OnInit {
     worksheet.getCell('Q14').value = this.headerMarketingOrder[1].totalWdTt; // "Month 1"
     worksheet.getCell('R14').value = this.headerMarketingOrder[2].totalWdTt; // "Month 2"
     worksheet.getCell('S14').value = this.headerMarketingOrder[0].totalWdTt; // "Month 3"
-    worksheet.getCell('Q14').numFmt = '#,##0';
-    worksheet.getCell('R14').numFmt = '#,##0';
-    worksheet.getCell('S14').numFmt = '#,##0';
-    ['Q14', 'R14', 'S14'].forEach((cell) => {
-      worksheet.getCell(cell).alignment = { vertical: 'middle', horizontal: 'center' };
-    });
+    worksheet.getCell('Q14').numFmt = '0.00';
+    worksheet.getCell('R14').numFmt = '0.00';
+    worksheet.getCell('S14').numFmt = '0.00';
 
     worksheet.mergeCells('N15:P15');
     worksheet.getCell('N15').value = 'Max Capacity Tube';
@@ -613,36 +620,73 @@ export class EditMoMarketingComponent implements OnInit {
     worksheet.getCell('Q15').numFmt = '#,##0';
     worksheet.getCell('R15').numFmt = '#,##0';
     worksheet.getCell('S15').numFmt = '#,##0';
+    worksheet.getCell('N15').fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'FFD9D9D9' },
+    };
+
     ['Q15', 'R15', 'S15'].forEach((cell) => {
-      worksheet.getCell(cell).alignment = { vertical: 'middle', horizontal: 'center' };
+      const cellRef = worksheet.getCell(cell);
+      cellRef.alignment = { vertical: 'middle', horizontal: 'center' };
+
+      cellRef.fill = {
+        type: 'pattern',
+        pattern: 'solid',
+        fgColor: { argb: 'FFD9D9D9' },
+      };
     });
 
     worksheet.mergeCells('N16:P16');
     worksheet.getCell('N16').value = 'Max Capacity Tire TL';
     worksheet.getCell('N16').alignment = { vertical: 'middle', horizontal: 'left' };
     setBorder(worksheet.getCell('N16'));
-    worksheet.getCell('Q16').value = this.headerMarketingOrder[1].maxCapTl; // "Month 1"
-    worksheet.getCell('R16').value = this.headerMarketingOrder[2].maxCapTl; // "Month 2"
-    worksheet.getCell('S16').value = this.headerMarketingOrder[0].maxCapTl; // "Month 3"
+    worksheet.getCell('Q16').value = this.headerMarketingOrder[0].maxCapTl; // "Month 1"
+    worksheet.getCell('R16').value = this.headerMarketingOrder[1].maxCapTl; // "Month 2"
+    worksheet.getCell('S16').value = this.headerMarketingOrder[2].maxCapTl; // "Month 3"
     worksheet.getCell('Q16').numFmt = '#,##0';
     worksheet.getCell('R16').numFmt = '#,##0';
     worksheet.getCell('S16').numFmt = '#,##0';
+    worksheet.getCell('N16').fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'FFD9D9D9' },
+    };
     ['Q16', 'R16', 'S16'].forEach((cell) => {
-      worksheet.getCell(cell).alignment = { vertical: 'middle', horizontal: 'center' };
+      const cellRef = worksheet.getCell(cell);
+      cellRef.alignment = { vertical: 'middle', horizontal: 'center' };
+
+      cellRef.fill = {
+        type: 'pattern',
+        pattern: 'solid',
+        fgColor: { argb: 'FFD9D9D9' },
+      };
     });
 
     worksheet.mergeCells('N17:P17');
     worksheet.getCell('N17').value = 'Max Capacity Tire TT';
     worksheet.getCell('N17').alignment = { vertical: 'middle', horizontal: 'left' };
     setBorder(worksheet.getCell('N17'));
-    worksheet.getCell('Q17').value = this.headerMarketingOrder[1].maxCapTt; // "Month 1"
-    worksheet.getCell('R17').value = this.headerMarketingOrder[2].maxCapTt; // "Month 2"
-    worksheet.getCell('S17').value = this.headerMarketingOrder[0].maxCapTt; // "Month 3"
+    worksheet.getCell('Q17').value = this.headerMarketingOrder[0].maxCapTt; // "Month 1"
+    worksheet.getCell('R17').value = this.headerMarketingOrder[1].maxCapTt; // "Month 2"
+    worksheet.getCell('S17').value = this.headerMarketingOrder[2].maxCapTt; // "Month 3"
     worksheet.getCell('Q17').numFmt = '#,##0';
     worksheet.getCell('R17').numFmt = '#,##0';
     worksheet.getCell('S17').numFmt = '#,##0';
+    worksheet.getCell('N17').fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'FFD9D9D9' },
+    };
     ['Q17', 'R17', 'S17'].forEach((cell) => {
-      worksheet.getCell(cell).alignment = { vertical: 'middle', horizontal: 'center' };
+      const cellRef = worksheet.getCell(cell);
+      cellRef.alignment = { vertical: 'middle', horizontal: 'center' };
+
+      cellRef.fill = {
+        type: 'pattern',
+        pattern: 'solid',
+        fgColor: { argb: 'FFD9D9D9' },
+      };
     });
 
     worksheet.mergeCells('N18:P18');
@@ -677,6 +721,12 @@ export class EditMoMarketingComponent implements OnInit {
         size: 11,
         bold: true,
         italic: true,
+      };
+
+      cellRef.fill = {
+        type: 'pattern',
+        pattern: 'solid',
+        fgColor: { argb: 'FFDCE6F1' },
       };
     });
 
@@ -736,116 +786,223 @@ export class EditMoMarketingComponent implements OnInit {
     worksheet.getCell('B19').alignment = { vertical: 'middle', horizontal: 'center' };
     worksheet.getColumn('B').width = 20;
     setBorder(worksheet.getCell('B19'));
+    worksheet.getCell('B19').fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'FFDCE6F1' },
+    };
 
     worksheet.mergeCells('C19:C20');
     worksheet.getCell('C19').value = 'Item';
     worksheet.getCell('C19').alignment = { vertical: 'middle', horizontal: 'center' };
     worksheet.getColumn('C').width = 20;
     setBorder(worksheet.getCell('C19'));
+    worksheet.getCell('C19').fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'FFDCE6F1' },
+    };
 
     worksheet.mergeCells('D19:D20');
     worksheet.getCell('D19').value = 'Description';
     worksheet.getCell('D19').alignment = { vertical: 'middle', horizontal: 'center' };
     worksheet.getColumn('D').width = 41;
     setBorder(worksheet.getCell('D19'));
+    worksheet.getCell('D19').fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'FFDCE6F1' },
+    };
+
 
     worksheet.mergeCells('E19:E20');
     worksheet.getCell('E19').value = 'Machine Type';
     worksheet.getCell('E19').alignment = { vertical: 'middle', horizontal: 'center' };
     worksheet.getColumn('E').width = 15;
     setBorder(worksheet.getCell('E19'));
+    worksheet.getCell('E19').fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'FFDCE6F1' },
+    };
 
     worksheet.mergeCells('F19:F20');
     worksheet.getCell('F19').value = 'Capacity 99,5%';
     worksheet.getCell('F19').alignment = { vertical: 'middle', horizontal: 'center' };
     worksheet.getColumn('F').width = 18;
     setBorder(worksheet.getCell('F19'));
+    worksheet.getCell('F19').fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'FFDCE6F1' },
+    };
 
     worksheet.mergeCells('G19:G20');
-    worksheet.getCell('G19').value = 'Qty Mould';
+    worksheet.getCell('G19').value = 'Mould Plan';
     worksheet.getCell('G19').alignment = { vertical: 'middle', horizontal: 'center' };
     worksheet.getColumn('G').width = 18;
     setBorder(worksheet.getCell('G19'));
+    worksheet.getCell('G19').fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'FFDCE6F1' },
+    };
 
     worksheet.mergeCells('H19:H20');
     worksheet.getCell('H19').value = 'Qty Per Rak';
     worksheet.getCell('H19').alignment = { vertical: 'middle', horizontal: 'center' };
     worksheet.getColumn('H').width = 18;
     setBorder(worksheet.getCell('H19'));
+    worksheet.getCell('H19').fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'FFDCE6F1' },
+    };
 
     worksheet.mergeCells('I19:I20');
     worksheet.getCell('I19').value = 'Minimal Order';
     worksheet.getCell('I19').alignment = { vertical: 'middle', horizontal: 'center' };
     worksheet.getColumn('I').width = 18;
     setBorder(worksheet.getCell('I19'));
+    worksheet.getCell('I19').fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'FFDCE6F1' },
+    };
 
     worksheet.mergeCells('J19:L19');
     worksheet.getCell('J19').value = 'Capacity Maximum';
     worksheet.getCell('J19').alignment = { vertical: 'middle', horizontal: 'center' };
     worksheet.getColumn('J').width = 15;
     setBorder(worksheet.getCell('J19'));
+    worksheet.getCell('J19').fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'FFDCE6F1' },
+    };
+
 
     worksheet.getCell('J20').value = month0;
     worksheet.getCell('J20').alignment = { vertical: 'middle', horizontal: 'center' };
     setBorder(worksheet.getCell('J20'));
+    worksheet.getCell('J20').fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'FFDCE6F1' },
+    };
 
     worksheet.getCell('K20').value = month1;
     worksheet.getCell('K20').alignment = { vertical: 'middle', horizontal: 'center' };
     worksheet.getColumn('K').width = 15;
     setBorder(worksheet.getCell('K20'));
+    worksheet.getCell('K20').fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'FFDCE6F1' },
+    };
 
     worksheet.getCell('L20').value = month2;
     worksheet.getCell('L20').alignment = { vertical: 'middle', horizontal: 'center' };
     worksheet.getColumn('L').width = 15;
     setBorder(worksheet.getCell('L20'));
+    worksheet.getCell('L20').fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'FFDCE6F1' },
+    };
 
     worksheet.mergeCells('M19:M20');
     worksheet.getCell('M19').value = 'Initial Stock';
     worksheet.getCell('M19').alignment = { vertical: 'middle', horizontal: 'center' };
     worksheet.getColumn('M').width = 20;
     setBorder(worksheet.getCell('M19'));
+    worksheet.getCell('M19').fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'FFDCE6F1' },
+    };
 
     worksheet.mergeCells('N19:P19');
     worksheet.getCell('N19').value = 'Sales Forecast';
     worksheet.getCell('N19').alignment = { vertical: 'middle', horizontal: 'center' };
     worksheet.getColumn('N').width = 20;
     setBorder(worksheet.getCell('N19'));
+    worksheet.getCell('N19').fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'FFDCE6F1' },
+    };
 
     worksheet.getCell('N20').value = month0;
     worksheet.getCell('N20').alignment = { vertical: 'middle', horizontal: 'center' };
     worksheet.getColumn('O').width = 20;
     setBorder(worksheet.getCell('N20'));
+    worksheet.getCell('N20').fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'FFDCE6F1' },
+    };
 
     worksheet.getCell('O20').value = month1;
     worksheet.getCell('O20').alignment = { vertical: 'middle', horizontal: 'center' };
     worksheet.getColumn('O').width = 20;
     setBorder(worksheet.getCell('O20'));
+    worksheet.getCell('O20').fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'FFDCE6F1' },
+    };
 
     worksheet.getCell('P20').value = month2;
     worksheet.getCell('P20').alignment = { vertical: 'middle', horizontal: 'center' };
     worksheet.getColumn('P').width = 20;
     setBorder(worksheet.getCell('P20'));
+    worksheet.getCell('P20').fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'FFDCE6F1' },
+    };
 
     worksheet.mergeCells('Q19:S19');
     worksheet.getCell('Q19').value = 'Marketing Order';
     worksheet.getCell('Q19').alignment = { vertical: 'middle', horizontal: 'center' };
     worksheet.getColumn('Q').width = 20;
     setBorder(worksheet.getCell('Q19'));
+    worksheet.getCell('Q19').fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'FFDCE6F1' },
+    };
 
     worksheet.getCell('Q20').value = month0;
     worksheet.getCell('Q20').alignment = { vertical: 'middle', horizontal: 'center' };
     worksheet.getColumn('Q').width = 20;
     setBorder(worksheet.getCell('Q20'));
+    worksheet.getCell('Q20').fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'FFDCE6F1' },
+    };
 
     worksheet.getCell('R20').value = month1;
     worksheet.getCell('R20').alignment = { vertical: 'middle', horizontal: 'center' };
     worksheet.getColumn('R').width = 20;
     setBorder(worksheet.getCell('R20'));
+    worksheet.getCell('R20').fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'FFDCE6F1' },
+    };
 
     worksheet.getCell('S20').value = month2;
     worksheet.getCell('S20').alignment = { vertical: 'middle', horizontal: 'center' };
     worksheet.getColumn('S').width = 20;
     setBorder(worksheet.getCell('S20'));
+    worksheet.getCell('S20').fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'FFDCE6F1' },
+    };
 
     //Styling Font Header Detail Markting Order
     ['B19', 'C19', 'D19', 'E19', 'F19', 'G19', 'H19', 'I19', 'J19', 'J20', 'K20', 'L20', 'M19', 'N19', 'N20', 'O20', 'P20', 'Q19', 'Q20', 'R20', 'S20'].forEach((cell) => {
@@ -860,69 +1017,182 @@ export class EditMoMarketingComponent implements OnInit {
 
     let rowIndex = 21;
     this.detailMarketingOrder.forEach((item) => {
+      worksheet.getCell(`B${rowIndex}`).value = item.category;
+      worksheet.getCell(`C${rowIndex}`).value = item.partNumber;
+      worksheet.getCell(`C${rowIndex}`).numFmt = '0';
+
+      worksheet.getCell(`D${rowIndex}`).value = item.description;
+      worksheet.getCell(`E${rowIndex}`).value = item.machineType;
+
+      worksheet.getCell(`F${rowIndex}`).value = item.capacity;
+      worksheet.getCell(`F${rowIndex}`).numFmt = '#,##0';
+
+      worksheet.getCell(`G${rowIndex}`).value = item.mouldMonthlyPlan;
+      worksheet.getCell(`G${rowIndex}`).numFmt = '#,##0';
+
+      worksheet.getCell(`H${rowIndex}`).value = item.qtyPerRak;
+      worksheet.getCell(`H${rowIndex}`).numFmt = '#,##0';
+
+      worksheet.getCell(`I${rowIndex}`).value = item.minOrder;
+      worksheet.getCell(`I${rowIndex}`).numFmt = '#,##0';
+
+      worksheet.getCell(`J${rowIndex}`).value = item.maxCapMonth0;
+      worksheet.getCell(`J${rowIndex}`).numFmt = '#,##0';
+
+      worksheet.getCell(`K${rowIndex}`).value = item.maxCapMonth1;
+      worksheet.getCell(`K${rowIndex}`).numFmt = '#,##0';
+
+      worksheet.getCell(`L${rowIndex}`).value = item.maxCapMonth2;
+      worksheet.getCell(`L${rowIndex}`).numFmt = '#,##0';
+
+      worksheet.getCell(`M${rowIndex}`).value = item.initialStock;
+      worksheet.getCell(`M${rowIndex}`).numFmt = '#,##0';
+
+      worksheet.getCell(`N${rowIndex}`).value = item.sfMonth0;
+      worksheet.getCell(`N${rowIndex}`).numFmt = '#,##0';
+
+      worksheet.getCell(`O${rowIndex}`).value = item.sfMonth1;
+      worksheet.getCell(`O${rowIndex}`).numFmt = '#,##0';
+
+      worksheet.getCell(`P${rowIndex}`).value = item.sfMonth2;
+      worksheet.getCell(`P${rowIndex}`).numFmt = '#,##0';
+
       if (item.lockStatusM0 !== 1) {
-        worksheet.getCell(`B${rowIndex}`).value = item.category;
-        worksheet.getCell(`C${rowIndex}`).value = item.partNumber;
-        worksheet.getCell(`C${rowIndex}`).numFmt = '0';
-
-        worksheet.getCell(`D${rowIndex}`).value = item.description;
-        worksheet.getCell(`E${rowIndex}`).value = item.machineType;
-
-        worksheet.getCell(`F${rowIndex}`).value = item.capacity;
-        worksheet.getCell(`F${rowIndex}`).numFmt = '#,##0';
-
-        worksheet.getCell(`G${rowIndex}`).value = item.qtyPerMould;
-        worksheet.getCell(`G${rowIndex}`).numFmt = '#,##0';
-
-        worksheet.getCell(`H${rowIndex}`).value = item.qtyPerRak;
-        worksheet.getCell(`H${rowIndex}`).numFmt = '#,##0';
-
-        worksheet.getCell(`I${rowIndex}`).value = item.minOrder;
-        worksheet.getCell(`I${rowIndex}`).numFmt = '#,##0';
-
-        worksheet.getCell(`J${rowIndex}`).value = item.maxCapMonth0;
-        worksheet.getCell(`J${rowIndex}`).numFmt = '#,##0';
-
-        worksheet.getCell(`K${rowIndex}`).value = item.maxCapMonth1;
-        worksheet.getCell(`K${rowIndex}`).numFmt = '#,##0';
-
-        worksheet.getCell(`L${rowIndex}`).value = item.maxCapMonth2;
-        worksheet.getCell(`L${rowIndex}`).numFmt = '#,##0';
-
-        worksheet.getCell(`M${rowIndex}`).value = item.initialStock;
-        worksheet.getCell(`M${rowIndex}`).numFmt = '#,##0';
-
-        worksheet.getCell(`N${rowIndex}`).value = item.sfMonth0;
-        worksheet.getCell(`N${rowIndex}`).numFmt = '#,##0';
-
-        worksheet.getCell(`O${rowIndex}`).value = item.sfMonth1;
-        worksheet.getCell(`O${rowIndex}`).numFmt = '#,##0';
-
-        worksheet.getCell(`P${rowIndex}`).value = item.sfMonth2;
-        worksheet.getCell(`P${rowIndex}`).numFmt = '#,##0';
-
         worksheet.getCell(`Q${rowIndex}`).value = item.moMonth0;
         worksheet.getCell(`Q${rowIndex}`).numFmt = '#,##0';
+      }
 
+      if (item.lockStatusM1 !== 1) {
         worksheet.getCell(`R${rowIndex}`).value = item.moMonth1;
         worksheet.getCell(`R${rowIndex}`).numFmt = '#,##0';
+      }
 
+      if (item.lockStatusM2 !== 1) {
         worksheet.getCell(`S${rowIndex}`).value = item.moMonth2;
         worksheet.getCell(`S${rowIndex}`).numFmt = '#,##0';
-
-        ['B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S'].forEach((col) => {
-          const cell = worksheet.getCell(`${col}${rowIndex}`);
-          cell.alignment = { vertical: 'middle', horizontal: 'center' };
-          cell.border = {
-            top: { style: 'thin' },
-            left: { style: 'thin' },
-            bottom: { style: 'thin' },
-            right: { style: 'thin' },
-          };
-        });
-
-        rowIndex++;
       }
+
+      // Cek status lockStatusM0
+      if (item.lockStatusM0 === 1) {
+        worksheet.getCell(`Q${rowIndex}`).fill = {
+          type: 'pattern',
+          pattern: 'solid',
+          fgColor: { argb: 'FFFF0000' },
+        };
+      } else {
+        worksheet.getCell(`Q${rowIndex}`).fill = {
+          type: 'pattern',
+          pattern: 'solid',
+          fgColor: { argb: 'FFFFC000' },
+        };
+      }
+
+      if (item.lockStatusM1 === 1) {
+        worksheet.getCell(`R${rowIndex}`).fill = {
+          type: 'pattern',
+          pattern: 'solid',
+          fgColor: { argb: 'FFFF0000' },
+        };
+      } else {
+        worksheet.getCell(`R${rowIndex}`).fill = {
+          type: 'pattern',
+          pattern: 'solid',
+          fgColor: { argb: 'FFFFC000' },
+        };
+      }
+
+      if (item.lockStatusM2 === 1) {
+        worksheet.getCell(`S${rowIndex}`).fill = {
+          type: 'pattern',
+          pattern: 'solid',
+          fgColor: { argb: 'FFFF0000' },
+        };
+      } else {
+        worksheet.getCell(`S${rowIndex}`).fill = {
+          type: 'pattern',
+          pattern: 'solid',
+          fgColor: { argb: 'FFFFC000' },
+        };
+      }
+
+      ['B', 'C', 'D', 'E'].forEach((col) => {
+        const cell = worksheet.getCell(`${col}${rowIndex}`);
+        cell.alignment = { vertical: 'middle', horizontal: 'center' };
+        cell.border = {
+          top: { style: 'thin' },
+          left: { style: 'thin' },
+          bottom: { style: 'thin' },
+          right: { style: 'thin' },
+        };
+      });
+
+      ['F', 'G', 'H', 'I', 'J', 'K', 'L'].forEach((col) => {
+        const cell = worksheet.getCell(`${col}${rowIndex}`);
+        cell.alignment = { vertical: 'middle', horizontal: 'right' };
+        cell.border = {
+          top: { style: 'thin' },
+          left: { style: 'thin' },
+          bottom: { style: 'thin' },
+          right: { style: 'thin' },
+        };
+      });
+
+      ['M'].forEach((col) => {
+        const cell = worksheet.getCell(`${col}${rowIndex}`);
+        cell.alignment = { vertical: 'middle', horizontal: 'right' };
+        cell.border = {
+          top: { style: 'thin' },
+          left: { style: 'thin' },
+          bottom: { style: 'thin' },
+          right: { style: 'thin' },
+        };
+        cell.fill = {
+          type: 'pattern',
+          pattern: 'solid',
+          fgColor: { argb: 'FFD9D9D9' },
+        };
+      });
+
+      ['N', 'O', 'P'].forEach((col) => {
+        const cell = worksheet.getCell(`${col}${rowIndex}`);
+        cell.alignment = { vertical: 'middle', horizontal: 'right' };
+        cell.border = {
+          top: { style: 'thin' },
+          left: { style: 'thin' },
+          bottom: { style: 'thin' },
+          right: { style: 'thin' },
+        };
+        cell.fill = {
+          type: 'pattern',
+          pattern: 'solid',
+          fgColor: { argb: 'FFFFF2CC' },
+        };
+      });
+
+      ['Q', 'R', 'S'].forEach((col) => {
+        const cell = worksheet.getCell(`${col}${rowIndex}`);
+        cell.alignment = { vertical: 'middle', horizontal: 'right' };
+        cell.border = {
+          top: { style: 'thin' },
+          left: { style: 'thin' },
+          bottom: { style: 'thin' },
+          right: { style: 'thin' },
+        };
+      });
+
+      // Pengaturan alignment dan border untuk Q, R, dan S
+      ['Q', 'R', 'S'].forEach((col) => {
+        const cell = worksheet.getCell(`${col}${rowIndex}`);
+        cell.alignment = { vertical: 'middle', horizontal: 'right' };
+        cell.border = {
+          top: { style: 'thin' },
+          left: { style: 'thin' },
+          bottom: { style: 'thin' },
+          right: { style: 'thin' },
+        };
+      });
+
+      rowIndex++;
     });
 
     workbook.xlsx.writeBuffer().then((buffer) => {
@@ -1004,9 +1274,12 @@ export class EditMoMarketingComponent implements OnInit {
               detail.sfMonth0 = sfMonth0Value;
               detail.sfMonth1 = sfMonth1Value;
               detail.sfMonth2 = sfMonth2Value;
-              detail.moMonth0 = moMonth0Value;
-              detail.moMonth1 = moMonth1Value;
-              detail.moMonth2 = moMonth2Value;
+              detail.moMonth0 = detail.lockStatusM0 === 1 ? 0 : moMonth0Value;
+              detail.moMonth1 = detail.lockStatusM1 === 1 ? 0 : moMonth1Value;
+              detail.moMonth2 = detail.lockStatusM2 === 1 ? 0 : moMonth2Value;
+              detail.isTouchedM0 = true;
+              detail.isTouchedM1 = true;
+              detail.isTouchedM2 = true;
             }
           }
         } else {
