@@ -31,10 +31,10 @@
               [ngStyle]="{
                 'background-color': 
                   day.detail.off === 1 ? 'red' : 
-                  day.detail.semi_OFF === 1 ? 'yellow' : 
-                  day.detail.off === 0 && day.detail.semi_OFF === 0 ? 'green' : 'inherit', 
+                  day.detail.off === 0 && day.detail.semi_OFF === 0 && (day.detail.iwd_shift_1 === 1 || day.detail.iwd_shift_2 === 1 || day.detail.iwd_shift_3 === 1)  ? 'yellow' : 
+                  day.detail.semi_OFF === 1 ? 'rgb(76,199,180)' : 'inherit', 
                 'color': 
-                  day.detail.off === 1|| (day.detail.off === 0 && day.detail.semi_OFF === 0) ? 'white': 
+                day.detail.off === 0 && day.detail.semi_OFF === 0 && (day.detail.iwd_shift_1 === 1 || day.detail.iwd_shift_2 === 1 || day.detail.iwd_shift_3 === 1 ) || day.weekend || (day.detail.iot_tt_1 === 1 || day.detail.iot_tt_2 === 1 || day.detail.iot_tt_3 === 1 )  ? 'white': 
                   day.detail.semi_OFF === 1 ? 'black' : 'inherit'
               }" 
               [ngClass]="{ 'selected': day.days === selectedDay.days && day.month=== selectedDay.month  }" 
@@ -52,11 +52,11 @@
           </div>
           <div class="legend-item d-flex align-items-center mx-3 ">
             <div class="legend-color" style="width: 15px; height: 15px; background-color: yellow; margin-right: 5px;"></div>
-            <span>Semi-Off</span>
+            <span>Overtime</span>
           </div>
           <div class="legend-item d-flex align-items-center mx-3 ">
-            <div class="legend-color" style="width: 15px; height: 15px; background-color: green; margin-right: 5px;"></div>
-            <span>On</span>
+            <div class="legend-color" style="width: 15px; height: 15px; background-color: rgb(76,199,180); margin-right: 5px;"></div>
+            <span>Semi-Off</span>
           </div>
         </div>
       </div>
@@ -165,7 +165,7 @@
                           <span class="switch-slider" data-checked="On" data-unchecked="Off"></span>
                         </label>
                         <div *ngIf="isReasonRequired(ttSwitches[0])">
-                          <input type="text" placeholder="Reason" class="form-control" [(ngModel)]="ttReasons[0]" required>
+                          <input type="text" placeholder="Reason" class="form-control"  [(ngModel)]="ttReasons[0]" required>
                         </div>
                       </div>
                     </div>
@@ -255,7 +255,7 @@
                     <div class="per-hour-wrapper">
                       <h6>{{ formatHourRange(i) }}</h6> 
                       <label class="switch switch-label switch-primary" style="min-width: 10px;">
-                        <input type="checkbox" class="switch-input" [(ngModel)]="perHourSwitches[i]" [disabled]="isReasonRequiredPerHourSwitch(i)">
+                        <input type="checkbox" class="switch-input" [(ngModel)]="perHourSwitches[i]" (ngModelChange)="updateHours()" [disabled]="isReasonRequiredPerHourSwitch(i)">
                         <span class="switch-slider" data-checked="On" data-unchecked="Off"></span>
                       </label>
                       <!-- Reason input displayed if required -->

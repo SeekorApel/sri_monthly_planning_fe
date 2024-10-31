@@ -6,14 +6,13 @@ import { ApiResponse } from 'src/app/response/Response';
 import { throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { map, catchError } from 'rxjs/operators';
-
+import { WDHours } from 'src/app/models/WDHours';
 @Injectable({
   providedIn: 'root',
 })
 export class WorkDayService {
   //Isi tokenya
-  token: String =
-    'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBdXJlbCIsImV4cCI6MTcyODA0MjAzNH0.j_HYWCIoDutMP1jk2VbfOJOlbMpUEKkpaP_S4uPOu4Ajds66XOpxxA7t0nFi7zgG7YgC0KVmKPhv2wpb4XQLPA';
+
 
   constructor(private http: HttpClient) {}
 
@@ -29,6 +28,13 @@ export class WorkDayService {
       environment.apiUrlWebAdmin + '/getAllWorkDaysByDateRange/' + dateStart +'/'+dateEnd,
       { headers: this.getHeaders() }
     );
+  }  
+  updateWorkDay(workday: WorkDay): Observable<ApiResponse<WorkDay>> {
+    return this.http.post<ApiResponse<WorkDay>>(
+      environment.apiUrlWebAdmin + '/updateWorkDay',
+      workday,
+      { headers: this.getHeaders() }
+    );
   }
   turnOffShift(dateTarget: string,shift: string): Observable<ApiResponse<WorkDay[]>> {
     return this.http.post<ApiResponse<WorkDay[]>>(
@@ -39,6 +45,37 @@ export class WorkDayService {
   turnOnShift(dateTarget: string,shift: string): Observable<ApiResponse<WorkDay[]>> {
     return this.http.post<ApiResponse<WorkDay[]>>(
       environment.apiUrlWebAdmin + '/turnOnShift/' + dateTarget +'/'+shift,
+      { headers: this.getHeaders() }
+    );
+  }
+  getDWorkDayHoursByDateNormal(dateTarget: string): Observable<ApiResponse<WDHours>> {
+    return this.http.get<ApiResponse<WDHours>>(
+      environment.apiUrlWebAdmin + '/getDWorkDayHoursByDate/' + dateTarget ,
+      { headers: this.getHeaders() }
+    );
+  }
+  updateDWorkDayHours(wdhours: WDHours): Observable<ApiResponse<WDHours>> {
+    return this.http
+    .post<ApiResponse<WDHours>>(
+      environment.apiUrlWebAdmin + '/updateDWorkDayHours' ,
+      wdhours,
+      { headers: this.getHeaders() }
+    );
+  }
+  saveDWorkDayHours(wdhours: WDHours): Observable<ApiResponse<WDHours>> {
+    console.log(wdhours);
+    return this.http
+    .post<ApiResponse<WDHours>>(
+      environment.apiUrlWebAdmin + '/saveDWorkDayHours' ,
+      wdhours,
+      { headers: this.getHeaders() }
+    );
+  }
+  turnOnOvertime(dateTarget: string): Observable<ApiResponse<WorkDay>> {
+    console.log(dateTarget);
+    return this.http
+    .post<ApiResponse<WorkDay>>(
+      environment.apiUrlWebAdmin + '/turnOnOvertime/'+dateTarget ,
       { headers: this.getHeaders() }
     );
   }
@@ -56,14 +93,6 @@ export class WorkDayService {
   //       environment.apiUrlWebAdmin + '/updateBuilding',
   //       building,
   //       { headers: this.getHeaders() } // Menyertakan header
-  //     )
-  //     .pipe(
-  //       map((response) => {
-  //         return response;
-  //       }),
-  //       catchError((err) => {
-  //         return throwError(err);
-  //       })
   //     );
   // }
 
