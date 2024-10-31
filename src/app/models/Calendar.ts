@@ -1,3 +1,5 @@
+import { WorkDay } from "./WorkDay";
+
 export class Calendar {
   year: number;
   month: number;
@@ -12,11 +14,13 @@ export class Calendar {
 export class dayCalendar{
   month: number;
   days: number;
-  weekend: boolean
-  constructor( days: number, month: number, weekend: boolean) {
+  weekend: boolean;
+  detail: WorkDay;
+  constructor( days: number, month: number, weekend: boolean,  detail:WorkDay) {
     this.month = month;
     this.days = days;
     this.weekend = weekend;
+    this.detail = detail;
   }
 }
 export interface Event {
