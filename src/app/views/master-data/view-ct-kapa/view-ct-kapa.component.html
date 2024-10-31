@@ -32,61 +32,61 @@
           <!-- ID CT Kapa Column -->
           <ng-container matColumnDef="id_CT_KAPA">
             <th *matHeaderCellDef style="min-width: 130px" mat-sort-header>ID CT Kapa</th>
-            <td *matCellDef="let ctkapa">{{ ctkapa.id_CT_KAPA }}</td>
+            <td align="right" *matCellDef="let ctkapa">{{ ctkapa.id_CT_KAPA }}</td>
           </ng-container>
 
           <!-- Item Curing Column -->
           <ng-container matColumnDef="item_CURING">
             <th *matHeaderCellDef style="min-width: 130px" mat-sort-header>Item Curing</th>
-            <td *matCellDef="let ctkapa">{{ ctkapa.item_CURING }}</td>
+            <td align="left" *matCellDef="let ctkapa">{{ ctkapa.item_CURING }}</td>
           </ng-container>
 
           <!-- Type Curing Column -->
           <ng-container matColumnDef="type_CURING">
             <th *matHeaderCellDef style="min-width: 130px" mat-sort-header>Type Curing</th>
-            <td *matCellDef="let ctkapa">{{ ctkapa.type_CURING }}</td>
+            <td align="left" *matCellDef="let ctkapa">{{ ctkapa.type_CURING }}</td>
           </ng-container>
 
           <!-- Description Column -->
           <ng-container matColumnDef="description">
             <th *matHeaderCellDef style="min-width: 150px" mat-sort-header>Description</th>
-            <td *matCellDef="let ctkapa">{{ ctkapa.description }}</td>
+            <td align="left" *matCellDef="let ctkapa">{{ ctkapa.description }}</td>
           </ng-container>
 
           <!-- Cycle Time Column -->
           <ng-container matColumnDef="cycle_TIME">
             <th *matHeaderCellDef style="min-width: 130px" mat-sort-header>Cycle Time</th>
-            <td *matCellDef="let ctkapa">{{ ctkapa.cycle_TIME }}</td>
+            <td align="right" *matCellDef="let ctkapa">{{ ctkapa.cycle_TIME }}</td>
           </ng-container>
 
           <!-- Shift Column -->
           <ng-container matColumnDef="shift">
             <th *matHeaderCellDef style="min-width: 100px" mat-sort-header>Shift</th>
-            <td *matCellDef="let ctkapa">{{ ctkapa.shift }}</td>
+            <td align="right" *matCellDef="let ctkapa">{{ ctkapa.shift }}</td>
           </ng-container>
 
           <!-- Kapa Per Shift Column -->
           <ng-container matColumnDef="kapa_PERSHIFT">
             <th *matHeaderCellDef style="min-width: 130px" mat-sort-header>Kapa Per Shift</th>
-            <td *matCellDef="let ctkapa">{{ ctkapa.kapa_PERSHIFT }}</td>
+            <td align="right" *matCellDef="let ctkapa">{{ ctkapa.kapa_PERSHIFT }}</td>
           </ng-container>
 
           <!-- Last Update Data Column -->
           <ng-container matColumnDef="last_UPDATE_DATA">
             <th *matHeaderCellDef style="min-width: 140px" mat-sort-header>Last Update Data</th>
-            <td *matCellDef="let ctkapa">{{ ctkapa.last_UPDATE_DATA }}</td>
+            <td align="right" *matCellDef="let ctkapa">{{ ctkapa.last_UPDATE_DATA }}</td>
           </ng-container>
 
           <!-- Machine Column -->
           <ng-container matColumnDef="machine">
             <th *matHeaderCellDef style="min-width: 130px" mat-sort-header>Machine</th>
-            <td *matCellDef="let ctkapa">{{ ctkapa.machine }}</td>
+            <td align="left" *matCellDef="let ctkapa">{{ ctkapa.machine }}</td>
           </ng-container>
 
           <!-- Status Column -->
           <ng-container matColumnDef="status">
             <th *matHeaderCellDef style="min-width: 100px" mat-sort-header>Status</th>
-            <td *matCellDef="let ctkapa" [ngClass]="{ 'bg-success text-white': ctkapa.status === 1, 'bg-danger text-white': ctkapa.status !== 1 }">
+            <td align="left" *matCellDef="let ctkapa" [ngClass]="{ 'bg-success text-white': ctkapa.status === 1, 'bg-danger text-white': ctkapa.status !== 1 }">
               {{ ctkapa.status === 1 ? 'Active' : 'Deactive' }}
             </td>
           </ng-container>

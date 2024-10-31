@@ -7,10 +7,14 @@ import Swal from 'sweetalert2';
 declare var $: any;
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
+import { Select2OptionData } from 'ng-select2';
+import { Options } from 'select2';
 
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
+import { Product } from 'src/app/models/Product';
+import { ProductService } from 'src/app/services/master-data/product/product.service';
 
 @Component({
   selector: 'app-view-ct-curing',
@@ -26,6 +30,7 @@ export class ViewCtCuringComponent implements OnInit {
   isEditMode: boolean = false;
   file: File | null = null;
   editCTCuringForm: FormGroup;
+  products: Product[];
 
   // Pagination
   pageOfItems: Array<any>;
@@ -33,11 +38,18 @@ export class ViewCtCuringComponent implements OnInit {
   totalPages: number = 5;
   displayedColumns: string[] = ['no', 'ct_CURING_ID', 'wip', 'Part Number', 'group_COUNTER', 'var_GROUP_COUNTER', 'sequence', 'wct', 'operation_SHORT_TEXT', 'operation_UNIT', 'base_QUANTITY', 'standart_VALUE_UNIT', 'ct_SEC1', 'ct_HR1000', 'wh_NORMAL_SHIFT_0', 'wh_NORMAL_SHIFT_1', 'wh_NORMAL_SHIFT_2', 'wh_SHIFT_FRIDAY', 'wh_TOTAL_NORMAL_SHIFT', 'wh_TOTAL_SHIFT_FRIDAY', 'allow_NORMAL_SHIFT_0', 'allow_NORMAL_SHIFT_1', 'allow_NORMAL_SHIFT_2', 'allow_TOTAL', 'op_TIME_NORMAL_SHIFT_0', 'op_TIME_NORMAL_SHIFT_1', 'op_TIME_NORMAL_SHIFT_2', 'op_TIME_SHIFT_FRIDAY', 'op_TIME_NORMAL_SHIFT', 'op_TIME_TOTAL_SHIFT_FRIDAY', 'kaps_NORMAL_SHIFT_0', 'kaps_NORMAL_SHIFT_1', 'kaps_NORMAL_SHIFT_2', 'kaps_SHIFT_FRIDAY', 'kaps_TOTAL_NORMAL_SHIFT', 'kaps_TOTAL_SHIFT_FRIDAY', 'waktu_TOTAL_CT_NORMAL', 'waktu_TOTAL_CT_FRIDAY', 'status', 'action'];
   dataSource: MatTableDataSource<CT_Curing>;
+  public uomOptionData: Array<Select2OptionData>;
+  public options: Options = {
+    width: '100%',
+    minimumResultsForSearch: 0,
+  };
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  constructor(private ctcuringService: CTCuringService, private fb: FormBuilder) {
+  constructor(private ctcuringService: CTCuringService, private fb: FormBuilder,
+    private productService: ProductService 
+  ) {
     this.editCTCuringForm = this.fb.group({
       wip: ['', Validators.required],
       partNumber: ['', Validators.required],
@@ -76,10 +88,31 @@ export class ViewCtCuringComponent implements OnInit {
       waktutotalctnormal: ['', Validators.required],
       waktutotalctfriday: ['', Validators.required],
     });
+    this.loadProduct();
   }
 
   ngOnInit(): void {
     this.getAllCTCuring();
+  }
+
+  private loadProduct(): void {
+    this.productService.getAllProduct().subscribe(
+      (response: ApiResponse<Product[]>) => {
+        this.products = response.data;
+
+        if (!this.uomOptionData) {
+          this.uomOptionData = [];
+        }
+
+        this.uomOptionData = this.products.map((element) => ({
+          id: element.part_NUMBER.toString(), // Ensure the ID is a string
+          text: element.part_NUMBER.toString(), // Set the text to the name (or other property)
+        }));
+      },
+      (error) => {
+        this.errorMessage = 'Failed to load Setting: ' + error.message;
+      }
+    );
   }
 
   getAllCTCuring(): void {
@@ -107,7 +140,7 @@ export class ViewCtCuringComponent implements OnInit {
 
   resetSearch(): void {
     this.searchText = '';
-    this.onChangePage(this.ctcurings.slice(0, this.pageSize));
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
   }
 
   updateCTCuring(): void {

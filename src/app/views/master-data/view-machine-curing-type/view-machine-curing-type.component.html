@@ -32,25 +32,25 @@
           <!-- Machine Curing Type ID Column -->
           <ng-container matColumnDef="machinecuringtype_ID">
             <th *matHeaderCellDef style="min-width: 150px" mat-sort-header>Machine Curing Type ID</th>
-            <td *matCellDef="let mct">{{ mct.machinecuringtype_ID }}</td>
+            <td align="left" *matCellDef="let mct">{{ mct.machinecuringtype_ID }}</td>
           </ng-container>
 
           <!-- Setting ID Column -->
           <ng-container matColumnDef="setting_ID">
             <th *matHeaderCellDef style="min-width: 150px" mat-sort-header>Setting ID</th>
-            <td *matCellDef="let mct">{{ mct.setting_ID }}</td>
+            <td align="right" *matCellDef="let mct">{{ mct.setting_ID }}</td>
           </ng-container>
 
           <!-- Description Column -->
           <ng-container matColumnDef="description">
             <th *matHeaderCellDef style="min-width: 200px" mat-sort-header>Description</th>
-            <td *matCellDef="let mct">{{ mct.description }}</td>
+            <td align="left" *matCellDef="let mct">{{ mct.description }}</td>
           </ng-container>
 
           <!-- Cavity Column -->
           <ng-container matColumnDef="cavity">
             <th *matHeaderCellDef style="min-width: 100px" mat-sort-header>Cavity</th>
-            <td *matCellDef="let mct">{{ mct.cavity }}</td>
+            <td align="right" *matCellDef="let mct" align="right">{{ mct.cavity }}</td>
           </ng-container>
 
           <!-- Status Column -->

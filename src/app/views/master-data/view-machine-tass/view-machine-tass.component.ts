@@ -227,6 +227,7 @@ export class ViewMachineTassComponent implements OnInit {
     if (this.file) {
       const formData = new FormData();
       formData.append('file', this.file);
+      console.log("File yang diunggah:", this.file); 
       // unggah file Excel
       this.machineTassService.uploadFileExcel(formData).subscribe(
         (response) => {

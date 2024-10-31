@@ -32,31 +32,31 @@
           <!-- Detail Delivery Schedule ID Column -->
           <ng-container matColumnDef="detail_DS_ID">
             <th *matHeaderCellDef style="min-width: 200px" mat-sort-header>Detail Delivery Schedule ID</th>
-            <td *matCellDef="let detail">{{ detail.detail_DS_ID }}</td>
+            <td align="right" *matCellDef="let detail">{{ detail.detail_DS_ID }}</td>
           </ng-container>
 
           <!-- Delivery Schedule ID Column -->
           <ng-container matColumnDef="ds_ID">
             <th *matHeaderCellDef style="min-width: 200px" mat-sort-header>Delivery Schedule ID</th>
-            <td *matCellDef="let detail">{{ detail.ds_ID }}</td>
+            <td align="right" *matCellDef="let detail">{{ detail.ds_ID }}</td>
           </ng-container>
 
           <!-- Part Number Column -->
           <ng-container matColumnDef="part_NUM">
             <th *matHeaderCellDef style="min-width: 200px" mat-sort-header>Part Number</th>
-            <td *matCellDef="let detail">{{ detail.part_NUM }}</td>
+            <td align="left" *matCellDef="let detail">{{ detail.part_NUM }}</td>
           </ng-container>
 
           <!-- Date Column -->
           <ng-container matColumnDef="date_DS">
             <th *matHeaderCellDef style="min-width: 200px" mat-sort-header>Date</th>
-            <td *matCellDef="let detail">{{ detail.date_DS }}</td>
+            <td align="" *matCellDef="let detail">{{ detail.date_DS }}</td>
           </ng-container>
 
           <!-- Total Delivery Column -->
           <ng-container matColumnDef="total_DELIVERY">
             <th *matHeaderCellDef style="min-width: 150px" mat-sort-header>Total Delivery</th>
-            <td *matCellDef="let detail">{{ detail.total_DELIVERY }}</td>
+            <td *matCellDef="let detail" align="right">{{ detail.total_DELIVERY }}</td>
           </ng-container>
 
           <!-- Status Column -->
@@ -82,7 +82,6 @@
           <tr align="center" style="height: 20px" mat-header-row *matHeaderRowDef="displayedColumns"></tr>
           <tr align="center" mat-row *matRowDef="let row; columns: displayedColumns"></tr>
         </table>
-
       </div>
       <!-- Pagination -->
       <mat-paginator [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
