@@ -373,7 +373,16 @@
             <ng-container matColumnDef="minOrder">
               <th *matHeaderCellDef rowspan="2" mat-sort-header style="min-width: 150px">Minimum Order</th>
               <td *matCellDef="let mo; let i = index">
-                <input type="text" [(ngModel)]="mo.minOrder" class="text-right form-control" [class.is-invalid]="isSubmitted && (mo.minOrder === null || mo.minOrder === undefined)" style="width: 100%" (input)="onInputChangeMinimumOrder($event, mo, 'minOrder', i)" />
+                <input
+                  type="text"
+                  [ngModel]="formatNumber(mo.minOrder)"
+                  [ngClass]="{
+                    'is-invalid': isSubmitted && (mo.minOrder === null || mo.minOrder === '')
+                  }"
+                  [matTooltip]="isSubmitted && (mo.minOrder === null || mo.minOrder === '') ? 'Minimum order is required' : ''"
+                  matTooltipPosition="right"
+                  class="text-right form-control"
+                />
               </td>
             </ng-container>
 

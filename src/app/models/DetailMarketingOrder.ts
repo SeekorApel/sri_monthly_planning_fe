@@ -31,4 +31,6 @@ export class DetailMarketingOrder {
   isTouchedM0?: boolean = false;
   isTouchedM1?: boolean = false;
   isTouchedM2?: boolean = false;
+  isTouchedMinOrder: boolean = false;
+  isInvalid1? : boolean = false;
 }

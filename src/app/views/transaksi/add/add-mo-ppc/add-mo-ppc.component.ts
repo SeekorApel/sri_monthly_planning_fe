@@ -22,7 +22,7 @@ export class AddMoPpcComponent implements OnInit {
   capacity: string = '';
   isDisable: boolean = true;
   isReadOnly: boolean = true;
-  isTouched: boolean = false;
+  isInvalid: boolean = false;
   isSubmitted: boolean = false;
   formHeaderMo: FormGroup;
   isTableVisible: boolean = true;
@@ -35,6 +35,10 @@ export class AddMoPpcComponent implements OnInit {
   errorMessage: string | null = null;
   lastIdMo: string = '';
   workDay: any[];
+
+  //Error Message
+  errorMessagesMinOrder: string[] = [];
+  errorMessagesMachineType: string[] = [];
 
   //Pagination
   pageOfItems: Array<any>;
@@ -106,6 +110,7 @@ export class AddMoPpcComponent implements OnInit {
   ngOnInit(): void {
     this.getLastIdMo();
     this.loadValueTotal();
+    this.getCapacity();
     this.formHeaderMo.get('month_0')?.valueChanges.subscribe((value) => {
       this.calculateNextMonths(value);
     });
@@ -120,15 +125,13 @@ export class AddMoPpcComponent implements OnInit {
     this.subscribeToValueChanges('max_tube_capa_2');
     this.subscribeToValueChanges('max_capa_tl_2');
     this.subscribeToValueChanges('max_capa_tt_2');
-    this.getCapacity();
   }
 
-  onInputChangeMinimumOrder(event: any, mo: any, field: string, index: number) {
-    let value = event.target.value;
-    value = value.replace(/[^0-9]/g, '');
-    value = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-    mo[field] = value;
-    event.target.value = value;
+  formatNumberMo(value: any): string {
+    if (value == null || value === '') {
+      return '';
+    }
+    return Number(value).toLocaleString('id-ID');
   }
 
   lockUpdate(partNumber: number, lockStatusField: string) {
@@ -443,7 +446,9 @@ export class AddMoPpcComponent implements OnInit {
   saveAllMo() {
     this.isSubmitted = true;
 
-    const hasInvalidMinOrderOrMachineType = this.detailMarketingOrder.some((item) => item.minOrder === null || item.machineType === null);
+    const hasInvalidMinOrderOrMachineType = this.detailMarketingOrder.some(
+      (item) => item.minOrder === null || item.machineType === null
+    );
 
     if (hasInvalidMinOrderOrMachineType) {
       Swal.fire({
