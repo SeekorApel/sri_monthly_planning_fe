@@ -15,6 +15,7 @@ import { ParsingNumberService } from 'src/app/utils/parsing-number/parsing-numbe
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { ProductCurring } from 'src/app/models/ProductCurring';
 
 @Component({
   selector: 'app-add-mo-marketing',
@@ -36,6 +37,7 @@ export class AddMoMarketingComponent implements OnInit {
   detailMarketingOrder: DetailMarketingOrder[];
   headerMarketingOrder: HeaderMarketingOrder[];
   detailMarketingOrderUpdate: DetailMarketingOrder[];
+  productCurring: ProductCurring[];
   capacity: string = '';
 
   //Pagination
@@ -226,9 +228,15 @@ export class AddMoMarketingComponent implements OnInit {
     let value = input.value;
     let numericValue = value.replace(/[^0-9]/g, '');
     let data = this.detailMarketingOrder.find((dmo) => dmo.partNumber === partNumber);
+    let dataCurring = this.productCurring.find((pc) => pc.itemCuring === data.itemCuring);
     if (data) {
       data.moMonth0 = parseFloat(numericValue) || 0;
       data.isTouchedM0 = true;
+
+      if (dataCurring) {
+        dataCurring.totalCurringM0 = parseFloat(numericValue) - dataCurring.totalCurringM0;
+      }
+
       input.value = data.moMonth0.toLocaleString('id-ID');
     }
   }
@@ -345,6 +353,7 @@ export class AddMoMarketingComponent implements OnInit {
   fillAllData(data: any): void {
     this.headerMarketingOrder = data.dataHeaderMo;
     this.detailMarketingOrder = data.dataDetailMo;
+    this.productCurring = this.filterUniqueCurring(this.detailMarketingOrder);
 
     this.touchedRows = new Array(this.detailMarketingOrder.length).fill(false);
     this.dataSource = new MatTableDataSource(this.detailMarketingOrder);
@@ -399,6 +408,24 @@ export class AddMoMarketingComponent implements OnInit {
     });
 
     this.updateMonthNames(this.headerMarketingOrder);
+  }
+
+  filterUniqueCurring(dataDetailMo: DetailMarketingOrder[]): ProductCurring[] {
+    const uniqueMap: { [key: string]: ProductCurring } = {};
+
+    dataDetailMo.forEach(item => {
+      if (!uniqueMap[item.itemCuring]) {
+        uniqueMap[item.itemCuring] = {
+          itemCuring: item.itemCuring,
+          totalCurringM0: item.maxCapMonth0,
+          totalCurringM1: item.maxCapMonth1,
+          totalCurringM2: item.maxCapMonth2,
+        };
+      }
+    });
+
+    // Mengubah objek map menjadi array
+    return Object.values(uniqueMap);
   }
 
   formatNumberView(value: number) {

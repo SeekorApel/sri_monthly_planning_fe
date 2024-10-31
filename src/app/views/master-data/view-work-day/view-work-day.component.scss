@@ -14,7 +14,7 @@
 
 .per-hour-wrapper-item {
     flex: 0 0 calc(100%); /* Each item takes up half the width minus the gap */
-    flex: 0 0 calc(50% - 50px); /* Each item takes up half the width minus the gap */
+    // flex: 0 0 calc(50% - 50px); /* Each item takes up half the width minus the gap */
     box-sizing: border-box;      /* Ensure padding and border are included in width */
 }
 

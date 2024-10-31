@@ -39,6 +39,7 @@ export class ViewDetailRevisiPpcComponent implements OnInit {
   detailMarketingOrder: DetailMarketingOrder[];
   headerRevision: string;
   detailMoRevision: string;
+  capacity: string = '';
 
   // Pagination Marketing Order
   displayedColumnsMo: string[] = ['no', 'moId', 'type', 'dateValid', 'revisionPpc', 'revisionMarketing', 'month0', 'month1', 'month2', 'action'];
@@ -146,7 +147,25 @@ export class ViewDetailRevisiPpcComponent implements OnInit {
     this.getAllDetailRevision(this.month0, this.month1, this.month2, this.type);
     this.headerRevision = 'Header Marketing Order';
     this.detailMoRevision = 'Detail Marketing Order';
+    this.getCapacity();
   }
+
+  getCapacity(): void {
+    this.moService.getCapacity().subscribe(
+      (response: ApiResponse<any>) => {
+        this.capacity = response.data;
+      },
+      (error) => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Failed to load capacity ' + error.message,
+          confirmButtonText: 'OK',
+        });
+      }
+    );
+  }
+
 
   onSearchChangeMo(): void {
     this.dataSourceMo.filter = this.searchText.trim().toLowerCase();

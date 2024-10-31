@@ -29,6 +29,7 @@ export class EditMoPpcComponent implements OnInit {
   monthNames: string[] = ['', '', ''];
   allData: any;
   lastIdMo: string = '';
+  capacity: string = '';
 
   marketingOrder: MarketingOrder = new MarketingOrder();
   headerMarketingOrder: any[] = [];
@@ -130,6 +131,7 @@ export class EditMoPpcComponent implements OnInit {
     this.idMo = this.activeRoute.snapshot.paramMap.get('idMo');
     this.getAllData(this.idMo);
     this.getLastIdMo();
+    this.getCapacity();
   }
 
   lockUpdate(partNumber: number, lockStatusField: string) {
@@ -510,5 +512,21 @@ export class EditMoPpcComponent implements OnInit {
 
   navigateToViewMo() {
     this.router.navigate(['/transaksi/view-mo-ppc']);
+  }
+
+  getCapacity(): void {
+    this.moService.getCapacity().subscribe(
+      (response: ApiResponse<any>) => {
+        this.capacity = response.data;
+      },
+      (error) => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Failed to load capacity ' + error.message,
+          confirmButtonText: 'OK',
+        });
+      }
+    );
   }
 }

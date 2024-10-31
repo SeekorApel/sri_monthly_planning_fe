@@ -127,6 +127,11 @@ export class AddMoPpcComponent implements OnInit {
     this.subscribeToValueChanges('max_capa_tt_2');
   }
 
+  onMinOrderChange(mo: any, value: string) {
+    const numericValue = Number(value.replace(/\./g, '').replace(',', '.'));
+    mo.minOrder = numericValue;
+  }
+
   formatNumberMo(value: any): string {
     if (value == null || value === '') {
       return '';

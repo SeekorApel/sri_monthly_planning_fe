@@ -31,6 +31,7 @@ export class EditMoMarketingComponent implements OnInit {
   allData: any;
   lastIdMo: string = '';
   file: File | null = null;
+  capacity: string = '';
 
   //Error message
   errorMessagesM0: string[] = [];
@@ -135,6 +136,23 @@ export class EditMoMarketingComponent implements OnInit {
     this.idMo = this.activeRoute.snapshot.paramMap.get('idMo');
     this.getAllData(this.idMo);
     this.getLastIdMo();
+    this.getCapacity();
+  }
+
+  getCapacity(): void {
+    this.moService.getCapacity().subscribe(
+      (response: ApiResponse<any>) => {
+        this.capacity = response.data;
+      },
+      (error) => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Failed to load capacity ' + error.message,
+          confirmButtonText: 'OK',
+        });
+      }
+    );
   }
 
   onBlurFieldM0(index: number): void {
@@ -514,9 +532,12 @@ export class EditMoMarketingComponent implements OnInit {
       this.headerMarketingOrder.push({
         moId: this.lastIdMo,
         month: new Date(this.formHeaderMo.get(`month_${i}`)?.value),
-        wdNormal: this.parseFormattedValue(this.formHeaderMo.get(`nwd_${i}`)?.value),
+        wdNormalTire: this.parseFormattedValue(this.formHeaderMo.get(`nwd_${i}`)?.value),
+        wdNormalTube: this.parseFormattedValue(this.formHeaderMo.get(`nwt_${i}`)?.value),
+        wdOtTube: this.parseFormattedValue(this.formHeaderMo.get(`ot_wt_${i}`)?.value),
         wdOtTl: this.parseFormattedValue(this.formHeaderMo.get(`tl_ot_wd_${i}`)?.value),
         wdOtTt: this.parseFormattedValue(this.formHeaderMo.get(`tt_ot_wd_${i}`)?.value),
+        totalWdTube: this.parseFormattedValue(this.formHeaderMo.get(`total_wt_${i}`)?.value),
         totalWdTl: this.parseFormattedValue(this.formHeaderMo.get(`total_tlwd_${i}`)?.value || ''),
         totalWdTt: this.parseFormattedValue(this.formHeaderMo.get(`total_ttwd_${i}`)?.value || ''),
         maxCapTube: this.parseFormattedValue(this.formHeaderMo.get(`max_tube_capa_${i}`)?.value || ''),
@@ -532,17 +553,6 @@ export class EditMoMarketingComponent implements OnInit {
         noteOrderTl: this.formHeaderMo.get(`note_tl_m${i}`)?.value,
       });
     }
-
-    // this.detailMarketingOrder.forEach((mo) => {
-    //   mo.moId = this.lastIdMo;
-    //   mo.initialStock = parseFloat(mo.initialStock.toString().replace(/\./g, '')) || 0;
-    //   mo.sfMonth0 = parseFloat(mo.sfMonth0.toString().replace(/\./g, '')) || 0;
-    //   mo.sfMonth1 = parseFloat(mo.sfMonth1.toString().replace(/\./g, '')) || 0;
-    //   mo.sfMonth2 = parseFloat(mo.sfMonth2.toString().replace(/\./g, '')) || 0;
-    //   mo.moMonth0 = parseFloat(mo.moMonth0.toString().replace(/\./g, '')) || 0;
-    //   mo.moMonth1 = parseFloat(mo.moMonth1.toString().replace(/\./g, '')) || 0;
-    //   mo.moMonth2 = parseFloat(mo.moMonth2.toString().replace(/\./g, '')) || 0;
-    // });
 
     this.detailMarketingOrder.forEach((mo) => {
       mo.moId = this.lastIdMo;
@@ -562,17 +572,6 @@ export class EditMoMarketingComponent implements OnInit {
       detailMarketingOrder: this.detailMarketingOrder,
     };
 
-    // Swal.fire({
-    //   title: 'Success!',
-    //   text: 'Data Marketing Order successfully Revision.',
-    //   icon: 'success',
-    //   confirmButtonText: 'OK',
-    // }).then((result) => {
-    //   if (result.isConfirmed) {
-    //     console.log(revisionMo);
-    //     this.navigateToViewMo();
-    //   }
-    // });
 
     this.moService.updateMarketingOrderMarketing(revisionMo).subscribe(
       (response) => {

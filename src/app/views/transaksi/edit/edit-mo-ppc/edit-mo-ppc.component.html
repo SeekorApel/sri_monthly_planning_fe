@@ -507,7 +507,7 @@
             <!-- Description Column -->
             <ng-container matColumnDef="description" sticky>
               <th *matHeaderCellDef rowspan="2" style="min-width: 250px" mat-sort-header>Description</th>
-              <td class="text-center" *matCellDef="let mo">{{ mo.description }}</td>
+              <td class="text-left" *matCellDef="let mo">{{ mo.description }}</td>
             </ng-container>
 
             <!-- Machine Type Column -->
@@ -524,7 +524,7 @@
 
             <!-- Capacity 99,5% Column -->
             <ng-container matColumnDef="capacity">
-              <th *matHeaderCellDef rowspan="2" style="min-width: 50px" mat-sort-header>Capacity 99,5%</th>
+              <th *matHeaderCellDef rowspan="2" style="min-width: 50px" mat-sort-header>Capacity {{ capacity + '%' }}</th>
               <td class="text-right" *matCellDef="let mo">{{ formatSeparatorView(mo.capacity) }}</td>
             </ng-container>
 
