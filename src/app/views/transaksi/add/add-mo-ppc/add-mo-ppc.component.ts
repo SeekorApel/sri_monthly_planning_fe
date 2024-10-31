@@ -19,6 +19,7 @@ declare var $: any;
 })
 export class AddMoPpcComponent implements OnInit {
   //Variable Declaration
+  capacity: string = '';
   isDisable: boolean = true;
   isReadOnly: boolean = true;
   isTouched: boolean = false;
@@ -119,6 +120,7 @@ export class AddMoPpcComponent implements OnInit {
     this.subscribeToValueChanges('max_tube_capa_2');
     this.subscribeToValueChanges('max_capa_tl_2');
     this.subscribeToValueChanges('max_capa_tt_2');
+    this.getCapacity();
   }
 
   onInputChangeMinimumOrder(event: any, mo: any, field: string, index: number) {
@@ -593,5 +595,21 @@ export class AddMoPpcComponent implements OnInit {
 
   navigateToViewMo() {
     this.router.navigate(['/transaksi/view-mo-ppc']);
+  }
+
+  getCapacity(): void {
+    this.moService.getCapacity().subscribe(
+      (response: ApiResponse<any>) => {
+        this.capacity = response.data;
+      },
+      (error) => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Failed to load capacity ' + error.message,
+          confirmButtonText: 'OK',
+        });
+      }
+    );
   }
 }

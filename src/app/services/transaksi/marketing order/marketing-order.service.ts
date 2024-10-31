@@ -30,8 +30,19 @@ export class MarketingOrderService {
     return this.http.get<ApiResponse<string>>(environment.apiUrlWebAdmin + '/getLastIdMo');
   }
 
+  getCapacity(): Observable<ApiResponse<any>> {
+    return this.http.get<ApiResponse<any>>(environment.apiUrlWebAdmin + '/getCapacity');
+  }
+
+  //Get All Mo PPC
   getAllMarketingOrder(): Observable<ApiResponse<MarketingOrder[]>> {
     return this.http.get<ApiResponse<[]>>(environment.apiUrlWebAdmin + '/getAllMarketingOrderLatest');
+  }
+
+  //Get All Mo Marketing By role
+  getAllMarketingOrderMarketing(role: string): Observable<ApiResponse<MarketingOrder[]>> {
+    let params = new HttpParams().set('role', role);
+    return this.http.get<ApiResponse<[]>>(environment.apiUrlWebAdmin + '/getAllMarketingOrderMarketing', { params });
   }
 
   //get all data mo (MO, Header, Detail)

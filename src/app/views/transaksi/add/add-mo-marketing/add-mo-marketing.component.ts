@@ -36,6 +36,7 @@ export class AddMoMarketingComponent implements OnInit {
   detailMarketingOrder: DetailMarketingOrder[];
   headerMarketingOrder: HeaderMarketingOrder[];
   detailMarketingOrderUpdate: DetailMarketingOrder[];
+  capacity: string = '';
 
   //Pagination
   pageOfItems: Array<any>;
@@ -142,6 +143,7 @@ export class AddMoMarketingComponent implements OnInit {
   ngOnInit(): void {
     this.idMo = this.activeRoute.snapshot.paramMap.get('idMo');
     this.getAllData(this.idMo);
+    this.getCapacity();
   }
 
   onBlurFieldM0(index: number): void {
@@ -1305,5 +1307,21 @@ export class AddMoMarketingComponent implements OnInit {
         input.value = '';
       }
     }
+  }
+
+  getCapacity(): void {
+    this.moService.getCapacity().subscribe(
+      (response: ApiResponse<any>) => {
+        this.capacity = response.data;
+      },
+      (error) => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Failed to load capacity ' + error.message,
+          confirmButtonText: 'OK',
+        });
+      }
+    );
   }
 }

@@ -137,29 +137,115 @@ export class EditMoMarketingComponent implements OnInit {
     this.getLastIdMo();
   }
 
-  onInputChangeM0(event: Event, index: number): void {
-    const input = event.target as HTMLInputElement;
-    const value = input.value;
-    const numericValue = value.replace(/[^0-9]/g, '');
-    this.detailMarketingOrder[index].moMonth0 = parseFloat(numericValue) || 0;
-    input.value = this.detailMarketingOrder[index].moMonth0.toLocaleString('id-ID');
+  onBlurFieldM0(index: number): void {
+    let mo = this.detailMarketingOrder[index];
+    if (mo.moMonth0 != null && mo.moMonth0 !== 0) {
+      this.validateM0(mo.moMonth0, mo.partNumber);
+    }
   }
 
-  validateM0(value: any | null | undefined, partNumber: number): string | null {
-    const data = this.detailMarketingOrder.find((dmo) => dmo.partNumber === partNumber);
-    if (value < data.minOrder) {
-      return 'MO must not be less than the minimum order.';
+  onBlurFieldM1(index: number): void {
+    let mo = this.detailMarketingOrder[index];
+    if (mo.moMonth1 != null && mo.moMonth1 !== 0) {
+      this.validateM1(mo.moMonth1, mo.partNumber);
     }
+  }
 
-    if (value > data.maxCapMonth0) {
-      return 'MO cannot be more than the maximum order M1.';
+  onBlurFieldM2(index: number): void {
+    let mo = this.detailMarketingOrder[index];
+    if (mo.moMonth2 != null && mo.moMonth2 !== 0) {
+      this.validateM2(mo.moMonth2, mo.partNumber);
     }
+  }
 
-    if (value % data.qtyPerRak !== 0) {
-      return `MO must be a multiple of ${data.qtyPerRak}.`;
+  validateM0(value: any | null | 0, partNumber: number): string {
+    let data = this.detailMarketingOrder.find((dmo) => dmo.partNumber === partNumber);
+    if (data?.isTouchedM0) {
+      if (value < data.minOrder) {
+        return 'MO must not be less than the minimum order.';
+      }
+
+      if (value > data.maxCapMonth0) {
+        return 'MO cannot be more than the maximum order M1.';
+      }
+
+      if (value % data.qtyPerRak !== 0) {
+        return `MO must be a multiple of ${data.qtyPerRak}.`;
+      }
     }
-
     return null;
+  }
+
+  validateM1(value: any | null | 0, partNumber: number): string {
+    let data = this.detailMarketingOrder.find((dmo) => dmo.partNumber === partNumber);
+    if (data?.isTouchedM1) {
+      if (value < data.minOrder) {
+        return 'MO must not be less than the minimum order.';
+      }
+
+      if (value > data.maxCapMonth1) {
+        return 'MO cannot be more than the maximum order M2.';
+      }
+
+      if (value % data.qtyPerRak !== 0) {
+        return `MO must be a multiple of ${data.qtyPerRak}.`;
+      }
+    }
+    return null;
+  }
+
+  validateM2(value: any | null | 0, partNumber: number): string {
+    let data = this.detailMarketingOrder.find((dmo) => dmo.partNumber === partNumber);
+    if (data?.isTouchedM2) {
+      if (value < data.minOrder) {
+        return 'MO must not be less than the minimum order.';
+      }
+
+      if (value > data.maxCapMonth2) {
+        return 'MO cannot be more than the maximum order M3.';
+      }
+
+      if (value % data.qtyPerRak !== 0) {
+        return `MO must be a multiple of ${data.qtyPerRak}.`;
+      }
+    }
+    return null;
+  }
+
+  onInputChangeM0(event: Event, partNumber: number): void {
+    let input = event.target as HTMLInputElement;
+    let value = input.value;
+    let numericValue = value.replace(/[^0-9]/g, '');
+    let data = this.detailMarketingOrder.find((dmo) => dmo.partNumber === partNumber);
+    if (data) {
+      data.moMonth0 = parseFloat(numericValue) || 0;
+      data.isTouchedM0 = true;
+      input.value = data.moMonth0.toLocaleString('id-ID');
+    }
+  }
+
+  onInputChangeM1(event: Event, partNumber: number): void {
+    let input = event.target as HTMLInputElement;
+    let value = input.value;
+    let numericValue = value.replace(/[^0-9]/g, '');
+    let data = this.detailMarketingOrder.find((dmo) => dmo.partNumber === partNumber);
+    if (data) {
+      data.moMonth1 = parseFloat(numericValue) || 0;
+      data.isTouchedM1 = true;
+      input.value = data.moMonth1.toLocaleString('id-ID');
+    }
+  }
+
+  onInputChangeM2(event: Event, partNumber: number): void {
+    let input = event.target as HTMLInputElement;
+    let value = input.value;
+    let numericValue = value.replace(/[^0-9]/g, '');
+    let data = this.detailMarketingOrder.find((dmo) => dmo.partNumber === partNumber);
+    if (data) {
+      data.moMonth2 = parseFloat(numericValue) || 0;
+      data.isTouchedM2 = true;
+      input.value = data.moMonth2.toLocaleString('id-ID');
+    }
   }
 
   formatNumber(value: any): string {
@@ -368,33 +454,40 @@ export class EditMoMarketingComponent implements OnInit {
   }
 
   editMo(): void {
-    // const hasInvalidInput = this.detailMarketingOrder.some((mo) => {
-    //   const sfMonth0 = parseFloat(mo.sfMonth0.toString().replace(/\./g, '')) || 0;
-    //   const sfMonth1 = parseFloat(mo.sfMonth1.toString().replace(/\./g, '')) || 0;
-    //   const sfMonth2 = parseFloat(mo.sfMonth2.toString().replace(/\./g, '')) || 0;
-    //   const moMonth0 = parseFloat(mo.moMonth0.toString().replace(/\./g, '')) || 0;
-    //   const moMonth1 = parseFloat(mo.moMonth1.toString().replace(/\./g, '')) || 0;
-    //   const moMonth2 = parseFloat(mo.moMonth2.toString().replace(/\./g, '')) || 0;
+    const hasInvalidInput = this.detailMarketingOrder.some((mo) => {
+      const moMonth0 = mo.moMonth0 ? parseFloat(mo.moMonth0.toString().replace(/\./g, '')) : 0;
+      const moMonth1 = mo.moMonth1 ? parseFloat(mo.moMonth1.toString().replace(/\./g, '')) : 0;
+      const moMonth2 = mo.moMonth2 ? parseFloat(mo.moMonth2.toString().replace(/\./g, '')) : 0;
 
-    //   const minOrder = Number(mo.minOrder);
-    //   const maxCapMonth0 = Number(mo.maxCapMonth0);
-    //   const maxCapMonth1 = Number(mo.maxCapMonth1);
-    //   const maxCapMonth2 = Number(mo.maxCapMonth2);
+      const minOrder = Number(mo.minOrder);
+      const maxCapMonth0 = Number(mo.maxCapMonth0);
+      const maxCapMonth1 = Number(mo.maxCapMonth1);
+      const maxCapMonth2 = Number(mo.maxCapMonth2);
+      const qtyPerRak = Number(mo.qtyPerRak);
 
-    //   // Jika nilainya 0, maka dianggap valid, sehingga tidak masuk kategori input yang invalid
-    //   return (sfMonth0 !== 0 && (sfMonth0 < minOrder || sfMonth0 > maxCapMonth0)) || (sfMonth1 !== 0 && (sfMonth1 < minOrder || sfMonth1 > maxCapMonth1)) || (sfMonth2 !== 0 && (sfMonth2 < minOrder || sfMonth2 > maxCapMonth2)) || (moMonth0 !== 0 && (moMonth0 < minOrder || moMonth0 > maxCapMonth0)) || (moMonth1 !== 0 && (moMonth1 < minOrder || moMonth1 > maxCapMonth1)) || (moMonth2 !== 0 && (moMonth2 < minOrder || moMonth2 > maxCapMonth2));
-    // });
+      const lockStatusM0 = Number(mo.lockStatusM0);
+      const lockStatusM1 = Number(mo.lockStatusM1);
+      const lockStatusM2 = Number(mo.lockStatusM2);
 
-    // // Jika terdapat input yang tidak valid, tampilkan SweetAlert dan hentikan fungsi
-    // if (hasInvalidInput) {
-    //   Swal.fire({
-    //     title: 'Warning!',
-    //     text: 'There is an invalid input on the marketing order form.',
-    //     icon: 'warning',
-    //     confirmButtonText: 'OK',
-    //   });
-    //   return;
-    // }
+      const isInvalidMoMonth0 = (moMonth0 !== 0 && (moMonth0 < minOrder || moMonth0 > maxCapMonth0 || moMonth0 % qtyPerRak !== 0)) || (lockStatusM0 !== 1 && moMonth0 === 0);
+
+      const isInvalidMoMonth1 = (moMonth1 !== 0 && (moMonth1 < minOrder || moMonth1 > maxCapMonth1 || moMonth1 % qtyPerRak !== 0)) || (lockStatusM1 !== 1 && moMonth1 === 0);
+
+      const isInvalidMoMonth2 = (moMonth2 !== 0 && (moMonth2 < minOrder || moMonth2 > maxCapMonth2 || moMonth2 % qtyPerRak !== 0)) || (lockStatusM2 !== 1 && moMonth2 === 0);
+
+      return isInvalidMoMonth0 || isInvalidMoMonth1 || isInvalidMoMonth2;
+    });
+
+    // Jika terdapat input yang tidak valid, tampilkan SweetAlert dan hentikan fungsi
+    if (hasInvalidInput) {
+      Swal.fire({
+        title: 'Warning!',
+        text: 'There is an invalid input on the marketing order form.',
+        icon: 'warning',
+        confirmButtonText: 'OK',
+      });
+      return;
+    }
 
     const type = this.formHeaderMo.get('type')?.value;
 
@@ -575,7 +668,6 @@ export class EditMoMarketingComponent implements OnInit {
     worksheet.getCell('Q11').numFmt = '0.00';
     worksheet.getCell('R11').numFmt = '0.00';
     worksheet.getCell('S11').numFmt = '0.00';
-
 
     worksheet.mergeCells('N12:P12');
     worksheet.getCell('N12').value = 'Workday Overtime TT';
@@ -814,7 +906,6 @@ export class EditMoMarketingComponent implements OnInit {
       fgColor: { argb: 'FFDCE6F1' },
     };
 
-
     worksheet.mergeCells('E19:E20');
     worksheet.getCell('E19').value = 'Machine Type';
     worksheet.getCell('E19').alignment = { vertical: 'middle', horizontal: 'center' };
@@ -880,7 +971,6 @@ export class EditMoMarketingComponent implements OnInit {
       pattern: 'solid',
       fgColor: { argb: 'FFDCE6F1' },
     };
-
 
     worksheet.getCell('J20').value = month0;
     worksheet.getCell('J20').alignment = { vertical: 'middle', horizontal: 'center' };
@@ -1272,6 +1362,7 @@ export class EditMoMarketingComponent implements OnInit {
             if (detail) {
               detail.initialStock = initialStockValue;
               detail.sfMonth0 = sfMonth0Value;
+              ``;
               detail.sfMonth1 = sfMonth1Value;
               detail.sfMonth2 = sfMonth2Value;
               detail.moMonth0 = detail.lockStatusM0 === 1 ? 0 : moMonth0Value;

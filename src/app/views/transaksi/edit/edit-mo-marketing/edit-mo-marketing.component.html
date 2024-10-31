@@ -614,7 +614,8 @@
                   *ngIf="mo.lockStatusM0 !== 1"
                   type="text"
                   [ngModel]="formatNumber(mo.moMonth0)"
-                  (input)="onInputChangeM0($event, i)"
+                  (input)="onInputChangeM0($event, mo.partNumber)"
+                  (blur)="onBlurFieldM0(i)"
                   [ngClass]="{
                     'is-invalid': validateM0(mo.moMonth0, mo.partNumber) !== null
                   }"
@@ -629,7 +630,19 @@
             <ng-container matColumnDef="moMonth1">
               <th mat-sort-header *matHeaderCellDef style="min-width: 80px" class="child-column">{{ monthNames[1] || 'Month 1' }}</th>
               <td mat-cell *matCellDef="let mo; let i = index" class="text-right" [ngClass]="{ 'locked-background': mo.lockStatusM1 === 1 }">
-                <input *ngIf="mo.lockStatusM1 !== 1" type="text" [ngModel]="formatNumber(mo.moMonth1)" class="text-right form-control" />
+                <input
+                  *ngIf="mo.lockStatusM1 !== 1"
+                  type="text"
+                  [ngModel]="formatNumber(mo.moMonth1)"
+                  (input)="onInputChangeM1($event, mo.partNumber)"
+                  (blur)="onBlurFieldM1(i)"
+                  [ngClass]="{
+                    'is-invalid': validateM1(mo.moMonth1, mo.partNumber) !== null
+                  }"
+                  [matTooltip]="validateM1(mo.moMonth1, mo.partNumber)"
+                  matTooltipPosition="right"
+                  class="text-right form-control"
+                />
               </td>
             </ng-container>
 
@@ -637,7 +650,18 @@
             <ng-container matColumnDef="moMonth2">
               <th mat-sort-header *matHeaderCellDef style="min-width: 80px" class="child-column">{{ monthNames[2] || 'Month 2' }}</th>
               <td mat-cell *matCellDef="let mo; let i = index" class="text-right" [ngClass]="{ 'locked-background': mo.lockStatusM2 === 1 }">
-                <input *ngIf="mo.lockStatusM2 !== 1" type="text" [ngModel]="formatNumber(mo.moMonth2)" (input)="onInputChangeM2($event, i)" class="text-right form-control" />
+                <input
+                  *ngIf="mo.lockStatusM2 !== 1"
+                  type="text"
+                  [ngModel]="formatNumber(mo.moMonth2)"
+                  (input)="onInputChangeM2($event, mo.partNumber)"
+                  (blur)="onBlurFieldM2(i)"
+                  [ngClass]="{
+                    'is-invalid': validateM2(mo.moMonth2, mo.partNumber) !== null
+                  }"
+                  [matTooltip]="validateM2(mo.moMonth2, mo.partNumber)"
+                  class="text-right form-control"
+                />
               </td>
             </ng-container>
 

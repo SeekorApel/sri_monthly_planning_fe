@@ -20,6 +20,7 @@ export class ViewMoMarketingComponent implements OnInit {
   searchText: string = '';
   marketingOrders: MarketingOrder[] = [];
   dateUtil: typeof ParsingDate;
+  public role;
 
   // Pagination
   pageOfItems: Array<any>;
@@ -31,22 +32,22 @@ export class ViewMoMarketingComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(private router: Router, private moService: MarketingOrderService, private parseDateService: ParsingDateService) {
-    this.dateUtil = ParsingDate;
+    let currentUserSubject = JSON.parse(localStorage.getItem('currentUser'));
+    this.role = currentUserSubject.roles.role_name;
   }
 
   ngOnInit(): void {
-    this.getAllMarketingOrder();
+    this.getAllMarketingOrderMarketing(this.role);
   }
 
   parseDate(dateParse: string): string {
     return this.parseDateService.convertDateToString(dateParse);
   }
 
-  getAllMarketingOrder(): void {
-    this.moService.getAllMarketingOrder().subscribe(
+  getAllMarketingOrderMarketing(role: string): void {
+    this.moService.getAllMarketingOrderMarketing(role).subscribe(
       (response: ApiResponse<MarketingOrder[]>) => {
         if (response.data.length === 0) {
-          // Tampilkan SweetAlert ketika tidak ada data
           Swal.fire({
             icon: 'info',
             title: 'No Data',
