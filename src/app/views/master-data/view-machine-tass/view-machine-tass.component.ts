@@ -44,6 +44,7 @@ export class ViewMachineTassComponent implements OnInit {
   dataSource: MatTableDataSource<MachineTass>;
   buildings: Building[];
 
+
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
@@ -59,6 +60,13 @@ export class ViewMachineTassComponent implements OnInit {
     });
     this.loadBuilding();
   }
+  
+
+  getBuildingName(buildingId: number): string {
+    const building = this.buildings.find(b => b.building_ID === buildingId);
+    return building ? building.building_NAME : 'Unknown';
+  }
+  
 
   ngOnInit(): void {
     this.getAllMachineTass();

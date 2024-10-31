@@ -39,6 +39,11 @@ export class ViewDDeliveryScheduleComponent implements OnInit {
   };
   DeliverySchedules: DeliverySchedule[];
 
+  // getProductName(productID: number): string {
+  //   const pattern = this..find(p => p.pattern_ID === patternID);
+  //   return pattern ? pattern.pattern_NAME : 'Unknown';
+  // }
+
   // Pagination
   pageOfItems: Array<any>;
   pageSize: number = 5;

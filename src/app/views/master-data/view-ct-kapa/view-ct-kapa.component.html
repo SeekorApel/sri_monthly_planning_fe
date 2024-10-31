@@ -32,13 +32,13 @@
           <!-- ID CT Kapa Column -->
           <ng-container matColumnDef="id_CT_KAPA">
             <th *matHeaderCellDef style="min-width: 130px" mat-sort-header>ID CT Kapa</th>
-            <td align="right" *matCellDef="let ctkapa">{{ ctkapa.id_CT_KAPA }}</td>
+            <td align="center" *matCellDef="let ctkapa">{{ ctkapa.id_CT_KAPA }}</td>
           </ng-container>
 
           <!-- Item Curing Column -->
           <ng-container matColumnDef="item_CURING">
             <th *matHeaderCellDef style="min-width: 130px" mat-sort-header>Item Curing</th>
-            <td align="left" *matCellDef="let ctkapa">{{ ctkapa.item_CURING }}</td>
+            <td align="left" *matCellDef="let ctkapa">{{ getItemCuringType(ctkapa.item_CURING) }}</td>
           </ng-container>
 
           <!-- Type Curing Column -->
@@ -80,7 +80,7 @@
           <!-- Machine Column -->
           <ng-container matColumnDef="machine">
             <th *matHeaderCellDef style="min-width: 130px" mat-sort-header>Machine</th>
-            <td align="left" *matCellDef="let ctkapa">{{ ctkapa.machine }}</td>
+            <td *matCellDef="let ctkapa">{{ ctkapa.machine }}</td>
           </ng-container>
 
           <!-- Status Column -->

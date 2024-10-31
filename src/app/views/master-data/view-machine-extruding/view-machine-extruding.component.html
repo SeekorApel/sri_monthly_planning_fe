@@ -32,13 +32,13 @@
           <!-- ID Machine Extruding Column -->
           <ng-container matColumnDef="id_MACHINE_EXT">
             <th *matHeaderCellDef style="min-width: 130px" mat-sort-header>ID Machine Extruding</th>
-            <td align="right" *matCellDef="let me">{{ me.id_MACHINE_EXT }}</td>
+            <td align="center" *matCellDef="let me">{{ me.id_MACHINE_EXT }}</td>
           </ng-container>
 
           <!-- Building ID Column -->
           <ng-container matColumnDef="building_ID">
-            <th *matHeaderCellDef style="min-width: 130px" mat-sort-header>Building ID</th>
-            <td align="right" *matCellDef="let me">{{ me.building_ID }}</td>
+            <th *matHeaderCellDef style="min-width: 130px" mat-sort-header>Building</th>
+            <td align="left" *matCellDef="let me">{{ getBuildingName(me.building_ID) }}</td>
           </ng-container>
 
           <!-- Type Column -->

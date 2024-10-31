@@ -150,6 +150,10 @@ export class ViewProductComponent implements OnInit {
       }
     );
   }
+  getPatternName(patternID: number): string {
+    const pattern = this.patterns.find(p => p.pattern_ID === patternID);
+    return pattern ? pattern.pattern_NAME : 'Unknown';
+  }
 
   activateData(product: Product): void {
     Swal.fire({

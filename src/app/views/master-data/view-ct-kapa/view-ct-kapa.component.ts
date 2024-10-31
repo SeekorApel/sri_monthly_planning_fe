@@ -144,16 +144,12 @@ export class ViewCtKapaComponent implements OnInit {
   }
 
   onSearchChange(): void {
-    // Lakukan filter berdasarkan nama plant yang mengandung text pencarian (case-insensitive)
-    const filteredPlants = this.ctkapas.filter((ctkapa) => ctkapa.machine.toLowerCase().includes(this.searchText.toLowerCase()) || ctkapa.id_CT_KAPA.toString().includes(this.searchText));
-
-    // Tampilkan hasil filter pada halaman pertama
-    this.onChangePage(filteredPlants.slice(0, this.pageSize));
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
   }
 
   resetSearch(): void {
     this.searchText = '';
-    this.onChangePage(this.ctkapas.slice(0, this.pageSize));
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
   }
 
   updatePattern(): void {
@@ -182,6 +178,10 @@ export class ViewCtKapaComponent implements OnInit {
     this.isEditMode = true;
     this.getCtKapaByID(idCtkapa);
     $('#editModal').modal('show');
+  }
+  getItemCuringType(itemCuring: number): string {
+    const item_curing = this.itemCurings.find(c => c.item_CURING === itemCuring.toString());
+    return item_curing ? item_curing.machine_TYPE : 'Tidak Ada';
   }
 
   getCtKapaByID(idCtkapa: number): void {

@@ -32,13 +32,13 @@
           <!-- Machine Tass ID Column -->
           <ng-container matColumnDef="id_MACHINE_TASS">
             <th *matHeaderCellDef style="min-width: 130px" mat-sort-header>Machine Tass ID</th>
-            <td align="left" *matCellDef="let element">{{ element.id_MACHINE_TASS }}</td>
+            <td align="center" *matCellDef="let element">{{ element.id_MACHINE_TASS }}</td>
           </ng-container>
 
           <!-- Building ID Column -->
           <ng-container matColumnDef="building_ID">
-            <th *matHeaderCellDef style="min-width: 130px" mat-sort-header>Building ID</th>
-            <td align="right" *matCellDef="let element">{{ element.building_ID }}</td>
+            <th *matHeaderCellDef style="min-width: 130px" mat-sort-header>Building</th>
+            <td align="left" *matCellDef="let element">{{ getBuildingName(element.building_ID) }}</td>
           </ng-container>
 
           <!-- Floor Column -->

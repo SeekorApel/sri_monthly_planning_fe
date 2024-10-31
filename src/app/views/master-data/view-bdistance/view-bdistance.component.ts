@@ -55,6 +55,10 @@ export class ViewBDistanceComponent implements OnInit {
     });
     this.loadBuilding();
   }
+  getBuildingName(buildingId: number): string {
+    const building = this.buildings.find(b => b.building_ID === buildingId);
+    return building ? building.building_NAME : 'Unknown';
+  }
 
   ngOnInit(): void {
     this.getAllBuildingDistance();

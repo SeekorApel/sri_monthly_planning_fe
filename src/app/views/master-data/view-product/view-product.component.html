@@ -33,7 +33,7 @@
           <!-- Part Number Column -->
           <ng-container matColumnDef="part_NUMBER">
             <th *matHeaderCellDef style="min-width: 130px" mat-sort-header>Part Number</th>
-            <td align="right" *matCellDef="let element">{{ element.part_NUMBER }}</td>
+            <td align="center" *matCellDef="let element">{{ element.part_NUMBER }}</td>
           </ng-container>
 
           <!-- Item Curing Column -->
@@ -45,14 +45,13 @@
           <!-- Pattern ID Column -->
           <ng-container matColumnDef="pattern_ID">
             <th *matHeaderCellDef style="min-width: 130px" mat-sort-header>Pattern ID</th>
-            <td align="left" *matCellDef="let element">{{ element.pattern_ID }}</td>
+            <td align="left" *matCellDef="let element">{{ getPatternName(element.pattern_ID) }}</td>
           </ng-container>
 
           <!-- Size ID Column -->
           <ng-container matColumnDef="size_ID">
             <th *matHeaderCellDef style="min-width: 103px" mat-sort-header>Size ID</th>
             <td   align="left" *matCellDef="let element">{{ element.size_ID }}</td>
-
           </ng-container>
 
           <!-- Product Type ID Column -->
