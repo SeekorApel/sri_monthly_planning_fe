@@ -18,10 +18,9 @@ import { SizeService } from 'src/app/services/master-data/size/size.service';
 import { ProductType } from 'src/app/models/ProductType';
 import { ProductTypeService } from 'src/app/services/master-data/productType/productType.service';
 
-  import { MatTableDataSource } from '@angular/material/table';
-  import { MatSort } from '@angular/material/sort';
-  import { MatPaginator } from '@angular/material/paginator';
-
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSort } from '@angular/material/sort';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-view-product',
@@ -37,38 +36,27 @@ export class ViewProductComponent implements OnInit {
   isEditMode: boolean = false;
   file: File | null = null;
   editProductTypeForm: FormGroup;
-  public uomOptionData:  Array<Array<Select2OptionData>>;
+  public uomOptionData: Array<Array<Select2OptionData>>;
   public options: Options = {
     width: '100%',
-    minimumResultsForSearch: 0
+    minimumResultsForSearch: 0,
   };
   itemCurings: Item_Curing[];
   patterns: Pattern[];
   sizes: Size[];
-  productTypes:  ProductType[];
+  productTypes: ProductType[];
 
-  
   // Pagination
   pageOfItems: Array<any>;
   pageSize: number = 5;
   totalPages: number = 5;
-  displayedColumns: string[] = ['no', 'part_NUMBER','item_CURING',
-    'pattern_ID','size_ID','product_TYPE_ID','qty_PER_RAK','upper_CONSTANT',
-  'lower_CONSTANT','ext_DESCRIPTION','item_EXT','item_ASSY','wib_TUBE','rim','description', 'status','action'];
+  displayedColumns: string[] = ['no', 'part_NUMBER', 'item_CURING', 'pattern_ID', 'size_ID', 'product_TYPE_ID', 'qty_PER_RAK', 'upper_CONSTANT', 'lower_CONSTANT', 'ext_DESCRIPTION', 'item_EXT', 'item_ASSY', 'wib_TUBE', 'rim', 'description', 'status', 'action'];
   dataSource: MatTableDataSource<Product>;
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  constructor(
-    private productService: ProductService,
-    private fb: FormBuilder,
-    private itemCuring: ItemCuringService,
-    private pattern: PatternService,
-    private size: SizeService,
-    private  productType: ProductTypeService,
-
-  ) {
+  constructor(private productService: ProductService, private fb: FormBuilder, private itemCuring: ItemCuringService, private pattern: PatternService, private size: SizeService, private productType: ProductTypeService) {
     this.editProductTypeForm = this.fb.group({
       curing: ['', Validators.required],
       pattern: ['', Validators.required],
@@ -95,14 +83,14 @@ export class ViewProductComponent implements OnInit {
     this.itemCuring.getAllItemCuring().subscribe(
       (response: ApiResponse<Item_Curing[]>) => {
         this.itemCurings = response.data;
-  
+
         if (!this.uomOptionData) {
           this.uomOptionData = [];
         }
-  
+
         this.uomOptionData[0] = this.itemCurings.map((element) => ({
           id: element.item_CURING.toString(), // Ensure the ID is a string
-          text: element.item_CURING           // Set the text to the name (or other property)
+          text: element.item_CURING, // Set the text to the name (or other property)
         }));
       },
       (error) => {
@@ -113,13 +101,13 @@ export class ViewProductComponent implements OnInit {
   private loadSize(): void {
     this.size.getAllSize().subscribe(
       (response: ApiResponse<Size[]>) => {
-        this.sizes = response.data;  
+        this.sizes = response.data;
         if (!this.uomOptionData) {
           this.uomOptionData = [];
-        }  
+        }
         this.uomOptionData[2] = this.sizes.map((element) => ({
           id: element.size_ID.toString(), // Ensure the ID is a string
-          text: element.size_ID,           // Set the text to the name (or other property)
+          text: element.size_ID, // Set the text to the name (or other property)
         }));
       },
       (error) => {
@@ -130,13 +118,13 @@ export class ViewProductComponent implements OnInit {
   private loadProductType(): void {
     this.productType.getAllProductType().subscribe(
       (response: ApiResponse<ProductType[]>) => {
-        this.productTypes = response.data;  
+        this.productTypes = response.data;
         if (!this.uomOptionData) {
           this.uomOptionData = [];
-        }  
+        }
         this.uomOptionData[3] = this.productTypes.map((element) => ({
           id: element.product_TYPE_ID.toString(), // Ensure the ID is a string
-          text: element.product_TYPE,           // Set the text to the name (or other property)
+          text: element.product_TYPE, // Set the text to the name (or other property)
         }));
       },
       (error) => {
@@ -144,17 +132,17 @@ export class ViewProductComponent implements OnInit {
       }
     );
   }
-  
+
   private loadPattern(): void {
     this.pattern.getAllPattern().subscribe(
       (response: ApiResponse<Pattern[]>) => {
-        this.patterns = response.data;  
+        this.patterns = response.data;
         if (!this.uomOptionData) {
           this.uomOptionData = [];
-        }  
+        }
         this.uomOptionData[1] = this.patterns.map((element) => ({
           id: element.pattern_ID.toString(), // Ensure the ID is a string
-          text: element.pattern_NAME         // Set the text to the name
+          text: element.pattern_NAME, // Set the text to the name
         }));
       },
       (error) => {
@@ -162,7 +150,7 @@ export class ViewProductComponent implements OnInit {
       }
     );
   }
-  
+
   activateData(product: Product): void {
     Swal.fire({
       title: 'Are you sure?',
