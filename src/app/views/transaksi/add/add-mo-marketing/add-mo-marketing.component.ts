@@ -16,6 +16,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { ProductCurring } from 'src/app/models/ProductCurring';
+import { NumberFormatService } from 'src/app/utils/number-format/number-format.service';
 
 @Component({
   selector: 'app-add-mo-marketing',
@@ -59,7 +60,12 @@ export class AddMoMarketingComponent implements OnInit {
   //Touch status
   touchStatus: { [key: number]: { isTouchedM0: boolean } } = {};
 
-  constructor(private router: Router, private activeRoute: ActivatedRoute, private moService: MarketingOrderService, private fb: FormBuilder, private parsingNumberService: ParsingNumberService) {
+  constructor(private router: Router, 
+              private activeRoute: ActivatedRoute, 
+              private moService: MarketingOrderService, 
+              private fb: FormBuilder, 
+              private parsingNumberService: ParsingNumberService,
+              private numberService: NumberFormatService) {
     this.formHeaderMo = this.fb.group({
       date: [null, []],
       type: [null, []],
@@ -111,7 +117,6 @@ export class AddMoMarketingComponent implements OnInit {
       fdr_TL_percentage_m0: [null, []],
       fed_TT_percentage_m0: [null, []],
       fdr_TT_percentage_m0: [null, []],
-      note_tl_m0: [null, []],
       looping_m1: [null, []],
       machine_airbag_m1: [null, []],
       fed_tl_m1: [null, []],
@@ -123,7 +128,6 @@ export class AddMoMarketingComponent implements OnInit {
       fdr_TL_percentage_m1: [null, []],
       fed_TT_percentage_m1: [null, []],
       fdr_TT_percentage_m1: [null, []],
-      note_tl_m1: [null, []],
       looping_m2: [null, []],
       machine_airbag_m2: [null, []],
       fed_tl_m2: [null, []],
@@ -135,10 +139,9 @@ export class AddMoMarketingComponent implements OnInit {
       fdr_TL_percentage_m2: [null, []],
       fed_TT_percentage_m2: [null, []],
       fdr_TT_percentage_m2: [null, []],
-      note_tl_m2: [null, []],
-      upload_file_m0: [null, []],
-      upload_file_m1: [null, []],
-      upload_file_m2: [null, []],
+      note_order_tl_0: [null, []],
+      note_order_tl_1: [null, []],
+      note_order_tl_2: [null, []],
     });
   }
 

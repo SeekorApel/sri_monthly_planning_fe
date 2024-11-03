@@ -7,6 +7,7 @@ import Swal from 'sweetalert2';
 import { DetailMarketingOrder } from 'src/app/models/DetailMarketingOrder';
 import { ApiResponse } from 'src/app/response/Response';
 import { ParsingNumberService } from 'src/app/utils/parsing-number/parsing-number.service';
+import { NumberFormatService } from 'src/app/utils/number-format/number-format.service';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
@@ -52,7 +53,12 @@ export class AddMoPpcComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  constructor(private router: Router, private fb: FormBuilder, private moService: MarketingOrderService, private parsingNumberService: ParsingNumberService) {
+  constructor(
+    private router: Router,
+    private fb: FormBuilder,
+    private moService: MarketingOrderService,
+    private parsingNumberService: ParsingNumberService,
+    private numberService: NumberFormatService) {
     this.formHeaderMo = this.fb.group({
       date: [new Date().toISOString().substring(0, 10)],
       type: [null, Validators.required],
@@ -127,6 +133,14 @@ export class AddMoPpcComponent implements OnInit {
     this.subscribeToValueChanges('max_capa_tt_2');
   }
 
+  formatSeparator(value: number): string{
+    return this.numberService.formatSeparator(value);
+  }
+
+  formatDecimal(value: number): string{
+    return this.numberService.formatDecimal(value);
+  }
+
   onMinOrderChange(mo: any, value: string) {
     const numericValue = Number(value.replace(/\./g, '').replace(',', '.'));
     mo.minOrder = numericValue;
@@ -179,10 +193,6 @@ export class AddMoPpcComponent implements OnInit {
     return this.parsingNumberService.separatorTableView(num);
   }
 
-  onChangePage(pageOfItems: Array<any>) {
-    this.pageOfItems = pageOfItems;
-  }
-
   onSearchChange(): void {
     this.dataSource.filter = this.searchText.trim().toLowerCase();
   }
@@ -192,10 +202,10 @@ export class AddMoPpcComponent implements OnInit {
     this.dataSource.filter = '';
   }
 
-  onInputChange(event: any, formControlName: string): void {
+  onInputChange(event: any, controlName: string): void {
     const inputValue = event.target.value;
-    const formattedValue = this.parsingNumberService.separatorAndDecimalInput(inputValue);
-    this.formHeaderMo.get(formControlName)?.setValue(formattedValue, { emitEvent: false });
+    const formattedValue = this.numberService.formatDecimal(inputValue); // Format input
+    this.formHeaderMo.controls[controlName].setValue(formattedValue, { emitEvent: false }); // Update FormControl tanpa memicu event
   }
 
   calculateTotalTube(controlName: string): void {
@@ -458,7 +468,7 @@ export class AddMoPpcComponent implements OnInit {
     if (hasInvalidMinOrderOrMachineType) {
       Swal.fire({
         title: 'Warning!',
-        text: 'Please fill in all Minimum Order and Machine Type fields.',
+        text: 'Please fill in all fields in the Marekting Order form.',
         icon: 'warning',
         confirmButtonText: 'OK',
       });
