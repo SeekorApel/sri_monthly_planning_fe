@@ -34,4 +34,7 @@ export class DetailMarketingOrder {
   isTouchedM2?: boolean = false;
   isTouchedMinOrder: boolean = false;
   isInvalid1? : boolean = false;
+  validationMessageM0: string = '';
+  validationMessageM1: string = '';
+  validationMessageM2: string = '';
 }

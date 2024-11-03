@@ -32,6 +32,7 @@ export class AddMoMarketingComponent implements OnInit {
   formHeaderMo: FormGroup;
   isReadOnly: Boolean = true;
   isTableVisible: boolean = false;
+  isSubmitted: boolean = false;
   file: File | null = null;
   allData: any;
   marketingOrder: MarketingOrder;
@@ -60,12 +61,12 @@ export class AddMoMarketingComponent implements OnInit {
   //Touch status
   touchStatus: { [key: number]: { isTouchedM0: boolean } } = {};
 
-  constructor(private router: Router, 
-              private activeRoute: ActivatedRoute, 
-              private moService: MarketingOrderService, 
-              private fb: FormBuilder, 
-              private parsingNumberService: ParsingNumberService,
-              private numberService: NumberFormatService) {
+  constructor(private router: Router,
+    private activeRoute: ActivatedRoute,
+    private moService: MarketingOrderService,
+    private fb: FormBuilder,
+    private parsingNumberService: ParsingNumberService,
+    private numberService: NumberFormatService) {
     this.formHeaderMo = this.fb.group({
       date: [null, []],
       type: [null, []],
@@ -226,46 +227,19 @@ export class AddMoMarketingComponent implements OnInit {
     return null;
   }
 
-  onInputChangeM0(event: Event, partNumber: number): void {
-    let input = event.target as HTMLInputElement;
-    let value = input.value;
-    let numericValue = value.replace(/[^0-9]/g, '');
-    let data = this.detailMarketingOrder.find((dmo) => dmo.partNumber === partNumber);
-    let dataCurring = this.productCurring.find((pc) => pc.itemCuring === data.itemCuring);
-    if (data) {
-      data.moMonth0 = parseFloat(numericValue) || 0;
-      data.isTouchedM0 = true;
-
-      if (dataCurring) {
-        dataCurring.totalCurringM0 = parseFloat(numericValue) - dataCurring.totalCurringM0;
-      }
-
-      input.value = data.moMonth0.toLocaleString('id-ID');
-    }
+  onInputChangeM0(mo: any, value: string) {
+    const numericValue = Number(value.replace(/\./g, '').replace(',', '.'));
+    mo.moMonth0 = numericValue;
   }
 
-  onInputChangeM1(event: Event, partNumber: number): void {
-    let input = event.target as HTMLInputElement;
-    let value = input.value;
-    let numericValue = value.replace(/[^0-9]/g, '');
-    let data = this.detailMarketingOrder.find((dmo) => dmo.partNumber === partNumber);
-    if (data) {
-      data.moMonth1 = parseFloat(numericValue) || 0;
-      data.isTouchedM1 = true;
-      input.value = data.moMonth1.toLocaleString('id-ID');
-    }
+  onInputChangeM1(mo: any, value: string): void {
+    const numericValue = Number(value.replace(/\./g, '').replace(',', '.'));
+    mo.moMonth1 = numericValue;
   }
 
-  onInputChangeM2(event: Event, partNumber: number): void {
-    let input = event.target as HTMLInputElement;
-    let value = input.value;
-    let numericValue = value.replace(/[^0-9]/g, '');
-    let data = this.detailMarketingOrder.find((dmo) => dmo.partNumber === partNumber);
-    if (data) {
-      data.moMonth2 = parseFloat(numericValue) || 0;
-      data.isTouchedM2 = true;
-      input.value = data.moMonth2.toLocaleString('id-ID');
-    }
+  onInputChangeM2(mo: any, value: string): void {
+    const numericValue = Number(value.replace(/\./g, '').replace(',', '.'));
+    mo.moMonth2 = numericValue;
   }
 
   formatNumber(value: any): string {
@@ -356,7 +330,7 @@ export class AddMoMarketingComponent implements OnInit {
   fillAllData(data: any): void {
     this.headerMarketingOrder = data.dataHeaderMo;
     this.detailMarketingOrder = data.dataDetailMo;
-    this.productCurring = this.filterUniqueCurring(this.detailMarketingOrder);
+    this.productCurring = this.filterDuplicateItems(this.detailMarketingOrder);
 
     this.touchedRows = new Array(this.detailMarketingOrder.length).fill(false);
     this.dataSource = new MatTableDataSource(this.detailMarketingOrder);
@@ -413,22 +387,33 @@ export class AddMoMarketingComponent implements OnInit {
     this.updateMonthNames(this.headerMarketingOrder);
   }
 
-  filterUniqueCurring(dataDetailMo: DetailMarketingOrder[]): ProductCurring[] {
-    const uniqueMap: { [key: string]: ProductCurring } = {};
+  filterDuplicateItems(details: any[]): ProductCurring[] {
+    // Count occurrences of each itemCuring
+    const itemCount = details.reduce((acc, detail) => {
+      acc[detail.itemCuring] = (acc[detail.itemCuring] || 0) + 1;
+      return acc;
+    }, {} as Record<string, number>);
 
-    dataDetailMo.forEach(item => {
-      if (!uniqueMap[item.itemCuring]) {
-        uniqueMap[item.itemCuring] = {
-          itemCuring: item.itemCuring,
-          totalCurringM0: item.maxCapMonth0,
-          totalCurringM1: item.maxCapMonth1,
-          totalCurringM2: item.maxCapMonth2,
-        };
-      }
-    });
+    // Filter to get only items that appear more than once
+    const duplicates = Object.keys(itemCount).filter(item => itemCount[item] > 1);
 
-    // Mengubah objek map menjadi array
-    return Object.values(uniqueMap);
+    // Map the details to ProductCurring if they are in the duplicates array
+    const productCurring: ProductCurring[] = details
+      .filter(detail => duplicates.includes(detail.itemCuring))
+      .map(detail => {
+        const product = new ProductCurring();
+        product.partNumber = detail.partNumber; // Assuming partNumber is a single value
+        product.itemCuring = detail.itemCuring;
+        product.maxCapMonth0 = detail.maxCapMonth0;
+        product.maxCapMonth1 = detail.maxCapMonth1;
+        product.maxCapMonth2 = detail.maxCapMonth2;
+        product.moMonth0 = detail.moMonth0;
+        product.moMonth1 = detail.moMonth1;
+        product.moMonth2 = detail.moMonth2;
+        return product;
+      });
+
+    return productCurring;
   }
 
   formatNumberView(value: number) {
@@ -1248,29 +1233,95 @@ export class AddMoMarketingComponent implements OnInit {
   }
 
   saveMo(): void {
-    const hasInvalidInput = this.detailMarketingOrder.some((mo) => {
-      const moMonth0 = mo.moMonth0 ? parseFloat(mo.moMonth0.toString().replace(/\./g, '')) : 0;
-      const moMonth1 = mo.moMonth1 ? parseFloat(mo.moMonth1.toString().replace(/\./g, '')) : 0;
-      const moMonth2 = mo.moMonth2 ? parseFloat(mo.moMonth2.toString().replace(/\./g, '')) : 0;
 
-      const minOrder = Number(mo.minOrder);
-      const maxCapMonth0 = Number(mo.maxCapMonth0);
-      const maxCapMonth1 = Number(mo.maxCapMonth1);
-      const maxCapMonth2 = Number(mo.maxCapMonth2);
-      const qtyPerRak = Number(mo.qtyPerRak);
+    this.isSubmitted = true;
+    let hasInvalidInput = false;
+    
+    this.detailMarketingOrder.forEach((dmo) => {
+      const moMonth0 = dmo.moMonth0 ? parseFloat(dmo.moMonth0.toString().replace(/\./g, '')) : 0;
+      const moMonth1 = dmo.moMonth1 ? parseFloat(dmo.moMonth1.toString().replace(/\./g, '')) : 0;
+      const moMonth2 = dmo.moMonth2 ? parseFloat(dmo.moMonth2.toString().replace(/\./g, '')) : 0;
 
-      const lockStatusM0 = Number(mo.lockStatusM0);
-      const lockStatusM1 = Number(mo.lockStatusM1);
-      const lockStatusM2 = Number(mo.lockStatusM2);
+      dmo.validationMessageM0 = '';
+      dmo.validationMessageM1 = '';
+      dmo.validationMessageM2 = '';
 
-      const isInvalidMoMonth0 = (moMonth0 !== 0 && (moMonth0 < minOrder || moMonth0 > maxCapMonth0 || moMonth0 % qtyPerRak !== 0)) || (lockStatusM0 !== 1 && moMonth0 === 0);
+      // Validate moMonth0 and update validation messages
+      if (dmo.lockStatusM0 !== 1) {
+        if (moMonth0 === 0) {
+          dmo.validationMessageM0 = 'This field is required';
+          hasInvalidInput = true;
+        } else if (moMonth0 < dmo.minOrder) {
+          dmo.validationMessageM0 = 'MO must not be less than the minimum order.';
+          hasInvalidInput = true;
+        } else if (moMonth0 > dmo.maxCapMonth0) {
+          dmo.validationMessageM0 = 'MO cannot be more than the maximum order M1.';
+          hasInvalidInput = true;
+        } else if (moMonth0 % dmo.qtyPerRak !== 0) {
+          dmo.validationMessageM0 = `MO must be a multiple of ${dmo.qtyPerRak}.`;
+          hasInvalidInput = true;
+        }
+      }
 
-      const isInvalidMoMonth1 = (moMonth1 !== 0 && (moMonth1 < minOrder || moMonth1 > maxCapMonth1 || moMonth1 % qtyPerRak !== 0)) || (lockStatusM1 !== 1 && moMonth1 === 0);
+      // Validate moMonth1 and update validation messages
+      if (dmo.lockStatusM1 !== 1) {
+        if (moMonth1 === 0) {
+          dmo.validationMessageM1 = 'This field is required';
+          hasInvalidInput = true;
+        } else if (moMonth1 < dmo.minOrder) {
+          dmo.validationMessageM1 = 'MO must not be less than the minimum order.';
+          hasInvalidInput = true;
+        } else if (moMonth1 > dmo.maxCapMonth1) {
+          dmo.validationMessageM1 = 'MO cannot be more than the maximum order M2.';
+          hasInvalidInput = true;
+        } else if (moMonth1 % dmo.qtyPerRak !== 0) {
+          dmo.validationMessageM1 = `MO must be a multiple of ${dmo.qtyPerRak}.`;
+          hasInvalidInput = true;
+        }
+      }
 
-      const isInvalidMoMonth2 = (moMonth2 !== 0 && (moMonth2 < minOrder || moMonth2 > maxCapMonth2 || moMonth2 % qtyPerRak !== 0)) || (lockStatusM2 !== 1 && moMonth2 === 0);
+      // Validate moMonth2 and update validation messages
+      if (dmo.lockStatusM2 !== 1) {
+        if (moMonth2 === 0) {
+          dmo.validationMessageM2 = 'This field is required';
+          hasInvalidInput = true;
+        } else if (moMonth2 < dmo.minOrder) {
+          dmo.validationMessageM2 = 'MO must not be less than the minimum order.';
+          hasInvalidInput = true;
+        } else if (moMonth2 > dmo.maxCapMonth2) {
+          dmo.validationMessageM2 = 'MO cannot be more than the maximum order M3.';
+          hasInvalidInput = true;
+        } else if (moMonth2 % dmo.qtyPerRak !== 0) {
+          dmo.validationMessageM2 = `MO must be a multiple of ${dmo.qtyPerRak}.`;
+          hasInvalidInput = true;
+        }
+      }
 
-      return isInvalidMoMonth0 || isInvalidMoMonth1 || isInvalidMoMonth2;
+      //Koncian HGP
+      let data = this.productCurring.find(product => product.partNumber === dmo.partNumber);
+      if (data !== undefined) {
+        data.moMonth0 = moMonth0;
+        data.moMonth1 = moMonth1;
+        data.moMonth2 = moMonth2;
+      }
     });
+
+    const result: { [key: string]: { totalMoMonth0: number, maxCapMonth0: number } } = {};
+
+    this.productCurring.forEach(item => {
+      const { itemCuring, moMonth0, maxCapMonth0 } = item;
+      if (!result[itemCuring]) {
+        result[itemCuring] = { totalMoMonth0: 0, maxCapMonth0 };
+      }
+      result[itemCuring].totalMoMonth0 += moMonth0;
+    });
+
+    for (const [itemCuring, { totalMoMonth0, maxCapMonth0 }] of Object.entries(result)) {
+      console.log(`Total moMonth0 for ${itemCuring}: ${totalMoMonth0}`);
+      if (totalMoMonth0 > maxCapMonth0) {
+        console.log(`Warning: Total moMonth0 for ${itemCuring} (${totalMoMonth0}) exceeds maxCapMonth0 (${maxCapMonth0})`);
+      }
+    }
 
     if (hasInvalidInput) {
       Swal.fire({
@@ -1281,6 +1332,7 @@ export class AddMoMarketingComponent implements OnInit {
       });
       return;
     }
+
 
     //Parsing data text to number
     this.detailMarketingOrder.forEach((mo) => {
@@ -1293,28 +1345,28 @@ export class AddMoMarketingComponent implements OnInit {
       mo.moMonth2 = mo.moMonth2 !== null ? parseFloat(mo.moMonth2.toString().replace(/\./g, '')) : 0;
     });
 
-    this.moService.saveMarketingOrderMarketing(this.detailMarketingOrder).subscribe(
-      (response) => {
-        Swal.fire({
-          title: 'Success!',
-          text: 'Data Marketing Order Success added.',
-          icon: 'success',
-          confirmButtonText: 'OK',
-        }).then((result) => {
-          if (result.isConfirmed) {
-            this.navigateToView();
-          }
-        });
-      },
-      (error) => {
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'Failed to add marketing order details: ' + error.message,
-          confirmButtonText: 'OK',
-        });
-      }
-    );
+    // this.moService.saveMarketingOrderMarketing(this.detailMarketingOrder).subscribe(
+    //   (response) => {
+    //     Swal.fire({
+    //       title: 'Success!',
+    //       text: 'Data Marketing Order Success added.',
+    //       icon: 'success',
+    //       confirmButtonText: 'OK',
+    //     }).then((result) => {
+    //       if (result.isConfirmed) {
+    //         this.navigateToView();
+    //       }
+    //     });
+    //   },
+    //   (error) => {
+    //     Swal.fire({
+    //       icon: 'error',
+    //       title: 'Error',
+    //       text: 'Failed to add marketing order details: ' + error.message,
+    //       confirmButtonText: 'OK',
+    //     });
+    //   }
+    // );
   }
 
   onFileChange(event: Event) {

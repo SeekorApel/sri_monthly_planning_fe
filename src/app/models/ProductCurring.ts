@@ -1,12 +1,10 @@
-export class ProductCurring{
+export class ProductCurring {
+    partNumber: number;
     itemCuring: string;
-    totalCurringM0: number;
-    totalCurringM1: number;
-    totalCurringM2: number;
-    constructor(itemCuring: string) {
-        this.itemCuring = itemCuring;
-        this.totalCurringM0 = 0;
-        this.totalCurringM1 = 0;
-        this.totalCurringM2 = 0;
-    }
+    maxCapMonth0: number;
+    maxCapMonth1: number;
+    maxCapMonth2: number;
+    moMonth0: number;
+    moMonth1: number;
+    moMonth2: number;
 }
