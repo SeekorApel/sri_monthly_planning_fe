@@ -1280,6 +1280,13 @@ export class AddMoMarketingComponent implements OnInit {
     this.isSubmitted = true;
     let hasInvalidInput = false;
 
+    console.log(this.productCurring);
+
+    // Group by itemCuring and calculate total moMonth0 for each group
+    const curingGroupsM0: { [key: string]: number } = {};
+    const curingGroupsM1: { [key: string]: number } = {};
+    const curingGroupsM2: { [key: string]: number } = {};
+
     this.detailMarketingOrder.forEach((dmo) => {
       const moMonth0 = dmo.moMonth0 ? parseFloat(dmo.moMonth0.toString().replace(/\./g, '')) : 0;
       const moMonth1 = dmo.moMonth1 ? parseFloat(dmo.moMonth1.toString().replace(/\./g, '')) : 0;
@@ -1288,6 +1295,12 @@ export class AddMoMarketingComponent implements OnInit {
       dmo.validationMessageM0 = '';
       dmo.validationMessageM1 = '';
       dmo.validationMessageM2 = '';
+
+      if (dmo.itemCuring) {
+        curingGroupsM0[dmo.itemCuring] = (curingGroupsM0[dmo.itemCuring] || 0) + moMonth0;
+        curingGroupsM1[dmo.itemCuring] = (curingGroupsM1[dmo.itemCuring] || 0) + moMonth1;
+        curingGroupsM2[dmo.itemCuring] = (curingGroupsM2[dmo.itemCuring] || 0) + moMonth2;
+      }
 
       // Validate moMonth0 and update validation messages
       if (dmo.lockStatusM0 !== 1) {
@@ -1339,15 +1352,42 @@ export class AddMoMarketingComponent implements OnInit {
           hasInvalidInput = true;
         }
       }
+    });
 
-      //Koncian HGP
-      let data = this.productCurring.find((product) => product.partNumber === dmo.partNumber);
-      if (data !== undefined) {
-        data.moMonth0 = moMonth0;
-        data.moMonth1 = moMonth1;
-        data.moMonth2 = moMonth2;
+    this.detailMarketingOrder.forEach((dmo) => {
+      if (dmo.itemCuring) {
+        if (curingGroupsM0[dmo.itemCuring] > dmo.maxCapMonth0) {
+          dmo.validationMessageM0 = 'Koncian HGP M1';
+          hasInvalidInput = true;
+        }
+        if (curingGroupsM1[dmo.itemCuring] > dmo.maxCapMonth1) {
+          dmo.validationMessageM1 = 'Koncian HGP M2';
+          hasInvalidInput = true;
+        }
+        if (curingGroupsM2[dmo.itemCuring] > dmo.maxCapMonth2) {
+          dmo.validationMessageM2 = 'Koncian HGP M3';
+          hasInvalidInput = true;
+        }
       }
     });
+
+    if (hasInvalidInput) {
+      Swal.fire({
+        title: 'Warning!',
+        text: 'There is an invalid input on the marketing order form.',
+        icon: 'warning',
+        confirmButtonText: 'OK',
+      });
+      return;
+    }
+
+    // //Koncian HGP
+    // let data = this.productCurring.find((product) => product.partNumber === dmo.partNumber);
+    // if (data !== undefined) {
+    //   data.moMonth0 = moMonth0;
+    //   data.moMonth1 = moMonth1;
+    //   data.moMonth2 = moMonth2;
+    // }
 
     // const result: { [key: string]: { totalMoMonth0: number; maxCapMonth0: number } } = {};
 
@@ -1366,16 +1406,6 @@ export class AddMoMarketingComponent implements OnInit {
     //   }
     // }
 
-    if (hasInvalidInput) {
-      Swal.fire({
-        title: 'Warning!',
-        text: 'There is an invalid input on the marketing order form.',
-        icon: 'warning',
-        confirmButtonText: 'OK',
-      });
-      return;
-    }
-
     //Parsing data text to number
     this.detailMarketingOrder.forEach((mo) => {
       mo.initialStock = mo.initialStock !== null ? parseFloat(mo.initialStock.toString().replace(/\./g, '')) : 0;
@@ -1387,28 +1417,28 @@ export class AddMoMarketingComponent implements OnInit {
       mo.moMonth2 = mo.moMonth2 !== null ? parseFloat(mo.moMonth2.toString().replace(/\./g, '')) : 0;
     });
 
-    this.moService.saveMarketingOrderMarketing(this.detailMarketingOrder).subscribe(
-      (response) => {
-        Swal.fire({
-          title: 'Success!',
-          text: 'Data Marketing Order Success added.',
-          icon: 'success',
-          confirmButtonText: 'OK',
-        }).then((result) => {
-          if (result.isConfirmed) {
-            this.navigateToView();
-          }
-        });
-      },
-      (error) => {
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'Failed to add marketing order details: ' + error.message,
-          confirmButtonText: 'OK',
-        });
-      }
-    );
+    // this.moService.saveMarketingOrderMarketing(this.detailMarketingOrder).subscribe(
+    //   (response) => {
+    //     Swal.fire({
+    //       title: 'Success!',
+    //       text: 'Data Marketing Order Success added.',
+    //       icon: 'success',
+    //       confirmButtonText: 'OK',
+    //     }).then((result) => {
+    //       if (result.isConfirmed) {
+    //         this.navigateToView();
+    //       }
+    //     });
+    //   },
+    //   (error) => {
+    //     Swal.fire({
+    //       icon: 'error',
+    //       title: 'Error',
+    //       text: 'Failed to add marketing order details: ' + error.message,
+    //       confirmButtonText: 'OK',
+    //     });
+    //   }
+    // );
   }
 
   onFileChange(event: Event) {
