@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DetailMarketingOrder } from 'src/app/models/DetailMarketingOrder';
@@ -8,6 +8,10 @@ import { ApiResponse } from 'src/app/response/Response';
 import { MarketingOrderService } from 'src/app/services/transaksi/marketing order/marketing-order.service';
 import { ParsingDate } from 'src/app/utils/ParsingDate';
 import Swal from 'sweetalert2';
+import { MatTableDataSource } from '@angular/material/table';
+import { ParsingDateService } from 'src/app/utils/parsing-date/parsing-date.service';
+import { MatSort } from '@angular/material/sort';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-view-detail-revisi-marketing',
@@ -34,12 +38,27 @@ export class ViewDetailRevisiMarketingComponent implements OnInit {
   allData: any;
   headerRevision: string;
   detailMoRevision: string;
+  capacity: string = '';
+
+  // Pagination Marketing Order
+  displayedColumnsMo: string[] = ['no', 'moId', 'type', 'dateValid', 'revisionPpc', 'revisionMarketing', 'month0', 'month1', 'month2', 'action'];
+  dataSourceMo: MatTableDataSource<MarketingOrder>;
+  @ViewChild('sortMo') sortMo = new MatSort();
+  @ViewChild('paginatorMo') paginatorMo: MatPaginator;
+
+  // Pagination Detail Marketing Order
+  headersColumnsDmo: string[] = ['no', 'category', 'partNumber', 'description', 'machineType', 'capacity', 'mouldMonthlyPlan', 'qtyPerRak', 'minOrder', 'maxCap', 'initialStock', 'salesForecast', 'marketingOrder'];
+  childHeadersColumnsDmo: string[] = ['maxCapMonth0', 'maxCapMonth1', 'maxCapMonth2', 'sfMonth0', 'sfMonth1', 'sfMonth2', 'moMonth0', 'moMonth1', 'moMonth2'];
+  rowDataDmo: string[] = ['no', 'category', 'partNumber', 'description', 'machineType', 'capacity', 'mouldMonthlyPlan', 'qtyPerRak', 'minOrder', 'maxCapMonth0', 'maxCapMonth1', 'maxCapMonth2', 'initialStock', 'sfMonth0', 'sfMonth1', 'sfMonth2', 'moMonth0', 'moMonth1', 'moMonth2'];
+  dataSourceDmo: MatTableDataSource<DetailMarketingOrder>;
+  @ViewChild('sortDmo') sortDmo = new MatSort();
+  @ViewChild('paginatorDmo') paginatorDmo: MatPaginator;
 
   pageOfItems: Array<any>;
   pageSize: number = 5;
   totalPages: number = 5;
 
-  constructor(private router: Router, private moService: MarketingOrderService, private activeRoute: ActivatedRoute, private fb: FormBuilder) {
+  constructor(private router: Router, private moService: MarketingOrderService, private activeRoute: ActivatedRoute, private fb: FormBuilder, private parseDateService: ParsingDateService) {
     this.dateUtil = ParsingDate;
     this.formHeaderMo = this.fb.group({
       date: [null, []],
@@ -48,6 +67,15 @@ export class ViewDetailRevisiMarketingComponent implements OnInit {
       month_0: [null, []],
       month_1: [null, []],
       month_2: [null, []],
+      nwt_0: [null, []],
+      nwt_1: [null, []],
+      nwt_2: [null, []],
+      ot_wt_0: [null, []],
+      ot_wt_1: [null, []],
+      ot_wt_2: [null, []],
+      total_wt_0: [null, []],
+      total_wt_1: [null, []],
+      total_wt_2: [null, []],
       nwd_0: [null, []],
       nwd_1: [null, []],
       nwd_2: [null, []],
@@ -112,6 +140,7 @@ export class ViewDetailRevisiMarketingComponent implements OnInit {
       upload_file_m1: [null, []],
       upload_file_m2: [null, []],
     });
+    this.getCapacity();
   }
 
   ngOnInit(): void {
@@ -122,6 +151,35 @@ export class ViewDetailRevisiMarketingComponent implements OnInit {
     this.getAllDetailRevision(this.month0, this.month1, this.month2, this.type);
     this.headerRevision = 'Header Marketing Order';
     this.detailMoRevision = 'Detail Marketing Order';
+  }
+
+  getCapacity(): void {
+    this.moService.getCapacity().subscribe(
+      (response: ApiResponse<any>) => {
+        this.capacity = response.data;
+      },
+      (error) => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Failed to load capacity ' + error.message,
+          confirmButtonText: 'OK',
+        });
+      }
+    );
+  }
+
+  onSearchChangeMo(): void {
+    this.dataSourceMo.filter = this.searchText.trim().toLowerCase();
+  }
+
+  resetSearchMo(): void {
+    this.searchText = '';
+    this.dataSourceMo.filter = '';
+  }
+
+  parseDate(dateParse: string): string {
+    return this.parseDateService.convertDateToString(dateParse);
   }
 
   exportExcelMo(id: string): void {
@@ -149,13 +207,30 @@ export class ViewDetailRevisiMarketingComponent implements OnInit {
     this.moService.getAllDetailRevision(month0, month1, month2, type).subscribe(
       (response: ApiResponse<MarketingOrder[]>) => {
         this.marketingOrders = response.data;
-        this.onChangePage(this.marketingOrders.slice(0, this.pageSize));
+        if (this.marketingOrders.length === 0) {
+          Swal.fire({
+            icon: 'info',
+            title: 'No Data',
+            text: 'No marketing orders found.',
+            timer: 3000,
+            showConfirmButton: false,
+          });
+        } else {
+          this.dataSourceMo = new MatTableDataSource(this.marketingOrders);
+          this.dataSourceMo.sort = this.sortMo;
+          this.dataSourceMo.paginator = this.paginatorMo;
+        }
       },
       (error) => {
-        this.errorMessage = 'Failed to load plants: ' + error.message;
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Failed to load marketing orders: ' + error.message,
+          timer: 3000,
+          showConfirmButton: false,
+        });
       }
     );
-    this.onChangePage(this.marketingOrders.slice(0, this.pageSize));
   }
 
   showDataRevision(idMo: string) {
@@ -177,7 +252,11 @@ export class ViewDetailRevisiMarketingComponent implements OnInit {
 
   fillAllData(data: any) {
     this.headerMarketingOrder = data.dataHeaderMo;
+    //Fill table
     this.detailMarketingOrder = data.dataDetailMo;
+    this.dataSourceDmo = new MatTableDataSource(this.detailMarketingOrder);
+    this.dataSourceDmo.sort = this.sortDmo;
+    this.dataSourceDmo.paginator = this.paginatorDmo;
     let typeProduct = data.type;
 
     if (this.allData) {
@@ -192,72 +271,89 @@ export class ViewDetailRevisiMarketingComponent implements OnInit {
 
       // Header Month 1
       month_0: this.formatDateToString(this.headerMarketingOrder[0].month),
-      nwd_0: this.formatNumber(this.headerMarketingOrder[0].wdNormalTire),
-      tl_ot_wd_0: this.formatNumber(this.headerMarketingOrder[0].wdOtTl),
-      tt_ot_wd_0: this.formatNumber(this.headerMarketingOrder[0].wdOtTt),
-      total_tlwd_0: this.formatNumber(this.headerMarketingOrder[0].totalWdTl),
-      total_ttwd_0: this.formatNumber(this.headerMarketingOrder[0].totalWdTt),
-      max_tube_capa_0: this.formatNumber(this.headerMarketingOrder[0].maxCapTube),
-      max_capa_tl_0: this.formatNumber(this.headerMarketingOrder[0].maxCapTl),
-      max_capa_tt_0: this.formatNumber(this.headerMarketingOrder[0].maxCapTt),
-      looping_m0: this.formatNumber(this.headerMarketingOrder[0].looping),
-      machine_airbag_m0: this.formatNumber(this.headerMarketingOrder[0].airbagMachine),
-      fed_tl_m0: typeProduct === 'FED' ? this.formatNumber(this.headerMarketingOrder[0].tl) : null,
-      fed_tt_m0: typeProduct === 'FED' ? this.formatNumber(this.headerMarketingOrder[0].tt) : null,
-      fdr_tl_m0: typeProduct === 'FDR' ? this.formatNumber(this.headerMarketingOrder[0].tl) : null,
-      fdr_tt_m0: typeProduct === 'FDR' ? this.formatNumber(this.headerMarketingOrder[0].tt) : null,
-      fed_TL_percentage_m0: typeProduct === 'FED' ? this.formatNumber(this.headerMarketingOrder[0].tlPercentage) : null,
-      fed_TT_percentage_m0: typeProduct === 'FED' ? this.formatNumber(this.headerMarketingOrder[0].ttPercentage) : null,
-      fdr_TL_percentage_m0: typeProduct === 'FDR' ? this.formatNumber(this.headerMarketingOrder[0].tlPercentage) : null,
-      fdr_TT_percentage_m0: typeProduct === 'FDR' ? this.formatNumber(this.headerMarketingOrder[0].ttPercentage) : null,
-      total_mo_m0: this.formatNumber(this.headerMarketingOrder[0].totalMo),
+      nwd_0: this.formatDecimal(this.headerMarketingOrder[0].wdNormalTire),
+      nwt_0: this.formatDecimal(this.headerMarketingOrder[0].wdNormalTube),
+      ot_wt_0: this.formatDecimal(this.headerMarketingOrder[0].wdOtTube),
+      tl_ot_wd_0: this.formatDecimal(this.headerMarketingOrder[0].wdOtTl),
+      tt_ot_wd_0: this.formatDecimal(this.headerMarketingOrder[0].wdOtTt),
+      total_wt_0: this.formatDecimal(this.headerMarketingOrder[0].totalWdTube),
+      total_tlwd_0: this.formatDecimal(this.headerMarketingOrder[0].totalWdTl),
+      total_ttwd_0: this.formatDecimal(this.headerMarketingOrder[0].totalWdTt),
+      max_tube_capa_0: this.formatSeparator(this.headerMarketingOrder[0].maxCapTube),
+      max_capa_tl_0: this.formatSeparator(this.headerMarketingOrder[0].maxCapTl),
+      max_capa_tt_0: this.formatSeparator(this.headerMarketingOrder[0].maxCapTt),
+      machine_airbag_m0: this.formatSeparator(this.headerMarketingOrder[0].airbagMachine),
+      fed_tl_m0: typeProduct === 'FED' ? this.formatSeparator(this.headerMarketingOrder[0].tl) : null,
+      fed_tt_m0: typeProduct === 'FED' ? this.formatSeparator(this.headerMarketingOrder[0].tt) : null,
+      fdr_tl_m0: typeProduct === 'FDR' ? this.formatSeparator(this.headerMarketingOrder[0].tl) : null,
+      fdr_tt_m0: typeProduct === 'FDR' ? this.formatSeparator(this.headerMarketingOrder[0].tt) : null,
+      fed_TL_percentage_m0: typeProduct === 'FED' ? this.formatDecimal(this.headerMarketingOrder[0].tlPercentage) : null,
+      fed_TT_percentage_m0: typeProduct === 'FED' ? this.formatDecimal(this.headerMarketingOrder[0].ttPercentage) : null,
+      fdr_TL_percentage_m0: typeProduct === 'FDR' ? this.formatDecimal(this.headerMarketingOrder[0].tlPercentage) : null,
+      fdr_TT_percentage_m0: typeProduct === 'FDR' ? this.formatDecimal(this.headerMarketingOrder[0].ttPercentage) : null,
+      total_mo_m0: this.formatSeparator(this.headerMarketingOrder[0].totalMo),
       note_tl_m0: this.headerMarketingOrder[0].noteOrderTl,
       // Header Month 2
       month_1: this.formatDateToString(this.headerMarketingOrder[1].month),
-      nwd_1: this.formatNumber(this.headerMarketingOrder[1].wdNormalTire),
-      tl_ot_wd_1: this.formatNumber(this.headerMarketingOrder[1].wdOtTl),
-      tt_ot_wd_1: this.formatNumber(this.headerMarketingOrder[1].wdOtTt),
-      total_tlwd_1: this.formatNumber(this.headerMarketingOrder[1].totalWdTl),
-      total_ttwd_1: this.formatNumber(this.headerMarketingOrder[1].totalWdTt),
-      max_tube_capa_1: this.formatNumber(this.headerMarketingOrder[1].maxCapTube),
-      max_capa_tl_1: this.formatNumber(this.headerMarketingOrder[1].maxCapTl),
-      max_capa_tt_1: this.formatNumber(this.headerMarketingOrder[1].maxCapTt),
-      looping_m1: this.formatNumber(this.headerMarketingOrder[1].looping),
-      machine_airbag_m1: this.formatNumber(this.headerMarketingOrder[1].airbagMachine),
-      fed_tl_m1: typeProduct === 'FED' ? this.formatNumber(this.headerMarketingOrder[1].tl) : null,
-      fed_tt_m1: typeProduct === 'FED' ? this.formatNumber(this.headerMarketingOrder[1].tt) : null,
-      fdr_tl_m1: typeProduct === 'FDR' ? this.formatNumber(this.headerMarketingOrder[1].tl) : null,
-      fdr_tt_m1: typeProduct === 'FDR' ? this.formatNumber(this.headerMarketingOrder[1].tt) : null,
-      fed_TL_percentage_m1: typeProduct === 'FED' ? this.formatNumber(this.headerMarketingOrder[1].tlPercentage) : null,
-      fed_TT_percentage_m1: typeProduct === 'FED' ? this.formatNumber(this.headerMarketingOrder[1].ttPercentage) : null,
-      fdr_TL_percentage_m1: typeProduct === 'FDR' ? this.formatNumber(this.headerMarketingOrder[1].tlPercentage) : null,
-      fdr_TT_percentage_m1: typeProduct === 'FDR' ? this.formatNumber(this.headerMarketingOrder[1].ttPercentage) : null,
-      total_mo_m1: this.formatNumber(this.headerMarketingOrder[1].totalMo),
+      nwd_1: this.formatDecimal(this.headerMarketingOrder[1].wdNormalTire),
+      nwt_1: this.formatDecimal(this.headerMarketingOrder[1].wdNormalTube),
+      ot_wt_1: this.formatDecimal(this.headerMarketingOrder[1].wdOtTube),
+      tl_ot_wd_1: this.formatDecimal(this.headerMarketingOrder[1].wdOtTl),
+      tt_ot_wd_1: this.formatDecimal(this.headerMarketingOrder[1].wdOtTt),
+      total_wt_1: this.formatDecimal(this.headerMarketingOrder[1].totalWdTube),
+      total_tlwd_1: this.formatDecimal(this.headerMarketingOrder[1].totalWdTl),
+      total_ttwd_1: this.formatDecimal(this.headerMarketingOrder[1].totalWdTt),
+      max_tube_capa_1: this.formatSeparator(this.headerMarketingOrder[1].maxCapTube),
+      max_capa_tl_1: this.formatSeparator(this.headerMarketingOrder[1].maxCapTl),
+      max_capa_tt_1: this.formatSeparator(this.headerMarketingOrder[1].maxCapTt),
+      machine_airbag_m1: this.formatSeparator(this.headerMarketingOrder[1].airbagMachine),
+      fed_tl_m1: typeProduct === 'FED' ? this.formatSeparator(this.headerMarketingOrder[1].tl) : null,
+      fed_tt_m1: typeProduct === 'FED' ? this.formatSeparator(this.headerMarketingOrder[1].tt) : null,
+      fdr_tl_m1: typeProduct === 'FDR' ? this.formatSeparator(this.headerMarketingOrder[1].tl) : null,
+      fdr_tt_m1: typeProduct === 'FDR' ? this.formatSeparator(this.headerMarketingOrder[1].tt) : null,
+      fed_TL_percentage_m1: typeProduct === 'FED' ? this.formatDecimal(this.headerMarketingOrder[1].tlPercentage) : null,
+      fed_TT_percentage_m1: typeProduct === 'FED' ? this.formatDecimal(this.headerMarketingOrder[1].ttPercentage) : null,
+      fdr_TL_percentage_m1: typeProduct === 'FDR' ? this.formatDecimal(this.headerMarketingOrder[1].tlPercentage) : null,
+      fdr_TT_percentage_m1: typeProduct === 'FDR' ? this.formatDecimal(this.headerMarketingOrder[1].ttPercentage) : null,
+      total_mo_m1: this.formatSeparator(this.headerMarketingOrder[1].totalMo),
       note_tl_m1: this.headerMarketingOrder[1].noteOrderTl,
       // Header Month 3
       month_2: this.formatDateToString(this.headerMarketingOrder[2].month),
-      nwd_2: this.formatNumber(this.headerMarketingOrder[2].wdNormalTire),
-      tl_ot_wd_2: this.formatNumber(this.headerMarketingOrder[2].wdOtTl),
-      tt_ot_wd_2: this.formatNumber(this.headerMarketingOrder[2].wdOtTt),
-      total_tlwd_2: this.formatNumber(this.headerMarketingOrder[2].totalWdTl),
-      total_ttwd_2: this.formatNumber(this.headerMarketingOrder[2].totalWdTt),
-      max_tube_capa_2: this.formatNumber(this.headerMarketingOrder[2].maxCapTube),
-      max_capa_tl_2: this.formatNumber(this.headerMarketingOrder[2].maxCapTl),
-      max_capa_tt_2: this.formatNumber(this.headerMarketingOrder[2].maxCapTt),
-      looping_m2: this.formatNumber(this.headerMarketingOrder[2].looping),
-      machine_airbag_m2: this.formatNumber(this.headerMarketingOrder[2].airbagMachine),
-      fed_tl_m2: typeProduct === 'FED' ? this.formatNumber(this.headerMarketingOrder[2].tl) : null,
-      fed_tt_m2: typeProduct === 'FED' ? this.formatNumber(this.headerMarketingOrder[2].tt) : null,
-      fdr_tl_m2: typeProduct === 'FDR' ? this.formatNumber(this.headerMarketingOrder[2].tl) : null,
-      fdr_tt_m2: typeProduct === 'FDR' ? this.formatNumber(this.headerMarketingOrder[2].tt) : null,
-      fed_TL_percentage_m2: typeProduct === 'FED' ? this.formatNumber(this.headerMarketingOrder[2].tlPercentage) : null,
-      fed_TT_percentage_m2: typeProduct === 'FED' ? this.formatNumber(this.headerMarketingOrder[2].ttPercentage) : null,
-      fdr_TL_percentage_m2: typeProduct === 'FDR' ? this.formatNumber(this.headerMarketingOrder[2].tlPercentage) : null,
-      fdr_TT_percentage_m2: typeProduct === 'FDR' ? this.formatNumber(this.headerMarketingOrder[2].ttPercentage) : null,
-      total_mo_m2: this.formatNumber(this.headerMarketingOrder[2].totalMo),
+      nwd_2: this.formatDecimal(this.headerMarketingOrder[2].wdNormalTire),
+      nwt_2: this.formatDecimal(this.headerMarketingOrder[2].wdNormalTube),
+      ot_wt_2: this.formatDecimal(this.headerMarketingOrder[2].wdOtTube),
+      tl_ot_wd_2: this.formatDecimal(this.headerMarketingOrder[2].wdOtTl),
+      tt_ot_wd_2: this.formatDecimal(this.headerMarketingOrder[2].wdOtTt),
+      total_wt_2: this.formatDecimal(this.headerMarketingOrder[2].totalWdTube),
+      total_tlwd_2: this.formatDecimal(this.headerMarketingOrder[2].totalWdTl),
+      total_ttwd_2: this.formatDecimal(this.headerMarketingOrder[2].totalWdTt),
+      max_tube_capa_2: this.formatSeparator(this.headerMarketingOrder[2].maxCapTube),
+      max_capa_tl_2: this.formatSeparator(this.headerMarketingOrder[2].maxCapTl),
+      max_capa_tt_2: this.formatSeparator(this.headerMarketingOrder[2].maxCapTt),
+      machine_airbag_m2: this.formatSeparator(this.headerMarketingOrder[2].airbagMachine),
+      fed_tl_m2: typeProduct === 'FED' ? this.formatSeparator(this.headerMarketingOrder[2].tl) : null,
+      fed_tt_m2: typeProduct === 'FED' ? this.formatSeparator(this.headerMarketingOrder[2].tt) : null,
+      fdr_tl_m2: typeProduct === 'FDR' ? this.formatSeparator(this.headerMarketingOrder[2].tl) : null,
+      fdr_tt_m2: typeProduct === 'FDR' ? this.formatSeparator(this.headerMarketingOrder[2].tt) : null,
+      fed_TL_percentage_m2: typeProduct === 'FED' ? this.formatDecimal(this.headerMarketingOrder[2].tlPercentage) : null,
+      fed_TT_percentage_m2: typeProduct === 'FED' ? this.formatDecimal(this.headerMarketingOrder[2].ttPercentage) : null,
+      fdr_TL_percentage_m2: typeProduct === 'FDR' ? this.formatDecimal(this.headerMarketingOrder[2].tlPercentage) : null,
+      fdr_TT_percentage_m2: typeProduct === 'FDR' ? this.formatDecimal(this.headerMarketingOrder[2].ttPercentage) : null,
+      total_mo_m2: this.formatSeparator(this.headerMarketingOrder[2].totalMo),
       note_tl_m2: this.headerMarketingOrder[2].noteOrderTl,
     });
     this.updateMonthNames(this.headerMarketingOrder);
+  }
+
+  formatDecimal(value: number | null | undefined): string {
+    if (value === undefined || value === null || value === 0) {
+      return '0';
+    }
+    return value.toFixed(2).replace('.', ',');
+  }
+
+  formatSeparator(value: number | null | undefined): string {
+    return value != null ? value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : '0';
   }
 
   formatNumber(value: number): string {
@@ -296,20 +392,6 @@ export class ViewDetailRevisiMarketingComponent implements OnInit {
       return monthValue.toLocaleString('default', { month: 'short' }).toUpperCase();
     }
     return '';
-  }
-
-  onChangePage(pageOfItems: Array<any>) {
-    this.pageOfItems = pageOfItems;
-  }
-
-  onSearchChange(): void {
-    const filteredSearch = this.marketingOrders.filter((mo) => mo.moId.toString().includes(this.searchText) || mo.type.toLowerCase().includes(this.searchText.toLowerCase()));
-    this.onChangePage(filteredSearch.slice(0, this.pageSize));
-  }
-
-  resetSearch(): void {
-    this.searchText = '';
-    this.onChangePage(this.marketingOrders.slice(0, this.pageSize));
   }
 
   navigateToViewMo() {

@@ -61,12 +61,7 @@ export class AddMoMarketingComponent implements OnInit {
   //Touch status
   touchStatus: { [key: number]: { isTouchedM0: boolean } } = {};
 
-  constructor(private router: Router,
-    private activeRoute: ActivatedRoute,
-    private moService: MarketingOrderService,
-    private fb: FormBuilder,
-    private parsingNumberService: ParsingNumberService,
-    private numberService: NumberFormatService) {
+  constructor(private router: Router, private activeRoute: ActivatedRoute, private moService: MarketingOrderService, private fb: FormBuilder, private parsingNumberService: ParsingNumberService, private numberService: NumberFormatService) {
     this.formHeaderMo = this.fb.group({
       date: [null, []],
       type: [null, []],
@@ -395,12 +390,12 @@ export class AddMoMarketingComponent implements OnInit {
     }, {} as Record<string, number>);
 
     // Filter to get only items that appear more than once
-    const duplicates = Object.keys(itemCount).filter(item => itemCount[item] > 1);
+    const duplicates = Object.keys(itemCount).filter((item) => itemCount[item] > 1);
 
     // Map the details to ProductCurring if they are in the duplicates array
     const productCurring: ProductCurring[] = details
-      .filter(detail => duplicates.includes(detail.itemCuring))
-      .map(detail => {
+      .filter((detail) => duplicates.includes(detail.itemCuring))
+      .map((detail) => {
         const product = new ProductCurring();
         product.partNumber = detail.partNumber; // Assuming partNumber is a single value
         product.itemCuring = detail.itemCuring;
@@ -461,48 +456,112 @@ export class AddMoMarketingComponent implements OnInit {
       bold: true,
     };
 
-    worksheet.mergeCells('N9:P9');
-    worksheet.getCell('N9').value = 'Description';
-    worksheet.getCell('N9').alignment = { vertical: 'middle', horizontal: 'left' };
-    setBorder(worksheet.getCell('N9'));
-    worksheet.getCell('N9').font = { name: 'Calibri Body', size: 11, bold: true, italic: true };
-    worksheet.getCell('N9').fill = {
+    worksheet.mergeCells('N6:P6');
+    worksheet.getCell('N6').value = 'Description';
+    worksheet.getCell('N6').alignment = { vertical: 'middle', horizontal: 'left' };
+    setBorder(worksheet.getCell('N6'));
+    worksheet.getCell('N6').font = { name: 'Calibri Body', size: 11, bold: true, italic: true };
+    worksheet.getCell('N6').fill = {
       type: 'pattern',
       pattern: 'solid',
       fgColor: { argb: 'FFDCE6F1' },
     };
 
+    worksheet.getCell('Q6').value = month0;
+    setBorder(worksheet.getCell('Q6'));
+
+    worksheet.getCell('R6').value = month1;
+    setBorder(worksheet.getCell('R6'));
+
+    worksheet.getCell('S6').value = month2;
+    setBorder(worksheet.getCell('S6'));
+
+    ['Q6', 'R6', 'S6'].forEach((cell) => {
+      const cellRef = worksheet.getCell(cell);
+      cellRef.alignment = { vertical: 'middle', horizontal: 'center' };
+      cellRef.font = {
+        name: 'Calibri Body',
+        size: 11,
+        bold: true,
+        italic: true,
+      };
+
+      // Menambahkan warna pada sel
+      cellRef.fill = {
+        type: 'pattern',
+        pattern: 'solid',
+        fgColor: { argb: 'FFDCE6F1' },
+      };
+    });
+
+    worksheet.mergeCells('N7:P7');
+    worksheet.getCell('N7').value = 'Normal Working Day';
+    worksheet.getCell('N7').alignment = { vertical: 'middle', horizontal: 'left' };
+    worksheet.getCell('N7').font = { name: 'Calibri Body', size: 11, bold: true, italic: true };
+    setBorder(worksheet.getCell('N7'));
+
+    worksheet.getCell('Q7').value = this.headerMarketingOrder[0].wdNormalTire; // "Month 1"
+    worksheet.getCell('R7').value = this.headerMarketingOrder[1].wdNormalTire; // "Month 2"
+    worksheet.getCell('S7').value = this.headerMarketingOrder[2].wdNormalTire; // "Month 3"
+    worksheet.getCell('Q7').numFmt = '0.00';
+    worksheet.getCell('R7').numFmt = '0.00';
+    worksheet.getCell('S7').numFmt = '0.00';
+
+    worksheet.mergeCells('N8:P8');
+    worksheet.getCell('N8').value = 'Normal Working Day Tube';
+    worksheet.getCell('N8').alignment = { vertical: 'middle', horizontal: 'left' };
+    worksheet.getCell('N8').font = { name: 'Calibri Body', size: 11, bold: true, italic: true };
+    setBorder(worksheet.getCell('N8'));
+
+    worksheet.getCell('Q8').value = this.headerMarketingOrder[0].wdNormalTube; // "Month 1"
+    worksheet.getCell('R8').value = this.headerMarketingOrder[1].wdNormalTube; // "Month 2"
+    worksheet.getCell('S8').value = this.headerMarketingOrder[2].wdNormalTube; // "Month 3"
+    worksheet.getCell('Q8').numFmt = '0.00';
+    worksheet.getCell('R8').numFmt = '0.00';
+    worksheet.getCell('S8').numFmt = '0.00';
+
+    worksheet.mergeCells('N9:P9');
+    worksheet.getCell('N9').value = 'Workday Overtime Tube';
+    worksheet.getCell('N9').alignment = { vertical: 'middle', horizontal: 'left' };
+    worksheet.getCell('N9').font = { name: 'Calibri Body', size: 11, bold: true, italic: true };
+    setBorder(worksheet.getCell('N9'));
+    worksheet.getCell('Q9').value = this.headerMarketingOrder[0].wdOtTube; // "Month 1"
+    worksheet.getCell('R9').value = this.headerMarketingOrder[1].wdOtTube; // "Month 2"
+    worksheet.getCell('S9').value = this.headerMarketingOrder[2].wdOtTube; // "Month 3"
+    worksheet.getCell('Q9').numFmt = '0.00';
+    worksheet.getCell('R9').numFmt = '0.00';
+    worksheet.getCell('S9').numFmt = '0.00';
+
     worksheet.mergeCells('N10:P10');
-    worksheet.getCell('N10').value = 'Workday Normal / Workday Tube';
+    worksheet.getCell('N10').value = 'Workday Overtime TL';
     worksheet.getCell('N10').alignment = { vertical: 'middle', horizontal: 'left' };
     worksheet.getCell('N10').font = { name: 'Calibri Body', size: 11, bold: true, italic: true };
     setBorder(worksheet.getCell('N10'));
-
-    worksheet.getCell('Q10').value = this.headerMarketingOrder[0].wdNormalTire; // "Month 1"
-    worksheet.getCell('R10').value = this.headerMarketingOrder[1].wdNormalTire; // "Month 2"
-    worksheet.getCell('S10').value = this.headerMarketingOrder[2].wdNormalTire; // "Month 3"
+    worksheet.getCell('Q10').value = this.headerMarketingOrder[0].wdOtTl; // "Month 1"
+    worksheet.getCell('R10').value = this.headerMarketingOrder[1].wdOtTl; // "Month 2"
+    worksheet.getCell('S10').value = this.headerMarketingOrder[2].wdOtTl; // "Month 3"
     worksheet.getCell('Q10').numFmt = '0.00';
     worksheet.getCell('R10').numFmt = '0.00';
     worksheet.getCell('S10').numFmt = '0.00';
 
     worksheet.mergeCells('N11:P11');
-    worksheet.getCell('N11').value = 'Workday Overtime TL';
+    worksheet.getCell('N11').value = 'Workday Overtime TT';
     worksheet.getCell('N11').alignment = { vertical: 'middle', horizontal: 'left' };
     setBorder(worksheet.getCell('N11'));
-    worksheet.getCell('Q11').value = this.headerMarketingOrder[0].wdOtTl; // "Month 1"
-    worksheet.getCell('R11').value = this.headerMarketingOrder[1].wdOtTl; // "Month 2"
-    worksheet.getCell('S11').value = this.headerMarketingOrder[2].wdOtTl; // "Month 3"
+    worksheet.getCell('Q11').value = this.headerMarketingOrder[0].wdOtTt; // "Month 1"
+    worksheet.getCell('R11').value = this.headerMarketingOrder[1].wdOtTt; // "Month 2"
+    worksheet.getCell('S11').value = this.headerMarketingOrder[2].wdOtTt; // "Month 3"
     worksheet.getCell('Q11').numFmt = '0.00';
     worksheet.getCell('R11').numFmt = '0.00';
     worksheet.getCell('S11').numFmt = '0.00';
 
     worksheet.mergeCells('N12:P12');
-    worksheet.getCell('N12').value = 'Workday Overtime TT';
+    worksheet.getCell('N12').value = 'Total Workday Tube';
     worksheet.getCell('N12').alignment = { vertical: 'middle', horizontal: 'left' };
     setBorder(worksheet.getCell('N12'));
-    worksheet.getCell('Q12').value = this.headerMarketingOrder[1].wdOtTt; // "Month 1"
-    worksheet.getCell('R12').value = this.headerMarketingOrder[2].wdOtTt; // "Month 2"
-    worksheet.getCell('S12').value = this.headerMarketingOrder[0].wdOtTt; // "Month 3"
+    worksheet.getCell('Q12').value = this.headerMarketingOrder[0].totalWdTube; // "Month 1"
+    worksheet.getCell('R12').value = this.headerMarketingOrder[1].totalWdTube; // "Month 2"
+    worksheet.getCell('S12').value = this.headerMarketingOrder[2].totalWdTube; // "Month 3"
     worksheet.getCell('Q12').numFmt = '0.00';
     worksheet.getCell('R12').numFmt = '0.00';
     worksheet.getCell('S12').numFmt = '0.00';
@@ -511,9 +570,9 @@ export class AddMoMarketingComponent implements OnInit {
     worksheet.getCell('N13').value = 'Total Workday Tire TL';
     worksheet.getCell('N13').alignment = { vertical: 'middle', horizontal: 'left' };
     setBorder(worksheet.getCell('N13'));
-    worksheet.getCell('Q13').value = this.headerMarketingOrder[1].totalWdTl; // "Month 1"
-    worksheet.getCell('R13').value = this.headerMarketingOrder[2].totalWdTl; // "Month 2"
-    worksheet.getCell('S13').value = this.headerMarketingOrder[0].totalWdTl; // "Month 3"
+    worksheet.getCell('Q13').value = this.headerMarketingOrder[0].totalWdTl; // "Month 1"
+    worksheet.getCell('R13').value = this.headerMarketingOrder[1].totalWdTl; // "Month 2"
+    worksheet.getCell('S13').value = this.headerMarketingOrder[2].totalWdTl; // "Month 3"
     worksheet.getCell('Q13').numFmt = '0.00';
     worksheet.getCell('R13').numFmt = '0.00';
     worksheet.getCell('S13').numFmt = '0.00';
@@ -522,9 +581,9 @@ export class AddMoMarketingComponent implements OnInit {
     worksheet.getCell('N14').value = 'Total Workday Tire TT';
     worksheet.getCell('N14').alignment = { vertical: 'middle', horizontal: 'left' };
     setBorder(worksheet.getCell('N14'));
-    worksheet.getCell('Q14').value = this.headerMarketingOrder[1].totalWdTt; // "Month 1"
-    worksheet.getCell('R14').value = this.headerMarketingOrder[2].totalWdTt; // "Month 2"
-    worksheet.getCell('S14').value = this.headerMarketingOrder[0].totalWdTt; // "Month 3"
+    worksheet.getCell('Q14').value = this.headerMarketingOrder[0].totalWdTt; // "Month 1"
+    worksheet.getCell('R14').value = this.headerMarketingOrder[1].totalWdTt; // "Month 2"
+    worksheet.getCell('S14').value = this.headerMarketingOrder[2].totalWdTt; // "Month 3"
     worksheet.getCell('Q14').numFmt = '0.00';
     worksheet.getCell('R14').numFmt = '0.00';
     worksheet.getCell('S14').numFmt = '0.00';
@@ -619,38 +678,11 @@ export class AddMoMarketingComponent implements OnInit {
       worksheet.getCell(cell).alignment = { vertical: 'middle', horizontal: 'center' };
     });
 
-    for (let i = 9; i <= 20; i++) {
+    for (let i = 6; i <= 20; i++) {
       worksheet.getRow(i).height = 20;
     }
 
-    worksheet.getCell('Q9').value = month0;
-    setBorder(worksheet.getCell('Q9'));
-
-    worksheet.getCell('R9').value = month1;
-    setBorder(worksheet.getCell('R9'));
-
-    worksheet.getCell('S9').value = month2;
-    setBorder(worksheet.getCell('S9'));
-
-    ['Q9', 'R9', 'S9'].forEach((cell) => {
-      const cellRef = worksheet.getCell(cell);
-      cellRef.alignment = { vertical: 'middle', horizontal: 'center' };
-      cellRef.font = {
-        name: 'Calibri Body',
-        size: 11,
-        bold: true,
-        italic: true,
-      };
-
-      // Menambahkan warna pada sel
-      cellRef.fill = {
-        type: 'pattern',
-        pattern: 'solid',
-        fgColor: { argb: 'FFDCE6F1' },
-      };
-    });
-
-    for (let row = 10; row <= 18; row++) {
+    for (let row = 7; row <= 18; row++) {
       setBorder(worksheet.getCell(`Q${row}`));
       setBorder(worksheet.getCell(`R${row}`));
       setBorder(worksheet.getCell(`S${row}`));
@@ -666,7 +698,7 @@ export class AddMoMarketingComponent implements OnInit {
       };
     });
 
-    ['Q10', 'Q11', 'Q12', 'Q13', 'Q14', 'Q15', 'Q16', 'Q17'].forEach((cell) => {
+    ['Q7', 'Q8', 'Q9', 'Q10', 'Q11', 'Q12', 'Q13', 'Q14', 'Q15', 'Q16', 'Q17'].forEach((cell) => {
       const cellRef = worksheet.getCell(cell);
       cellRef.alignment = { vertical: 'middle', horizontal: 'right' };
       cellRef.font = {
@@ -677,7 +709,7 @@ export class AddMoMarketingComponent implements OnInit {
       };
     });
 
-    ['R10', 'R11', 'R12', 'R13', 'R14', 'R15', 'R16', 'R17'].forEach((cell) => {
+    ['R7', 'R8', 'R9', 'R10', 'R11', 'R12', 'R13', 'R14', 'R15', 'R16', 'R17'].forEach((cell) => {
       const cellRef = worksheet.getCell(cell);
       cellRef.alignment = { vertical: 'middle', horizontal: 'right' };
       cellRef.font = {
@@ -688,7 +720,7 @@ export class AddMoMarketingComponent implements OnInit {
       };
     });
 
-    ['S10', 'S11', 'S12', 'S13', 'S14', 'S15', 'S16', 'S17'].forEach((cell) => {
+    ['S7', 'S8', 'S9', 'S10', 'S11', 'S12', 'S13', 'S14', 'S15', 'S16', 'S17'].forEach((cell) => {
       const cellRef = worksheet.getCell(cell);
       cellRef.alignment = { vertical: 'middle', horizontal: 'right' };
       cellRef.font = {
@@ -1027,7 +1059,19 @@ export class AddMoMarketingComponent implements OnInit {
         };
       }
 
-      ['B', 'C', 'D', 'E'].forEach((col) => {
+      //Style column description
+      ['D'].forEach((col) => {
+        const cell = worksheet.getCell(`${col}${rowIndex}`);
+        cell.alignment = { vertical: 'middle', horizontal: 'left' };
+        cell.border = {
+          top: { style: 'thin' },
+          left: { style: 'thin' },
+          bottom: { style: 'thin' },
+          right: { style: 'thin' },
+        };
+      });
+
+      ['B', 'C', 'E'].forEach((col) => {
         const cell = worksheet.getCell(`${col}${rowIndex}`);
         cell.alignment = { vertical: 'middle', horizontal: 'center' };
         cell.border = {
@@ -1233,10 +1277,9 @@ export class AddMoMarketingComponent implements OnInit {
   }
 
   saveMo(): void {
-
     this.isSubmitted = true;
     let hasInvalidInput = false;
-    
+
     this.detailMarketingOrder.forEach((dmo) => {
       const moMonth0 = dmo.moMonth0 ? parseFloat(dmo.moMonth0.toString().replace(/\./g, '')) : 0;
       const moMonth1 = dmo.moMonth1 ? parseFloat(dmo.moMonth1.toString().replace(/\./g, '')) : 0;
@@ -1298,7 +1341,7 @@ export class AddMoMarketingComponent implements OnInit {
       }
 
       //Koncian HGP
-      let data = this.productCurring.find(product => product.partNumber === dmo.partNumber);
+      let data = this.productCurring.find((product) => product.partNumber === dmo.partNumber);
       if (data !== undefined) {
         data.moMonth0 = moMonth0;
         data.moMonth1 = moMonth1;
@@ -1306,22 +1349,22 @@ export class AddMoMarketingComponent implements OnInit {
       }
     });
 
-    const result: { [key: string]: { totalMoMonth0: number, maxCapMonth0: number } } = {};
+    // const result: { [key: string]: { totalMoMonth0: number; maxCapMonth0: number } } = {};
 
-    this.productCurring.forEach(item => {
-      const { itemCuring, moMonth0, maxCapMonth0 } = item;
-      if (!result[itemCuring]) {
-        result[itemCuring] = { totalMoMonth0: 0, maxCapMonth0 };
-      }
-      result[itemCuring].totalMoMonth0 += moMonth0;
-    });
+    // this.productCurring.forEach((item) => {
+    //   const { itemCuring, moMonth0, maxCapMonth0 } = item;
+    //   if (!result[itemCuring]) {
+    //     result[itemCuring] = { totalMoMonth0: 0, maxCapMonth0 };
+    //   }
+    //   result[itemCuring].totalMoMonth0 += moMonth0;
+    // });
 
-    for (const [itemCuring, { totalMoMonth0, maxCapMonth0 }] of Object.entries(result)) {
-      console.log(`Total moMonth0 for ${itemCuring}: ${totalMoMonth0}`);
-      if (totalMoMonth0 > maxCapMonth0) {
-        console.log(`Warning: Total moMonth0 for ${itemCuring} (${totalMoMonth0}) exceeds maxCapMonth0 (${maxCapMonth0})`);
-      }
-    }
+    // for (const [itemCuring, { totalMoMonth0, maxCapMonth0 }] of Object.entries(result)) {
+    //   console.log(`Total moMonth0 for ${itemCuring}: ${totalMoMonth0}`);
+    //   if (totalMoMonth0 > maxCapMonth0) {
+    //     console.log(`Warning: Total moMonth0 for ${itemCuring} (${totalMoMonth0}) exceeds maxCapMonth0 (${maxCapMonth0})`);
+    //   }
+    // }
 
     if (hasInvalidInput) {
       Swal.fire({
@@ -1332,7 +1375,6 @@ export class AddMoMarketingComponent implements OnInit {
       });
       return;
     }
-
 
     //Parsing data text to number
     this.detailMarketingOrder.forEach((mo) => {
@@ -1345,28 +1387,28 @@ export class AddMoMarketingComponent implements OnInit {
       mo.moMonth2 = mo.moMonth2 !== null ? parseFloat(mo.moMonth2.toString().replace(/\./g, '')) : 0;
     });
 
-    // this.moService.saveMarketingOrderMarketing(this.detailMarketingOrder).subscribe(
-    //   (response) => {
-    //     Swal.fire({
-    //       title: 'Success!',
-    //       text: 'Data Marketing Order Success added.',
-    //       icon: 'success',
-    //       confirmButtonText: 'OK',
-    //     }).then((result) => {
-    //       if (result.isConfirmed) {
-    //         this.navigateToView();
-    //       }
-    //     });
-    //   },
-    //   (error) => {
-    //     Swal.fire({
-    //       icon: 'error',
-    //       title: 'Error',
-    //       text: 'Failed to add marketing order details: ' + error.message,
-    //       confirmButtonText: 'OK',
-    //     });
-    //   }
-    // );
+    this.moService.saveMarketingOrderMarketing(this.detailMarketingOrder).subscribe(
+      (response) => {
+        Swal.fire({
+          title: 'Success!',
+          text: 'Data Marketing Order Success added.',
+          icon: 'success',
+          confirmButtonText: 'OK',
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.navigateToView();
+          }
+        });
+      },
+      (error) => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Failed to add marketing order details: ' + error.message,
+          confirmButtonText: 'OK',
+        });
+      }
+    );
   }
 
   onFileChange(event: Event) {

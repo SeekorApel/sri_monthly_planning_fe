@@ -331,9 +331,9 @@
             <ng-container matColumnDef="machineType">
               <th *matHeaderCellDef rowspan="2" style="min-width: 100px" mat-sort-header>Machine Type</th>
               <td *matCellDef="let mo; let i = index">
-                <select [(ngModel)]="mo.machineType" class="form-control" 
+                <select [(ngModel)]="mo.machineType" class="form-control"
                 [ngClass]="{'is-invalid': isSubmitted && !mo.machineType}"
-                [matTooltip]="isSubmitted && !mo.machineType ? 'Machine Type is Required' : ''"
+                [matTooltip]="isSubmitted && !mo.machineType ? 'This field is Required' : ''"
                 matTooltipPosition="right">
                   <option [ngValue]="null" disabled></option>
                   <option value="A/B">A/B</option>
@@ -381,7 +381,7 @@
                   [ngModel]="formatSeparator(mo.minOrder)"
                   (ngModelChange)="onMinOrderChange(mo, $event)"
                   [ngClass]="{'is-invalid': isSubmitted && !mo.minOrder}"
-                  [matTooltip]="isSubmitted && !mo.minOrder ? 'Machine Type is Required' : ''"
+                  [matTooltip]="isSubmitted && !mo.minOrder ? 'This field is Required' : ''"
                   matTooltipPosition="right"
                   class="text-right form-control"
                 />
