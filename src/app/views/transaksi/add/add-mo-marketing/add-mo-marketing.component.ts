@@ -41,6 +41,13 @@ export class AddMoMarketingComponent implements OnInit {
   detailMarketingOrderUpdate: DetailMarketingOrder[];
   productCurring: ProductCurring[];
   capacity: string = '';
+  totalMoMonth1TT: number = 0;
+  totalMoMonth2TT: number = 0;
+  totalMoMonth3TT: number = 0;
+  totalMoMonth1TL: number = 0;
+  totalMoMonth2TL: number = 0;
+  totalMoMonth3TL: number = 0;
+
 
   //Pagination
   pageOfItems: Array<any>;
@@ -1369,6 +1376,32 @@ export class AddMoMarketingComponent implements OnInit {
       }
     });
 
+    console.log(this.detailMarketingOrder);
+
+    const maxCapTubeM0 = this.headerMarketingOrder[0].maxCapTube;
+    const maxCapTlM0 = this.headerMarketingOrder[0].maxCapTl;
+    const maxCapTtM0 = this.headerMarketingOrder[0].maxCapTt;
+
+    const maxCapTubeM1 = this.headerMarketingOrder[1].maxCapTube;
+    const maxCapTlM1 = this.headerMarketingOrder[1].maxCapTl;
+    const maxCapTtM1 = this.headerMarketingOrder[1].maxCapTt;
+
+    const maxCapTubeM2 = this.headerMarketingOrder[2].maxCapTube;
+    const maxCapTlM2 = this.headerMarketingOrder[2].maxCapTl;
+    const maxCapTtM2 = this.headerMarketingOrder[2].maxCapTt;
+
+    let totalMoTTubeMonth0 = 0;
+    let totalMoTTMonth0 = 0;
+    let totalMoTLMonth0 = 0;
+
+    let totalMoTTubeMonth1 = 0;
+    let totalMoTTMonth1 = 0;
+    let totalMoTLMonth1 = 0;
+
+    let totalMoTTubeMonth2 = 0;
+    let totalMoTTMonth2 = 0;
+    let totalMoTLMonth2 = 0;
+
     if (hasInvalidInput) {
       Swal.fire({
         title: 'Warning!',
@@ -1390,28 +1423,28 @@ export class AddMoMarketingComponent implements OnInit {
       mo.moMonth2 = mo.moMonth2 !== null ? parseFloat(mo.moMonth2.toString().replace(/\./g, '')) : 0;
     });
 
-    this.moService.saveMarketingOrderMarketing(this.detailMarketingOrder).subscribe(
-      (response) => {
-        Swal.fire({
-          title: 'Success!',
-          text: 'Data Marketing Order Success added.',
-          icon: 'success',
-          confirmButtonText: 'OK',
-        }).then((result) => {
-          if (result.isConfirmed) {
-            this.navigateToView();
-          }
-        });
-      },
-      (error) => {
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'Failed to add marketing order details: ' + error.message,
-          confirmButtonText: 'OK',
-        });
-      }
-    );
+    // this.moService.saveMarketingOrderMarketing(this.detailMarketingOrder).subscribe(
+    //   (response) => {
+    //     Swal.fire({
+    //       title: 'Success!',
+    //       text: 'Data Marketing Order Success added.',
+    //       icon: 'success',
+    //       confirmButtonText: 'OK',
+    //     }).then((result) => {
+    //       if (result.isConfirmed) {
+    //         this.navigateToView();
+    //       }
+    //     });
+    //   },
+    //   (error) => {
+    //     Swal.fire({
+    //       icon: 'error',
+    //       title: 'Error',
+    //       text: 'Failed to add marketing order details: ' + error.message,
+    //       confirmButtonText: 'OK',
+    //     });
+    //   }
+    // );
   }
 
   onFileChange(event: Event) {
