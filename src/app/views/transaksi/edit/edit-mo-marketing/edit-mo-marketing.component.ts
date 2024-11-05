@@ -32,6 +32,7 @@ export class EditMoMarketingComponent implements OnInit {
   lastIdMo: string = '';
   file: File | null = null;
   capacity: string = '';
+  isSubmitted: boolean = false;
 
   //Error message
   errorMessagesM0: string[] = [];
@@ -230,40 +231,19 @@ export class EditMoMarketingComponent implements OnInit {
     return null;
   }
 
-  onInputChangeM0(event: Event, partNumber: number): void {
-    let input = event.target as HTMLInputElement;
-    let value = input.value;
-    let numericValue = value.replace(/[^0-9]/g, '');
-    let data = this.detailMarketingOrder.find((dmo) => dmo.partNumber === partNumber);
-    if (data) {
-      data.moMonth0 = parseFloat(numericValue) || 0;
-      data.isTouchedM0 = true;
-      input.value = data.moMonth0.toLocaleString('id-ID');
-    }
+  onInputChangeM0(mo: any, value: string) {
+    const numericValue = Number(value.replace(/\./g, '').replace(',', '.'));
+    mo.moMonth0 = numericValue;
   }
 
-  onInputChangeM1(event: Event, partNumber: number): void {
-    let input = event.target as HTMLInputElement;
-    let value = input.value;
-    let numericValue = value.replace(/[^0-9]/g, '');
-    let data = this.detailMarketingOrder.find((dmo) => dmo.partNumber === partNumber);
-    if (data) {
-      data.moMonth1 = parseFloat(numericValue) || 0;
-      data.isTouchedM1 = true;
-      input.value = data.moMonth1.toLocaleString('id-ID');
-    }
+  onInputChangeM1(mo: any, value: string): void {
+    const numericValue = Number(value.replace(/\./g, '').replace(',', '.'));
+    mo.moMonth1 = numericValue;
   }
 
-  onInputChangeM2(event: Event, partNumber: number): void {
-    let input = event.target as HTMLInputElement;
-    let value = input.value;
-    let numericValue = value.replace(/[^0-9]/g, '');
-    let data = this.detailMarketingOrder.find((dmo) => dmo.partNumber === partNumber);
-    if (data) {
-      data.moMonth2 = parseFloat(numericValue) || 0;
-      data.isTouchedM2 = true;
-      input.value = data.moMonth2.toLocaleString('id-ID');
-    }
+  onInputChangeM2(mo: any, value: string): void {
+    const numericValue = Number(value.replace(/\./g, '').replace(',', '.'));
+    mo.moMonth2 = numericValue;
   }
 
   formatNumber(value: any): string {
@@ -472,31 +452,98 @@ export class EditMoMarketingComponent implements OnInit {
   }
 
   editMo(): void {
-    const hasInvalidInput = this.detailMarketingOrder.some((mo) => {
-      const moMonth0 = mo.moMonth0 ? parseFloat(mo.moMonth0.toString().replace(/\./g, '')) : 0;
-      const moMonth1 = mo.moMonth1 ? parseFloat(mo.moMonth1.toString().replace(/\./g, '')) : 0;
-      const moMonth2 = mo.moMonth2 ? parseFloat(mo.moMonth2.toString().replace(/\./g, '')) : 0;
+    this.isSubmitted = true;
+    let hasInvalidInput = false;
 
-      const minOrder = Number(mo.minOrder);
-      const maxCapMonth0 = Number(mo.maxCapMonth0);
-      const maxCapMonth1 = Number(mo.maxCapMonth1);
-      const maxCapMonth2 = Number(mo.maxCapMonth2);
-      const qtyPerRak = Number(mo.qtyPerRak);
+    // Group by itemCuring and calculate total moMonth0 for each group
+    const curingGroupsM0: { [key: string]: number } = {};
+    const curingGroupsM1: { [key: string]: number } = {};
+    const curingGroupsM2: { [key: string]: number } = {};
 
-      const lockStatusM0 = Number(mo.lockStatusM0);
-      const lockStatusM1 = Number(mo.lockStatusM1);
-      const lockStatusM2 = Number(mo.lockStatusM2);
+    this.detailMarketingOrder.forEach((dmo) => {
+      const moMonth0 = dmo.moMonth0 ? parseFloat(dmo.moMonth0.toString().replace(/\./g, '')) : 0;
+      const moMonth1 = dmo.moMonth1 ? parseFloat(dmo.moMonth1.toString().replace(/\./g, '')) : 0;
+      const moMonth2 = dmo.moMonth2 ? parseFloat(dmo.moMonth2.toString().replace(/\./g, '')) : 0;
 
-      const isInvalidMoMonth0 = (moMonth0 !== 0 && (moMonth0 < minOrder || moMonth0 > maxCapMonth0 || moMonth0 % qtyPerRak !== 0)) || (lockStatusM0 !== 1 && moMonth0 === 0);
+      dmo.validationMessageM0 = '';
+      dmo.validationMessageM1 = '';
+      dmo.validationMessageM2 = '';
 
-      const isInvalidMoMonth1 = (moMonth1 !== 0 && (moMonth1 < minOrder || moMonth1 > maxCapMonth1 || moMonth1 % qtyPerRak !== 0)) || (lockStatusM1 !== 1 && moMonth1 === 0);
+      if (dmo.itemCuring) {
+        curingGroupsM0[dmo.itemCuring] = (curingGroupsM0[dmo.itemCuring] || 0) + moMonth0;
+        curingGroupsM1[dmo.itemCuring] = (curingGroupsM1[dmo.itemCuring] || 0) + moMonth1;
+        curingGroupsM2[dmo.itemCuring] = (curingGroupsM2[dmo.itemCuring] || 0) + moMonth2;
+      }
 
-      const isInvalidMoMonth2 = (moMonth2 !== 0 && (moMonth2 < minOrder || moMonth2 > maxCapMonth2 || moMonth2 % qtyPerRak !== 0)) || (lockStatusM2 !== 1 && moMonth2 === 0);
+      // Validate moMonth0 and update validation messages
+      if (dmo.lockStatusM0 !== 1) {
+        if (moMonth0 === 0) {
+          dmo.validationMessageM0 = 'This field is required';
+          hasInvalidInput = true;
+        } else if (moMonth0 < dmo.minOrder) {
+          dmo.validationMessageM0 = 'MO must not be less than the minimum order.';
+          hasInvalidInput = true;
+        } else if (moMonth0 > dmo.maxCapMonth0) {
+          dmo.validationMessageM0 = 'MO cannot be more than the maximum order M1.';
+          hasInvalidInput = true;
+        } else if (moMonth0 % dmo.qtyPerRak !== 0) {
+          dmo.validationMessageM0 = `MO must be a multiple of ${dmo.qtyPerRak}.`;
+          hasInvalidInput = true;
+        }
+      }
 
-      return isInvalidMoMonth0 || isInvalidMoMonth1 || isInvalidMoMonth2;
+      // Validate moMonth1 and update validation messages
+      if (dmo.lockStatusM1 !== 1) {
+        if (moMonth1 === 0) {
+          dmo.validationMessageM1 = 'This field is required';
+          hasInvalidInput = true;
+        } else if (moMonth1 < dmo.minOrder) {
+          dmo.validationMessageM1 = 'MO must not be less than the minimum order.';
+          hasInvalidInput = true;
+        } else if (moMonth1 > dmo.maxCapMonth1) {
+          dmo.validationMessageM1 = 'MO cannot be more than the maximum order M2.';
+          hasInvalidInput = true;
+        } else if (moMonth1 % dmo.qtyPerRak !== 0) {
+          dmo.validationMessageM1 = `MO must be a multiple of ${dmo.qtyPerRak}.`;
+          hasInvalidInput = true;
+        }
+      }
+
+      // Validate moMonth2 and update validation messages
+      if (dmo.lockStatusM2 !== 1) {
+        if (moMonth2 === 0) {
+          dmo.validationMessageM2 = 'This field is required';
+          hasInvalidInput = true;
+        } else if (moMonth2 < dmo.minOrder) {
+          dmo.validationMessageM2 = 'MO must not be less than the minimum order.';
+          hasInvalidInput = true;
+        } else if (moMonth2 > dmo.maxCapMonth2) {
+          dmo.validationMessageM2 = 'MO cannot be more than the maximum order M3.';
+          hasInvalidInput = true;
+        } else if (moMonth2 % dmo.qtyPerRak !== 0) {
+          dmo.validationMessageM2 = `MO must be a multiple of ${dmo.qtyPerRak}.`;
+          hasInvalidInput = true;
+        }
+      }
     });
 
-    // Jika terdapat input yang tidak valid, tampilkan SweetAlert dan hentikan fungsi
+    this.detailMarketingOrder.forEach((dmo) => {
+      if (dmo.itemCuring) {
+        if (curingGroupsM0[dmo.itemCuring] > dmo.maxCapMonth0) {
+          dmo.validationMessageM0 = 'Koncian HGP M1';
+          hasInvalidInput = true;
+        }
+        if (curingGroupsM1[dmo.itemCuring] > dmo.maxCapMonth1) {
+          dmo.validationMessageM1 = 'Koncian HGP M2';
+          hasInvalidInput = true;
+        }
+        if (curingGroupsM2[dmo.itemCuring] > dmo.maxCapMonth2) {
+          dmo.validationMessageM2 = 'Koncian HGP M3';
+          hasInvalidInput = true;
+        }
+      }
+    });
+
     if (hasInvalidInput) {
       Swal.fire({
         title: 'Warning!',
@@ -571,7 +618,6 @@ export class EditMoMarketingComponent implements OnInit {
       headerMarketingOrder: this.headerMarketingOrder,
       detailMarketingOrder: this.detailMarketingOrder,
     };
-
 
     this.moService.updateMarketingOrderMarketing(revisionMo).subscribe(
       (response) => {

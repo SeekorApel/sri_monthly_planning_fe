@@ -1280,8 +1280,6 @@ export class AddMoMarketingComponent implements OnInit {
     this.isSubmitted = true;
     let hasInvalidInput = false;
 
-    console.log(this.productCurring);
-
     // Group by itemCuring and calculate total moMonth0 for each group
     const curingGroupsM0: { [key: string]: number } = {};
     const curingGroupsM1: { [key: string]: number } = {};
@@ -1381,31 +1379,6 @@ export class AddMoMarketingComponent implements OnInit {
       return;
     }
 
-    // //Koncian HGP
-    // let data = this.productCurring.find((product) => product.partNumber === dmo.partNumber);
-    // if (data !== undefined) {
-    //   data.moMonth0 = moMonth0;
-    //   data.moMonth1 = moMonth1;
-    //   data.moMonth2 = moMonth2;
-    // }
-
-    // const result: { [key: string]: { totalMoMonth0: number; maxCapMonth0: number } } = {};
-
-    // this.productCurring.forEach((item) => {
-    //   const { itemCuring, moMonth0, maxCapMonth0 } = item;
-    //   if (!result[itemCuring]) {
-    //     result[itemCuring] = { totalMoMonth0: 0, maxCapMonth0 };
-    //   }
-    //   result[itemCuring].totalMoMonth0 += moMonth0;
-    // });
-
-    // for (const [itemCuring, { totalMoMonth0, maxCapMonth0 }] of Object.entries(result)) {
-    //   console.log(`Total moMonth0 for ${itemCuring}: ${totalMoMonth0}`);
-    //   if (totalMoMonth0 > maxCapMonth0) {
-    //     console.log(`Warning: Total moMonth0 for ${itemCuring} (${totalMoMonth0}) exceeds maxCapMonth0 (${maxCapMonth0})`);
-    //   }
-    // }
-
     //Parsing data text to number
     this.detailMarketingOrder.forEach((mo) => {
       mo.initialStock = mo.initialStock !== null ? parseFloat(mo.initialStock.toString().replace(/\./g, '')) : 0;
@@ -1417,28 +1390,28 @@ export class AddMoMarketingComponent implements OnInit {
       mo.moMonth2 = mo.moMonth2 !== null ? parseFloat(mo.moMonth2.toString().replace(/\./g, '')) : 0;
     });
 
-    // this.moService.saveMarketingOrderMarketing(this.detailMarketingOrder).subscribe(
-    //   (response) => {
-    //     Swal.fire({
-    //       title: 'Success!',
-    //       text: 'Data Marketing Order Success added.',
-    //       icon: 'success',
-    //       confirmButtonText: 'OK',
-    //     }).then((result) => {
-    //       if (result.isConfirmed) {
-    //         this.navigateToView();
-    //       }
-    //     });
-    //   },
-    //   (error) => {
-    //     Swal.fire({
-    //       icon: 'error',
-    //       title: 'Error',
-    //       text: 'Failed to add marketing order details: ' + error.message,
-    //       confirmButtonText: 'OK',
-    //     });
-    //   }
-    // );
+    this.moService.saveMarketingOrderMarketing(this.detailMarketingOrder).subscribe(
+      (response) => {
+        Swal.fire({
+          title: 'Success!',
+          text: 'Data Marketing Order Success added.',
+          icon: 'success',
+          confirmButtonText: 'OK',
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.navigateToView();
+          }
+        });
+      },
+      (error) => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Failed to add marketing order details: ' + error.message,
+          confirmButtonText: 'OK',
+        });
+      }
+    );
   }
 
   onFileChange(event: Event) {
