@@ -20,6 +20,6 @@ export class HeaderMarketingOrder {
   totalMo: number;
   tlPercentage: number;
   ttPercentage: number;
-  noteOrderTl: number;
+  noteOrderTl: string;
   status: number;
 }
