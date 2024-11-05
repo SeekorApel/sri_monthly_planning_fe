@@ -33,6 +33,7 @@ export class EditMoMarketingComponent implements OnInit {
   file: File | null = null;
   capacity: string = '';
   isSubmitted: boolean = false;
+  typeMo: string = '';
 
   //Error message
   errorMessagesM0: string[] = [];
@@ -277,24 +278,6 @@ export class EditMoMarketingComponent implements OnInit {
     return value != null ? value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : '';
   }
 
-  // formatNumber(value: number): string {
-  //   if (value !== null && value !== undefined) {
-  //     // Mengubah angka menjadi string
-  //     let strValue = value.toString();
-
-  //     // Memisahkan bagian desimal dan bagian bulat
-  //     const parts = strValue.split('.');
-  //     const integerPart = parts[0];
-  //     const decimalPart = parts[1] ? ',' + parts[1] : '';
-
-  //     // Menambahkan separator ribuan
-  //     const formattedInteger = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-
-  //     return formattedInteger + decimalPart;
-  //   }
-  //   return '';
-  // }
-
   parseFormattedValue(formattedValue: string | null): number | null {
     if (formattedValue && typeof formattedValue === 'string') {
       const numericString = formattedValue.replace(/\./g, '').replace(/,/g, '.');
@@ -336,6 +319,7 @@ export class EditMoMarketingComponent implements OnInit {
   }
 
   fillAllData(data: any) {
+    this.typeMo = data.type;
     this.headerMarketingOrder = data.dataHeaderMo;
     this.detailMarketingOrder = data.dataDetailMo;
     this.dataSource = new MatTableDataSource(this.detailMarketingOrder);
@@ -644,7 +628,7 @@ export class EditMoMarketingComponent implements OnInit {
     const month0 = this.monthNames[0];
     const month1 = this.monthNames[1];
     const month2 = this.monthNames[2];
-    const type = this.marketingOrder.type;
+    const type = this.typeMo;
 
     const formattedMonths = this.headerMarketingOrder.map((item) => {
       const date = new Date(item.month);
