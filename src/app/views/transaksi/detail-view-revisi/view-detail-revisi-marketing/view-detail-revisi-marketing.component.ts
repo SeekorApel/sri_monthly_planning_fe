@@ -20,6 +20,7 @@ import { MatPaginator } from '@angular/material/paginator';
 })
 export class ViewDetailRevisiMarketingComponent implements OnInit {
   idMo: String;
+  capacityDb: string = '';
   formHeaderMo: FormGroup;
   marketingOrders: MarketingOrder[] = [];
   errorMessage: string | null = null;
@@ -38,7 +39,6 @@ export class ViewDetailRevisiMarketingComponent implements OnInit {
   allData: any;
   headerRevision: string;
   detailMoRevision: string;
-  capacity: string = '';
 
   // Pagination Marketing Order
   displayedColumnsMo: string[] = ['no', 'moId', 'type', 'dateValid', 'revisionPpc', 'revisionMarketing', 'month0', 'month1', 'month2', 'action'];
@@ -140,23 +140,9 @@ export class ViewDetailRevisiMarketingComponent implements OnInit {
       upload_file_m1: [null, []],
       upload_file_m2: [null, []],
     });
-    this.getCapacity();
-  }
-
-  ngOnInit(): void {
-    this.month0 = this.activeRoute.snapshot.paramMap.get('month0');
-    this.month1 = this.activeRoute.snapshot.paramMap.get('month1');
-    this.month2 = this.activeRoute.snapshot.paramMap.get('month2');
-    this.type = this.activeRoute.snapshot.paramMap.get('type');
-    this.getAllDetailRevision(this.month0, this.month1, this.month2, this.type);
-    this.headerRevision = 'Header Marketing Order';
-    this.detailMoRevision = 'Detail Marketing Order';
-  }
-
-  getCapacity(): void {
     this.moService.getCapacity().subscribe(
       (response: ApiResponse<any>) => {
-        this.capacity = response.data;
+        this.capacityDb = response.data;
       },
       (error) => {
         Swal.fire({
@@ -167,6 +153,16 @@ export class ViewDetailRevisiMarketingComponent implements OnInit {
         });
       }
     );
+  }
+
+  ngOnInit(): void {
+    this.month0 = this.activeRoute.snapshot.paramMap.get('month0');
+    this.month1 = this.activeRoute.snapshot.paramMap.get('month1');
+    this.month2 = this.activeRoute.snapshot.paramMap.get('month2');
+    this.type = this.activeRoute.snapshot.paramMap.get('type');
+    this.getAllDetailRevision(this.month0, this.month1, this.month2, this.type);
+    this.headerRevision = 'Header Marketing Order';
+    this.detailMoRevision = 'Detail Marketing Order';
   }
 
   onSearchChangeMo(): void {

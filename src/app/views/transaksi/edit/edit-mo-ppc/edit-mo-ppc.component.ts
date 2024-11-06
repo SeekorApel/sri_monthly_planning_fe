@@ -24,12 +24,12 @@ import { ParsingNumberService } from 'src/app/utils/parsing-number/parsing-numbe
 export class EditMoPpcComponent implements OnInit {
   //Variable Declaration
   idMo: String;
+  capacityDb: string = '';
   formHeaderMo: FormGroup;
   isReadOnly: boolean = true;
   monthNames: string[] = ['', '', ''];
   allData: any;
   lastIdMo: string = '';
-  capacity: string = '';
 
   marketingOrder: MarketingOrder = new MarketingOrder();
   headerMarketingOrder: any[] = [];
@@ -125,13 +125,26 @@ export class EditMoPpcComponent implements OnInit {
       upload_file_m1: [null, [Validators.required]],
       upload_file_m2: [null, [Validators.required]],
     });
+
+    this.moService.getCapacity().subscribe(
+      (response: ApiResponse<any>) => {
+        this.capacityDb = response.data;
+      },
+      (error) => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Failed to load capacity ' + error.message,
+          confirmButtonText: 'OK',
+        });
+      }
+    );
   }
 
   ngOnInit(): void {
     this.idMo = this.activeRoute.snapshot.paramMap.get('idMo');
     this.getAllData(this.idMo);
     this.getLastIdMo();
-    this.getCapacity();
   }
 
   lockUpdate(partNumber: number, lockStatusField: string) {
@@ -512,21 +525,5 @@ export class EditMoPpcComponent implements OnInit {
 
   navigateToViewMo() {
     this.router.navigate(['/transaksi/view-mo-ppc']);
-  }
-
-  getCapacity(): void {
-    this.moService.getCapacity().subscribe(
-      (response: ApiResponse<any>) => {
-        this.capacity = response.data;
-      },
-      (error) => {
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'Failed to load capacity ' + error.message,
-          confirmButtonText: 'OK',
-        });
-      }
-    );
   }
 }

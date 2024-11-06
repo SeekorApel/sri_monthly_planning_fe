@@ -19,7 +19,7 @@ import { DetailViewMoPpcComponent } from './detail-view/detail-view-mo-ppc/detai
 import { DetailViewMoMarketingComponent } from './detail-view-mo-marketing/detail-view-mo-marketing.component';
 import { EditMoMarketingComponent } from './edit/edit-mo-marketing/edit-mo-marketing.component';
 import { ViewDetailRevisiPpcComponent } from './detail-view-revisi/view-detail-revisi-ppc/view-detail-revisi-ppc.component';
-import { ViewDetailRevisiMarketingComponent } from './view-detail-revisi-marketing/view-detail-revisi-marketing.component';
+import { ViewDetailRevisiMarketingComponent } from './detail-view-revisi/view-detail-revisi-marketing/view-detail-revisi-marketing.component';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';

@@ -26,6 +26,7 @@ import { NumberFormatService } from 'src/app/utils/number-format/number-format.s
 export class AddMoMarketingComponent implements OnInit {
   //Variable Declaration
   idMo: String;
+  capacityDb: string = '';
   searchText: string = '';
   monthNames: string[] = ['', '', ''];
   touchedRows: boolean[] = [];
@@ -40,7 +41,6 @@ export class AddMoMarketingComponent implements OnInit {
   headerMarketingOrder: HeaderMarketingOrder[];
   detailMarketingOrderUpdate: DetailMarketingOrder[];
   productCurring: ProductCurring[];
-  capacity: string = '';
   totalMoMonth1TT: number = 0;
   totalMoMonth2TT: number = 0;
   totalMoMonth3TT: number = 0;
@@ -145,12 +145,25 @@ export class AddMoMarketingComponent implements OnInit {
       note_order_tl_1: [null, []],
       note_order_tl_2: [null, []],
     });
+
+    this.moService.getCapacity().subscribe(
+      (response: ApiResponse<any>) => {
+        this.capacityDb = response.data;
+      },
+      (error) => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Failed to load capacity ' + error.message,
+          confirmButtonText: 'OK',
+        });
+      }
+    );
   }
 
   ngOnInit(): void {
     this.idMo = this.activeRoute.snapshot.paramMap.get('idMo');
     this.getAllData(this.idMo);
-    this.getCapacity();
   }
 
   onInputChangeM0(mo: any, value: string) {
@@ -658,7 +671,7 @@ export class AddMoMarketingComponent implements OnInit {
     };
 
     worksheet.mergeCells('F19:F20');
-    worksheet.getCell('F19').value = 'Capacity 99,5%';
+    worksheet.getCell('F19').value = `Capacity ${this.capacityDb} %`;
     worksheet.getCell('F19').alignment = { vertical: 'middle', horizontal: 'center' };
     worksheet.getColumn('F').width = 18;
     setBorder(worksheet.getCell('F19'));
@@ -1455,21 +1468,5 @@ export class AddMoMarketingComponent implements OnInit {
         input.value = '';
       }
     }
-  }
-
-  getCapacity(): void {
-    this.moService.getCapacity().subscribe(
-      (response: ApiResponse<any>) => {
-        this.capacity = response.data;
-      },
-      (error) => {
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'Failed to load capacity ' + error.message,
-          confirmButtonText: 'OK',
-        });
-      }
-    );
   }
 }

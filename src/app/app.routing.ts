@@ -48,7 +48,7 @@ import { DetailViewMoMarketingComponent } from './views/transaksi/detail-view-mo
 import { EditMoMarketingComponent } from './views/transaksi/edit/edit-mo-marketing/edit-mo-marketing.component';
 import { ViewDetailRevisiPpcComponent } from './views/transaksi/detail-view-revisi/view-detail-revisi-ppc/view-detail-revisi-ppc.component';
 import { ViewWorkDayComponent } from './views/master-data/view-work-day/view-work-day.component';
-import { ViewDetailRevisiMarketingComponent } from './views/transaksi/view-detail-revisi-marketing/view-detail-revisi-marketing.component';
+import { ViewDetailRevisiMarketingComponent } from './views/transaksi/detail-view-revisi/view-detail-revisi-marketing/view-detail-revisi-marketing.component';
 
 export const routes: Routes = [
   {
@@ -438,4 +438,4 @@ export const routes: Routes = [
   imports: [RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy' })],
   exports: [RouterModule],
 })
-export class AppRoutingModule {}
+export class AppRoutingModule { }
