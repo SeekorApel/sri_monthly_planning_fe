@@ -20,7 +20,8 @@ declare var $: any;
 })
 export class AddMoPpcComponent implements OnInit {
   //Variable Declaration
-  capacity: string = '';
+  capacityDb: string = '';
+  lastIdMo: string = '';
   isDisable: boolean = true;
   isReadOnly: boolean = true;
   isInvalid: boolean = false;
@@ -34,7 +35,6 @@ export class AddMoPpcComponent implements OnInit {
   detailMarketingOrder: DetailMarketingOrder[];
   excelData: any[] = [];
   errorMessage: string | null = null;
-  lastIdMo: string = '';
   workDay: any[];
 
   //Error Message
@@ -53,12 +53,7 @@ export class AddMoPpcComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  constructor(
-    private router: Router,
-    private fb: FormBuilder,
-    private moService: MarketingOrderService,
-    private parsingNumberService: ParsingNumberService,
-    private numberService: NumberFormatService) {
+  constructor(private router: Router, private fb: FormBuilder, private moService: MarketingOrderService, private parsingNumberService: ParsingNumberService, private numberService: NumberFormatService) {
     this.formHeaderMo = this.fb.group({
       date: [new Date().toISOString().substring(0, 10)],
       type: [null, Validators.required],
@@ -103,6 +98,20 @@ export class AddMoPpcComponent implements OnInit {
       note_order_tl_2: [null, []],
     });
 
+    this.moService.getCapacity().subscribe(
+      (response: ApiResponse<any>) => {
+        this.capacityDb = response.data;
+      },
+      (error) => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Failed to load capacity ' + error.message,
+          confirmButtonText: 'OK',
+        });
+      }
+    );
+
     this.formHeaderMo.valueChanges.subscribe((values) => {
       this.updateMonthNames();
     });
@@ -116,7 +125,6 @@ export class AddMoPpcComponent implements OnInit {
   ngOnInit(): void {
     this.getLastIdMo();
     this.loadValueTotal();
-    this.getCapacity();
     this.formHeaderMo.get('month_0')?.valueChanges.subscribe((value) => {
       this.calculateNextMonths(value);
     });
@@ -133,11 +141,26 @@ export class AddMoPpcComponent implements OnInit {
     this.subscribeToValueChanges('max_capa_tt_2');
   }
 
-  formatSeparator(value: number): string{
+  getLastIdMo(): void {
+    this.moService.getLastIdMo().subscribe(
+      (response: ApiResponse<string>) => {
+        this.lastIdMo = response.data;
+      },
+      (error) => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Failed to load data: ' + error.message,
+        });
+      }
+    );
+  }
+
+  formatSeparator(value: number): string {
     return this.numberService.formatSeparator(value);
   }
 
-  formatDecimal(value: number): string{
+  formatDecimal(value: number): string {
     return this.numberService.formatDecimal(value);
   }
 
@@ -337,21 +360,6 @@ export class AddMoPpcComponent implements OnInit {
     return '';
   }
 
-  getLastIdMo(): void {
-    this.moService.getLastIdMo().subscribe(
-      (response: ApiResponse<string>) => {
-        this.lastIdMo = response.data;
-      },
-      (error) => {
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'Failed to load data: ' + error.message,
-        });
-      }
-    );
-  }
-
   // Fungsi untuk memperbarui array nama bulan
   updateMonthNames(): void {
     this.monthNames[0] = this.getMonthName(this.formHeaderMo.get('month_0')?.value);
@@ -427,15 +435,41 @@ export class AddMoPpcComponent implements OnInit {
   }
 
   fillTheTableMo(): void {
-    const totalHKTT1 = parseFloat(this.formHeaderMo.get('total_ttwd_0').value) || 0;
-    const totalHKTT2 = parseFloat(this.formHeaderMo.get('total_ttwd_1').value) || 0;
-    const totalHKTT3 = parseFloat(this.formHeaderMo.get('total_ttwd_2').value) || 0;
-    const totalHKTL1 = parseFloat(this.formHeaderMo.get('total_tlwd_0').value) || 0;
-    const totalHKTL2 = parseFloat(this.formHeaderMo.get('total_tlwd_1').value) || 0;
-    const totalHKTL3 = parseFloat(this.formHeaderMo.get('total_tlwd_2').value) || 0;
-    const productMerk = this.formHeaderMo.get('type').value;
+    let month0full = this.formHeaderMo.get('month_0').value;
+    let month1full = this.formHeaderMo.get('month_1').value;
+    let month2full = this.formHeaderMo.get('month_2').value;
 
-    this.moService.getDetailMarketingOrder(totalHKTT1, totalHKTT2, totalHKTT3, totalHKTL1, totalHKTL2, totalHKTL3, productMerk).subscribe(
+    function formatToMMYYYY(dateString) {
+      const [year, month] = dateString.split('-');
+      return `${month}-${year}`;
+    }
+
+    month0full = formatToMMYYYY(month0full);
+    month1full = formatToMMYYYY(month1full);
+    month2full = formatToMMYYYY(month2full);
+
+    const totalHKTL1form = parseFloat(this.formHeaderMo.get('total_tlwd_0').value.replace(',', '.')) || 0;
+    const totalHKTL2form = parseFloat(this.formHeaderMo.get('total_tlwd_1').value.replace(',', '.')) || 0;
+    const totalHKTL3form = parseFloat(this.formHeaderMo.get('total_tlwd_2').value.replace(',', '.')) || 0;
+    const totalHKTT1from = parseFloat(this.formHeaderMo.get('total_ttwd_0').value.replace(',', '.')) || 0;
+    const totalHKTT2form = parseFloat(this.formHeaderMo.get('total_ttwd_1').value.replace(',', '.')) || 0;
+    const totalHKTT3form = parseFloat(this.formHeaderMo.get('total_ttwd_2').value.replace(',', '.')) || 0;
+    const typeMoForm = this.formHeaderMo.get('type').value;
+
+    let data = {
+      monthYear0: month0full,
+      monthYear1: month1full,
+      monthYear2: month2full,
+      totalHKTT1: totalHKTT1from.toString(),
+      totalHKTT2: totalHKTT2form.toString(),
+      totalHKTT3: totalHKTT3form.toString(),
+      totalHKTL1: totalHKTL1form.toString(),
+      totalHKTL2: totalHKTL2form.toString(),
+      totalHKTL3: totalHKTL3form.toString(),
+      productMerk: typeMoForm,
+    };
+
+    this.moService.getDetailMarketingOrder(data).subscribe(
       (response: ApiResponse<DetailMarketingOrder[]>) => {
         this.detailMarketingOrder = response.data;
         this.dataSource = new MatTableDataSource(this.detailMarketingOrder);
@@ -461,9 +495,7 @@ export class AddMoPpcComponent implements OnInit {
   saveAllMo() {
     this.isSubmitted = true;
 
-    const hasInvalidMinOrderOrMachineType = this.detailMarketingOrder.some(
-      (item) => item.minOrder === null || item.machineType === null
-    );
+    const hasInvalidMinOrderOrMachineType = this.detailMarketingOrder.some((item) => item.minOrder === null || item.machineType === null);
 
     if (hasInvalidMinOrderOrMachineType) {
       Swal.fire({
@@ -615,21 +647,5 @@ export class AddMoPpcComponent implements OnInit {
 
   navigateToViewMo() {
     this.router.navigate(['/transaksi/view-mo-ppc']);
-  }
-
-  getCapacity(): void {
-    this.moService.getCapacity().subscribe(
-      (response: ApiResponse<any>) => {
-        this.capacity = response.data;
-      },
-      (error) => {
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'Failed to load capacity ' + error.message,
-          confirmButtonText: 'OK',
-        });
-      }
-    );
   }
 }

@@ -28,7 +28,9 @@ export class ViewMoPpcComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  constructor(private router: Router, private moService: MarketingOrderService, private parseDateService: ParsingDateService) {}
+  constructor(private router: Router, private moService: MarketingOrderService, private parseDateService: ParsingDateService) {
+    localStorage.removeItem('capacityPpc');
+  }
 
   ngOnInit(): void {
     this.getAllMarketingOrder();
