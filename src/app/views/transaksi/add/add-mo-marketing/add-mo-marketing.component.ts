@@ -1248,15 +1248,15 @@ export class AddMoMarketingComponent implements OnInit {
     this.detailMarketingOrder.forEach((dmo) => {
       if (dmo.itemCuring) {
         if (curingGroupsM0[dmo.itemCuring] > dmo.maxCapMonth0) {
-          dmo.validationMessageM0 = 'Koncian HGP M1';
+          dmo.validationMessageM0 = 'Maximal Capacity with the same curring item is overloaded';
           hasInvalidInput = true;
         }
         if (curingGroupsM1[dmo.itemCuring] > dmo.maxCapMonth1) {
-          dmo.validationMessageM1 = 'Koncian HGP M2';
+          dmo.validationMessageM1 = 'Maximal Capacity with the same curring item is overloaded';
           hasInvalidInput = true;
         }
         if (curingGroupsM2[dmo.itemCuring] > dmo.maxCapMonth2) {
-          dmo.validationMessageM2 = 'Koncian HGP M3';
+          dmo.validationMessageM2 = 'Maximal Capacity with the same curring item is overloaded';
           hasInvalidInput = true;
         }
       }
