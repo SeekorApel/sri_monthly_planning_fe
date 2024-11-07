@@ -30,12 +30,11 @@
               <td *ngFor="let day of week" 
               [ngStyle]="{
                 'background-color': 
-                  day.detail.off === 1 ? 'red' : 
-                  day.detail.off === 0 && day.detail.semi_OFF === 0 && (day.detail.iwd_shift_1 === 1 || day.detail.iwd_shift_2 === 1 || day.detail.iwd_shift_3 === 1)  ? 'yellow' : 
+                  (day.detail.off === 1  && day.weekend ) || (day.detail.off === 1 && day.detail.iwd_SHIFT_1 === 0 && day.detail.iwd_SHIFT_2 === 0 && day.detail.iwd_SHIFT_3 === 0 && day.detail.iot_TL_1 === 0 && day.detail.iot_TL_2 === 0 && day.detail.iot_TL_3 === 0 && day.detail.iot_TT_1 === 0 && day.detail.iot_TT_2 === 0 && day.detail.iot_TT_3 === 0)? 'red' : 
+                  day.detail.off === 1 && (day.detail.iot_TL_1 === 1 || day.detail.iot_TL_2 === 1 || day.detail.iot_TL_3 === 1 || day.detail.iot_TT_1 === 1 || day.detail.iot_TT_2 === 1 || day.detail.iot_TT_3 === 1)  ? 'yellow' : 
                   day.detail.semi_OFF === 1 ? 'rgb(76,199,180)' : 'inherit', 
                 'color': 
-                day.detail.off === 0 && day.detail.semi_OFF === 0 && (day.detail.iwd_shift_1 === 1 || day.detail.iwd_shift_2 === 1 || day.detail.iwd_shift_3 === 1 ) || day.weekend || (day.detail.iot_tt_1 === 1 || day.detail.iot_tt_2 === 1 || day.detail.iot_tt_3 === 1 )  ? 'white': 
-                  day.detail.semi_OFF === 1 ? 'black' : 'inherit'
+                (day.detail.off === 1  && day.weekend ) || (day.detail.off === 1 && day.detail.iwd_SHIFT_1 === 0 && day.detail.iwd_SHIFT_2 === 0 && day.detail.iwd_SHIFT_3 === 0 && day.detail.iot_TL_1 === 0 && day.detail.iot_TL_2 === 0 && day.detail.iot_TL_3 === 0 && day.detail.iot_TT_1 === 0 && day.detail.iot_TT_2 === 0 && day.detail.iot_TT_3 === 0)  ? 'white':  'inherit'
               }" 
               [ngClass]="{ 'selected': day.days === selectedDay.days && day.month=== selectedDay.month  }" 
               (click)="selectDay(day)" >
@@ -73,23 +72,23 @@
               <div *ngIf="!weekend && !overTimeSwitch">
                 <h4>Reason of deactive shift</h4>
                 <ul>
-                  <li>Shift 3: {{ shift1Reasons[0] ? shift1Reasons[0] : '-' }}</li>
-                  <li>Shift 1: {{ shift1Reasons[1] ? shift1Reasons[1] : '-' }}</li>
-                  <li>Shift 2: {{ shift1Reasons[2] ? shift1Reasons[2] : '-' }}</li>
+                  <li>Shift 3: {{ shift1Reasons[0] ? shift1Reasons[0].description : '-' }}</li>
+                  <li>Shift 1: {{ shift1Reasons[1] ? shift1Reasons[1].description : '-' }}</li>
+                  <li>Shift 2: {{ shift1Reasons[2] ? shift1Reasons[2].description : '-' }}</li>
                 </ul>
               </div>
               <div *ngIf="weekend || overTimeSwitch">
                 <h4>Reason of deactive shift of TT</h4>
                 <ul>
-                  <li>Shift 3: {{ ttReasons[0] ? ttReasons[0] : '-' }}</li>
-                  <li>Shift 1: {{ ttReasons[1] ? ttReasons[1] : '-' }}</li>
-                  <li>Shift 2: {{ ttReasons[2] ? ttReasons[2] : '-' }}</li>
+                  <li>Shift 3: {{ ttReasons[0] ? ttReasons[0].description : '-' }}</li>
+                  <li>Shift 1: {{ ttReasons[1] ? ttReasons[1].description : '-' }}</li>
+                  <li>Shift 2: {{ ttReasons[2] ? ttReasons[2].description : '-' }}</li>
                 </ul>                
                 <h4>Reason of deactive shift of TL</h4>
                 <ul>
-                  <li>Shift 3: {{ tlReasons[0] ? tlReasons[0] : '-' }}</li>
-                  <li>Shift 1: {{ tlReasons[1] ? tlReasons[1] : '-' }}</li>
-                  <li>Shift 2: {{ tlReasons[2] ? tlReasons[2] : '-' }}</li>
+                  <li>Shift 3: {{ tlReasons[0] ? tlReasons[0].description : '-' }}</li>
+                  <li>Shift 1: {{ tlReasons[1] ? tlReasons[1].description : '-' }}</li>
+                  <li>Shift 2: {{ tlReasons[2] ? tlReasons[2].description : '-' }}</li>
                 </ul>
               </div>
               
@@ -108,7 +107,7 @@
                       <span class="switch-slider" data-checked="On" data-unchecked="Off"></span>
                     </label>
                     <div *ngIf="isReasonRequired(shift1Switches[0]) && !overTimeSwitch">
-                      <input type="text" placeholder="Reason" class="form-control" [(ngModel)]="shift1Reasons[0]" required >
+                      <input type="text" placeholder="Reason" class="form-control" [(ngModel)]="shift1Reasons[0].description" (keydown.enter)="handleReasonSaveUpdateDelete(shift1Reasons[0])" required >
                     </div>
                   </div>
                 </div>
@@ -122,7 +121,7 @@
                       <span class="switch-slider" data-checked="On" data-unchecked="Off"></span>
                     </label>
                     <div *ngIf="isReasonRequired(shift1Switches[1]) && !overTimeSwitch">
-                      <input type="text" placeholder="Reason" class="form-control" [(ngModel)]="shift1Reasons[1]" required >
+                      <input type="text" placeholder="Reason" class="form-control" [(ngModel)]="shift1Reasons[1].description" (keydown.enter)="handleReasonSaveUpdateDelete(shift1Reasons[1])" required >
                     </div>
                   </div>
                 </div>
@@ -136,7 +135,7 @@
                       <span class="switch-slider" data-checked="On" data-unchecked="Off"></span>
                     </label>
                     <div *ngIf="isReasonRequired(shift1Switches[2]) && !overTimeSwitch">
-                      <input type="text" placeholder="Reason" class="form-control" [(ngModel)]="shift1Reasons[2]" required >
+                      <input type="text" placeholder="Reason" class="form-control" [(ngModel)]="shift1Reasons[2].description" (keydown.enter)="handleReasonSaveUpdateDelete(shift1Reasons[2])" required >
                     </div>
                   </div>
                 </div>
@@ -146,7 +145,7 @@
                   <div class="per-hour-wrapper">
                     <h4 style="min-width: 70px;">OverTime</h4>
                     <label class="switch switch-label switch-primary">
-                      <input type="checkbox" class="switch-input" [(ngModel)]="overTimeSwitch" (ngModelChange)="handleOverTimeChange()" [disabled]="weekend">
+                      <input type="checkbox" class="switch-input" [(ngModel)]="overTimeSwitch" (ngModelChange)="handleOverTimeChange()"  [disabled]="weekend">
                       <span class="switch-slider" data-checked="On" data-unchecked="Off"></span>
                     </label>
                   </div>
@@ -161,11 +160,11 @@
                       <div class="per-hour-wrapper">
                         <h4 style="min-width: 70px;">Shift 3</h4>
                         <label class="switch switch-label switch-primary">
-                          <input type="checkbox" class="switch-input" [(ngModel)]="ttSwitches[0]" (ngModelChange)="handleShiftChangeTT  (0)">
+                          <input type="checkbox" class="switch-input" [(ngModel)]="ttSwitches[0]" (ngModelChange)="handleShiftChangeTT(0)">
                           <span class="switch-slider" data-checked="On" data-unchecked="Off"></span>
                         </label>
                         <div *ngIf="isReasonRequired(ttSwitches[0])">
-                          <input type="text" placeholder="Reason" class="form-control"  [(ngModel)]="ttReasons[0]" required>
+                          <input type="text" placeholder="Reason" class="form-control"  [(ngModel)]="ttReasons[0].description" (keydown.enter)="handleReasonSaveUpdateDelete(ttReasons[0])" required>
                         </div>
                       </div>
                     </div>
@@ -179,7 +178,7 @@
                           <span class="switch-slider" data-checked="On" data-unchecked="Off"></span>
                         </label>
                         <div *ngIf="isReasonRequired(ttSwitches[1])">
-                          <input type="text" placeholder="Reason" class="form-control" [(ngModel)]="ttReasons[1]" required>
+                          <input type="text" placeholder="Reason" class="form-control" [(ngModel)]="ttReasons[1].description" (keydown.enter)="handleReasonSaveUpdateDelete(ttReasons[1])" required>
                         </div>
                       </div>
                     </div>
@@ -193,7 +192,7 @@
                           <span class="switch-slider" data-checked="On" data-unchecked="Off"></span>
                         </label>
                         <div *ngIf="isReasonRequired(ttSwitches[2])">
-                          <input type="text" placeholder="Reason" class="form-control" [(ngModel)]="ttReasons[2]" required>
+                          <input type="text" placeholder="Reason" class="form-control" [(ngModel)]="ttReasons[2].description" (keydown.enter)="handleReasonSaveUpdateDelete(ttReasons[2])" required>
                         </div>
                       </div>
                     </div>
@@ -212,7 +211,7 @@
                           <span class="switch-slider" data-checked="On" data-unchecked="Off"></span>
                         </label>
                         <div *ngIf="isReasonRequired(tlSwitches[0])">
-                          <input type="text" placeholder="Reason" class="form-control" [(ngModel)]="tlReasons[0]" required>
+                          <input type="text" placeholder="Reason" class="form-control" [(ngModel)]="tlReasons[0].description"(keydown.enter)="handleReasonSaveUpdateDelete(tlReasons[0])" required>
                         </div>
                       </div>
                     </div>
@@ -225,7 +224,7 @@
                           <span class="switch-slider" data-checked="On" data-unchecked="Off"></span>
                         </label>
                         <div *ngIf="isReasonRequired(tlSwitches[1])">
-                          <input type="text" placeholder="Reason" class="form-control" [(ngModel)]="tlReasons[1]" required>
+                          <input type="text" placeholder="Reason" class="form-control" [(ngModel)]="tlReasons[1].description"(keydown.enter)="handleReasonSaveUpdateDelete(tlReasons[1])" required>
                         </div>
                       </div>
                     </div>
@@ -239,7 +238,7 @@
                           <span class="switch-slider" data-checked="On" data-unchecked="Off"></span>
                         </label>
                         <div *ngIf="isReasonRequired(tlSwitches[2])">
-                          <input type="text" placeholder="Reason" class="form-control" [(ngModel)]="tlReasons[2]" required>
+                          <input type="text" placeholder="Reason" class="form-control" [(ngModel)]="tlReasons[2].description"(keydown.enter)="handleReasonSaveUpdateDelete(tlReasons[2])" required>
                         </div>
                       </div>
                     </div>

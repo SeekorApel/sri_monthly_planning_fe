@@ -7,6 +7,7 @@ import { WorkDay } from 'src/app/models/WorkDay';
 import {WorkDayService} from 'src/app/services/master-data/work-day/work-day.service'
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { WDHours } from 'src/app/models/WDHours';
+import { DWorkDay } from 'src/app/models/DWorkDay';
 
 @Component({
   selector: 'app-view-work-day',
@@ -17,7 +18,7 @@ export class ViewWorkDayComponent implements OnInit {
 
   title = "Normal Work Day"
   shift1Switches = Array(3).fill(true);
-  shift1Reasons = Array(3).fill(''); 
+  shift1Reasons = Array(3).fill(new DWorkDay); 
 
   // editNormalShift: FormGroup;
   
@@ -30,12 +31,12 @@ export class ViewWorkDayComponent implements OnInit {
   // ttEditNormalShift: FormGroup;
 
   ttperHourSwitches = Array(24).fill(true);
-  ttperHourReasons = Array(24).fill(''); 
+  ttperHourReasons = Array(24).fill(new DWorkDay); 
   // ttEditNormalShiftPerHour: FormGroup;
 
   
   tlSwitches = Array(3).fill(true);
-  tlReasons = Array(3).fill(''); 
+  tlReasons = Array(3).fill(new DWorkDay); 
   // tlEditNormalShift: FormGroup;
 
   tlperHourSwitches = Array(24).fill(true);
@@ -172,6 +173,8 @@ export class ViewWorkDayComponent implements OnInit {
       this.tlperHourSwitches[i] = this.tlSwitches[shiftIndex] ? true : false;
     }
     this.changeShiftOverTime();
+
+    this.loadReason();
   }
 
   // TT Overtime
@@ -387,6 +390,7 @@ export class ViewWorkDayComponent implements OnInit {
       const yearValue = eventDate.getFullYear(); 
       this.newEvent.title = `${dayName}, ${dayValue} - ${this.monthNames[monthValue]} - ${yearValue}`;
       this.loadHours();
+      this.loadReason();
       this.loadSelectDay();
     }
 
@@ -401,6 +405,74 @@ export class ViewWorkDayComponent implements OnInit {
     }
   }
 
+  handleReasonSaveUpdateDelete(buffer: DWorkDay){
+    console.log(buffer);
+    if(buffer.detail_WD_ID){
+      if(buffer.description === ""){
+        this.workDayService.deleteDWorkDay(buffer).subscribe(
+          (response: ApiResponse<DWorkDay>) => {
+            console.log(response);
+            if (response) {
+              console.log(response.data);
+            }
+          },
+          (error) => {
+            this.errorMessage = 'Failed to update detail work day hours: ' + error.message;
+          }
+        );
+      }else{
+        this.workDayService.updateDWorkDay(buffer).subscribe(
+          (response: ApiResponse<DWorkDay>) => {
+            console.log(response);
+            if (response) {
+              console.log(response.data);
+            }
+          },
+          (error) => {
+            this.errorMessage = 'Failed to update detail work day hours: ' + error.message;
+          }
+        );
+      }
+    }else{
+      this.workDayService.saveDWorkDay(buffer).subscribe(
+        (response: ApiResponse<DWorkDay>) => {
+          console.log(response);
+          if (response) {
+            console.log(response.data);
+          }
+        },
+        (error) => {
+          this.errorMessage = 'Failed to save detail work day hours: ' + error.message;
+        }
+      );
+    }
+  }
+
+  loadReason(){
+    const dateToLoad = this.getdateselectedFlip();
+    this.workDayService.getDWorkDayByDate(this.getdateselected()).subscribe(
+      (response: ApiResponse<DWorkDay[]>) => {
+        console.log(response);
+        if (response) {
+          console.log(response.data);
+          this.shift1Reasons[0] = response.data.find(item => item.parent === "SHIFT 3")?? { description: '', parent: 'SHIFT 3', date_WD: dateToLoad };
+          this.shift1Reasons[1] = response.data.find(item => item.parent === "SHIFT 1")?? { description: '', parent: 'SHIFT 1', date_WD: dateToLoad };
+          this.shift1Reasons[2] = response.data.find(item => item.parent === "SHIFT 2")?? { description: '', parent: 'SHIFT 2', date_WD: dateToLoad };
+          this.ttReasons[0] = response.data.find(item => item.parent === "OT TT SHIFT 3")?? { description: '', parent: 'OT TT SHIFT 3', date_WD: dateToLoad };
+          this.ttReasons[1] = response.data.find(item => item.parent === "OT TT SHIFT 1")?? { description: '', parent: 'OT TT SHIFT 1', date_WD: dateToLoad };
+          this.ttReasons[2] = response.data.find(item => item.parent === "OT TT SHIFT 2")?? { description: '', parent: 'OT TT SHIFT 2', date_WD: dateToLoad };
+          this.tlReasons[0] = response.data.find(item => item.parent === "OT TL SHIFT 3")?? { description: '', parent: 'OT TL SHIFT 3', date_WD: dateToLoad };
+          this.tlReasons[1] = response.data.find(item => item.parent === "OT TL SHIFT 1")?? { description: '', parent: 'OT TL SHIFT 1', date_WD: dateToLoad };
+          this.tlReasons[2] = response.data.find(item => item.parent === "OT TL SHIFT 2")?? { description: '', parent: 'OT TL SHIFT 2', date_WD: dateToLoad };
+
+        }
+      },
+      (error) => {
+        this.errorMessage = 'Failed to update work day hours: ' + error.message;
+      }
+    );
+  }
+
   loadSelectDay(){
         // Set the title in the desired format
         this.showModal = true;
@@ -409,8 +481,6 @@ export class ViewWorkDayComponent implements OnInit {
         this.shift1Switches[1] = this.selectedDay.detail.iwd_SHIFT_1 ;
         this.shift1Switches[2] = this.selectedDay.detail.iwd_SHIFT_2 ;
         this.shift1Switches[0] = this.selectedDay.detail.iwd_SHIFT_3 ;
-        console.log(this.selectedDay.detail);
-        this.shift1Reasons = Array(3).fill(''); 
         const { iot_TL_1, iot_TL_2, iot_TL_3, iot_TT_1, iot_TT_2, iot_TT_3 } = this.selectedDay.detail;
         this.overTimeSwitch = [iot_TL_1, iot_TL_2, iot_TL_3, iot_TT_1, iot_TT_2, iot_TT_3].some(value => value === 1);
         this.perHourReasons = Array(24).fill(''); 
@@ -431,7 +501,7 @@ export class ViewWorkDayComponent implements OnInit {
         this.tlperHourSwitches = Array(24).fill(true);
         this.tlperHourReasons = Array(24).fill(''); 
 
-        this.weekend = false;
+        this.weekend = this.selectedDay.weekend;
   }
 
   overtimeOn() {
@@ -498,6 +568,7 @@ export class ViewWorkDayComponent implements OnInit {
   refreshWorkday() {
     this.loadWorkday();
     this.loadSelectDay();
+    this.loadReason();
   }
   
 
