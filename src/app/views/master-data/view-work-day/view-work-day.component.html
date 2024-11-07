@@ -254,7 +254,7 @@
                     <div class="per-hour-wrapper">
                       <h6>{{ formatHourRange(i) }}</h6> 
                       <label class="switch switch-label switch-primary" style="min-width: 10px;">
-                        <input type="checkbox" class="switch-input" [(ngModel)]="perHourSwitches[i]" (ngModelChange)="updateHours()" [disabled]="isReasonRequiredPerHourSwitch(i)">
+                        <input type="checkbox" class="switch-input" [(ngModel)]="perHourSwitches[i]" (ngModelChange)="updateHours('NORMAL')" [disabled]="isReasonRequiredPerHourSwitch(i)">
                         <span class="switch-slider" data-checked="On" data-unchecked="Off"></span>
                       </label>
                       <!-- Reason input displayed if required -->
@@ -273,7 +273,7 @@
                     <div class="per-hour-wrapper">
                       <h6>{{ formatHourRange(i) }}</h6> 
                       <label class="switch switch-label switch-primary" style="min-width: 10px;">
-                        <input type="checkbox" class="switch-input" [(ngModel)]="ttperHourSwitches[i]" [disabled]="isReasonRequiredPerHourSwitchTT(i)">
+                        <input type="checkbox" class="switch-input" [(ngModel)]="ttperHourSwitches[i]" (ngModelChange)="updateHours('OT TT')" [disabled]="isReasonRequiredPerHourSwitchTT(i)">
                         <span class="switch-slider" data-checked="On" data-unchecked="Off"></span>
                       </label>
                       <!-- Reason input displayed if required -->
@@ -292,7 +292,7 @@
                     <div class="per-hour-wrapper">
                       <h6>{{ formatHourRange(i) }}</h6> 
                       <label class="switch switch-label switch-primary" style="min-width: 10px;">
-                        <input type="checkbox" class="switch-input" [(ngModel)]="tlperHourSwitches[i]" [disabled]="isReasonRequiredPerHourSwitchTL(i)">
+                        <input type="checkbox" class="switch-input" [(ngModel)]="tlperHourSwitches[i]" (ngModelChange)="updateHours('OT TL')" [disabled]="isReasonRequiredPerHourSwitchTL(i)">
                         <span class="switch-slider" data-checked="On" data-unchecked="Off"></span>
                       </label>
                       <!-- Reason input displayed if required -->

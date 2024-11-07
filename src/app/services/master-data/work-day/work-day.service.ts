@@ -60,9 +60,9 @@ export class WorkDayService {
     );
   }
 
-  getDWorkDayHoursByDateNormal(dateTarget: string): Observable<ApiResponse<WDHours>> {
+  getDWorkDayHoursByDateDesc(dateTarget: string, targetdesc: string): Observable<ApiResponse<WDHours>> {
     return this.http.get<ApiResponse<WDHours>>(
-      environment.apiUrlWebAdmin + '/getDWorkDayHoursByDate/' + dateTarget,
+      environment.apiUrlWebAdmin + '/getDWorkDayHoursByDateDesc/' + dateTarget+"/"+targetdesc,
       { headers: this.getHeaders() }
     );
   }
@@ -83,6 +83,7 @@ export class WorkDayService {
       { headers: this.getHeaders() }
     );
   }
+  
   getDWorkDayByDate(buffer: string): Observable<ApiResponse<DWorkDay[]>> {
     return this.http.get<ApiResponse<DWorkDay[]>>(
       environment.apiUrlWebAdmin + '/getDWorkDayByDate/'+buffer,
