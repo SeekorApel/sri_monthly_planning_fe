@@ -11,6 +11,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ParsingDateService } from 'src/app/utils/parsing-date/parsing-date.service';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
+declare var $: any;
 
 @Component({
   selector: 'app-add-mo-front-rear',
@@ -33,7 +34,8 @@ export class AddMoFrontRearComponent implements OnInit {
   detailMarketingOrder: DetailMarketingOrder[];
   headerMO: any[] = [];
 
-
+  gedung: string = ''; // Variabel untuk menyimpan nilai Gedung
+  mesin: string = '';  // Variabel untuk menyimpan nilai Mesin
 
   searchText: string = '';
 
@@ -53,7 +55,7 @@ export class AddMoFrontRearComponent implements OnInit {
     private moService: MarketingOrderService,
     private parseDateService: ParsingDateService) {
     this.formHeaderMo = this.fb.group({
-      date: [null, []],
+      date: [new Date().toISOString().substring(0, 10), []],
       type: [null, []],
       revision: [null, []],
       month_0: [null, []],
@@ -130,6 +132,7 @@ export class AddMoFrontRearComponent implements OnInit {
     // this.getAllData(this.idMo);
     // this.fillBodyTableMo();
     this.fillDataDetailMo();
+    this.fillDataHeaderMo();
   }
 
   onChangePage(pageOfItems: Array<any>) {
@@ -166,75 +169,14 @@ export class AddMoFrontRearComponent implements OnInit {
     );
   }
 
-  fillBodyTableMo(): void {
-    console.log("assalamualaikum");
-    const mockData = [
-      {
-        dataHeaderMo: [
-          {
-            date: 684,
-            type: 373,
-            revision:1,
-            month_0: "SEP",
-            month_1: "OCT",
-            month_2: "NOV",
-            nwd_0: 27,
-            nwd_1: 25,
-            nwd_2: 24,
-            tl_ot_wd_0: 2,
-            tl_ot_wd_1: 3,
-            tl_ot_wd_2: 3,
-            tt_ot_wd_0: 1,
-            tt_ot_wd_1: 2,
-            tt_ot_wd_2: 3,
-            total_tlwd_0: 29,
-            total_tlwd_1: 28,
-            total_tlwd_2: 27,
-            total_ttwd_0: 29,
-            total_ttwd_1: 28,
-            total_ttwd_2: 27,
-            max_tube_capa_0: 560.483,
-            max_tube_capa_1: 493.717,
-            max_tube_capa_2: 577.300,
-            max_capa_tl_0: 713.862,
-            max_capa_tl_1: 714.762,
-            max_capa_tl_2: 718.232,
-            max_capa_tt_0: 713.862,
-            max_capa_tt_1: 714.762,
-            max_capa_tt_2: 718.232,
-            machine_airbag_m0: 93.680,
-            fed_tl_m0: 659.706, 
-            fed_tt_m0: 276.840,
-            fdr_tl_m0: 659.706, 
-            fdr_tt_m0: 276.840,
-            total_mo_m0:  936.546, 
-            fed_TL_percentage_m0: "73,2%",
-            fed_TT_percentage_m0: "26,8%",
-            fdr_TL_percentage_m0: "73,2%",
-            fdr_TT_percentage_m0: "26,8%",
-          }
-        ]
-      }
-    ];
-
-  // // Menyimpan data ke dalam marketingOrder
-  // this.marketingOrder = mockData.map(item => ({
-  //   dataHeaderMo: item.dataHeaderMo,
-  //   dataDetailMo: item.dataDetailMo
-  // }));
-
-  // // Set dataDetailMo ke dalam tabel
-  // this.detailMarketingOrder = this.marketingOrder[0].dataDetailMo;
-  // this.fillAllData(this.marketingOrder);
-  }
 
   fillDataDetailMo(): void {
     this.marketingOrders = [
-      { no: 1, category: 'HGP TT', partNumber: '1031003051033', description: 'FED TR TT 80/90-14 FT 235 H', machineType: "A/B", capacity: 197, qtyPerMould: 80, qtyPerRak: 200, minOrder: 400, maxCapMonth0: 345.000, maxCapMonth2: 340.400, maxCapMonth3: 382.800, initialStock: 11.270, sfMonth0:  99.860, sfMonth1:94.500, sfMonth2: 94.500, moMonth0: 100.640, moMonth1: 94.400, moMonth2: 92.640, PPD: 4137, gedung:null, mesin:null },
-      { no: 2, category: 'HGP TT', partNumber: '1031103051032', description: 'FED TR TT 90/90-14 FT 235 H', machineType: "BOM", capacity: 178, qtyPerMould: 65, qtyPerRak: 160, minOrder: 480, maxCapMonth0: 253.280, maxCapMonth2: 249.760, maxCapMonth3: 281.120, initialStock: 13.980, sfMonth0: 125.510, sfMonth1: 115.500, sfMonth2: 115.000, moMonth0: 126.240, moMonth1: 115.520, moMonth2: 114.080, PPD:5189,gedung:null, mesin:null },
-      { no: 3, category: 'OEM TL', partNumber: '1021103093057', description: 'FED TL 90/90-14 FT 235 L', machineType: "BOM", capacity: 149, qtyPerMould: 71, qtyPerRak: 60, minOrder: 480, maxCapMonth0: 257.040, maxCapMonth2: 253.920, maxCapMonth3: 257.040, initialStock: 23.097, sfMonth0: 129.100, sfMonth1: 119.750, sfMonth2: 120.000, moMonth0: 127.840, moMonth1: 117.920, moMonth2: 120.000, PPD:4735,gedung:null, mesin:null },
-      { no: 4, category: 'OEM TL', partNumber: '1021703094058', description: 'FED TR TL 110/80-14 FT 297', machineType: "BOM", capacity: 133, qtyPerMould: 11, qtyPerRak: 40, minOrder: 440, maxCapMonth0: 35.520, maxCapMonth2: 35.080, maxCapMonth3: 35.520, initialStock: 4.495, sfMonth0: 15.150, sfMonth1: 13.800, sfMonth2: 15.200, moMonth0: 13.640, moMonth1: 13.840, moMonth2: 15.200, PPD:506, gedung:null, mesin:null },
-      { no: 5, category: 'HGP TT', partNumber: '1031004064032', description: 'FED TR TT 80/90-17 FT 138 H', machineType: "A/B", capacity: 124, qtyPerMould: 44, qtyPerRak: 160, minOrder: 480, maxCapMonth0: 119.360, maxCapMonth2: 117.760, maxCapMonth3: 132.480, initialStock: 1.940, sfMonth0: 1.390, sfMonth1: 3.110, sfMonth2: 3.100, moMonth0: 1.280, moMonth1: 3.200, moMonth2: 3.040, PPD:53, gedung:null, mesin:null },
+      { no: 1, category: 'HGP TT', partNumber: '1031003051033', description: 'FED TR TT 80/90-14 FT 235 H', machineType: "A/B", capacity: 197, qtyPerMould: 80, qtyPerRak: 200, minOrder: 400, maxCapMonth0: 345.000, maxCapMonth2: 340.400, maxCapMonth3: 382.800, initialStock: 11.270, sfMonth0: 99.860, sfMonth1: 94.500, sfMonth2: 94.500, moMonth0: 100.640, moMonth1: 94.400, moMonth2: 92.640, PPD: 4137, gedung: null, mesin: null },
+      { no: 2, category: 'HGP TT', partNumber: '1031103051032', description: 'FED TR TT 90/90-14 FT 235 H', machineType: "BOM", capacity: 178, qtyPerMould: 65, qtyPerRak: 160, minOrder: 480, maxCapMonth0: 253.280, maxCapMonth2: 249.760, maxCapMonth3: 281.120, initialStock: 13.980, sfMonth0: 125.510, sfMonth1: 115.500, sfMonth2: 115.000, moMonth0: 126.240, moMonth1: 115.520, moMonth2: 114.080, PPD: 5189, gedung: null, mesin: null },
+      { no: 3, category: 'OEM TL', partNumber: '1021103093057', description: 'FED TL 90/90-14 FT 235 L', machineType: "BOM", capacity: 149, qtyPerMould: 71, qtyPerRak: 60, minOrder: 480, maxCapMonth0: 257.040, maxCapMonth2: 253.920, maxCapMonth3: 257.040, initialStock: 23.097, sfMonth0: 129.100, sfMonth1: 119.750, sfMonth2: 120.000, moMonth0: 127.840, moMonth1: 117.920, moMonth2: 120.000, PPD: 4735, gedung: null, mesin: null },
+      { no: 4, category: 'OEM TL', partNumber: '1021703094058', description: 'FED TR TL 110/80-14 FT 297', machineType: "BOM", capacity: 133, qtyPerMould: 11, qtyPerRak: 40, minOrder: 440, maxCapMonth0: 35.520, maxCapMonth2: 35.080, maxCapMonth3: 35.520, initialStock: 4.495, sfMonth0: 15.150, sfMonth1: 13.800, sfMonth2: 15.200, moMonth0: 13.640, moMonth1: 13.840, moMonth2: 15.200, PPD: 506, gedung: null, mesin: null },
+      { no: 5, category: 'HGP TT', partNumber: '1031004064032', description: 'FED TR TT 80/90-17 FT 138 H', machineType: "A/B", capacity: 124, qtyPerMould: 44, qtyPerRak: 160, minOrder: 480, maxCapMonth0: 119.360, maxCapMonth2: 117.760, maxCapMonth3: 132.480, initialStock: 1.940, sfMonth0: 1.390, sfMonth1: 3.110, sfMonth2: 3.100, moMonth0: 1.280, moMonth1: 3.200, moMonth2: 3.040, PPD: 53, gedung: null, mesin: null },
     ];
   }
 
@@ -243,7 +185,7 @@ export class AddMoFrontRearComponent implements OnInit {
       {
         date: 684,
         type: 373,
-        revision:1,
+        revision: 1,
         month_0: "SEP",
         month_1: "OCT",
         month_2: "NOV",
@@ -272,17 +214,58 @@ export class AddMoFrontRearComponent implements OnInit {
         max_capa_tt_1: 714.762,
         max_capa_tt_2: 718.232,
         machine_airbag_m0: 93.680,
-        fed_tl_m0: 659.706, 
+        fed_tl_m0: 659.706,
         fed_tt_m0: 276.840,
-        fdr_tl_m0: 659.706, 
+        fdr_tl_m0: 659.706,
         fdr_tt_m0: 276.840,
-        total_mo_m0:  936.546, 
+        total_mo_m0: 936.546,
         fed_TL_percentage_m0: "73,2%",
         fed_TT_percentage_m0: "26,8%",
         fdr_TL_percentage_m0: "73,2%",
         fdr_TT_percentage_m0: "26,8%",
-      }  
+      }
     ];
+    this.formHeaderMo.patchValue({
+      type: "FED",
+      revision: 1,
+      month_0: 10 - 2024,
+      month_1: "OCT",
+      month_2: "NOV",
+      nwd_0: 27,
+      nwd_1: 25,
+      nwd_2: 24,
+      tl_ot_wd_0: 2,
+      tl_ot_wd_1: 3,
+      tl_ot_wd_2: 3,
+      tt_ot_wd_0: 1,
+      tt_ot_wd_1: 2,
+      tt_ot_wd_2: 3,
+      total_tlwd_0: 29,
+      total_tlwd_1: 28,
+      total_tlwd_2: 27,
+      total_ttwd_0: 29,
+      total_ttwd_1: 28,
+      total_ttwd_2: 27,
+      max_tube_capa_0: 560.483,
+      max_tube_capa_1: 493.717,
+      max_tube_capa_2: 577.300,
+      max_capa_tl_0: 713.862,
+      max_capa_tl_1: 714.762,
+      max_capa_tl_2: 718.232,
+      max_capa_tt_0: 713.862,
+      max_capa_tt_1: 714.762,
+      max_capa_tt_2: 718.232,
+      machine_airbag_m0: 93.680,
+      fed_tl_m0: 659.706,
+      fed_tt_m0: 276.840,
+      fdr_tl_m0: 659.706,
+      fdr_tt_m0: 276.840,
+      total_mo_m0: 936.546,
+      fed_TL_percentage_m0: "73,2%",
+      fed_TT_percentage_m0: "26,8%",
+      fdr_TL_percentage_m0: "73,2%",
+      fdr_TT_percentage_m0: "26,8%",
+    });
   }
 
   fillAllData(data: any) {
@@ -300,7 +283,7 @@ export class AddMoFrontRearComponent implements OnInit {
     console.log(this.headerMarketingOrder);
 
     console.log(data);
-    console.log("ini data " +data);
+    console.log("ini data " + data);
 
     // this.dataSource = new MatTableDataSource(this.marketingOrders);
     // this.dataSource.sort = this.sort;
@@ -308,7 +291,7 @@ export class AddMoFrontRearComponent implements OnInit {
 
     this.headerMarketingOrder = data.dataHeaderMo;
     this.detailMarketingOrder = data.dataDetailMo;
-    
+
     let typeProduct = data.type;
 
     this.formHeaderMo.setValue({
@@ -388,7 +371,7 @@ export class AddMoFrontRearComponent implements OnInit {
   }
 
   formatNumber(value: number): string {
-    
+
     if (value !== null && value !== undefined) {
       // Mengubah angka menjadi string
       let strValue = value.toString();
@@ -427,8 +410,8 @@ export class AddMoFrontRearComponent implements OnInit {
   }
   selectedMarketingOrder: any;
 
-  viewDetail(mo: any) {
-    this.selectedMarketingOrder = mo;
+  viewDetail(): void {
+    $('#dmpModal').modal('show');
   }
   navigateToViewMo() {
     this.router.navigate(['/transaksi/view-mo-ppc']);
@@ -437,5 +420,50 @@ export class AddMoFrontRearComponent implements OnInit {
   navigateToEdit() {
     this.router.navigate(['/transaksi/edit-mo-ppc', this.idMo]);
   }
+
+  // Fungsi untuk menambah data ke tabel
+  addTable() {
+    // Pastikan Gedung dan Mesin telah dipilih
+    if (this.gedung === '' || this.mesin === '') {
+      alert("Silakan pilih Gedung dan Mesin terlebih dahulu.");
+      return;
+    }
+
+    // Temukan tbody dari tabel untuk menambahkan data baru
+    const tableBody = document.getElementById('machineTable')?.getElementsByTagName('tbody')[0];
+
+    // Membuat baris baru di tabel
+    const newRow = tableBody?.insertRow();
+
+    // Membuat cell untuk Gedung, Mesin, dan Action (Tombol Delete)
+    const cellGedung = newRow?.insertCell(0);
+    const cellMesin = newRow?.insertCell(1);
+    const cellDelete = newRow?.insertCell(2); // Cell untuk tombol delete
+
+    // Mengisi cell dengan data Gedung dan Mesin yang dipilih
+    if (cellGedung && cellMesin && cellDelete) {
+      cellGedung.innerText = this.gedung;
+      cellMesin.innerText = this.mesin;
+
+      // Membuat tombol silang untuk menghapus baris
+      const deleteBtn = document.createElement('button');
+      deleteBtn.innerHTML = '❌'; // Menambahkan ikon silang
+      deleteBtn.classList.add('btn', 'btn-danger');
+
+      // Event listener untuk menghapus baris ketika tombol silang diklik
+      deleteBtn.addEventListener('click', () => {
+        newRow?.remove(); // Menghapus baris
+      });
+
+      // Menambahkan tombol silang ke dalam cellDelete
+      cellDelete.appendChild(deleteBtn);
+    }
+
+    // Reset dropdown setelah data ditambahkan
+    this.gedung = '';
+    this.mesin = '';
+  }
+
+
 
 }
