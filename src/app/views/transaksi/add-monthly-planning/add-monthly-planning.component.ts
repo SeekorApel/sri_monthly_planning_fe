@@ -19,7 +19,11 @@ export class AddMonthlyPlanningComponent implements OnInit {
 
   monthlyPlanningsCurring: any[] = [];
   marketingOrders: any[] = [];
+  showMonthlyPlanning: boolean = false;
 
+  generateMonthlyPlanning() {
+    this.showMonthlyPlanning = true;
+  }
   constructor(private router: Router) { }
 
   ngOnInit(): void {
@@ -258,5 +262,9 @@ export class AddMonthlyPlanningComponent implements OnInit {
 
   navigateToViewMp() {
     this.router.navigate(['/transaksi/view-monthly-planning']);
+  }
+
+  navigateToViewMoFrontRear() {
+    this.router.navigate(['/transaksi/add-mo-front-rear']);
   }
 }

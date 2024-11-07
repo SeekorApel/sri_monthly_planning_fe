@@ -87,10 +87,13 @@
                 <th class="align-middle">Marketing Order ID</th>
                 <th class="align-middle">Type</th>
                 <th class="align-middle">Date</th>
-                <th class="align-middle">Revision</th>
+                <th class="align-middle">Revision PPC</th>
+                <th class="align-middle">Revision Marketing</th>
                 <th class="align-middle">Month 1</th>
                 <th class="align-middle">Month 2</th>
                 <th class="align-middle">Month 3</th>
+                <th class="align-middle">Action</th>
+
               </tr>
             </thead>
             <tbody>
@@ -103,27 +106,35 @@
                 <td>{{ order.type }}</td>
                 <td>{{ order.date }}</td>
                 <td>{{ order.revision }}</td>
+                <td>{{ order.revision }}</td>
                 <td>{{ order.month1 }}</td>
                 <td>{{ order.month2 }}</td>
                 <td>{{ order.month3 }}</td>
+                <td>
+                  <button type="button" class="btn btn-warning" (click)="navigateToViewMoFrontRear()">
+                  <i class="fa fa-check"></i> Mark Front Rear
+                </button>
+              </td>
               </tr>
             </tbody>
           </table>
         </div>
         <!-- Wrap button in a d-flex div with justify-content-end -->
         <div class="d-flex justify-content-end mt-3">
-          <button type="button" class="btn btn-success">Save</button>
-        </div>
+          <button type="button" class="btn btn-success" (click)="generateMonthlyPlanning()">
+            <i class="fa fa-file"></i> Generate Monthly Planning
+        </button>                
+      </div>
       </div>
     </div>
 
-    <div class="card">
+    <div *ngIf="showMonthlyPlanning" class="card">
       <div class="card-header">
         <strong>Table Detail Monthly Palnning</strong>
       </div>
       <div class="card-body">
         <tabset>
-          <tab heading="TASS">
+          <tab heading="CURING">
             <div class="table-responsive">
               <table class="table table-bordered table-striped table-sm">
                 <thead>
@@ -194,8 +205,8 @@
             </div>
           </tab>
 
-          <!-- Tab Curring -->
-          <tab heading="CURRING">
+          <!-- Tab Tass -->
+          <tab heading="TASS">
             <div class="table-responsive">
               <table class="table table-bordered table-striped table-sm">
                 <thead>
