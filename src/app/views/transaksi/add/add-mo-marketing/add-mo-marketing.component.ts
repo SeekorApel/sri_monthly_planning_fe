@@ -1195,7 +1195,7 @@ export class AddMoMarketingComponent implements OnInit {
 
       // Validate moMonth0 and update validation messages
       if (dmo.lockStatusM0 !== 1) {
-        if (moMonth0 === 0) {
+        if (moMonth0 === null) {
           dmo.validationMessageM0 = 'This field is required';
           hasInvalidInput = true;
         } else if (moMonth0 < dmo.minOrder) {
@@ -1212,7 +1212,7 @@ export class AddMoMarketingComponent implements OnInit {
 
       // Validate moMonth1 and update validation messages
       if (dmo.lockStatusM1 !== 1) {
-        if (moMonth1 === 0) {
+        if (moMonth1 === null) {
           dmo.validationMessageM1 = 'This field is required';
           hasInvalidInput = true;
         } else if (moMonth1 < dmo.minOrder) {
@@ -1229,7 +1229,7 @@ export class AddMoMarketingComponent implements OnInit {
 
       // Validate moMonth2 and update validation messages
       if (dmo.lockStatusM2 !== 1) {
-        if (moMonth2 === 0) {
+        if (moMonth2 === null) {
           dmo.validationMessageM2 = 'This field is required';
           hasInvalidInput = true;
         } else if (moMonth2 < dmo.minOrder) {
