@@ -259,7 +259,7 @@
                       </label>
                       <!-- Reason input displayed if required -->
                       <div *ngIf="isReasonRequiredPerHour(i)" class="reason-input">
-                        <input type="text" placeholder="Reason" class="form-control" [(ngModel)]="perHourReasons[i]" required>
+                        <input type="text" placeholder="Reason" class="form-control" [(ngModel)]="perHourReasons[i].description" (keydown.enter)="handleReasonSaveUpdateDelete(perHourReasons[i])" required>
                       </div>
                     </div>
                   </div>
@@ -278,7 +278,7 @@
                       </label>
                       <!-- Reason input displayed if required -->
                       <div *ngIf="isReasonRequiredTT(i)" class="reason-input">
-                        <input type="text" placeholder="Reason" class="form-control" [(ngModel)]="ttperHourReasons[i]" required>
+                        <input type="text" placeholder="Reason" class="form-control" [(ngModel)]="ttperHourReasons[i].description" (keydown.enter)="handleReasonSaveUpdateDelete(ttperHourReasons[i])" required>
                       </div>
                     </div>
                   </div>
@@ -297,7 +297,7 @@
                       </label>
                       <!-- Reason input displayed if required -->
                       <div *ngIf="isReasonRequiredTL(i)" class="reason-input">
-                        <input type="text" placeholder="Reason" class="form-control" [(ngModel)]="tlperHourReasons[i]" required>
+                        <input type="text" placeholder="Reason" class="form-control" [(ngModel)]="tlperHourReasons[i].description" (keydown.enter)="handleReasonSaveUpdateDelete(tlperHourReasons[i])" required>
                       </div>
                     </div>
                   </div>

@@ -225,7 +225,7 @@ export class ViewWorkDayComponent implements OnInit {
       String(startDate.getMonth()).padStart(2, '0'), // MM (months are zero-based)
       startDate.getFullYear()                           // yyyy
     ].join('-');
-    console.log(fStartDate)
+    // console.log(fStartDate)
     const fEndDate = [
       String(endDate.getDate()).padStart(2, '0'),    // dd
       String(endDate.getMonth()).padStart(2, '0'), // MM (months are zero-based)
@@ -304,7 +304,7 @@ export class ViewWorkDayComponent implements OnInit {
         }
       );
     }else{
-      console.log("ot");
+      // console.log("ot");
       this.workDayService.getDWorkDayHoursByDateDesc(this.getdateselected(),"OT_TT").subscribe(
         (response: ApiResponse<WDHours>) => {
           if (response.data) {
@@ -313,7 +313,7 @@ export class ViewWorkDayComponent implements OnInit {
               this.ttperHourSwitches[i] = this.work_days_hoursTT[`hour_${i + 1}`];
             }
           } else {
-            console.log("create");
+            // console.log("create");
             this.createHours("OT_TT");
           }
         },
@@ -329,7 +329,7 @@ export class ViewWorkDayComponent implements OnInit {
               this.tlperHourSwitches[i] = this.work_days_hoursTL[`hour_${i + 1}`];
             }
           } else {
-            console.log("create");
+            // console.log("create");
             this.createHours("OT_TL");
           }
         },
@@ -341,7 +341,7 @@ export class ViewWorkDayComponent implements OnInit {
   }
   
   updateHours(type: string){
-    console.log(type);
+    // console.log(type);
     if(type === 'NORMAL'){
       for (let i = 0; i < 24; i++) {
         this.work_days_hours[`hour_${i + 1}`] = this.perHourSwitches[i] ? 1:0;
@@ -425,12 +425,12 @@ export class ViewWorkDayComponent implements OnInit {
 
     this.workDayService.saveDWorkDayHours(buffer).subscribe(
       (response: ApiResponse<WDHours>) => {
-        console.log(response);
+        // console.log(response);
         if (response) {
         }
       },
       (error) => {
-        this.errorMessage = 'Failed to update work day hours: ' + error.message;
+        this.errorMessage = 'Failed to create work day hours: ' + error.message;
       }
     );
   }
@@ -472,14 +472,14 @@ export class ViewWorkDayComponent implements OnInit {
   }
 
   handleReasonSaveUpdateDelete(buffer: DWorkDay){
-    console.log(buffer);
+    // console.log(buffer);
     if(buffer.detail_WD_ID){
       if(buffer.description === ""){
         this.workDayService.deleteDWorkDay(buffer).subscribe(
           (response: ApiResponse<DWorkDay>) => {
-            console.log(response);
+            // console.log(response);
             if (response) {
-              console.log(response.data);
+              // console.log(response.data);
             }
           },
           (error) => {
@@ -489,9 +489,9 @@ export class ViewWorkDayComponent implements OnInit {
       }else{
         this.workDayService.updateDWorkDay(buffer).subscribe(
           (response: ApiResponse<DWorkDay>) => {
-            console.log(response);
+            // console.log(response);
             if (response) {
-              console.log(response.data);
+              // console.log(response.data);
             }
           },
           (error) => {
@@ -502,9 +502,9 @@ export class ViewWorkDayComponent implements OnInit {
     }else{
       this.workDayService.saveDWorkDay(buffer).subscribe(
         (response: ApiResponse<DWorkDay>) => {
-          console.log(response);
+          // console.log(response);
           if (response) {
-            console.log(response.data);
+            // console.log(response.data);
           }
         },
         (error) => {
@@ -516,21 +516,38 @@ export class ViewWorkDayComponent implements OnInit {
 
   loadReason(){
     const dateToLoad = this.getdateselectedFlip();
+    const hourIntervals = [
+      "00:00 - 01:00", "01:00 - 02:00", "02:00 - 03:00", "03:00 - 04:00",
+      "04:00 - 05:00", "05:00 - 06:00", "06:00 - 07:00", "07:00 - 08:00",
+      "08:00 - 09:00", "09:00 - 10:00", "10:00 - 11:00", "11:00 - 12:00",
+      "12:00 - 13:00", "13:00 - 14:00", "14:00 - 15:00", "15:00 - 16:00",
+      "16:00 - 17:00", "17:00 - 18:00", "18:00 - 19:00", "19:00 - 20:00",
+      "20:00 - 21:00", "21:00 - 22:00", "22:00 - 23:00", "23:00 - 24:00"
+    ];
+    
     this.workDayService.getDWorkDayByDate(this.getdateselected()).subscribe(
       (response: ApiResponse<DWorkDay[]>) => {
-        console.log(response);
+        // console.log(response);
         if (response) {
-          console.log(response.data);
-          this.shift1Reasons[0] = response.data.find(item => item.parent === "SHIFT 3")?? { description: '', parent: 'SHIFT 3', date_WD: dateToLoad };
-          this.shift1Reasons[1] = response.data.find(item => item.parent === "SHIFT 1")?? { description: '', parent: 'SHIFT 1', date_WD: dateToLoad };
-          this.shift1Reasons[2] = response.data.find(item => item.parent === "SHIFT 2")?? { description: '', parent: 'SHIFT 2', date_WD: dateToLoad };
-          this.ttReasons[0] = response.data.find(item => item.parent === "OT TT SHIFT 3")?? { description: '', parent: 'OT TT SHIFT 3', date_WD: dateToLoad };
-          this.ttReasons[1] = response.data.find(item => item.parent === "OT TT SHIFT 1")?? { description: '', parent: 'OT TT SHIFT 1', date_WD: dateToLoad };
-          this.ttReasons[2] = response.data.find(item => item.parent === "OT TT SHIFT 2")?? { description: '', parent: 'OT TT SHIFT 2', date_WD: dateToLoad };
-          this.tlReasons[0] = response.data.find(item => item.parent === "OT TL SHIFT 3")?? { description: '', parent: 'OT TL SHIFT 3', date_WD: dateToLoad };
-          this.tlReasons[1] = response.data.find(item => item.parent === "OT TL SHIFT 1")?? { description: '', parent: 'OT TL SHIFT 1', date_WD: dateToLoad };
-          this.tlReasons[2] = response.data.find(item => item.parent === "OT TL SHIFT 2")?? { description: '', parent: 'OT TL SHIFT 2', date_WD: dateToLoad };
-
+          // console.log(response.data);
+          this.shift1Reasons[0] = response.data.find(item => item.parent === "SHIFT 3" && item.status === 1)?? { description: '', parent: 'SHIFT 3', date_WD: dateToLoad };
+          this.shift1Reasons[1] = response.data.find(item => item.parent === "SHIFT 1" && item.status === 1)?? { description: '', parent: 'SHIFT 1', date_WD: dateToLoad };
+          this.shift1Reasons[2] = response.data.find(item => item.parent === "SHIFT 2" && item.status === 1)?? { description: '', parent: 'SHIFT 2', date_WD: dateToLoad };
+          this.ttReasons[0] = response.data.find(item => item.parent === "OT TT SHIFT 3" && item.status === 1)?? { description: '', parent: 'OT TT SHIFT 3', date_WD: dateToLoad };
+          this.ttReasons[1] = response.data.find(item => item.parent === "OT TT SHIFT 1" && item.status === 1)?? { description: '', parent: 'OT TT SHIFT 1', date_WD: dateToLoad };
+          this.ttReasons[2] = response.data.find(item => item.parent === "OT TT SHIFT 2" && item.status === 1)?? { description: '', parent: 'OT TT SHIFT 2', date_WD: dateToLoad };
+          this.tlReasons[0] = response.data.find(item => item.parent === "OT TL SHIFT 3" && item.status === 1)?? { description: '', parent: 'OT TL SHIFT 3', date_WD: dateToLoad };
+          this.tlReasons[1] = response.data.find(item => item.parent === "OT TL SHIFT 1" && item.status === 1)?? { description: '', parent: 'OT TL SHIFT 1', date_WD: dateToLoad };
+          this.tlReasons[2] = response.data.find(item => item.parent === "OT TL SHIFT 2" && item.status === 1)?? { description: '', parent: 'OT TL SHIFT 2', date_WD: dateToLoad };
+          this.perHourReasons = hourIntervals.map(interval => 
+            response.data.find(item => item.parent === interval && item.status === 1) ?? { description: '', parent: interval, date_WD: dateToLoad }
+          );
+          this.ttperHourReasons = hourIntervals.map(interval => 
+            response.data.find(item => item.parent === "OT TT " + interval && item.status === 1) ?? { description: '', parent: "OT TT " + interval, date_WD: dateToLoad }
+          );
+          this.tlperHourReasons = hourIntervals.map(interval => 
+            response.data.find(item => item.parent === "OT TL " + interval && item.status === 1) ?? { description: '', parent: "OT TL " + interval, date_WD: dateToLoad }
+          );
         }
       },
       (error) => {
@@ -618,7 +635,7 @@ export class ViewWorkDayComponent implements OnInit {
       iot_TT_2: this.ttSwitches[1] ? 1:0,
       iot_TT_3: this.ttSwitches[2] ? 1:0,
     });
-    console.log(this.selectedDay.detail);
+    // console.log(this.selectedDay.detail);
     this.workDayService.updateWorkDay(this.selectedDay.detail).subscribe(
       (response: ApiResponse<WorkDay>) => {
         if (response.data) {
