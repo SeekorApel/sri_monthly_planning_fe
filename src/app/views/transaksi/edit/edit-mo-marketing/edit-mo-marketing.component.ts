@@ -154,96 +154,6 @@ export class EditMoMarketingComponent implements OnInit {
     this.getLastIdMo();
   }
 
-  onBlurFieldM0(index: number): void {
-    let mo = this.detailMarketingOrder[index];
-    if (mo.moMonth0 != null && mo.moMonth0 !== 0) {
-      this.validateM0(mo.moMonth0, mo.partNumber);
-    }
-  }
-
-  onBlurFieldM1(index: number): void {
-    let mo = this.detailMarketingOrder[index];
-    if (mo.moMonth1 != null && mo.moMonth1 !== 0) {
-      this.validateM1(mo.moMonth1, mo.partNumber);
-    }
-  }
-
-  onBlurFieldM2(index: number): void {
-    let mo = this.detailMarketingOrder[index];
-    if (mo.moMonth2 != null && mo.moMonth2 !== 0) {
-      this.validateM2(mo.moMonth2, mo.partNumber);
-    }
-  }
-
-  validateM0(value: any | null | 0, partNumber: number): string {
-    let data = this.detailMarketingOrder.find((dmo) => dmo.partNumber === partNumber);
-    if (data?.isTouchedM0) {
-      if (value < data.minOrder) {
-        return 'MO must not be less than the minimum order.';
-      }
-
-      if (value > data.maxCapMonth0) {
-        return 'MO cannot be more than the maximum order M1.';
-      }
-
-      if (value % data.qtyPerRak !== 0) {
-        return `MO must be a multiple of ${data.qtyPerRak}.`;
-      }
-    }
-    return null;
-  }
-
-  validateM1(value: any | null | 0, partNumber: number): string {
-    let data = this.detailMarketingOrder.find((dmo) => dmo.partNumber === partNumber);
-    if (data?.isTouchedM1) {
-      if (value < data.minOrder) {
-        return 'MO must not be less than the minimum order.';
-      }
-
-      if (value > data.maxCapMonth1) {
-        return 'MO cannot be more than the maximum order M2.';
-      }
-
-      if (value % data.qtyPerRak !== 0) {
-        return `MO must be a multiple of ${data.qtyPerRak}.`;
-      }
-    }
-    return null;
-  }
-
-  validateM2(value: any | null | 0, partNumber: number): string {
-    let data = this.detailMarketingOrder.find((dmo) => dmo.partNumber === partNumber);
-    if (data?.isTouchedM2) {
-      if (value < data.minOrder) {
-        return 'MO must not be less than the minimum order.';
-      }
-
-      if (value > data.maxCapMonth2) {
-        return 'MO cannot be more than the maximum order M3.';
-      }
-
-      if (value % data.qtyPerRak !== 0) {
-        return `MO must be a multiple of ${data.qtyPerRak}.`;
-      }
-    }
-    return null;
-  }
-
-  onInputChangeM0(mo: any, value: string) {
-    const numericValue = Number(value.replace(/\./g, '').replace(',', '.'));
-    mo.moMonth0 = numericValue;
-  }
-
-  onInputChangeM1(mo: any, value: string): void {
-    const numericValue = Number(value.replace(/\./g, '').replace(',', '.'));
-    mo.moMonth1 = numericValue;
-  }
-
-  onInputChangeM2(mo: any, value: string): void {
-    const numericValue = Number(value.replace(/\./g, '').replace(',', '.'));
-    mo.moMonth2 = numericValue;
-  }
-
   formatNumber(value: any): string {
     if (value == null || value === '') {
       return '';
@@ -582,7 +492,7 @@ export class EditMoMarketingComponent implements OnInit {
     if (totalMoTLMonth0 > maxCapTlM0) {
       Swal.fire({
         title: 'Warning!',
-        text: 'Total Marketing Order TL for Month 1 must not exceed Maximum Capacity Tire TL',
+        text: `Total Marketing Order TL for Month 1 must not exceed Maximum Capacity Tire TL ${this.formatSeparatorView(maxCapTlM0)}`,
         icon: 'warning',
         confirmButtonText: 'OK',
       });
@@ -592,7 +502,7 @@ export class EditMoMarketingComponent implements OnInit {
     if (totalMoTLMonth1 > maxCapTlM1) {
       Swal.fire({
         title: 'Warning!',
-        text: 'Total Marketing Order TL for Month 2 must not exceed Maximum Capacity Tire TL',
+        text: `Total Marketing Order TL for Month 2 must not exceed Maximum Capacity Tire TL ${this.formatSeparatorView(maxCapTlM1)}`,
         icon: 'warning',
         confirmButtonText: 'OK',
       });
@@ -602,7 +512,7 @@ export class EditMoMarketingComponent implements OnInit {
     if (totalMoTLMonth2 > maxCapTlM2) {
       Swal.fire({
         title: 'Warning!',
-        text: 'Total Marketing Order TL for Month 3 must not exceed Maximum Capacity Tire TL',
+        text: `Total Marketing Order TL for Month 3 must not exceed Maximum Capacity Tire TL ${this.formatSeparatorView(maxCapTlM0)}`,
         icon: 'warning',
         confirmButtonText: 'OK',
       });
@@ -614,7 +524,7 @@ export class EditMoMarketingComponent implements OnInit {
     if (totalMoTTMonth0 > maxCapTtM0) {
       Swal.fire({
         title: 'Warning!',
-        text: 'Total Marketing Order TT for Month 1 must not exceed Maximum Capacity Tire TT',
+        text: `Total Marketing Order TT for Month 1 must not exceed Maximum Capacity Tire TT ${this.formatSeparatorView(maxCapTtM0)}`,
         icon: 'warning',
         confirmButtonText: 'OK',
       });
@@ -624,7 +534,7 @@ export class EditMoMarketingComponent implements OnInit {
     if (totalMoTTMonth1 > maxCapTtM1) {
       Swal.fire({
         title: 'Warning!',
-        text: 'Total Marketing Order TT for Month 2 must not exceed Maximum Capacity Tire TT',
+        text: `Total Marketing Order TT for Month 2 must not exceed Maximum Capacity Tire TT ${this.formatSeparatorView(maxCapTtM1)}`,
         icon: 'warning',
         confirmButtonText: 'OK',
       });
@@ -634,7 +544,7 @@ export class EditMoMarketingComponent implements OnInit {
     if (totalMoTTMonth2 > maxCapTtM2) {
       Swal.fire({
         title: 'Warning!',
-        text: 'Total Marketing Order TT for Month 3 must not exceed Maximum Capacity Tire TT',
+        text: `Total Marketing Order TT for Month 3 must not exceed Maximum Capacity Tire TT ${this.formatSeparatorView(maxCapTtM2)}`,
         icon: 'warning',
         confirmButtonText: 'OK',
       });
@@ -646,7 +556,7 @@ export class EditMoMarketingComponent implements OnInit {
     if (totalMoTTubeMonth0 > maxCapTubeM0) {
       Swal.fire({
         title: 'Warning!',
-        text: 'Total Marketing Order Tube for Month 1 must not exceed Maximum Capacity Tube',
+        text: `Total Marketing Order Tube for Month 1 must not exceed Maximum Capacity Tube ${this.formatSeparatorView(maxCapTubeM0)}`,
         icon: 'warning',
         confirmButtonText: 'OK',
       });
@@ -656,7 +566,7 @@ export class EditMoMarketingComponent implements OnInit {
     if (totalMoTTubeMonth1 > maxCapTubeM1) {
       Swal.fire({
         title: 'Warning!',
-        text: 'Total Marketing Order Tube for Month 2 must not exceed Maximum Capacity Tube',
+        text: `Total Marketing Order Tube for Month 2 must not exceed Maximum Capacity Tube ${this.formatSeparatorView(maxCapTubeM1)}`,
         icon: 'warning',
         confirmButtonText: 'OK',
       });
@@ -666,7 +576,7 @@ export class EditMoMarketingComponent implements OnInit {
     if (totalMoTTubeMonth2 > maxCapTubeM2) {
       Swal.fire({
         title: 'Warning!',
-        text: 'Total Marketing Order Tube for Month 3 must not exceed Maximum Capacity Tube',
+        text: `Total Marketing Order Tube for Month 3 must not exceed Maximum Capacity Tube ${this.formatSeparatorView(maxCapTubeM2)}`,
         icon: 'warning',
         confirmButtonText: 'OK',
       });
