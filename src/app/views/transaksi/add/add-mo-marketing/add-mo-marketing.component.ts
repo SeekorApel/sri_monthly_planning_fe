@@ -249,6 +249,8 @@ export class AddMoMarketingComponent implements OnInit {
     this.headerMarketingOrder = data.dataHeaderMo;
     this.detailMarketingOrder = data.dataDetailMo;
 
+    console.log(this.detailMarketingOrder);
+
     this.touchedRows = new Array(this.detailMarketingOrder.length).fill(false);
     this.dataSource = new MatTableDataSource(this.detailMarketingOrder);
     this.dataSource.sort = this.sort;
@@ -1245,22 +1247,46 @@ export class AddMoMarketingComponent implements OnInit {
       }
     });
 
+    // this.detailMarketingOrder.forEach((dmo) => {
+    //   if (dmo.itemCuring) {
+    //     if (curingGroupsM0[dmo.itemCuring] > dmo.maxCapMonth0) {
+    //       dmo.validationMessageM0 = 'Maximal Capacity with the same curring item is overloaded';
+    //       hasInvalidInput = true;
+    //     }
+    //     if (curingGroupsM1[dmo.itemCuring] > dmo.maxCapMonth1) {
+    //       dmo.validationMessageM1 = 'Maximal Capacity with the same curring item is overloaded';
+    //       hasInvalidInput = true;
+    //     }
+    //     if (curingGroupsM2[dmo.itemCuring] > dmo.maxCapMonth2) {
+    //       dmo.validationMessageM2 = 'Maximal Capacity with the same curring item is overloaded';
+    //       hasInvalidInput = true;
+    //     }
+    //   }
+    // });
+
     this.detailMarketingOrder.forEach((dmo) => {
       if (dmo.itemCuring) {
         if (curingGroupsM0[dmo.itemCuring] > dmo.maxCapMonth0) {
-          dmo.validationMessageM0 = 'Maximal Capacity with the same curring item is overloaded';
-          hasInvalidInput = true;
+          if (!dmo.validationMessageM0) {
+            dmo.validationMessageM0 = 'Maximal Capacity with the same curing item is overloaded';
+            hasInvalidInput = true;
+          }
         }
         if (curingGroupsM1[dmo.itemCuring] > dmo.maxCapMonth1) {
-          dmo.validationMessageM1 = 'Maximal Capacity with the same curring item is overloaded';
-          hasInvalidInput = true;
+          if (!dmo.validationMessageM1) {
+            dmo.validationMessageM1 = 'Maximal Capacity with the same curing item is overloaded';
+            hasInvalidInput = true;
+          }
         }
         if (curingGroupsM2[dmo.itemCuring] > dmo.maxCapMonth2) {
-          dmo.validationMessageM2 = 'Maximal Capacity with the same curring item is overloaded';
-          hasInvalidInput = true;
+          if (!dmo.validationMessageM2) {
+            dmo.validationMessageM2 = 'Maximal Capacity with the same curing item is overloaded';
+            hasInvalidInput = true;
+          }
         }
       }
     });
+
 
     if (hasInvalidInput) {
       Swal.fire({

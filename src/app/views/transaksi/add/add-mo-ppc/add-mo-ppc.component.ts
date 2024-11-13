@@ -470,8 +470,6 @@ export class AddMoPpcComponent implements OnInit {
       productMerk: typeMoForm,
     };
 
-    console.log(data);
-
     this.moService.getDetailMarketingOrder(data).subscribe(
       (response: ApiResponse<DetailMarketingOrder[]>) => {
         this.detailMarketingOrder = response.data;
