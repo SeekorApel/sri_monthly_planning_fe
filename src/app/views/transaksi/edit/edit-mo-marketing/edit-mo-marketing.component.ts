@@ -154,6 +154,21 @@ export class EditMoMarketingComponent implements OnInit {
     this.getLastIdMo();
   }
 
+  onInputChangeM0(mo: any, value: string) {
+    const numericValue = Number(value.replace(/\./g, '').replace(',', '.'));
+    mo.moMonth0 = numericValue;
+  }
+
+  onInputChangeM1(mo: any, value: string): void {
+    const numericValue = Number(value.replace(/\./g, '').replace(',', '.'));
+    mo.moMonth1 = numericValue;
+  }
+
+  onInputChangeM2(mo: any, value: string): void {
+    const numericValue = Number(value.replace(/\./g, '').replace(',', '.'));
+    mo.moMonth2 = numericValue;
+  }
+
   formatNumber(value: any): string {
     if (value == null || value === '') {
       return '';
