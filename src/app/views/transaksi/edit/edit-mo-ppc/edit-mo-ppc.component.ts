@@ -294,6 +294,8 @@ export class EditMoPpcComponent implements OnInit {
       item.moMonth2 = item.moMonth2 !== null ? item.moMonth2 : 0;
     });
 
+    console.log(this.headerMarketingOrder[0].totalWdTube);
+
     let typeProduct = data.type;
     this.formHeaderMo.patchValue({
       date: new Date(data.dateValid).toISOString().split('T')[0],

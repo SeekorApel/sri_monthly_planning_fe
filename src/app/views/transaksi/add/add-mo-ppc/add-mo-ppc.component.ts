@@ -237,8 +237,9 @@ export class AddMoPpcComponent implements OnInit {
       const baseName = match[1];
       const index = match[2];
 
-      const nwtValue = parseFloat(this.formHeaderMo.get(`nwt_${index}`)?.value.replace(',', '.') || '0');
-      const otValue = parseFloat(this.formHeaderMo.get(`ot_wt_${index}`)?.value.replace(',', '.') || '0');
+      const nwtValue = this.formHeaderMo.get(`nwt_${index}`)?.value ? parseFloat(this.formHeaderMo.get(`nwt_${index}`)?.value.replace(',', '.')) : 0;
+
+      const otValue = this.formHeaderMo.get(`ot_wt_${index}`)?.value ? parseFloat(this.formHeaderMo.get(`ot_wt_${index}`)?.value.replace(',', '.')) : 0;
 
       const total = nwtValue + otValue;
       const formattedTotal = total.toLocaleString('id-ID', { minimumFractionDigits: 2 });
@@ -268,9 +269,6 @@ export class AddMoPpcComponent implements OnInit {
       month3: month3Val,
       year3: year3Val,
     };
-
-    console.log(varWd);
-
     this.getWorkDays(varWd);
   }
 
@@ -284,18 +282,21 @@ export class AddMoPpcComponent implements OnInit {
 
           this.formHeaderMo.patchValue({
             nwd_0: this.parsingNumberService.separatorAndDecimalView(workDataM0.wdNormalTire),
+            nwt_0: this.parsingNumberService.separatorAndDecimalView(workDataM0.wdNormalTire),
             tl_ot_wd_0: this.parsingNumberService.separatorAndDecimalView(workDataM0.wdOtTl),
             tt_ot_wd_0: this.parsingNumberService.separatorAndDecimalView(workDataM0.wdOtTt),
             total_tlwd_0: this.parsingNumberService.separatorAndDecimalView(workDataM0.totalWdTl),
             total_ttwd_0: this.parsingNumberService.separatorAndDecimalView(workDataM0.totalWdTt),
 
             nwd_1: this.parsingNumberService.separatorAndDecimalView(workDataM1.wdNormalTire),
+            nwt_1: this.parsingNumberService.separatorAndDecimalView(workDataM1.wdNormalTire),
             tl_ot_wd_1: this.parsingNumberService.separatorAndDecimalView(workDataM1.wdOtTl),
             tt_ot_wd_1: this.parsingNumberService.separatorAndDecimalView(workDataM1.wdOtTt),
             total_tlwd_1: this.parsingNumberService.separatorAndDecimalView(workDataM1.totalWdTl),
             total_ttwd_1: this.parsingNumberService.separatorAndDecimalView(workDataM1.totalWdTt),
 
             nwd_2: this.parsingNumberService.separatorAndDecimalView(workDataM2.wdNormalTire),
+            nwt_2: this.parsingNumberService.separatorAndDecimalView(workDataM2.wdNormalTire),
             tl_ot_wd_2: this.parsingNumberService.separatorAndDecimalView(workDataM2.wdOtTl),
             tt_ot_wd_2: this.parsingNumberService.separatorAndDecimalView(workDataM2.wdOtTt),
             total_tlwd_2: this.parsingNumberService.separatorAndDecimalView(workDataM2.totalWdTl),
@@ -533,7 +534,7 @@ export class AddMoPpcComponent implements OnInit {
     // Validate available months before proceeding
     this.validateAvailableMonths(varWd).then((isValid) => {
       if (!isValid) {
-        return; // Exit if validation fails
+        return;
       }
 
       // Proceed with data preparation and saving if validation passes
@@ -608,27 +609,16 @@ export class AddMoPpcComponent implements OnInit {
     // Set data save Header Mo
     this.headerMo = [];
     for (let i = 0; i < 3; i++) {
-      let nwdValue = this.parseFormattedValue(this.formHeaderMo.get(`nwd_${i}`)?.value);
-      let nwtValue = this.parseFormattedValue(this.formHeaderMo.get(`nwt_${i}`)?.value);
-      let otWdTubeValue = this.parseFormattedValue(this.formHeaderMo.get(`ot_wt_${i}`)?.value);
-      let totalWdTube = this.parseFormattedValue(this.formHeaderMo.get(`total_wt_${i}`)?.value);
-
-      // Validate: if nwt is null or not filled, set it to nwd
-      if (nwtValue === null) {
-        nwtValue = nwdValue;
-        otWdTubeValue = 0;
-        totalWdTube = nwtValue + otWdTubeValue;
-      }
-
+      let otWdTubeValue = this.parseFormattedValue(this.formHeaderMo.get(`ot_wt_${i}`)?.value) ?? 0;
       this.headerMo.push({
         moId: this.lastIdMo,
         month: new Date(this.formHeaderMo.get(`month_${i}`)?.value),
         wdNormalTire: this.parseFormattedValue(this.formHeaderMo.get(`nwd_${i}`)?.value),
-        wdNormalTube: nwtValue,
+        wdNormalTube: this.parseFormattedValue(this.formHeaderMo.get(`nwt_${i}`)?.value),
         wdOtTube: otWdTubeValue,
         wdOtTl: this.parseFormattedValue(this.formHeaderMo.get(`tl_ot_wd_${i}`)?.value),
         wdOtTt: this.parseFormattedValue(this.formHeaderMo.get(`tt_ot_wd_${i}`)?.value),
-        totalWdTube: totalWdTube,
+        totalWdTube: this.parseFormattedValue(this.formHeaderMo.get(`total_wt_${i}`)?.value),
         totalWdTl: this.parseFormattedValue(this.formHeaderMo.get(`total_tlwd_${i}`)?.value),
         totalWdTt: this.parseFormattedValue(this.formHeaderMo.get(`total_ttwd_${i}`)?.value),
         maxCapTube: this.parseFormattedValue(this.formHeaderMo.get(`max_tube_capa_${i}`)?.value || ''),
