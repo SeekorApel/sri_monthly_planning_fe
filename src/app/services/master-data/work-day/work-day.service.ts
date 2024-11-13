@@ -67,6 +67,19 @@ export class WorkDayService {
     );
   }
 
+  turnOnHour(dateTarget: string,hour: string,type: string): Observable<ApiResponse<WDHours>> {
+    return this.http.post<ApiResponse<WDHours>>(
+      environment.apiUrlWebAdmin + '/turnOnHour/'+dateTarget+"/"+hour+"/"+type,
+      { headers: this.getHeaders() }
+    );
+  }
+  turnOffHour(dateTarget: string,hour: string,type: string): Observable<ApiResponse<WDHours>> {
+    return this.http.post<ApiResponse<WDHours>>(
+      environment.apiUrlWebAdmin + '/turnOffHour/'+dateTarget+"/"+hour+"/"+type,
+      { headers: this.getHeaders() }
+    );
+  }
+
   updateDWorkDayHours(wdhours: WDHours): Observable<ApiResponse<WDHours>> {
     return this.http.post<ApiResponse<WDHours>>(
       environment.apiUrlWebAdmin + '/updateDWorkDayHours',
