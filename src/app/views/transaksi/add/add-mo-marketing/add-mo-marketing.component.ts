@@ -1319,7 +1319,7 @@ export class AddMoMarketingComponent implements OnInit {
     if (totalMoTLMonth0 > maxCapTlM0) {
       Swal.fire({
         title: 'Warning!',
-        text: `Total Marketing Order TL for Month 1 must not exceed Maximum Capacity Tire TL ${this.formatSeparator(maxCapTlM0)}`,
+        text: `Total Marketing Order TL must not exceed the total Maximum Capacity of TL ${this.formatSeparator(maxCapTlM0)} in month 1.`,
         icon: 'warning',
         confirmButtonText: 'OK',
       });
@@ -1329,7 +1329,7 @@ export class AddMoMarketingComponent implements OnInit {
     if (totalMoTLMonth1 > maxCapTlM1) {
       Swal.fire({
         title: 'Warning!',
-        text: `Total Marketing Order TL for Month 2 must not exceed Maximum Capacity Tire TL ${this.formatSeparator(maxCapTlM1)}`,
+        text: `Total Marketing Order TL must not exceed the total Maximum Capacity of TL ${this.formatSeparator(maxCapTlM1)} in month 2.`,
         icon: 'warning',
         confirmButtonText: 'OK',
       });
@@ -1339,7 +1339,7 @@ export class AddMoMarketingComponent implements OnInit {
     if (totalMoTLMonth2 > maxCapTlM2) {
       Swal.fire({
         title: 'Warning!',
-        text: `Total Marketing Order TL for Month 3 must not exceed Maximum Capacity Tire TL ${this.formatSeparator(maxCapTlM0)}`,
+        text: `Total Marketing Order TL must not exceed the total Maximum Capacity of TL ${this.formatSeparator(maxCapTlM2)} in month 3.`,
         icon: 'warning',
         confirmButtonText: 'OK',
       });
@@ -1351,7 +1351,7 @@ export class AddMoMarketingComponent implements OnInit {
     if (totalMoTTMonth0 > maxCapTtM0) {
       Swal.fire({
         title: 'Warning!',
-        text: `Total Marketing Order TT for Month 1 must not exceed Maximum Capacity Tire TT ${this.formatSeparator(maxCapTtM0)}`,
+        text: `Total Marketing Order TT must not exceed the total Maximum Capacity of TT ${this.formatSeparator(maxCapTtM0)} in month 1.`,
         icon: 'warning',
         confirmButtonText: 'OK',
       });
@@ -1361,7 +1361,7 @@ export class AddMoMarketingComponent implements OnInit {
     if (totalMoTTMonth1 > maxCapTtM1) {
       Swal.fire({
         title: 'Warning!',
-        text: `Total Marketing Order TT for Month 2 must not exceed Maximum Capacity Tire TT ${this.formatSeparator(maxCapTtM1)}`,
+        text: `Total Marketing Order TT must not exceed the total Maximum Capacity of TT ${this.formatSeparator(maxCapTtM1)} in month 2.`,
         icon: 'warning',
         confirmButtonText: 'OK',
       });
@@ -1371,7 +1371,7 @@ export class AddMoMarketingComponent implements OnInit {
     if (totalMoTTMonth2 > maxCapTtM2) {
       Swal.fire({
         title: 'Warning!',
-        text: `Total Marketing Order TT for Month 3 must not exceed Maximum Capacity Tire TT ${this.formatSeparator(maxCapTtM2)}`,
+        text: `Total Marketing Order TT must not exceed the total Maximum Capacity of TT ${this.formatSeparator(maxCapTtM2)} in month 3.`,
         icon: 'warning',
         confirmButtonText: 'OK',
       });
@@ -1383,7 +1383,7 @@ export class AddMoMarketingComponent implements OnInit {
     if (totalMoTTubeMonth0 > maxCapTubeM0) {
       Swal.fire({
         title: 'Warning!',
-        text: `Total Marketing Order Tube for Month 1 must not exceed Maximum Capacity Tube ${this.formatSeparator(maxCapTubeM0)}`,
+        text: `Total Marketing Order Tube must not exceed the total Maximum Capacity of Tube ${this.formatSeparator(maxCapTubeM0)} in month 1.`,
         icon: 'warning',
         confirmButtonText: 'OK',
       });
@@ -1393,7 +1393,7 @@ export class AddMoMarketingComponent implements OnInit {
     if (totalMoTTubeMonth1 > maxCapTubeM1) {
       Swal.fire({
         title: 'Warning!',
-        text: `Total Marketing Order Tube for Month 2 must not exceed Maximum Capacity Tube ${this.formatSeparator(maxCapTubeM1)}`,
+        text: `Total Marketing Order Tube must not exceed the total Maximum Capacity of Tube ${this.formatSeparator(maxCapTubeM1)} in month 2.`,
         icon: 'warning',
         confirmButtonText: 'OK',
       });
@@ -1403,7 +1403,7 @@ export class AddMoMarketingComponent implements OnInit {
     if (totalMoTTubeMonth2 > maxCapTubeM2) {
       Swal.fire({
         title: 'Warning!',
-        text: `Total Marketing Order Tube for Month 3 must not exceed Maximum Capacity Tube ${this.formatSeparator(maxCapTubeM2)}`,
+        text: `Total Marketing Order Tube must not exceed the total Maximum Capacity of Tube ${this.formatSeparator(maxCapTubeM2)} in month 3.`,
         icon: 'warning',
         confirmButtonText: 'OK',
       });
