@@ -13,25 +13,8 @@
 }
 
 .per-hour-wrapper-item {
-    flex: 0 0 calc(100%); /* Each item takes up half the width minus the gap */
-    flex: 0 0 calc(50% - 50px); /* Each item takes up half the width minus the gap */
+    flex: 0 0 calc(30%);  /* Each item takes up half the width minus the gap */
     box-sizing: border-box;      /* Ensure padding and border are included in width */
 }
 
-// .per-hour-item {
-// display: flex;
-// flex-direction: column;  /* Stack the checkbox and input within each hour block */
-// align-items: center;     /* Center items horizontally */
-// width: 120px;            /* Set a fixed width for each hour block */
-// }
-
-// .reason-input {
-// margin-top: 5px;         /* Add some space between the checkbox and the input field */
-// }
-
-// .card-body {
-// display: flex;
-// flex-direction: column;
-// align-items: center;
-// }
   
