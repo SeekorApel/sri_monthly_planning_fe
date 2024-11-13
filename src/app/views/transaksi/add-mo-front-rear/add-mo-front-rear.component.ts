@@ -34,8 +34,7 @@ export class AddMoFrontRearComponent implements OnInit {
   detailMarketingOrder: DetailMarketingOrder[];
   headerMO: any[] = [];
 
-  gedung: string = ''; // Variabel untuk menyimpan nilai Gedung
-  mesin: string = '';  // Variabel untuk menyimpan nilai Mesin
+  gedung: string = ''; 
 
   searchText: string = '';
 
@@ -133,6 +132,7 @@ export class AddMoFrontRearComponent implements OnInit {
     // this.fillBodyTableMo();
     this.fillDataDetailMo();
     this.fillDataHeaderMo();
+    // this.filterMachines();
   }
 
   onChangePage(pageOfItems: Array<any>) {
@@ -168,6 +168,61 @@ export class AddMoFrontRearComponent implements OnInit {
       }
     );
   }
+
+  mesin: string = '';  
+
+  gedungOptions: string[] = ['Gedung G', 'Gedung C', 'Gedung D', 'Gedung A', 'Gedung B', 'Gedung H'];
+  mesinOptions: string[] = [
+    'CURING BOM 4 CAVITY GD G NO.001', 'CURING BOM 4 CAVITY GD G NO.002', 'CURING BOM 4 CAVITY GD G NO.003',
+    'CURING BOM 4 CAVITY GD G NO.004', 'CURING BOM 4 CAVITY GD G NO.005', 'CURING BOM 4 CAVITY GD C NO.001',
+    'CURING BOM 4 CAVITY GD C NO.002', 'CURING BOM 4 CAVITY GD C NO.003', 'CURING BOM 4 CAVITY GD C NO.004',
+    'CURING BOM 4 CAVITY GD C NO.005', 'CURING BOM 4 CAVITY GD D NO.001', 'CURING BOM 4 CAVITY GD D NO.002',
+    'CURING BOM 4 CAVITY GD D NO.003', 'CURING BOM 4 CAVITY GD D NO.004', 'CURING BOM 4 CAVITY GD D NO.005',
+    'CURING AB 5 ST CHOP GD A NO.013', 'CURING AB 5 ST CHOP GD A NO.014', 'CURING AB 5 ST CHOP GD A NO.015',
+    'CURING AB 5 ST CHOP GD A NO.016', 'CURING AB 5 ST CHOP GD B NO.001', 'CURING AB 5 ST CHOP GD B NO.002',
+    'CURING AB 5 ST CHOP GD B NO.003', 'CURING BOM 4 CAVITY GD H NO.020', 'CURING BOM 4 CAVITY GD H NO.021'
+  ];
+  
+  selectedGedung: string = '';
+  machineEntries: { gedung: string, mesin: string, filteredMesinOptions: string[] }[] = [];
+
+  onGedungSelect(index: number) {
+    this.filterMachines(index); // Apply the filter when Gedung is selected in a particular row
+  }
+
+  filterMachines(index: number) {
+    const selectedGedung = this.machineEntries[index].gedung;
+    let filteredOptions: string[] = [];
+    
+    if (selectedGedung === 'Gedung G') {
+      filteredOptions = this.mesinOptions.filter(mesin => mesin.toLowerCase().includes('gd g'));
+    } else if (selectedGedung === 'Gedung C') {
+      filteredOptions = this.mesinOptions.filter(mesin => mesin.toLowerCase().includes('gd c'));
+    } else if (selectedGedung === 'Gedung D') {
+      filteredOptions = this.mesinOptions.filter(mesin => mesin.toLowerCase().includes('gd d'));
+    } else if (selectedGedung === 'Gedung A') {
+      filteredOptions = this.mesinOptions.filter(mesin => mesin.toLowerCase().includes('gd a'));
+    } else if (selectedGedung === 'Gedung B') {
+      filteredOptions = this.mesinOptions.filter(mesin => mesin.toLowerCase().includes('gd b'));
+    } else if (selectedGedung === 'Gedung H') {
+      filteredOptions = this.mesinOptions.filter(mesin => mesin.toLowerCase().includes('gd h'));
+    }
+    
+    this.machineEntries[index].filteredMesinOptions = filteredOptions;
+  }
+
+  addRow() {
+    this.machineEntries.push({ gedung: '', mesin: '', filteredMesinOptions: [] });
+  }
+
+  // Method untuk menghapus entri dari tabel
+  removeEntry(entry: { gedung: string, mesin: string, filteredMesinOptions: string[] }) {
+    const index = this.machineEntries.findIndex(e => e === entry); // Menggunakan findIndex untuk mencocokkan entri
+    if (index > -1) {
+      this.machineEntries.splice(index, 1); // Menghapus entri berdasarkan index
+    }
+  }
+  
 
 
   fillDataDetailMo(): void {
@@ -417,53 +472,13 @@ export class AddMoFrontRearComponent implements OnInit {
     this.router.navigate(['/transaksi/view-mo-ppc']);
   }
 
+  navigateToViewMp() {
+    this.router.navigate(['/transaksi/add-monthly-planning']);
+  }
+
   navigateToEdit() {
     this.router.navigate(['/transaksi/edit-mo-ppc', this.idMo]);
   }
-
-  // Fungsi untuk menambah data ke tabel
-  addTable() {
-    // Pastikan Gedung dan Mesin telah dipilih
-    if (this.gedung === '' || this.mesin === '') {
-      alert("Silakan pilih Gedung dan Mesin terlebih dahulu.");
-      return;
-    }
-
-    // Temukan tbody dari tabel untuk menambahkan data baru
-    const tableBody = document.getElementById('machineTable')?.getElementsByTagName('tbody')[0];
-
-    // Membuat baris baru di tabel
-    const newRow = tableBody?.insertRow();
-
-    // Membuat cell untuk Gedung, Mesin, dan Action (Tombol Delete)
-    const cellGedung = newRow?.insertCell(0);
-    const cellMesin = newRow?.insertCell(1);
-    const cellDelete = newRow?.insertCell(2); // Cell untuk tombol delete
-
-    // Mengisi cell dengan data Gedung dan Mesin yang dipilih
-    if (cellGedung && cellMesin && cellDelete) {
-      cellGedung.innerText = this.gedung;
-      cellMesin.innerText = this.mesin;
-
-      // Membuat tombol silang untuk menghapus baris
-      const deleteBtn = document.createElement('button');
-      deleteBtn.innerHTML = '❌'; // Menambahkan ikon silang
-      deleteBtn.classList.add('btn', 'btn-danger');
-
-      // Event listener untuk menghapus baris ketika tombol silang diklik
-      deleteBtn.addEventListener('click', () => {
-        newRow?.remove(); // Menghapus baris
-      });
-
-      // Menambahkan tombol silang ke dalam cellDelete
-      cellDelete.appendChild(deleteBtn);
-    }
-
-    // Reset dropdown setelah data ditambahkan
-    this.gedung = '';
-    this.mesin = '';
-  }
-
 
 
 }

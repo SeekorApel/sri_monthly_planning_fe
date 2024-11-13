@@ -511,7 +511,7 @@
                 <th colspan="3" style="min-width: 400px" class="align-middle">Sales Forecast</th>
                 <th colspan="3" style="min-width: 400px" class="align-middle">Marketing Order</th>
                 <th rowspan="2" style="min-width: 150px" class="align-middle">PPD</th>
-                <th rowspan="2" style="min-width: 150px" class="align-middle">Machine</th>
+                <th rowspan="2" style="min-width: 150px" class="align-middle">Alternative Machine</th>
               </tr>
 
               <!-- Child Header -->
@@ -555,7 +555,7 @@
 
                 <td class="text-center">
                   <div class="d-flex align-items-center justify-content-center">
-                    <button (click)="viewDetail(mo)" class="btn btn-sm btn-info ml-2">Detail</button>
+                    <button (click)="viewDetail(mo)" class="btn btn-sm btn-secondary ml-2">Detail</button>
                   </div>
                 </td>
               </tr>
@@ -568,13 +568,14 @@
 
   <div class="col-md-12 pb-4">
     <button (click)="navigateToViewMo()" class="btn btn-primary justify-content-start mr-2">Back</button>
+    <button (click)="navigateToViewMp()" class="btn btn-success justify-content-start mr-2">Submit</button>
   </div>
 </div>
 
 <!-- Modal Detail Mesin -->
-<div class="modal fade" id="dmpModal" tabindex="-1" role="dialog" aria-labelledby="Detail Daily Monthly Planning"
+<div class="modal fade " id="dmpModal" tabindex="-1" role="dialog" aria-labelledby="Detail Daily Monthly Planning"
   aria-hidden="true">
-  <div class="modal-dialog" role="document">
+  <div class="modal-dialog" role="document"  style="max-width: 40%;">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="addModalLabel">Detail Machine</h5>
@@ -584,68 +585,47 @@
       </div>
       <div class="modal-body">
         <form>
-          <div class="form-group">
-            <label for="gedungSelect">Gedung:</label>
-            <select id="gedungSelect" class="form-control" [(ngModel)]="gedung" name="gedung">
-              <option value="">Select Gedung</option>
-              <option value="Gedung G">Gedung G</option>
-              <option value="Gedung C">Gedung C</option>
-              <option value="Gedung D">Gedung D</option>
-              <option value="Gedung A">Gedung A</option>
-              <option value="Gedung B">Gedung B</option>
-              <option value="Gedung H">Gedung H</option>
-            </select>
+          <table id="machineTable" class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Gedung</th>
+                <th>Mesin</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Loop through machineEntries to create rows -->
+              <tr *ngFor="let entry of machineEntries; let i = index">
+                <td>
+                  <select class="form-control" [(ngModel)]="entry.gedung" name="gedung{{i}}" (change)="onGedungSelect(i)">
+                    <option value="">Select Gedung</option>
+                    <option *ngFor="let option of gedungOptions" [value]="option">{{ option }}</option>
+                  </select>
+                </td>
+                <td>
+                  <select id="mesinSelect" class="form-control" [(ngModel)]="entry.mesin" name="mesin{{i}}">
+                    <option value="">Select Mesin</option>
+                    <option *ngFor="let mesin of entry.filteredMesinOptions" [value]="mesin">{{ mesin }}</option>
+                  </select>
+                </td>
+                <td>
+                  <button (click)="removeEntry(entry)" class="btn btn-danger" style="font-size: 12px; padding: 3px 6px;">Remove</button>
+                </td>
+              </tr>             
+            </tbody>
+          </table>
+
+          <!-- Add Row Button -->
+          <div class="text-right form-group mb-3">
+            <button type="button" (click)="addRow()" class="btn btn-success">Add Row</button>
           </div>
-          <div class="form-group">
-            <label for="mesinSelect">Mesin:</label>
-            <select id="mesinSelect" class="form-control" [(ngModel)]="mesin" name="mesin">
-              <option value="">Select Mesin</option>
-              <option value="CURING BOM 4 CAVITY GD G NO.001">CURING BOM 4 CAVITY GD G NO.001</option>
-              <option value="CURING BOM 4 CAVITY GD G NO.002">CURING BOM 4 CAVITY GD G NO.002</option>
-              <option value="CURING BOM 4 CAVITY GD G NO.003">CURING BOM 4 CAVITY GD G NO.003</option>
-              <option value="CURING BOM 4 CAVITY GD G NO.004">CURING BOM 4 CAVITY GD G NO.004</option>
-              <option value="CURING BOM 4 CAVITY GD G NO.005">CURING BOM 4 CAVITY GD G NO.005</option>
-              <option value="CURING BOM 4 CAVITY GD C NO.001">CURING BOM 4 CAVITY GD C NO.001</option>
-              <option value="CURING BOM 4 CAVITY GD C NO.002">CURING BOM 4 CAVITY GD C NO.002</option>
-              <option value="CURING BOM 4 CAVITY GD C NO.003">CURING BOM 4 CAVITY GD C NO.003</option>
-              <option value="CURING BOM 4 CAVITY GD C NO.004">CURING BOM 4 CAVITY GD C NO.004</option>
-              <option value="CURING BOM 4 CAVITY GD C NO.005">CURING BOM 4 CAVITY GD C NO.005</option>
-              <option value="CURING BOM 4 CAVITY GD D NO.001">CURING BOM 4 CAVITY GD D NO.001</option>
-              <option value="CURING BOM 4 CAVITY GD D NO.002">CURING BOM 4 CAVITY GD D NO.002</option>
-              <option value="CURING BOM 4 CAVITY GD D NO.003">CURING BOM 4 CAVITY GD D NO.003</option>
-              <option value="CURING BOM 4 CAVITY GD D NO.004">CURING BOM 4 CAVITY GD D NO.004</option>
-              <option value="CURING BOM 4 CAVITY GD D NO.005">CURING BOM 4 CAVITY GD D NO.005</option>
-              <option value="CURING AB 5 ST CHOP GD A NO.013">CURING AB 5 ST CHOP GD A NO.013</option>
-              <option value="CURING AB 5 ST CHOP GD A NO.014">CURING AB 5 ST CHOP GD A NO.014</option>
-              <option value="CURING AB 5 ST CHOP GD A NO.015">CURING AB 5 ST CHOP GD A NO.015</option>
-              <option value="CURING AB 5 ST CHOP GD A NO.016">CURING AB 5 ST CHOP GD A NO.016</option>
-              <option value="CURING AB 5 ST CHOP GD B NO.001">CURING AB 5 ST CHOP GD B NO.001</option>
-              <option value="CURING AB 5 ST CHOP GD B NO.002">CURING AB 5 ST CHOP GD B NO.002</option>
-              <option value="CURING AB 5 ST CHOP GD B NO.003">CURING AB 5 ST CHOP GD B NO.003</option>
-              <option value="CURING BOM 4 CAVITY GD H NO.020">CURING BOM 4 CAVITY GD H NO.020</option>
-              <option value="CURING BOM 4 CAVITY GD H NO.021">CURING BOM 4 CAVITY GD H NO.021</option>
-            </select>
-          </div>
-          <button (click)="addTable()" id="addToTableBtn" class="btn btn-primary">Add to Table</button>
         </form>
-        <table id="machineTable" class="table table-bordered">
-          <thead>
-            <tr>
-              <th>Gedung</th>
-              <th>Mesin</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <!-- Data akan ditambahkan di sini -->
-          </tbody>
-        </table>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         <button type="button" class="btn btn-primary" id="saveMachineBtn">Simpan</button>
-        <button type="button" class="btn btn-warning" id="addMoreBtn">Tambah Lagi</button>
       </div>
     </div>
   </div>
 </div>
+
