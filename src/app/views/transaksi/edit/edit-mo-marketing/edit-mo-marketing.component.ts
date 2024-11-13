@@ -433,19 +433,42 @@ export class EditMoMarketingComponent implements OnInit {
       }
     });
 
+    // this.detailMarketingOrder.forEach((dmo) => {
+    //   if (dmo.itemCuring) {
+    //     if (curingGroupsM0[dmo.itemCuring] > dmo.maxCapMonth0) {
+    //       dmo.validationMessageM0 = 'Maximal Capacity with the same curring item is overloaded';
+    //       hasInvalidInput = true;
+    //     }
+    //     if (curingGroupsM1[dmo.itemCuring] > dmo.maxCapMonth1) {
+    //       dmo.validationMessageM1 = 'Maximal Capacity with the same curring item is overloaded';
+    //       hasInvalidInput = true;
+    //     }
+    //     if (curingGroupsM2[dmo.itemCuring] > dmo.maxCapMonth2) {
+    //       dmo.validationMessageM2 = 'Maximal Capacity with the same curring item is overloaded';
+    //       hasInvalidInput = true;
+    //     }
+    //   }
+    // });
+
     this.detailMarketingOrder.forEach((dmo) => {
       if (dmo.itemCuring) {
         if (curingGroupsM0[dmo.itemCuring] > dmo.maxCapMonth0) {
-          dmo.validationMessageM0 = 'Maximal Capacity with the same curring item is overloaded';
-          hasInvalidInput = true;
+          if (!dmo.validationMessageM0) {
+            dmo.validationMessageM0 = 'Maximal Capacity with the same curing item is overloaded';
+            hasInvalidInput = true;
+          }
         }
         if (curingGroupsM1[dmo.itemCuring] > dmo.maxCapMonth1) {
-          dmo.validationMessageM1 = 'Maximal Capacity with the same curring item is overloaded';
-          hasInvalidInput = true;
+          if (!dmo.validationMessageM1) {
+            dmo.validationMessageM1 = 'Maximal Capacity with the same curing item is overloaded';
+            hasInvalidInput = true;
+          }
         }
         if (curingGroupsM2[dmo.itemCuring] > dmo.maxCapMonth2) {
-          dmo.validationMessageM2 = 'Maximal Capacity with the same curring item is overloaded';
-          hasInvalidInput = true;
+          if (!dmo.validationMessageM2) {
+            dmo.validationMessageM2 = 'Maximal Capacity with the same curing item is overloaded';
+            hasInvalidInput = true;
+          }
         }
       }
     });
@@ -507,7 +530,7 @@ export class EditMoMarketingComponent implements OnInit {
     if (totalMoTLMonth0 > maxCapTlM0) {
       Swal.fire({
         title: 'Warning!',
-        text: `Total Marketing Order TL must not exceed the total Maximum Capacity of TL ${this.formatSeparatorView(maxCapTlM0)} in month 1.`,
+        text: `Total Marketing Order TL must not exceed the total Maximum Capacity of TL 1st month (${this.formatSeparatorView(maxCapTlM0)}).`,
         icon: 'warning',
         confirmButtonText: 'OK',
       });
@@ -517,7 +540,7 @@ export class EditMoMarketingComponent implements OnInit {
     if (totalMoTLMonth1 > maxCapTlM1) {
       Swal.fire({
         title: 'Warning!',
-        text: `Total Marketing Order TL must not exceed the total Maximum Capacity of TL ${this.formatSeparatorView(maxCapTlM1)} in month 2.`,
+        text: `Total Marketing Order TL must not exceed the total Maximum Capacity of TL 2st month (${this.formatSeparatorView(maxCapTlM1)}).`,
         icon: 'warning',
         confirmButtonText: 'OK',
       });
@@ -527,7 +550,7 @@ export class EditMoMarketingComponent implements OnInit {
     if (totalMoTLMonth2 > maxCapTlM2) {
       Swal.fire({
         title: 'Warning!',
-        text: `Total Marketing Order TL must not exceed the total Maximum Capacity of TL ${this.formatSeparatorView(maxCapTlM2)} in month 3.`,
+        text: `Total Marketing Order TL must not exceed the total Maximum Capacity of TL 3st month (${this.formatSeparatorView(maxCapTlM2)}).`,
         icon: 'warning',
         confirmButtonText: 'OK',
       });
@@ -539,7 +562,7 @@ export class EditMoMarketingComponent implements OnInit {
     if (totalMoTTMonth0 > maxCapTtM0) {
       Swal.fire({
         title: 'Warning!',
-        text: `Total Marketing Order TT must not exceed the total Maximum Capacity of TT ${this.formatSeparatorView(maxCapTtM0)} in month 1.`,
+        text: `Total Marketing Order TT must not exceed the total Maximum Capacity of TT 1st month (${this.formatSeparatorView(maxCapTtM0)}).`,
         icon: 'warning',
         confirmButtonText: 'OK',
       });
@@ -549,7 +572,7 @@ export class EditMoMarketingComponent implements OnInit {
     if (totalMoTTMonth1 > maxCapTtM1) {
       Swal.fire({
         title: 'Warning!',
-        text: `Total Marketing Order TT must not exceed the total Maximum Capacity of TT ${this.formatSeparatorView(maxCapTtM1)} in month 2.`,
+        text: `Total Marketing Order TT must not exceed the total Maximum Capacity of TT 2st month (${this.formatSeparatorView(maxCapTtM1)}).`,
         icon: 'warning',
         confirmButtonText: 'OK',
       });
@@ -559,7 +582,7 @@ export class EditMoMarketingComponent implements OnInit {
     if (totalMoTTMonth2 > maxCapTtM2) {
       Swal.fire({
         title: 'Warning!',
-        text: `Total Marketing Order TT must not exceed the total Maximum Capacity of TT ${this.formatSeparatorView(maxCapTtM2)} in month 3.`,
+        text: `Total Marketing Order TT must not exceed the total Maximum Capacity of TT 3st month (${this.formatSeparatorView(maxCapTtM2)}).`,
         icon: 'warning',
         confirmButtonText: 'OK',
       });
@@ -571,7 +594,7 @@ export class EditMoMarketingComponent implements OnInit {
     if (totalMoTTubeMonth0 > maxCapTubeM0) {
       Swal.fire({
         title: 'Warning!',
-        text: `Total Marketing Order Tube must not exceed the total Maximum Capacity of Tube ${this.formatSeparatorView(maxCapTubeM0)} in month 1.`,
+        text: `Total Marketing Order Tube must not exceed the total Maximum Capacity of Tube 1st month (${this.formatSeparatorView(maxCapTubeM0)}).`,
         icon: 'warning',
         confirmButtonText: 'OK',
       });
@@ -581,7 +604,7 @@ export class EditMoMarketingComponent implements OnInit {
     if (totalMoTTubeMonth1 > maxCapTubeM1) {
       Swal.fire({
         title: 'Warning!',
-        text: `Total Marketing Order Tube must not exceed the total Maximum Capacity of Tube ${this.formatSeparatorView(maxCapTubeM1)} in month 2.`,
+        text: `Total Marketing Order Tube must not exceed the total Maximum Capacity of Tube 2st month (${this.formatSeparatorView(maxCapTubeM1)}).`,
         icon: 'warning',
         confirmButtonText: 'OK',
       });
@@ -591,7 +614,7 @@ export class EditMoMarketingComponent implements OnInit {
     if (totalMoTTubeMonth2 > maxCapTubeM2) {
       Swal.fire({
         title: 'Warning!',
-        text: `Total Marketing Order Tube must not exceed the total Maximum Capacity of Tube ${this.formatSeparatorView(maxCapTubeM2)} in month 3.`,
+        text: `Total Marketing Order Tube must not exceed the total Maximum Capacity of Tube 3st month (${this.formatSeparatorView(maxCapTubeM2)}).`,
         icon: 'warning',
         confirmButtonText: 'OK',
       });
