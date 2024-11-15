@@ -47,12 +47,9 @@ export class ViewCtCuringComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  constructor(private ctcuringService: CTCuringService, private fb: FormBuilder,
-    private productService: ProductService 
-  ) {
+  constructor(private ctcuringService: CTCuringService, private fb: FormBuilder, private productService: ProductService) {
     this.editCTCuringForm = this.fb.group({
       wip: ['', Validators.required],
-      partNumber: ['', Validators.required],
       groupcounter: ['', Validators.required],
       vargroupcounter: ['', Validators.required],
       sequence: ['', Validators.required],
@@ -88,31 +85,10 @@ export class ViewCtCuringComponent implements OnInit {
       waktutotalctnormal: ['', Validators.required],
       waktutotalctfriday: ['', Validators.required],
     });
-    this.loadProduct();
   }
 
   ngOnInit(): void {
     this.getAllCTCuring();
-  }
-
-  private loadProduct(): void {
-    this.productService.getAllProduct().subscribe(
-      (response: ApiResponse<Product[]>) => {
-        this.products = response.data;
-
-        if (!this.uomOptionData) {
-          this.uomOptionData = [];
-        }
-
-        this.uomOptionData = this.products.map((element) => ({
-          id: element.part_NUMBER.toString(), // Ensure the ID is a string
-          text: element.part_NUMBER.toString(), // Set the text to the name (or other property)
-        }));
-      },
-      (error) => {
-        this.errorMessage = 'Failed to load Setting: ' + error.message;
-      }
-    );
   }
 
   getAllCTCuring(): void {

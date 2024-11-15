@@ -12,12 +12,12 @@ import { map, catchError } from 'rxjs/operators';
 export class PatternService {
   constructor(private http: HttpClient) {}
 
-  // private getHeaders() {
-  //   return new HttpHeaders({
-  //     Authorization: `Bearer ${environment.token}`,
-  //     // Do not set Content-Type here; let the browser handle it
-  //   });
-  // }
+  private getHeaders() {
+    return new HttpHeaders({
+      Authorization: `Bearer ${environment.token}`,
+      // Do not set Content-Type here; let the browser handle it
+    });
+  }
 
   getPatternById(idPattern: number): Observable<ApiResponse<Pattern>> {
     return this.http.get<ApiResponse<Pattern>>(environment.apiUrlWebAdmin + '/getPatternById/' + idPattern);

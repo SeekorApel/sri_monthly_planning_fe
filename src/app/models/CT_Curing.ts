@@ -1,7 +1,6 @@
 export class CT_Curing {
   ct_CURING_ID: number;
   wip: string;
-  part_NUMBER: number;
   group_COUNTER: string;
   var_GROUP_COUNTER: string;
   sequence: number;
