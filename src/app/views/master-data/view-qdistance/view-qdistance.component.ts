@@ -55,8 +55,8 @@ export class ViewQDistanceComponent implements OnInit {
   }
 
   getQuadrantName(quadrantID: number): string {
-    const quadrant = this.quadrant.find(b => b.quadrant_ID === quadrantID);
-    return quadrant ? quadrant.quadrant_ID.toString() : 'Unknown';
+    const quadrant = this.quadrant.find((b) => b.quadrant_ID === quadrantID);
+    return quadrant ? quadrant.quadrant_NAME.toString() : 'Unknown';
   }
 
   ngOnInit(): void {

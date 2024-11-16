@@ -49,7 +49,7 @@
 
           <!-- Machine Number Column -->
           <ng-container matColumnDef="machine_NUMBER">
-            <th *matHeaderCellDef style="min-width: 130px" mat-sort-header>Machine Number</th>
+            <th *matHeaderCellDef style="min-width: 150px" mat-sort-header>Machine Number</th>
             <td align="right" *matCellDef="let element">{{ element.machine_NUMBER }}</td>
           </ng-container>
 
@@ -75,7 +75,7 @@
 
           <!-- Action Column -->
           <ng-container matColumnDef="action">
-            <th *matHeaderCellDef style="min-width: 100px">Action</th>
+            <th *matHeaderCellDef style="min-width: 200px">Action</th>
             <td *matCellDef="let element">
               <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(element.id_MACHINE_TASS)">Update</button>
               <button type="button" class="btn btn-md ml-3" [ngClass]="{ 'btn-danger': element.status === 1, 'btn-success': element.status !== 1 }" (click)="element.status === 1 ? deleteData(element) : activateData(element)">
