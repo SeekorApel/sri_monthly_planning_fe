@@ -11,8 +11,6 @@ import { map, catchError } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class CTCuringService {
-  //Isi tokenya
-  token: String = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBdXJlbCIsImV4cCI6MTcyODUyMDUzMX0.Hg8SUxKJX8hTT8rYrBOnyphRoPPSzcRIeJWJHTDOdZQb3_U1KqM7m6J6k6LDpEoPba2DplpwV_KRsNti1Tcbig';
 
   constructor(private http: HttpClient) {}
 
