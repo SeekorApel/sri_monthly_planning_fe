@@ -21,40 +21,53 @@
       </div>
       <div class="table-responsive">
         <!-- Table -->
-        <table class="table table-striped">
-          <thead  align="center">
-            <tr>
-              <th>No</th>
-              <th>Plant ID</th>
-              <th>Building Name</th>
-              <th>Status</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr align="center" *ngFor="let building of pageOfItems; let i = index">
-              <td>{{ i + 1 }}</td>
-              <td>{{ building.plant_ID }}</td>
-              <td>{{ building.building_NAME }}</td>
-              <td [ngClass]="{ 'bg-success': building.status === 1, 'bg-danger': building.status !== 1 }">
-                {{ building.status === 1 ? 'Active' : 'Deactive' }}
-              </td>
-              <td>
-                <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(building.building_ID)">Update</button>
-                <button type="button" class="btn btn-md ml-2" [ngClass]="{ 'btn-danger': building.status === 1, 'btn-success': building.status !== 1 }" (click)="building.status === 1 ? deleteData(building) : activateData(building)">
-                  {{ building.status === 1 ? 'Delete' : 'Active' }}
-                </button>
-              </td>
-            </tr>
-          </tbody>
+        <table mat-table [dataSource]="dataSource" matSort class="table table-bordered table-striped table-sm">
+          <ng-container matColumnDef="no" >
+            <th *matHeaderCellDef >No</th>
+            <td  *matCellDef="let element; let i = index">{{ i + 1 }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="building_ID">
+            <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Building ID</th>
+            <td class="angka" *matCellDef="let element">{{ element.building_ID }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="plant_ID">
+            <th  *matHeaderCellDef mat-sort-header >Plant ID</th>
+            <td class="angka" *matCellDef="let element">{{ element.plant_ID }}</td>
+          </ng-container>
+          
+          <ng-container matColumnDef="building_NAME">
+            <th  *matHeaderCellDef mat-sort-header >Building Name</th>
+            <td class="huruf" *matCellDef="let element">{{ element.building_NAME }}</td>
+          </ng-container>
+          
+          <ng-container matColumnDef="status">
+            <th style="min-width: 50px;" *matHeaderCellDef>Status</th>
+            <td *matCellDef="let element" [ngClass]="{ 'bg-success': element.status === 1, 'bg-danger': element.status !== 1 }">
+              {{ element.status === 1 ? 'Active' : 'Deactive' }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="action" >
+            <th *matHeaderCellDef style="min-width: 150px;">Action</th>
+            <td *matCellDef="let element">
+              <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(element.building_ID)">Update</button>
+              <button type="button" class="btn btn-md ml-2" [ngClass]="{ 'btn-danger': element.status === 1, 'btn-success': element.status !== 1 }" (click)="element.status === 1 ? deleteData(element) : activateData(element)">
+                {{ element.status === 1 ? 'Delete' : 'Active' }}
+              </button>
+            </td>
+          </ng-container>
+
+          <tr align="center" style="height: 20px;" mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr align="center" mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
         </table>
         <!-- Pagination -->
-        <nav>
-          <ul class="pagination">
-            <jw-pagination [items]="buildings" [pageSize]="pageSize" [maxPages]="totalPages" (changePage)="onChangePage($event)"> </jw-pagination>
-          </ul>
-        </nav>
       </div>
+      <mat-paginator [pageSize]="pageSize"
+            [pageSizeOptions]="[5, 10, 20]"
+            showFirstLastButtons>
+      </mat-paginator>
     </div>
   </div>
 </div>
@@ -73,10 +86,21 @@
         <!-- Form with Reactive Forms -->
         <form [formGroup]="editBuildingForm">
           <div class="form-group">
-            <label for="plantID">Plant Id</label>
-            <input [(ngModel)]="edtBuildingObject.plant_ID" type="text" class="form-control" id="plantID" formControlName="plantID" [ngClass]="{ 'is-invalid': editBuildingForm.get('plantID').invalid && editBuildingForm.get('plantID').touched }" />
-            <!-- Error message if plantName is empty -->
-            <div *ngIf="editBuildingForm.get('plantID').invalid && editBuildingForm.get('plantID').touched" class="invalid-feedback">Building name is required.</div>
+            <label for="plantID" style="min-width: 150px;">Plant Name</label>
+            <div>
+              <ng-select2
+                formControlName="plantID" 
+                id="plantID"
+                name = "plantID"
+                [(ngModel)]="edtBuildingObject.plant_ID"
+                [data]="uomOptions"
+                [options]="options"
+                [placeholder]="'Please Select'">
+              </ng-select2>
+            </div>
+          </div>
+
+          <div class="form-group">
             <label for="buildingName">Building Name</label>
             <input [(ngModel)]="edtBuildingObject.building_NAME" type="text" class="form-control" id="buildingName" formControlName="buildingName" [ngClass]="{ 'is-invalid': editBuildingForm.get('buildingName').invalid && editBuildingForm.get('buildingName').touched }" />
             <!-- Error message if plantName is empty -->

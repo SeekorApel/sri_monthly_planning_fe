@@ -7,6 +7,14 @@ import Swal from 'sweetalert2';
 declare var $: any;
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
+import { Select2OptionData } from 'ng-select2';
+import { Options } from 'select2';
+
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSort } from '@angular/material/sort';
+import { MatPaginator } from '@angular/material/paginator';
+import { PlantService } from 'src/app/services/master-data/plant/plant.service';
+import { Plant } from 'src/app/models/Plant';
 
 @Component({
   selector: 'app-view-building',
@@ -28,12 +36,35 @@ export class ViewBuildingComponent implements OnInit {
   pageOfItems: Array<any>;
   pageSize: number = 5;
   totalPages: number = 5;
+  sortBuffer: Array<any>;
+  displayedColumns: string[] = ['no', 'building_ID', 'plant_ID','building_NAME','status', 'action'];
+  dataSource: MatTableDataSource<Building>;
 
-  constructor(private buildingService: BuildingService, private fb: FormBuilder) { 
+  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+
+  public uomOptions: Array<Select2OptionData>;
+  public options: Options = { width: '100%'};
+  uom: any;
+  plant: Plant[] =[];
+
+  constructor(private buildingService: BuildingService, private fb: FormBuilder, private plantService: PlantService) { 
     this.editBuildingForm = this.fb.group({
-      plantID: ['', Validators.required],
       buildingName: ['', Validators.required],
+      plantID: ['', Validators.required],
     });
+    plantService.getAllPlant().subscribe(
+      (response: ApiResponse<Plant[]>) => {
+        this.plant = response.data;
+        this.uomOptions = this.plant.map((element) => ({
+          id: element.plant_ID.toString(), // Ensure the ID is a string
+          text: element.plant_NAME // Set the text to the plant name
+        }));
+      },
+      (error) => {
+        this.errorMessage = 'Failed to load plants: ' + error.message;
+      }
+    );
   }
 
   ngOnInit(): void {
@@ -44,7 +75,10 @@ export class ViewBuildingComponent implements OnInit {
     this.buildingService.getAllBuilding().subscribe(
       (response: ApiResponse<Building[]>) => {
         this.buildings = response.data;
-        this.onChangePage(this.buildings.slice(0, this.pageSize));
+        this.dataSource = new MatTableDataSource(this.buildings);
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+        this.onChangePage(this.dataSource.data.slice(0, this.pageSize));
       },
       (error) => {
         this.errorMessage = 'Failed to load buildings: ' + error.message;
@@ -57,17 +91,18 @@ export class ViewBuildingComponent implements OnInit {
   }
 
   onSearchChange(): void {
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
     // Lakukan filter berdasarkan nama plant yang mengandung text pencarian (case-insensitive)
-    const filteredBuildings = this.buildings.filter(
-      (building) =>
-        building.plant_ID.toString()
-          .toLowerCase()
-          .includes(this.searchText.toLowerCase()) ||
-        building.building_NAME.toString().includes(this.searchText)
-    );
+    // const filteredBuildings = this.buildings.filter(
+    //   (building) =>
+    //     building.plant_ID.toString()
+    //       .toLowerCase()
+    //       .includes(this.searchText.toLowerCase()) ||
+    //     building.building_NAME.toString().includes(this.searchText)
+    // );
 
-    // Tampilkan hasil filter pada halaman pertama
-    this.onChangePage(filteredBuildings.slice(0, this.pageSize));
+    // // Tampilkan hasil filter pada halaman pertama
+    // this.onChangePage(filteredBuildings.slice(0, this.pageSize));
   }
 
   resetSearch(): void {

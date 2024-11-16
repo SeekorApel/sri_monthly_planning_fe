@@ -22,44 +22,58 @@
   
         <!-- Table -->
         <div class="table-responsive table-wrapper">
-          <table class="table table-bordered table-striped table-sm">
-            <thead align="center">
-              <tr>
-                <th>No</th>
-                <th>Curing Size ID</th>
-                <th>Machine Curing Type ID</th>
-                <th>Size ID</th>
-                <th>Capacity</th>
-                <th>Status</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr align="center" *ngFor="let curingSize of pageOfItems; let i = index">
-                <td>{{ i + 1 }}</td>
-                <td>{{ curingSize.curingsize_ID }}</td>
-                <td>{{ curingSize.machinecuringtype_ID }}</td>
-                <td>{{ curingSize.size_ID }}</td>
-                <td>{{ curingSize.capacity }}</td>
-                <td [ngClass]="{ 'bg-success': curingSize.status === 1, 'bg-danger': curingSize.status !== 1 }">
-                  {{ curingSize.status === 1 ? 'Active' : 'Deactive' }}
-                </td>
-                <td>
-                  <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(curingSize.curingsize_ID)">Update</button>
-                  <button type="button" class="btn btn-md ml-2" [ngClass]="{ 'btn-danger': curingSize.status === 1, 'btn-success': curingSize.status !== 1 }" (click)="curingSize.status === 1 ? deleteData(curingSize) : activateData(curingSize)">
-                    {{ curingSize.status === 1 ? 'Delete' : 'Active' }}
-                  </button>
-                </td>
-              </tr>
-            </tbody>
+          <table mat-table [dataSource]="dataSource" matSort class="table table-bordered table-striped table-sm">
+            <ng-container matColumnDef="no" >
+              <th *matHeaderCellDef >No</th>
+              <td  *matCellDef="let element; let i = index">{{ i + 1 }}</td>
+            </ng-container>
+  
+            <ng-container matColumnDef="curingsize_ID">
+              <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Curing Size ID</th>
+              <td class="angka" *matCellDef="let element">{{ element.curingsize_ID }}</td>
+            </ng-container>
+  
+            <ng-container matColumnDef="machinecuringtype_ID">
+              <th  *matHeaderCellDef mat-sort-header >Machine Curing Type ID</th>
+              <td class="huruf" *matCellDef="let element">{{ element.machinecuringtype_ID }}</td>
+            </ng-container>
+            
+            <ng-container matColumnDef="size_ID">
+              <th  *matHeaderCellDef mat-sort-header >Size ID</th>
+              <td class="huruf" *matCellDef="let element">{{ element.size_ID }}</td>
+            </ng-container>
+            
+            <ng-container matColumnDef="capacity">
+              <th  *matHeaderCellDef mat-sort-header >Capacity</th>
+              <td *matCellDef="let element">{{ element.capacity }}</td>
+            </ng-container>
+  
+            <ng-container matColumnDef="status">
+              <th style="min-width: 70px;" *matHeaderCellDef>Status</th>
+              <td *matCellDef="let element" [ngClass]="{ 'bg-success': element.status === 1, 'bg-danger': element.status !== 1 }">
+                {{ element.status === 1 ? 'Active' : 'Deactive' }}
+              </td>
+            </ng-container>
+  
+            <ng-container matColumnDef="action" >
+              <th *matHeaderCellDef style="min-width: 200px;">Action</th>
+              <td *matCellDef="let element">
+                <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(element.curingsize_ID)">Update</button>
+                <button type="button" class="btn btn-md ml-2" [ngClass]="{ 'btn-danger': element.status === 1, 'btn-success': element.status !== 1 }" (click)="element.status === 1 ? deleteData(element) : activateData(element)">
+                  {{ element.status === 1 ? 'Delete' : 'Active' }}
+                </button>
+              </td>
+            </ng-container>
+  
+            <tr align="center" style="height: 20px;" mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr align="center" mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
           </table>
           <!-- Pagination -->
-          <nav>
-            <ul class="pagination">
-              <jw-pagination [items]="curingSizes" [pageSize]="pageSize" [maxPages]="totalPages" (changePage)="onChangePage($event)"> </jw-pagination>
-            </ul>
-          </nav>
         </div>
+        <mat-paginator [pageSize]="pageSize"
+            [pageSizeOptions]="[5, 10, 20]"
+            showFirstLastButtons>
+      </mat-paginator>
       </div>
     </div>
   </div>
@@ -78,16 +92,32 @@
           <!-- Form with Reactive Forms -->
           <form [formGroup]="editCuringSizeForm">
             <div class="form-group">
-              <label for="machineCuringSizeID">Machine Curing Type ID</label>
-              <input [(ngModel)]="edtCuringSizeObject.machinecuringtype_ID" type="text" class="form-control" id="machineCuringSizeID" formControlName="machineCuringSizeID" [ngClass]="{ 'is-invalid': editCuringSizeForm.get('machineCuringSizeID').invalid && editCuringSizeForm.get('machineCuringSizeID').touched }" />
-              <!-- Error message if plantName is empty -->
-              <div *ngIf="editCuringSizeForm.get('machineCuringSizeID').invalid && editCuringSizeForm.get('machineCuringSizeID').touched" class="invalid-feedback">Machine curing type ID is required.</div>
+              <label for="machineCuringTypeID">Machine Curing Type ID</label>
+              <div>
+                <ng-select2
+                  formControlName="machineCuringTypeID" 
+                  id="machineCuringTypeID"
+                  name = "machineCuringTypeID"
+                  [(ngModel)]="edtCuringSizeObject.machinecuringtype_ID"
+                  [data]="uomOptions[0]"
+                  [options]="options"
+                  [placeholder]="'Please Select'">
+                </ng-select2>
+              </div>
             </div>
             <div class="form-group">
               <label for="sizeID">Size ID</label>
-              <input [(ngModel)]="edtCuringSizeObject.size_ID" type="text" class="form-control" id="sizeID" formControlName="sizeID" [ngClass]="{ 'is-invalid': editCuringSizeForm.get('sizeID').invalid && editCuringSizeForm.get('sizeID').touched }" />
-              <!-- Error message if plantName is empty -->
-              <div *ngIf="editCuringSizeForm.get('sizeID').invalid && editCuringSizeForm.get('sizeID').touched" class="invalid-feedback">Curing size ID is required.</div>
+              <div>
+                <ng-select2
+                  formControlName="sizeID" 
+                  id="sizeID"
+                  name = "sizeID"
+                  [(ngModel)]="edtCuringSizeObject.size_ID"
+                  [data]="uomOptions[1]"
+                  [options]="options"
+                  [placeholder]="'Please Select'">
+                </ng-select2>
+              </div>
             </div>
             <div class="form-group">
               <label for="capacity">Capacity</label>
