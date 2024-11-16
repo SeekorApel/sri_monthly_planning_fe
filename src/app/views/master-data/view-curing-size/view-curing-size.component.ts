@@ -7,6 +7,16 @@ import Swal from 'sweetalert2';
 declare var $: any;
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
+import { Select2OptionData } from 'ng-select2';
+import { Options } from 'select2';
+
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSort } from '@angular/material/sort';
+import { MatPaginator } from '@angular/material/paginator';
+import { MachineCuringType } from 'src/app/models/machine-curing-type';
+import { MachineCuringTypeService } from 'src/app/services/master-data/machine-curing-type/machine-curing-type.service';
+import { Size } from 'src/app/models/Size';
+import { SizeService } from 'src/app/services/master-data/size/size.service';
 
 @Component({
   selector: 'app-view-curing-size',
@@ -27,13 +37,63 @@ export class ViewCuringSizeComponent implements OnInit {
   pageOfItems: Array<any>;
   pageSize: number = 5;
   totalPages: number = 5;
+  sortBuffer: Array<any>;
+  displayedColumns: string[] = ['no', 'curingsize_ID', 'machinecuringtype_ID','size_ID', 'capacity', 'status', 'action'];
+  dataSource: MatTableDataSource<Curing_Size>;
 
-  constructor(private curingSizeService: CuringSizeService, private fb: FormBuilder) {
+  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+
+  public uomOptions: Array<Array<Select2OptionData>>;
+  public options: Options = { width: '100%'};
+  uom: any;
+  machineCuringType: MachineCuringType[] =[];
+  size: Size[] =[];
+
+  constructor(private curingSizeService: CuringSizeService, private fb: FormBuilder, private machineCuringTypeService: MachineCuringTypeService, private sizeService: SizeService) { 
     this.editCuringSizeForm = this.fb.group({
-      machineCuringSizeID: ['', Validators.required],
+      machineCuringTypeID: ['', Validators.required],
       sizeID: ['', Validators.required],
       capacity: ['', Validators.required]
     });
+    
+    this.loadMachineCuringType();
+    this.loadSize();
+  }
+
+  private loadMachineCuringType(): void {
+    this.machineCuringTypeService.getAllMCT().subscribe(
+      (response: ApiResponse<MachineCuringType[]>) => {
+        this.machineCuringType = response.data;
+        if (!this.uomOptions) {
+          this.uomOptions = [];
+        }
+        this.uomOptions[0] = this.machineCuringType.map((element) => ({
+          id: element.machinecuringtype_ID.toString(), // Ensure the ID is a string
+          text: element.machinecuringtype_ID.toString() // Set the text to the plant name
+        }));
+      },
+      (error) => {
+        this.errorMessage = 'Failed to load machine Curing type: ' + error.message;
+      }
+    );
+  }
+  private loadSize(): void {
+    this.sizeService.getAllSize().subscribe(
+      (response: ApiResponse<Size[]>) => {
+        this.size = response.data;
+        if (!this.uomOptions) {
+          this.uomOptions = [];
+        }
+        this.uomOptions[1] = this.size.map((element) => ({
+          id: element.size_ID, // Ensure the ID is a string
+          text: element.size_ID, // Set the text to the name (or other property)
+        }));
+      },
+      (error) => {
+        this.errorMessage = 'Failed to load size: ' + error.message;
+      }
+    );
   }
 
   ngOnInit(): void {
@@ -44,7 +104,10 @@ export class ViewCuringSizeComponent implements OnInit {
     this.curingSizeService.getAllCuringSize().subscribe(
       (response: ApiResponse<Curing_Size[]>) => {
         this.curingSizes = response.data;
-        this.onChangePage(this.curingSizes.slice(0, this.pageSize));
+        this.dataSource = new MatTableDataSource(this.curingSizes);
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+        this.onChangePage(this.dataSource.data.slice(0, this.pageSize));
       },
       (error) => {
         this.errorMessage = 'Failed to load curing sizes: ' + error.message;
@@ -57,15 +120,16 @@ export class ViewCuringSizeComponent implements OnInit {
   }
 
   onSearchChange(): void {
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
     // Lakukan filter berdasarkan nama plant yang mengandung text pencarian (case-insensitive)
-    const filteredCuringSizes = this.curingSizes.filter((curingSizes) => 
-      curingSizes.size_ID.toLowerCase().includes(this.searchText.toLowerCase()) ||
-      curingSizes.machinecuringtype_ID.toString().includes(this.searchText) ||
-      curingSizes.capacity.toString().includes(this.searchText) 
-    );
+    // const filteredCuringSizes = this.curingSizes.filter((curingSizes) => 
+    //   curingSizes.size_ID.toLowerCase().includes(this.searchText.toLowerCase()) ||
+    //   curingSizes.machinecuringtype_ID.toString().includes(this.searchText) ||
+    //   curingSizes.capacity.toString().includes(this.searchText) 
+    // );
 
-    // Tampilkan hasil filter pada halaman pertama
-    this.onChangePage(filteredCuringSizes.slice(0, this.pageSize));
+    // // Tampilkan hasil filter pada halaman pertama
+    // this.onChangePage(filteredCuringSizes.slice(0, this.pageSize));
   }
 
   resetSearch(): void {

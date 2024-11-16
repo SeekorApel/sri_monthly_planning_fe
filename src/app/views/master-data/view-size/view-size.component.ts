@@ -31,7 +31,6 @@ export class ViewSizeComponent implements OnInit {
   pageOfItems: Size[] =[];
   pageSize: number = 5;
   totalPages: number = 5;
-  sortBuffer: Array<any>;
   displayedColumns: string[] = ['no', 'size_ID', 'description','status','action'];
   dataSource: MatTableDataSource<Size>;
 
@@ -273,11 +272,3 @@ export class ViewSizeComponent implements OnInit {
   //   });
   // }
 }
-function compare(a: number | string, b: number | string, isAsc: boolean) {
-  return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
-}
-const ELEMENT_DATA = [
-  { size_ID: 1, description: 'Size 1', status: 1 },
-  { size_ID: 2, description: 'Size 2', status: 0 },
-  // Add more data as needed
-];

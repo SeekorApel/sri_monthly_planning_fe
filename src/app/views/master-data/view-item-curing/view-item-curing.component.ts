@@ -8,6 +8,10 @@ declare var $: any;
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSort } from '@angular/material/sort';
+import { MatPaginator } from '@angular/material/paginator';
+
 @Component({
   selector: 'app-view-item-curing',
   templateUrl: './view-item-curing.component.html',
@@ -28,6 +32,12 @@ export class ViewItemCuringComponent implements OnInit {
   pageOfItems: Array<any>;
   pageSize: number = 5;
   totalPages: number = 5;
+  sortBuffer: Array<any>;
+  displayedColumns: string[] = ['no', 'item_CURING', 'machine_TYPE','kapa_PER_MOULD','number_OF_MOULD', 'status', 'action'];
+  dataSource: MatTableDataSource<Item_Curing>;
+
+  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(private itemcuringService: ItemCuringService, private fb: FormBuilder) { 
     this.editItemCuringForm = this.fb.group({
@@ -46,7 +56,10 @@ export class ViewItemCuringComponent implements OnInit {
     this.itemcuringService.getAllItemCuring().subscribe(
       (response: ApiResponse<Item_Curing[]>) => {
         this.itemcurings = response.data;
-        this.onChangePage(this.itemcurings.slice(0, this.pageSize));
+        this.dataSource = new MatTableDataSource(this.itemcurings);
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+        this.onChangePage(this.dataSource.data.slice(0, this.pageSize));
       },
       (error) => {
         this.errorMessage = 'Failed to load item curings: ' + error.message;
@@ -59,19 +72,20 @@ export class ViewItemCuringComponent implements OnInit {
   }
 
   onSearchChange(): void {
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
     // Lakukan filter berdasarkan nama plant yang mengandung text pencarian (case-insensitive)
-    const filteredItemCurings = this.itemcurings.filter(
-      (itemcuring) =>
-        itemcuring.item_CURING
-          .toLowerCase()
-          .includes(this.searchText.toLowerCase()) ||
-          itemcuring.machine_TYPE.toLowerCase().includes(this.searchText.toLowerCase())||
-          itemcuring.kapa_PER_MOULD.toString().includes(this.searchText)||
-          itemcuring.number_OF_MOULD.toString().includes(this.searchText)
-    );
+    // const filteredItemCurings = this.itemcurings.filter(
+    //   (itemcuring) =>
+    //     itemcuring.item_CURING
+    //       .toLowerCase()
+    //       .includes(this.searchText.toLowerCase()) ||
+    //       itemcuring.machine_TYPE.toLowerCase().includes(this.searchText.toLowerCase())||
+    //       itemcuring.kapa_PER_MOULD.toString().includes(this.searchText)||
+    //       itemcuring.number_OF_MOULD.toString().includes(this.searchText)
+    // );
 
-    // Tampilkan hasil filter pada halaman pertama
-    this.onChangePage(filteredItemCurings.slice(0, this.pageSize));
+    // // Tampilkan hasil filter pada halaman pertama
+    // this.onChangePage(filteredItemCurings.slice(0, this.pageSize));
   }
 
   resetSearch(): void {

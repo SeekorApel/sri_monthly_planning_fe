@@ -8,6 +8,10 @@ declare var $: any;
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSort } from '@angular/material/sort';
+import { MatPaginator } from '@angular/material/paginator';
+
 @Component({
   selector: 'app-view-setting',
   templateUrl: './view-setting.component.html',
@@ -28,6 +32,12 @@ export class ViewSettingComponent implements OnInit {
   pageOfItems: Array<any>;
   pageSize: number = 5;
   totalPages: number = 5;
+  sortBuffer: Array<any>;
+  displayedColumns: string[] = ['no', 'setting_ID', 'setting_KEY','setting_VALUE', 'description', 'status', 'action'];
+  dataSource: MatTableDataSource<Setting>;
+
+  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(private settingService: SettingService, private fb: FormBuilder) { 
     this.editSettingForm = this.fb.group({
@@ -45,7 +55,10 @@ export class ViewSettingComponent implements OnInit {
     this.settingService.getAllSetting().subscribe(
       (response: ApiResponse<Setting[]>) => {
         this.settings = response.data;
-        this.onChangePage(this.settings.slice(0, this.pageSize));
+        this.dataSource = new MatTableDataSource(this.settings);
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+        this.onChangePage(this.dataSource.data.slice(0, this.pageSize));
       },
       (error) => {
         this.errorMessage = 'Failed to load settings: ' + error.message;
@@ -58,19 +71,20 @@ export class ViewSettingComponent implements OnInit {
   }
 
   onSearchChange(): void {
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
     // Lakukan filter berdasarkan nama plant yang mengandung text pencarian (case-insensitive)
-    const filteredPlants = this.settings.filter(
-      (setting) =>
-        setting.setting_KEY
-          .toLowerCase()
-          .includes(this.searchText.toLowerCase()) ||
-        setting.setting_ID.toString().includes(this.searchText)||
-        setting.setting_VALUE.toLowerCase().includes(this.searchText.toLowerCase()) ||
-        setting.description.toLowerCase().includes(this.searchText.toLowerCase())
-    );
+    // const filteredPlants = this.settings.filter(
+    //   (setting) =>
+    //     setting.setting_KEY
+    //       .toLowerCase()
+    //       .includes(this.searchText.toLowerCase()) ||
+    //     setting.setting_ID.toString().includes(this.searchText)||
+    //     setting.setting_VALUE.toLowerCase().includes(this.searchText.toLowerCase()) ||
+    //     setting.description.toLowerCase().includes(this.searchText.toLowerCase())
+    // );
 
     // Tampilkan hasil filter pada halaman pertama
-    this.onChangePage(filteredPlants.slice(0, this.pageSize));
+    // this.onChangePage(filteredPlants.slice(0, this.pageSize));
   }
 
   resetSearch(): void {
