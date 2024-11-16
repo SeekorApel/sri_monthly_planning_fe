@@ -68,7 +68,6 @@ export class ViewWorkDayComponent implements OnInit {
       this.shift1Switches[2] = this.selectedDay.detail.iwd_SHIFT_2 ;
       this.shift1Switches[0] = this.selectedDay.detail.iwd_SHIFT_3 ;
     }
-    this.perHourSwitches = Array(24).fill(!this.overTimeSwitch);
   }
   isReasonRequired(shiftState: boolean): boolean {
     return !shiftState; 
@@ -530,7 +529,6 @@ export class ViewWorkDayComponent implements OnInit {
       this.tabset.tabs[0].active = true;
       if (day.weekend) {
           this.weekend = true;
-          this.overTimeSwitch = true;
           // this.handleOverTimeChange();
           this.title = "OverTime TT and TL";
         } else {
@@ -659,12 +657,66 @@ export class ViewWorkDayComponent implements OnInit {
   }
 
   overtimeOn() {
-    if (this.overTimeSwitch) {
-      this.workDayService.turnOnOvertime(this.getdateselected()).subscribe(
+    this.workDayService.turnOnOvertime(this.getdateselected()).subscribe(
+      (response: ApiResponse<WorkDay>) => {
+        if (response.data) {
+          this.selectDay(this.selectedDay);
+          this.tabset.tabs[1].active = true;
+          this.refreshWorkday();
+        }
+      },
+      (error) => {
+        this.errorMessage = 'Failed to update work day hours: ' + error.message;
+      }
+    );
+  }
+  OffWorkday(){
+    Object.assign(this.selectedDay.detail, {
+      iot_TL_1: 0,
+      iot_TL_2: 0,
+      iot_TL_3: 0,
+      iot_TT_1: 0,
+      iot_TT_2: 0,
+      iot_TT_3: 0,
+      iwd_SHIFT_1: 0,
+      iwd_SHIFT_2: 0,
+      iwd_SHIFT_3: 0,
+      off: 1
+    });
+    
+    this.workDayService.updateWorkDay(this.selectedDay.detail).subscribe(
+      (response: ApiResponse<WorkDay>) => {
+        if (response.data) {
+          this.refreshWorkday();
+          if(this.weekend){
+            // this.ove
+          }
+        }
+      },
+      (error) => {
+        this.errorMessage = 'Failed to update work day hours: ' + error.message;
+      }
+    );
+  }
+
+  OnWorkday(){
+    if(this.weekend){
+      Object.assign(this.selectedDay.detail, {
+        iot_TL_1: 1,
+        iot_TL_2: 1,
+        iot_TL_3: 1,
+        iot_TT_1: 1,
+        iot_TT_2: 1,
+        iot_TT_3: 1,
+        iwd_SHIFT_1: 0,
+        iwd_SHIFT_2: 0,
+        iwd_SHIFT_3: 0,
+        off: 1
+      });
+      
+      this.workDayService.updateWorkDay(this.selectedDay.detail).subscribe(
         (response: ApiResponse<WorkDay>) => {
           if (response.data) {
-            this.selectDay(this.selectedDay);
-            this.tabset.tabs[1].active = true;
             this.refreshWorkday();
           }
         },
@@ -672,58 +724,33 @@ export class ViewWorkDayComponent implements OnInit {
           this.errorMessage = 'Failed to update work day hours: ' + error.message;
         }
       );
-    } else {
-      if(this.weekend){
-        Object.assign(this.selectedDay.detail, {
-          iot_TL_1: 0,
-          iot_TL_2: 0,
-          iot_TL_3: 0,
-          iot_TT_1: 0,
-          iot_TT_2: 0,
-          iot_TT_3: 0,
-          iwd_SHIFT_1: 0,
-          iwd_SHIFT_2: 0,
-          iwd_SHIFT_3: 0,
-          off: 1
-        });
-        
-        this.workDayService.updateWorkDay(this.selectedDay.detail).subscribe(
-          (response: ApiResponse<WorkDay>) => {
-            if (response.data) {
-              this.refreshWorkday();
-            }
-          },
-          (error) => {
-            this.errorMessage = 'Failed to update work day hours: ' + error.message;
+    }else{
+      Object.assign(this.selectedDay.detail, {
+        iot_TL_1: 0,
+        iot_TL_2: 0,
+        iot_TL_3: 0,
+        iot_TT_1: 0,
+        iot_TT_2: 0,
+        iot_TT_3: 0,
+        iwd_SHIFT_1: 1,
+        iwd_SHIFT_2: 1,
+        iwd_SHIFT_3: 1,
+        off: 0
+      });
+      
+      this.workDayService.updateWorkDay(this.selectedDay.detail).subscribe(
+        (response: ApiResponse<WorkDay>) => {
+          if (response.data) {
+            this.refreshWorkday();
           }
-        );
-      }else{
-        Object.assign(this.selectedDay.detail, {
-          iot_TL_1: 0,
-          iot_TL_2: 0,
-          iot_TL_3: 0,
-          iot_TT_1: 0,
-          iot_TT_2: 0,
-          iot_TT_3: 0,
-          iwd_SHIFT_1: 1,
-          iwd_SHIFT_2: 1,
-          iwd_SHIFT_3: 1,
-          off: 0
-        });
-        
-        this.workDayService.updateWorkDay(this.selectedDay.detail).subscribe(
-          (response: ApiResponse<WorkDay>) => {
-            if (response.data) {
-              this.refreshWorkday();
-            }
-          },
-          (error) => {
-            this.errorMessage = 'Failed to update work day hours: ' + error.message;
-          }
-        );
-      }
+        },
+        (error) => {
+          this.errorMessage = 'Failed to update work day hours: ' + error.message;
+        }
+      );
     }
   }
+
   changeShiftOverTime(){
     Object.assign(this.selectedDay.detail, {
       iot_TL_1: this.tlSwitches[1] ? 1:0,

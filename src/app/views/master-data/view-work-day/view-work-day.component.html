@@ -100,6 +100,19 @@
             <!-- Tab 2: Shift -->
             <tab heading="Shift">
               <div class="form-group">
+                <!-- OverTime Switch -->
+                <div class="form-group d-flex">
+                  <div class="mx-3">
+                      <button type="button" class="btn btn-primary " [disabled]="overTimeSwitch" (click)="overtimeOn()">OverTime</button>
+                  </div>
+                  <div class="mx-3">
+                      <button type="button" class="btn btn-primary " (click)="OffWorkday()">Off</button>
+                  </div>
+                  <div class="mx-3">
+                      <button type="button" class="btn btn-primary " (click)="OnWorkday()">On</button>
+                  </div>
+                </div>
+                
 
                 <!-- Shift 3 -->
                 <div class="form-group" *ngIf="!weekend">
@@ -143,16 +156,6 @@
                   </div>
                 </div>
                                   
-                <!-- OverTime Switch -->
-                <div class="form-group">
-                  <div class="per-hour-wrapper">
-                    <h4 style="min-width: 70px;">OverTime</h4>
-                    <label class="switch switch-label switch-primary">
-                      <input type="checkbox" class="switch-input" [(ngModel)]="overTimeSwitch" (ngModelChange)="handleOverTimeChange()">
-                      <span class="switch-slider" data-checked="On" data-unchecked="Off"></span>
-                    </label>
-                  </div>
-                </div>
               </div>
               <tabset>
                 <tab *ngIf="overTimeSwitch" heading="TT">
