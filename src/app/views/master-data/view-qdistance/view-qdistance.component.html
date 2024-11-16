@@ -63,7 +63,7 @@
 
           <!-- Action Column -->
           <ng-container matColumnDef="action">
-            <th *matHeaderCellDef style="min-width: 100px">Action</th>
+            <th *matHeaderCellDef style="min-width: 200px">Action</th>
             <td *matCellDef="let qdistance">
               <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(qdistance.id_Q_DISTANCE)">Update</button>
               <button type="button" class="btn btn-md ml-3" [ngClass]="{ 'btn-danger': qdistance.status === 1, 'btn-success': qdistance.status !== 1 }" (click)="qdistance.status === 1 ? deleteData(qdistance) : activateData(qdistance)">
