@@ -4,11 +4,11 @@ import { Building } from 'src/app/models/Building';
 import { ApiResponse } from 'src/app/response/Response';
 import { BuildingService } from 'src/app/services/master-data/building/building.service';
 import Swal from 'sweetalert2';
-declare var $: any;
-import * as XLSX from 'xlsx';
-import { saveAs } from 'file-saver';
 import { Select2OptionData } from 'ng-select2';
 import { Options } from 'select2';
+declare var $: any;
+import { saveAs } from 'file-saver';
+import * as XLSX from 'xlsx';
 
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
@@ -31,6 +31,27 @@ export class ViewBuildingComponent implements OnInit {
   isEditMode: boolean = false;
   file: File | null = null;
   editBuildingForm: FormGroup;
+  
+  public uomOptions: Array<Select2OptionData>;
+  public options: Options = {
+    width: '100%'
+  };
+
+  plant:Plant[];
+  // constructor(private plantService: PlantService) { 
+  //   plantService.getAllPlant().subscribe(
+  //     (response: ApiResponse<Plant[]>) => {
+  //       this.plant = response.data;
+  //       this.uomOptions = this.plant.map((element) => ({
+  //         id: element.plant_ID.toString(), // Ensure the ID is a string
+  //         text: element.plant_NAME // Set the text to the plant name
+  //       }));
+  //     },
+  //     (error) => {
+  //       this.errorMessage = 'Failed to load plants: ' + error.message;
+  //     }
+  //   );
+  // }
 
   // Pagination
   pageOfItems: Array<any>;
@@ -43,16 +64,14 @@ export class ViewBuildingComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  public uomOptions: Array<Select2OptionData>;
-  public options: Options = { width: '100%'};
-  uom: any;
-  plant: Plant[] =[];
-
   constructor(private buildingService: BuildingService, private fb: FormBuilder, private plantService: PlantService) { 
     this.editBuildingForm = this.fb.group({
       buildingName: ['', Validators.required],
       plantID: ['', Validators.required],
     });
+  
+    // Fetch plant data and map it to the format needed for the ng-select2 options
+    this.loadPlants();
     plantService.getAllPlant().subscribe(
       (response: ApiResponse<Plant[]>) => {
         this.plant = response.data;
@@ -64,8 +83,24 @@ export class ViewBuildingComponent implements OnInit {
       (error) => {
         this.errorMessage = 'Failed to load plants: ' + error.message;
       }
-    );
+    );
   }
+  
+  private loadPlants(): void {
+    this.plantService.getAllPlant().subscribe(
+      (response: ApiResponse<Plant[]>) => {
+        this.plant = response.data;
+        this.uomOptions = this.plant.map((element) => ({
+          id: element.plant_ID.toString(), // Ensure the ID is a string
+          text: element.plant_NAME // Set the text to the plant name
+        }));
+      },
+      (error) => {
+        this.errorMessage = 'Failed to load plants: ' + error.message;
+      }
+    );
+  }
+  
 
   ngOnInit(): void {
     this.getAllBuilding();

@@ -50,6 +50,7 @@ export class ViewItemCuringComponent implements OnInit {
   ngOnInit(): void {
     this.getAllItemCuring();
   }
+  
 
   getAllItemCuring(): void {
     this.itemcuringService.getAllItemCuring().subscribe(

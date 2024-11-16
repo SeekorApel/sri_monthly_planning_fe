@@ -17,6 +17,8 @@ import { MatPaginator } from '@angular/material/paginator';
 import { Building } from 'src/app/models/Building';
 import { BuildingService } from 'src/app/services/master-data/building/building.service';
 
+
+
 @Component({
   selector: 'app-view-quadrant',
   templateUrl: './view-quadrant.component.html',

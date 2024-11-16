@@ -21,71 +21,131 @@
       </div>
 
       <!-- Table -->
+
       <div class="table-responsive">
-        <table class="table table-bordered table-striped table-sm" style="table-layout: auto">
-          <thead align="center">
-            <tr>
-              <th style="min-width: 50px">No</th>
-              <th style="min-width: 150px">Part Number</th>
-              <th style="min-width: 150px">Item Curing</th>
-              <th style="min-width: 100px">Pattern ID</th>
-              <th style="min-width: 100px">Size ID</th>
-              <th style="min-width: 150px">Product Type ID</th>
-              <th style="min-width: 100px">Qty Per Rak</th>
-              <th style="min-width: 150px">Upper Constant</th>
-              <th style="min-width: 150px">Lower Constant</th>
-              <th style="min-width: 200px">Ext Description</th>
-              <th style="min-width: 100px">Item Ext</th>
-              <th style="min-width: 100px">Item Assy</th>
-              <th style="min-width: 100px">Wib Tube</th>
-              <th style="min-width: 100px">Rim</th>
-              <th style="min-width: 200px">Description</th>
-              <th style="min-width: 100px">Status</th>
-              <th style="min-width: 220px; padding: 10px">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr align="center" *ngFor="let productt of pageOfItems; let i = index">
-              <td>{{ i + 1 }}</td>
-              <td>{{ productt.part_NUMBER }}</td>
-              <td>{{ productt.item_CURING }}</td>
-              <td>{{ productt.pattern_ID }}</td>
-              <td>{{ productt.size_ID }}</td>
-              <td>{{ productt.product_TYPE_ID }}</td>
-              <td>{{ productt.qty_PER_RAK }}</td>
-              <td>{{ productt.upper_CONSTANT }}</td>
-              <td>{{ productt.lower_CONSTANT }}</td>
-              <td>{{ productt.ext_DESCRIPTION }}</td>
-              <td>{{ productt.item_EXT }}</td>
-              <td>{{ productt.item_ASSY }}</td>
-              <td>{{ productt.wib_TUBE }}</td>
-              <td>{{ productt.rim }}</td>
-              <td>{{ productt.description }}</td>
-              <td [ngClass]="{ 'bg-success': productt.status === 1, 'bg-danger': productt.status !== 1 }">
-                {{ productt.status === 1 ? 'Active' : 'Deactive' }}
-              </td>
-              <td>
-                <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(productt.part_NUMBER)">Update</button>
-                <button type="button" class="btn btn-md ml-3" [ngClass]="{ 'btn-danger': productt.status === 1, 'btn-success': productt.status !== 1 }" (click)="productt.status === 1 ? deleteData(productt) : activateData(productt)">
-                  {{ productt.status === 1 ? 'Delete' : 'Active' }}
-                </button>
-              </td>
-            </tr>
-          </tbody>
+        <table mat-table [dataSource]="dataSource" matSort class="table table-bordered table-striped table-sm">
+          <!-- No Column -->
+          <ng-container matColumnDef="no">
+            <th *matHeaderCellDef style="min-width: 50px">No</th>
+            <td *matCellDef="let element; let i = index">{{ i + 1 }}</td>
+          </ng-container>
+
+          <!-- Part Number Column -->
+          <ng-container matColumnDef="part_NUMBER">
+            <th *matHeaderCellDef style="min-width: 130px" mat-sort-header>Part Number</th>
+            <td align="center" *matCellDef="let element">{{ element.part_NUMBER }}</td>
+          </ng-container>
+
+          <!-- Item Curing Column -->
+          <ng-container matColumnDef="item_CURING">
+            <th *matHeaderCellDef style="min-width: 130px" mat-sort-header>Item Curing</th>
+            <td align="left" *matCellDef="let element">{{ element.item_CURING }}</td>
+          </ng-container>
+
+          <!-- Pattern ID Column -->
+          <ng-container matColumnDef="pattern_ID">
+            <th *matHeaderCellDef style="min-width: 130px" mat-sort-header>Pattern ID</th>
+            <td align="left" *matCellDef="let element">{{ getPatternName(element.pattern_ID) }}</td>
+          </ng-container>
+
+          <!-- Size ID Column -->
+          <ng-container matColumnDef="size_ID">
+            <th *matHeaderCellDef style="min-width: 103px" mat-sort-header>Size ID</th>
+            <td   align="left" *matCellDef="let element">{{ element.size_ID }}</td>
+          </ng-container>
+
+          <!-- Product Type ID Column -->
+          <ng-container matColumnDef="product_TYPE_ID">
+            <th *matHeaderCellDef style="min-width: 150px" mat-sort-header>Product Type ID</th>
+            <td align="right" *matCellDef="let element">{{ element.product_TYPE_ID }}</td>
+          </ng-container>
+
+          <!-- Qty Per Rak Column -->
+          <ng-container matColumnDef="qty_PER_RAK">
+            <th *matHeaderCellDef style="min-width: 130px" mat-sort-header>Qty Per Rak</th>
+            <td align="right" *matCellDef="let element">{{ element.qty_PER_RAK }}</td>
+          </ng-container>
+
+          <!-- Upper Constant Column -->
+          <ng-container matColumnDef="upper_CONSTANT">
+            <th *matHeaderCellDef style="min-width: 130px" mat-sort-header>Upper Constant</th>
+            <td align="right" *matCellDef="let element">{{ element.upper_CONSTANT }}</td>
+          </ng-container>
+
+          <!-- Lower Constant Column -->
+          <ng-container matColumnDef="lower_CONSTANT">
+            <th *matHeaderCellDef style="min-width: 130px" mat-sort-header>Lower Constant</th>
+            <td align="right" *matCellDef="let element">{{ element.lower_CONSTANT }}</td>
+          </ng-container>
+
+          <!-- Ext Description Column -->
+          <ng-container matColumnDef="ext_DESCRIPTION">
+            <th *matHeaderCellDef style="min-width: 150px" mat-sort-header>Ext Description</th>
+            <td align="left" *matCellDef="let element">{{ element.ext_DESCRIPTION }}</td>
+          </ng-container>
+
+          <!-- Item Ext Column -->
+          <ng-container matColumnDef="item_EXT">
+            <th *matHeaderCellDef style="min-width: 100px" mat-sort-header>Item Ext</th>
+            <td align="left" *matCellDef="let element">{{ element.item_EXT }}</td>
+          </ng-container>
+
+          <!-- Item Assy Column -->
+          <ng-container matColumnDef="item_ASSY">
+            <th *matHeaderCellDef style="min-width: 100px" mat-sort-header>Item Assy</th>
+            <td align="left" *matCellDef="let element">{{ element.item_ASSY }}</td>
+          </ng-container>
+
+          <!-- Wib Tube Column -->
+          <ng-container matColumnDef="wib_TUBE">
+            <th *matHeaderCellDef style="min-width: 100px" mat-sort-header>Wib Tube</th>
+            <td align="left" *matCellDef="let element">{{ element.wib_TUBE }}</td>
+          </ng-container>
+
+          <!-- Rim Column -->
+          <ng-container matColumnDef="rim">
+            <th *matHeaderCellDef style="min-width: 100px" mat-sort-header>Rim</th>
+            <td align="right" *matCellDef="let element">{{ element.rim }}</td>
+          </ng-container>
+
+          <!-- Description Column -->
+          <ng-container matColumnDef="description">
+            <th *matHeaderCellDef style="min-width: 200px" mat-sort-header>Description</th>
+            <td align="left" *matCellDef="let element">{{ element.description }}</td>
+          </ng-container>
+
+          <!-- Status Column -->
+          <ng-container matColumnDef="status">
+            <th *matHeaderCellDef style="min-width: 100px" mat-sort-header>Status</th>
+            <td *matCellDef="let element" [ngClass]="{ 'bg-success': element.status === 1, 'bg-danger': element.status !== 1 }">
+              {{ element.status === 1 ? 'Active' : 'Deactive' }}
+            </td>
+          </ng-container>
+
+          <!-- Action Column -->
+          <ng-container matColumnDef="action">
+            <th style="min-width: 200px" *matHeaderCellDef>Action</th>
+            <td *matCellDef="let element">
+              <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(element.part_NUMBER)">Update</button>
+              <button type="button" class="btn btn-md ml-3" [ngClass]="{ 'btn-danger': element.status === 1, 'btn-success': element.status !== 1 }" (click)="element.status === 1 ? deleteData(element) : activateData(element)">
+                {{ element.status === 1 ? 'Delete' : 'Activate' }}
+              </button>
+            </td>
+          </ng-container>
+
+          <!-- Add header and row declarations -->
+          <tr align="center" style="height: 20px" mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr align="center" mat-row *matRowDef="let row; columns: displayedColumns"></tr>
         </table>
-        <!-- Pagination -->
-        <nav>
-          <ul class="pagination">
-            <jw-pagination [items]="products" [pageSize]="pageSize" [maxPages]="totalPages" (changePage)="onChangePage($event)"> </jw-pagination>
-          </ul>
-        </nav>
       </div>
+      <!-- Pagination -->
+      <mat-paginator [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
     </div>
   </div>
 </div>
 
 <!-- Modal edit -->
-<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+<div class="modal fade" id="editModal" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -98,67 +158,71 @@
         <!-- Form with Reactive Forms -->
         <form [formGroup]="editProductTypeForm">
           <div class="form-group">
-            <label for="curing">Curing Item</label>
-            <input [(ngModel)]="editProductTypeObject.item_CURING" type="text" class="form-control" id="curing" formControlName="curing" [ngClass]="{ 'is-invalid': editProductTypeForm.get('curing').invalid && editProductTypeForm.get('curing').touched }" />
-            <div *ngIf="editProductTypeForm.get('curing').invalid && editProductTypeForm.get('curing').touched" class="invalid-feedback">Curing name is required.</div>
+            <h6 for="curing">Item Curing</h6>
+            <div class="col-md-13">
+              <ng-select2 id="curing" name="curing" formControlName="curing" [(ngModel)]="editProductTypeObject.item_CURING" [data]="uomOptionData[0]" [options]="options"> </ng-select2>
+            </div>
           </div>
           <div class="form-group">
-            <label for="pattern">Pattern</label>
-            <input [(ngModel)]="editProductTypeObject.pattern_ID" type="text" class="form-control" id="pattern" formControlName="pattern" [ngClass]="{ 'is-invalid': editProductTypeForm.get('pattern').invalid && editProductTypeForm.get('pattern').touched }" />
-            <div *ngIf="editProductTypeForm.get('pattern').invalid && editProductTypeForm.get('pattern').touched" class="invalid-feedback">pattern is required.</div>
+            <h6 for="pattern">Pattern</h6>
+            <div class="col-md-13">
+              <ng-select2 id="pattern" name="pattern" formControlName="pattern" [(ngModel)]="editProductTypeObject.pattern_ID" [data]="uomOptionData[1]" [options]="options"> </ng-select2>
+            </div>
           </div>
           <div class="form-group">
-            <label for="size">Size ID</label>
-            <input [(ngModel)]="editProductTypeObject.size_ID" type="text" class="form-control" id="size" formControlName="size" [ngClass]="{ 'is-invalid': editProductTypeForm.get('size').invalid && editProductTypeForm.get('size').touched }" />
-            <div *ngIf="editProductTypeForm.get('size').invalid && editProductTypeForm.get('size').touched" class="invalid-feedback">Machine Number is required.</div>
+            <h6 for="size">Size</h6>
+            <div class="col-md-13">
+              <ng-select2 id="size" name="size" formControlName="size" [(ngModel)]="editProductTypeObject.size_ID" [data]="uomOptionData[2]" [options]="options"> </ng-select2>
+            </div>
           </div>
           <div class="form-group">
-            <label for="productType">Product Type ID</label>
-            <input [(ngModel)]="editProductTypeObject.product_TYPE_ID" type="text" class="form-control" id="productType" formControlName="productType" [ngClass]="{ 'is-invalid': editProductTypeForm.get('productType').invalid && editProductTypeForm.get('productType').touched }" />
-            <div *ngIf="editProductTypeForm.get('productType').invalid && editProductTypeForm.get('productType').touched" class="invalid-feedback">productType is required.</div>
+            <h6 for="productType">Product Type</h6>
+            <div class="col-md-13">
+              <ng-select2 id="productType" name="productType" formControlName="productType" [(ngModel)]="editProductTypeObject.product_TYPE_ID" [data]="uomOptionData[3]" [options]="options"> </ng-select2>
+            </div>
           </div>
           <div class="form-group">
-            <label for="qty">Qty Per Rak</label>
+            <h6 for="qty">Qty Per Rak</h6>
             <input [(ngModel)]="editProductTypeObject.qty_PER_RAK" type="text" class="form-control" id="qty" formControlName="qty" [ngClass]="{ 'is-invalid': editProductTypeForm.get('qty').invalid && editProductTypeForm.get('qty').touched }" />
             <div *ngIf="editProductTypeForm.get('qty').invalid && editProductTypeForm.get('qty').touched" class="invalid-feedback">Qty Per Rak Text is required.</div>
           </div>
           <div class="form-group">
-            <label for="upper">Upper Constant</label>
+            <h6 for="upper">Upper Constant</h6>
             <input [(ngModel)]="editProductTypeObject.upper_CONSTANT" type="text" class="form-control" id="upper" formControlName="upper" [ngClass]="{ 'is-invalid': editProductTypeForm.get('upper').invalid && editProductTypeForm.get('upper').touched }" />
             <div *ngIf="editProductTypeForm.get('upper').invalid && editProductTypeForm.get('upper').touched" class="invalid-feedback">upper Per Rak Text is required.</div>
           </div>
           <div class="form-group">
-            <label for="lower">Lower Constant</label>
+            <h6 for="lower">Lower Constant</h6>
             <input [(ngModel)]="editProductTypeObject.lower_CONSTANT" type="text" class="form-control" id="lower" formControlName="lower" [ngClass]="{ 'is-invalid': editProductTypeForm.get('lower').invalid && editProductTypeForm.get('lower').touched }" />
             <div *ngIf="editProductTypeForm.get('lower').invalid && editProductTypeForm.get('lower').touched" class="invalid-feedback">lower Text is required.</div>
           </div>
           <div class="form-group">
-            <label for="desc">Ext Description</label>
+            <h6 for="desc">Ext Description</h6>
             <input [(ngModel)]="editProductTypeObject.ext_DESCRIPTION" type="text" class="form-control" id="desc" formControlName="desc" [ngClass]="{ 'is-invalid': editProductTypeForm.get('desc').invalid && editProductTypeForm.get('desc').touched }" />
             <div *ngIf="editProductTypeForm.get('desc').invalid && editProductTypeForm.get('desc').touched" class="invalid-feedback">Ext Description Text is required.</div>
           </div>
           <div class="form-group">
-            <label for="itemExt">Item Ext</label>
+            <h6 for="itemExt">Item Ext</h6>
             <input [(ngModel)]="editProductTypeObject.item_EXT" type="text" class="form-control" id="itemExt" formControlName="itemExt" [ngClass]="{ 'is-invalid': editProductTypeForm.get('itemExt').invalid && editProductTypeForm.get('itemExt').touched }" />
             <div *ngIf="editProductTypeForm.get('itemExt').invalid && editProductTypeForm.get('itemExt').touched" class="invalid-feedback">Item Ext Text is required.</div>
           </div>
           <div class="form-group">
-            <label for="itemAssy">Item Assy</label>
+            <h6 for="itemAssy">Item Assy</h6>
             <input [(ngModel)]="editProductTypeObject.item_ASSY" type="itemAssy" class="form-control" id="itemAssy" formControlName="itemAssy" [ngClass]="{ 'is-invalid': editProductTypeForm.get('itemAssy').invalid && editProductTypeForm.get('itemAssy').touched }" />
             <div *ngIf="editProductTypeForm.get('itemAssy').invalid && editProductTypeForm.get('itemAssy').touched" class="invalid-feedback">Item Assy Text is required.</div>
           </div>
           <div class="form-group">
-            <label for="wibTube">Wib Tube</label>
+            <h6 for="wibTube">Wib Tube</h6>
             <input [(ngModel)]="editProductTypeObject.wib_TUBE" type="text" class="form-control" id="wibTube" formControlName="wibTube" [ngClass]="{ 'is-invalid': editProductTypeForm.get('wibTube').invalid && editProductTypeForm.get('wibTube').touched }" />
             <div *ngIf="editProductTypeForm.get('wibTube').invalid && editProductTypeForm.get('wibTube').touched" class="invalid-feedback">Wib Tube is required.</div>
           </div>
           <div class="form-group">
-            <label for="rim">Rim</label>
+            <h6 for="rim">Rim</h6>
             <input [(ngModel)]="editProductTypeObject.rim" type="text" class="form-control" id="rim" formControlName="rim" [ngClass]="{ 'is-invalid': editProductTypeForm.get('rim').invalid && editProductTypeForm.get('rim').touched }" />
             <div *ngIf="editProductTypeForm.get('rim').invalid && editProductTypeForm.get('rim').touched" class="invalid-feedback">Rim Text is required.</div>
           </div>
           <div class="form-group">
-            <label for="description">Description</label>
+            <h6 for="description">Description</h6>
             <input [(ngModel)]="editProductTypeObject.description" type="text" class="form-control" id="description" formControlName="description" [ngClass]="{ 'is-invalid': editProductTypeForm.get('description').invalid && editProductTypeForm.get('description').touched }" />
             <div *ngIf="editProductTypeForm.get('description').invalid && editProductTypeForm.get('description').touched" class="invalid-feedback">Description Text is required.</div>
           </div>

@@ -8,6 +8,10 @@ declare var $: any;
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSort } from '@angular/material/sort';
+import { MatPaginator } from '@angular/material/paginator';
+
 @Component({
   selector: 'app-view-pattern',
   templateUrl: './view-pattern.component.html',
@@ -27,6 +31,11 @@ export class ViewPatternComponent implements OnInit {
   pageOfItems: Array<any>;
   pageSize: number = 5;
   totalPages: number = 5;
+  displayedColumns: string[] = ['no', 'pattern_ID', 'pattern_NAME', 'status', 'action'];
+  dataSource: MatTableDataSource<Pattern>;
+
+  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(private patternService: PatternService, private fb: FormBuilder) {
     this.editPatternForm = this.fb.group({
@@ -67,8 +76,10 @@ export class ViewPatternComponent implements OnInit {
     this.patternService.getAllPattern().subscribe(
       (response: ApiResponse<Pattern[]>) => {
         this.patterns = response.data;
-        console.log(this.patterns);
-        this.onChangePage(this.patterns.slice(0, this.pageSize));
+        this.dataSource = new MatTableDataSource(this.patterns);
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+        // this.onChangePage(this.patterns.slice(0, this.pageSize));
       },
       (error) => {
         this.errorMessage = 'Failed to load plants: ' + error.message;
@@ -81,16 +92,12 @@ export class ViewPatternComponent implements OnInit {
   }
 
   onSearchChange(): void {
-    // Lakukan filter berdasarkan nama plant yang mengandung text pencarian (case-insensitive)
-    const filteredPlants = this.patterns.filter((pattern) => pattern.pattern_NAME.toLowerCase().includes(this.searchText.toLowerCase()) || pattern.pattern_ID.toString().includes(this.searchText));
-
-    // Tampilkan hasil filter pada halaman pertama
-    this.onChangePage(filteredPlants.slice(0, this.pageSize));
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
   }
 
   resetSearch(): void {
     this.searchText = '';
-    this.onChangePage(this.patterns.slice(0, this.pageSize));
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
   }
 
   updatePattern(): void {

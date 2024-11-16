@@ -5,8 +5,16 @@ import { ApiResponse } from 'src/app/response/Response';
 import { QDistanceService } from 'src/app/services/master-data/Qdistance/Qdistance.service';
 import Swal from 'sweetalert2';
 declare var $: any;
+import { Select2OptionData } from 'ng-select2';
+import { Options } from 'select2';
+import { Quadrant } from 'src/app/models/quadrant';
+import { QuadrantService } from 'src/app/services/master-data/quadrant/quadrant.service';
+
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSort } from '@angular/material/sort';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-view-qdistance',
@@ -14,7 +22,6 @@ import { saveAs } from 'file-saver';
   styleUrls: ['./view-qdistance.component.scss'],
 })
 export class ViewQDistanceComponent implements OnInit {
-
   //Variable Declaration
   qdistances: QDistance[] = [];
   searchText: string = '';
@@ -23,29 +30,69 @@ export class ViewQDistanceComponent implements OnInit {
   isEditMode: boolean = false;
   file: File | null = null;
   editQDistancesForm: FormGroup;
+  public uomOptionData: Array<Select2OptionData>;
+  public options: Options = {
+    width: '100%',
+    minimumResultsForSearch: 0,
+  };
+  quadrant: Quadrant[];
 
   // Pagination
   pageOfItems: Array<any>;
   pageSize: number = 5;
   totalPages: number = 5;
 
-  constructor(private qdistanceService: QDistanceService, private fb: FormBuilder) { 
+  displayedColumns: string[] = ['no', 'id_Q_DISTANCE', 'quadrant_ID_1', 'quadrant_ID_2', 'distance', 'status', 'action'];
+  dataSource: MatTableDataSource<QDistance>;
+
+  constructor(private qdistanceService: QDistanceService, private fb: FormBuilder, private quadrantService: QuadrantService) {
     this.editQDistancesForm = this.fb.group({
       quadrantID1: ['', Validators.required],
       quadrantID2: ['', Validators.required],
       distance: ['', Validators.required],
     });
+    this.loadQdistance();
+  }
+
+  getQuadrantName(quadrantID: number): string {
+    const quadrant = this.quadrant.find((b) => b.quadrant_ID === quadrantID);
+    return quadrant ? quadrant.quadrant_NAME.toString() : 'Unknown';
   }
 
   ngOnInit(): void {
     this.getAllQuadrantDistance();
+  }
+  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+
+  private loadQdistance(): void {
+    this.quadrantService.getAllQuadrant().subscribe(
+      (response: ApiResponse<Quadrant[]>) => {
+        this.quadrant = response.data;
+
+        if (!this.uomOptionData) {
+          this.uomOptionData = [];
+        }
+
+        this.uomOptionData = this.quadrant.map((element) => ({
+          id: element.quadrant_ID.toString(), // Ensure the ID is a string
+          text: element.quadrant_NAME, // Set the text to the name (or other property)
+        }));
+      },
+      (error) => {
+        this.errorMessage = 'Failed to load Quadrant: ' + error.message;
+      }
+    );
   }
 
   getAllQuadrantDistance(): void {
     this.qdistanceService.getAllQuadrantDistance().subscribe(
       (response: ApiResponse<QDistance[]>) => {
         this.qdistances = response.data;
-        this.onChangePage(this.qdistances.slice(0, this.pageSize));
+        this.dataSource = new MatTableDataSource(this.qdistances);
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+        // this.onChangePage(this.qdistances.slice(0, this.pageSize));
       },
       (error) => {
         this.errorMessage = 'Failed to load quadrant distance: ' + error.message;
@@ -58,18 +105,7 @@ export class ViewQDistanceComponent implements OnInit {
   }
 
   onSearchChange(): void {
-    const filteredQDistances = this.qdistances.filter(
-      (distance) =>
-        distance.id_Q_DISTANCE.toString()
-          .toLowerCase()
-          .includes(this.searchText.toLowerCase()) ||
-        distance.distance.toString().includes(this.searchText) ||
-        distance.quadrant_ID_1.toString().includes(this.searchText)||
-        distance.quadrant_ID_2.toString().includes(this.searchText)
-    );
-
-    // Tampilkan hasil filter pada halaman pertama
-    this.onChangePage(filteredQDistances.slice(0, this.pageSize));
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
   }
 
   resetSearch(): void {
@@ -78,7 +114,6 @@ export class ViewQDistanceComponent implements OnInit {
   }
 
   updateQuadrantDistance(): void {
-    
     this.qdistanceService.updateQuadrantDistance(this.edtQDistancesObject).subscribe(
       (response) => {
         // SweetAlert setelah update berhasil
@@ -143,7 +178,6 @@ export class ViewQDistanceComponent implements OnInit {
     });
   }
 
-
   openModalUpload(): void {
     $('#uploadModal').modal('show');
   }
@@ -154,7 +188,6 @@ export class ViewQDistanceComponent implements OnInit {
     link.download = 'Layout_Quadrant_Distance.xlsx';
     link.click();
   }
-
 
   onFileChange(event: Event) {
     const input = event.target as HTMLInputElement;
@@ -178,7 +211,6 @@ export class ViewQDistanceComponent implements OnInit {
       }
     }
   }
-
 
   uploadFileExcel() {
     if (this.file) {
@@ -250,7 +282,7 @@ export class ViewQDistanceComponent implements OnInit {
       },
       error: (err) => {
         console.error('Download error:', err);
-      }
+      },
     });
   }
 }

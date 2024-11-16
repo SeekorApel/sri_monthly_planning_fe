@@ -6,15 +6,22 @@ import { CTCuringService } from 'src/app/services/master-data/ct-curing/ct-curin
 import Swal from 'sweetalert2';
 declare var $: any;
 import * as XLSX from 'xlsx';
-import { saveAs } from 'file-saver';
+import { saveAs } from 'file-saver';  
+import { Select2OptionData } from 'ng-select2';
+import { Options } from 'select2';
+
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSort } from '@angular/material/sort';
+import { MatPaginator } from '@angular/material/paginator';
+import { Product } from 'src/app/models/Product';
+import { ProductService } from 'src/app/services/master-data/product/product.service';
 
 @Component({
   selector: 'app-view-ct-curing',
   templateUrl: './view-ct-curing.component.html',
-  styleUrls: ['./view-ct-curing.component.scss']
+  styleUrls: ['./view-ct-curing.component.scss'],
 })
-export class ViewCtCuringComponent  implements OnInit {
-
+export class ViewCtCuringComponent implements OnInit {
   //Variable Declaration
   ctcurings: CT_Curing[] = [];
   searchText: string = '';
@@ -23,50 +30,60 @@ export class ViewCtCuringComponent  implements OnInit {
   isEditMode: boolean = false;
   file: File | null = null;
   editCTCuringForm: FormGroup;
+  products: Product[];
 
   // Pagination
   pageOfItems: Array<any>;
   pageSize: number = 5;
   totalPages: number = 5;
+  displayedColumns: string[] = ['no', 'ct_CURING_ID', 'wip', 'group_COUNTER', 'var_GROUP_COUNTER', 'sequence', 'wct', 'operation_SHORT_TEXT', 'operation_UNIT', 'base_QUANTITY', 'standart_VALUE_UNIT', 'ct_SEC1', 'ct_HR1000', 'wh_NORMAL_SHIFT_0', 'wh_NORMAL_SHIFT_1', 'wh_NORMAL_SHIFT_2', 'wh_SHIFT_FRIDAY', 'wh_TOTAL_NORMAL_SHIFT', 'wh_TOTAL_SHIFT_FRIDAY', 'allow_NORMAL_SHIFT_0', 'allow_NORMAL_SHIFT_1', 'allow_NORMAL_SHIFT_2', 'allow_TOTAL', 'op_TIME_NORMAL_SHIFT_0', 'op_TIME_NORMAL_SHIFT_1', 'op_TIME_NORMAL_SHIFT_2', 'op_TIME_SHIFT_FRIDAY', 'op_TIME_NORMAL_SHIFT', 'op_TIME_TOTAL_SHIFT_FRIDAY', 'kaps_NORMAL_SHIFT_0', 'kaps_NORMAL_SHIFT_1', 'kaps_NORMAL_SHIFT_2', 'kaps_SHIFT_FRIDAY', 'kaps_TOTAL_NORMAL_SHIFT', 'kaps_TOTAL_SHIFT_FRIDAY', 'waktu_TOTAL_CT_NORMAL', 'waktu_TOTAL_CT_FRIDAY', 'status', 'action'];
+  dataSource: MatTableDataSource<CT_Curing>;
+  public uomOptionData: Array<Select2OptionData>;
+  public options: Options = {
+    width: '100%',
+    minimumResultsForSearch: 0,
+  };
 
-  constructor(private ctcuringService: CTCuringService, private fb: FormBuilder) { 
+  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+
+  constructor(private ctcuringService: CTCuringService, private fb: FormBuilder, private productService: ProductService) {
     this.editCTCuringForm = this.fb.group({
       wip: ['', Validators.required],
-      description: ['', Validators.required],
-      groupcounter: ['', Validators.required],  
-      vargroupcounter: ['', Validators.required], 
-      sequence: ['', Validators.required],      
+      groupcounter: ['', Validators.required],
+      vargroupcounter: ['', Validators.required],
+      sequence: ['', Validators.required],
       wct: ['', Validators.required],
-      operationshorttext: ['', Validators.required], 
-      operationunit: ['', Validators.required],      
-      basequantity: ['', Validators.required],      
-      standardvalueunit: ['', Validators.required],    
-      ctsec1: ['', Validators.required],             
-      cthr1000: ['', Validators.required],           
-      whnormalshift0: ['', Validators.required],     
+      operationshorttext: ['', Validators.required],
+      operationunit: ['', Validators.required],
+      basequantity: ['', Validators.required],
+      standardvalueunit: ['', Validators.required],
+      ctsec1: ['', Validators.required],
+      cthr1000: ['', Validators.required],
+      whnormalshift0: ['', Validators.required],
       whnormalshift1: ['', Validators.required],
       whnormalshift2: ['', Validators.required],
-      whshiftfriday: ['', Validators.required],       
-      whtotalnormalshift: ['', Validators.required],  
-      whtotalshiftfriday: ['', Validators.required],  
-      allownormalshift0: ['', Validators.required],   
-      allownormalshift1: ['', Validators.required],   
-      allownormalshift2: ['', Validators.required],   
-      allowtotal: ['', Validators.required],          
-      optimenormalshift0: ['', Validators.required],  
-      optimenormalshift1: ['', Validators.required],  
-      optimenormalshift2: ['', Validators.required],  
-      optimeshiftfriday: ['', Validators.required],   
+      whshiftfriday: ['', Validators.required],
+      whtotalnormalshift: ['', Validators.required],
+      whtotalshiftfriday: ['', Validators.required],
+      allownormalshift0: ['', Validators.required],
+      allownormalshift1: ['', Validators.required],
+      allownormalshift2: ['', Validators.required],
+      allowtotal: ['', Validators.required],
+      optimenormalshift0: ['', Validators.required],
+      optimenormalshift1: ['', Validators.required],
+      optimenormalshift2: ['', Validators.required],
+      optimeshiftfriday: ['', Validators.required],
       optimenormalshift: ['', Validators.required],
       optimetotalshiftfriday: ['', Validators.required],
-      kapsnormalshift0: ['', Validators.required],      
-      kapsnormalshift1: ['', Validators.required],      
-      kapsnormalshift2: ['', Validators.required],      
-      kapsshiftfriday: ['', Validators.required],       
-      kapstotalnormalshift: ['', Validators.required],  
-      kapstotalshiftfriday: ['', Validators.required],  
-      waktutotalctnormal: ['', Validators.required],    
-      waktutotalctfriday: ['', Validators.required]   
+      kapsnormalshift0: ['', Validators.required],
+      kapsnormalshift1: ['', Validators.required],
+      kapsnormalshift2: ['', Validators.required],
+      kapsshiftfriday: ['', Validators.required],
+      kapstotalnormalshift: ['', Validators.required],
+      kapstotalshiftfriday: ['', Validators.required],
+      waktutotalctnormal: ['', Validators.required],
+      waktutotalctfriday: ['', Validators.required],
     });
   }
 
@@ -78,7 +95,10 @@ export class ViewCtCuringComponent  implements OnInit {
     this.ctcuringService.getAllCTCuring().subscribe(
       (response: ApiResponse<CT_Curing[]>) => {
         this.ctcurings = response.data;
-        this.onChangePage(this.ctcurings.slice(0, this.pageSize));
+        this.dataSource = new MatTableDataSource(this.ctcurings);
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+        // this.onChangePage(this.ctcurings.slice(0, this.pageSize));
       },
       (error) => {
         this.errorMessage = 'Failed to load CT Curing: ' + error.message;
@@ -91,11 +111,11 @@ export class ViewCtCuringComponent  implements OnInit {
   }
 
   onSearchChange(): void {
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
     const filteredCTCurings = this.ctcurings.filter(
       (ctcuring) =>
         ctcuring.ct_CURING_ID.toString().toLowerCase().includes(this.searchText.toLowerCase()) ||
         ctcuring.wip.toLowerCase().includes(this.searchText.toLowerCase())||
-        ctcuring.part_NUMBER.toString().toLowerCase().includes(this.searchText.toLowerCase())||
         ctcuring.group_COUNTER.toLowerCase().includes(this.searchText.toLowerCase())||
         ctcuring.var_GROUP_COUNTER.toLowerCase().includes(this.searchText.toLowerCase())||
         ctcuring.sequence.toString().toLowerCase().includes(this.searchText.toLowerCase())||
@@ -110,11 +130,10 @@ export class ViewCtCuringComponent  implements OnInit {
 
   resetSearch(): void {
     this.searchText = '';
-    this.onChangePage(this.ctcurings.slice(0, this.pageSize));
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
   }
 
   updateCTCuring(): void {
-    
     this.ctcuringService.updateCTCuring(this.edtCTCuringObject).subscribe(
       (response) => {
         // SweetAlert setelah update berhasil
@@ -191,7 +210,7 @@ export class ViewCtCuringComponent  implements OnInit {
       confirmButtonText: 'Yes',
       cancelButtonText: 'No',
     }).then((result) => {
-      if (result.isConfirmed) { 
+      if (result.isConfirmed) {
         this.ctcuringService.activateCTCuring(ct_curing).subscribe(
           (response) => {
             Swal.fire('Activated!', 'Data CT Curing has been Activated', 'success').then(() => {
@@ -217,7 +236,6 @@ export class ViewCtCuringComponent  implements OnInit {
     link.click();
   }
 
-
   onFileChange(event: Event) {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
@@ -240,7 +258,6 @@ export class ViewCtCuringComponent  implements OnInit {
       }
     }
   }
-
 
   uploadFileExcel() {
     if (this.file) {
@@ -287,7 +304,7 @@ export class ViewCtCuringComponent  implements OnInit {
       },
       error: (err) => {
         console.error('Download error:', err);
-      }
+      },
     });
   }
 }

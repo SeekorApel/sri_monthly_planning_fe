@@ -69,17 +69,6 @@ export class ViewSizeComponent implements OnInit {
   onSearchChange(): void {
 
     this.dataSource.filter = this.searchText.trim().toLowerCase();
-    // Lakukan filter berdasarkan nama plant yang mengandung text pencarian (case-insensitive)
-    // const filteredSizes = this.sizes.filter(
-    //   (size) =>
-    //     size.description
-    //       .toLowerCase()
-    //       .includes(this.searchText.toLowerCase()) ||
-    //     size.size_ID.toString().toLowerCase().includes(this.searchText.toLowerCase())
-    // );
-
-    // // Tampilkan hasil filter pada halaman pertama
-    // this.onChangePage(filteredSizes.slice(0, this.pageSize));
   }
 
   resetSearch(): void {

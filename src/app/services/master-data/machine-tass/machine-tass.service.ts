@@ -69,7 +69,7 @@ export class MachineTassService {
   }
 
   uploadFileExcel(file: FormData): Observable<ApiResponse<MachineTass>> {
-    return this.http.post<ApiResponse<MachineTass>>(environment.apiUrlWebAdmin + '/saveMachineTassExcel', file, { headers: this.getHeaders() }).pipe(
+    return this.http.post<ApiResponse<MachineTass>>(environment.apiUrlWebAdmin + '/saveMachineTassExcel', file).pipe(
       map((response) => {
         return response;
       }),

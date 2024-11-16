@@ -5,9 +5,17 @@ import { ApiResponse } from 'src/app/response/Response';
 import { DDeliveryScheduleService } from 'src/app/services/master-data/DdeliverySchedule/DdeliverySchedule.service';
 import Swal from 'sweetalert2';
 import { saveAs } from 'file-saver';
+import { Select2OptionData } from 'ng-select2';
+import { Options } from 'select2';
+import { DeliverySchedule } from 'src/app/models/DeliverySchedule';
+import { DeliveryScheduleService } from 'src/app/services/master-data/deliverySchedule/deliverySchedule.service';
 
 declare var $: any;
 import * as XLSX from 'xlsx';
+
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSort } from '@angular/material/sort';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-view-d-deliveryschedule',
@@ -23,19 +31,37 @@ export class ViewDDeliveryScheduleComponent implements OnInit {
   isEditMode: boolean = false;
   file: File | null = null;
   editDDeliveryScheduleTypeForm: FormGroup;
+  uom: any;
+  public uomOptionData: Array<Select2OptionData>;
+  public options: Options = {
+    width: '100%',
+    minimumResultsForSearch: 0,
+  };
+  DeliverySchedules: DeliverySchedule[];
+
+  // getProductName(productID: number): string {
+  //   const pattern = this..find(p => p.pattern_ID === patternID);
+  //   return pattern ? pattern.pattern_NAME : 'Unknown';
+  // }
 
   // Pagination
   pageOfItems: Array<any>;
   pageSize: number = 5;
   totalPages: number = 5;
+  displayedColumns: string[] = ['no', 'detail_DS_ID', 'ds_ID', 'part_NUM', 'date_DS', 'total_DELIVERY', 'status', 'action'];
+  dataSource: MatTableDataSource<DDeliverySchedule>;
 
-  constructor(private ddeliveryschedule: DDeliveryScheduleService, private fb: FormBuilder) {
+  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+
+  constructor(private ddeliveryschedule: DDeliveryScheduleService, private fb: FormBuilder, private DeliveryScheduleService: DeliveryScheduleService) {
     this.editDDeliveryScheduleTypeForm = this.fb.group({
       dsID: ['', Validators.required],
       partNum: ['', Validators.required],
       date: ['', Validators.required],
       totalDelvery: ['', Validators.required],
     });
+    this.loadDeliverySchedule();
   }
 
   ngOnInit(): void {
@@ -46,11 +72,32 @@ export class ViewDDeliveryScheduleComponent implements OnInit {
     this.ddeliveryschedule.getAllDDeliverySchedule().subscribe(
       (response: ApiResponse<DDeliverySchedule[]>) => {
         this.ddeliveryScedules = response.data;
-        console.log(this.ddeliveryScedules);
-        this.onChangePage(this.ddeliveryScedules.slice(0, this.pageSize));
+        this.dataSource = new MatTableDataSource(this.ddeliveryScedules);
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+        // this.onChangePage(this.ddeliveryScedules.slice(0, this.pageSize));
       },
       (error) => {
         this.errorMessage = 'Failed to load Detail Delivery Schedule: ' + error.message;
+      }
+    );
+  }
+  private loadDeliverySchedule(): void {
+    this.DeliveryScheduleService.getAllDeliverySchedule().subscribe(
+      (response: ApiResponse<DeliverySchedule[]>) => {
+        this.DeliverySchedules = response.data;
+
+        if (!this.uomOptionData) {
+          this.uomOptionData = [];
+        }
+
+        this.uomOptionData = this.DeliverySchedules.map((element) => ({
+          id: element.ds_ID.toString(), // Ensure the ID is a string
+          text: element.ds_ID.toString(), // Set the text to the name (or other property)
+        }));
+      },
+      (error) => {
+        this.errorMessage = 'Failed to load delivery schedule: ' + error.message;
       }
     );
   }
@@ -97,11 +144,7 @@ export class ViewDDeliveryScheduleComponent implements OnInit {
   }
 
   onSearchChange(): void {
-    // Lakukan filter berdasarkan nama detail DeliverySchedule yang mengandung text pencarian (case-insensitive)
-    const filteredDDeliverySchedule = this.ddeliveryScedules.filter((dds) => dds.part_NUM.toLowerCase().includes(this.searchText.toLowerCase()) || dds.detail_DS_ID.toString().includes(this.searchText));
-
-    // Tampilkan hasil filter pada halaman pertama
-    this.onChangePage(filteredDDeliverySchedule.slice(0, this.pageSize));
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
   }
 
   resetSearch(): void {

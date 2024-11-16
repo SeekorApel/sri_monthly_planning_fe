@@ -22,118 +22,147 @@
 
       <!-- Table -->
       <div class="table-responsive">
-        <table class="table table-bordered table-striped table-sm" style="table-layout: auto">
-          <thead align="center">
-            <th>No</th>
-            <th>Machine Tass ID</th>
-            <th>Building ID</th>
-            <th>Floor</th>
-            <th>Machine Number</th>
-            <th>Type</th>
-            <th>Work Center Text</th>
-            <th>Status</th>
-            <th>Action</th>
-          </thead>
-          <tbody>
-            <tr *ngFor="let machinetass of pageOfItems; let i = index">
-              <td>{{ i + 1 }}</td>
-              <td>{{ machinetass.id_MACHINE_TASS }}</td>
-              <td>{{ machinetass.building_ID }}</td>
-              <td>{{ machinetass.floor }}</td>
-              <td>{{ machinetass.machine_NUMBER }}</td>
-              <td>{{ machinetass.type }}</td>
-              <td>{{ machinetass.work_CENTER_TEXT }}</td>
-              <td [ngClass]="{ 'bg-success': machinetass.status === 1, 'bg-danger': machinetass.status !== 1 }">
-                {{ machinetass.status === 1 ? 'Active' : 'Deactive' }}
-              </td>
-              <td>
-                <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(machinetass.id_MACHINE_TASS)">Update</button>
-                <button type="button" class="btn btn-md ml-3" [ngClass]="{ 'btn-danger': machinetass.status === 1, 'btn-success': machinetass.status !== 1 }" (click)="machinetass.status === 1 ? deleteData(machinetass) : activateData(machinetass)">
-                  {{ machinetass.status === 1 ? 'Delete' : 'Active' }}
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <!-- Pagination -->
-      <nav>
-        <ul class="pagination">
-          <jw-pagination [items]="machineTasss" [pageSize]="pageSize" [maxPages]="totalPages" (changePage)="onChangePage($event)"> </jw-pagination>
-        </ul>
-      </nav>
-    </div>
-  </div>
-</div>
+        <table mat-table [dataSource]="dataSource" matSort class="table table-bordered table-striped table-sm">
+          <!-- No Column -->
+          <ng-container matColumnDef="no">
+            <th *matHeaderCellDef style="min-width: 50px">No</th>
+            <td *matCellDef="let element; let i = index">{{ i + 1 }}</td>
+          </ng-container>
 
-<!-- Modal edit -->
-<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="addModalLabel">Edit Machine Tass</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+          <!-- Machine Tass ID Column -->
+          <ng-container matColumnDef="id_MACHINE_TASS">
+            <th *matHeaderCellDef style="min-width: 130px" mat-sort-header>Machine Tass ID</th>
+            <td align="center" *matCellDef="let element">{{ element.id_MACHINE_TASS }}</td>
+          </ng-container>
+
+          <!-- Building ID Column -->
+          <ng-container matColumnDef="building_ID">
+            <th *matHeaderCellDef style="min-width: 130px" mat-sort-header>Building</th>
+            <td align="left" *matCellDef="let element">{{ getBuildingName(element.building_ID) }}</td>
+          </ng-container>
+
+          <!-- Floor Column -->
+          <ng-container matColumnDef="floor">
+            <th *matHeaderCellDef style="min-width: 130px" mat-sort-header>Floor</th>
+            <td align="right" *matCellDef="let element">{{ element.floor }}</td>
+          </ng-container>
+
+          <!-- Machine Number Column -->
+          <ng-container matColumnDef="machine_NUMBER">
+            <th *matHeaderCellDef style="min-width: 150px" mat-sort-header>Machine Number</th>
+            <td align="right" *matCellDef="let element">{{ element.machine_NUMBER }}</td>
+          </ng-container>
+
+          <!-- Type Column -->
+          <ng-container matColumnDef="type">
+            <th *matHeaderCellDef style="min-width: 100px" mat-sort-header>Type</th>
+            <td align="left" *matCellDef="let element">{{ element.type }}</td>
+          </ng-container>
+
+          <!-- Work Center Text Column -->
+          <ng-container matColumnDef="work_CENTER_TEXT">
+            <th *matHeaderCellDef style="min-width: 150px" mat-sort-header>Work Center Text</th>
+            <td align="left" *matCellDef="let element">{{ element.work_CENTER_TEXT }}</td>
+          </ng-container>
+
+          <!-- Status Column -->
+          <ng-container matColumnDef="status">
+            <th *matHeaderCellDef style="min-width: 100px" mat-sort-header>Status</th>
+            <td *matCellDef="let element" [ngClass]="{ 'bg-success': element.status === 1, 'bg-danger': element.status !== 1 }">
+              {{ element.status === 1 ? 'Active' : 'Deactive' }}
+            </td>
+          </ng-container>
+
+          <!-- Action Column -->
+          <ng-container matColumnDef="action">
+            <th *matHeaderCellDef style="min-width: 200px">Action</th>
+            <td *matCellDef="let element">
+              <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(element.id_MACHINE_TASS)">Update</button>
+              <button type="button" class="btn btn-md ml-3" [ngClass]="{ 'btn-danger': element.status === 1, 'btn-success': element.status !== 1 }" (click)="element.status === 1 ? deleteData(element) : activateData(element)">
+                {{ element.status === 1 ? 'Delete' : 'Active' }}
+              </button>
+            </td>
+          </ng-container>
+          <tr align="center" style="height: 20px" mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr align="center" mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+
+        <!-- Pagination -->
       </div>
-      <div class="modal-body">
-        <!-- Form with Reactive Forms -->
-        <form [formGroup]="editMachineTassForm">
-          <div class="form-group">
-            <label for="building">Building</label>
-            <input [(ngModel)]="editMachineTassObject.building_ID" type="text" class="form-control" id="building" formControlName="building" [ngClass]="{ 'is-invalid': editMachineTassForm.get('building').invalid && editMachineTassForm.get('building').touched }" />
-            <div *ngIf="editMachineTassForm.get('building').invalid && editMachineTassForm.get('building').touched" class="invalid-feedback">Building name is required.</div>
+      <mat-paginator [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+
+      <!-- Modal edit -->
+      <div class="modal fade" id="editModal" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="addModalLabel">Edit Machine Tass</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <!-- Form with Reactive Forms -->
+              <form [formGroup]="editMachineTassForm">
+                <div class="form-group">
+                  <h6 for="building">Building</h6>
+                  <div class="col-md-13">
+                    <ng-select2 id="building" name="building" formControlName="building" [(ngModel)]="editMachineTassObject.building_ID" [data]="uomOptionData" [options]="options"> </ng-select2>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <h6 for="floor">Floor</h6>
+                  <input [(ngModel)]="editMachineTassObject.floor" type="text" class="form-control" id="floor" formControlName="floor" [ngClass]="{ 'is-invalid': editMachineTassForm.get('floor').invalid && editMachineTassForm.get('floor').touched }" />
+                  <div *ngIf="editMachineTassForm.get('floor').invalid && editMachineTassForm.get('floor').touched" class="invalid-feedback">Floor is required.</div>
+                </div>
+                <div class="form-group">
+                  <h6 for="machineNum">Machine Number</h6>
+                  <input [(ngModel)]="editMachineTassObject.machine_NUMBER" type="text" class="form-control" id="machineNum" formControlName="machineNum" [ngClass]="{ 'is-invalid': editMachineTassForm.get('machineNum').invalid && editMachineTassForm.get('machineNum').touched }" />
+                  <div *ngIf="editMachineTassForm.get('machineNum').invalid && editMachineTassForm.get('machineNum').touched" class="invalid-feedback">Machine Number is required.</div>
+                </div>
+                <div class="form-group">
+                  <h6 for="type">Type</h6>
+                  <input [(ngModel)]="editMachineTassObject.type" type="text" class="form-control" id="type" formControlName="type" [ngClass]="{ 'is-invalid': editMachineTassForm.get('type').invalid && editMachineTassForm.get('type').touched }" />
+                  <div *ngIf="editMachineTassForm.get('type').invalid && editMachineTassForm.get('type').touched" class="invalid-feedback">Type is required.</div>
+                </div>
+                <div class="form-group">
+                  <h6 for="wct">Work Center Text</h6>
+                  <input [(ngModel)]="editMachineTassObject.work_CENTER_TEXT" type="text" class="form-control" id="wct" formControlName="wct" [ngClass]="{ 'is-invalid': editMachineTassForm.get('wct').invalid && editMachineTassForm.get('wct').touched }" />
+                  <div *ngIf="editMachineTassForm.get('wct').invalid && editMachineTassForm.get('wct').touched" class="invalid-feedback">Work Center Text is required.</div>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-primary" [disabled]="editMachineTassForm.invalid" (click)="updateMachineTass()">Update Machine Tass</button>
+            </div>
           </div>
-          <div class="form-group">
-            <label for="floor">Floor</label>
-            <input [(ngModel)]="editMachineTassObject.floor" type="text" class="form-control" id="floor" formControlName="floor" [ngClass]="{ 'is-invalid': editMachineTassForm.get('floor').invalid && editMachineTassForm.get('floor').touched }" />
-            <div *ngIf="editMachineTassForm.get('floor').invalid && editMachineTassForm.get('floor').touched" class="invalid-feedback">Floor is required.</div>
-          </div>
-          <div class="form-group">
-            <label for="machineNum">Machine Number</label>
-            <input [(ngModel)]="editMachineTassObject.machine_NUMBER" type="text" class="form-control" id="machineNum" formControlName="machineNum" [ngClass]="{ 'is-invalid': editMachineTassForm.get('machineNum').invalid && editMachineTassForm.get('machineNum').touched }" />
-            <div *ngIf="editMachineTassForm.get('machineNum').invalid && editMachineTassForm.get('machineNum').touched" class="invalid-feedback">Machine Number is required.</div>
-          </div>
-          <div class="form-group">
-            <label for="type">Type</label>
-            <input [(ngModel)]="editMachineTassObject.type" type="text" class="form-control" id="type" formControlName="type" [ngClass]="{ 'is-invalid': editMachineTassForm.get('type').invalid && editMachineTassForm.get('type').touched }" />
-            <div *ngIf="editMachineTassForm.get('type').invalid && editMachineTassForm.get('type').touched" class="invalid-feedback">Type is required.</div>
-          </div>
-          <div class="form-group">
-            <label for="wct">Work Center Text</label>
-            <input [(ngModel)]="editMachineTassObject.work_CENTER_TEXT" type="text" class="form-control" id="wct" formControlName="wct" [ngClass]="{ 'is-invalid': editMachineTassForm.get('wct').invalid && editMachineTassForm.get('wct').touched }" />
-            <div *ngIf="editMachineTassForm.get('wct').invalid && editMachineTassForm.get('wct').touched" class="invalid-feedback">Work Center Text is required.</div>
-          </div>
-        </form>
+        </div>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" [disabled]="editMachineTassForm.invalid" (click)="updateMachineTass()">Update Machine Tass</button>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- Modal for Upload Excel -->
-<div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="uploadModalLabel">Upload Excel File</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form id="uploadForm">
-          <!-- Manual File Input -->
-          <div class="form-group mt-3">
-            <input type="file" class="form-control-file" id="manualFileInput" accept=".xls,.xlsx" (change)="onFileChange($event)" />
+      <!-- Modal for Upload Excel -->
+      <div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="uploadModalLabel">Upload Excel File</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form id="uploadForm">
+                <!-- Manual File Input -->
+                <div class="form-group mt-3">
+                  <input type="file" class="form-control-file" id="manualFileInput" accept=".xls,.xlsx" (change)="onFileChange($event)" />
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-md btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-md btn-primary" id="uploadButton" (click)="uploadFileExcel()">Upload</button>
+            </div>
           </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-md btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-md btn-primary" id="uploadButton" (click)="uploadFileExcel()">Upload</button>
+        </div>
       </div>
     </div>
   </div>
