@@ -7,6 +7,7 @@ import Swal from 'sweetalert2';
 import { Select2OptionData } from 'ng-select2';
 import { Options } from 'select2';
 declare var $: any;
+import { saveAs } from 'file-saver';
 import * as XLSX from 'xlsx';
 
 import { MatTableDataSource } from '@angular/material/table';
@@ -62,7 +63,6 @@ export class ViewBuildingComponent implements OnInit {
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
-
 
   constructor(private buildingService: BuildingService, private fb: FormBuilder, private plantService: PlantService) { 
     this.editBuildingForm = this.fb.group({
