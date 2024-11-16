@@ -9,5 +9,11 @@ export class WorkDay {
     iot_TT_1: Number;
     iot_TT_2: Number;
     iot_TT_3: Number;
-    off: Number;
+    off: number
+    semi_OFF: number
+    status: number
+    creation_DATE: Date
+    created_BY: string
+    last_UPDATE_DATE: Date
+    last_UPDATED_BY: string
 }

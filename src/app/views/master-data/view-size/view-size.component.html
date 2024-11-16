@@ -25,7 +25,7 @@
         <table mat-table [dataSource]="dataSource" matSort class="table table-bordered table-striped table-sm">
           <!-- No Column -->
           <ng-container matColumnDef="no" >
-            <th *matHeaderCellDef >No</th>
+            <th *matHeaderCellDef style="min-width: 10px;" >No</th>
             <td  *matCellDef="let element; let i = index">{{ i + 1 }}</td>
           </ng-container>
         
@@ -63,11 +63,11 @@
           <tr align="center" style="height: 20px;" mat-header-row *matHeaderRowDef="displayedColumns"></tr>
           <tr align="center" mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
         </table>
-            <mat-paginator [pageSize]="pageSize"
-              [pageSizeOptions]="[5, 10, 20]"
-              showFirstLastButtons>
-            </mat-paginator>
       </div>
+      <mat-paginator [pageSize]="pageSize"
+        [pageSizeOptions]="[5, 10, 20]"
+        showFirstLastButtons>
+      </mat-paginator>
     </div>
   </div>
 </div>
