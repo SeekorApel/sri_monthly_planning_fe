@@ -30,22 +30,22 @@
 
           <ng-container matColumnDef="tassize_ID">
             <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Tass Size ID</th>
-            <td  *matCellDef="let element">{{ element.tassize_ID }}</td>
+            <td class="angka" *matCellDef="let element">{{ element.tassize_ID }}</td>
           </ng-container>
 
           <ng-container matColumnDef="machinetasstype_ID">
-            <th  *matHeaderCellDef mat-sort-header >Machine Tass Type ID</th>
-            <td *matCellDef="let element">{{ element.machinetasstype_ID }}</td>
+            <th  *matHeaderCellDef mat-sort-header >Type Code</th>
+            <td class="huruf" *matCellDef="let element">{{ element.machinetasstype_ID }}</td>
           </ng-container>
           
           <ng-container matColumnDef="size_ID">
             <th  *matHeaderCellDef mat-sort-header >Size ID</th>
-            <td *matCellDef="let element">{{ element.size_ID }}</td>
+            <td class="huruf" *matCellDef="let element">{{ element.size_ID }}</td>
           </ng-container>
           
           <ng-container matColumnDef="capacity">
             <th  *matHeaderCellDef mat-sort-header >Capacity</th>
-            <td *matCellDef="let element">{{ element.capacity }}</td>
+            <td class="angka" *matCellDef="let element">{{ element.capacity }}</td>
           </ng-container>
           
           <ng-container matColumnDef="status">
@@ -92,18 +92,37 @@
         <!-- Form with Reactive Forms -->
         <form [formGroup]="editTassSizeForm">
           <div class="form-group">
-            <label for="machinetasstype">Machine Tass Type</label>
-            <input [(ngModel)]="edtTassSizeObject.machinetasstype_ID" type="text" class="form-control" id="machinetasstype" formControlName="machinetasstype" [ngClass]="{ 'is-invalid': editTassSizeForm.get('machinetasstype').invalid && editTassSizeForm.get('machinetasstype').touched }" />
-            <div *ngIf="editTassSizeForm.get('machinetasstype').invalid && editTassSizeForm.get('machinetasstype').touched" class="invalid-feedback">Machine tass type is required.</div>
-
-            <label for="sizeid">Size</label>
-            <input [(ngModel)]="edtTassSizeObject.size_ID" type="text" class="form-control" id="sizeid" formControlName="sizeid" [ngClass]="{ 'is-invalid': editTassSizeForm.get('sizeid').invalid && editTassSizeForm.get('sizeid').touched }" />
-            <div *ngIf="editTassSizeForm.get('sizeid').invalid && editTassSizeForm.get('sizeid').touched" class="invalid-feedback">Size is required.</div>
-
+            <label for="machinetasstype_ID" style="min-width: 150px;">Machine ID</label>
+            <div>
+              <ng-select2
+                formControlName="machinetasstype_ID" 
+                id="machinetasstype_ID"
+                name = "machinetasstype_ID"
+                [(ngModel)]="edtTassSizeObject.machinetasstype_ID"
+                [data]="uomOptions[0]"
+                [options]="options"
+                [placeholder]="'Please Select'">
+              </ng-select2>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="sizeid" style="min-width: 150px;">Size ID</label>
+            <div>
+              <ng-select2
+                formControlName="sizeid" 
+                id="sizeid"
+                name = "sizeid"
+                [(ngModel)]="edtTassSizeObject.size_ID"
+                [data]="uomOptions[1]"
+                [options]="options"
+                [placeholder]="'Please Select'">
+              </ng-select2>
+            </div>
+          </div>
+          <div class="form-group">
             <label for="capacity">Capacity</label>
             <input [(ngModel)]="edtTassSizeObject.capacity" type="text" class="form-control" id="capacity" formControlName="capacity" [ngClass]="{ 'is-invalid': editTassSizeForm.get('capacity').invalid && editTassSizeForm.get('capacity').touched }" />
             <div *ngIf="editTassSizeForm.get('capacity').invalid && editTassSizeForm.get('capacity').touched" class="invalid-feedback">Capacity is required.</div>
-
           </div>
         </form>
       </div>

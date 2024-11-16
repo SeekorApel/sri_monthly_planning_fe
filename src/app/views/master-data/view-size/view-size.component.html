@@ -32,18 +32,18 @@
           <!-- Size ID Column -->
           <ng-container matColumnDef="size_ID">
             <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Size ID</th>
-            <td  *matCellDef="let element">{{ element.size_ID }}</td>
+            <td class="huruf" *matCellDef="let element">{{ element.size_ID }}</td>
           </ng-container>
         
           <!-- Description Column -->
           <ng-container matColumnDef="description">
             <th  *matHeaderCellDef mat-sort-header >Description</th>
-            <td *matCellDef="let element">{{ element.description }}</td>
+            <td class="huruf" *matCellDef="let element">{{ element.description }}</td>
           </ng-container>
         
           <!-- Status Column -->
           <ng-container matColumnDef="status">
-            <th  *matHeaderCellDef>Status</th>
+            <th style="min-width: 70px;" *matHeaderCellDef>Status</th>
             <td *matCellDef="let element" [ngClass]="{ 'bg-success': element.status === 1, 'bg-danger': element.status !== 1 }">
               {{ element.status === 1 ? 'Active' : 'Deactive' }}
             </td>

@@ -29,21 +29,21 @@
 
           <ng-container matColumnDef="building_ID">
             <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Building ID</th>
-            <td  *matCellDef="let element">{{ element.building_ID }}</td>
+            <td class="angka" *matCellDef="let element">{{ element.building_ID }}</td>
           </ng-container>
 
           <ng-container matColumnDef="plant_ID">
             <th  *matHeaderCellDef mat-sort-header >Plant ID</th>
-            <td *matCellDef="let element">{{ element.plant_ID }}</td>
+            <td class="angka" *matCellDef="let element">{{ element.plant_ID }}</td>
           </ng-container>
           
           <ng-container matColumnDef="building_NAME">
             <th  *matHeaderCellDef mat-sort-header >Building Name</th>
-            <td *matCellDef="let element">{{ element.building_NAME }}</td>
+            <td class="huruf" *matCellDef="let element">{{ element.building_NAME }}</td>
           </ng-container>
           
           <ng-container matColumnDef="status">
-            <th  *matHeaderCellDef>Status</th>
+            <th style="min-width: 50px;" *matHeaderCellDef>Status</th>
             <td *matCellDef="let element" [ngClass]="{ 'bg-success': element.status === 1, 'bg-danger': element.status !== 1 }">
               {{ element.status === 1 ? 'Active' : 'Deactive' }}
             </td>

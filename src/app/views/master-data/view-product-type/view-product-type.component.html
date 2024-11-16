@@ -30,22 +30,22 @@
 
           <ng-container matColumnDef="product_TYPE_ID">
             <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Product Type ID</th>
-            <td  *matCellDef="let element">{{ element.product_TYPE_ID }}</td>
+            <td class="angka" *matCellDef="let element">{{ element.product_TYPE_ID }}</td>
           </ng-container>
 
           <ng-container matColumnDef="product_MERK">
             <th  *matHeaderCellDef mat-sort-header >Product Merk</th>
-            <td *matCellDef="let element">{{ element.product_MERK }}</td>
+            <td class="huruf" *matCellDef="let element">{{ element.product_MERK }}</td>
           </ng-container>
           
           <ng-container matColumnDef="product_TYPE">
             <th  *matHeaderCellDef mat-sort-header >Product Type</th>
-            <td *matCellDef="let element">{{ element.product_TYPE }}</td>
+            <td class="huruf" *matCellDef="let element">{{ element.product_TYPE }}</td>
           </ng-container>
           
           <ng-container matColumnDef="category">
             <th  *matHeaderCellDef mat-sort-header >Category</th>
-            <td *matCellDef="let element">{{ element.category }}</td>
+            <td class="huruf" *matCellDef="let element">{{ element.category }}</td>
           </ng-container>
 
           <ng-container matColumnDef="status">

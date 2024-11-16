@@ -58,7 +58,7 @@ export class ProductTypeService {
   }
 
   activateProductType(productType: ProductType): Observable<ApiResponse<ProductType>> {
-    return this.http.post<ApiResponse<ProductType>>(environment.apiUrlWebAdmin + '/restoreProductType', productType, { headers: this.getHeaders() }).pipe(
+    return this.http.post<ApiResponse<ProductType>>(environment.apiUrlWebAdmin + '/activateProductType', productType, { headers: this.getHeaders() }).pipe(
       map((response) => {
         return response;
       }),

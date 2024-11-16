@@ -30,17 +30,17 @@
   
             <ng-container matColumnDef="curingsize_ID">
               <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Curing Size ID</th>
-              <td  *matCellDef="let element">{{ element.curingsize_ID }}</td>
+              <td class="angka" *matCellDef="let element">{{ element.curingsize_ID }}</td>
             </ng-container>
   
             <ng-container matColumnDef="machinecuringtype_ID">
               <th  *matHeaderCellDef mat-sort-header >Machine Curing Type ID</th>
-              <td *matCellDef="let element">{{ element.machinecuringtype_ID }}</td>
+              <td class="huruf" *matCellDef="let element">{{ element.machinecuringtype_ID }}</td>
             </ng-container>
             
             <ng-container matColumnDef="size_ID">
               <th  *matHeaderCellDef mat-sort-header >Size ID</th>
-              <td *matCellDef="let element">{{ element.size_ID }}</td>
+              <td class="huruf" *matCellDef="let element">{{ element.size_ID }}</td>
             </ng-container>
             
             <ng-container matColumnDef="capacity">
@@ -49,7 +49,7 @@
             </ng-container>
   
             <ng-container matColumnDef="status">
-              <th  *matHeaderCellDef>Status</th>
+              <th style="min-width: 70px;" *matHeaderCellDef>Status</th>
               <td *matCellDef="let element" [ngClass]="{ 'bg-success': element.status === 1, 'bg-danger': element.status !== 1 }">
                 {{ element.status === 1 ? 'Active' : 'Deactive' }}
               </td>
@@ -92,16 +92,32 @@
           <!-- Form with Reactive Forms -->
           <form [formGroup]="editCuringSizeForm">
             <div class="form-group">
-              <label for="machineCuringSizeID">Machine Curing Type ID</label>
-              <input [(ngModel)]="edtCuringSizeObject.machinecuringtype_ID" type="text" class="form-control" id="machineCuringSizeID" formControlName="machineCuringSizeID" [ngClass]="{ 'is-invalid': editCuringSizeForm.get('machineCuringSizeID').invalid && editCuringSizeForm.get('machineCuringSizeID').touched }" />
-              <!-- Error message if plantName is empty -->
-              <div *ngIf="editCuringSizeForm.get('machineCuringSizeID').invalid && editCuringSizeForm.get('machineCuringSizeID').touched" class="invalid-feedback">Machine curing type ID is required.</div>
+              <label for="machineCuringTypeID">Machine Curing Type ID</label>
+              <div>
+                <ng-select2
+                  formControlName="machineCuringTypeID" 
+                  id="machineCuringTypeID"
+                  name = "machineCuringTypeID"
+                  [(ngModel)]="edtCuringSizeObject.machinecuringtype_ID"
+                  [data]="uomOptions[0]"
+                  [options]="options"
+                  [placeholder]="'Please Select'">
+                </ng-select2>
+              </div>
             </div>
             <div class="form-group">
               <label for="sizeID">Size ID</label>
-              <input [(ngModel)]="edtCuringSizeObject.size_ID" type="text" class="form-control" id="sizeID" formControlName="sizeID" [ngClass]="{ 'is-invalid': editCuringSizeForm.get('sizeID').invalid && editCuringSizeForm.get('sizeID').touched }" />
-              <!-- Error message if plantName is empty -->
-              <div *ngIf="editCuringSizeForm.get('sizeID').invalid && editCuringSizeForm.get('sizeID').touched" class="invalid-feedback">Curing size ID is required.</div>
+              <div>
+                <ng-select2
+                  formControlName="sizeID" 
+                  id="sizeID"
+                  name = "sizeID"
+                  [(ngModel)]="edtCuringSizeObject.size_ID"
+                  [data]="uomOptions[1]"
+                  [options]="options"
+                  [placeholder]="'Please Select'">
+                </ng-select2>
+              </div>
             </div>
             <div class="form-group">
               <label for="capacity">Capacity</label>

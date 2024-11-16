@@ -15,6 +15,8 @@ import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { Product } from 'src/app/models/Product';
 import { ProductService } from 'src/app/services/master-data/product/product.service';
+import { MachineCuringTypeService } from 'src/app/services/master-data/machine-curing-type/machine-curing-type.service';
+import { MachineCuringType } from 'src/app/models/machine-curing-type';
 
 @Component({
   selector: 'app-view-max-capacity',
@@ -43,24 +45,34 @@ export class ViewMaxCapacityComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  public uomOptions: Array<Select2OptionData>;
+  public uomOptions: Array<Array<Select2OptionData>>;
   public options: Options = { width: '100%'};
   uom: any;
   product: Product[] =[];
+  machineCuringType: MachineCuringType[] =[];
 
-  constructor(private maxCapacityService: MaxCapacityService, private fb: FormBuilder, private productService: ProductService) { 
+  constructor(private maxCapacityService: MaxCapacityService, private fb: FormBuilder, private productService: ProductService, private machineCuringTypeService: MachineCuringTypeService) { 
     this.editMaxCapacityForm = this.fb.group({
-      productID: ['', Validators.required],
-      machineCuringTypeID: ['', Validators.required],
-      cycleTime: ['', Validators.required],
-      capacityShift1: ['', Validators.required],
-      capacityShift2: ['', Validators.required],
-      capacityShift3: ['', Validators.required]
+      product_ID: ['', Validators.required],
+      machinecuringtype_ID: ['', Validators.required],
+      cycle_TIME: ['', Validators.required],
+      capacity_SHIFT_1: ['', Validators.required],
+      capacity_SHIFT_2: ['', Validators.required],
+      capacity_SHIFT_3: ['', Validators.required]
     });
-    productService.getAllProduct().subscribe(
+    
+    this.loadProduct();
+    this.loadMachineCuringType();
+  }
+
+  private loadProduct(): void {
+    this.productService.getAllProduct().subscribe(
       (response: ApiResponse<Product[]>) => {
         this.product = response.data;
-        this.uomOptions = this.product.map((element) => ({
+        if (!this.uomOptions) {
+          this.uomOptions = [];
+        }
+        this.uomOptions[0] = this.product.map((element) => ({
           id: element.part_NUMBER.toString(), // Ensure the ID is a string
           text: element.part_NUMBER.toString() // Set the text to the plant name
         }));
@@ -70,6 +82,23 @@ export class ViewMaxCapacityComponent implements OnInit {
       }
     );
   }
+      private loadMachineCuringType(): void {
+        this.machineCuringTypeService.getAllMCT().subscribe(
+          (response: ApiResponse<MachineCuringType[]>) => {
+            this.machineCuringType = response.data;
+            if (!this.uomOptions) {
+              this.uomOptions = [];
+            }
+            this.uomOptions[1] = this.machineCuringType.map((element) => ({
+              id: element.machinecuringtype_ID.toString(), // Ensure the ID is a string
+              text: element.machinecuringtype_ID.toString() // Set the text to the plant name
+            }));
+          },
+          (error) => {
+            this.errorMessage = 'Failed to load machine Curing type: ' + error.message;
+          }
+        );
+      }
 
   ngOnInit(): void {
     this.getAllMaxCapacity();

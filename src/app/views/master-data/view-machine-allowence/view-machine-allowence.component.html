@@ -24,52 +24,52 @@
       <div class="table-responsive">
         <table mat-table [dataSource]="dataSource" matSort class="table table-bordered table-striped table-sm">
           <ng-container matColumnDef="no" >
-            <th *matHeaderCellDef >No</th>
+            <th *matHeaderCellDef style="min-width: 50px;" >No</th>
             <td  *matCellDef="let element; let i = index">{{ i + 1 }}</td>
           </ng-container>
 
           <ng-container matColumnDef="machine_ALLOW_ID">
-            <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Machine Allow ID</th>
-            <td  *matCellDef="let element">{{ element.machine_ALLOW_ID }}</td>
+            <th class="centered-sorted-header" style="min-width: 150px;" *matHeaderCellDef mat-sort-header >Machine Allow ID</th>
+            <td class="angka" *matCellDef="let element">{{ element.machine_ALLOW_ID }}</td>
           </ng-container>
 
           <ng-container matColumnDef="id_MACHINE">
             <th  *matHeaderCellDef mat-sort-header >Machine ID</th>
-            <td *matCellDef="let element">{{ element.id_MACHINE }}</td>
+            <td class="huruf" *matCellDef="let element">{{ element.id_MACHINE }}</td>
           </ng-container>
           
           <ng-container matColumnDef="person_RESPONSIBLE">
             <th  *matHeaderCellDef mat-sort-header >Person Responsible</th>
-            <td *matCellDef="let element">{{ element.person_RESPONSIBLE }}</td>
+            <td class="huruf" *matCellDef="let element">{{ element.person_RESPONSIBLE }}</td>
           </ng-container>
           
           <ng-container matColumnDef="shift_1">
-            <th  *matHeaderCellDef mat-sort-header >Shift 1</th>
-            <td *matCellDef="let element">{{ element.shift_1 }}</td>
+            <th  *matHeaderCellDef mat-sort-header style="min-width: 80px;">Shift 1</th>
+            <td class="angka" *matCellDef="let element">{{ element.shift_1 }}</td>
           </ng-container>
 
           <ng-container matColumnDef="shift_2">
-            <th  *matHeaderCellDef mat-sort-header >Shift 2</th>
-            <td *matCellDef="let element">{{ element.shift_2 }}</td>
+            <th  *matHeaderCellDef mat-sort-header style="min-width: 80px;">Shift 2</th>
+            <td class="angka" *matCellDef="let element">{{ element.shift_2 }}</td>
           </ng-container>
 
           <ng-container matColumnDef="shift_3">
-            <th  *matHeaderCellDef mat-sort-header >Shift 3</th>
-            <td *matCellDef="let element">{{ element.shift_3 }}</td>
+            <th  *matHeaderCellDef mat-sort-header style="min-width: 80px;">Shift 3</th>
+            <td class="angka" *matCellDef="let element">{{ element.shift_3 }}</td>
           </ng-container>
 
           <ng-container matColumnDef="shift_1_FRIDAY">
-            <th  *matHeaderCellDef mat-sort-header >Shift 1 Friday</th>
-            <td *matCellDef="let element">{{ element.shift_1_FRIDAY }}</td>
+            <th  *matHeaderCellDef mat-sort-header style="min-width: 120px;">Shift 1 Friday</th>
+            <td class="angka" *matCellDef="let element">{{ element.shift_1_FRIDAY }}</td>
           </ng-container>
 
           <ng-container matColumnDef="total_SHIFT_123">
-            <th  *matHeaderCellDef mat-sort-header >Total Shift 123</th>
-            <td *matCellDef="let element">{{ element.total_SHIFT_123 }}</td>
+            <th  *matHeaderCellDef mat-sort-header style="min-width: 130px;">Total Shift 123</th>
+            <td class="angka" *matCellDef="let element">{{ element.total_SHIFT_123 }}</td>
           </ng-container>
 
           <ng-container matColumnDef="status">
-            <th  *matHeaderCellDef>Status</th>
+            <th  *matHeaderCellDef style="min-width: 70px;">Status</th>
             <td *matCellDef="let element" [ngClass]="{ 'bg-success': element.status === 1, 'bg-danger': element.status !== 1 }">
               {{ element.status === 1 ? 'Active' : 'Deactive' }}
             </td>
@@ -112,10 +112,18 @@
         <!-- Form with Reactive Forms -->
         <form [formGroup]="editMachineAllowenceForm">
           <div class="form-group">
-            <label for="idMachine">ID Machine</label>
-            <input [(ngModel)]="edtMachineAllowenceObject.id_MACHINE" type="text" class="form-control" id="idMachine" formControlName="idMachine" [ngClass]="{ 'is-invalid': editMachineAllowenceForm.get('idMachine').invalid && editMachineAllowenceForm.get('idMachine').touched }" />
-            <!-- Error message if plantName is empty -->
-            <div *ngIf="editMachineAllowenceForm.get('idMachine').invalid && editMachineAllowenceForm.get('idMachine').touched" class="invalid-feedback">ID Machine is required.</div>
+            <label for="idMachine" style="min-width: 150px;">Machine ID</label>
+            <div>
+              <ng-select2
+                formControlName="idMachine" 
+                id="idMachine"
+                name = "idMachine"
+                [(ngModel)]="edtMachineAllowenceObject.id_MACHINE"
+                [data]="uomOptions"
+                [options]="options"
+                [placeholder]="'Please Select'">
+              </ng-select2>
+            </div>
           </div>
           <div class="form-group">
             <label for="personResponsible">Person Responsible</label>

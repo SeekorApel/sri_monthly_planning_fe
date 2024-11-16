@@ -7,10 +7,14 @@ import Swal from 'sweetalert2';
 declare var $: any;
 import * as XLSX from 'xlsx';
 import {saveAs} from 'file-saver';
+import { Select2OptionData } from 'ng-select2';
+import { Options } from 'select2';
 
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
+import { Curing_Machine } from 'src/app/models/Curing_Machine';
+import { CuringMachineService } from 'src/app/services/master-data/curing-machine/curing-machine.service';
 
 @Component({
   selector: 'app-view-machine-allowence',
@@ -39,7 +43,12 @@ export class ViewMachineAllowenceComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  constructor(private machineAllowenceService: MachineAllowenceService, private fb: FormBuilder) { 
+  public uomOptions: Array<Select2OptionData>;
+  public options: Options = { width: '100%'};
+  uom: any;
+  curingMachine: Curing_Machine[] =[];
+
+  constructor(private machineAllowenceService: MachineAllowenceService, private fb: FormBuilder, private curingMachineService: CuringMachineService) { 
     this.editMachineAllowenceForm = this.fb.group({
       idMachine: ['', Validators.required],
       personResponsible: ['', Validators.required],
@@ -49,6 +58,18 @@ export class ViewMachineAllowenceComponent implements OnInit {
       shift1Friday: ['', Validators.required],
       totalShift123: ['', Validators.required]
     });
+    curingMachineService.getAllMachineCuring().subscribe(
+      (response: ApiResponse<Curing_Machine[]>) => {
+        this.curingMachine = response.data;
+        this.uomOptions = this.curingMachine.map((element) => ({
+          id: element.work_CENTER_TEXT, // Ensure the ID is a string
+          text: element.work_CENTER_TEXT // Set the text to the plant name
+        }));
+      },
+      (error) => {
+        this.errorMessage = 'Failed to load curing machine: ' + error.message;
+      }
+    );
   }
 
   ngOnInit(): void {

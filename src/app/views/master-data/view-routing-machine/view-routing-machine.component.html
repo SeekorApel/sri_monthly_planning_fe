@@ -24,197 +24,197 @@
       <div class="table-responsive table-wrapper">
         <table mat-table [dataSource]="dataSource" matSort class="table table-bordered table-striped table-sm">
           <ng-container matColumnDef="no" >
-            <th *matHeaderCellDef >No</th>
+            <th style="min-width: 50px;" *matHeaderCellDef >No</th>
             <td  *matCellDef="let element; let i = index">{{ i + 1 }}</td>
           </ng-container>
 
           <ng-container matColumnDef="ct_ASSY_ID">
-            <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Cycle Time Assy ID</th>
-            <td  *matCellDef="let element">{{ element.ct_ASSY_ID }}</td>
+            <th style="min-width: 150px;" class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Cycle Time Assy ID</th>
+            <td class="angka" *matCellDef="let element">{{ element.ct_ASSY_ID }}</td>
           </ng-container>
 
           <ng-container matColumnDef="wip">
-            <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >WIP</th>
-            <td  *matCellDef="let element">{{ element.wip }}</td>
+            <th style="min-width: 150px;" class="centered-sorted-header" *matHeaderCellDef mat-sort-header >WIP</th>
+            <td class="huruf" *matCellDef="let element">{{ element.wip }}</td>
           </ng-container>
 
           <ng-container matColumnDef="description">
-            <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Description</th>
-            <td  *matCellDef="let element">{{ element.description }}</td>
+            <th style="min-width: 150px;" class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Description</th>
+            <td class="huruf" *matCellDef="let element">{{ element.description }}</td>
           </ng-container>
 
           <ng-container matColumnDef="group_COUNTER">
-            <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Group Counter</th>
-            <td  *matCellDef="let element">{{ element.group_COUNTER }}</td>
+            <th style="min-width: 150px;" class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Group Counter</th>
+            <td class="huruf" *matCellDef="let element">{{ element.group_COUNTER }}</td>
           </ng-container>
 
           <ng-container matColumnDef="var_GROUP_COUNTER">
-            <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Var Group Counter</th>
-            <td  *matCellDef="let element">{{ element.var_GROUP_COUNTER }}</td>
+            <th style="min-width: 150px;" class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Var Group Counter</th>
+            <td class="huruf" *matCellDef="let element">{{ element.var_GROUP_COUNTER }}</td>
           </ng-container>
 
           <ng-container matColumnDef="sequence">
-            <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Sequence</th>
-            <td  *matCellDef="let element">{{ element.sequence }}</td>
+            <th style="min-width: 150px;" class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Sequence</th>
+            <td class="angka" *matCellDef="let element">{{ element.sequence }}</td>
           </ng-container>
 
           <ng-container matColumnDef="wct">
-            <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >WCT</th>
-            <td  *matCellDef="let element">{{ element.wct }}</td>
+            <th style="min-width: 150px;" class="centered-sorted-header" *matHeaderCellDef mat-sort-header >WCT</th>
+            <td class="huruf" *matCellDef="let element">{{ element.wct }}</td>
           </ng-container>
 
           <ng-container matColumnDef="operation_SHORT_TEXT">
-            <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Operation Short Text</th>
-            <td  *matCellDef="let element">{{ element.operation_SHORT_TEXT }}</td>
+            <th style="min-width: 350px;" class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Operation Short Text</th>
+            <td class="huruf" *matCellDef="let element">{{ element.operation_SHORT_TEXT }}</td>
           </ng-container>
 
           <ng-container matColumnDef="operation_UNIT">
-            <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Operation Unit</th>
-            <td  *matCellDef="let element">{{ element.operation_UNIT }}</td>
+            <th style="min-width: 150px;" class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Operation Unit</th>
+            <td class="huruf" *matCellDef="let element">{{ element.operation_UNIT }}</td>
           </ng-container>
 
           <ng-container matColumnDef="base_QUANTITY">
-            <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Base Quantity</th>
-            <td  *matCellDef="let element">{{ element.base_QUANTITY }}</td>
+            <th style="min-width: 150px;" class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Base Quantity</th>
+            <td class="angka" *matCellDef="let element">{{ element.base_QUANTITY }}</td>
           </ng-container>
 
           <ng-container matColumnDef="standard_VALUE_UNIT">
             <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Standard Value Unit</th>
-            <td  *matCellDef="let element">{{ element.standard_VALUE_UNIT }}</td>
+            <td class="huruf" *matCellDef="let element">{{ element.standard_VALUE_UNIT }}</td>
           </ng-container>
 
           <ng-container matColumnDef="ct_SEC_1">
-            <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Cycle Time Sec 1</th>
-            <td  *matCellDef="let element">{{ element.ct_SEC_1 }}</td>
+            <th style="min-width: 150px;" class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Cycle Time Sec 1</th>
+            <td class="angka" *matCellDef="let element">{{ element.ct_SEC_1 }}</td>
           </ng-container>
 
           <ng-container matColumnDef="ct_HR_1000">
-            <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Cycle Time HR 1000</th>
-            <td  *matCellDef="let element">{{ element.ct_HR_1000 }}</td>
+            <th style="min-width: 170px;" class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Cycle Time HR 1000</th>
+            <td class="angka" *matCellDef="let element">{{ element.ct_HR_1000 }}</td>
           </ng-container>
 
           <ng-container matColumnDef="wh_NORMAL_SHIFT_0">
-            <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Work Hours Normal Shift 1</th>
-            <td  *matCellDef="let element">{{ element.wh_NORMAL_SHIFT_0 }}</td>
+            <th style="min-width: 200px;" class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Work Hours Normal Shift 1</th>
+            <td class="angka" *matCellDef="let element">{{ element.wh_NORMAL_SHIFT_0 }}</td>
           </ng-container>
 
           <ng-container matColumnDef="wh_NORMAL_SHIFT_1">
-            <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Work Hours Normal Shift 2</th>
-            <td  *matCellDef="let element">{{ element.wh_NORMAL_SHIFT_1 }}</td>
+            <th style="min-width: 200px;" class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Work Hours Normal Shift 2</th>
+            <td class="angka" *matCellDef="let element">{{ element.wh_NORMAL_SHIFT_1 }}</td>
           </ng-container>
 
           <ng-container matColumnDef="wh_NORMAL_SHIFT_2">
-            <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Work Hours Normal Shift 3</th>
-            <td  *matCellDef="let element">{{ element.wh_NORMAL_SHIFT_2 }}</td>
+            <th style="min-width: 200px;" class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Work Hours Normal Shift 3</th>
+            <td class="angka" *matCellDef="let element">{{ element.wh_NORMAL_SHIFT_2 }}</td>
           </ng-container>
 
           <ng-container matColumnDef="wh_SHIFT_FRIDAY">
-            <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Work Hours Shift Jumat</th>
-            <td  *matCellDef="let element">{{ element.wh_SHIFT_FRIDAY }}</td>
+            <th style="min-width: 200px;" class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Work Hours Shift Jumat</th>
+            <td class="angka" *matCellDef="let element">{{ element.wh_SHIFT_FRIDAY }}</td>
           </ng-container>
 
           <ng-container matColumnDef="wh_TOTAL_NORMAL_SHIFT">
-            <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Work Hours Total Normal Shift</th>
-            <td  *matCellDef="let element">{{ element.wh_TOTAL_NORMAL_SHIFT }}</td>
+            <th style="min-width: 230px;" class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Work Hours Total Normal Shift</th>
+            <td class="angka" *matCellDef="let element">{{ element.wh_TOTAL_NORMAL_SHIFT }}</td>
           </ng-container>
 
           <ng-container matColumnDef="wh_TOTAL_SHIFT_FRIDAY">
-            <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Work Hours Total Shift Jumat</th>
-            <td  *matCellDef="let element">{{ element.wh_TOTAL_SHIFT_FRIDAY }}</td>
+            <th style="min-width: 230px;" class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Work Hours Total Shift Jumat</th>
+            <td class="angka" *matCellDef="let element">{{ element.wh_TOTAL_SHIFT_FRIDAY }}</td>
           </ng-container>
 
           <ng-container matColumnDef="allow_NORMAL_SHIFT_0">
             <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Allow Normal Shift 1</th>
-            <td  *matCellDef="let element">{{ element.allow_NORMAL_SHIFT_0 }}</td>
+            <td class="angka" *matCellDef="let element">{{ element.allow_NORMAL_SHIFT_0 }}</td>
           </ng-container>
 
           <ng-container matColumnDef="allow_NORMAL_SHIFT_1">
             <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Allow Normal Shift 2</th>
-            <td  *matCellDef="let element">{{ element.allow_NORMAL_SHIFT_1 }}</td>
+            <td class="angka" *matCellDef="let element">{{ element.allow_NORMAL_SHIFT_1 }}</td>
           </ng-container>
 
           <ng-container matColumnDef="allow_NORMAL_SHIFT_2">
             <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Allow Normal Shift 3</th>
-            <td  *matCellDef="let element">{{ element.allow_NORMAL_SHIFT_2 }}</td>
+            <td class="angka" *matCellDef="let element">{{ element.allow_NORMAL_SHIFT_2 }}</td>
           </ng-container>
 
           <ng-container matColumnDef="allow_TOTAL">
             <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Allow Total</th>
-            <td  *matCellDef="let element">{{ element.allow_TOTAL }}</td>
+            <td class="angka" *matCellDef="let element">{{ element.allow_TOTAL }}</td>
           </ng-container>
 
           <ng-container matColumnDef="op_TIME_NORMAL_SHIFT_0">
             <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >OP Time Normal Shift 1</th>
-            <td  *matCellDef="let element">{{ element.op_TIME_NORMAL_SHIFT_0 }}</td>
+            <td class="angka" *matCellDef="let element">{{ element.op_TIME_NORMAL_SHIFT_0 }}</td>
           </ng-container>
 
           <ng-container matColumnDef="op_TIME_NORMAL_SHIFT_1">
             <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >OP Time Normal Shift 2</th>
-            <td  *matCellDef="let element">{{ element.op_TIME_NORMAL_SHIFT_1 }}</td>
+            <td class="angka" *matCellDef="let element">{{ element.op_TIME_NORMAL_SHIFT_1 }}</td>
           </ng-container>
 
           <ng-container matColumnDef="op_TIME_NORMAL_SHIFT_2">
             <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >OP Time Normal Shift 3</th>
-            <td  *matCellDef="let element">{{ element.op_TIME_NORMAL_SHIFT_2 }}</td>
+            <td class="angka" *matCellDef="let element">{{ element.op_TIME_NORMAL_SHIFT_2 }}</td>
           </ng-container>
 
           <ng-container matColumnDef="op_TIME_SHIFT_FRIDAY">
             <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >OP Time Shift Jumat</th>
-            <td  *matCellDef="let element">{{ element.op_TIME_SHIFT_FRIDAY }}</td>
+            <td class="angka" *matCellDef="let element">{{ element.op_TIME_SHIFT_FRIDAY }}</td>
           </ng-container>
 
           <ng-container matColumnDef="op_TIME_TOTAL_NORMAL_SHIFT">
             <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >OP Time Total Normal Shift</th>
-            <td  *matCellDef="let element">{{ element.op_TIME_TOTAL_NORMAL_SHIFT }}</td>
+            <td class="angka" *matCellDef="let element">{{ element.op_TIME_TOTAL_NORMAL_SHIFT }}</td>
           </ng-container>
 
           <ng-container matColumnDef="op_TIME_TOTAL_SHIFT_FRIDAY">
             <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >OP Time Total Shift Jumat</th>
-            <td  *matCellDef="let element">{{ element.op_TIME_TOTAL_SHIFT_FRIDAY }}</td>
+            <td class="angka" *matCellDef="let element">{{ element.op_TIME_TOTAL_SHIFT_FRIDAY }}</td>
           </ng-container>
 
           <ng-container matColumnDef="kaps_NORMAL_SHIFT_0">
             <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Kapasitas Normal Shift 1</th>
-            <td  *matCellDef="let element">{{ element.kaps_NORMAL_SHIFT_0 }}</td>
+            <td class="angka" *matCellDef="let element">{{ element.kaps_NORMAL_SHIFT_0 }}</td>
           </ng-container>
 
           <ng-container matColumnDef="kaps_NORMAL_SHIFT_1">
             <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Kapasitas Normal Shift 2</th>
-            <td  *matCellDef="let element">{{ element.kaps_NORMAL_SHIFT_1 }}</td>
+            <td class="angka" *matCellDef="let element">{{ element.kaps_NORMAL_SHIFT_1 }}</td>
           </ng-container>
 
           <ng-container matColumnDef="kaps_NORMAL_SHIFT_2">
             <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Kapasitas Normal Shift 3</th>
-            <td  *matCellDef="let element">{{ element.kaps_NORMAL_SHIFT_2 }}</td>
+            <td class="angka" *matCellDef="let element">{{ element.kaps_NORMAL_SHIFT_2 }}</td>
           </ng-container>
 
           <ng-container matColumnDef="kaps_SHIFT_FRIDAY">
             <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Kapasitas Shift Jumat</th>
-            <td  *matCellDef="let element">{{ element.kaps_SHIFT_FRIDAY }}</td>
+            <td class="angka" *matCellDef="let element">{{ element.kaps_SHIFT_FRIDAY }}</td>
           </ng-container>
 
           <ng-container matColumnDef="kaps_TOTAL_NORMAL_SHIFT">
             <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Kapasitas Total Normal Shift</th>
-            <td  *matCellDef="let element">{{ element.kaps_TOTAL_NORMAL_SHIFT }}</td>
+            <td class="angka" *matCellDef="let element">{{ element.kaps_TOTAL_NORMAL_SHIFT }}</td>
           </ng-container>
 
           <ng-container matColumnDef="kaps_TOTAL_SHIFT_FRIDAY">
             <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Kapasitas Total Shift Jumat</th>
-            <td  *matCellDef="let element">{{ element.kaps_TOTAL_SHIFT_FRIDAY }}</td>
+            <td class="angka" *matCellDef="let element">{{ element.kaps_TOTAL_SHIFT_FRIDAY }}</td>
           </ng-container>
 
           <ng-container matColumnDef="waktu_TOTAL_CT_NORMAL">
             <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Waktu Total Cycle Time Normal</th>
-            <td  *matCellDef="let element">{{ element.waktu_TOTAL_CT_NORMAL }}</td>
+            <td class="angka" *matCellDef="let element">{{ element.waktu_TOTAL_CT_NORMAL }}</td>
           </ng-container>
 
           <ng-container matColumnDef="waktu_TOTAL_CT_FRIDAY">
             <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Waktu Total Cycle Time Jumat</th>
-            <td  *matCellDef="let element">{{ element.waktu_TOTAL_CT_FRIDAY }}</td>
+            <td class="angka" *matCellDef="let element">{{ element.waktu_TOTAL_CT_FRIDAY }}</td>
           </ng-container>
 
           <ng-container matColumnDef="status">
-            <th  *matHeaderCellDef mat-sort-header>Status</th>
+            <th style="min-width: 70px;" *matHeaderCellDef>Status</th>
             <td *matCellDef="let element" [ngClass]="{ 'bg-success': element.status === 1, 'bg-danger': element.status !== 1 }">
               {{ element.status === 1 ? 'Active' : 'Deactive' }}
             </td>

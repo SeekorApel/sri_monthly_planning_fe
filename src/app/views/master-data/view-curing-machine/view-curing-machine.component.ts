@@ -37,7 +37,7 @@ export class ViewCuringMachineComponent implements OnInit {
   pageSize: number = 5;
   totalPages: number = 5;
   sortBuffer: Array<any>;
-  displayedColumns: string[] = ['no', 'machine_TYPE', 'building_ID','cavity','work_CENTER_TEXT', 'status_USAGE', 'status', 'action'];
+  displayedColumns: string[] = ['no', 'work_CENTER_TEXT', 'machine_TYPE', 'building_ID','cavity', 'status_USAGE', 'status', 'action'];
   dataSource: MatTableDataSource<Curing_Machine>;
 
   @ViewChild(MatSort) sort: MatSort;

@@ -29,22 +29,22 @@
 
           <ng-container matColumnDef="item_CURING">
             <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Item Curing</th>
-            <td  *matCellDef="let element">{{ element.item_CURING }}</td>
+            <td class="huruf" *matCellDef="let element">{{ element.item_CURING }}</td>
           </ng-container>
 
           <ng-container matColumnDef="machine_TYPE">
             <th  *matHeaderCellDef mat-sort-header >Machine Type</th>
-            <td *matCellDef="let element">{{ element.machine_TYPE }}</td>
+            <td class="huruf" *matCellDef="let element">{{ element.machine_TYPE }}</td>
           </ng-container>
           
           <ng-container matColumnDef="kapa_PER_MOULD">
             <th  *matHeaderCellDef mat-sort-header >Kapa Per Mould</th>
-            <td *matCellDef="let element">{{ element.kapa_PER_MOULD }}</td>
+            <td class="angka" *matCellDef="let element">{{ element.kapa_PER_MOULD }}</td>
           </ng-container>
           
           <ng-container matColumnDef="number_OF_MOULD">
             <th  *matHeaderCellDef mat-sort-header >Number of Mould</th>
-            <td *matCellDef="let element">{{ element.number_OF_MOULD }}</td>
+            <td class="angka" *matCellDef="let element">{{ element.number_OF_MOULD }}</td>
           </ng-container>
           
           <ng-container matColumnDef="status">

@@ -7,10 +7,16 @@ import Swal from 'sweetalert2';
 declare var $: any;
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
+import { Select2OptionData } from 'ng-select2';
+import { Options } from 'select2';
 
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
+import { MachineTassType } from 'src/app/models/machine-tass-type';
+import { MachineTassTypeService } from 'src/app/services/master-data/machine-tass-type/machine-tass-type.service';
+import { Size } from 'src/app/models/Size';
+import { SizeService } from 'src/app/services/master-data/size/size.service';
 
 @Component({
   selector: 'app-view-tass-size',
@@ -39,14 +45,58 @@ export class ViewTassSizeComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  constructor(private tass_sizeService: TassSizeService, private fb: FormBuilder) { 
+  public uomOptions: Array<Array<Select2OptionData>>;
+  public options: Options = { width: '100%'
+  };
+  uom: any;
+  machineTassType: MachineTassType[];
+  size: Size[];
+
+  constructor(private tass_sizeService: TassSizeService, private fb: FormBuilder, private machineTassTypeService: MachineTassTypeService, private sizeService: SizeService) { 
     this.editTassSizeForm = this.fb.group({
-      machinetasstype: ['', Validators.required],
+      machinetasstype_ID: ['', Validators.required],
       sizeid: ['', Validators.required],
       capacity: ['', Validators.required],
     });
+    
+    this.loadMachineTassType();
+    this.loadSize();
   }
 
+  private loadMachineTassType(): void {
+    this.machineTassTypeService.getAllMachineTassType().subscribe(
+      (response: ApiResponse<MachineTassType[]>) => {
+        this.machineTassType = response.data;
+        if (!this.uomOptions) {
+          this.uomOptions = [];
+        }
+        this.uomOptions[0] = this.machineTassType.map((element) => ({
+          id: element.machinetasstype_ID, // Ensure the ID is a string
+          text: element.machinetasstype_ID // Set the text to the plant name
+        }));
+      },
+      (error) => {
+        this.errorMessage = 'Failed to load Machine Tass Type: ' + error.message;
+      }
+    );
+  }
+  private loadSize(): void {
+    this.sizeService.getAllSize().subscribe(
+      (response: ApiResponse<Size[]>) => {
+        this.size = response.data;
+        if (!this.uomOptions) {
+          this.uomOptions = [];
+        }
+        this.uomOptions[1] = this.size.map((element) => ({
+          id: element.size_ID, // Ensure the ID is a string
+          text: element.size_ID, // Set the text to the name (or other property)
+        }));
+      },
+      (error) => {
+        this.errorMessage = 'Failed to load size: ' + error.message;
+      }
+    );
+  }
   ngOnInit(): void {
     this.getAllTassSize();
   }
@@ -93,6 +143,8 @@ export class ViewTassSizeComponent implements OnInit {
   }
 
   updateTassSize(): void {
+    const machineId = this.editTassSizeForm.get('machinetasstype_ID').value;
+  console.log('Machine ID:', machineId);
     
     this.tass_sizeService.updateTassSize(this.edtTassSizeObject).subscribe(
       (response) => {

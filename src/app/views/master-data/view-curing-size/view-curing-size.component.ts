@@ -7,10 +7,16 @@ import Swal from 'sweetalert2';
 declare var $: any;
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
+import { Select2OptionData } from 'ng-select2';
+import { Options } from 'select2';
 
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
+import { MachineCuringType } from 'src/app/models/machine-curing-type';
+import { MachineCuringTypeService } from 'src/app/services/master-data/machine-curing-type/machine-curing-type.service';
+import { Size } from 'src/app/models/Size';
+import { SizeService } from 'src/app/services/master-data/size/size.service';
 
 @Component({
   selector: 'app-view-curing-size',
@@ -38,12 +44,56 @@ export class ViewCuringSizeComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  constructor(private curingSizeService: CuringSizeService, private fb: FormBuilder) {
+  public uomOptions: Array<Array<Select2OptionData>>;
+  public options: Options = { width: '100%'};
+  uom: any;
+  machineCuringType: MachineCuringType[] =[];
+  size: Size[] =[];
+
+  constructor(private curingSizeService: CuringSizeService, private fb: FormBuilder, private machineCuringTypeService: MachineCuringTypeService, private sizeService: SizeService) { 
     this.editCuringSizeForm = this.fb.group({
-      machineCuringSizeID: ['', Validators.required],
+      machineCuringTypeID: ['', Validators.required],
       sizeID: ['', Validators.required],
       capacity: ['', Validators.required]
     });
+    
+    this.loadMachineCuringType();
+    this.loadSize();
+  }
+
+  private loadMachineCuringType(): void {
+    this.machineCuringTypeService.getAllMCT().subscribe(
+      (response: ApiResponse<MachineCuringType[]>) => {
+        this.machineCuringType = response.data;
+        if (!this.uomOptions) {
+          this.uomOptions = [];
+        }
+        this.uomOptions[0] = this.machineCuringType.map((element) => ({
+          id: element.machinecuringtype_ID.toString(), // Ensure the ID is a string
+          text: element.machinecuringtype_ID.toString() // Set the text to the plant name
+        }));
+      },
+      (error) => {
+        this.errorMessage = 'Failed to load machine Curing type: ' + error.message;
+      }
+    );
+  }
+  private loadSize(): void {
+    this.sizeService.getAllSize().subscribe(
+      (response: ApiResponse<Size[]>) => {
+        this.size = response.data;
+        if (!this.uomOptions) {
+          this.uomOptions = [];
+        }
+        this.uomOptions[1] = this.size.map((element) => ({
+          id: element.size_ID, // Ensure the ID is a string
+          text: element.size_ID, // Set the text to the name (or other property)
+        }));
+      },
+      (error) => {
+        this.errorMessage = 'Failed to load size: ' + error.message;
+      }
+    );
   }
 
   ngOnInit(): void {

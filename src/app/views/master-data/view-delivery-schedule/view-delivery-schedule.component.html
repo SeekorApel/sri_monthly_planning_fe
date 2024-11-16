@@ -25,32 +25,32 @@
         <table mat-table [dataSource]="dataSource" matSort class="table table-bordered table-striped table-sm">
 
           <ng-container matColumnDef="no" >
-            <th *matHeaderCellDef >No</th>
+            <th style="min-width: 50px;" *matHeaderCellDef >No</th>
             <td  *matCellDef="let element; let i = index">{{ i + 1 }}</td>
           </ng-container>
 
           <ng-container matColumnDef="ds_ID">
-            <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Delivery Schedule ID</th>
-            <td  *matCellDef="let element">{{ element.ds_ID }}</td>
+            <th style="min-width: 170px;" class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Delivery Schedule ID</th>
+            <td class="angka" *matCellDef="let element">{{ element.ds_ID }}</td>
           </ng-container>
 
           <ng-container matColumnDef="effective_TIME">
-            <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Effective Time</th>
-            <td  *matCellDef="let element">{{ element.effective_TIME }}</td>
+            <th style="min-width: 250px;" class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Effective Time</th>
+            <td class="angka" *matCellDef="let element">{{ element.effective_TIME }}</td>
           </ng-container>
 
           <ng-container matColumnDef="date_ISSUED">
-            <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Data Issued</th>
-            <td  *matCellDef="let element">{{ element.date_ISSUED }}</td>
+            <th style="min-width: 250px;" class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Data Issued</th>
+            <td class="angka" *matCellDef="let element">{{ element.date_ISSUED }}</td>
           </ng-container>
 
           <ng-container matColumnDef="category">
-            <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Category</th>
-            <td  *matCellDef="let element">{{ element.category }}</td>
+            <th style="min-width: 100px;" class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Category</th>
+            <td class="huruf" *matCellDef="let element">{{ element.category }}</td>
           </ng-container>
 
           <ng-container matColumnDef="status">
-            <th  *matHeaderCellDef mat-sort-header>Status</th>
+            <th style="min-width: 70px;" *matHeaderCellDef mat-sort-header>Status</th>
             <td *matCellDef="let element" [ngClass]="{ 'bg-success': element.status === 1, 'bg-danger': element.status !== 1 }">
               {{ element.status === 1 ? 'Active' : 'Deactive' }}
             </td>
@@ -94,13 +94,13 @@
         <form [formGroup]="editDeliveryScheduleForm">
           <div class="form-group">
             <label for="effectiveTime">Effective Time</label>
-            <input [(ngModel)]="edtDeliveryScheduleObject.effective_TIME" type="date" class="form-control" id="effectiveTime" formControlName="effectiveTime" [ngClass]="{ 'is-invalid': editDeliveryScheduleForm.get('effectiveTime').invalid && editDeliveryScheduleForm.get('effectiveTime').touched }" />
+            <input [(ngModel)]="edtDeliveryScheduleObject.effective_TIME" type="datetime-local" class="form-control" id="effectiveTime" formControlName="effectiveTime" [ngClass]="{ 'is-invalid': editDeliveryScheduleForm.get('effectiveTime').invalid && editDeliveryScheduleForm.get('effectiveTime').touched }" />
             <!-- Error message if plantName is empty -->
             <div *ngIf="editDeliveryScheduleForm.get('effectiveTime').invalid && editDeliveryScheduleForm.get('effectiveTime').touched" class="invalid-feedback">Effective time is required.</div>
           </div>
           <div class="form-group">
             <label for="dataIssue">Data Issue</label>
-            <input [(ngModel)]="edtDeliveryScheduleObject.date_ISSUED" type="date" class="form-control" id="dataIssue" formControlName="dataIssue" [ngClass]="{ 'is-invalid': editDeliveryScheduleForm.get('dataIssue').invalid && editDeliveryScheduleForm.get('dataIssue').touched }" />
+            <input [(ngModel)]="edtDeliveryScheduleObject.date_ISSUED" type="datetime-local" class="form-control" id="dataIssue" formControlName="dataIssue" [ngClass]="{ 'is-invalid': editDeliveryScheduleForm.get('dataIssue').invalid && editDeliveryScheduleForm.get('dataIssue').touched }" />
             <!-- Error message if plantName is empty -->
             <div *ngIf="editDeliveryScheduleForm.get('dataIssue').invalid && editDeliveryScheduleForm.get('dataIssue').touched" class="invalid-feedback">Data Issue is required.</div>
           </div>
