@@ -6,8 +6,9 @@ import { ApiResponse } from 'src/app/response/Response';
 import { throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { map, catchError } from 'rxjs/operators';
-import { WDHours } from 'src/app/models/WDHours';
+// import { WDHours } from 'src/app/models/WDHours';
 import { DWorkDay } from 'src/app/models/DWorkDay';
+import { WDHoursSpecific } from 'src/app/models/WDHoursSpecific';
 
 @Injectable({
   providedIn: 'root',
@@ -60,42 +61,42 @@ export class WorkDayService {
     );
   }
 
-  getDWorkDayHoursByDateDesc(dateTarget: string, targetdesc: string): Observable<ApiResponse<WDHours>> {
-    return this.http.get<ApiResponse<WDHours>>(
-      environment.apiUrlWebAdmin + '/getDWorkDayHoursByDateDesc/' + dateTarget+"/"+targetdesc,
-      { headers: this.getHeaders() }
-    );
-  }
+  // getDWorkDayHoursByDateDesc(dateTarget: string, targetdesc: string): Observable<ApiResponse<WDHours>> {
+  //   return this.http.get<ApiResponse<WDHours>>(
+  //     environment.apiUrlWebAdmin + '/getDWorkDayHoursByDateDesc/' + dateTarget+"/"+targetdesc,
+  //     { headers: this.getHeaders() }
+  //   );
+  // }
 
-  turnOnHour(dateTarget: string,hour: string,type: string): Observable<ApiResponse<WDHours>> {
-    return this.http.post<ApiResponse<WDHours>>(
-      environment.apiUrlWebAdmin + '/turnOnHour/'+dateTarget+"/"+hour+"/"+type,
-      { headers: this.getHeaders() }
-    );
-  }
-  turnOffHour(dateTarget: string,hour: string,type: string): Observable<ApiResponse<WDHours>> {
-    return this.http.post<ApiResponse<WDHours>>(
-      environment.apiUrlWebAdmin + '/turnOffHour/'+dateTarget+"/"+hour+"/"+type,
-      { headers: this.getHeaders() }
-    );
-  }
+  // turnOnHour(dateTarget: string,hour: string,type: string): Observable<ApiResponse<WDHours>> {
+  //   return this.http.post<ApiResponse<WDHours>>(
+  //     environment.apiUrlWebAdmin + '/turnOnHour/'+dateTarget+"/"+hour+"/"+type,
+  //     { headers: this.getHeaders() }
+  //   );
+  // }
+  // turnOffHour(dateTarget: string,hour: string,type: string): Observable<ApiResponse<WDHours>> {
+  //   return this.http.post<ApiResponse<WDHours>>(
+  //     environment.apiUrlWebAdmin + '/turnOffHour/'+dateTarget+"/"+hour+"/"+type,
+  //     { headers: this.getHeaders() }
+  //   );
+  // }
 
-  updateDWorkDayHours(wdhours: WDHours): Observable<ApiResponse<WDHours>> {
-    return this.http.post<ApiResponse<WDHours>>(
-      environment.apiUrlWebAdmin + '/updateDWorkDayHours',
-      wdhours,
-      { headers: this.getHeaders() }
-    );
-  }
+  // updateDWorkDayHours(wdhours: WDHours): Observable<ApiResponse<WDHours>> {
+  //   return this.http.post<ApiResponse<WDHours>>(
+  //     environment.apiUrlWebAdmin + '/updateDWorkDayHours',
+  //     wdhours,
+  //     { headers: this.getHeaders() }
+  //   );
+  // }
 
-  saveDWorkDayHours(wdhours: WDHours): Observable<ApiResponse<WDHours>> {
-    console.log(wdhours);
-    return this.http.post<ApiResponse<WDHours>>(
-      environment.apiUrlWebAdmin + '/saveDWorkDayHours',
-      wdhours,
-      { headers: this.getHeaders() }
-    );
-  }
+  // saveDWorkDayHours(wdhours: WDHours): Observable<ApiResponse<WDHours>> {
+  //   console.log(wdhours);
+  //   return this.http.post<ApiResponse<WDHours>>(
+  //     environment.apiUrlWebAdmin + '/saveDWorkDayHours',
+  //     wdhours,
+  //     { headers: this.getHeaders() }
+  //   );
+  // }
   
   getDWorkDayByDate(buffer: string): Observable<ApiResponse<DWorkDay[]>> {
     return this.http.get<ApiResponse<DWorkDay[]>>(
@@ -127,66 +128,20 @@ export class WorkDayService {
     );
   }
 
-  // getAllBuilding(): Observable<ApiResponse<Building[]>> {
-  //   return this.http.get<ApiResponse<Building[]>>(
-  //     environment.apiUrlWebAdmin + '/getAllBuilding',
-  //     { headers: this.getHeaders() }
-  //   );
-  // }
+  getDWorkDayHoursSpecificByDateDesc(target:string,type: string): Observable<ApiResponse<WDHoursSpecific>> {
+    return this.http.get<ApiResponse<WDHoursSpecific>>(
+      environment.apiUrlWebAdmin + '/getDWorkDayHoursSpecificByDateDesc/'+target+"/"+type,
+      { headers: this.getHeaders() }
+    );
+  }
 
-  // //Method Update plant
-  // updateBuilding(building: Building): Observable<ApiResponse<Building>> {
-  //   return this.http.post<ApiResponse<Building>>(
-  //     environment.apiUrlWebAdmin + '/updateBuilding',
-  //     building,
-  //     { headers: this.getHeaders() } // Menyertakan header
-  //   );
-  // }
-
-  // deleteBuilding(building: Building): Observable<ApiResponse<Building>> {
-  //   return this.http.post<ApiResponse<Building>>(
-  //     environment.apiUrlWebAdmin + '/deleteBuilding',
-  //     building,
-  //     { headers: this.getHeaders() }
-  //   )
-  //   .pipe(
-  //     map((response) => {
-  //       return response;
-  //     }),
-  //     catchError((err) => {
-  //       return throwError(err);
-  //     })
-  //   );
-  // }
-
-  // activateBuilding(building: Building): Observable<ApiResponse<Building>> {
-  //   return this.http.post<ApiResponse<Building>>(environment.apiUrlWebAdmin + '/restoreBuilding', building, { headers: this.getHeaders() }).pipe(
-  //     map((response) => {
-  //       return response;
-  //     }),
-  //     catchError((err) => {
-  //       return throwError(err);
-  //     })
-  //   );
-  // }
-
-  // uploadFileExcel(file: FormData): Observable<ApiResponse<Building>> {
-  //   return this.http.post<ApiResponse<Building>>(
-  //     environment.apiUrlWebAdmin + '/saveBuildingsExcel',
-  //     file,
-  //     { headers: this.getHeaders() }
-  //   )
-  //   .pipe(
-  //     map((response) => {
-  //       return response;
-  //     }),
-  //     catchError((err) => {
-  //       return throwError(err);
-  //     })
-  //   );
-  // }
-
-  // exportExcel(): Observable<Blob> {
-  //   return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/exportBuildingsExcel`, { responseType: 'blob' as 'json' });
-  // }
+  saveDWorkDayHoursSpecific(wdhours: WDHoursSpecific): Observable<ApiResponse<WDHoursSpecific>> {
+    console.log(wdhours);
+    return this.http.post<ApiResponse<WDHoursSpecific>>(
+      environment.apiUrlWebAdmin + '/saveDWorkDayHoursSpecific',
+      wdhours,
+      { headers: this.getHeaders() }
+    );
+  }
+  
 }

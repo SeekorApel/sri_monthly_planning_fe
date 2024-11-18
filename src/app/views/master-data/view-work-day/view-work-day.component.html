@@ -253,86 +253,130 @@
               </tabset>              
             </tab>                
             <!-- Tab 3: Per Hour -->
-            <tab heading="Per Hour"*ngIf="!overTimeSwitch">
+            <tab heading="Per Hour" *ngIf="!overTimeSwitch">
               <div class="form-group per-hour-wrapper">
-                <div *ngFor="let group of [0, 1, 2]; let g = index" class="hour-group">
-                  <h5>{{shifts[g]}} </h5>
-                  <div *ngFor="let i of [].constructor(8); let j = index" class="per-hour-wrapper-item">
-                    <div class="form-group">
-                      <div class="per-hour-wrapper">
-                        <h6>{{ formatHourRange(g * 8 + j) }}</h6>
-                        <label class="switch switch-label switch-primary" style="min-width: 10px;">
-                          <input type="checkbox" class="switch-input" [(ngModel)]="perHourSwitches[g * 8 + j]" 
-                                 (ngModelChange)="updateHours('WD_NORMAL',(g * 8 + j))" 
-                                 >
-                          <span class="switch-slider" data-checked="On" data-unchecked="Off"></span>
-                        </label>
-                        <!-- Reason input displayed if required -->
-                        <div *ngIf="isReasonRequiredPerHour(g * 8 + j)" class="reason-input">
-                          <input #reasonInput type="text" placeholder="Reason" class="form-control" 
-                                 [(ngModel)]="perHourReasons[g * 8 + j].description" 
-                                 (keydown.enter)="handleReasonSaveUpdateDelete(perHourReasons[g * 8 + j], reasonInput)" 
-                                 required>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                <div *ngFor="let shift of shifts; let i = index" class="hour-group">
+                  <h5>{{ shift }}</h5>
+                  
+                  <label>
+                    Start Time:
+                    <input
+                      type="time"
+                      [(ngModel)]="perHourSwitches['shift' + getShiftIndex(i) + '_START_TIME']"
+                      class="form-control"
+                    />
+                  </label>
+                  <label>
+                    End Time:
+                    <input
+                      type="time"
+                      [(ngModel)]="perHourSwitches['shift' +  getShiftIndex(i) + '_END_TIME']"
+                      class="form-control"
+                    />
+                  </label>
+                  <label>
+                    Total Time:
+                    <input
+                      type="number"
+                      [(ngModel)]="perHourSwitches['shift' +  getShiftIndex(i) + '_TOTAL_TIME']"
+                      class="form-control"
+                    />
+                  </label>
                 </div>
-              </div>              
+              </div>
             </tab>
+            
+            
+            <!-- <tab heading="Per Hour"*ngIf="!overTimeSwitch"> -->
+              <!-- <div class="form-group per-hour-wrapper"> -->
+                <!-- <div *ngFor="let group of [0, 1, 2]; let g = index" class="hour-group"> -->
+                  <!-- <h5>{{shifts[g]}} </h5> -->
+                  <!-- <div *ngFor="let i of [].constructor(8); let j = index" class="per-hour-wrapper-item"> -->
+                    <!-- <div class="form-group"> -->
+                      <!-- <div class="per-hour-wrapper"> -->
+                        <!-- <h6>{{ formatHourRange(g * 8 + j) }}</h6> -->
+                        <!-- <label class="switch switch-label switch-primary" style="min-width: 10px;"> -->
+                          <!-- <input type="checkbox" class="switch-input" [(ngModel)]="perHourSwitches[g * 8 + j]"  -->
+                                 <!-- (ngModelChange)="updateHours('WD_NORMAL',(g * 8 + j))"  -->
+                                 <!-- > -->
+                          <!-- <span class="switch-slider" data-checked="On" data-unchecked="Off"></span> -->
+                        <!-- </label> -->
+                        <!-- Reason input displayed if required -->
+                        <!-- <div *ngIf="isReasonRequiredPerHour(g * 8 + j)" class="reason-input"> -->
+                          <!-- <input #reasonInput type="text" placeholder="Reason" class="form-control"  -->
+                                 <!-- [(ngModel)]="perHourReasons[g * 8 + j].description"  -->
+                                 <!-- (keydown.enter)="handleReasonSaveUpdateDelete(perHourReasons[g * 8 + j], reasonInput)"  -->
+                                 <!-- required> -->
+                        <!-- </div> -->
+                      <!-- </div> -->
+                    <!-- </div> -->
+                  <!-- </div> -->
+                <!-- </div> -->
+              <!-- </div>               -->
+            <!-- </tab> -->
             <tab heading="Per Hour TT"*ngIf="overTimeSwitch">
               <div class="form-group per-hour-wrapper">
-                <div *ngFor="let group of [0, 1, 2]; let g = index" class="hour-group">
-                  <h5>{{shifts[g]}} </h5>
-                  <div *ngFor="let i of [].constructor(8); let j = index" class="per-hour-wrapper-item">
-                    <div class="form-group">
-                      <div class="per-hour-wrapper">
-                        <h6>{{ formatHourRange(g * 8 + j) }}</h6>
-                        <label class="switch switch-label switch-primary" style="min-width: 10px;">
-                          <input type="checkbox" class="switch-input" [(ngModel)]="ttperHourSwitches[g * 8 + j]" 
-                                 (ngModelChange)="updateHours('OT_TT',(g * 8 + j))" 
-                                 >
-                          <span class="switch-slider" data-checked="On" data-unchecked="Off"></span>
-                        </label>
-                        <!-- Reason input displayed if required -->
-                        <div *ngIf="isReasonRequiredTT(g * 8 + j)" class="reason-input">
-                          <input #reasonInput type="text" placeholder="Reason" class="form-control" 
-                                 [(ngModel)]="ttperHourReasons[g * 8 + j].description" 
-                                 (keydown.enter)="handleReasonSaveUpdateDelete(ttperHourReasons[g * 8 + j], reasonInput)" 
-                                 required>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                <div *ngFor="let shift of shifts; let i = index" class="hour-group">
+                  <h5>{{ shift }}</h5>
+                  
+                  <label>
+                    Start Time:
+                    <input
+                      type="time"
+                      [(ngModel)]="ttperHourSwitches['shift' + getShiftIndex(i) + '_START_TIME']"
+                      class="form-control"
+                    />
+                  </label>
+                  <label>
+                    End Time:
+                    <input
+                      type="time"
+                      [(ngModel)]="ttperHourSwitches['shift' +  getShiftIndex(i) + '_END_TIME']"
+                      class="form-control"
+                    />
+                  </label>
+                  <label>
+                    Total Time:
+                    <input
+                      type="number"
+                      [(ngModel)]="ttperHourSwitches['shift' +  getShiftIndex(i) + '_TOTAL_TIME']"
+                      class="form-control"
+                    />
+                  </label>
                 </div>
               </div>
             </tab>   
             <tab heading="Per Hour TL"*ngIf="overTimeSwitch">
               <div class="form-group per-hour-wrapper">
-                <div *ngFor="let group of [0, 1, 2]; let g = index" class="hour-group">
-                  <h5>{{shifts[g]}} </h5>
-                  <div *ngFor="let i of [].constructor(8); let j = index" class="per-hour-wrapper-item">
-                    <div class="form-group">
-                      <div class="per-hour-wrapper">
-                        <h6>{{ formatHourRange(g * 8 + j) }}</h6>
-                        <label class="switch switch-label switch-primary" style="min-width: 10px;">
-                          <input type="checkbox" class="switch-input" [(ngModel)]="tlperHourSwitches[g * 8 + j]" 
-                                 (ngModelChange)="updateHours('OT_TL',(g * 8 + j))" 
-                                 >
-                          <span class="switch-slider" data-checked="On" data-unchecked="Off"></span>
-                        </label>
-                        <!-- Reason input displayed if required -->
-                        <div *ngIf="isReasonRequiredTL(g * 8 + j)" class="reason-input">
-                          <input #reasonInput type="text" placeholder="Reason" class="form-control" 
-                                 [(ngModel)]="tlperHourReasons[g * 8 + j].description" 
-                                 (keydown.enter)="handleReasonSaveUpdateDelete(tlperHourReasons[g * 8 + j], reasonInput)" 
-                                 required>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                <div *ngFor="let shift of shifts; let i = index" class="hour-group">
+                  <h5>{{ shift }}</h5>
+                  
+                  <label>
+                    Start Time:
+                    <input
+                      type="time"
+                      [(ngModel)]="tlperHourSwitches['shift' + getShiftIndex(i) + '_START_TIME']"
+                      class="form-control"
+                    />
+                  </label>
+                  <label>
+                    End Time:
+                    <input
+                      type="time"
+                      [(ngModel)]="tlperHourSwitches['shift' +  getShiftIndex(i) + '_END_TIME']"
+                      class="form-control"
+                    />
+                  </label>
+                  <label>
+                    Total Time:
+                    <input
+                      type="number"
+                      [(ngModel)]="tlperHourSwitches['shift' +  getShiftIndex(i) + '_TOTAL_TIME']"
+                      class="form-control"
+                    />
+                  </label>
                 </div>
-              </div>              
+              </div>            
             </tab>                             
           </tabset>
         </div>
