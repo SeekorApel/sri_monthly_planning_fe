@@ -433,23 +433,6 @@ export class EditMoMarketingComponent implements OnInit {
       }
     });
 
-    // this.detailMarketingOrder.forEach((dmo) => {
-    //   if (dmo.itemCuring) {
-    //     if (curingGroupsM0[dmo.itemCuring] > dmo.maxCapMonth0) {
-    //       dmo.validationMessageM0 = 'Maximal Capacity with the same curring item is overloaded';
-    //       hasInvalidInput = true;
-    //     }
-    //     if (curingGroupsM1[dmo.itemCuring] > dmo.maxCapMonth1) {
-    //       dmo.validationMessageM1 = 'Maximal Capacity with the same curring item is overloaded';
-    //       hasInvalidInput = true;
-    //     }
-    //     if (curingGroupsM2[dmo.itemCuring] > dmo.maxCapMonth2) {
-    //       dmo.validationMessageM2 = 'Maximal Capacity with the same curring item is overloaded';
-    //       hasInvalidInput = true;
-    //     }
-    //   }
-    // });
-
     this.detailMarketingOrder.forEach((dmo) => {
       if (dmo.itemCuring) {
         if (curingGroupsM0[dmo.itemCuring] > dmo.maxCapMonth0) {
@@ -673,14 +656,13 @@ export class EditMoMarketingComponent implements OnInit {
 
     this.detailMarketingOrder.forEach((mo) => {
       mo.moId = this.lastIdMo;
-
-      mo.initialStock = parseFloat(mo.initialStock?.toString().replace(/\./g, '') || '0') || 0;
-      mo.sfMonth0 = parseFloat(mo.sfMonth0?.toString().replace(/\./g, '') || '0') || 0;
-      mo.sfMonth1 = parseFloat(mo.sfMonth1?.toString().replace(/\./g, '') || '0') || 0;
-      mo.sfMonth2 = parseFloat(mo.sfMonth2?.toString().replace(/\./g, '') || '0') || 0;
-      mo.moMonth0 = parseFloat(mo.moMonth0?.toString().replace(/\./g, '') || '0') || 0;
-      mo.moMonth1 = parseFloat(mo.moMonth1?.toString().replace(/\./g, '') || '0') || 0;
-      mo.moMonth2 = parseFloat(mo.moMonth2?.toString().replace(/\./g, '') || '0') || 0;
+      // mo.initialStock = parseFloat(mo.initialStock?.toString().replace(/\./g, '') || '0') || 0;
+      // mo.sfMonth0 = parseFloat(mo.sfMonth0?.toString().replace(/\./g, '') || '0') || 0;
+      // mo.sfMonth1 = parseFloat(mo.sfMonth1?.toString().replace(/\./g, '') || '0') || 0;
+      // mo.sfMonth2 = parseFloat(mo.sfMonth2?.toString().replace(/\./g, '') || '0') || 0;
+      // mo.moMonth0 = parseFloat(mo.moMonth0?.toString().replace(/\./g, '') || '0') || 0;
+      // mo.moMonth1 = parseFloat(mo.moMonth1?.toString().replace(/\./g, '') || '0') || 0;
+      // mo.moMonth2 = parseFloat(mo.moMonth2?.toString().replace(/\./g, '') || '0') || 0;
     });
 
     const revisionMo = {
@@ -688,6 +670,15 @@ export class EditMoMarketingComponent implements OnInit {
       headerMarketingOrder: this.headerMarketingOrder,
       detailMarketingOrder: this.detailMarketingOrder,
     };
+
+    // const filteredData = this.detailMarketingOrder.map(item => ({
+    //   partNumber: item.partNumber,
+    //   moMonth0: item.moMonth0,
+    //   moMonth1: item.moMonth1,
+    //   moMonth2: item.moMonth2
+    // }));
+
+    // console.table(filteredData);
 
     this.moService.updateMarketingOrderMarketing(revisionMo).subscribe(
       (response) => {

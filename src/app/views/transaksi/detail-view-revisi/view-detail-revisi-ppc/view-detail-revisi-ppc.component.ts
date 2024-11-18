@@ -24,7 +24,8 @@ export class ViewDetailRevisiPpcComponent implements OnInit {
   capacityDb: string = '';
   formHeaderMo: FormGroup;
   errorMessage: string | null = null;
-  searchText: string = '';
+  searchTextMo: string = '';
+  searchTextDmo: string = '';
   dataTemp: any[];
   dateUtil: typeof ParsingDate;
   marketingOrder: MarketingOrder;
@@ -163,12 +164,21 @@ export class ViewDetailRevisiPpcComponent implements OnInit {
     this.detailMoRevision = 'Detail Marketing Order';
   }
 
+  onSearchChangeDmo(): void {
+    this.dataSourceDmo.filter = this.searchTextDmo.trim().toLowerCase();
+  }
+
+  resetSearchDmo(): void {
+    this.searchTextDmo = '';
+    this.dataSourceDmo.filter = '';
+  }
+
   onSearchChangeMo(): void {
-    this.dataSourceMo.filter = this.searchText.trim().toLowerCase();
+    this.dataSourceMo.filter = this.searchTextMo.trim().toLowerCase();
   }
 
   resetSearchMo(): void {
-    this.searchText = '';
+    this.searchTextMo = '';
     this.dataSourceMo.filter = '';
   }
 

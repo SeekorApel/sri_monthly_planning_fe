@@ -1247,23 +1247,6 @@ export class AddMoMarketingComponent implements OnInit {
       }
     });
 
-    // this.detailMarketingOrder.forEach((dmo) => {
-    //   if (dmo.itemCuring) {
-    //     if (curingGroupsM0[dmo.itemCuring] > dmo.maxCapMonth0) {
-    //       dmo.validationMessageM0 = 'Maximal Capacity with the same curring item is overloaded';
-    //       hasInvalidInput = true;
-    //     }
-    //     if (curingGroupsM1[dmo.itemCuring] > dmo.maxCapMonth1) {
-    //       dmo.validationMessageM1 = 'Maximal Capacity with the same curring item is overloaded';
-    //       hasInvalidInput = true;
-    //     }
-    //     if (curingGroupsM2[dmo.itemCuring] > dmo.maxCapMonth2) {
-    //       dmo.validationMessageM2 = 'Maximal Capacity with the same curring item is overloaded';
-    //       hasInvalidInput = true;
-    //     }
-    //   }
-    // });
-
     this.detailMarketingOrder.forEach((dmo) => {
       if (dmo.itemCuring) {
         if (curingGroupsM0[dmo.itemCuring] > dmo.maxCapMonth0) {
@@ -1286,7 +1269,6 @@ export class AddMoMarketingComponent implements OnInit {
         }
       }
     });
-
 
     if (hasInvalidInput) {
       Swal.fire({
@@ -1440,15 +1422,24 @@ export class AddMoMarketingComponent implements OnInit {
     //End Validasi Total
 
     //Parsing data text to number
-    this.detailMarketingOrder.forEach((mo) => {
-      mo.initialStock = mo.initialStock !== null ? parseFloat(mo.initialStock.toString().replace(/\./g, '')) : 0;
-      mo.sfMonth0 = mo.sfMonth0 !== null ? parseFloat(mo.sfMonth0.toString().replace(/\./g, '')) : 0;
-      mo.sfMonth1 = mo.sfMonth1 !== null ? parseFloat(mo.sfMonth1.toString().replace(/\./g, '')) : 0;
-      mo.sfMonth2 = mo.sfMonth2 !== null ? parseFloat(mo.sfMonth2.toString().replace(/\./g, '')) : 0;
-      mo.moMonth0 = mo.moMonth0 !== null ? parseFloat(mo.moMonth0.toString().replace(/\./g, '')) : 0;
-      mo.moMonth1 = mo.moMonth1 !== null ? parseFloat(mo.moMonth1.toString().replace(/\./g, '')) : 0;
-      mo.moMonth2 = mo.moMonth2 !== null ? parseFloat(mo.moMonth2.toString().replace(/\./g, '')) : 0;
-    });
+    // this.detailMarketingOrder.forEach((mo) => {
+    //   mo.initialStock = mo.initialStock !== null ? parseFloat(mo.initialStock.toString().replace(/\./g, '')) : 0;
+    //   mo.sfMonth0 = mo.sfMonth0 !== null ? parseFloat(mo.sfMonth0.toString().replace(/\./g, '')) : 0;
+    //   mo.sfMonth1 = mo.sfMonth1 !== null ? parseFloat(mo.sfMonth1.toString().replace(/\./g, '')) : 0;
+    //   mo.sfMonth2 = mo.sfMonth2 !== null ? parseFloat(mo.sfMonth2.toString().replace(/\./g, '')) : 0;
+    //   mo.moMonth0 = mo.moMonth0 !== null ? parseFloat(mo.moMonth0.toString().replace(/\./g, '')) : 0;
+    //   mo.moMonth1 = mo.moMonth1 !== null ? parseFloat(mo.moMonth1.toString().replace(/\./g, '')) : 0;
+    //   mo.moMonth2 = mo.moMonth2 !== null ? parseFloat(mo.moMonth2.toString().replace(/\./g, '')) : 0;
+    // });
+
+    const filteredData = this.detailMarketingOrder.map((item) => ({
+      partNumber: item.partNumber,
+      moMonth0: item.moMonth0,
+      moMonth1: item.moMonth1,
+      moMonth2: item.moMonth2,
+    }));
+
+    console.table(filteredData);
 
     this.moService.saveMarketingOrderMarketing(this.detailMarketingOrder).subscribe(
       (response) => {
