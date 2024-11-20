@@ -40,6 +40,7 @@ export class ViewQDistanceComponent implements OnInit {
   // Pagination
   pageOfItems: Array<any>;
   pageSize: number = 5;
+  isDataEmpty: boolean = true; // Flag untuk mengecek apakah data kosong
   totalPages: number = 5;
 
   displayedColumns: string[] = ['no', 'id_Q_DISTANCE', 'quadrant_ID_1', 'quadrant_ID_2', 'distance', 'status', 'action'];
@@ -88,7 +89,20 @@ export class ViewQDistanceComponent implements OnInit {
   getAllQuadrantDistance(): void {
     this.qdistanceService.getAllQuadrantDistance().subscribe(
       (response: ApiResponse<QDistance[]>) => {
-        this.qdistances = response.data;
+        this.qdistances = response.data.map(qdistance => {
+          const quadrant1 = this.quadrant.find(
+            qd => qd.quadrant_ID === qdistance.quadrant_ID_1
+          );
+          const quadrant2 = this.quadrant.find(
+            qd => qd.quadrant_ID === qdistance.quadrant_ID_2
+          );
+          return {
+            ...qdistance,
+            quadrant_1: quadrant1 ? quadrant1.quadrant_NAME : 'Unknown',
+            quadrant_2: quadrant2 ? quadrant2.quadrant_NAME : 'Unknown',
+          }
+        });
+        this.isDataEmpty = this.qdistances.length === 0; // Update status data kosong
         this.dataSource = new MatTableDataSource(this.qdistances);
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
@@ -110,7 +124,7 @@ export class ViewQDistanceComponent implements OnInit {
 
   resetSearch(): void {
     this.searchText = '';
-    this.onChangePage(this.qdistances.slice(0, this.pageSize));
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
   }
 
   updateQuadrantDistance(): void {

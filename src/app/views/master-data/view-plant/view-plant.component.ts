@@ -8,6 +8,10 @@ declare var $: any;
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSort } from '@angular/material/sort';
+import { MatPaginator } from '@angular/material/paginator';
+
 @Component({
   selector: 'app-view-plant',
   templateUrl: './view-plant.component.html',
@@ -15,7 +19,7 @@ import { saveAs } from 'file-saver';
 })
 export class ViewPlantComponent implements OnInit {
   //Variable Declaration
-  plants: Plant[] = [];
+  Plants: Plant[] = [];
   searchText: string = '';
   errorMessage: string | null = null;
   edtPlantObject: Plant = new Plant();
@@ -27,22 +31,55 @@ export class ViewPlantComponent implements OnInit {
   pageOfItems: Array<any>;
   pageSize: number = 5;
   totalPages: number = 5;
+  displayedColumns: string[] = ['no', 'plant_ID', 'plant_NAME', 'status', 'action'];
+  dataSource: MatTableDataSource<Plant>;
 
-  constructor(private plantService: PlantService, private fb: FormBuilder) {
+  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+
+  constructor(private PlantService: PlantService, private fb: FormBuilder) {
     this.editPlantForm = this.fb.group({
-      plantName: ['', Validators.required],
+      plant_name: ['', Validators.required],
     });
   }
 
   ngOnInit(): void {
     this.getAllPlant();
   }
+  activateData(Plant: Plant): void {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'This data Plant will be Activated!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes',
+      cancelButtonText: 'No',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.PlantService.activatePlant(Plant).subscribe(
+          (response) => {
+            Swal.fire('Activated!', 'Data Plant has been Activated', 'success').then(() => {
+              window.location.reload();
+            });
+          },
+          (err) => {
+            Swal.fire('Error!', 'Failed to Activated the Plant.', 'error');
+          }
+        );
+      }
+    });
+  }
 
   getAllPlant(): void {
-    this.plantService.getAllPlant().subscribe(
+    this.PlantService.getAllPlant().subscribe(
       (response: ApiResponse<Plant[]>) => {
-        this.plants = response.data;
-        this.onChangePage(this.plants.slice(0, this.pageSize));
+        this.Plants = response.data;
+        this.dataSource = new MatTableDataSource(this.Plants);
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+        // this.onChangePage(this.Plants.slice(0, this.pageSize));
       },
       (error) => {
         this.errorMessage = 'Failed to load plants: ' + error.message;
@@ -55,25 +92,21 @@ export class ViewPlantComponent implements OnInit {
   }
 
   onSearchChange(): void {
-    // Lakukan filter berdasarkan nama plant yang mengandung text pencarian (case-insensitive)
-    const filteredPlants = this.plants.filter((plant) => plant.plant_NAME.toLowerCase().includes(this.searchText.toLowerCase()) || plant.plant_ID.toString().includes(this.searchText));
-
-    // Tampilkan hasil filter pada halaman pertama
-    this.onChangePage(filteredPlants.slice(0, this.pageSize));
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
   }
 
   resetSearch(): void {
     this.searchText = '';
-    this.onChangePage(this.plants.slice(0, this.pageSize));
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
   }
 
   updatePlant(): void {
-    this.plantService.updatePlant(this.edtPlantObject).subscribe(
+    this.PlantService.updatePlant(this.edtPlantObject).subscribe(
       (response) => {
         // SweetAlert setelah update berhasil
         Swal.fire({
           title: 'Success!',
-          text: 'Data plant successfully updated.',
+          text: 'Data Plant successfully updated.',
           icon: 'success',
           confirmButtonText: 'OK',
         }).then((result) => {
@@ -96,7 +129,7 @@ export class ViewPlantComponent implements OnInit {
   }
 
   getPlantById(idPlant: number): void {
-    this.plantService.getPlantById(idPlant).subscribe(
+    this.PlantService.getPlantById(idPlant).subscribe(
       (response: ApiResponse<Plant>) => {
         this.edtPlantObject = response.data;
       },
@@ -106,7 +139,7 @@ export class ViewPlantComponent implements OnInit {
     );
   }
 
-  deleteData(plant: Plant): void {
+  deleteData(Plant: Plant): void {
     Swal.fire({
       title: 'Are you sure?',
       text: 'This data plant will be deleted!',
@@ -118,40 +151,14 @@ export class ViewPlantComponent implements OnInit {
       cancelButtonText: 'No',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.plantService.deletePlant(plant).subscribe(
+        this.PlantService.deletePlant(Plant).subscribe(
           (response) => {
-            Swal.fire('Deleted!', 'Data plant has been deleted', 'success').then(() => {
+            Swal.fire('Deleted!', 'Data Plant has been deleted', 'success').then(() => {
               window.location.reload();
             });
           },
           (err) => {
-            Swal.fire('Error!', 'Failed to delete the plant.', 'error');
-          }
-        );
-      }
-    });
-  }
-
-  activateData(plant: Plant): void {
-    Swal.fire({
-      title: 'Are you sure?',
-      text: 'This data plant will be Activated!',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes',
-      cancelButtonText: 'No',
-    }).then((result) => {
-      if (result.isConfirmed) { 
-        this.plantService.activatePlant(plant).subscribe(
-          (response) => {
-            Swal.fire('Activated!', 'Data plant has been Activated', 'success').then(() => {
-              window.location.reload();
-            });
-          },
-          (err) => {
-            Swal.fire('Error!', 'Failed to Activated the plant.', 'error');
+            Swal.fire('Error!', 'Failed to delete the Plant.', 'error');
           }
         );
       }
@@ -197,7 +204,7 @@ export class ViewPlantComponent implements OnInit {
       const formData = new FormData();
       formData.append('file', this.file);
       // unggah file Excel
-      this.plantService.uploadFileExcel(formData).subscribe(
+      this.PlantService.uploadFileExcel(formData).subscribe(
         (response) => {
           Swal.fire({
             icon: 'success',
@@ -228,39 +235,16 @@ export class ViewPlantComponent implements OnInit {
       });
     }
   }
-
   downloadExcel(): void {
-    this.plantService.exportPlantsExcel().subscribe({
+    this.PlantService.exportExcel().subscribe({
       next: (response) => {
         // Menggunakan nama file yang sudah ditentukan di backend
-        const filename = 'PLANT_DATA.xlsx'; // Nama file bisa dinamis jika diperlukan
+        const filename = 'Plant_DATA.xlsx'; // Nama file bisa dinamis jika diperlukan
         saveAs(response, filename); // Mengunduh file
       },
       error: (err) => {
         console.error('Download error:', err);
-      }
+      },
     });
   }
-
-  saveAsExcelFile(buffer: any, fileName: string): void {
-    const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
-    const data: Blob = new Blob([buffer], { type: EXCEL_TYPE });
-    saveAs(data, `${fileName}_export_${new Date().getTime()}.xlsx`);
-  }
-
-  // downloadExcel(): void {
-  //   this.plantService.downloadPlantsExcel().subscribe(
-  //     (response: Blob) => {
-  //       const blobUrl = window.URL.createObjectURL(response);
-  //       const a = document.createElement('a');
-  //       a.href = blobUrl;
-  //       a.download = 'MASTER_PLANT.xlsx';
-  //       a.click();
-  //       window.URL.revokeObjectURL(blobUrl);
-  //     },
-  //     (error) => {
-  //       this.errorMessage = 'Failed to download Excel: ' + error.message;
-  //     }
-  //   );
-  // }
 }

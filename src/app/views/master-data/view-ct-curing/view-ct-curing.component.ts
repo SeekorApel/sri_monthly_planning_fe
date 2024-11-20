@@ -112,20 +112,6 @@ export class ViewCtCuringComponent implements OnInit {
 
   onSearchChange(): void {
     this.dataSource.filter = this.searchText.trim().toLowerCase();
-    const filteredCTCurings = this.ctcurings.filter(
-      (ctcuring) =>
-        ctcuring.ct_CURING_ID.toString().toLowerCase().includes(this.searchText.toLowerCase()) ||
-        ctcuring.wip.toLowerCase().includes(this.searchText.toLowerCase())||
-        ctcuring.group_COUNTER.toLowerCase().includes(this.searchText.toLowerCase())||
-        ctcuring.var_GROUP_COUNTER.toLowerCase().includes(this.searchText.toLowerCase())||
-        ctcuring.sequence.toString().toLowerCase().includes(this.searchText.toLowerCase())||
-        ctcuring.wct.toLowerCase().includes(this.searchText.toLowerCase())||
-        ctcuring.operation_SHORT_TEXT.toLowerCase().includes(this.searchText.toLowerCase())||
-        ctcuring.operation_UNIT.toLowerCase().includes(this.searchText.toLowerCase())
-    );
-
-    // Tampilkan hasil filter pada halaman pertama
-    this.onChangePage(filteredCTCurings.slice(0, this.pageSize));
   }
 
   resetSearch(): void {

@@ -95,10 +95,23 @@ export class ViewMachineTassComponent implements OnInit {
   getAllMachineTass(): void {
     this.machineTassService.getAllMachineTass().subscribe(
       (response: ApiResponse<MachineTass[]>) => {
-        this.machineTasss = response.data;
+        // Add a new column (e.g., buildingName) to each machineTass
+        this.machineTasss = response.data.map(machine => {
+          const building = this.buildings.find(
+            b => b.building_ID === machine.building_ID
+          );
+          return {
+            ...machine,
+            building_Name: building ? building.building_NAME : 'Unknown',
+          };
+        });
+  
+        // Initialize the data table
         this.dataSource = new MatTableDataSource(this.machineTasss);
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
+  
+        // Optional: Handle pagination manually if needed
         // this.onChangePage(this.machineTasss.slice(0, this.pageSize));
       },
       (error) => {
@@ -106,18 +119,19 @@ export class ViewMachineTassComponent implements OnInit {
       }
     );
   }
+  
 
   onChangePage(pageOfItems: Array<any>) {
     this.pageOfItems = pageOfItems;
   }
 
   onSearchChange(): void {
-    this.dataSource.filter = this.searchText.trim().toLowerCase();
+    // this.getBuildingName()
+      this.dataSource.filter = this.searchText.trim().toLowerCase();
   }
 
   resetSearch(): void {
-    this.searchText = '';
-    this.onChangePage(this.machineTasss.slice(0, this.pageSize));
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
   }
 
   updateMachineTass(): void {
