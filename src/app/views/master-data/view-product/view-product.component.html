@@ -51,13 +51,19 @@
           <!-- Size ID Column -->
           <ng-container matColumnDef="size_ID">
             <th *matHeaderCellDef style="min-width: 103px" mat-sort-header>Size ID</th>
-            <td   align="left" *matCellDef="let element">{{ element.size_ID }}</td>
+            <td align="left" *matCellDef="let element">{{ element.size_ID }}</td>
           </ng-container>
 
           <!-- Product Type ID Column -->
           <ng-container matColumnDef="product_TYPE_ID">
             <th *matHeaderCellDef style="min-width: 150px" mat-sort-header>Product Type ID</th>
             <td align="right" *matCellDef="let element">{{ element.product_TYPE_ID }}</td>
+          </ng-container>
+
+          <!-- Description Column -->
+          <ng-container matColumnDef="description">
+            <th *matHeaderCellDef style="min-width: 200px" mat-sort-header>Description</th>
+            <td align="left" *matCellDef="let element">{{ element.description }}</td>
           </ng-container>
 
           <!-- Qty Per Rak Column -->
@@ -108,12 +114,6 @@
             <td align="right" *matCellDef="let element">{{ element.rim }}</td>
           </ng-container>
 
-          <!-- Description Column -->
-          <ng-container matColumnDef="description">
-            <th *matHeaderCellDef style="min-width: 200px" mat-sort-header>Description</th>
-            <td align="left" *matCellDef="let element">{{ element.description }}</td>
-          </ng-container>
-
           <!-- Status Column -->
           <ng-container matColumnDef="status">
             <th *matHeaderCellDef style="min-width: 100px" mat-sort-header>Status</th>
@@ -160,70 +160,70 @@
           <div class="form-group">
             <h6 for="curing">Item Curing</h6>
             <div class="col-md-13">
-              <ng-select2 id="curing" name="curing" formControlName="curing" [(ngModel)]="editProductTypeObject.item_CURING" [data]="uomOptionData[0]" [options]="options"> </ng-select2>
+              <ng-select2 id="curing" name="curing" formControlName="curing" [(ngModel)]="editProductObject.item_CURING" [data]="uomOptionData[0]" [options]="options"> </ng-select2>
             </div>
           </div>
           <div class="form-group">
             <h6 for="pattern">Pattern</h6>
             <div class="col-md-13">
-              <ng-select2 id="pattern" name="pattern" formControlName="pattern" [(ngModel)]="editProductTypeObject.pattern_ID" [data]="uomOptionData[1]" [options]="options"> </ng-select2>
+              <ng-select2 id="pattern" name="pattern" formControlName="pattern" [(ngModel)]="editProductObject.pattern_ID" [data]="uomOptionData[1]" [options]="options"> </ng-select2>
             </div>
           </div>
           <div class="form-group">
             <h6 for="size">Size</h6>
             <div class="col-md-13">
-              <ng-select2 id="size" name="size" formControlName="size" [(ngModel)]="editProductTypeObject.size_ID" [data]="uomOptionData[2]" [options]="options"> </ng-select2>
+              <ng-select2 id="size" name="size" formControlName="size" [(ngModel)]="editProductObject.size_ID" [data]="uomOptionData[2]" [options]="options"> </ng-select2>
             </div>
           </div>
           <div class="form-group">
             <h6 for="productType">Product Type</h6>
             <div class="col-md-13">
-              <ng-select2 id="productType" name="productType" formControlName="productType" [(ngModel)]="editProductTypeObject.product_TYPE_ID" [data]="uomOptionData[3]" [options]="options"> </ng-select2>
+              <ng-select2 id="productType" name="productType" formControlName="productType" [(ngModel)]="editProductObject.product_TYPE_ID" [data]="uomOptionData[3]" [options]="options"> </ng-select2>
             </div>
           </div>
           <div class="form-group">
             <h6 for="qty">Qty Per Rak</h6>
-            <input [(ngModel)]="editProductTypeObject.qty_PER_RAK" type="text" class="form-control" id="qty" formControlName="qty" [ngClass]="{ 'is-invalid': editProductTypeForm.get('qty').invalid && editProductTypeForm.get('qty').touched }" />
+            <input [(ngModel)]="editProductObject.qty_PER_RAK" type="text" class="form-control" id="qty" formControlName="qty" [ngClass]="{ 'is-invalid': editProductTypeForm.get('qty').invalid && editProductTypeForm.get('qty').touched }" />
             <div *ngIf="editProductTypeForm.get('qty').invalid && editProductTypeForm.get('qty').touched" class="invalid-feedback">Qty Per Rak Text is required.</div>
           </div>
           <div class="form-group">
             <h6 for="upper">Upper Constant</h6>
-            <input [(ngModel)]="editProductTypeObject.upper_CONSTANT" type="text" class="form-control" id="upper" formControlName="upper" [ngClass]="{ 'is-invalid': editProductTypeForm.get('upper').invalid && editProductTypeForm.get('upper').touched }" />
+            <input [(ngModel)]="editProductObject.upper_CONSTANT" type="text" class="form-control" id="upper" formControlName="upper" [ngClass]="{ 'is-invalid': editProductTypeForm.get('upper').invalid && editProductTypeForm.get('upper').touched }" />
             <div *ngIf="editProductTypeForm.get('upper').invalid && editProductTypeForm.get('upper').touched" class="invalid-feedback">upper Per Rak Text is required.</div>
           </div>
           <div class="form-group">
             <h6 for="lower">Lower Constant</h6>
-            <input [(ngModel)]="editProductTypeObject.lower_CONSTANT" type="text" class="form-control" id="lower" formControlName="lower" [ngClass]="{ 'is-invalid': editProductTypeForm.get('lower').invalid && editProductTypeForm.get('lower').touched }" />
+            <input [(ngModel)]="editProductObject.lower_CONSTANT" type="text" class="form-control" id="lower" formControlName="lower" [ngClass]="{ 'is-invalid': editProductTypeForm.get('lower').invalid && editProductTypeForm.get('lower').touched }" />
             <div *ngIf="editProductTypeForm.get('lower').invalid && editProductTypeForm.get('lower').touched" class="invalid-feedback">lower Text is required.</div>
           </div>
           <div class="form-group">
             <h6 for="desc">Ext Description</h6>
-            <input [(ngModel)]="editProductTypeObject.ext_DESCRIPTION" type="text" class="form-control" id="desc" formControlName="desc" [ngClass]="{ 'is-invalid': editProductTypeForm.get('desc').invalid && editProductTypeForm.get('desc').touched }" />
+            <input [(ngModel)]="editProductObject.ext_DESCRIPTION" type="text" class="form-control" id="desc" formControlName="desc" [ngClass]="{ 'is-invalid': editProductTypeForm.get('desc').invalid && editProductTypeForm.get('desc').touched }" />
             <div *ngIf="editProductTypeForm.get('desc').invalid && editProductTypeForm.get('desc').touched" class="invalid-feedback">Ext Description Text is required.</div>
           </div>
           <div class="form-group">
             <h6 for="itemExt">Item Ext</h6>
-            <input [(ngModel)]="editProductTypeObject.item_EXT" type="text" class="form-control" id="itemExt" formControlName="itemExt" [ngClass]="{ 'is-invalid': editProductTypeForm.get('itemExt').invalid && editProductTypeForm.get('itemExt').touched }" />
+            <input [(ngModel)]="editProductObject.item_EXT" type="text" class="form-control" id="itemExt" formControlName="itemExt" [ngClass]="{ 'is-invalid': editProductTypeForm.get('itemExt').invalid && editProductTypeForm.get('itemExt').touched }" />
             <div *ngIf="editProductTypeForm.get('itemExt').invalid && editProductTypeForm.get('itemExt').touched" class="invalid-feedback">Item Ext Text is required.</div>
           </div>
           <div class="form-group">
             <h6 for="itemAssy">Item Assy</h6>
-            <input [(ngModel)]="editProductTypeObject.item_ASSY" type="itemAssy" class="form-control" id="itemAssy" formControlName="itemAssy" [ngClass]="{ 'is-invalid': editProductTypeForm.get('itemAssy').invalid && editProductTypeForm.get('itemAssy').touched }" />
+            <input [(ngModel)]="editProductObject.item_ASSY" type="itemAssy" class="form-control" id="itemAssy" formControlName="itemAssy" [ngClass]="{ 'is-invalid': editProductTypeForm.get('itemAssy').invalid && editProductTypeForm.get('itemAssy').touched }" />
             <div *ngIf="editProductTypeForm.get('itemAssy').invalid && editProductTypeForm.get('itemAssy').touched" class="invalid-feedback">Item Assy Text is required.</div>
           </div>
           <div class="form-group">
             <h6 for="wibTube">Wib Tube</h6>
-            <input [(ngModel)]="editProductTypeObject.wib_TUBE" type="text" class="form-control" id="wibTube" formControlName="wibTube" [ngClass]="{ 'is-invalid': editProductTypeForm.get('wibTube').invalid && editProductTypeForm.get('wibTube').touched }" />
+            <input [(ngModel)]="editProductObject.wib_TUBE" type="text" class="form-control" id="wibTube" formControlName="wibTube" [ngClass]="{ 'is-invalid': editProductTypeForm.get('wibTube').invalid && editProductTypeForm.get('wibTube').touched }" />
             <div *ngIf="editProductTypeForm.get('wibTube').invalid && editProductTypeForm.get('wibTube').touched" class="invalid-feedback">Wib Tube is required.</div>
           </div>
           <div class="form-group">
             <h6 for="rim">Rim</h6>
-            <input [(ngModel)]="editProductTypeObject.rim" type="text" class="form-control" id="rim" formControlName="rim" [ngClass]="{ 'is-invalid': editProductTypeForm.get('rim').invalid && editProductTypeForm.get('rim').touched }" />
+            <input [(ngModel)]="editProductObject.rim" type="text" class="form-control" id="rim" formControlName="rim" [ngClass]="{ 'is-invalid': editProductTypeForm.get('rim').invalid && editProductTypeForm.get('rim').touched }" />
             <div *ngIf="editProductTypeForm.get('rim').invalid && editProductTypeForm.get('rim').touched" class="invalid-feedback">Rim Text is required.</div>
           </div>
           <div class="form-group">
             <h6 for="description">Description</h6>
-            <input [(ngModel)]="editProductTypeObject.description" type="text" class="form-control" id="description" formControlName="description" [ngClass]="{ 'is-invalid': editProductTypeForm.get('description').invalid && editProductTypeForm.get('description').touched }" />
+            <input [(ngModel)]="editProductObject.description" type="text" class="form-control" id="description" formControlName="description" [ngClass]="{ 'is-invalid': editProductTypeForm.get('description').invalid && editProductTypeForm.get('description').touched }" />
             <div *ngIf="editProductTypeForm.get('description').invalid && editProductTypeForm.get('description').touched" class="invalid-feedback">Description Text is required.</div>
           </div>
         </form>

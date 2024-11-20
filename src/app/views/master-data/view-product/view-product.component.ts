@@ -32,7 +32,7 @@ export class ViewProductComponent implements OnInit {
   products: Product[] = [];
   searchText: string = '';
   errorMessage: string | null = null;
-  editProductTypeObject: Product = new Product();
+  editProductObject: Product = new Product();
   isEditMode: boolean = false;
   file: File | null = null;
   editProductTypeForm: FormGroup;
@@ -124,7 +124,7 @@ export class ViewProductComponent implements OnInit {
         }
         this.uomOptionData[3] = this.productTypes.map((element) => ({
           id: element.product_TYPE_ID.toString(), // Ensure the ID is a string
-          text: element.product_TYPE, // Set the text to the name (or other property)
+          text: element.category, // Set the text to the name (or other property)
         }));
       },
       (error) => {
@@ -215,7 +215,7 @@ export class ViewProductComponent implements OnInit {
   }
 
   updateProduct(): void {
-    this.productService.updateProduct(this.editProductTypeObject).subscribe(
+    this.productService.updateProduct(this.editProductObject).subscribe(
       (response) => {
         // SweetAlert setelah update berhasil
         Swal.fire({
@@ -245,7 +245,7 @@ export class ViewProductComponent implements OnInit {
   getProductById(partNum: number): void {
     this.productService.getProductById(partNum).subscribe(
       (response: ApiResponse<Product>) => {
-        this.editProductTypeObject = response.data;
+        this.editProductObject = response.data;
       },
       (error) => {
         this.errorMessage = 'Failed to load Product: ' + error.message;

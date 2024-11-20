@@ -59,24 +59,9 @@ export class PatternService {
       })
     );
   }
-  // uploadFileExcel(file: File): Observable<any> {
-  //   const formData: FormData = new FormData();
-  //   formData.append('file', file);
 
-  //   return this.http.post(environment.apiUrlWebAdmin + '/savePatternsExcel', formData, {
-  //     headers: new HttpHeaders({
-  //       'enctype': 'multipart/form-data',
-  //     }),
-  //     responseType: 'json',
-  //   });
-  // }
 
   uploadFileExcel(file: FormData): Observable<ApiResponse<Pattern>> {
-    // console.log("File name:", file.get); // Logs the file name to the console
-
-    // const formData = new FormData();
-    // formData.append('file', file); // Ensure 'file' matches the expected parameter name on the server
-
     return this.http.post<ApiResponse<Pattern>>(environment.apiUrlWebAdmin + '/savePatternsExcel', file).pipe(
       map((response) => {
         console.log(response);
