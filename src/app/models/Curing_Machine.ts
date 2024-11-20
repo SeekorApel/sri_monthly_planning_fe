@@ -1,8 +1,8 @@
 export class Curing_Machine {
+  work_CENTER_TEXT: string;
   machine_TYPE: string;
   building_ID: number;      
   cavity: number;
-  work_CENTER_TEXT: string;
   status_USAGE: number;        
   status: number;      
   creation_DATE: Date;     

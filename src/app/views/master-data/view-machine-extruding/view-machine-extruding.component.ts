@@ -5,9 +5,17 @@ import { ApiResponse } from 'src/app/response/Response';
 import { MachineExtrudingService } from 'src/app/services/master-data/machine-extruding/machine-extruding.service';
 import Swal from 'sweetalert2';
 import { saveAs } from 'file-saver';
+import { Select2OptionData } from 'ng-select2';
+import { Options } from 'select2';
+import { Building } from 'src/app/models/Building';
+import { BuildingService } from 'src/app/services/master-data/building/building.service';
 
 declare var $: any;
 import * as XLSX from 'xlsx';
+
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSort } from '@angular/material/sort';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-view-machine-extruding',
@@ -23,29 +31,64 @@ export class ViewMachineExtrudingComponent implements OnInit {
   isEditMode: boolean = false;
   file: File | null = null;
   editMachineExtrudingTypeForm: FormGroup;
+  public uomOptionData: Array<Select2OptionData>;
+  public options: Options = {
+    width: '100%',
+    minimumResultsForSearch: 0,
+  };
 
   // Pagination
   pageOfItems: Array<any>;
   pageSize: number = 5;
   totalPages: number = 5;
+  displayedColumns: string[] = ['no', 'id_MACHINE_EXT', 'building_ID', 'type', 'status', 'action'];
+  dataSource: MatTableDataSource<MachineExtruding>;
+  buildings: Building[];
 
-  constructor(private MEService: MachineExtrudingService, private fb: FormBuilder) {
+  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+
+  constructor(private MEService: MachineExtrudingService, private fb: FormBuilder, private buildingService: BuildingService) {
     this.editMachineExtrudingTypeForm = this.fb.group({
       buildingID: ['', Validators.required],
       Type: ['', Validators.required],
     });
+    this.loadBuilding();
+  }
+  getBuildingName(buildingId: number): string {
+    const building = this.buildings.find(b => b.building_ID === buildingId);
+    return building ? building.building_NAME : 'Unknown';
   }
 
   ngOnInit(): void {
     this.getAllMachineExtruding();
+  }
+  private loadBuilding(): void {
+    this.buildingService.getAllBuilding().subscribe(
+      (response: ApiResponse<Building[]>) => {
+        this.buildings = response.data;
+        if (!this.uomOptionData) {
+          this.uomOptionData = [];
+        }
+        this.uomOptionData = this.buildings.map((element) => ({
+          id: element.building_ID.toString(), // Ensure the ID is a string
+          text: element.building_NAME, // Set the text to the name (or other property)
+        }));
+      },
+      (error) => {
+        this.errorMessage = 'Failed to load Building: ' + error.message;
+      }
+    );
   }
 
   getAllMachineExtruding(): void {
     this.MEService.getAllMachineExtruding().subscribe(
       (response: ApiResponse<MachineExtruding[]>) => {
         this.machineExtudings = response.data;
-        console.log(this.machineExtudings);
-        this.onChangePage(this.machineExtudings.slice(0, this.pageSize));
+        this.dataSource = new MatTableDataSource(this.machineExtudings);
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+        // this.onChangePage(this.machineExtudings.slice(0, this.pageSize));
       },
       (error) => {
         this.errorMessage = 'Failed to load machine extruding: ' + error.message;
@@ -58,11 +101,7 @@ export class ViewMachineExtrudingComponent implements OnInit {
   }
 
   onSearchChange(): void {
-    // Lakukan filter berdasarkan nama MachineTASSType yang mengandung text pencarian (case-insensitive)
-    const filteredmachineExtruding = this.machineExtudings.filter((meType) => meType.type.toLowerCase().includes(this.searchText.toLowerCase()) || meType.ID_machine_ext.toString().includes(this.searchText));
-
-    // Tampilkan hasil filter pada halaman pertama
-    this.onChangePage(filteredmachineExtruding.slice(0, this.pageSize));
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
   }
 
   resetSearch(): void {

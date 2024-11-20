@@ -7,6 +7,14 @@ import Swal from 'sweetalert2';
 declare var $: any;
 import * as XLSX from 'xlsx';
 import {saveAs} from 'file-saver';
+import { Select2OptionData } from 'ng-select2';
+import { Options } from 'select2';
+
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSort } from '@angular/material/sort';
+import { MatPaginator } from '@angular/material/paginator';
+import { Curing_Machine } from 'src/app/models/Curing_Machine';
+import { CuringMachineService } from 'src/app/services/master-data/curing-machine/curing-machine.service';
 
 @Component({
   selector: 'app-view-machine-allowence',
@@ -28,8 +36,19 @@ export class ViewMachineAllowenceComponent implements OnInit {
   pageOfItems: Array<any>;
   pageSize: number = 5;
   totalPages: number = 5;
+  sortBuffer: Array<any>;
+  displayedColumns: string[] = ['no', 'machine_ALLOW_ID', 'id_MACHINE','person_RESPONSIBLE', 'shift_1', 'shift_2', 'shift_3', 'shift_1_FRIDAY', 'total_SHIFT_123', 'status', 'action'];
+  dataSource: MatTableDataSource<machineAllowence>;
 
-  constructor(private machineAllowenceService: MachineAllowenceService, private fb: FormBuilder) { 
+  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+
+  public uomOptions: Array<Select2OptionData>;
+  public options: Options = { width: '100%'};
+  uom: any;
+  curingMachine: Curing_Machine[] =[];
+
+  constructor(private machineAllowenceService: MachineAllowenceService, private fb: FormBuilder, private curingMachineService: CuringMachineService) { 
     this.editMachineAllowenceForm = this.fb.group({
       idMachine: ['', Validators.required],
       personResponsible: ['', Validators.required],
@@ -39,6 +58,18 @@ export class ViewMachineAllowenceComponent implements OnInit {
       shift1Friday: ['', Validators.required],
       totalShift123: ['', Validators.required]
     });
+    curingMachineService.getAllMachineCuring().subscribe(
+      (response: ApiResponse<Curing_Machine[]>) => {
+        this.curingMachine = response.data;
+        this.uomOptions = this.curingMachine.map((element) => ({
+          id: element.work_CENTER_TEXT, // Ensure the ID is a string
+          text: element.work_CENTER_TEXT // Set the text to the plant name
+        }));
+      },
+      (error) => {
+        this.errorMessage = 'Failed to load curing machine: ' + error.message;
+      }
+    );
   }
 
   ngOnInit(): void {
@@ -49,7 +80,10 @@ export class ViewMachineAllowenceComponent implements OnInit {
     this.machineAllowenceService.getAllMachineAllowence().subscribe(
       (response: ApiResponse<machineAllowence[]>) => {
         this.machineAllowences = response.data;
-        this.onChangePage(this.machineAllowences.slice(0, this.pageSize));
+        this.dataSource = new MatTableDataSource(this.machineAllowences);
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+        this.onChangePage(this.dataSource.data.slice(0, this.pageSize));
       },
       (error) => {
         this.errorMessage = 'Failed to load machine allowences: ' + error.message;
@@ -62,24 +96,25 @@ export class ViewMachineAllowenceComponent implements OnInit {
   }
 
   onSearchChange(): void {
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
     // Lakukan filter berdasarkan nama plant yang mengandung text pencarian (case-insensitive)
-    const filteredMachineAllowences = this.machineAllowences.filter(
-      (machineAllowance) =>
-        machineAllowance.id_MACHINE
-          .toLowerCase()
-          .includes(this.searchText.toLowerCase()) ||
-          machineAllowance.machine_ALLOW_ID.toString().includes(this.searchText.toLowerCase()) ||
-          machineAllowance.id_MACHINE.toString().includes(this.searchText.toLowerCase()) ||
-          machineAllowance.person_RESPONSIBLE.toLowerCase().toString().includes(this.searchText.toLowerCase()) ||
-          machineAllowance.shift_1.toString().includes(this.searchText) ||
-          machineAllowance.shift_2.toString().includes(this.searchText) ||
-          machineAllowance.shift_3.toString().includes(this.searchText) ||
-          machineAllowance.shift_1_FRIDAY.toString().includes(this.searchText) ||
-          machineAllowance.total_SHIFT_123.toString().includes(this.searchText)
-    );
+    // const filteredMachineAllowences = this.machineAllowences.filter(
+    //   (machineAllowance) =>
+    //     machineAllowance.id_MACHINE
+    //       .toLowerCase()
+    //       .includes(this.searchText.toLowerCase()) ||
+    //       machineAllowance.machine_ALLOW_ID.toString().includes(this.searchText.toLowerCase()) ||
+    //       machineAllowance.id_MACHINE.toString().includes(this.searchText.toLowerCase()) ||
+    //       machineAllowance.person_RESPONSIBLE.toLowerCase().toString().includes(this.searchText.toLowerCase()) ||
+    //       machineAllowance.shift_1.toString().includes(this.searchText) ||
+    //       machineAllowance.shift_2.toString().includes(this.searchText) ||
+    //       machineAllowance.shift_3.toString().includes(this.searchText) ||
+    //       machineAllowance.shift_1_FRIDAY.toString().includes(this.searchText) ||
+    //       machineAllowance.total_SHIFT_123.toString().includes(this.searchText)
+    // );
 
-    // Tampilkan hasil filter pada halaman pertama
-    this.onChangePage(filteredMachineAllowences.slice(0, this.pageSize));
+    // // Tampilkan hasil filter pada halaman pertama
+    // this.onChangePage(filteredMachineAllowences.slice(0, this.pageSize));
   }
 
   resetSearch(): void {

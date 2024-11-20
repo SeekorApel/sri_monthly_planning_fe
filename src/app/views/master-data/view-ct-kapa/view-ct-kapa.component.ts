@@ -7,6 +7,14 @@ import Swal from 'sweetalert2';
 import { saveAs } from 'file-saver';
 declare var $: any;
 import * as XLSX from 'xlsx';
+import { Select2OptionData } from 'ng-select2';
+import { Options } from 'select2';
+import { ItemCuringService } from 'src/app/services/master-data/item-curing/item-curing.service';
+import { Item_Curing } from 'src/app/models/Item_Curing';
+
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSort } from '@angular/material/sort';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-view-ct-kapa',
@@ -22,13 +30,20 @@ export class ViewCtKapaComponent implements OnInit {
   isEditMode: boolean = false;
   file: File | null = null;
   editCtKapaForm: FormGroup;
-
+  public uomOptionData: Array<Select2OptionData>;
+  public options: Options = {
+    width: '100%',
+    minimumResultsForSearch: 0,
+  };
+  itemCurings: Item_Curing[];
   // Pagination
   pageOfItems: Array<any>;
   pageSize: number = 5;
   totalPages: number = 5;
+  displayedColumns: string[] = ['no', 'id_CT_KAPA', 'item_CURING', 'type_CURING', 'description', 'cycle_TIME', 'shift', 'kapa_PERSHIFT', 'last_UPDATE_DATA', 'machine', 'status', 'action'];
+  dataSource: MatTableDataSource<CtKapa>;
 
-  constructor(private ctkapaService: CtKapaService, private fb: FormBuilder) {
+  constructor(private ctkapaService: CtKapaService, private ItemCuring: ItemCuringService, private fb: FormBuilder) {
     this.editCtKapaForm = this.fb.group({
       itemCuring: ['', Validators.required],
       typeCuring: ['', Validators.required],
@@ -39,6 +54,26 @@ export class ViewCtKapaComponent implements OnInit {
       lastUpdateData: ['', Validators.required],
       machine: ['', Validators.required],
     });
+    this.loadItemCuring();
+  }
+  private loadItemCuring(): void {
+    this.ItemCuring.getAllItemCuring().subscribe(
+      (response: ApiResponse<Item_Curing[]>) => {
+        this.itemCurings = response.data;
+
+        if (!this.uomOptionData) {
+          this.uomOptionData = [];
+        }
+
+        this.uomOptionData = this.itemCurings.map((element) => ({
+          id: element.item_CURING.toString(), // Ensure the ID is a string
+          text: element.item_CURING, // Set the text to the name (or other property)
+        }));
+      },
+      (error) => {
+        this.errorMessage = 'Failed to load item curing: ' + error.message;
+      }
+    );
   }
   activateData(ctkapa: CtKapa): void {
     Swal.fire({
@@ -82,6 +117,8 @@ export class ViewCtKapaComponent implements OnInit {
       },
     });
   }
+  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
   ngOnInit(): void {
     this.getAllCtKapa();
@@ -91,8 +128,10 @@ export class ViewCtKapaComponent implements OnInit {
     this.ctkapaService.getAllCtKapa().subscribe(
       (response: ApiResponse<CtKapa[]>) => {
         this.ctkapas = response.data;
-        console.log(this.ctkapas);
-        this.onChangePage(this.ctkapas.slice(0, this.pageSize));
+        this.dataSource = new MatTableDataSource(this.ctkapas);
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+        // this.onChangePage(this.ctkapas.slice(0, this.pageSize));
       },
       (error) => {
         this.errorMessage = 'Failed to load Ct Kapa: ' + error.message;
@@ -105,16 +144,12 @@ export class ViewCtKapaComponent implements OnInit {
   }
 
   onSearchChange(): void {
-    // Lakukan filter berdasarkan nama plant yang mengandung text pencarian (case-insensitive)
-    const filteredPlants = this.ctkapas.filter((ctkapa) => ctkapa.machine.toLowerCase().includes(this.searchText.toLowerCase()) || ctkapa.id_CT_KAPA.toString().includes(this.searchText));
-
-    // Tampilkan hasil filter pada halaman pertama
-    this.onChangePage(filteredPlants.slice(0, this.pageSize));
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
   }
 
   resetSearch(): void {
     this.searchText = '';
-    this.onChangePage(this.ctkapas.slice(0, this.pageSize));
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
   }
 
   updatePattern(): void {
@@ -143,6 +178,10 @@ export class ViewCtKapaComponent implements OnInit {
     this.isEditMode = true;
     this.getCtKapaByID(idCtkapa);
     $('#editModal').modal('show');
+  }
+  getItemCuringType(itemCuring: number): string {
+    const item_curing = this.itemCurings.find(c => c.item_CURING === itemCuring.toString());
+    return item_curing ? item_curing.machine_TYPE : 'Tidak Ada';
   }
 
   getCtKapaByID(idCtkapa: number): void {

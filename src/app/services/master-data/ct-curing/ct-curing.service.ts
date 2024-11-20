@@ -11,9 +11,6 @@ import { map, catchError } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class CTCuringService {
-  //Isi tokenya
-  token: String =
-    'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBdXJlbCIsImV4cCI6MTcyODUyMDUzMX0.Hg8SUxKJX8hTT8rYrBOnyphRoPPSzcRIeJWJHTDOdZQb3_U1KqM7m6J6k6LDpEoPba2DplpwV_KRsNti1Tcbig';
 
   constructor(private http: HttpClient) {}
 
@@ -25,17 +22,11 @@ export class CTCuringService {
   }
 
   getCTCuringById(idCTCuring: number): Observable<ApiResponse<CT_Curing>> {
-    return this.http.get<ApiResponse<CT_Curing>>(
-      environment.apiUrlWebAdmin + '/getCTCuringById/' + idCTCuring,
-      { headers: this.getHeaders() }
-    );
+    return this.http.get<ApiResponse<CT_Curing>>(environment.apiUrlWebAdmin + '/getCTCuringById/' + idCTCuring, { headers: this.getHeaders() });
   }
 
   getAllCTCuring(): Observable<ApiResponse<CT_Curing[]>> {
-    return this.http.get<ApiResponse<CT_Curing[]>>(
-      environment.apiUrlWebAdmin + '/getAllCTCuring',
-      { headers: this.getHeaders() }
-    );
+    return this.http.get<ApiResponse<CT_Curing[]>>(environment.apiUrlWebAdmin + '/getAllCTCuring', { headers: this.getHeaders() });
   }
 
   //Method Update plant
@@ -58,20 +49,14 @@ export class CTCuringService {
   }
 
   deleteCTCuring(ctcuring: CT_Curing): Observable<ApiResponse<CT_Curing>> {
-    return this.http
-      .post<ApiResponse<CT_Curing>>(
-        environment.apiUrlWebAdmin + '/deleteCTCuring',
-        ctcuring,
-        { headers: this.getHeaders() }
-      )
-      .pipe(
-        map((response) => {
-          return response;
-        }),
-        catchError((err) => {
-          return throwError(err);
-        })
-      );
+    return this.http.post<ApiResponse<CT_Curing>>(environment.apiUrlWebAdmin + '/deleteCTCuring', ctcuring, { headers: this.getHeaders() }).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((err) => {
+        return throwError(err);
+      })
+    );
   }
 
   activateCTCuring(ct_curing: CT_Curing): Observable<ApiResponse<CT_Curing>> {
@@ -86,20 +71,14 @@ export class CTCuringService {
   }
 
   uploadFileExcel(file: FormData): Observable<ApiResponse<CT_Curing>> {
-    return this.http
-      .post<ApiResponse<CT_Curing>>(
-        environment.apiUrlWebAdmin + '/saveCTCuringExcel',
-        file,
-        { headers: this.getHeaders() }
-      )
-      .pipe(
-        map((response) => {
-          return response;
-        }),
-        catchError((err) => {
-          return throwError(err);
-        })
-      );
+    return this.http.post<ApiResponse<CT_Curing>>(environment.apiUrlWebAdmin + '/saveCTCuringExcel', file, { headers: this.getHeaders() }).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((err) => {
+        return throwError(err);
+      })
+    );
   }
   exportCTCuringsExcel(): Observable<Blob> {
     return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/exportCTCuringExcel`, { responseType: 'blob' as 'json' });

@@ -49,18 +49,17 @@
           </tbody>
         </table>
         <!-- Pagination -->
-        <nav>
-          <ul class="pagination">
-            <jw-pagination [items]="buildings" [pageSize]="pageSize" [maxPages]="totalPages" (changePage)="onChangePage($event)"> </jw-pagination>
-          </ul>
-        </nav>
       </div>
+      <mat-paginator [pageSize]="pageSize"
+            [pageSizeOptions]="[5, 10, 20]"
+            showFirstLastButtons>
+      </mat-paginator>
     </div>
   </div>
 </div>
 
 <!-- Modal edit -->
-<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+<div class="modal fade" id="editModal" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -71,7 +70,20 @@
       </div>
       <div class="modal-body">
         <!-- Form with Reactive Forms -->
-        <form [formGroup]="editBuildingForm">
+        <form [formGroup]="editBuildingForm" >
+          <div class="form-group row">
+            <label class="col-md-3 col-form-label" for="plantID">Plant</label>
+            <div class="col-md-9">
+              <ng-select2 
+                id="plantID" 
+                name="plantID"
+                formControlName="plantID" 
+                [(ngModel)]="edtBuildingObject.plant_ID" 
+                [data]="uomOptions" 
+                [options]="options" >
+              </ng-select2>
+            </div>
+          </div>
           <div class="form-group">
             <label for="plantID">Plant Id</label>
             <input [(ngModel)]="edtBuildingObject.plant_ID" type="text" class="form-control" id="plantID" formControlName="plantID" [ngClass]="{ 'is-invalid': editBuildingForm.get('plantID').invalid && editBuildingForm.get('plantID').touched }" />
@@ -79,7 +91,7 @@
             <div *ngIf="editBuildingForm.get('plantID').invalid && editBuildingForm.get('plantID').touched" class="invalid-feedback">Building name is required.</div>
             <label for="buildingName">Building Name</label>
             <input [(ngModel)]="edtBuildingObject.building_NAME" type="text" class="form-control" id="buildingName" formControlName="buildingName" [ngClass]="{ 'is-invalid': editBuildingForm.get('buildingName').invalid && editBuildingForm.get('buildingName').touched }" />
-            <!-- Error message if plantName is empty -->
+            
             <div *ngIf="editBuildingForm.get('buildingName').invalid && editBuildingForm.get('buildingName').touched" class="invalid-feedback">Building name is required.</div>
           </div>
         </form>
