@@ -39,18 +39,18 @@ export class ViewQuadrantComponent implements OnInit {
   pageSize: number = 5;
   totalPages: number = 5;
   sortBuffer: Array<any>;
-  displayedColumns: string[] = ['no', 'quadrant_ID', 'building_ID','quadrant_NAME','status', 'action'];
+  displayedColumns: string[] = ['no', 'quadrant_ID', 'building_NAME', 'quadrant_NAME', 'status', 'action'];
   dataSource: MatTableDataSource<Quadrant>;
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   public uomOptions: Array<Select2OptionData>;
-  public options: Options = { width: '100%'};
+  public options: Options = { width: '100%' };
   uom: any;
-  building: Building[] =[];
+  building: Building[] = [];
 
-  constructor(private quadrantService: QuadrantService, private fb: FormBuilder, private buildingService: BuildingService) { 
+  constructor(private quadrantService: QuadrantService, private fb: FormBuilder, private buildingService: BuildingService) {
     this.editQuadrantForm = this.fb.group({
       quadrantName: ['', Validators.required],
       buildingID: ['', Validators.required],
@@ -66,7 +66,7 @@ export class ViewQuadrantComponent implements OnInit {
       (error) => {
         this.errorMessage = 'Failed to load building: ' + error.message;
       }
-    );
+    );
   }
 
   ngOnInit(): void {
@@ -77,6 +77,18 @@ export class ViewQuadrantComponent implements OnInit {
     this.quadrantService.getAllQuadrant().subscribe(
       (response: ApiResponse<Quadrant[]>) => {
         this.quadrants = response.data;
+        
+        this.quadrants = this.quadrants.map((quadrant) => {
+          const matchedBuilding = this.building.find(
+            (b) => b.building_ID === Number(quadrant.building_ID)
+          );
+  
+          return {
+            ...quadrant, // Salin semua properti quadrant
+            building_NAME: matchedBuilding ? matchedBuilding.building_NAME : null // Tambahkan building_NAME jika ada kecocokan
+          };
+        });
+
         this.dataSource = new MatTableDataSource(this.quadrants);
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
@@ -95,7 +107,7 @@ export class ViewQuadrantComponent implements OnInit {
   onSearchChange(): void {
     this.dataSource.filter = this.searchText.trim().toLowerCase();
     // Lakukan filter berdasarkan nama plant yang mengandung text pencarian (case-insensitive)
-    
+
   }
 
   resetSearch(): void {
