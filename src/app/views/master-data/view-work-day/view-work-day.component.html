@@ -262,58 +262,46 @@
                     Start Time:
                     <input
                       type="time"
-                      [(ngModel)]="perHourSwitches['shift' + getShiftIndex(i) + '_START_TIME']"
+                      [(ngModel)]="perHourShift['shift' + getShiftIndex(i) + '_START_TIME']"
                       class="form-control"
+                      (change)="updateTotalTime(i)"
+                      [min]="getMinTime(i, 'start')"
+                      [max]="getMaxTime(i, 'start')"
                     />
                   </label>
                   <label>
                     End Time:
                     <input
                       type="time"
-                      [(ngModel)]="perHourSwitches['shift' +  getShiftIndex(i) + '_END_TIME']"
+                      [(ngModel)]="perHourShift['shift' + getShiftIndex(i) + '_END_TIME']"
                       class="form-control"
+                      (change)="updateTotalTime(i)"
+                      [min]="getMinTime(i, 'end')"
+                      [max]="getMaxTime(i, 'end')"
                     />
                   </label>
                   <label>
                     Total Time:
                     <input
                       type="number"
-                      [(ngModel)]="perHourSwitches['shift' +  getShiftIndex(i) + '_TOTAL_TIME']"
+                      [(ngModel)]="perHourShift['shift' + getShiftIndex(i) + '_TOTAL_TIME']"
                       class="form-control"
+                      disabled
                     />
                   </label>
+                  <button type="button" class="btn btn-warning" (click)="resetShiftTime('perHourShift', i)">Reset Time</button>
+                  <div *ngIf="perHourShift['shift' +  getShiftIndex(i) + '_END_TIME'] === '00:00' && perHourShift['shift' + getShiftIndex(i) + '_START_TIME']" class="reason-input">
+                    <input #reasonInput type="text" placeholder="Reason" class="form-control" 
+                           [(ngModel)]="perHourReasons[i].description" 
+                           (keydown.enter)="handleReasonSaveUpdateDelete(perHourReasons[i], reasonInput)" 
+                           required>
+                  </div>
                 </div>
               </div>
+              <div class="mx-3">
+                <button type="button" (click)="saveHour(perHourShift)" class="btn btn-primary">Save</button>
+              </div>
             </tab>
-            
-            
-            <!-- <tab heading="Per Hour"*ngIf="!overTimeSwitch"> -->
-              <!-- <div class="form-group per-hour-wrapper"> -->
-                <!-- <div *ngFor="let group of [0, 1, 2]; let g = index" class="hour-group"> -->
-                  <!-- <h5>{{shifts[g]}} </h5> -->
-                  <!-- <div *ngFor="let i of [].constructor(8); let j = index" class="per-hour-wrapper-item"> -->
-                    <!-- <div class="form-group"> -->
-                      <!-- <div class="per-hour-wrapper"> -->
-                        <!-- <h6>{{ formatHourRange(g * 8 + j) }}</h6> -->
-                        <!-- <label class="switch switch-label switch-primary" style="min-width: 10px;"> -->
-                          <!-- <input type="checkbox" class="switch-input" [(ngModel)]="perHourSwitches[g * 8 + j]"  -->
-                                 <!-- (ngModelChange)="updateHours('WD_NORMAL',(g * 8 + j))"  -->
-                                 <!-- > -->
-                          <!-- <span class="switch-slider" data-checked="On" data-unchecked="Off"></span> -->
-                        <!-- </label> -->
-                        <!-- Reason input displayed if required -->
-                        <!-- <div *ngIf="isReasonRequiredPerHour(g * 8 + j)" class="reason-input"> -->
-                          <!-- <input #reasonInput type="text" placeholder="Reason" class="form-control"  -->
-                                 <!-- [(ngModel)]="perHourReasons[g * 8 + j].description"  -->
-                                 <!-- (keydown.enter)="handleReasonSaveUpdateDelete(perHourReasons[g * 8 + j], reasonInput)"  -->
-                                 <!-- required> -->
-                        <!-- </div> -->
-                      <!-- </div> -->
-                    <!-- </div> -->
-                  <!-- </div> -->
-                <!-- </div> -->
-              <!-- </div>               -->
-            <!-- </tab> -->
             <tab heading="Per Hour TT"*ngIf="overTimeSwitch">
               <div class="form-group per-hour-wrapper">
                 <div *ngFor="let shift of shifts; let i = index" class="hour-group">
@@ -343,7 +331,17 @@
                       class="form-control"
                     />
                   </label>
+                  <button type="button" class="btn btn-warning" (click)="resetShiftTime('ttperHourSwitches', i)">Reset Time</button>
+                  <div *ngIf="ttperHourSwitches['shift' +  getShiftIndex(i) + '_END_TIME'] === '00:00' && ttperHourSwitches['shift' + getShiftIndex(i) + '_START_TIME']" class="reason-input">
+                    <input #reasonInput type="text" placeholder="Reason" class="form-control" 
+                           [(ngModel)]="ttperHourReasons[i].description" 
+                           (keydown.enter)="handleReasonSaveUpdateDelete(ttperHourReasons[i], reasonInput)" 
+                           required>
+                  </div>
                 </div>
+              </div>
+              <div class="mx-3">
+                <button type="button" (click)="saveHour(ttperHourSwitches)" class="btn btn-primary">Save</button>
               </div>
             </tab>   
             <tab heading="Per Hour TL"*ngIf="overTimeSwitch">
@@ -375,8 +373,18 @@
                       class="form-control"
                     />
                   </label>
+                  <button type="button" class="btn btn-warning" (click)="resetShiftTime('tlperHourSwitches', i)">Reset Time</button>
+                  <div *ngIf="tlperHourSwitches['shift' +  getShiftIndex(i) + '_END_TIME'] === '00:00' && tlperHourSwitches['shift' + getShiftIndex(i) + '_START_TIME']" class="reason-input">
+                    <input #reasonInput type="text" placeholder="Reason" class="form-control" 
+                           [(ngModel)]="tlperHourReasons[i].description" 
+                           (keydown.enter)="handleReasonSaveUpdateDelete(tlperHourReasons[i], reasonInput)" 
+                           required>
+                  </div>
                 </div>
               </div>            
+              <div class="mx-3">
+                <button type="button" (click)="saveHour(tlperHourSwitches)" class="btn btn-primary">Save</button>
+              </div>
             </tab>                             
           </tabset>
         </div>

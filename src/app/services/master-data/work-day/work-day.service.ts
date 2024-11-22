@@ -142,6 +142,14 @@ export class WorkDayService {
       wdhours,
       { headers: this.getHeaders() }
     );
+  }  
+  updateDWorkDayHoursSpecific(wdhours: WDHoursSpecific): Observable<ApiResponse<WDHoursSpecific>> {
+    console.log(wdhours);
+    return this.http.post<ApiResponse<WDHoursSpecific>>(
+      environment.apiUrlWebAdmin + '/updateDWorkDayHoursSpecific',
+      wdhours,
+      { headers: this.getHeaders() }
+    );
   }
   
 }
