@@ -727,9 +727,9 @@ export class AddMoPpcComponent implements OnInit {
     worksheet.getCell('N7').font = { name: 'Calibri Body', size: 11, bold: true, italic: true };
     setBorder(worksheet.getCell('N7'));
 
-    // worksheet.getCell('Q7').value = this.headerMarketingOrder[0].wdNormalTire; // "Month 1"
-    // worksheet.getCell('R7').value = this.headerMarketingOrder[1].wdNormalTire; // "Month 2"
-    // worksheet.getCell('S7').value = this.headerMarketingOrder[2].wdNormalTire; // "Month 3"
+    worksheet.getCell('Q7').value = this.formHeaderMo.get('nwd_0')?.value; // "Month 1"
+    worksheet.getCell('R7').value = this.formHeaderMo.get('nwd_1')?.value; // "Month 2"
+    worksheet.getCell('S7').value = this.formHeaderMo.get('nwd_2')?.value; // "Month 3"
     worksheet.getCell('Q7').numFmt = '0.00';
     worksheet.getCell('R7').numFmt = '0.00';
     worksheet.getCell('S7').numFmt = '0.00';
@@ -740,9 +740,9 @@ export class AddMoPpcComponent implements OnInit {
     worksheet.getCell('N8').font = { name: 'Calibri Body', size: 11, bold: true, italic: true };
     setBorder(worksheet.getCell('N8'));
 
-    // worksheet.getCell('Q8').value = this.headerMarketingOrder[0].wdNormalTube; // "Month 1"
-    // worksheet.getCell('R8').value = this.headerMarketingOrder[1].wdNormalTube; // "Month 2"
-    // worksheet.getCell('S8').value = this.headerMarketingOrder[2].wdNormalTube; // "Month 3"
+    worksheet.getCell('Q8').value = this.formHeaderMo.get('nwt_0')?.value; // "Month 1"
+    worksheet.getCell('R8').value = this.formHeaderMo.get('nwt_1')?.value; // "Month 2"
+    worksheet.getCell('S8').value = this.formHeaderMo.get('nwt_2')?.value; // "Month 3"
     worksheet.getCell('Q8').numFmt = '0.00';
     worksheet.getCell('R8').numFmt = '0.00';
     worksheet.getCell('S8').numFmt = '0.00';
@@ -752,9 +752,9 @@ export class AddMoPpcComponent implements OnInit {
     worksheet.getCell('N9').alignment = { vertical: 'middle', horizontal: 'left' };
     worksheet.getCell('N9').font = { name: 'Calibri Body', size: 11, bold: true, italic: true };
     setBorder(worksheet.getCell('N9'));
-    // worksheet.getCell('Q9').value = this.headerMarketingOrder[0].wdOtTube; // "Month 1"
-    // worksheet.getCell('R9').value = this.headerMarketingOrder[1].wdOtTube; // "Month 2"
-    // worksheet.getCell('S9').value = this.headerMarketingOrder[2].wdOtTube; // "Month 3"
+    worksheet.getCell('Q9').value = this.formHeaderMo.get('ot_wt_0')?.value; // "Month 1"
+    worksheet.getCell('R9').value = this.formHeaderMo.get('ot_wt_1')?.value; // "Month 2"
+    worksheet.getCell('S9').value = this.formHeaderMo.get('ot_wt_2')?.value; // "Month 3"
     worksheet.getCell('Q9').numFmt = '0.00';
     worksheet.getCell('R9').numFmt = '0.00';
     worksheet.getCell('S9').numFmt = '0.00';
@@ -764,9 +764,9 @@ export class AddMoPpcComponent implements OnInit {
     worksheet.getCell('N10').alignment = { vertical: 'middle', horizontal: 'left' };
     worksheet.getCell('N10').font = { name: 'Calibri Body', size: 11, bold: true, italic: true };
     setBorder(worksheet.getCell('N10'));
-    // worksheet.getCell('Q10').value = this.headerMarketingOrder[0].wdOtTl; // "Month 1"
-    // worksheet.getCell('R10').value = this.headerMarketingOrder[1].wdOtTl; // "Month 2"
-    // worksheet.getCell('S10').value = this.headerMarketingOrder[2].wdOtTl; // "Month 3"
+    worksheet.getCell('Q10').value = this.formHeaderMo.get('tl_ot_wd_0')?.value; // "Month 1"
+    worksheet.getCell('R10').value = this.formHeaderMo.get('tl_ot_wd_1')?.value; // "Month 2"
+    worksheet.getCell('S10').value = this.formHeaderMo.get('tl_ot_wd_2')?.value; // "Month 3"
     worksheet.getCell('Q10').numFmt = '0.00';
     worksheet.getCell('R10').numFmt = '0.00';
     worksheet.getCell('S10').numFmt = '0.00';
@@ -775,9 +775,9 @@ export class AddMoPpcComponent implements OnInit {
     worksheet.getCell('N11').value = 'Workday Overtime TT';
     worksheet.getCell('N11').alignment = { vertical: 'middle', horizontal: 'left' };
     setBorder(worksheet.getCell('N11'));
-    // worksheet.getCell('Q11').value = this.headerMarketingOrder[0].wdOtTt; // "Month 1"
-    // worksheet.getCell('R11').value = this.headerMarketingOrder[1].wdOtTt; // "Month 2"
-    // worksheet.getCell('S11').value = this.headerMarketingOrder[2].wdOtTt; // "Month 3"
+    worksheet.getCell('Q11').value = this.formHeaderMo.get('tt_ot_wd_0')?.value; // "Month 1"
+    worksheet.getCell('R11').value = this.formHeaderMo.get('tt_ot_wd_1')?.value; // "Month 2"
+    worksheet.getCell('S11').value = this.formHeaderMo.get('tt_ot_wd_2')?.value; // "Month 3"
     worksheet.getCell('Q11').numFmt = '0.00';
     worksheet.getCell('R11').numFmt = '0.00';
     worksheet.getCell('S11').numFmt = '0.00';
@@ -786,9 +786,9 @@ export class AddMoPpcComponent implements OnInit {
     worksheet.getCell('N12').value = 'Total Workday Tube';
     worksheet.getCell('N12').alignment = { vertical: 'middle', horizontal: 'left' };
     setBorder(worksheet.getCell('N12'));
-    // worksheet.getCell('Q12').value = this.headerMarketingOrder[0].totalWdTube; // "Month 1"
-    // worksheet.getCell('R12').value = this.headerMarketingOrder[1].totalWdTube; // "Month 2"
-    // worksheet.getCell('S12').value = this.headerMarketingOrder[2].totalWdTube; // "Month 3"
+    worksheet.getCell('Q12').value = this.formHeaderMo.get('total_wt_0')?.value ?? 0; // "Month 1"
+    worksheet.getCell('R12').value = this.formHeaderMo.get('total_wt_1')?.value ?? 0; // "Month 2"
+    worksheet.getCell('S12').value = this.formHeaderMo.get('total_wt_2')?.value ?? 0; // "Month 3"    
     worksheet.getCell('Q12').numFmt = '0.00';
     worksheet.getCell('R12').numFmt = '0.00';
     worksheet.getCell('S12').numFmt = '0.00';
@@ -797,9 +797,9 @@ export class AddMoPpcComponent implements OnInit {
     worksheet.getCell('N13').value = 'Total Workday Tire TL';
     worksheet.getCell('N13').alignment = { vertical: 'middle', horizontal: 'left' };
     setBorder(worksheet.getCell('N13'));
-    // worksheet.getCell('Q13').value = this.headerMarketingOrder[0].totalWdTl; // "Month 1"
-    // worksheet.getCell('R13').value = this.headerMarketingOrder[1].totalWdTl; // "Month 2"
-    // worksheet.getCell('S13').value = this.headerMarketingOrder[2].totalWdTl; // "Month 3"
+    worksheet.getCell('Q13').value = this.formHeaderMo.get('total_tlwd_0')?.value; // "Month 1"
+    worksheet.getCell('R13').value = this.formHeaderMo.get('total_tlwd_1')?.value; // "Month 2"
+    worksheet.getCell('S13').value = this.formHeaderMo.get('total_tlwd_2')?.value; // "Month 3"
     worksheet.getCell('Q13').numFmt = '0.00';
     worksheet.getCell('R13').numFmt = '0.00';
     worksheet.getCell('S13').numFmt = '0.00';
@@ -808,9 +808,9 @@ export class AddMoPpcComponent implements OnInit {
     worksheet.getCell('N14').value = 'Total Workday Tire TT';
     worksheet.getCell('N14').alignment = { vertical: 'middle', horizontal: 'left' };
     setBorder(worksheet.getCell('N14'));
-    // worksheet.getCell('Q14').value = this.headerMarketingOrder[0].totalWdTt; // "Month 1"
-    // worksheet.getCell('R14').value = this.headerMarketingOrder[1].totalWdTt; // "Month 2"
-    // worksheet.getCell('S14').value = this.headerMarketingOrder[2].totalWdTt; // "Month 3"
+    worksheet.getCell('Q14').value = this.formHeaderMo.get('total_ttwd_0')?.value; // "Month 1"
+    worksheet.getCell('R14').value = this.formHeaderMo.get('total_ttwd_1')?.value; // "Month 2"
+    worksheet.getCell('S14').value = this.formHeaderMo.get('total_ttwd_2')?.value; // "Month 3"
     worksheet.getCell('Q14').numFmt = '0.00';
     worksheet.getCell('R14').numFmt = '0.00';
     worksheet.getCell('S14').numFmt = '0.00';
@@ -819,9 +819,9 @@ export class AddMoPpcComponent implements OnInit {
     worksheet.getCell('N15').value = 'Max Capacity Tube';
     worksheet.getCell('N15').alignment = { vertical: 'middle', horizontal: 'left' };
     setBorder(worksheet.getCell('N15'));
-    // worksheet.getCell('Q15').value = this.headerMarketingOrder[1].maxCapTube; // "Month 1"
-    // worksheet.getCell('R15').value = this.headerMarketingOrder[2].maxCapTube; // "Month 2"
-    // worksheet.getCell('S15').value = this.headerMarketingOrder[0].maxCapTube; // "Month 3"
+    worksheet.getCell('Q15').value = this.formHeaderMo.get('max_tube_capa_0')?.value; // "Month 1"
+    worksheet.getCell('R15').value = this.formHeaderMo.get('max_tube_capa_1')?.value; // "Month 2"
+    worksheet.getCell('S15').value = this.formHeaderMo.get('max_tube_capa_2')?.value; // "Month 3"
     worksheet.getCell('Q15').numFmt = '#,##0';
     worksheet.getCell('R15').numFmt = '#,##0';
     worksheet.getCell('S15').numFmt = '#,##0';
@@ -846,9 +846,9 @@ export class AddMoPpcComponent implements OnInit {
     worksheet.getCell('N16').value = 'Max Capacity Tire TL';
     worksheet.getCell('N16').alignment = { vertical: 'middle', horizontal: 'left' };
     setBorder(worksheet.getCell('N16'));
-    // worksheet.getCell('Q16').value = this.headerMarketingOrder[0].maxCapTl; // "Month 1"
-    // worksheet.getCell('R16').value = this.headerMarketingOrder[1].maxCapTl; // "Month 2"
-    // worksheet.getCell('S16').value = this.headerMarketingOrder[2].maxCapTl; // "Month 3"
+    worksheet.getCell('Q16').value = this.formHeaderMo.get('max_capa_tl_0')?.value; // "Month 1"
+    worksheet.getCell('R16').value = this.formHeaderMo.get('max_capa_tl_1')?.value; // "Month 2"
+    worksheet.getCell('S16').value = this.formHeaderMo.get('max_capa_tl_2')?.value; // "Month 3"
     worksheet.getCell('Q16').numFmt = '#,##0';
     worksheet.getCell('R16').numFmt = '#,##0';
     worksheet.getCell('S16').numFmt = '#,##0';
@@ -872,9 +872,9 @@ export class AddMoPpcComponent implements OnInit {
     worksheet.getCell('N17').value = 'Max Capacity Tire TT';
     worksheet.getCell('N17').alignment = { vertical: 'middle', horizontal: 'left' };
     setBorder(worksheet.getCell('N17'));
-    // worksheet.getCell('Q17').value = this.headerMarketingOrder[0].maxCapTt; // "Month 1"
-    // worksheet.getCell('R17').value = this.headerMarketingOrder[1].maxCapTt; // "Month 2"
-    // worksheet.getCell('S17').value = this.headerMarketingOrder[2].maxCapTt; // "Month 3"
+    worksheet.getCell('Q17').value = this.formHeaderMo.get('max_capa_tt_0')?.value; // "Month 1"
+    worksheet.getCell('R17').value = this.formHeaderMo.get('max_capa_tt_1')?.value;  // "Month 2"
+    worksheet.getCell('S17').value = this.formHeaderMo.get('max_capa_tt_2')?.value;  // "Month 3"
     worksheet.getCell('Q17').numFmt = '#,##0';
     worksheet.getCell('R17').numFmt = '#,##0';
     worksheet.getCell('S17').numFmt = '#,##0';
