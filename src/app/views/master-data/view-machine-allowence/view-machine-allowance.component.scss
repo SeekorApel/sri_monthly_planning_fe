@@ -2,3 +2,17 @@
     width: 100%;
     overflow-x: auto;
 }
+
+.table th {
+    min-width: 170px;
+    text-align: center;
+    align-items: center;
+}
+
+.angka{
+    text-align: right;
+}
+
+.huruf {
+    text-align: left;
+}

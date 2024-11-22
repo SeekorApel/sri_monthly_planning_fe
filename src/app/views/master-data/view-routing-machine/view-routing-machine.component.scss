@@ -2,7 +2,16 @@
     width: 100%;
     overflow-x: auto;
 }
-.trTDTH td, th{
+.table th {
     min-width: 250px;
     text-align: center;
+    align-items: center;
+}
+
+.angka{
+    text-align: right;
+}
+
+.huruf {
+    text-align: left;
 }
