@@ -94,7 +94,6 @@
                   <li>Shift 2: {{ tlReasons[2] ? tlReasons[2].description : '-' }}</li>
                 </ul>
               </div>
-              
             </tab>
       
             <!-- Tab 2: Shift -->
@@ -103,13 +102,13 @@
                 <!-- OverTime Switch -->
                 <div class="form-group d-flex">
                   <div class="mx-3">
-                      <button type="button" class="btn btn-primary " [disabled]="overTimeSwitch" (click)="overtimeOn()">OverTime</button>
+                      <button type="button" class="btn btn-primary " [disabled]="overTimeSwitch || selectedDay.detail.off === 0" (click)="overtimeOn()">OverTime</button>
                   </div>
                   <div class="mx-3">
-                      <button type="button" class="btn btn-primary " (click)="OffWorkday()">Off</button>
+                      <button type="button" class="btn btn-primary " [disabled]="selectedDay.detail.off === 1" (click)="OffWorkday()">Off</button>
                   </div>
                   <div class="mx-3">
-                      <button type="button" class="btn btn-primary " (click)="OnWorkday()">On</button>
+                      <button type="button" class="btn btn-primary " [disabled]="selectedDay.detail.off === 0 && !overTimeSwitch" (click)="OnWorkday()">On</button>
                   </div>
                 </div>
                 
