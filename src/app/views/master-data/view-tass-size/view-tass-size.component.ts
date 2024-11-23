@@ -39,7 +39,7 @@ export class ViewTassSizeComponent implements OnInit {
   pageSize: number = 5;
   totalPages: number = 5;
   sortBuffer: Array<any>;
-  displayedColumns: string[] = ['no', 'tassize_ID', 'machinetasstype_ID','size_ID','capacity', 'status', 'action'];
+  displayedColumns: string[] = ['no', 'tassize_ID', 'machinetasstype_NAME','size_NAME','capacity', 'status', 'action'];
   dataSource: MatTableDataSource<Tass_Size>;
 
   @ViewChild(MatSort) sort: MatSort;
@@ -105,6 +105,21 @@ export class ViewTassSizeComponent implements OnInit {
     this.tass_sizeService.getAllTassSize().subscribe(
       (response: ApiResponse<Tass_Size[]>) => {
         this.tass_sizes = response.data;
+        
+        this.tass_sizes = this.tass_sizes.map((tassSize) => {
+          const matchedMachineTassType = this.machineTassType.find(
+            (b) => b.machinetasstype_ID === (tassSize.machinetasstype_ID)
+          );
+          const matchedSize = this.size.find(
+            (c) => c.size_ID === (tassSize.size_ID)
+          );
+  
+          return {
+            ...tassSize, // Salin semua properti quadrant
+            machinetasstype_NAME: matchedMachineTassType ? matchedMachineTassType.machinetasstype_ID : null, // Tambahkan building_NAME jika ada kecocokan
+            size_NAME: matchedSize ? matchedSize.size_ID : null // Tambahkan building_NAME jika ada kecocokan
+          };
+        });
         this.dataSource = new MatTableDataSource(this.tass_sizes);
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
@@ -139,7 +154,7 @@ export class ViewTassSizeComponent implements OnInit {
 
   resetSearch(): void {
     this.searchText = '';
-    this.onChangePage(this.tass_sizes.slice(0, this.pageSize));
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
   }
 
   updateTassSize(): void {

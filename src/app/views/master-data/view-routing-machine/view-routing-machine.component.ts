@@ -160,6 +160,7 @@ export class ViewRoutingMachineComponent implements OnInit {
 
   resetSearch(): void {
     this.searchText = '';
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
     this.onChangePage(this.routingMachines.slice(0, this.pageSize));
   }
 

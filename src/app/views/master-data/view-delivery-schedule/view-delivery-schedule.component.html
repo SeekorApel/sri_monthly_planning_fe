@@ -36,12 +36,12 @@
 
           <ng-container matColumnDef="effective_TIME">
             <th style="min-width: 250px;" class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Effective Time</th>
-            <td class="angka" *matCellDef="let element">{{ element.effective_TIME }}</td>
+            <td class="angka" *matCellDef="let element">{{ element.formattedDate }}</td>
           </ng-container>
-
+          
           <ng-container matColumnDef="date_ISSUED">
             <th style="min-width: 250px;" class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Data Issued</th>
-            <td class="angka" *matCellDef="let element">{{ element.date_ISSUED }}</td>
+            <td class="angka" *matCellDef="let element">{{ element.formattedDateIssued }}</td>
           </ng-container>
 
           <ng-container matColumnDef="category">
@@ -94,13 +94,13 @@
         <form [formGroup]="editDeliveryScheduleForm">
           <div class="form-group">
             <label for="effectiveTime">Effective Time</label>
-            <input [(ngModel)]="edtDeliveryScheduleObject.effective_TIME" type="datetime-local" class="form-control" id="effectiveTime" formControlName="effectiveTime" [ngClass]="{ 'is-invalid': editDeliveryScheduleForm.get('effectiveTime').invalid && editDeliveryScheduleForm.get('effectiveTime').touched }" />
+            <input [(ngModel)]="edtDeliveryScheduleObject.effective_TIME" type="date" class="form-control" id="effectiveTime" formControlName="effectiveTime" [ngClass]="{ 'is-invalid': editDeliveryScheduleForm.get('effectiveTime').invalid && editDeliveryScheduleForm.get('effectiveTime').touched }" />
             <!-- Error message if plantName is empty -->
             <div *ngIf="editDeliveryScheduleForm.get('effectiveTime').invalid && editDeliveryScheduleForm.get('effectiveTime').touched" class="invalid-feedback">Effective time is required.</div>
           </div>
           <div class="form-group">
             <label for="dataIssue">Data Issue</label>
-            <input [(ngModel)]="edtDeliveryScheduleObject.date_ISSUED" type="datetime-local" class="form-control" id="dataIssue" formControlName="dataIssue" [ngClass]="{ 'is-invalid': editDeliveryScheduleForm.get('dataIssue').invalid && editDeliveryScheduleForm.get('dataIssue').touched }" />
+            <input [(ngModel)]="edtDeliveryScheduleObject.date_ISSUED" type="date" class="form-control" id="dataIssue" formControlName="dataIssue" [ngClass]="{ 'is-invalid': editDeliveryScheduleForm.get('dataIssue').invalid && editDeliveryScheduleForm.get('dataIssue').touched }" />
             <!-- Error message if plantName is empty -->
             <div *ngIf="editDeliveryScheduleForm.get('dataIssue').invalid && editDeliveryScheduleForm.get('dataIssue').touched" class="invalid-feedback">Data Issue is required.</div>
           </div>

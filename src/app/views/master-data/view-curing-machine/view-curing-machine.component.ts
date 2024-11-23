@@ -37,7 +37,7 @@ export class ViewCuringMachineComponent implements OnInit {
   pageSize: number = 5;
   totalPages: number = 5;
   sortBuffer: Array<any>;
-  displayedColumns: string[] = ['no', 'work_CENTER_TEXT', 'machine_TYPE', 'building_ID','cavity', 'status_USAGE', 'status', 'action'];
+  displayedColumns: string[] = ['no', 'work_CENTER_TEXT', 'building_ID', 'cavity', 'machine_TYPE', 'status_USAGE', 'status', 'action'];
   dataSource: MatTableDataSource<Curing_Machine>;
 
   @ViewChild(MatSort) sort: MatSort;
@@ -125,6 +125,7 @@ export class ViewCuringMachineComponent implements OnInit {
 
   resetSearch(): void {
     this.searchText = '';
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
     this.onChangePage(this.curingmachines.slice(0, this.pageSize));
   }
 

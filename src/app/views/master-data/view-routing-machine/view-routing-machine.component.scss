@@ -2,6 +2,10 @@
     width: 100%;
     overflow-x: auto;
 }
+::ng-deep .mat-sort-header-container {
+    justify-content: center;
+}
+
 .table th {
     min-width: 250px;
     text-align: center;
@@ -24,4 +28,10 @@
 .per-hour-wrapper-item {
     flex: 0 0 calc(100%);  /* Each item takes up half the width minus the gap */
     box-sizing: border-box;      /* Ensure padding and border are included in width */
+}
+.modal-content {
+    width: 1000px;
+    display: flex;
+    // justify-content: center;
+    transform: translateX(-240px);
 }

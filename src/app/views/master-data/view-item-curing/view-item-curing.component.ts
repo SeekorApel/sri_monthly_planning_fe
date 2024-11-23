@@ -51,7 +51,6 @@ export class ViewItemCuringComponent implements OnInit {
     this.getAllItemCuring();
   }
   
-
   getAllItemCuring(): void {
     this.itemcuringService.getAllItemCuring().subscribe(
       (response: ApiResponse<Item_Curing[]>) => {
@@ -90,6 +89,7 @@ export class ViewItemCuringComponent implements OnInit {
 
   resetSearch(): void {
     this.searchText = '';
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
     this.onChangePage(this.itemcurings.slice(0, this.pageSize));
   }
 

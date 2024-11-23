@@ -19,9 +19,9 @@
           <button type="button" class="btn btn-success ml-2" data-toggle="modal" data-target="#uploadModal"><i class="fa fa-file-excel-o fa-lg"></i> Upload Excel</button>
         </div>
       </div>
+      <!-- Table -->
       <div class="table-responsive">
-        <!-- Table -->
-        <table mat-table [dataSource]="dataSource" matSort class="table table-striped table-bordered">
+        <table mat-table [dataSource]="dataSource" matSort class="table table-striped table-bordered table-sm">
           <ng-container matColumnDef="no" >
             <th *matHeaderCellDef >No</th>
             <td  *matCellDef="let element; let i = index">{{ i + 1 }}</td>
@@ -32,9 +32,9 @@
             <td class="angka"  *matCellDef="let element">{{ element.building_ID }}</td>
           </ng-container>
 
-          <ng-container matColumnDef="plant_ID">
+          <ng-container matColumnDef="plant_NAME">
             <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Plant Name</th>
-            <td class="huruf"  *matCellDef="let element">{{ element.plant_id }}</td>
+            <td class="huruf"  *matCellDef="let element">{{ element.plant_NAME }}</td>
           </ng-container>
 
           <ng-container matColumnDef="building_NAME">

@@ -39,7 +39,7 @@ export class ViewMaxCapacityComponent implements OnInit {
   pageSize: number = 5;
   totalPages: number = 5;
   sortBuffer: Array<any>;
-  displayedColumns: string[] = ['no', 'max_CAP_ID', 'product_ID','machinecuringtype_ID', 'cycle_TIME', 'capacity_SHIFT_1', 'capacity_SHIFT_2', 'capacity_SHIFT_3', 'status', 'action'];
+  displayedColumns: string[] = ['no', 'max_CAP_ID', 'part_NUMBER','machine_curing_TYPE_ID', 'cycle_TIME', 'capacity_SHIFT_1', 'capacity_SHIFT_2', 'capacity_SHIFT_3', 'status', 'action'];
   dataSource: MatTableDataSource<Max_Capacity>;
 
   @ViewChild(MatSort) sort: MatSort;
@@ -108,6 +108,22 @@ export class ViewMaxCapacityComponent implements OnInit {
     this.maxCapacityService.getAllMaxCapacity().subscribe(
       (response: ApiResponse<Max_Capacity[]>) => {
         this.maxCapacitys = response.data;
+        
+        this.maxCapacitys = this.maxCapacitys.map((maxCapacity) => {
+          const matchedProduct = this.product.find(
+            (b) => b.part_NUMBER === (maxCapacity.product_ID)
+          );
+          const matchedCuringType = this.machineCuringType.find(
+            (c) => c.machinecuringtype_ID === (maxCapacity.machinecuringtype_ID)
+          );
+  
+          return {
+            ...maxCapacity, // Salin semua properti quadrant
+            part_NUMBER: matchedProduct ? matchedProduct.part_NUMBER : null, // Tambahkan building_NAME jika ada kecocokan
+            machine_curing_TYPE_ID: matchedCuringType ? matchedCuringType.machinecuringtype_ID : null // Tambahkan building_NAME jika ada kecocokan
+          };
+        });
+
         this.dataSource = new MatTableDataSource(this.maxCapacitys);
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
@@ -145,6 +161,7 @@ export class ViewMaxCapacityComponent implements OnInit {
 
   resetSearch(): void {
     this.searchText = '';
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
     this.onChangePage(this.maxCapacitys.slice(0, this.pageSize));
   }
 

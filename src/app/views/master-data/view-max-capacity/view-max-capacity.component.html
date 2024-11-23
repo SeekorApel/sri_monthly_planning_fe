@@ -34,14 +34,14 @@
             <td class="angka" *matCellDef="let element">{{ element.max_CAP_ID }}</td>
           </ng-container>
 
-          <ng-container matColumnDef="product_ID">
+          <ng-container matColumnDef="part_NUMBER">
             <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Product Part Number</th>
-            <td class="angka" *matCellDef="let element">{{ element.product_ID }}</td>
+            <td class="angka" *matCellDef="let element">{{ element.part_NUMBER }}</td>
           </ng-container>
 
-          <ng-container matColumnDef="machinecuringtype_ID">
-            <th style="min-width: 250px;" class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Machine Curing Type Description</th>
-            <td class="huruf" *matCellDef="let element">{{ element.machinecuringtype_ID }}</td>
+          <ng-container matColumnDef="machine_curing_TYPE_ID">
+            <th style="min-width: 250px;" class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Machine Curing Type</th>
+            <td class="huruf" *matCellDef="let element">{{ element.machine_curing_TYPE_ID }}</td>
           </ng-container>
 
           <ng-container matColumnDef="cycle_TIME">

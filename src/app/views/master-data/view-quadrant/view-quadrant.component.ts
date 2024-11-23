@@ -10,7 +10,6 @@ import { saveAs } from 'file-saver';
 import { Select2OptionData } from 'ng-select2';
 import { Options } from 'select2';
 
-
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
@@ -37,7 +36,7 @@ export class ViewQuadrantComponent implements OnInit {
   pageSize: number = 5;
   totalPages: number = 5;
   sortBuffer: Array<any>;
-  displayedColumns: string[] = ['no', 'quadrant_ID', 'building_ID','quadrant_NAME','status', 'action'];
+  displayedColumns: string[] = ['no', 'quadrant_ID', 'building_NAME','quadrant_NAME','status', 'action'];
   dataSource: MatTableDataSource<Quadrant>;
 
   @ViewChild(MatSort) sort: MatSort;
@@ -79,15 +78,17 @@ export class ViewQuadrantComponent implements OnInit {
   getAllQuadrant(): void {
     this.quadrantService.getAllQuadrant().subscribe(
       (response: ApiResponse<Quadrant[]>) => {
-        this.quadrants = response.data.map(quadrant => {
-          const building = this.building.find(
-            bd=> bd.building_ID === quadrant.building_ID
+        this.quadrants = response.data;
+        
+        this.quadrants = this.quadrants.map((quadrant) => {
+          const matchedBuilding = this.building.find(
+            (b) => b.building_ID === Number(quadrant.building_ID)
           );
-
+  
           return {
-            ...quadrant,
-            building_id: building ? building.building_NAME : 'Unknown'
-          }
+            ...quadrant, // Salin semua properti quadrant
+            building_NAME: matchedBuilding ? matchedBuilding.building_NAME : null // Tambahkan building_NAME jika ada kecocokan
+          };
         });
         this.dataSource = new MatTableDataSource(this.quadrants);
         this.dataSource.sort = this.sort;
@@ -112,6 +113,7 @@ export class ViewQuadrantComponent implements OnInit {
 
   resetSearch(): void {
     this.searchText = '';
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
     this.onChangePage(this.quadrants.slice(0, this.pageSize));
   }
 

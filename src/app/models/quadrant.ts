@@ -2,6 +2,7 @@
 export class Quadrant {
   quadrant_ID?: number;        
   building_ID: number;
+  building_NAME?: string = "";
   quadrant_NAME: string;           
   status: number;
   creation_DATE: Date;  

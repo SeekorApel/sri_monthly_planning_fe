@@ -320,7 +320,9 @@
                 <!-- Error message if plantName is empty -->
                 <div *ngIf="editRoutingMachineForm.get('base_quantity').invalid && editRoutingMachineForm.get('base_quantity')touched" class="invalid-feedback">base quantity value is required.</div>
               </div>
-              
+            </div>
+
+            <div class="mx-3">
               <div class="form-group">
                 <label for="standard_value_unit">Standard Value Unit</label>
                 <input [(ngModel)]="edtRoutingMachineObject.standard_VALUE_UNIT" type="text" class="form-control" id="standard_value_unit" formControlName="standard_value_unit" [ngClass]="{ 'is-invalid': editRoutingMachineForm.get('standard_value_unit').invalid && editRoutingMachineForm.get('standard_value_unit').touched }" />
@@ -341,7 +343,7 @@
                 <!-- Error message if plantName is empty -->
                 <div *ngIf="editRoutingMachineForm.get('CT_hr_1000').invalid && editRoutingMachineForm.get('CT_hr_1000')touched" class="invalid-feedback">CT hr 1000 value is required.</div>
               </div>
-              
+
               <div class="form-group">
                 <label for="WH_normal_shift_1">WH Normal Shift 1</label>
                 <input [(ngModel)]="edtRoutingMachineObject.wh_NORMAL_SHIFT_0" type="text" class="form-control" id="WH_normal_shift_1" formControlName="WH_normal_shift_1" [ngClass]="{ 'is-invalid': editRoutingMachineForm.get('WH_normal_shift_1').invalid && editRoutingMachineForm.get('WH_normal_shift_1').touched }" />
@@ -362,7 +364,7 @@
                 <!-- Error message if plantName is empty -->
                 <div *ngIf="editRoutingMachineForm.get('WH_normal_shift_3').invalid && editRoutingMachineForm.get('WH_normal_shift_3')touched" class="invalid-feedback">WH normal shift 3 value is required.</div>
               </div>
-              
+
               <div class="form-group">
                 <label for="WH_shift_jumat">WH Shift Jumat</label>
                 <input [(ngModel)]="edtRoutingMachineObject.wh_SHIFT_FRIDAY" type="text" class="form-control" id="WH_shift_jumat" formControlName="WH_shift_jumat" [ngClass]="{ 'is-invalid': editRoutingMachineForm.get('WH_shift_jumat').invalid && editRoutingMachineForm.get('WH_shift_jumat').touched }" />
@@ -427,7 +429,7 @@
                 <!-- Error message if plantName is empty -->
                 <div *ngIf="editRoutingMachineForm.get('OP_time_normal_shift_2').invalid && editRoutingMachineForm.get('OP_time_normal_shift_2')touched" class="invalid-feedback">OP time normal shift 2 value is required.</div>
               </div>
-            
+              
               <div class="form-group">
                 <label for="OP_time_normal_shift_3">OP Time Normal Shift 3</label>
                 <input [(ngModel)]="edtRoutingMachineObject.op_TIME_NORMAL_SHIFT_2" type="text" class="form-control" id="OP_time_normal_shift_3" formControlName="OP_time_normal_shift_3" [ngClass]="{ 'is-invalid': editRoutingMachineForm.get('OP_time_normal_shift_3').invalid && editRoutingMachineForm.get('OP_time_normal_shift_3').touched }" />
@@ -448,6 +450,9 @@
                 <!-- Error message if plantName is empty -->
                 <div *ngIf="editRoutingMachineForm.get('OP_time_total_normal_shift').invalid && editRoutingMachineForm.get('OP_time_total_normal_shift')touched" class="invalid-feedback">OP time total normal shift value is required.</div>
               </div>
+            </div>
+
+            <div class="mx-3">
             
               <div class="form-group">
                 <label for="OP_time_total_shift_jumat">OP Time Total Shift Jumat</label>

@@ -73,6 +73,7 @@ export class ViewSizeComponent implements OnInit {
 
   resetSearch(): void {
     this.searchText = '';
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
     this.onChangePage(this.sizes.slice(0, this.pageSize));
   }
 
