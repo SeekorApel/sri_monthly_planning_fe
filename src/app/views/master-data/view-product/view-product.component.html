@@ -66,6 +66,12 @@
             <td align="left" *matCellDef="let element">{{ element.description }}</td>
           </ng-container>
 
+          <!-- Description Column -->
+          <ng-container matColumnDef="description">
+            <th *matHeaderCellDef style="min-width: 200px" mat-sort-header>Description</th>
+            <td align="left" *matCellDef="let element">{{ element.description }}</td>
+          </ng-container>
+
           <!-- Qty Per Rak Column -->
           <ng-container matColumnDef="qty_PER_RAK">
             <th *matHeaderCellDef style="min-width: 130px" mat-sort-header>Qty Per Rak</th>
