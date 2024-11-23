@@ -22,6 +22,7 @@ import { MatPaginator } from '@angular/material/paginator';
   templateUrl: './view-d-deliveryschedule.component.html',
   styleUrls: ['./view-d-deliveryschedule.component.scss'],
 })
+
 export class ViewDDeliveryScheduleComponent implements OnInit {
   //Variable Declaration
   ddeliveryScedules: DDeliverySchedule[] = [];
