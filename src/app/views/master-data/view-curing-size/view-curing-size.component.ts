@@ -103,7 +103,16 @@ export class ViewCuringSizeComponent implements OnInit {
   getAllCuringSize(): void {
     this.curingSizeService.getAllCuringSize().subscribe(
       (response: ApiResponse<Curing_Size[]>) => {
-        this.curingSizes = response.data;
+        this.curingSizes = response.data.map(curingSize => {
+          const size = this.size.find(
+            bd=> bd.size_ID === curingSize.size_ID
+          );
+
+          return {
+            ...curingSize,
+            size_id: size ? size.description : 'Unknown'
+          }
+        });
         this.dataSource = new MatTableDataSource(this.curingSizes);
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;

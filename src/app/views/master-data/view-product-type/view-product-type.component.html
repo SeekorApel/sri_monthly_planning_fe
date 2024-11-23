@@ -99,9 +99,18 @@
           </div>
           <div class="form-group">
             <label for="productType">Product Type</label>
-            <input [(ngModel)]="edtProductTypeObject.product_TYPE" type="text" class="form-control" id="productType" formControlName="productType" [ngClass]="{ 'is-invalid': editProductTypeForm.get('productType').invalid && editProductTypeForm.get('productType').touched }" />
-            <!-- Error message if plantName is empty -->
-            <div *ngIf="editProductTypeForm.get('productType').invalid && editProductTypeForm.get('productType').touched" class="invalid-feedback">Product Type is required.</div>
+            <ng-select2
+                formControlName="productType" 
+                id="productType"
+                name = "productType"
+                [(ngModel)]="edtProductTypeObject.product_TYPE"
+                [data]="[
+                  { id: 'FED', text: 'FED' },
+                  { id: 'FDR', text: 'FDR' },
+                ]"
+                [options]="options"
+                [placeholder]="'Please Select'">
+              </ng-select2>
           </div>
           <div class="form-group">
             <label for="category">Category</label>

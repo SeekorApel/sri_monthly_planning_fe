@@ -39,8 +39,8 @@
           </ng-container>
           
           <ng-container matColumnDef="size_ID">
-            <th  *matHeaderCellDef mat-sort-header >Size ID</th>
-            <td class="huruf" *matCellDef="let element">{{ element.size_ID }}</td>
+            <th  *matHeaderCellDef mat-sort-header >Description Size</th>
+            <td class="huruf" *matCellDef="let element">{{ getDescSize(element.size_ID) }}</td>
           </ng-container>
           
           <ng-container matColumnDef="capacity">

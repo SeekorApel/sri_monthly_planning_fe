@@ -69,6 +69,11 @@ export class ViewCuringMachineComponent implements OnInit {
     );
   }
 
+  getBuildingName(building_ID: number): string {
+    const building = this.building.find(b => b.building_ID === building_ID);
+    return building ? building.building_NAME : 'Unknown';
+  }
+
   ngOnInit(): void {
     this.getAllCuringMachines();
   }
@@ -76,7 +81,16 @@ export class ViewCuringMachineComponent implements OnInit {
   getAllCuringMachines(): void {
     this.curingmachineService.getAllMachineCuring().subscribe(
       (response: ApiResponse<Curing_Machine[]>) => {
-        this.curingmachines = response.data;
+        this.curingmachines = response.data.map(curingmachine => {
+          const building = this.building.find(
+            bd=> bd.building_ID === curingmachine.building_ID
+          );
+
+          return {
+            ...curingmachine,
+            building_id: building ? building.building_NAME : 'Unknown'
+          }
+        });
         this.dataSource = new MatTableDataSource(this.curingmachines);
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;

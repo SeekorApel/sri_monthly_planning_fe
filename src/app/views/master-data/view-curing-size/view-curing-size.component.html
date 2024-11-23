@@ -39,13 +39,13 @@
             </ng-container>
             
             <ng-container matColumnDef="size_ID">
-              <th  *matHeaderCellDef mat-sort-header >Size ID</th>
-              <td class="huruf" *matCellDef="let element">{{ element.size_ID }}</td>
+              <th  *matHeaderCellDef mat-sort-header >Description Size</th>
+              <td class="huruf" *matCellDef="let element">{{ element.size_id }}</td>
             </ng-container>
             
             <ng-container matColumnDef="capacity">
               <th  *matHeaderCellDef mat-sort-header >Capacity</th>
-              <td *matCellDef="let element">{{ element.capacity }}</td>
+              <td class="angka" *matCellDef="let element">{{ element.capacity }}</td>
             </ng-container>
   
             <ng-container matColumnDef="status">

@@ -7,6 +7,8 @@ import Swal from 'sweetalert2';
 declare var $: any;
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
+import { Select2OptionData } from 'ng-select2';
+import { Options } from 'select2';
 
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
@@ -38,12 +40,20 @@ export class ViewProductTypeComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
+  public uomOptions: Array<Select2OptionData>;
+  public options: Options = { width: '100%'};
+
   constructor(private productTypeService: ProductTypeService, private fb: FormBuilder) {
     this.editProductTypeForm = this.fb.group({
       productMerk: ['', Validators.required],
       productType: ['', Validators.required],
       category: ['', Validators.required]
     });
+
+    // this.uomOptions = [
+    //   { id: 'FED', text: 'FED' },
+    //   { id: 'FDR', text: 'FDR' }
+    // ];
   }
 
   ngOnInit(): void {

@@ -36,7 +36,7 @@ export class ViewBuildingComponent implements OnInit {
   public options: Options = {
     width: '100%'
   };
-
+  uom: any;
   plant:Plant[];
   // constructor(private plantService: PlantService) { 
   //   plantService.getAllPlant().subscribe(
@@ -101,6 +101,10 @@ export class ViewBuildingComponent implements OnInit {
     );
   }
   
+  getPlantName(plant_ID: number): string {
+    const plant = this.plant.find(b => b.plant_ID === plant_ID);
+    return plant ? plant.plant_NAME : 'Unknown';
+  }
 
   ngOnInit(): void {
     this.getAllBuilding();
@@ -109,7 +113,16 @@ export class ViewBuildingComponent implements OnInit {
   getAllBuilding(): void {
     this.buildingService.getAllBuilding().subscribe(
       (response: ApiResponse<Building[]>) => {
-        this.buildings = response.data;
+        this.buildings = response.data.map(building => {
+          const plant = this.plant.find(
+            bd=> bd.plant_ID === building.building_ID
+          );
+
+          return {
+            ...building,
+            plant_id: plant ? plant.plant_NAME : 'Unknown'
+          }
+        });
         this.dataSource = new MatTableDataSource(this.buildings);
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
@@ -127,6 +140,16 @@ export class ViewBuildingComponent implements OnInit {
 
   onSearchChange(): void {
     this.dataSource.filter = this.searchText.trim().toLowerCase();
+
+    // const plantName = this.getPlantName(data.plant_ID).toLowerCase(); 
+
+    // return (
+    //   data.building_NAME.toLowerCase().includes(searchTerm) ||
+    //   data.plant_ID.toString().toLowerCase().includes(searchTerm) ||
+    //   plantName.includes(searchTerm)
+    // );
+
+    
     // Lakukan filter berdasarkan nama plant yang mengandung text pencarian (case-insensitive)
     // const filteredBuildings = this.buildings.filter(
     //   (building) =>

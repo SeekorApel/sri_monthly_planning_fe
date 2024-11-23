@@ -17,8 +17,6 @@ import { MatPaginator } from '@angular/material/paginator';
 import { Building } from 'src/app/models/Building';
 import { BuildingService } from 'src/app/services/master-data/building/building.service';
 
-
-
 @Component({
   selector: 'app-view-quadrant',
   templateUrl: './view-quadrant.component.html',
@@ -69,6 +67,11 @@ export class ViewQuadrantComponent implements OnInit {
     );
   }
 
+  getBuildingName(building_ID: number): string {
+    const building = this.building.find(b => b.building_ID === building_ID);
+    return building ? building.building_NAME : 'Unknown';
+  }
+
   ngOnInit(): void {
     this.getAllQuadrant();
   }
@@ -76,7 +79,16 @@ export class ViewQuadrantComponent implements OnInit {
   getAllQuadrant(): void {
     this.quadrantService.getAllQuadrant().subscribe(
       (response: ApiResponse<Quadrant[]>) => {
-        this.quadrants = response.data;
+        this.quadrants = response.data.map(quadrant => {
+          const building = this.building.find(
+            bd=> bd.building_ID === quadrant.building_ID
+          );
+
+          return {
+            ...quadrant,
+            building_id: building ? building.building_NAME : 'Unknown'
+          }
+        });
         this.dataSource = new MatTableDataSource(this.quadrants);
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
