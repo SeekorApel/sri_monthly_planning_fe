@@ -33,14 +33,14 @@
             <td class="angka" *matCellDef="let element">{{ element.tassize_ID }}</td>
           </ng-container>
 
-          <ng-container matColumnDef="machinetasstype_ID">
-            <th  *matHeaderCellDef mat-sort-header >Type Code</th>
-            <td class="huruf" *matCellDef="let element">{{ element.machinetasstype_ID }}</td>
+          <ng-container matColumnDef="machinetasstype_NAME">
+            <th  *matHeaderCellDef mat-sort-header >Machine Tass Type</th>
+            <td class="huruf" *matCellDef="let element">{{ element.machinetasstype_NAME }}</td>
           </ng-container>
           
-          <ng-container matColumnDef="size_ID">
-            <th  *matHeaderCellDef mat-sort-header >Size ID</th>
-            <td class="huruf" *matCellDef="let element">{{ element.size_ID }}</td>
+          <ng-container matColumnDef="size_NAME">
+            <th  *matHeaderCellDef mat-sort-header >Size</th>
+            <td class="huruf" *matCellDef="let element">{{ element.size_NAME }}</td>
           </ng-container>
           
           <ng-container matColumnDef="capacity">
@@ -92,7 +92,7 @@
         <!-- Form with Reactive Forms -->
         <form [formGroup]="editTassSizeForm">
           <div class="form-group">
-            <label for="machinetasstype_ID" style="min-width: 150px;">Machine ID</label>
+            <label for="machinetasstype_ID" style="min-width: 150px;">Machine Tass Type</label>
             <div>
               <ng-select2
                 formControlName="machinetasstype_ID" 
@@ -106,7 +106,7 @@
             </div>
           </div>
           <div class="form-group">
-            <label for="sizeid" style="min-width: 150px;">Size ID</label>
+            <label for="sizeid" style="min-width: 150px;">Size</label>
             <div>
               <ng-select2
                 formControlName="sizeid" 

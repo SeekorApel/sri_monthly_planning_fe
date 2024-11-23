@@ -201,6 +201,23 @@ export class ViewSettingComponent implements OnInit {
     if (input.files && input.files.length > 0) {
       const file = input.files[0];
       const fileName = file.name.toLowerCase();
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const data = new Uint8Array(reader.result as ArrayBuffer);
+        const workbook = XLSX.read(data, { type: 'array' });
+
+        const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+        const jsonData = XLSX.utils.sheet_to_json(worksheet, { raw: true });
+        const formattedData = jsonData.map((row: any) => {
+          for (const key in row) {
+            if (typeof row[key] === 'number') {
+              row[key] = row[key].toString(); // Konversi angka menjadi string
+            }
+          }
+          return row;
+        });
+        console.log(formattedData);
+    };
 
       // Validasi ekstensi file
       if (fileName.endsWith('.xls') || fileName.endsWith('.xlsx')) {

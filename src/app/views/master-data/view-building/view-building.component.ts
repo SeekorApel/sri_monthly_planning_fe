@@ -36,29 +36,15 @@ export class ViewBuildingComponent implements OnInit {
   public options: Options = {
     width: '100%'
   };
-
+  uom: any;
   plant:Plant[];
-  // constructor(private plantService: PlantService) { 
-  //   plantService.getAllPlant().subscribe(
-  //     (response: ApiResponse<Plant[]>) => {
-  //       this.plant = response.data;
-  //       this.uomOptions = this.plant.map((element) => ({
-  //         id: element.plant_ID.toString(), // Ensure the ID is a string
-  //         text: element.plant_NAME // Set the text to the plant name
-  //       }));
-  //     },
-  //     (error) => {
-  //       this.errorMessage = 'Failed to load plants: ' + error.message;
-  //     }
-  //   );
-  // }
 
   // Pagination
   pageOfItems: Array<any>;
   pageSize: number = 5;
   totalPages: number = 5;
   sortBuffer: Array<any>;
-  displayedColumns: string[] = ['no', 'building_ID', 'plant_ID','building_NAME','status', 'action'];
+  displayedColumns: string[] = ['no', 'building_ID', 'plant_NAME','building_NAME','status', 'action'];
   dataSource: MatTableDataSource<Building>;
 
   @ViewChild(MatSort) sort: MatSort;
@@ -70,56 +56,70 @@ export class ViewBuildingComponent implements OnInit {
       plantID: ['', Validators.required],
     });
   
-    // Fetch plant data and map it to the format needed for the ng-select2 options
-    this.loadPlants();
-    plantService.getAllPlant().subscribe(
-      (response: ApiResponse<Plant[]>) => {
-        this.plant = response.data;
-        this.uomOptions = this.plant.map((element) => ({
-          id: element.plant_ID.toString(), // Ensure the ID is a string
-          text: element.plant_NAME // Set the text to the plant name
-        }));
-      },
-      (error) => {
-        this.errorMessage = 'Failed to load plants: ' + error.message;
-      }
-    );
   }
   
   private loadPlants(): void {
     this.plantService.getAllPlant().subscribe(
       (response: ApiResponse<Plant[]>) => {
-        this.plant = response.data;
-        this.uomOptions = this.plant.map((element) => ({
-          id: element.plant_ID.toString(), // Ensure the ID is a string
-          text: element.plant_NAME // Set the text to the plant name
-        }));
+        if(response.data){
+          this.plant = response.data;
+          this.uomOptions = this.plant.map((element) => ({
+            id: element.plant_ID.toString(), // Ensure the ID is a string
+            text: element.plant_NAME // Set the text to the plant name
+          }));
+              this.getAllBuilding();
+        }
       },
       (error) => {
         this.errorMessage = 'Failed to load plants: ' + error.message;
       }
     );
+    console.log(this.uomOptions);
   }
   
+  getPlantName(plant_ID: number): string {
+    const plant = this.plant.find(b => b.plant_ID === plant_ID);
+    return plant ? plant.plant_NAME : 'Unknown';
+  }
 
   ngOnInit(): void {
-    this.getAllBuilding();
+    this.loadPlants();
   }
 
   getAllBuilding(): void {
     this.buildingService.getAllBuilding().subscribe(
       (response: ApiResponse<Building[]>) => {
-        this.buildings = response.data;
-        this.dataSource = new MatTableDataSource(this.buildings);
-        this.dataSource.sort = this.sort;
-        this.dataSource.paginator = this.paginator;
-        this.onChangePage(this.dataSource.data.slice(0, this.pageSize));
+        if (response && response.data) {
+          this.buildings = response.data;
+        
+          this.buildings = this.buildings.map((plant) => {
+            const matchedPlant = this.plant.find(
+              (b) => b.plant_ID === Number(plant.plant_ID)
+            );
+    
+            return {
+              ...plant, // Salin semua properti quadrant
+              plant_NAME: matchedPlant ? matchedPlant.plant_NAME : null // Tambahkan building_NAME jika ada kecocokan
+            };
+          });
+  
+          this.dataSource = new MatTableDataSource(this.buildings);
+          this.dataSource.sort = this.sort;
+          this.dataSource.paginator = this.paginator;
+  
+          // Update the current page data
+          const initialPageData = this.dataSource.data.slice(0, this.pageSize);
+          this.onChangePage(initialPageData);
+        } else {
+          this.errorMessage = 'No building data received.';
+        }
       },
       (error) => {
-        this.errorMessage = 'Failed to load buildings: ' + error.message;
+        this.errorMessage = `Failed to load buildings: ${error.message || 'Unknown error'}`;
       }
     );
   }
+  
 
   onChangePage(pageOfItems: Array<any>) {
     this.pageOfItems = pageOfItems;
@@ -127,21 +127,11 @@ export class ViewBuildingComponent implements OnInit {
 
   onSearchChange(): void {
     this.dataSource.filter = this.searchText.trim().toLowerCase();
-    // Lakukan filter berdasarkan nama plant yang mengandung text pencarian (case-insensitive)
-    // const filteredBuildings = this.buildings.filter(
-    //   (building) =>
-    //     building.plant_ID.toString()
-    //       .toLowerCase()
-    //       .includes(this.searchText.toLowerCase()) ||
-    //     building.building_NAME.toString().includes(this.searchText)
-    // );
-
-    // // Tampilkan hasil filter pada halaman pertama
-    // this.onChangePage(filteredBuildings.slice(0, this.pageSize));
   }
 
   resetSearch(): void {
     this.searchText = '';
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
     this.onChangePage(this.buildings.slice(0, this.pageSize));
   }
 

@@ -37,7 +37,7 @@ export class ViewCuringMachineComponent implements OnInit {
   pageSize: number = 5;
   totalPages: number = 5;
   sortBuffer: Array<any>;
-  displayedColumns: string[] = ['no', 'work_CENTER_TEXT', 'machine_TYPE', 'building_ID','cavity', 'status_USAGE', 'status', 'action'];
+  displayedColumns: string[] = ['no', 'work_CENTER_TEXT', 'building_ID', 'cavity', 'machine_TYPE', 'status_USAGE', 'status', 'action'];
   dataSource: MatTableDataSource<Curing_Machine>;
 
   @ViewChild(MatSort) sort: MatSort;
@@ -69,6 +69,11 @@ export class ViewCuringMachineComponent implements OnInit {
     );
   }
 
+  getBuildingName(building_ID: number): string {
+    const building = this.building.find(b => b.building_ID === building_ID);
+    return building ? building.building_NAME : 'Unknown';
+  }
+
   ngOnInit(): void {
     this.getAllCuringMachines();
   }
@@ -76,7 +81,16 @@ export class ViewCuringMachineComponent implements OnInit {
   getAllCuringMachines(): void {
     this.curingmachineService.getAllMachineCuring().subscribe(
       (response: ApiResponse<Curing_Machine[]>) => {
-        this.curingmachines = response.data;
+        this.curingmachines = response.data.map(curingmachine => {
+          const building = this.building.find(
+            bd=> bd.building_ID === curingmachine.building_ID
+          );
+
+          return {
+            ...curingmachine,
+            building_id: building ? building.building_NAME : 'Unknown'
+          }
+        });
         this.dataSource = new MatTableDataSource(this.curingmachines);
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
@@ -111,6 +125,7 @@ export class ViewCuringMachineComponent implements OnInit {
 
   resetSearch(): void {
     this.searchText = '';
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
     this.onChangePage(this.curingmachines.slice(0, this.pageSize));
   }
 

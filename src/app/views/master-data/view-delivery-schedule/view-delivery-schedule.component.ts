@@ -53,7 +53,13 @@ export class ViewDeliveryScheduleComponent implements OnInit {
   getAllDeliverySchedule(): void {
     this.deliveryScheduleService.getAllDeliverySchedule().subscribe(
       (response: ApiResponse<DeliverySchedule[]>) => {
-        this.deliverySchedules = response.data;
+        this.deliverySchedules = response.data.map(element => {
+          return {
+            ...element,
+            formattedDate: new Date(element.effective_TIME).toLocaleDateString('en-US', { day: '2-digit', month: 'long', year: 'numeric' }),
+            formattedDateIssued: new Date(element.date_ISSUED).toLocaleDateString('en-US', { day: '2-digit', month: 'long', year: 'numeric' })
+          }
+        });
         this.dataSource = new MatTableDataSource(this.deliverySchedules);
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
@@ -101,6 +107,14 @@ export class ViewDeliveryScheduleComponent implements OnInit {
     );
   }
 
+  convertToInputDateFormat(dateString: string): string {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }  
+  
   openModalEdit(iddDeliverySchedule: number): void {
     this.isEditMode = true;
     this.getDeliveryScheduleById(iddDeliverySchedule);
@@ -111,6 +125,17 @@ export class ViewDeliveryScheduleComponent implements OnInit {
     this.deliveryScheduleService.getDeliveryScheduleById(iddDeliverySchedule).subscribe(
       (response: ApiResponse<DeliverySchedule>) => {
         this.edtDeliveryScheduleObject = response.data;
+
+        if (this.edtDeliveryScheduleObject.effective_TIME) {
+          this.edtDeliveryScheduleObject.effective_TIME = this.convertToInputDateFormat(
+            this.edtDeliveryScheduleObject.effective_TIME
+          );
+        }
+        if (this.edtDeliveryScheduleObject.date_ISSUED) {
+          this.edtDeliveryScheduleObject.date_ISSUED = this.convertToInputDateFormat(
+            this.edtDeliveryScheduleObject.date_ISSUED
+          );
+        }
       },
       (error) => {
         this.errorMessage = 'Failed to load delivery schedules: ' + error.message;

@@ -45,7 +45,6 @@ export class ViewRoutingMachineComponent implements OnInit {
 
   constructor(private RoutingMachineService: RoutingService, private fb: FormBuilder) { 
     this.editRoutingMachineForm = this.fb.group({
-      CtAssyID: ['', Validators.required],
       wip: ['', Validators.required],
       description: ['', Validators.required],
       group_counter: ['', Validators.required],
@@ -161,6 +160,7 @@ export class ViewRoutingMachineComponent implements OnInit {
 
   resetSearch(): void {
     this.searchText = '';
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
     this.onChangePage(this.routingMachines.slice(0, this.pageSize));
   }
 
@@ -271,7 +271,7 @@ export class ViewRoutingMachineComponent implements OnInit {
     this.RoutingMachineService.exportRoutingMachineExcel().subscribe({
       next: (response) => {
         // Menggunakan nama file yang sudah ditentukan di backend
-        const filename = 'ROUTING_MACHINE_DATA.xlsx'; // Nama file bisa dinamis jika diperlukan
+        const filename = 'CT_ASSY_DATA.xlsx'; // Nama file bisa dinamis jika diperlukan
         saveAs(response, filename); // Mengunduh file
       },
       error: (err) => {
