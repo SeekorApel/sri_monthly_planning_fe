@@ -110,9 +110,6 @@ export class ViewMachineTassComponent implements OnInit {
         this.dataSource = new MatTableDataSource(this.machineTasss);
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
-  
-        // Optional: Handle pagination manually if needed
-        // this.onChangePage(this.machineTasss.slice(0, this.pageSize));
       },
       (error) => {
         this.errorMessage = 'Failed to load machine Tass: ' + error.message;
@@ -131,6 +128,7 @@ export class ViewMachineTassComponent implements OnInit {
   }
 
   resetSearch(): void {
+    this.searchText = '';
     this.dataSource.filter = this.searchText.trim().toLowerCase();
   }
 

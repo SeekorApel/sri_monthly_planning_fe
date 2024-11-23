@@ -50,7 +50,7 @@
           <!-- Date Column -->
           <ng-container matColumnDef="date_DS">
             <th *matHeaderCellDef style="min-width: 250px" mat-sort-header>Date</th>
-            <td align="" *matCellDef="let detail">{{ detail.date_DS | date: 'dd MMM yyyy' }}</td>
+            <td align="" *matCellDef="let detail">{{ detail.formattedDate }}</td>
           </ng-container>
 
           <!-- Total Delivery Column -->
@@ -111,7 +111,7 @@
                 </div>
                 <div class="form-group">
                   <h6 for="date">Date</h6>
-                  <input [(ngModel)]="editDDeliveryScheduleTypeObject.date_DS" type="text" class="form-control" id="date" formControlName="date" [ngClass]="{ 'is-invalid': editDDeliveryScheduleTypeForm.get('date').invalid && editDDeliveryScheduleTypeForm.get('date').touched }" />
+                  <input [(ngModel)]="editDDeliveryScheduleTypeObject.date_DS" type="date" class="form-control" id="date" formControlName="date" [ngClass]="{ 'is-invalid': editDDeliveryScheduleTypeForm.get('date').invalid && editDDeliveryScheduleTypeForm.get('date').touched }" />
                   <div *ngIf="editDDeliveryScheduleTypeForm.get('date').invalid && editDDeliveryScheduleTypeForm.get('date').touched" class="invalid-feedback">Date is required.</div>
                 </div>
                 <div class="form-group">

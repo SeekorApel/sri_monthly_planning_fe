@@ -112,12 +112,12 @@
                 </div>
                 <div class="form-group">
                   <h6 for="floor">Floor</h6>
-                  <input [(ngModel)]="editMachineTassObject.floor" type="text" class="form-control" id="floor" formControlName="floor" [ngClass]="{ 'is-invalid': editMachineTassForm.get('floor').invalid && editMachineTassForm.get('floor').touched }" />
+                  <input [(ngModel)]="editMachineTassObject.floor" type="number" class="form-control" id="floor" formControlName="floor" [ngClass]="{ 'is-invalid': editMachineTassForm.get('floor').invalid && editMachineTassForm.get('floor').touched }" />
                   <div *ngIf="editMachineTassForm.get('floor').invalid && editMachineTassForm.get('floor').touched" class="invalid-feedback">Floor is required.</div>
                 </div>
                 <div class="form-group">
                   <h6 for="machineNum">Machine Number</h6>
-                  <input [(ngModel)]="editMachineTassObject.machine_NUMBER" type="text" class="form-control" id="machineNum" formControlName="machineNum" [ngClass]="{ 'is-invalid': editMachineTassForm.get('machineNum').invalid && editMachineTassForm.get('machineNum').touched }" />
+                  <input [(ngModel)]="editMachineTassObject.machine_NUMBER" type="number" class="form-control" id="machineNum" formControlName="machineNum" [ngClass]="{ 'is-invalid': editMachineTassForm.get('machineNum').invalid && editMachineTassForm.get('machineNum').touched }" />
                   <div *ngIf="editMachineTassForm.get('machineNum').invalid && editMachineTassForm.get('machineNum').touched" class="invalid-feedback">Machine Number is required.</div>
                 </div>
                 <div class="form-group">
