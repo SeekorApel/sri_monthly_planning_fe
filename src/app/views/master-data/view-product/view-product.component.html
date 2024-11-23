@@ -44,8 +44,8 @@
 
           <!-- Pattern ID Column -->
           <ng-container matColumnDef="pattern_ID">
-            <th *matHeaderCellDef style="min-width: 130px" mat-sort-header>Pattern ID</th>
-            <td align="left" *matCellDef="let element">{{ element.pattern_ID }}</td>
+            <th *matHeaderCellDef style="min-width: 130px" mat-sort-header>Pattern</th>
+            <td align="left" *matCellDef="let element">{{ element.pattern_name }}</td>
           </ng-container>
 
           <!-- Size ID Column -->
@@ -57,7 +57,13 @@
           <!-- Product Type ID Column -->
           <ng-container matColumnDef="product_TYPE_ID">
             <th *matHeaderCellDef style="min-width: 150px" mat-sort-header>Product Type ID</th>
-            <td align="right" *matCellDef="let element">{{ element.product_TYPE_ID }}</td>
+            <td align="left" *matCellDef="let element">{{ element.product_type_name }}</td>
+          </ng-container>
+
+          <!-- Description Column -->
+          <ng-container matColumnDef="description">
+            <th *matHeaderCellDef style="min-width: 200px" mat-sort-header>Description</th>
+            <td align="left" *matCellDef="let element">{{ element.description }}</td>
           </ng-container>
 
           <!-- Description Column -->

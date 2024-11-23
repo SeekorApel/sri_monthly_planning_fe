@@ -15,6 +15,8 @@ import { Item_Curing } from 'src/app/models/Item_Curing';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
+import { MachineCuringType } from 'src/app/models/machine-curing-type';
+import { MachineCuringTypeService } from 'src/app/services/master-data/machine-curing-type/machine-curing-type.service';
 
 @Component({
   selector: 'app-view-ct-kapa',
@@ -30,12 +32,13 @@ export class ViewCtKapaComponent implements OnInit {
   isEditMode: boolean = false;
   file: File | null = null;
   editCtKapaForm: FormGroup;
-  public uomOptionData: Array<Select2OptionData>;
+  public uomOptionData: Array<Array<Select2OptionData>>;
   public options: Options = {
     width: '100%',
     minimumResultsForSearch: 0,
   };
   itemCurings: Item_Curing[];
+  CuringType: MachineCuringType[];
   // Pagination
   pageOfItems: Array<any>;
   pageSize: number = 5;
@@ -43,7 +46,7 @@ export class ViewCtKapaComponent implements OnInit {
   displayedColumns: string[] = ['no', 'id_CT_KAPA', 'item_CURING', 'type_CURING', 'description', 'cycle_TIME', 'shift', 'kapa_PERSHIFT', 'last_UPDATE_DATA', 'machine', 'status', 'action'];
   dataSource: MatTableDataSource<CtKapa>;
 
-  constructor(private ctkapaService: CtKapaService, private ItemCuring: ItemCuringService, private fb: FormBuilder) {
+  constructor(private ctkapaService: CtKapaService, private ItemCuring: ItemCuringService, private CuringStypeService: MachineCuringTypeService, private fb: FormBuilder) {
     this.editCtKapaForm = this.fb.group({
       itemCuring: ['', Validators.required],
       typeCuring: ['', Validators.required],
@@ -55,6 +58,7 @@ export class ViewCtKapaComponent implements OnInit {
       machine: ['', Validators.required],
     });
     this.loadItemCuring();
+    this.loadCuringType();
   }
   private loadItemCuring(): void {
     this.ItemCuring.getAllItemCuring().subscribe(
@@ -65,9 +69,28 @@ export class ViewCtKapaComponent implements OnInit {
           this.uomOptionData = [];
         }
 
-        this.uomOptionData = this.itemCurings.map((element) => ({
+        this.uomOptionData[0] = this.itemCurings.map((element) => ({
           id: element.item_CURING.toString(), // Ensure the ID is a string
           text: element.item_CURING, // Set the text to the name (or other property)
+        }));
+      },
+      (error) => {
+        this.errorMessage = 'Failed to load item curing: ' + error.message;
+      }
+    );
+  }
+  private loadCuringType(): void {
+    this.CuringStypeService.getAllMCT().subscribe(
+      (response: ApiResponse<MachineCuringType[]>) => {
+        this.CuringType = response.data;
+
+        if (!this.uomOptionData) {
+          this.uomOptionData = [];
+        }
+
+        this.uomOptionData[1] = this.CuringType.map((element) => ({
+          id: element.machinecuringtype_ID.toString(), // Ensure the ID is a string
+          text: element.machinecuringtype_ID.toString(), // Set the text to the name (or other property)
         }));
       },
       (error) => {
@@ -153,6 +176,7 @@ export class ViewCtKapaComponent implements OnInit {
   }
 
   updatePattern(): void {
+    console.log(this.editCtKapaObject);
     this.ctkapaService.updateCtKapa(this.editCtKapaObject).subscribe(
       (response) => {
         // SweetAlert setelah update berhasil
@@ -180,7 +204,7 @@ export class ViewCtKapaComponent implements OnInit {
     $('#editModal').modal('show');
   }
   getItemCuringType(itemCuring: number): string {
-    const item_curing = this.itemCurings.find(c => c.item_CURING === itemCuring.toString());
+    const item_curing = this.itemCurings.find((c) => c.item_CURING === itemCuring.toString());
     return item_curing ? item_curing.machine_TYPE : 'Tidak Ada';
   }
 

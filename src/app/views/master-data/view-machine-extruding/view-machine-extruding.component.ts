@@ -55,10 +55,6 @@ export class ViewMachineExtrudingComponent implements OnInit {
     });
     this.loadBuilding();
   }
-  getBuildingName(buildingId: number): string {
-    const building = this.buildings.find(b => b.building_ID === buildingId);
-    return building ? building.building_NAME : 'Unknown';
-  }
 
   ngOnInit(): void {
     this.getAllMachineExtruding();
@@ -84,7 +80,15 @@ export class ViewMachineExtrudingComponent implements OnInit {
   getAllMachineExtruding(): void {
     this.MEService.getAllMachineExtruding().subscribe(
       (response: ApiResponse<MachineExtruding[]>) => {
-        this.machineExtudings = response.data;
+        this.machineExtudings = response.data.map(machineEx => {
+          const building = this.buildings.find(
+            b => b.building_ID === machineEx.building_ID
+          );
+          return {
+            ...machineEx,
+            building_Name: building ? building.building_NAME : 'Unknown',
+          };
+        });
         this.dataSource = new MatTableDataSource(this.machineExtudings);
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
@@ -106,7 +110,7 @@ export class ViewMachineExtrudingComponent implements OnInit {
 
   resetSearch(): void {
     this.searchText = '';
-    this.onChangePage(this.machineExtudings.slice(0, this.pageSize));
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
   }
 
   updateMachineExtruding(): void {
