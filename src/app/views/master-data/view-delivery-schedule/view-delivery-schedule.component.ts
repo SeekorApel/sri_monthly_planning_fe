@@ -77,14 +77,6 @@ export class ViewDeliveryScheduleComponent implements OnInit {
 
   onSearchChange(): void {
     this.dataSource.filter = this.searchText.trim().toLowerCase();
-    // Lakukan filter berdasarkan nama plant yang mengandung text pencarian (case-insensitive)
-    // const filteredDeliverySchedul = this.deliverySchedules.filter((deliverySchedule) => 
-    // deliverySchedule.effective_TIME.toString().includes(this.searchText) ||
-    // deliverySchedule.date_ISSUED.toString().includes(this.searchText) ||
-    // deliverySchedule.category.toLowerCase().includes(this.searchText.toLowerCase()));
-
-    // // Tampilkan hasil filter pada halaman pertama
-    // this.onChangePage(filteredDeliverySchedul.slice(0, this.pageSize));
   }
 
   resetSearch(): void {

@@ -67,7 +67,19 @@ export class ViewBDistanceComponent implements OnInit {
   getAllBuildingDistance(): void {
     this.bdistanceService.getAllBuildingDistance().subscribe(
       (response: ApiResponse<BDistance[]>) => {
-        this.bdistances = response.data;
+        this.bdistances = response.data.map(bdistance => {
+          const building1 = this.buildings.find(
+            bd => bd.building_ID === bdistance.building_ID_1
+          );
+          const building2 = this.buildings.find(
+            bd => bd.building_ID === bdistance.building_ID_2
+          );
+          return {
+            ...bdistance,
+            building_1: building1 ? building1.building_NAME : 'Unknown',
+            building_2: building2 ? building2.building_NAME : 'Unknown',
+          }
+        });
         this.isDataEmpty = this.bdistances.length === 0; // Update status data kosong
         this.dataSource = new MatTableDataSource(this.bdistances);
         this.dataSource.sort = this.sort;
@@ -91,7 +103,7 @@ export class ViewBDistanceComponent implements OnInit {
 
   resetSearch(): void {
     this.searchText = '';
-    this.onChangePage(this.bdistances.slice(0, this.pageSize));
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
   }
   private loadBuilding(): void {
     this.buildingService.getAllBuilding().subscribe(

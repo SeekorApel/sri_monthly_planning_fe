@@ -32,7 +32,7 @@ export class ViewProductComponent implements OnInit {
   products: Product[] = [];
   searchText: string = '';
   errorMessage: string | null = null;
-  editProductTypeObject: Product = new Product();
+  editProductObject: Product = new Product();
   isEditMode: boolean = false;
   file: File | null = null;
   editProductTypeForm: FormGroup;
@@ -50,7 +50,7 @@ export class ViewProductComponent implements OnInit {
   pageOfItems: Array<any>;
   pageSize: number = 5;
   totalPages: number = 5;
-  displayedColumns: string[] = ['no', 'part_NUMBER', 'item_CURING', 'pattern_ID', 'size_ID', 'product_TYPE_ID', 'qty_PER_RAK', 'upper_CONSTANT', 'lower_CONSTANT', 'ext_DESCRIPTION', 'item_EXT', 'item_ASSY', 'wib_TUBE', 'rim', 'description', 'status', 'action'];
+  displayedColumns: string[] = ['no', 'part_NUMBER', 'item_CURING', 'pattern_ID', 'size_ID', 'product_TYPE_ID', 'description', 'qty_PER_RAK', 'upper_CONSTANT', 'lower_CONSTANT', 'ext_DESCRIPTION', 'item_EXT', 'item_ASSY', 'wib_TUBE', 'rim', 'status', 'action'];
   dataSource: MatTableDataSource<Product>;
 
   @ViewChild(MatSort) sort: MatSort;
@@ -62,6 +62,7 @@ export class ViewProductComponent implements OnInit {
       pattern: ['', Validators.required],
       size: ['', Validators.required],
       productType: ['', Validators.required],
+      description: ['', Validators.required],
       qty: ['', Validators.required],
       upper: ['', Validators.required],
       lower: ['', Validators.required],
@@ -70,7 +71,6 @@ export class ViewProductComponent implements OnInit {
       itemAssy: ['', Validators.required],
       wibTube: ['', Validators.required],
       rim: ['', Validators.required],
-      description: ['', Validators.required],
     });
 
     this.loadItemCuring();
@@ -124,7 +124,7 @@ export class ViewProductComponent implements OnInit {
         }
         this.uomOptionData[3] = this.productTypes.map((element) => ({
           id: element.product_TYPE_ID.toString(), // Ensure the ID is a string
-          text: element.product_TYPE, // Set the text to the name (or other property)
+          text: element.category, // Set the text to the name (or other property)
         }));
       },
       (error) => {
@@ -151,7 +151,7 @@ export class ViewProductComponent implements OnInit {
     );
   }
   getPatternName(patternID: number): string {
-    const pattern = this.patterns.find(p => p.pattern_ID === patternID);
+    const pattern = this.patterns.find((p) => p.pattern_ID === patternID);
     return pattern ? pattern.pattern_NAME : 'Unknown';
   }
 
@@ -188,7 +188,17 @@ export class ViewProductComponent implements OnInit {
   getAllProduct(): void {
     this.productService.getAllProduct().subscribe(
       (response: ApiResponse<Product[]>) => {
-        this.products = response.data;
+        this.products = response.data.map((produk) => {
+          const pattern2 = this.patterns.find((p) => p.pattern_ID == Number(produk.pattern_ID));
+          const size_id = this.sizes.find((s) => Number(s.size_ID) === produk.size_ID);
+          const product_type = this.productTypes.find((pt) => pt.product_TYPE_ID === produk.product_TYPE_ID);
+          return {
+            ...produk,
+            pattern_name: pattern2 ? pattern2.pattern_NAME : 'Unknow',
+            size_name: size_id ? size_id.description : 'Unknow',
+            product_type_name: product_type ? product_type.category : 'Unknow',
+          };
+        });
         this.dataSource = new MatTableDataSource(this.products);
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
@@ -215,7 +225,7 @@ export class ViewProductComponent implements OnInit {
   }
 
   updateProduct(): void {
-    this.productService.updateProduct(this.editProductTypeObject).subscribe(
+    this.productService.updateProduct(this.editProductObject).subscribe(
       (response) => {
         // SweetAlert setelah update berhasil
         Swal.fire({
@@ -245,7 +255,7 @@ export class ViewProductComponent implements OnInit {
   getProductById(partNum: number): void {
     this.productService.getProductById(partNum).subscribe(
       (response: ApiResponse<Product>) => {
-        this.editProductTypeObject = response.data;
+        this.editProductObject = response.data;
       },
       (error) => {
         this.errorMessage = 'Failed to load Product: ' + error.message;

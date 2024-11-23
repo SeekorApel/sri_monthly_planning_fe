@@ -76,7 +76,7 @@ export class ViewMachineCuringTypeComponent implements OnInit {
 
         this.uomOptionData = this.settings.map((element) => ({
           id: element.setting_ID.toString(), // Ensure the ID is a string
-          text: element.description, // Set the text to the name (or other property)
+          text: element.setting_KEY, // Set the text to the name (or other property)
         }));
       },
       (error) => {
@@ -88,7 +88,13 @@ export class ViewMachineCuringTypeComponent implements OnInit {
   getAllMachineCuringType(): void {
     this.machineCuringTypeService.getAllMCT().subscribe(
       (response: ApiResponse<MachineCuringType[]>) => {
-        this.machineCuringTypes = response.data;
+        this.machineCuringTypes = response.data.map(curingT => {
+          const setting = this.settings.find(setting => setting.setting_ID === curingT.setting_ID);
+          return {
+            ...curingT,
+            setting_key: setting ? setting.setting_KEY : 'Unknown',
+          }
+        })
         this.dataSource = new MatTableDataSource(this.machineCuringTypes);
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
@@ -110,7 +116,7 @@ export class ViewMachineCuringTypeComponent implements OnInit {
 
   resetSearch(): void {
     this.searchText = '';
-    this.onChangePage(this.machineCuringTypes.slice(0, this.pageSize));
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
   }
 
   updateMCT(): void {

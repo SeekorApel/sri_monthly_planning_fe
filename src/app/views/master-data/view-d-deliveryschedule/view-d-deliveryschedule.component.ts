@@ -22,6 +22,7 @@ import { MatPaginator } from '@angular/material/paginator';
   templateUrl: './view-d-deliveryschedule.component.html',
   styleUrls: ['./view-d-deliveryschedule.component.scss'],
 })
+
 export class ViewDDeliveryScheduleComponent implements OnInit {
   //Variable Declaration
   ddeliveryScedules: DDeliverySchedule[] = [];
@@ -71,17 +72,23 @@ export class ViewDDeliveryScheduleComponent implements OnInit {
   getAllDDeliverySchedule(): void {
     this.ddeliveryschedule.getAllDDeliverySchedule().subscribe(
       (response: ApiResponse<DDeliverySchedule[]>) => {
-        this.ddeliveryScedules = response.data;
+        this.ddeliveryScedules = response.data.map(element => {
+          // Create a new object with the formatted date
+          return {
+            ...element, // Keep all other properties
+            formattedDate: new Date(element.date_DS).toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' })
+          };
+        });
         this.dataSource = new MatTableDataSource(this.ddeliveryScedules);
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
-        // this.onChangePage(this.ddeliveryScedules.slice(0, this.pageSize));
       },
       (error) => {
         this.errorMessage = 'Failed to load Detail Delivery Schedule: ' + error.message;
       }
     );
   }
+  
   private loadDeliverySchedule(): void {
     this.DeliveryScheduleService.getAllDeliverySchedule().subscribe(
       (response: ApiResponse<DeliverySchedule[]>) => {
@@ -149,7 +156,7 @@ export class ViewDDeliveryScheduleComponent implements OnInit {
 
   resetSearch(): void {
     this.searchText = '';
-    this.onChangePage(this.ddeliveryScedules.slice(0, this.pageSize));
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
   }
 
   updateDDeliverySchedule(): void {
