@@ -8,6 +8,7 @@ import {WorkDayService} from 'src/app/services/master-data/work-day/work-day.ser
 import { FormGroup, FormBuilder, FormControl } from '@angular/forms';
 import { WDHours } from 'src/app/models/WDHours';
 import { DWorkDay } from 'src/app/models/DWorkDay';
+import { WDHoursSpecific } from 'src/app/models/WDHoursSpecific';
 
 @Component({
   selector: 'app-view-work-day',
@@ -20,21 +21,21 @@ export class ViewWorkDayComponent implements OnInit {
   shift1Switches = Array(3).fill(true);
   shift1Reasons = Array(3).fill(new DWorkDay); 
   
-  perHourSwitches = Array(24).fill(true);
-  perHourReasons = Array(24).fill(''); 
+  perHourShift = new WDHoursSpecific;
+  perHourReasons = Array(3).fill(new DWorkDay); 
 
   ttSwitches = Array(3).fill(true);
   ttReasons = Array(3).fill('');
 
-  ttperHourSwitches = Array(24).fill(true);
-  ttperHourReasons = Array(24).fill(new DWorkDay); 
+  ttperHourSwitches = new WDHoursSpecific;
+  ttperHourReasons = Array(3).fill(new DWorkDay); 
 
   
   tlSwitches = Array(3).fill(true);
   tlReasons = Array(3).fill(new DWorkDay); 
 
-  tlperHourSwitches = Array(24).fill(true);
-  tlperHourReasons = Array(24).fill(''); 
+  tlperHourSwitches = new WDHoursSpecific;
+  tlperHourReasons = Array(3).fill(new DWorkDay); 
 
   overTimeSwitch = false;
   
@@ -68,7 +69,6 @@ export class ViewWorkDayComponent implements OnInit {
       this.shift1Switches[2] = this.selectedDay.detail.iwd_SHIFT_2 ;
       this.shift1Switches[0] = this.selectedDay.detail.iwd_SHIFT_3 ;
     }
-    this.perHourSwitches = Array(24).fill(!this.overTimeSwitch);
   }
   isReasonRequired(shiftState: boolean): boolean {
     return !shiftState; 
@@ -76,24 +76,6 @@ export class ViewWorkDayComponent implements OnInit {
   isReasonRequiredPerHourSwitch(hourIndex: number): boolean {
     const shiftIndex = Math.floor(hourIndex / 8); 
     return !this.shift1Switches[shiftIndex];
-  }
-  isReasonRequiredPerHour(hourIndex: number): boolean {
-    const shiftIndex = Math.floor(hourIndex / 8); 
-    const isShiftActive = this.shift1Switches[shiftIndex];
-    const isSwitchOff = !this.perHourSwitches[hourIndex]; 
-  
-    // If the hour index is in range and the shift is active, return true if the switch is off
-    return hourIndex < 24 && isShiftActive && isSwitchOff;
-  }
-
-  changePerHour(shiftIndex: number){
-    const startIndex = shiftIndex * 8;
-    const endIndex = startIndex + 8;
-  
-    // Loop over the 8-hour block and update perHourSwitches based on shift1Switches
-    for (let i = startIndex; i < endIndex; i++) {
-      this.perHourSwitches[i] = this.shift1Switches[shiftIndex] ? true : false;
-    }
   }
   getdateselected(){
     const targetDate = new Date(this.calendar.year, this.selectedDay.month -1, this.selectedDay.days);
@@ -106,6 +88,7 @@ export class ViewWorkDayComponent implements OnInit {
     const yearValue = targetDate.getFullYear(); 
     return ( `${dayValue}-${monthValue}-${yearValue}`);
   }
+
   getdateselectedFlip(){
     const targetDate = new Date(this.calendar.year, this.selectedDay.month -1, this.selectedDay.days);
     const options: Intl.DateTimeFormatOptions = { weekday: 'long' }; 
@@ -313,15 +296,16 @@ export class ViewWorkDayComponent implements OnInit {
     const endHour = (hourIndex + 1).toString().padStart(2, '0'); // Format next hour as 01
     return `${startHour}:00 - ${endHour}:00`;
   }
+  getShiftIndex(i: number): number {
+    if (i === 0) return 3; 
+    return i; 
+  }
   loadHours() {
     if (!this.overTimeSwitch) {
-      this.workDayService.getDWorkDayHoursByDateDesc(this.getdateselected(),"WD_NORMAL").subscribe(
-        (response: ApiResponse<WDHours>) => {
+      this.workDayService.getDWorkDayHoursSpecificByDateDesc(this.getdateselected(),"WD_NORMAL").subscribe(
+        (response: ApiResponse<WDHoursSpecific>) => {
           if (response.data) {
-            this.work_days_hours = response.data;
-            for (let i = 0; i < 24; i++) {
-              this.perHourSwitches[i] = this.work_days_hours[`hour_${i + 1}`];
-            }
+            this.perHourShift = response.data;
           } else {
             this.createHours("WD_NORMAL");
           }
@@ -331,16 +315,11 @@ export class ViewWorkDayComponent implements OnInit {
         }
       );
     }else{
-      // console.log("ot");
-      this.workDayService.getDWorkDayHoursByDateDesc(this.getdateselected(),"OT_TT").subscribe(
-        (response: ApiResponse<WDHours>) => {
+      this.workDayService.getDWorkDayHoursSpecificByDateDesc(this.getdateselected(),"OT_TT").subscribe(
+        (response: ApiResponse<WDHoursSpecific>) => {
           if (response.data) {
-            this.work_days_hoursTT = response.data;
-            for (let i = 0; i < 24; i++) {
-              this.ttperHourSwitches[i] = this.work_days_hoursTT[`hour_${i + 1}`];
-            }
+            this.ttperHourSwitches = response.data;
           } else {
-            // console.log("create");
             this.createHours("OT_TT");
           }
         },
@@ -348,15 +327,11 @@ export class ViewWorkDayComponent implements OnInit {
           this.errorMessage = 'Failed to load work day hours: ' + error.message;
         }
       );
-      this.workDayService.getDWorkDayHoursByDateDesc(this.getdateselected(),"OT_TL").subscribe(
-        (response: ApiResponse<WDHours>) => {
+      this.workDayService.getDWorkDayHoursSpecificByDateDesc(this.getdateselected(),"OT_TL").subscribe(
+        (response: ApiResponse<WDHoursSpecific>) => {
           if (response.data) {
-            this.work_days_hoursTL = response.data;
-            for (let i = 0; i < 24; i++) {
-              this.tlperHourSwitches[i] = this.work_days_hoursTL[`hour_${i + 1}`];
-            }
+            this.tlperHourSwitches = response.data;
           } else {
-            // console.log("create");
             this.createHours("OT_TL");
           }
         },
@@ -369,139 +344,109 @@ export class ViewWorkDayComponent implements OnInit {
   
   updateHours(type: string,index: number){
     
-    const hour = "HOUR_"+(index+1);
-    const ftargetDate = this.getdateselected();
-    if(type === 'WD_NORMAL'){
-      if(this.perHourSwitches[index]){
-        this.workDayService.turnOnHour(ftargetDate,hour,type).subscribe(
-          (response: ApiResponse<WDHours>) => {
-            if (response.data) {
-              this.loadWorkday(); 
-            }
-          },
-          (error) => {
-            this.errorMessage = 'Failed to update work day hours: ' + error.message;
-          }
-        );
-      }else{
-        this.workDayService.turnOffHour(ftargetDate,hour,type).subscribe(
-          (response: ApiResponse<WDHours>) => {
-            if (response.data) {
-              this.loadWorkday(); 
-            } else {
-
-            }
-          },
-          (error) => {
-            this.errorMessage = 'Failed to update work day hours: ' + error.message;
-          }
-        );
-      }
-
-    }else if(type === 'OT_TT'){
-    console.log(ftargetDate+"/"+hour+"/"+type);
-      if(this.ttperHourSwitches[index]){
-        this.workDayService.turnOnHour(ftargetDate,hour,type).subscribe(
-          (response: ApiResponse<WDHours>) => {
-            if (response.data) {
-              console.log(response.data);
-              this.loadWorkday(); 
-            }
-          },
-          (error) => {
-            this.errorMessage = 'Failed to update work day hours: ' + error.message;
-          }
-        );
-      }else{
-        this.workDayService.turnOffHour(ftargetDate,hour,type).subscribe(
-          (response: ApiResponse<WDHours>) => {
-            if (response.data) {
-              this.loadWorkday(); 
-            } else {
-
-            }
-          },
-          (error) => {
-            this.errorMessage = 'Failed to update work day hours: ' + error.message;
-          }
-        );
-      }
-
-    }else if(type === 'OT_TL'){
-      if(this.tlperHourSwitches[index]){
-        this.workDayService.turnOnHour(ftargetDate,hour,type).subscribe(
-          (response: ApiResponse<WDHours>) => {
-            if (response.data) {
-              this.loadWorkday(); 
-            }
-          },
-          (error) => {
-            this.errorMessage = 'Failed to update work day hours: ' + error.message;
-          }
-        );
-      }else{
-        this.workDayService.turnOffHour(ftargetDate,hour,type).subscribe(
-          (response: ApiResponse<WDHours>) => {
-            if (response.data) {
-              this.loadWorkday(); 
-            } else {
-
-            }
-          },
-          (error) => {
-            this.errorMessage = 'Failed to update work day hours: ' + error.message;
-          }
-        );
-      }
-    }
   }
   createHours(desc: string) {
-    // Initialize buffer with all properties required by WDHours
-    const buffer: WDHours = {
+    const buffer: WDHoursSpecific = {
+      detail_WD_HOURS_SPECIFIC_ID: 1, 
       description: desc,
+      date_WD: this.getdateselectedFlip(), 
+      shift1_START_TIME: "07:10",
+      shift1_END_TIME: '15:50',
+      shift1_TOTAL_TIME: 520,
+      
+      shift2_START_TIME: '15:50',
+      shift2_END_TIME: '23:30',
+      shift2_TOTAL_TIME: 460,
+      
+      shift3_START_TIME: '23:30',
+      shift3_END_TIME: '07:10',
+      shift3_TOTAL_TIME: 460,
+
+      status: 1,
       created_BY: null,
       creation_DATE: null,
-      status: 1,
-      detail_WD_HOURS_ID: null, 
-      date_WD: this.getdateselectedFlip(), 
       last_UPDATED_BY: null,
       last_UPDATE_DATE: null, 
-      hour_1: 1,
-      hour_2: 1,
-      hour_3: 1,
-      hour_4: 1,
-      hour_5: 1,
-      hour_6: 1,
-      hour_7: 1,
-      hour_8: 1,
-      hour_9: 1,
-      hour_10: 1,
-      hour_11: 1,
-      hour_12: 1,
-      hour_13: 1,
-      hour_14: 1,
-      hour_15: 1,
-      hour_16: 1,
-      hour_17: 1,
-      hour_18: 1,
-      hour_19: 1,
-      hour_20: 1,
-      hour_21: 1,
-      hour_22: 1,
-      hour_23: 1,
-      hour_24: 1,
     };
 
-    this.workDayService.saveDWorkDayHours(buffer).subscribe(
-      (response: ApiResponse<WDHours>) => {
-        // console.log(response);
+    this.workDayService.saveDWorkDayHoursSpecific(buffer).subscribe(
+      (response: ApiResponse<WDHoursSpecific>) => {
         if (response) {
+          switch(response.data.description){
+            case "WD_NORMAL":
+              this.perHourShift = response.data;
+              break;
+            case "OT_TT":
+              this.ttperHourSwitches = response.data;
+              break;
+              case "OT_TL":
+              this.tlperHourSwitches = response.data;
+              break;
+          }
         }
       },
       (error) => {
-        this.errorMessage = 'Failed to create work day hours: ' + error.message;
+        this.errorMessage = 'Failed to create work day hours specific: ' + error.message;
       }
     );
+  }
+  convertTimeToMinutes(time: string): number {
+    const [hours, minutes] = time.split(':').map(Number);
+    return hours * 60 + minutes;
+  }
+  updateTotalTime(index: number): void {
+    const shiftIndex = this.getShiftIndex(index);
+    const startTime = this.perHourShift[`shift${shiftIndex}_START_TIME`];
+    const endTime = this.perHourShift[`shift${shiftIndex}_END_TIME`];
+
+    if (startTime && endTime) {
+      const start = this.convertTimeToMinutes(startTime);
+      const end = this.convertTimeToMinutes(endTime);
+
+      // Calculate total time in hours (handle overnight shifts)
+      const totalMinutes = end >= start ? end - start : 24 * 60 - start + end;
+      this.perHourShift[`shift${shiftIndex}_TOTAL_TIME`] = totalMinutes;
+    }
+  }
+
+  saveHour(buffer: WDHoursSpecific){
+    console.log("masuk");
+    this.workDayService.updateDWorkDayHoursSpecific(buffer).subscribe(
+      (response: ApiResponse<WDHoursSpecific>) => {
+        if (response) {
+          this.refreshWorkday();
+        }
+      },
+      (error) => {
+        this.errorMessage = 'Failed to save work day hours specific: ' + error.message;
+      }
+    );
+  }
+  getMinTime(index: number, type: 'start' | 'end'): string {
+    const minTimes = [
+      { start: '07:10', end: '15:50' }, // Shift 1
+      { start: '15:50', end: '23:30' }, // Shift 2
+      { start: '23:30', end: '07:10' }, // Shift 3
+    ];
+    
+    return minTimes[index][type];
+  }
+  
+  getMaxTime(index: number, type: 'start' | 'end'): string {
+    const maxTimes = [
+      { start: '15:50', end: '23:30' }, // Shift 1
+      { start: '23:30', end: '07:10' }, // Shift 2
+      { start: '07:10', end: '15:50' }, // Shift 3
+    ];
+  
+    return maxTimes[index][type];
+  }
+  
+  resetShiftTime(mode: 'perHourShift' | 'ttperHourSwitches' | 'tlperHourSwitches', index: number): void {
+    const shiftIndex = this.getShiftIndex(index);
+    this[mode][`shift${shiftIndex}_START_TIME`] = "00:00";
+    this[mode][`shift${shiftIndex}_END_TIME`] = "00:00";
+    this[mode][`shift${shiftIndex}_TOTAL_TIME`] = "0"; // Reset total time
   }
   
   
@@ -530,12 +475,14 @@ export class ViewWorkDayComponent implements OnInit {
       this.tabset.tabs[0].active = true;
       if (day.weekend) {
           this.weekend = true;
-          this.overTimeSwitch = true;
-          // this.handleOverTimeChange();
           this.title = "OverTime TT and TL";
         } else {
           this.weekend = false;
-          this.title = "Normal Work Day";
+          if(this.overTimeSwitch){
+            this.title = "OverTime TT and TL";
+          }else{
+            this.title = "Normal Work Day";
+          }
       }
     }
 
@@ -587,12 +534,7 @@ export class ViewWorkDayComponent implements OnInit {
   loadReason(){
     const dateToLoad = this.getdateselectedFlip();
     const hourIntervals = [
-      "00:00 - 01:00", "01:00 - 02:00", "02:00 - 03:00", "03:00 - 04:00",
-      "04:00 - 05:00", "05:00 - 06:00", "06:00 - 07:00", "07:00 - 08:00",
-      "08:00 - 09:00", "09:00 - 10:00", "10:00 - 11:00", "11:00 - 12:00",
-      "12:00 - 13:00", "13:00 - 14:00", "14:00 - 15:00", "15:00 - 16:00",
-      "16:00 - 17:00", "17:00 - 18:00", "18:00 - 19:00", "19:00 - 20:00",
-      "20:00 - 21:00", "21:00 - 22:00", "22:00 - 23:00", "23:00 - 24:00"
+      "Shift 3", "Shift 1", "Shift 2",
     ];
     
     this.workDayService.getDWorkDayByDate(this.getdateselected()).subscribe(
@@ -642,29 +584,75 @@ export class ViewWorkDayComponent implements OnInit {
         this.ttSwitches[1] = this.selectedDay.detail.iot_TT_1;
         this.ttSwitches[2] = this.selectedDay.detail.iot_TT_2;
 
-        this.ttReasons = Array(3).fill('');
-        this.ttperHourSwitches = Array(24).fill(true);
-        this.ttperHourReasons = Array(24).fill(''); 
-        
         this.tlSwitches[0] = this.selectedDay.detail.iot_TL_3;
         this.tlSwitches[1] = this.selectedDay.detail.iot_TL_1;
         this.tlSwitches[2] = this.selectedDay.detail.iot_TL_2;
-        
-        this.tlReasons = Array(3).fill(''); 
-        this.tlperHourSwitches = Array(24).fill(true);
-        this.tlperHourReasons = Array(24).fill(''); 
 
         this.weekend = this.selectedDay.weekend;
         this.loadHours();
   }
 
   overtimeOn() {
-    if (this.overTimeSwitch) {
-      this.workDayService.turnOnOvertime(this.getdateselected()).subscribe(
+    this.workDayService.turnOnOvertime(this.getdateselected()).subscribe(
+      (response: ApiResponse<WorkDay>) => {
+        if (response.data) {
+          this.selectDay(this.selectedDay);
+          this.tabset.tabs[1].active = true;
+          this.refreshWorkday();
+        }
+      },
+      (error) => {
+        this.errorMessage = 'Failed to update work day hours: ' + error.message;
+      }
+    );
+  }
+  OffWorkday(){
+    Object.assign(this.selectedDay.detail, {
+      iot_TL_1: 0,
+      iot_TL_2: 0,
+      iot_TL_3: 0,
+      iot_TT_1: 0,
+      iot_TT_2: 0,
+      iot_TT_3: 0,
+      iwd_SHIFT_1: 0,
+      iwd_SHIFT_2: 0,
+      iwd_SHIFT_3: 0,
+      off: 1
+    });
+    
+    this.workDayService.updateWorkDay(this.selectedDay.detail).subscribe(
+      (response: ApiResponse<WorkDay>) => {
+        if (response.data) {
+          this.refreshWorkday();
+          if(this.weekend){
+            // this.ove
+          }
+        }
+      },
+      (error) => {
+        this.errorMessage = 'Failed to update work day hours: ' + error.message;
+      }
+    );
+  }
+
+  OnWorkday(){
+    if(this.weekend){
+      Object.assign(this.selectedDay.detail, {
+        iot_TL_1: 1,
+        iot_TL_2: 1,
+        iot_TL_3: 1,
+        iot_TT_1: 1,
+        iot_TT_2: 1,
+        iot_TT_3: 1,
+        iwd_SHIFT_1: 0,
+        iwd_SHIFT_2: 0,
+        iwd_SHIFT_3: 0,
+        off: 1
+      });
+      
+      this.workDayService.updateWorkDay(this.selectedDay.detail).subscribe(
         (response: ApiResponse<WorkDay>) => {
           if (response.data) {
-            this.selectDay(this.selectedDay);
-            this.tabset.tabs[1].active = true;
             this.refreshWorkday();
           }
         },
@@ -672,58 +660,33 @@ export class ViewWorkDayComponent implements OnInit {
           this.errorMessage = 'Failed to update work day hours: ' + error.message;
         }
       );
-    } else {
-      if(this.weekend){
-        Object.assign(this.selectedDay.detail, {
-          iot_TL_1: 0,
-          iot_TL_2: 0,
-          iot_TL_3: 0,
-          iot_TT_1: 0,
-          iot_TT_2: 0,
-          iot_TT_3: 0,
-          iwd_SHIFT_1: 0,
-          iwd_SHIFT_2: 0,
-          iwd_SHIFT_3: 0,
-          off: 1
-        });
-        
-        this.workDayService.updateWorkDay(this.selectedDay.detail).subscribe(
-          (response: ApiResponse<WorkDay>) => {
-            if (response.data) {
-              this.refreshWorkday();
-            }
-          },
-          (error) => {
-            this.errorMessage = 'Failed to update work day hours: ' + error.message;
+    }else{
+      Object.assign(this.selectedDay.detail, {
+        iot_TL_1: 0,
+        iot_TL_2: 0,
+        iot_TL_3: 0,
+        iot_TT_1: 0,
+        iot_TT_2: 0,
+        iot_TT_3: 0,
+        iwd_SHIFT_1: 1,
+        iwd_SHIFT_2: 1,
+        iwd_SHIFT_3: 1,
+        off: 0
+      });
+      
+      this.workDayService.updateWorkDay(this.selectedDay.detail).subscribe(
+        (response: ApiResponse<WorkDay>) => {
+          if (response.data) {
+            this.refreshWorkday();
           }
-        );
-      }else{
-        Object.assign(this.selectedDay.detail, {
-          iot_TL_1: 0,
-          iot_TL_2: 0,
-          iot_TL_3: 0,
-          iot_TT_1: 0,
-          iot_TT_2: 0,
-          iot_TT_3: 0,
-          iwd_SHIFT_1: 1,
-          iwd_SHIFT_2: 1,
-          iwd_SHIFT_3: 1,
-          off: 0
-        });
-        
-        this.workDayService.updateWorkDay(this.selectedDay.detail).subscribe(
-          (response: ApiResponse<WorkDay>) => {
-            if (response.data) {
-              this.refreshWorkday();
-            }
-          },
-          (error) => {
-            this.errorMessage = 'Failed to update work day hours: ' + error.message;
-          }
-        );
-      }
+        },
+        (error) => {
+          this.errorMessage = 'Failed to update work day hours: ' + error.message;
+        }
+      );
     }
   }
+
   changeShiftOverTime(){
     Object.assign(this.selectedDay.detail, {
       iot_TL_1: this.tlSwitches[1] ? 1:0,
