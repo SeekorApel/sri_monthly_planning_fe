@@ -1,20 +1,18 @@
 .selected {
-    border: 2px solid #007bff; 
-    opacity: 0.4; 
+  border: 2px solid #007bff;
+  opacity: 0.4;
 }
 .navigation div {
-    font-size: 1.5rem; /* Adjust the font size as needed */
-    font-weight: bold; /* Make it bold */
+  font-size: 1.5rem; /* Adjust the font size as needed */
+  font-weight: bold; /* Make it bold */
 }
 .per-hour-wrapper {
-    display: flex;           /* Use flexbox for horizontal layout */
-    flex-wrap: wrap;         /* Allow wrapping if there are too many items */
-    gap: 10px;               /* Add space between items */
+  display: flex; /* Use flexbox for horizontal layout */
+  flex-wrap: wrap; /* Allow wrapping if there are too many items */
+  gap: 10px; /* Add space between items */
 }
 
 .per-hour-wrapper-item {
-    flex: 0 0 calc(30%);  /* Each item takes up half the width minus the gap */
-    box-sizing: border-box;      /* Ensure padding and border are included in width */
+  flex: 0 0 calc(30%); /* Each item takes up half the width minus the gap */
+  box-sizing: border-box; /* Ensure padding and border are included in width */
 }
-
-  

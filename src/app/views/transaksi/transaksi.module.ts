@@ -7,40 +7,26 @@ import { JwPaginationModule } from 'jw-angular-pagination';
 import { ModalModule } from 'ngx-bootstrap/modal';
 import { ToastrModule } from 'ngx-toastr';
 import { TransaksiRoutingModule } from './transaksi-routing.module';
-import { ViewMoPpcComponent } from './view-mo-ppc/view-mo-ppc.component';
-import { AddMoPpcComponent } from './add-mo-ppc/add-mo-ppc.component';
+import { ViewMoPpcComponent } from './view/view-mo-ppc/view-mo-ppc.component';
+import { AddMoPpcComponent } from './add/add-mo-ppc/add-mo-ppc.component';
 import { TabsModule } from 'ngx-bootstrap/tabs';
 import { ViewMonthlyPlanningComponent } from './view-monthly-planning/view-monthly-planning.component';
 import { AddMonthlyPlanningComponent } from './add-monthly-planning/add-monthly-planning.component';
-import { ViewMoMarketingComponent } from './view-mo-marketing/view-mo-marketing.component';
-import { AddMoMarketingComponent } from './add-mo-marketing/add-mo-marketing.component';
-import { EditMoPpcComponent } from './edit-mo-ppc/edit-mo-ppc.component';
-import { DetailViewMoPpcComponent } from './detail-view-mo-ppc/detail-view-mo-ppc.component';
-
-
+import { ViewMoMarketingComponent } from './view/view-mo-marketing/view-mo-marketing.component';
+import { AddMoMarketingComponent } from './add/add-mo-marketing/add-mo-marketing.component';
+import { EditMoPpcComponent } from './edit/edit-mo-ppc/edit-mo-ppc.component';
+import { DetailViewMoPpcComponent } from './detail-view/detail-view-mo-ppc/detail-view-mo-ppc.component';
+import { DetailViewMoMarketingComponent } from './detail-view-mo-marketing/detail-view-mo-marketing.component';
+import { EditMoMarketingComponent } from './edit/edit-mo-marketing/edit-mo-marketing.component';
+import { ViewDetailRevisiPpcComponent } from './detail-view-revisi/view-detail-revisi-ppc/view-detail-revisi-ppc.component';
+import { ViewDetailRevisiMarketingComponent } from './detail-view-revisi/view-detail-revisi-marketing/view-detail-revisi-marketing.component';
+import { MatSortModule } from '@angular/material/sort';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
-  declarations: [
-    ViewMoPpcComponent,
-    AddMoPpcComponent,
-    ViewMonthlyPlanningComponent,
-    AddMonthlyPlanningComponent,
-    ViewMoMarketingComponent,
-    AddMoMarketingComponent,
-    EditMoPpcComponent,
-    DetailViewMoPpcComponent
-  ],
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    NgxSpinnerModule,
-    NgSelect2Module,
-    JwPaginationModule,
-    TransaksiRoutingModule,
-    TabsModule,
-    ModalModule.forRoot(),
-    ToastrModule.forRoot()
-  ]
+  declarations: [ViewMoPpcComponent, AddMoPpcComponent, ViewMonthlyPlanningComponent, AddMonthlyPlanningComponent, ViewMoMarketingComponent, AddMoMarketingComponent, EditMoPpcComponent, DetailViewMoPpcComponent, DetailViewMoMarketingComponent, EditMoMarketingComponent, ViewDetailRevisiPpcComponent, ViewDetailRevisiMarketingComponent],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, NgxSpinnerModule, NgSelect2Module, JwPaginationModule, TransaksiRoutingModule, TabsModule, ModalModule.forRoot(), ToastrModule.forRoot(), MatSortModule, MatTableModule, MatPaginatorModule, MatTooltipModule],
 })
 export class TransaksiModule { }

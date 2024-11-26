@@ -11,7 +11,7 @@ import { map, catchError } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class SettingService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   // Method untuk menambahkan header Authorization dengan token
   private getHeaders() {
