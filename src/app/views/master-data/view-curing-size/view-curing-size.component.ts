@@ -38,7 +38,7 @@ export class ViewCuringSizeComponent implements OnInit {
   pageSize: number = 5;
   totalPages: number = 5;
   sortBuffer: Array<any>;
-  displayedColumns: string[] = ['no', 'curingsize_ID', 'machinecuringtype_ID','size_ID', 'capacity', 'status', 'action'];
+  displayedColumns: string[] = ['no', 'curingsize_ID', 'machinecuringtype_ID','size_NAME', 'capacity', 'status', 'action'];
   dataSource: MatTableDataSource<Curing_Size>;
 
   @ViewChild(MatSort) sort: MatSort;
@@ -104,6 +104,17 @@ export class ViewCuringSizeComponent implements OnInit {
     this.curingSizeService.getAllCuringSize().subscribe(
       (response: ApiResponse<Curing_Size[]>) => {
         this.curingSizes = response.data;
+        
+        this.curingSizes = this.curingSizes.map((curingSize) => {
+          const matchedSize = this.size.find(
+            (b) => b.size_ID === (curingSize.size_ID)
+          );
+  
+          return {
+            ...curingSize, // Salin semua properti quadrant
+            size_NAME: matchedSize ? matchedSize.description : null // Tambahkan building_NAME jika ada kecocokan
+          };
+        });
         this.dataSource = new MatTableDataSource(this.curingSizes);
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
@@ -134,6 +145,7 @@ export class ViewCuringSizeComponent implements OnInit {
 
   resetSearch(): void {
     this.searchText = '';
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
     this.onChangePage(this.curingSizes.slice(0, this.pageSize));
   }
 

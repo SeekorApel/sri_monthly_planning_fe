@@ -625,7 +625,6 @@ export class ViewWorkDayComponent implements OnInit {
         if (response.data) {
           this.refreshWorkday();
           if(this.weekend){
-            // this.ove
           }
         }
       },

@@ -24,3 +24,6 @@
 .centered-sorted-header {
     text-align: center;
 }
+::ng-deep .mat-sort-header-container {
+    justify-content: center;
+  }

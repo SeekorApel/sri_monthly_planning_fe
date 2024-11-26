@@ -81,11 +81,16 @@ export class ViewMachineTassTypeComponent implements OnInit {
   getAllMachineTassType(): void {
     this.mttService.getAllMachineTassType().subscribe(
       (response: ApiResponse<MachineTassType[]>) => {
-        this.mtt = response.data;
+        this.mtt = response.data.map(machineTassT => {
+          const setting = this.settings.find(setting => setting.setting_ID === machineTassT.setting_ID);
+          return {
+            ...machineTassT,
+            setting_key: setting ? setting.setting_KEY : 'Unknown',
+          }
+        })
         this.dataSource = new MatTableDataSource(this.mtt);
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
-        this.onChangePage(this.mtt.slice(0, this.pageSize));
       },
       (error) => {
         this.errorMessage = 'Failed to load machine tass types: ' + error.message;
@@ -128,7 +133,7 @@ export class ViewMachineTassTypeComponent implements OnInit {
 
   resetSearch(): void {
     this.searchText = '';
-    this.onChangePage(this.mtt.slice(0, this.pageSize));
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
   }
 
   updateMachineTassType(): void {

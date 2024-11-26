@@ -38,14 +38,14 @@
               <td class="huruf" *matCellDef="let element">{{ element.machinecuringtype_ID }}</td>
             </ng-container>
             
-            <ng-container matColumnDef="size_ID">
-              <th  *matHeaderCellDef mat-sort-header >Size ID</th>
-              <td class="huruf" *matCellDef="let element">{{ element.size_ID }}</td>
+            <ng-container matColumnDef="size_NAME">
+              <th  *matHeaderCellDef mat-sort-header >Description Size</th>
+              <td class="huruf" *matCellDef="let element">{{ element.size_NAME }}</td>
             </ng-container>
             
             <ng-container matColumnDef="capacity">
               <th  *matHeaderCellDef mat-sort-header >Capacity</th>
-              <td *matCellDef="let element">{{ element.capacity }}</td>
+              <td class="angka" *matCellDef="let element">{{ element.capacity }}</td>
             </ng-container>
   
             <ng-container matColumnDef="status">
@@ -121,7 +121,7 @@
             </div>
             <div class="form-group">
               <label for="capacity">Capacity</label>
-              <input [(ngModel)]="edtCuringSizeObject.capacity" type="text" class="form-control" id="capacity" formControlName="capacity" [ngClass]="{ 'is-invalid': editCuringSizeForm.get('capacity').invalid && editCuringSizeForm.get('capacity').touched }" />
+              <input [(ngModel)]="edtCuringSizeObject.capacity" type="number" min="0" class="form-control" id="capacity" formControlName="capacity" [ngClass]="{ 'is-invalid': editCuringSizeForm.get('capacity').invalid && editCuringSizeForm.get('capacity').touched }" />
               <!-- Error message if plantName is empty -->
               <div *ngIf="editCuringSizeForm.get('capacity').invalid && editCuringSizeForm.get('capacity').touched" class="invalid-feedback">Capacity is required.</div>
             </div>

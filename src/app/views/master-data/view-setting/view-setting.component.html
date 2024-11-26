@@ -30,22 +30,22 @@
 
           <ng-container matColumnDef="setting_ID">
             <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Setting ID</th>
-            <td  *matCellDef="let element">{{ element.setting_ID }}</td>
+            <td class="angka" *matCellDef="let element">{{ element.setting_ID }}</td>
           </ng-container>
 
           <ng-container matColumnDef="setting_KEY">
             <th  *matHeaderCellDef mat-sort-header >Setting Key</th>
-            <td *matCellDef="let element">{{ element.setting_KEY }}</td>
+            <td class="huruf" *matCellDef="let element">{{ element.setting_KEY }}</td>
           </ng-container>
           
           <ng-container matColumnDef="setting_VALUE">
             <th  *matHeaderCellDef mat-sort-header >Setting Value</th>
-            <td *matCellDef="let element">{{ element.setting_VALUE }}</td>
+            <td class="huruf" *matCellDef="let element">{{ element.setting_VALUE }}</td>
           </ng-container>
           
           <ng-container matColumnDef="description">
             <th  *matHeaderCellDef mat-sort-header >Description</th>
-            <td *matCellDef="let element">{{ element.description }}</td>
+            <td class="huruf" *matCellDef="let element">{{ element.description }}</td>
           </ng-container>
 
           <ng-container matColumnDef="status">

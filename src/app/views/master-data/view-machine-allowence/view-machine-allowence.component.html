@@ -28,13 +28,13 @@
             <td  *matCellDef="let element; let i = index">{{ i + 1 }}</td>
           </ng-container>
 
-          <ng-container matColumnDef="machine_ALLOW_ID">
+          <!-- <ng-container matColumnDef="machine_ALLOW_ID">
             <th class="centered-sorted-header" style="min-width: 150px;" *matHeaderCellDef mat-sort-header >Machine Allow ID</th>
             <td class="angka" *matCellDef="let element">{{ element.machine_ALLOW_ID }}</td>
-          </ng-container>
+          </ng-container> -->
 
           <ng-container matColumnDef="id_MACHINE">
-            <th  *matHeaderCellDef mat-sort-header >Machine ID</th>
+            <th  *matHeaderCellDef mat-sort-header >Work Center Text</th>
             <td class="huruf" *matCellDef="let element">{{ element.id_MACHINE }}</td>
           </ng-container>
           
@@ -53,10 +53,10 @@
             <td class="angka" *matCellDef="let element">{{ element.shift_2 }}</td>
           </ng-container>
 
-          <ng-container matColumnDef="shift_3">
+          <!-- <ng-container matColumnDef="shift_3">
             <th  *matHeaderCellDef mat-sort-header style="min-width: 80px;">Shift 3</th>
             <td class="angka" *matCellDef="let element">{{ element.shift_3 }}</td>
-          </ng-container>
+          </ng-container> -->
 
           <ng-container matColumnDef="shift_1_FRIDAY">
             <th  *matHeaderCellDef mat-sort-header style="min-width: 120px;">Shift 1 Friday</th>

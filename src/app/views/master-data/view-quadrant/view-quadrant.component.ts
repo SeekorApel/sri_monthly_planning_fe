@@ -10,14 +10,11 @@ import { saveAs } from 'file-saver';
 import { Select2OptionData } from 'ng-select2';
 import { Options } from 'select2';
 
-
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { Building } from 'src/app/models/Building';
 import { BuildingService } from 'src/app/services/master-data/building/building.service';
-
-
 
 @Component({
   selector: 'app-view-quadrant',
@@ -39,7 +36,7 @@ export class ViewQuadrantComponent implements OnInit {
   pageSize: number = 5;
   totalPages: number = 5;
   sortBuffer: Array<any>;
-  displayedColumns: string[] = ['no', 'quadrant_ID', 'building_NAME', 'quadrant_NAME', 'status', 'action'];
+  displayedColumns: string[] = ['no', 'quadrant_ID', 'building_NAME','quadrant_NAME','status', 'action'];
   dataSource: MatTableDataSource<Quadrant>;
 
   @ViewChild(MatSort) sort: MatSort;
@@ -69,6 +66,11 @@ export class ViewQuadrantComponent implements OnInit {
     );
   }
 
+  getBuildingName(building_ID: number): string {
+    const building = this.building.find(b => b.building_ID === building_ID);
+    return building ? building.building_NAME : 'Unknown';
+  }
+
   ngOnInit(): void {
     this.getAllQuadrant();
   }
@@ -88,7 +90,6 @@ export class ViewQuadrantComponent implements OnInit {
             building_NAME: matchedBuilding ? matchedBuilding.building_NAME : null // Tambahkan building_NAME jika ada kecocokan
           };
         });
-
         this.dataSource = new MatTableDataSource(this.quadrants);
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
@@ -112,6 +113,7 @@ export class ViewQuadrantComponent implements OnInit {
 
   resetSearch(): void {
     this.searchText = '';
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
     this.onChangePage(this.quadrants.slice(0, this.pageSize));
   }
 

@@ -1,5 +1,5 @@
 export class MachineCuringType {
-  machinecuringtype_ID: number;
+  machinecuringtype_ID: string;
   setting_ID: number;  
   description: string;   
   cavity: number;
