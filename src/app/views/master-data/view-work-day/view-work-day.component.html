@@ -311,6 +311,7 @@
                     <input
                       type="time"
                       [(ngModel)]="ttperHourSwitches['shift' + getShiftIndex(i) + '_START_TIME']"
+                      (change)="updateTotalTimeOTTT(i)"
                       class="form-control"
                     />
                   </label>
@@ -319,6 +320,7 @@
                     <input
                       type="time"
                       [(ngModel)]="ttperHourSwitches['shift' +  getShiftIndex(i) + '_END_TIME']"
+                      (change)="updateTotalTimeOTTT(i)"
                       class="form-control"
                     />
                   </label>
@@ -328,6 +330,7 @@
                       type="number"
                       [(ngModel)]="ttperHourSwitches['shift' +  getShiftIndex(i) + '_TOTAL_TIME']"
                       class="form-control"
+                      disabled
                     />
                   </label>
                   <button type="button" class="btn btn-warning" (click)="resetShiftTime('ttperHourSwitches', i)">Reset Time</button>
@@ -353,6 +356,7 @@
                     <input
                       type="time"
                       [(ngModel)]="tlperHourSwitches['shift' + getShiftIndex(i) + '_START_TIME']"
+                      (change)="updateTotalTimeOTTL(i)"
                       class="form-control"
                     />
                   </label>
@@ -361,6 +365,7 @@
                     <input
                       type="time"
                       [(ngModel)]="tlperHourSwitches['shift' +  getShiftIndex(i) + '_END_TIME']"
+                      (change)="updateTotalTimeOTTL(i)"
                       class="form-control"
                     />
                   </label>
@@ -370,6 +375,7 @@
                       type="number"
                       [(ngModel)]="tlperHourSwitches['shift' +  getShiftIndex(i) + '_TOTAL_TIME']"
                       class="form-control"
+                      disabled
                     />
                   </label>
                   <button type="button" class="btn btn-warning" (click)="resetShiftTime('tlperHourSwitches', i)">Reset Time</button>

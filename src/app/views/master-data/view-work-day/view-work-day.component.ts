@@ -409,6 +409,35 @@ export class ViewWorkDayComponent implements OnInit {
     }
   }
 
+  updateTotalTimeOTTT(index: number): void {
+    const shiftIndex = this.getShiftIndex(index);
+    const startTime = this.ttperHourSwitches[`shift${shiftIndex}_START_TIME`];
+    const endTime = this.ttperHourSwitches[`shift${shiftIndex}_END_TIME`];
+
+    if (startTime && endTime) {
+      const start = this.convertTimeToMinutes(startTime);
+      const end = this.convertTimeToMinutes(endTime);
+
+      // Calculate total time in hours (handle overnight shifts)
+      const totalMinutes = end >= start ? end - start : 24 * 60 - start + end;
+      this.ttperHourSwitches[`shift${shiftIndex}_TOTAL_TIME`] = totalMinutes;
+    }
+  }
+  updateTotalTimeOTTL(index: number): void {
+    const shiftIndex = this.getShiftIndex(index);
+    const startTime = this.tlperHourSwitches[`shift${shiftIndex}_START_TIME`];
+    const endTime = this.tlperHourSwitches[`shift${shiftIndex}_END_TIME`];
+
+    if (startTime && endTime) {
+      const start = this.convertTimeToMinutes(startTime);
+      const end = this.convertTimeToMinutes(endTime);
+
+      // Calculate total time in hours (handle overnight shifts)
+      const totalMinutes = end >= start ? end - start : 24 * 60 - start + end;
+      this.tlperHourSwitches[`shift${shiftIndex}_TOTAL_TIME`] = totalMinutes;
+    }
+  }
+
   saveHour(buffer: WDHoursSpecific){
     console.log("masuk");
     this.workDayService.updateDWorkDayHoursSpecific(buffer).subscribe(
