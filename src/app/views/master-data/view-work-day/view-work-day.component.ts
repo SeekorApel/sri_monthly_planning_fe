@@ -439,7 +439,6 @@ export class ViewWorkDayComponent implements OnInit {
   }
 
   saveHour(buffer: WDHoursSpecific){
-    console.log("masuk");
     this.workDayService.updateDWorkDayHoursSpecific(buffer).subscribe(
       (response: ApiResponse<WDHoursSpecific>) => {
         if (response) {
