@@ -598,7 +598,7 @@
         <!-- Table -->
         <div class="table-responsive">
           <table mat-table matSort #sortDmo="matSort" [dataSource]="dataSourceDmo" class="table table-bordered table-sm">
-            
+           
             <ng-container matColumnDef="no" sticky>
               <th *matHeaderCellDef style="min-width: 50px" rowspan="2">No</th>
               <td mat-cell class="text-center" *matCellDef="let mo; let i = index">{{ i + 1 }}</td>
