@@ -1,5 +1,20 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
+import { MarketingOrder } from 'src/app/models/MarketingOrder';
+import { DetailDailyMonthlyPlanCuring } from 'src/app/models/DetailDailyMonthlPlanCuring';
+import { DetailMonthlyPlanningCuring } from 'src/app/models/DetailMonthlyPlanningCuring';
+import { DetailShiftMonthlyPlanCuring } from 'src/app/models/DetailShiftMonthlyPlanCuring';
+import { MonthlyDailyPlan } from 'src/app/models/DetailMonthlyPlan';
+
+import { ApiResponse } from 'src/app/response/Response';
+import { MarketingOrderService } from 'src/app/services/transaksi/marketing order/marketing-order.service';
+import { MonthlyPlanCuringService } from 'src/app/services/transaksi/monthly plan curing/monthly-plan-curing.service';
+import Swal from 'sweetalert2';
+import { MatTableDataSource } from '@angular/material/table';
+import { ParsingDateService } from 'src/app/utils/parsing-date/parsing-date.service';
+import { MatSort } from '@angular/material/sort';
+import { MatPaginator } from '@angular/material/paginator';
+
 declare var $: any;
 
 @Component({
@@ -15,250 +30,393 @@ export class AddMonthlyPlanningComponent implements OnInit {
   dateHeadersCurring: any[] = [];
   monthlyPlanningTass: any[] = [];
   dailyMonthlyPlanningTass: any[] = [];
+  shiftMonthlyPlanningTass: any[] = [];
 
+
+
+  detailMonthlyPlanCuring: DetailMonthlyPlanningCuring[] = [];
+  dailyMonthlyPlanningCuring: DetailDailyMonthlyPlanCuring[] = [];
+  shiftMonthlyPlanningCuring: DetailShiftMonthlyPlanCuring[] = [];
+  monthlyDailyPlan: MonthlyDailyPlan[] = [];
+  monly: MonthlyDailyPlan[] = [];
+  description: any[] = [];
+
+  marketingOrders: MarketingOrder[] = [];
+  searchText: string = '';
+  allData: any;
+  workCenterText: string = '';
+  kapaShift1: number = 0;
+  kapaShift2: number = 0;
+  kapaShift3: number = 0;
+  totalKapa: number = 0;
+  shift: number = 0;
+  wct: string = '';
+  changeDate: string = '';
+
+  // workCenterText: any[] = [];
+  // kapaShift1: number = 0;
+  // kapaShift2: number = 0;
+  // kapaShift3: number = 0;
+  // totalKapa: number = 0;
+  // shift: any[] = [];
+  // wct: any[] = [];
+  // changeDate: any[] = [];
+
+  // Pagination
+  pageOfItems: Array<any>;
+  pageSize: number = 5;
+  totalPages: number = 5;
+  displayedColumns: string[] = ['no', 'moId', 'type', 'dateValid', 'revisionPpc', 'revisionMarketing', 'month0', 'month1', 'month2', 'action'];
+  displayedColumnsMP: string[] = ['no', 'partNumber', 'dateDailyMp', 'totalPlan'];
+  childHeadersColumnsMP: string[] = ['workDay'];
+
+  dataSourceMO: MatTableDataSource<MarketingOrder>;
+  dataSourceMP: MatTableDataSource<any>;
+
+  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
   monthlyPlanningsCurring: any[] = [];
-  marketingOrders: any[] = [];
   showMonthlyPlanning: boolean = false;
 
   generateMonthlyPlanning() {
+    this.fillBodyTableMp();
+
     this.showMonthlyPlanning = true;
   }
-  constructor(private router: Router) { }
+
+  constructor(private router: Router, private moService: MarketingOrderService, private mpService: MonthlyPlanCuringService, private parseDateService: ParsingDateService) { }
 
   ngOnInit(): void {
-    this.fillDataMo();
-    this.fillDataHeaderDateTass();
-    this.fillBodyTableMp();
+    this.getAllMarketingOrder();
   }
 
-  // MP section
+  parseDate(dateParse: string): string {
+    return this.parseDateService.convertDateToString(dateParse);
+  }
 
-  openDmpModal(dailyMp: { idDetailDaily: number; countProduction: number }): void {
-    this.selectedDetail = dailyMp; // Simpan detail yang dipilih
-    // Tampilkan modal (jika Anda menggunakan jQuery)
-    $('#dmpModal').modal('show');
+  onSearchChange(): void {
+    this.dataSourceMO.filter = this.searchText.trim().toLowerCase();
+  }
+
+  resetSearch(): void {
+    this.searchText = '';
+    this.dataSourceMO.filter = '';
+  }
+
+  getAllMarketingOrder(): void {
+    this.moService.getAllMarketingOrder().subscribe(
+      (response: ApiResponse<MarketingOrder[]>) => {
+        this.marketingOrders = response.data;
+        if (this.marketingOrders.length === 0) {
+          Swal.fire({
+            icon: 'info',
+            title: 'No Data',
+            text: 'No marketing orders found.',
+            timer: null,
+            showConfirmButton: true,
+            confirmButtonText: 'Ok',
+          });
+        } else {
+          this.marketingOrders = response.data;
+          this.dataSourceMO = new MatTableDataSource(this.marketingOrders);
+          this.dataSourceMO.sort = this.sort;
+          this.dataSourceMO.paginator = this.paginator;
+        }
+      },
+      (error) => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Failed to load marketing orders: ' + error.message,
+          timer: 3000,
+          showConfirmButton: false,
+        });
+      }
+    );
+  }
+
+  navigateToDetailMo(m0: any, m1: any, m3: any, typeProduct: string) {
+    const formatDate = (date: any): string => {
+      const dateObj = date instanceof Date ? date : new Date(date);
+
+      if (isNaN(dateObj.getTime())) {
+        throw new Error('Invalid date provided');
+      }
+
+      const day = String(dateObj.getDate()).padStart(2, '0');
+      const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+      const year = dateObj.getFullYear();
+
+      return `${day}-${month}-${year}`;
+    };
+
+    // Mengonversi ketiga tanggal
+    const month0 = formatDate(m0);
+    const month1 = formatDate(m1);
+    const month2 = formatDate(m3);
+    const type = typeProduct;
+
+    // Menggunakan string tanggal yang sudah dikonversi
+    this.router.navigate(['/transaksi/add-mo-front-rear/', month0, month1, month2, type]);
   }
 
   fillBodyTableMp(): void {
-    const mockData = [
-      {
-        partNumber: 1030304034035,
-        size: "FED TR TT 2.50-17",
-        pattern: "FF 135F",
-        detailDaily: [
-          {
-            idDetailDaily: 684,
-            countProduction: 373
-          },
-          {
-            idDetailDaily: 260,
-            countProduction: 416
-          },
-          {
-            idDetailDaily: 491,
-            countProduction: 123
-          },
-          {
-            idDetailDaily: 299,
-            countProduction: 233
-          },
-          {
-            idDetailDaily: 712,
-            countProduction: 2
-          },
-          {
-            idDetailDaily: 863,
-            countProduction: 341
-          },
-          {
-            idDetailDaily: 945,
-            countProduction: 168
-          },
-          {
-            idDetailDaily: 971,
-            countProduction: 211
-          },
-          {
-            idDetailDaily: 793,
-            countProduction: 132
-          },
-          {
-            idDetailDaily: 245,
-            countProduction: 477
-          },
-          {
-            idDetailDaily: 812,
-            countProduction: 276
-          },
-          {
-            idDetailDaily: 614,
-            countProduction: 178
-          },
-          {
-            idDetailDaily: 520,
-            countProduction: 449
-          },
-          {
-            idDetailDaily: 242,
-            countProduction: 468
-          },
-          {
-            idDetailDaily: 55,
-            countProduction: 5
-          },
-          {
-            idDetailDaily: 411,
-            countProduction: 198
-          },
-          {
-            idDetailDaily: 443,
-            countProduction: 417
-          },
-          {
-            idDetailDaily: 537,
-            countProduction: 339
-          },
-          {
-            idDetailDaily: 188,
-            countProduction: 228
-          },
-          {
-            idDetailDaily: 410,
-            countProduction: 37
-          },
-          {
-            idDetailDaily: 353,
-            countProduction: 335
-          },
-          {
-            idDetailDaily: 150,
-            countProduction: 10
-          },
-          {
-            idDetailDaily: 430,
-            countProduction: 125
-          },
-          {
-            idDetailDaily: 352,
-            countProduction: 121
-          },
-          {
-            idDetailDaily: 364,
-            countProduction: 476
-          },
-          {
-            idDetailDaily: 701,
-            countProduction: 138
-          },
-          {
-            idDetailDaily: 173,
-            countProduction: 14
-          },
-          {
-            idDetailDaily: 261,
-            countProduction: 3
-          },
-          {
-            idDetailDaily: 400,
-            countProduction: 399
-          },
-          {
-            idDetailDaily: 844,
-            countProduction: 255
-          },
-          {
-            idDetailDaily: 658,
-            countProduction: 35
-          }
-        ]
+    this.getDailyMonthPlan();
+  }
+
+  // getDailyMonthPlan(partNumber: number) {
+  //   this.mpService.getDailyMonthlyPlan(partNumber).subscribe(
+  //     (response: ApiResponse<any>) => {
+  //       this.allData = response.data;
+  //       this.fillAllData(this.allData);
+  //     },
+  //     (error) => {
+  //       Swal.fire({
+  //         icon: 'error',
+  //         title: 'Error',
+  //         text: 'Failed to load marketing order details: ' + error.message,
+  //         confirmButtonText: 'OK',
+  //       });
+  //     }
+  //   );
+  // }
+
+  getDailyMonthPlan() {
+    this.mpService.getDailyMonthlyPlan().subscribe(
+      (response: ApiResponse<any>) => {
+        this.allData = response.data;
+        this.fillAllData(this.allData);
+      },
+      (error) => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Failed to load marketing order details: ' + error.message,
+          confirmButtonText: 'OK',
+        });
       }
-    ];
-
-    this.monthlyPlanningTass = mockData.map(item => ({
-      partNumber: item.partNumber,
-      size: item.size,
-      pattern: item.pattern,
-      detailDailyMp: item.detailDaily
-    }));
+    );
   }
 
-  // Fungsi untuk menghitung total countProduction
-  calculateTotal(): number {
-    return this.monthlyPlanningTass.reduce((acc, mpTass) => {
-      return acc + mpTass.detailDailyMp.reduce((subAcc, dailyMp) => subAcc + dailyMp.countProduction, 0);
-    }, 0);
+  getDetailShiftMonthlyPlan(detailDailyId: number, actualDate: string): void {
+    this.mpService.getDetailShiftMonthlyPlan(detailDailyId, actualDate).subscribe(
+      (response: ApiResponse<DetailShiftMonthlyPlanCuring[]>) => {
+        const data = response.data;
+
+        this.fillDataShift(data);
+        this.openDmpModal();
+      },
+      (error) => {
+        console.error('Error loading data:', error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Failed to load data: ' + (error?.message || 'Unknown error'),
+          confirmButtonText: 'OK',
+        });
+      }
+    );
   }
 
-  fillDataHeaderDateTass(): void {
-    const mockData = [
-      { header_day: "1", status: "normal", working_day: 1 },
-      { header_day: "2", status: "normal", working_day: 2 },
-      { header_day: "3", status: "overtime", working_day: 3 },
-      { header_day: "4", status: "normal", working_day: 4 },
-      { header_day: "5", status: "overtime", working_day: 5 },
-      { header_day: "6", status: "off", working_day: 5 },   // Minggu
-      { header_day: "7", status: "normal", working_day: 6 },
-      { header_day: "8", status: "overtime", working_day: 7 },
-      { header_day: "9", status: "normal", working_day: 8 },
-      { header_day: "10", status: "normal", working_day: 9 },
-      { header_day: "11", status: "overtime", working_day: 10 },
-      { header_day: "12", status: "normal", working_day: 11 },
-      { header_day: "13", status: "off", working_day: 11 },   // Minggu
-      { header_day: "14", status: "normal", working_day: 12 },
-      { header_day: "15", status: "normal", working_day: 13 },
-      { header_day: "16", status: "normal", working_day: 14 },
-      { header_day: "17", status: "normal", working_day: 15 },
-      { header_day: "18", status: "normal", working_day: 16 },
-      { header_day: "19", status: "overtime", working_day: 17 },
-      { header_day: "20", status: "off", working_day: 17 },   // Minggu
-      { header_day: "21", status: "normal", working_day: 18 },
-      { header_day: "22", status: "normal", working_day: 19 },
-      { header_day: "23", status: "normal", working_day: 20 },
-      { header_day: "24", status: "normal", working_day: 21 },
-      { header_day: "25", status: "overtime", working_day: 22 },
-      { header_day: "26", status: "normal", working_day: 23 },
-      { header_day: "27", status: "off", working_day: 23 },   // Minggu
-      { header_day: "28", status: "normal", working_day: 24 },
-      { header_day: "29", status: "normal", working_day: 25 },
-      { header_day: "30", status: "normal", working_day: 26 },
-      { header_day: "31", status: "normal", working_day: 27 }
-    ];
-
-    //Mapping data header
-    this.dateHeadersTass = mockData.map(header => ({
-      date: header.header_day,
-      isOff: header.status === "off",
-      isOvertime: header.status === "overtime",
-      status: header.status,
-      workingDay: header.working_day
-    }));
+  openDmpModal(): void {
+    $('#dmpModal').modal('show');
   }
+
+
+  handleCellClick(detailDailyId: number, hDateTass: any): void {
+    console.log('Selected detail id:', detailDailyId);
+    console.log('Selected Date:', hDateTass);
+
+    this.getDetailShiftMonthlyPlan(detailDailyId, hDateTass);
+  }
+
+  fillAllData(data: any) {
+    console.log(data);
+    const monthlyPlans = data.detailMonthlyPlanCuring || [];
+    const dailyPlans = data.detailDailyMonthlyPlanCuring || [];
+    const sizePa = data.sizePa || [];
+    this.description = data.description || [];
+
+    this.monly = dailyPlans;
+
+    this.fillDataHeaderDate(dailyPlans);
+
+    // Merging data based on `detailIdCuring`
+    let mergedData: any[] = [];
+
+    // Loop over each daily plan
+    dailyPlans.forEach((daily, index) => {
+      const matchingMonthly = monthlyPlans.find(
+        (monthly) => monthly.detailIdCuring === daily.detailIdCuring
+      );
+
+      const matchingSizePa = sizePa.find(
+        (sizeEntry) => sizeEntry.partNumber === (matchingMonthly?.partNumber || daily.partNumber)
+      );
+
+      const dailyData = {
+        no: index + 1,
+        partNumber: matchingMonthly?.partNumber || null,
+        size: matchingSizePa?.description || null, // Get size from sizePa
+        pattern: matchingSizePa?.patternName || null,
+        total: matchingMonthly?.total || null,
+        netFulfilment: matchingMonthly?.netFulfilment || null,
+        grossReq: matchingMonthly?.grossReq || null,
+        netReq: matchingMonthly?.netReq || null,
+        reqAhmOem: matchingMonthly?.reqAhmOem || null,
+        reqAhmRem: matchingMonthly?.reqAhmRem || null,
+        reqFdr: matchingMonthly?.reqFdr || null,
+        differenceOfs: matchingMonthly?.differenceOfs || null,
+
+        // Fields from daily plan
+        detailIdCuring: daily.detailIdCuring,
+        dateDailyMp: daily.dateDailyMp,
+        workDay: daily.workDay,
+        totalPlan: daily.totalPlan,
+      };
+      console.table("WFF" + dailyData);
+
+      const existingEntry = mergedData.find(
+        (entry) => entry.partNumber === dailyData.partNumber && entry.detailIdCuring === dailyData.detailIdCuring
+      );
+
+      if (!existingEntry) {
+        mergedData.push(dailyData);
+      }
+    });
+
+    // Update the monthlyDailyPlan with the merged data (only unique entries)
+    this.monthlyDailyPlan = mergedData;
+
+    console.table(this.monthlyDailyPlan);
+
+    this.dataSourceMP = new MatTableDataSource(this.monthlyDailyPlan);
+    this.dataSourceMP.sort = this.sort;
+    this.dataSourceMP.paginator = this.paginator;
+  }
+
+
+  fillDataHeaderDate(dailyPlans: MonthlyDailyPlan[]): void {
+    const uniqueDates = new Set(); // To track already used dates
+    this.dateHeadersTass = dailyPlans.map(mp => {
+      const date = new Date(mp.dateDailyMp);
+      const date2 = new Date(mp.dateDailyMp);
+
+      // Format the date to dd-MM-yyyy
+      const formattedDate = `${('0' + (date2.getDate())).slice(-2)}-${('0' + (date2.getMonth() + 1)).slice(-2)}-${date2.getFullYear()}`;
+      console.log('Formatted Date:', formattedDate);
+
+      const matchingData = this.description.find(
+        (header) => this.formatDate(header.dateDailyMp) === formattedDate
+      );
+
+      const i = 0;
+      // Check if the date has already been added
+      if (!uniqueDates.has(formattedDate)) {
+        uniqueDates.add(formattedDate); // Mark this date as used
+
+        return {
+          date: formattedDate,
+          dateDisplay: date.getDate().toString(),
+          isOff: matchingData.description === 'OFF', // Off day logic
+          isOvertime: matchingData.description === 'OT_TT' || matchingData.description === 'OT_TL', // Overtime day logic
+          semiOff: matchingData.description === 'SEMI_OFF',
+          status: mp.workDay === 0 ? 'off' : (mp.workDay > 8 ? 'overtime' : 'normal'),
+          workingDay: mp.workDay,
+          totalPlan: mp.totalPlan
+        };
+      }
+
+      return null; // Return null for duplicate dates
+    }).filter(header => header !== null); // Filter out any null values
+  }
+
+
+  getTotalPlan(idCuring: number, date: string): number | string {
+    // Cari data yang sesuai dengan idCuring dan tanggal
+    const matchingData = this.monly.find(
+      (header) => this.formatDate(header.dateDailyMp) === date && header.detailIdCuring === idCuring
+    );
+    return matchingData ? matchingData.totalPlan : '-';
+  }
+
+  formatDate(date: string | Date): string {
+    if (!date) {
+      return '';
+    }
+    const dateObj = new Date(date);
+
+    const formattedDate = `${('0' + (dateObj.getDate())).slice(-2)}-${('0' + (dateObj.getMonth() + 1)).slice(-2)}-${dateObj.getFullYear()}`;
+    return formattedDate;
+  }
+
+  fillDataShift(detailShiftMonthlyPlanCuring: DetailShiftMonthlyPlanCuring[]): void {
+    // Reset nilai
+    this.workCenterText = '';
+    this.kapaShift1 = 0;
+    this.kapaShift2 = 0;
+    this.kapaShift3 = 0;
+    this.totalKapa = 0;
+    this.shift= 0;
+    this.wct = '';
+    this.changeDate = '';
+
+    // Loop untuk mengisi data
+    detailShiftMonthlyPlanCuring.forEach((item) => {
+      this.workCenterText += item.workCenterText || this.workCenterText;
+      this.kapaShift1 += item.kapaShift1 || 0;
+      this.kapaShift2 += item.kapaShift2 || 0;
+      this.kapaShift3 += item.kapaShift3 || 0;
+      this.totalKapa += item.totalKapa || 0;
+      this.changeDate += this.formatDate(item.changeDate);
+      this.wct += item.wct === null? '': item.wct;
+      this.shift += item.shift;
+    });
+  }
+
+  // fillDataShift(detailShiftMonthlyPlanCuring: DetailShiftMonthlyPlanCuring[]): void {
+  //   // Reset nilai
+  //   this.workCenterText = [];
+  //   this.kapaShift1 = 0;
+  //   this.kapaShift2 = 0;
+  //   this.kapaShift3 = 0;
+  //   this.totalKapa = 0;
+  //   this.shift = [];  // Ubah menjadi array
+  //   this.wct = [];
+  //   this.changeDate = [];
+
+  //   // Loop untuk mengisi data
+  //   detailShiftMonthlyPlanCuring.forEach((item) => {
+  //     // Menambahkan ke array jika ada
+  //     if (item.workCenterText) {
+  //       this.workCenterText.push(item.workCenterText);
+  //     }
+  //     this.kapaShift1 += item.kapaShift1 || 0;
+  //     this.kapaShift2 += item.kapaShift2 || 0;
+  //     this.kapaShift3 += item.kapaShift3 || 0;
+  //     this.totalKapa += item.totalKapa || 0;
+
+  //     // Menggunakan formatDate untuk tanggal
+  //     if (item.changeDate) {
+  //       this.changeDate.push(this.formatDate(item.changeDate));
+  //     }
+
+  //     // Menambahkan ke array wct jika tidak null
+  //     if (item.wct !== null && item.wct !== undefined) {
+  //       this.wct.push(item.wct);
+  //     }
+
+  //     // Menambahkan nilai shift ke dalam array
+  //     if (item.shift !== undefined) {
+  //       this.shift.push(item.shift);
+  //     }
+  //   });
+  // }
 
   fillDataWorkDays(): void {
 
   }
-
-  //End MP Section
-
-  // Mo section
-  fillDataMo(): void {
-    this.marketingOrders = [
-      { no: 1, orderId: 'MO-001', type: 'FED', date: '2024-09-01', revision: 1, month1: 'AUG', month2: 'SEP', month3: 'OCT' },
-      { no: 2, orderId: 'MO-002', type: 'FDR', date: '2024-08-15', revision: 2, month1: 'NOV', month2: 'DEC', month3: 'JAN' },
-      { no: 3, orderId: 'MO-003', type: 'FED', date: '2024-09-05', revision: 1, month1: 'FEB', month2: 'MAR', month3: 'APR' },
-      { no: 4, orderId: 'MO-004', type: 'FDR', date: '2024-08-25', revision: 3, month1: 'AUG', month2: 'SEP', month3: 'OCT' },
-      { no: 5, orderId: 'MO-005', type: 'FED', date: '2024-09-10', revision: 1, month1: 'AUG', month2: 'SEP', month3: 'OCT' },
-    ];
-  }
-
-  selectAll(event: any) {
-    const checked = event.target.checked;
-    this.marketingOrders.forEach((order) => {
-      order.selected = checked;
-    });
-  }
-  // End Mo section
 
   navigateToViewMp() {
     this.router.navigate(['/transaksi/view-monthly-planning']);

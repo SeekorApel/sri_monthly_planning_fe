@@ -392,12 +392,11 @@ export const routes: Routes = [
         
       },
       {
-        path: 'transaksi/add-mo-front-rear',
+        path: 'transaksi/add-mo-front-rear/:month0/:month1/:month2/:type',
         component: AddMoFrontRearComponent,
         data: {
           title: 'Transaksi / Add Front Rear',
         },
-        
       },
       {
         path: 'base',

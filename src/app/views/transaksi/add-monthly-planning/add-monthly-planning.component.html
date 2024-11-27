@@ -71,63 +71,93 @@
       </div>
       <div class="card-body">
         <div class="d-flex justify-content-between mb-3">
-          <div class="d-flex">
-            <input type="text" id="searchInput" placeholder="Search..." class="form-control" style="width: 250px; display: inline" />
-            <button class="btn btn-primary ml-2" id="searchButton">Search</button>
+          <div class="d-flex align-items-center">
+            <input type="text" class="form-control col-md-12 col-lg-12" [(ngModel)]="searchText"
+              (input)="onSearchChange()" placeholder="Find here..." />
+            <button type="submit" class="btn btn-primary ml-2" (click)="resetSearch()">Reset</button>
           </div>
         </div>
         <div class="table-responsive">
-          <table class="table table-bordered table-striped table-sm">
-            <thead>
-              <tr align="center">
-                <th class="align-middle">
-                  <input type="checkbox" (change)="selectAll($event)" />
-                </th>
-                <th class="align-middle">No</th>
-                <th class="align-middle">Marketing Order ID</th>
-                <th class="align-middle">Type</th>
-                <th class="align-middle">Date</th>
-                <th class="align-middle">Revision PPC</th>
-                <th class="align-middle">Revision Marketing</th>
-                <th class="align-middle">Month 1</th>
-                <th class="align-middle">Month 2</th>
-                <th class="align-middle">Month 3</th>
-                <th class="align-middle">Action</th>
+          <table mat-table [dataSource]="dataSourceMO" matSort class="table table-bordered table-striped table-sm">
 
-              </tr>
-            </thead>
-            <tbody>
-              <tr *ngFor="let order of marketingOrders; let i = index" align="center">
-                <td>
-                  <input type="checkbox" [(ngModel)]="order.selected" />
-                </td>
-                <td>{{ order.no }}</td>
-                <td>{{ order.orderId }}</td>
-                <td>{{ order.type }}</td>
-                <td>{{ order.date }}</td>
-                <td>{{ order.revision }}</td>
-                <td>{{ order.revision }}</td>
-                <td>{{ order.month1 }}</td>
-                <td>{{ order.month2 }}</td>
-                <td>{{ order.month3 }}</td>
-                <td>
-                  <button type="button" class="btn btn-warning" style="font-size: 12px; padding: 3px 6px;" (click)="navigateToViewMoFrontRear()">
-                  <i class="fa fa-check"></i> Mark Front Rear
-                </button>
+            <!-- No Column -->
+            <ng-container matColumnDef="no">
+              <th *matHeaderCellDef style="min-width: 50px">No</th>
+              <td *matCellDef="let mo; let i = index">{{ i + 1 }}</td>
+            </ng-container>
+
+            <!-- Marketing Order ID Column -->
+            <ng-container matColumnDef="moId">
+              <th *matHeaderCellDef style="min-width: 150px" mat-sort-header>Marketing Order ID</th>
+              <td *matCellDef="let mo">{{ mo.moId }}</td>
+            </ng-container>
+
+            <!-- Type Column -->
+            <ng-container matColumnDef="type">
+              <th *matHeaderCellDef style="min-width: 80px" mat-sort-header>Type</th>
+              <td *matCellDef="let mo">{{ mo.type }}</td>
+            </ng-container>
+
+            <!-- Date Column -->
+            <ng-container matColumnDef="dateValid">
+              <th *matHeaderCellDef style="min-width: 150px" mat-sort-header>Date</th>
+              <td *matCellDef="let mo">{{ parseDate(mo.dateValid) }}</td>
+            </ng-container>
+
+            <!-- Revision PPC Column -->
+            <ng-container matColumnDef="revisionPpc">
+              <th *matHeaderCellDef style="min-width: 100px" mat-sort-header>Revision PPC</th>
+              <td *matCellDef="let mo">{{ mo.revisionPpc }}</td>
+            </ng-container>
+
+            <!-- Revision Marketing Column -->
+            <ng-container matColumnDef="revisionMarketing">
+              <th *matHeaderCellDef style="min-width: 100px" mat-sort-header>Revision Marketing</th>
+              <td *matCellDef="let mo">{{ mo.revisionMarketing }}</td>
+            </ng-container>
+
+            <!-- Month 1 Column -->
+            <ng-container matColumnDef="month0">
+              <th *matHeaderCellDef style="min-width: 150px" mat-sort-header>Month 1</th>
+              <td *matCellDef="let mo">{{ parseDate(mo.month0) }}</td>
+            </ng-container>
+
+            <!-- Month 1 Column -->
+            <ng-container matColumnDef="month1">
+              <th *matHeaderCellDef style="min-width: 150px" mat-sort-header>Month 1</th>
+              <td *matCellDef="let mo">{{ parseDate(mo.month1) }}</td>
+            </ng-container>
+
+            <!-- Month 1 Column -->
+            <ng-container matColumnDef="month2">
+              <th *matHeaderCellDef style="min-width: 150px" mat-sort-header>Month 2</th>
+              <td *matCellDef="let mo">{{ parseDate(mo.month2) }}</td>
+            </ng-container>
+
+            <!-- Action Column -->
+            <ng-container matColumnDef="action">
+              <th *matHeaderCellDef style="min-width: 200px">Action</th>
+              <td *matCellDef="let mo">
+                <button type="button" class="btn btn-md btn-primary ml-2"
+                  (click)="navigateToDetailMo(mo.month0, mo.month1, mo.month2, mo.type)">Mark Front Rear</button>
               </td>
-              </tr>
-            </tbody>
+            </ng-container>
+
+            <tr align="center" style="height: 20px" mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr align="center" mat-row *matRowDef="let row; columns: displayedColumns"></tr>
           </table>
         </div>
+        <!-- Pagination -->
+        <mat-paginator [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
         <!-- Wrap button in a d-flex div with justify-content-end -->
         <div class="d-flex justify-content-end mt-3">
           <button type="button" class="btn btn-success" (click)="generateMonthlyPlanning()">
             <i class="fa fa-file"></i> Generate Monthly Planning
-        </button>                
-      </div>
+          </button>
+        </div>
       </div>
     </div>
-
+          
     <div *ngIf="showMonthlyPlanning" class="card">
       <div class="card-header">
         <strong>Table Detail Monthly Palnning</strong>
@@ -136,7 +166,7 @@
         <tabset>
           <tab heading="CURING">
             <div class="table-responsive">
-              <table class="table table-bordered table-striped table-sm">
+              <table class="table table-bordered table-striped table-sm" [dataSource]="dataSourceMP">
                 <thead>
                   <tr align="center">
                     <th rowspan="2" class="align-middle">No</th>
@@ -144,10 +174,14 @@
                     <th rowspan="2" style="min-width: 150px" class="align-middle">Size</th>
                     <th rowspan="2" style="min-width: 120px" class="align-middle">Pattern</th>
 
-                    <!-- Header Dinamis untuk Tanggal Bulan Ini -->
-                    <th style="min-width: 70px" *ngFor="let hDateTass of dateHeadersTass" [ngClass]="{ 'off-header': hDateTass.isOff, 'overtime-header': hDateTass.isOvertime }">
-                      {{ hDateTass.date }}
+                    <th *ngFor="let hDateTass of dateHeadersTass" style="min-width: 70px"
+                      [ngClass]="{ 'off-header': hDateTass.isOff,'semi-off': hDateTass.semiOff, 'overtime-header': hDateTass.isOvertime }"
+                      (click)="handleCellClick(partNumber, hDateTass)">
+                      {{ hDateTass.dateDisplay }}
                     </th>
+
+
+
 
                     <th rowspan="2" style="min-width: 120px" class="align-middle">Total</th>
                     <th rowspan="2" style="min-width: 120px" class="align-middle">Net Full Fillment</th>
@@ -169,38 +203,43 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let mpTass of monthlyPlanningTass; let i = index" align="center">
+                  <tr *ngFor="let mp of monthlyDailyPlan; let i = index" align="center">
                     <td>{{ i + 1 }}</td>
-                    <td>{{ mpTass.partNumber }}</td>
-                    <td>{{ mpTass.size }}</td>
-                    <td>{{ mpTass.pattern }}</td>
-                    <td *ngFor="let dailyMp of mpTass.detailDailyMp" class="hoverable" (click)="openDmpModal(dailyMp)">
-                      {{ dailyMp.countProduction }}
+                    <td>{{ mp.partNumber }}</td>
+                    <td>{{ mp.size }}</td>
+                    <td>{{ mp.pattern }}</td>
+
+                    <!-- Dynamically bind the dates -->
+                    <td *ngFor="let hDateTass of dateHeadersTass" class="hoverable"
+                      (click)="handleCellClick(mp.detailIdCuring, hDateTass.date)">
+                      {{ getTotalPlan(mp.detailIdCuring, hDateTass.date) }}
                     </td>
-                    <td>{{ calculateTotal() }}</td>
+
+                    <td>{{ mp.total }}</td>
                     <td>
-                      <input type="number" [(ngModel)]="mpTass.netFullFillment" class="form-control" />
-                    </td>
-                    <td>
-                      <input type="number" [(ngModel)]="mpTass.grossReq" class="form-control" />
-                    </td>
-                    <td>
-                      <input type="number" [(ngModel)]="mpTass.netReq" class="form-control" />
+                      <input type="number" [(ngModel)]="mp.netFulfilment" class="form-control" />
                     </td>
                     <td>
-                      <input type="number" [(ngModel)]="mpTass.reqCustomerAHMOEM" class="form-control" />
+                      <input type="number" [(ngModel)]="mp.grossReq" class="form-control" />
                     </td>
                     <td>
-                      <input type="number" [(ngModel)]="mpTass.reqCustomerAHMREM" class="form-control" />
+                      <input type="number" [(ngModel)]="mp.netReq" class="form-control" />
                     </td>
                     <td>
-                      <input type="number" [(ngModel)]="mpTass.reqCustomerAHMFDR" class="form-control" />
+                      <input type="number" [(ngModel)]="mp.reqAhmOem" class="form-control" />
                     </td>
                     <td>
-                      <input type="number" [(ngModel)]="mpTass.selisih" class="form-control" />
+                      <input type="number" [(ngModel)]="mp.reqAhmRem" class="form-control" />
+                    </td>
+                    <td>
+                      <input type="number" [(ngModel)]="mp.reqFdr" class="form-control" />
+                    </td>
+                    <td>
+                      <input type="number" [(ngModel)]="mp.differenceOfs" class="form-control" />
                     </td>
                   </tr>
                 </tbody>
+
               </table>
             </div>
           </tab>
@@ -211,26 +250,66 @@
               <table class="table table-bordered table-striped table-sm">
                 <thead>
                   <tr align="center">
-                    <th class="align-middle">No</th>
-                    <th class="align-middle">Marketing Order ID</th>
-                    <th class="align-middle">Type</th>
-                    <th class="align-middle">Date</th>
-                    <th class="align-middle">Revision</th>
-                    <th class="align-middle">Month 1</th>
-                    <th class="align-middle">Month 2</th>
-                    <th class="align-middle">Month 3</th>
+                    <th rowspan="2" class="align-middle">No</th>
+                    <th rowspan="2" style="min-width: 150px" class="align-middle">Partnumber</th>
+                    <th rowspan="2" style="min-width: 150px" class="align-middle">Size</th>
+                    <th rowspan="2" style="min-width: 120px" class="align-middle">Pattern</th>
+
+                    <th *ngFor="let hDateTass of dateHeadersTass" style="min-width: 70px"
+                      [ngClass]="{ 'off-header': hDateTass.isOff, 'overtime-header': hDateTass.isOvertime }"
+                      (click)="handleCellClick(partNumber, hDateTass.date2)">
+                      {{ hDateTass.date }} <!-- Only day part shown in header -->
+                    </th>
+                    <th rowspan="2" style="min-width: 120px" class="align-middle">Total</th>
+                    <th rowspan="2" style="min-width: 120px" class="align-middle">Net Full Fillment</th>
+                    <th rowspan="2" style="min-width: 120px" class="align-middle">Gross Req</th>
+                    <th rowspan="2" style="min-width: 120px" class="align-middle">Net Req</th>
+                    <th colspan="3" style="min-width: 120px" class="align-middle">Req Customer</th>
+                    <th colspan="1" style="min-width: 120px" class="align-middle">Selisih</th>
+                  </tr>
+
+                  <!-- Baris kedua -->
+                  <tr align="center">
+                    <th style="min-width: 70px" *ngFor="let cHeaderWo of dateHeadersTass">
+                      {{ cHeaderWo.workingDay }}
+                    </th>
+                    <th class="align-middle">AHM/OEM</th>
+                    <th class="align-middle">AHM/REM</th>
+                    <th class="align-middle">AHM/FDR</th>
+                    <th class="align-middle">OFS</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let order of marketingOrders; let i = index" align="center">
-                    <td>{{ order.no }}</td>
-                    <td>{{ order.orderId }}</td>
-                    <td>{{ order.type }}</td>
-                    <td>{{ order.date }}</td>
-                    <td>{{ order.revision }}</td>
-                    <td>{{ order.month1 }}</td>
-                    <td>{{ order.month2 }}</td>
-                    <td>{{ order.month3 }}</td>
+                  <tr *ngFor="let mpTass of monthlyDailyPlan; let i = index" align="center">
+                    <td>{{ i + 1 }}</td>
+                    <td>{{ mpTass.partNumber }}</td>
+                    <td>{{ mpTass.size }}</td>
+                    <td>{{ mpTass.pattern }}</td>
+                    <td *ngFor="let dailyMp of mpTass.detailDailyMp" class="hoverable" (click)="openDmpModal(dailyMp)">
+                      {{ mpTass.totalPlan }}
+                    </td>
+                    <td>{{ mpTass.total }}</td>
+                    <td>
+                      <input type="number" [(ngModel)]="mpTass.netFullFillment" class="form-control" />
+                    </td>
+                    <td>
+                      <input type="number" [(ngModel)]="mpTass.grossReq" class="form-control" />
+                    </td>
+                    <td>
+                      <input type="number" [(ngModel)]="mpTass.netReq" class="form-control" />
+                    </td>
+                    <td>
+                      <input type="number" [(ngModel)]="mpTass.reqAhmRem" class="form-control" />
+                    </td>
+                    <td>
+                      <input type="number" [(ngModel)]="mpTass.reqAhmRem" class="form-control" />
+                    </td>
+                    <td>
+                      <input type="number" [(ngModel)]="mpTass.reqAhmRem" class="form-control" />
+                    </td>
+                    <td>
+                      <input type="number" [(ngModel)]="mpTass.total" class="form-control" />
+                    </td>
                   </tr>
                 </tbody>
               </table>
@@ -248,7 +327,8 @@
 </div>
 
 <!-- Modal Detail Daily -->
-<div class="modal fade" id="dmpModal" tabindex="-1" role="dialog" aria-labelledby="Detail Daily Monthly Planning" aria-hidden="true">
+<div class="modal fade" id="dmpModal" tabindex="-1" role="dialog" aria-labelledby="Detail Daily Monthly Planning"
+  aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -259,29 +339,72 @@
       </div>
       <div class="modal-body">
         <form>
-          <!-- <div class="form-group">
-            <label for="idDetailDaily">ID Detail Daily:</label>
-            <input type="text" id="idDetailDaily" class="form-control" [value]="selectedDetail?.idDetailDaily" readonly />
-          </div> -->
+          <!-- Shift Table -->
           <div class="form-group">
-            <label for="countProduction">Shift 1:</label>
-            <input type="text" id="countProduction" class="form-control" [value]="10" readonly />
+            <label>Production by Shift:</label>
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Shift</th>
+                  <th>Production Count</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Shift 1</td>
+                  <td>{{ kapaShift1 }}</td>
+                </tr>
+                <tr>
+                  <td>Shift 2</td>
+                  <td>{{ kapaShift2 }}</td>
+                </tr>
+                <tr>
+                  <td>Shift 3</td>
+                  <td>{{ kapaShift3 }}</td>
+                </tr>
+                <tr>
+                  <td><strong>Total Production per Day</strong></td>
+                  <td><strong>{{ totalKapa }}</strong></td>
+                </tr>
+              </tbody>
+            </table>
           </div>
+
+          <!-- Machine and Building Table -->
           <div class="form-group">
-            <label for="countProduction">Shift 2:</label>
-            <input type="text" id="countProduction" class="form-control" [value]="90" readonly />
+            <label>Machine:</label>
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Machine</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>{{ workCenterText }}</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
-          <div class="form-group">
-            <label for="countProduction">Shift 3:</label>
-            <input type="text" id="countProduction" class="form-control" [value]="800" readonly />
-          </div>
-          <div class="form-group">
-            <label for="countProduction">Machine:</label>
-            <input type="text" id="countProduction" class="form-control" value="CURING AB 4 ST CHOP GD B NO.004" readonly />
-          </div>
-          <div class="form-group">
-            <label for="countProduction">Count Production:</label>
-            <input type="text" id="countProduction" class="form-control" [value]="selectedDetail?.countProduction" readonly />
+
+          <div class="form-group" *ngIf="changeDate || wct || shift">
+            <label>Change Mould</label>
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Change Date</th>
+                  <th>Work Center Text</th>
+                  <th>Shift</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>{{ changeDate }}</td>
+                  <td>{{ wct }}</td>
+                  <td>{{ shift }}</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </form>
       </div>
