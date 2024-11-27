@@ -97,7 +97,7 @@
             </tab>
       
             <!-- Tab 2: Shift -->
-            <tab heading="Shift" *ngIf="overTimeSwitch">
+            <tab heading="Shift" >
               <div class="form-group">
                 <!-- OverTime Switch -->
                 <div class="form-group d-flex">
@@ -252,7 +252,7 @@
               </tabset>              
             </tab>                
             <!-- Tab 3: Per Hour -->
-            <tab heading="Per Hour" *ngIf="!overTimeSwitch">
+            <tab heading="Per Hour" *ngIf="!overTimeSwitch && !weekend && selectedDay.detail.off === 0 ">
               <div class="form-group per-hour-wrapper">
                 <div *ngFor="let shift of shifts; let i = index" class="hour-group">
                   <h5>{{ shift }}</h5>
