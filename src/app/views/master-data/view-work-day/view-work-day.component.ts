@@ -409,8 +409,36 @@ export class ViewWorkDayComponent implements OnInit {
     }
   }
 
+  updateTotalTimeOTTT(index: number): void {
+    const shiftIndex = this.getShiftIndex(index);
+    const startTime = this.ttperHourSwitches[`shift${shiftIndex}_START_TIME`];
+    const endTime = this.ttperHourSwitches[`shift${shiftIndex}_END_TIME`];
+
+    if (startTime && endTime) {
+      const start = this.convertTimeToMinutes(startTime);
+      const end = this.convertTimeToMinutes(endTime);
+
+      // Calculate total time in hours (handle overnight shifts)
+      const totalMinutes = end >= start ? end - start : 24 * 60 - start + end;
+      this.ttperHourSwitches[`shift${shiftIndex}_TOTAL_TIME`] = totalMinutes;
+    }
+  }
+  updateTotalTimeOTTL(index: number): void {
+    const shiftIndex = this.getShiftIndex(index);
+    const startTime = this.tlperHourSwitches[`shift${shiftIndex}_START_TIME`];
+    const endTime = this.tlperHourSwitches[`shift${shiftIndex}_END_TIME`];
+
+    if (startTime && endTime) {
+      const start = this.convertTimeToMinutes(startTime);
+      const end = this.convertTimeToMinutes(endTime);
+
+      // Calculate total time in hours (handle overnight shifts)
+      const totalMinutes = end >= start ? end - start : 24 * 60 - start + end;
+      this.tlperHourSwitches[`shift${shiftIndex}_TOTAL_TIME`] = totalMinutes;
+    }
+  }
+
   saveHour(buffer: WDHoursSpecific){
-    console.log("masuk");
     this.workDayService.updateDWorkDayHoursSpecific(buffer).subscribe(
       (response: ApiResponse<WDHoursSpecific>) => {
         if (response) {
@@ -505,9 +533,7 @@ export class ViewWorkDayComponent implements OnInit {
       }else{
         this.workDayService.updateDWorkDay(buffer).subscribe(
           (response: ApiResponse<DWorkDay>) => {
-            // console.log(response);
             if (response) {
-              // console.log(response.data);
             }
           },
           (error) => {
@@ -520,7 +546,7 @@ export class ViewWorkDayComponent implements OnInit {
         (response: ApiResponse<DWorkDay>) => {
           // console.log(response);
           if (response) {
-            // console.log(response.data);
+            console.log(response.data);
           }
         },
         (error) => {
@@ -534,12 +560,12 @@ export class ViewWorkDayComponent implements OnInit {
   loadReason(){
     const dateToLoad = this.getdateselectedFlip();
     const hourIntervals = [
-      "Shift 3", "Shift 1", "Shift 2",
+      "HShift 3", "HShift 1", "HShift 2",
     ];
     
     this.workDayService.getDWorkDayByDate(this.getdateselected()).subscribe(
       (response: ApiResponse<DWorkDay[]>) => {
-        // console.log(response);
+        console.log(response);
         if (response) {
           // console.log(response.data);
           this.shift1Reasons[0] = response.data.find(item => item.parent === "SHIFT 3" && item.status === 1)?? { description: '', parent: 'SHIFT 3', date_WD: dateToLoad };
