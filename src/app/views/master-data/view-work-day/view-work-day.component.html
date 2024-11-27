@@ -97,7 +97,7 @@
             </tab>
       
             <!-- Tab 2: Shift -->
-            <tab heading="Shift">
+            <tab heading="Shift" *ngIf="overTimeSwitch">
               <div class="form-group">
                 <!-- OverTime Switch -->
                 <div class="form-group d-flex">
@@ -105,10 +105,10 @@
                       <button type="button" class="btn btn-primary " [disabled]="overTimeSwitch || selectedDay.detail.off === 0" (click)="overtimeOn()">OverTime</button>
                   </div>
                   <div class="mx-3">
-                      <button type="button" class="btn btn-primary " [disabled]="selectedDay.detail.off === 1" (click)="OffWorkday()">Off</button>
+                      <button type="button" class="btn btn-primary " [disabled]="(selectedDay.detail.off === 1  && !weekend && !overTimeSwitch) || (weekend && !overTimeSwitch)" (click)="OffWorkday()">Off</button>
                   </div>
                   <div class="mx-3">
-                      <button type="button" class="btn btn-primary " [disabled]="selectedDay.detail.off === 0 && !overTimeSwitch" (click)="OnWorkday()">On</button>
+                      <button type="button" class="btn btn-primary " [disabled]="(selectedDay.detail.off === 0 && !overTimeSwitch) || (weekend)" (click)="OnWorkday()">On</button>
                   </div>
                 </div>
                 
