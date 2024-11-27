@@ -533,9 +533,7 @@ export class ViewWorkDayComponent implements OnInit {
       }else{
         this.workDayService.updateDWorkDay(buffer).subscribe(
           (response: ApiResponse<DWorkDay>) => {
-            // console.log(response);
             if (response) {
-              // console.log(response.data);
             }
           },
           (error) => {
@@ -548,7 +546,7 @@ export class ViewWorkDayComponent implements OnInit {
         (response: ApiResponse<DWorkDay>) => {
           // console.log(response);
           if (response) {
-            // console.log(response.data);
+            console.log(response.data);
           }
         },
         (error) => {
@@ -562,12 +560,12 @@ export class ViewWorkDayComponent implements OnInit {
   loadReason(){
     const dateToLoad = this.getdateselectedFlip();
     const hourIntervals = [
-      "Shift 3", "Shift 1", "Shift 2",
+      "HShift 3", "HShift 1", "HShift 2",
     ];
     
     this.workDayService.getDWorkDayByDate(this.getdateselected()).subscribe(
       (response: ApiResponse<DWorkDay[]>) => {
-        // console.log(response);
+        console.log(response);
         if (response) {
           // console.log(response.data);
           this.shift1Reasons[0] = response.data.find(item => item.parent === "SHIFT 3" && item.status === 1)?? { description: '', parent: 'SHIFT 3', date_WD: dateToLoad };
