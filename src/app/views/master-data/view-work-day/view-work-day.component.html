@@ -12,7 +12,7 @@
             <strong>{{ calendar.year }} - {{ monthNames[calendar.month - 1] }}</strong>
           </div>
           <button type="button" class="btn btn-primary" (click)="nextMonth()">Next</button>
-        </div>        
+        </div>       
         <table class="table table-bordered table-striped table-md">
           <thead align="center">
             <tr>
@@ -31,7 +31,7 @@
               [ngStyle]="{
                 'background-color': 
                   (day.detail.off === 1  && day.weekend && day.detail.off === 1 && day.detail.iwd_SHIFT_1 === 0 && day.detail.iwd_SHIFT_2 === 0 && day.detail.iwd_SHIFT_3 === 0 && day.detail.iot_TL_1 === 0 && day.detail.iot_TL_2 === 0 && day.detail.iot_TL_3 === 0 && day.detail.iot_TT_1 === 0 && day.detail.iot_TT_2 === 0 && day.detail.iot_TT_3 === 0) ? 'red' : 
-                  (day.detail.off === 1 || day.detail.semi_OFF === 1) && (day.detail.iot_TL_1 === 1 || day.detail.iot_TL_2 === 1 || day.detail.iot_TL_3 === 1 || day.detail.iot_TT_1 === 1 || day.detail.iot_TT_2 === 1 || day.detail.iot_TT_3 === 1)  ? 'rgb(76,199,180)' : 
+                  (day.detail.off === 1 || day.detail.semi_OFF === 1) && (day.detail.iot_TL_1 === 1 || day.detail.iot_TL_2 === 1 || day.detail.iot_TL_3 === 1 || day.detail.iot_TT_1 === 1 || day.detail.iot_TT_2 === 1 || day.detail.iot_TT_3 === 1)  ? '#00ff73' : 
                   (day.detail.off === 1 && day.detail.semi_OFF === 0 && day.detail.iwd_SHIFT_1 === 0 && day.detail.iwd_SHIFT_2 === 0 && day.detail.iwd_SHIFT_3 === 0 && day.detail.iot_TL_1 === 0 && day.detail.iot_TL_2 === 0 && day.detail.iot_TL_3 === 0 && day.detail.iot_TT_1 === 0 && day.detail.iot_TT_2 === 0 && day.detail.iot_TT_3 === 0)  ? 'red' : 
                   day.detail.semi_OFF === 1 ? 'yellow' : 'inherit', 
                 'color': 
@@ -51,7 +51,7 @@
             <span>Off</span>
           </div>
           <div class="legend-item d-flex align-items-center mx-3 ">
-            <div class="legend-color" style="width: 15px; height: 15px; background-color: rgb(76,199,180); margin-right: 5px;"></div>
+            <div class="legend-color" style="width: 15px; height: 15px; background-color: #00ff73; margin-right: 5px;"></div>
             <span>Overtime</span>
           </div>
           <div class="legend-item d-flex align-items-center mx-3 ">

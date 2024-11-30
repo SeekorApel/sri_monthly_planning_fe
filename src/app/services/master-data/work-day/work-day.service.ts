@@ -25,6 +25,7 @@ export class WorkDayService {
   }
 
   getAllWorkDaysByDateRange(dateStart: string, dateEnd: string): Observable<ApiResponse<WorkDay[]>> {
+    console.log(environment.apiUrlWebAdmin + '/getAllWorkDaysByDateRange/' + dateStart + '/' + dateEnd);
     return this.http.get<ApiResponse<WorkDay[]>>(
       environment.apiUrlWebAdmin + '/getAllWorkDaysByDateRange/' + dateStart + '/' + dateEnd,
       { headers: this.getHeaders() }
