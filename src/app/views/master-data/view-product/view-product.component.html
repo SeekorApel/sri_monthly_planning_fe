@@ -183,7 +183,7 @@
           </div>
           <div class="form-group">
             <h6 for="qty">Qty Per Rak</h6>
-            <input [(ngModel)]="editProductObject.qty_PER_RAK" type="text" class="form-control" id="qty" formControlName="qty" [ngClass]="{ 'is-invalid': editProductTypeForm.get('qty').invalid && editProductTypeForm.get('qty').touched }" />
+            <input [(ngModel)]="editProductObject.qty_PER_RAK" type="number" class="form-control" id="qty" formControlName="qty" [ngClass]="{ 'is-invalid': editProductTypeForm.get('qty').invalid && editProductTypeForm.get('qty').touched }" />
             <div *ngIf="editProductTypeForm.get('qty').invalid && editProductTypeForm.get('qty').touched" class="invalid-feedback">Qty Per Rak Text is required.</div>
           </div>
           <div class="form-group">
@@ -218,7 +218,7 @@
           </div>
           <div class="form-group">
             <h6 for="rim">Rim</h6>
-            <input [(ngModel)]="editProductObject.rim" type="text" class="form-control" id="rim" formControlName="rim" [ngClass]="{ 'is-invalid': editProductTypeForm.get('rim').invalid && editProductTypeForm.get('rim').touched }" />
+            <input [(ngModel)]="editProductObject.rim" type="number" class="form-control" id="rim" formControlName="rim" [ngClass]="{ 'is-invalid': editProductTypeForm.get('rim').invalid && editProductTypeForm.get('rim').touched }" />
             <div *ngIf="editProductTypeForm.get('rim').invalid && editProductTypeForm.get('rim').touched" class="invalid-feedback">Rim Text is required.</div>
           </div>
           <div class="form-group">
