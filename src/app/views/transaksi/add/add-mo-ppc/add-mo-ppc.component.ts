@@ -40,6 +40,7 @@ export class AddMoPpcComponent implements OnInit {
   errorMessage: string | null = null;
   workDay: any[];
   file: File | null = null;
+  loading:boolean = false;
 
   //Error Message
   errorMessagesMinOrder: string[] = [];
@@ -435,6 +436,7 @@ export class AddMoPpcComponent implements OnInit {
       this.formHeaderMo.markAllAsTouched();
       return;
     }
+    this.loading = true;
     this.fillTheTableMo();
     this.isTableVisible = true;
   }
@@ -487,6 +489,7 @@ export class AddMoPpcComponent implements OnInit {
           item.lockStatusM1 = 0;
           item.lockStatusM2 = 0;
         });
+        this.loading = false;
       },
       (error) => {
         Swal.fire({
@@ -495,6 +498,7 @@ export class AddMoPpcComponent implements OnInit {
           text: error.message,
           confirmButtonText: 'OK',
         });
+        this.loading = false;
       }
     );
   }
@@ -537,9 +541,12 @@ export class AddMoPpcComponent implements OnInit {
       type: type,
     };
 
+    this.loading = true;
+
     // Validate available months before proceeding
     this.validateAvailableMonths(varWd).then((isValid) => {
       if (!isValid) {
+        this.loading = false;
         return;
       }
 
@@ -564,9 +571,11 @@ export class AddMoPpcComponent implements OnInit {
               this.navigateToViewMo();
             }
           });
+          this.loading = false;
         },
         (err) => {
           Swal.fire('Error!', 'Error insert data Marketing Order.', 'error');
+          this.loading = false;
         }
       );
     });
@@ -788,7 +797,7 @@ export class AddMoPpcComponent implements OnInit {
     setBorder(worksheet.getCell('N12'));
     worksheet.getCell('Q12').value = this.formHeaderMo.get('total_wt_0')?.value ?? 0; // "Month 1"
     worksheet.getCell('R12').value = this.formHeaderMo.get('total_wt_1')?.value ?? 0; // "Month 2"
-    worksheet.getCell('S12').value = this.formHeaderMo.get('total_wt_2')?.value ?? 0; // "Month 3"    
+    worksheet.getCell('S12').value = this.formHeaderMo.get('total_wt_2')?.value ?? 0; // "Month 3"
     worksheet.getCell('Q12').numFmt = '0.00';
     worksheet.getCell('R12').numFmt = '0.00';
     worksheet.getCell('S12').numFmt = '0.00';

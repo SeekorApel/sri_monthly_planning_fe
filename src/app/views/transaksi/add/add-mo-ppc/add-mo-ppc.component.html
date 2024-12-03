@@ -210,7 +210,10 @@
         </form>
       </div>
       <div class="col-md-12 d-flex justify-content-end pb-4">
-        <button (click)="showDetailMo()" type="submit" class="btn btn-primary"><i class="fa fa-eye mr-2"></i>Show Detail</button>
+        <button (click)="showDetailMo()" [disabled]="loading" type="submit" class="btn btn-primary"><i class="fa fa-eye mr-2"></i>
+          <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+          Show Detail
+        </button>
       </div>
     </div>
   </div>
@@ -383,11 +386,14 @@
       </div>
       <div class="col-md-12 pb-4">
         <button (click)="navigateToViewMo()" class="btn btn-primary justify-content-start mr-2">Back</button>
-        <button (click)="saveAllMo()" type="submit" class="btn btn-success">Submit</button>
+        <button (click)="saveAllMo()" type="submit" [disabled]="loading" class="btn btn-success">
+          <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+          Submit
+        </button>
       </div>
     </div>
   </div>
-  
+
   <!-- Modal for Upload Excel -->
   <div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
