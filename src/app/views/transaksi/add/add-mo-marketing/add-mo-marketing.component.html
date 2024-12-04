@@ -377,7 +377,10 @@
       </div>
       <div class="col-md-12 pb-4">
         <button (click)="navigateToViewMo()" class="btn btn-primary justify-content-start mr-2">Back</button>
-        <button (click)="saveMo()" type="submit" class="btn btn-success">Submit</button>
+        <button (click)="saveMo()" [disabled]="loading" type="submit" class="btn btn-success">
+          <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+          Submit
+        </button>
       </div>
     </div>
   </div>

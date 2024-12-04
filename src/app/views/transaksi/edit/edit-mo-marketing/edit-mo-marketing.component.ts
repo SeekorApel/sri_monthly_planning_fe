@@ -34,6 +34,7 @@ export class EditMoMarketingComponent implements OnInit {
   file: File | null = null;
   isSubmitted: boolean = false;
   typeMo: string = '';
+  loading:boolean = false;
 
   //Error message
   errorMessagesM0: string[] = [];
@@ -678,8 +679,8 @@ export class EditMoMarketingComponent implements OnInit {
     //   moMonth2: item.moMonth2
     // }));
 
-    // console.table(filteredData);
 
+    this.loading = true;
     this.moService.updateMarketingOrderMarketing(revisionMo).subscribe(
       (response) => {
         Swal.fire({
@@ -692,9 +693,11 @@ export class EditMoMarketingComponent implements OnInit {
             this.navigateToViewMo();
           }
         });
+        this.loading = false;
       },
       (err) => {
         Swal.fire('Error!', 'Error insert data Marketing Order.', 'error');
+        this.loading = false;
       }
     );
   }

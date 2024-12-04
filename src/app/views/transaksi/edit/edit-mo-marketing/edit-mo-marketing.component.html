@@ -506,7 +506,10 @@
       </div>
       <div class="col-md-12 pb-4">
         <button (click)="navigateToViewMo()" class="btn btn-primary justify-content-start mr-2">Back</button>
-        <button (click)="editMo()" type="submit" class="btn btn-success">Edit</button>
+        <button (click)="editMo()" [disabled]="loading" type="submit" class="btn btn-success">
+          <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+          Edit
+        </button>
       </div>
     </div>
   </div>

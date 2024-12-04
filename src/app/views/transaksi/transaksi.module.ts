@@ -15,7 +15,6 @@ import { AddMonthlyPlanningComponent } from './add-monthly-planning/add-monthly-
 import { ViewMoMarketingComponent } from './view/view-mo-marketing/view-mo-marketing.component';
 import { AddMoMarketingComponent } from './add/add-mo-marketing/add-mo-marketing.component';
 import { EditMoPpcComponent } from './edit/edit-mo-ppc/edit-mo-ppc.component';
-import { DetailViewMoPpcComponent } from './detail-view/detail-view-mo-ppc/detail-view-mo-ppc.component';
 import { DetailViewMoMarketingComponent } from './detail-view-mo-marketing/detail-view-mo-marketing.component';
 import { EditMoMarketingComponent } from './edit/edit-mo-marketing/edit-mo-marketing.component';
 import { ViewDetailRevisiPpcComponent } from './detail-view-revisi/view-detail-revisi-ppc/view-detail-revisi-ppc.component';
@@ -26,7 +25,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
 @NgModule({
-  declarations: [ViewMoPpcComponent, AddMoPpcComponent, ViewMonthlyPlanningComponent, AddMonthlyPlanningComponent, ViewMoMarketingComponent, AddMoMarketingComponent, EditMoPpcComponent, DetailViewMoPpcComponent, DetailViewMoMarketingComponent, EditMoMarketingComponent, ViewDetailRevisiPpcComponent, ViewDetailRevisiMarketingComponent],
+  declarations: [ViewMoPpcComponent, AddMoPpcComponent, ViewMonthlyPlanningComponent, AddMonthlyPlanningComponent, ViewMoMarketingComponent, AddMoMarketingComponent, EditMoPpcComponent, DetailViewMoMarketingComponent, EditMoMarketingComponent, ViewDetailRevisiPpcComponent, ViewDetailRevisiMarketingComponent],
   imports: [CommonModule, FormsModule, ReactiveFormsModule, NgxSpinnerModule, NgSelect2Module, JwPaginationModule, TransaksiRoutingModule, TabsModule, ModalModule.forRoot(), ToastrModule.forRoot(), MatSortModule, MatTableModule, MatPaginatorModule, MatTooltipModule],
 })
 export class TransaksiModule { }
