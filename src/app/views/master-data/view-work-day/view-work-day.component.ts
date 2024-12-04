@@ -414,12 +414,15 @@ export class ViewWorkDayComponent implements OnInit {
       try {
         const response = await this.workDayService.updateDWorkDayHoursSpecific(buffer).toPromise();
         if (response) {
-          this.refreshWorkday();
           await Swal.fire({
             icon: 'success',
             title: 'Success',
             text: 'Work day hours saved successfully!',
           });
+          this.refreshWorkday();
+          this.selectDay(this.selectedDay);
+          this.tabset.tabs[1].active = true;
+
         }
       } catch (error: any) {
         this.errorMessage = 'Failed to save work day hours: ' + error.message;
@@ -483,17 +486,21 @@ export class ViewWorkDayComponent implements OnInit {
       this.newEvent.title = `${dayName}, ${dayValue} - ${this.monthNames[monthValue]} - ${yearValue}`;
       this.loadReason();
       this.loadSelectDay();
+      if(this.tabset)
       this.tabset.tabs[0].active = true;
       if (day.weekend) {
-          this.weekend = true;
+        console.log("sini w");
+        this.weekend = true;
+        this.title = "OverTime TT and TL";
+      } else {
+        this.weekend = false;
+        if(this.overTimeSwitch){
+          console.log("sini wss");
           this.title = "OverTime TT and TL";
-        } else {
-          this.weekend = false;
-          if(this.overTimeSwitch){
-            this.title = "OverTime TT and TL";
-          }else{
-            this.title = "Normal Work Day";
-          }
+        }else{
+          console.log("sini wddd");
+          this.title = "Normal Work Day";
+        }
       }
     }
   }
@@ -580,10 +587,11 @@ export class ViewWorkDayComponent implements OnInit {
   async overtimeOn() {
     try {
       const response = await this.workDayService.turnOnOvertime(this.getdateselected()).toPromise();
-      if (response?.data) {
+      if (response.data) {
+        this.selectedDay.detail = response.data;
+        this.refreshWorkday();
         this.selectDay(this.selectedDay);
         this.tabset.tabs[1].active = true;
-        this.refreshWorkday();
       }
     } catch (error: any) {
       this.errorMessage = 'Failed to update work day hours: ' + error.message;
