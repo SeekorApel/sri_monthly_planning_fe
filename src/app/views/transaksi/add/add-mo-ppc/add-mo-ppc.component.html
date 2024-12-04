@@ -210,8 +210,9 @@
         </form>
       </div>
       <div class="col-md-12 d-flex justify-content-end pb-4">
-        <button (click)="showDetailMo()" [disabled]="loading" type="submit" class="btn btn-primary"><i class="fa fa-eye mr-2"></i>
-          <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+        <button (click)="showDetailMo()" [disabled]="loadingShowData" type="submit" class="btn btn-primary">
+          <i class="fa fa-eye mr-2"></i>
+          <span *ngIf="loadingShowData" class="spinner-border spinner-border-sm mr-1"></span>
           Show Detail
         </button>
       </div>
@@ -386,8 +387,8 @@
       </div>
       <div class="col-md-12 pb-4">
         <button (click)="navigateToViewMo()" class="btn btn-primary justify-content-start mr-2">Back</button>
-        <button (click)="saveAllMo()" type="submit" [disabled]="loading" class="btn btn-success">
-          <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+        <button (click)="saveAllMo()" type="submit" [disabled]="loadingSaveData" class="btn btn-success">
+          <span *ngIf="loadingSaveData" class="spinner-border spinner-border-sm mr-1"></span>
           Submit
         </button>
       </div>

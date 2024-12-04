@@ -72,10 +72,16 @@
 
             <!-- Action Column -->
             <ng-container matColumnDef="action">
-              <th *matHeaderCellDef style="min-width: 150px">Action</th>
+              <th *matHeaderCellDef style="min-width: 200px">Action</th>
               <td *matCellDef="let mo">
-                <button type="button" class="btn btn-md btn-secondary" (click)="showDataRevision(mo.moId)">Show</button>
-                <button type="button" class="btn btn-md btn-success ml-2" (click)="exportExcelMo(mo.moId)">Print</button>
+                <button type="button" [disabled]="loadingShow" class="btn btn-md btn-secondary" (click)="showDataRevision(mo.moId)">
+                  <span *ngIf="loadingShow" class="spinner-border spinner-border-sm mr-1"></span>
+                  Show
+                </button>
+                <button type="button" [disabled]="loadingPrint" class="btn btn-md btn-success ml-2" (click)="exportExcelMo(mo.moId)">
+                  <span *ngIf="loadingPrint" class="spinner-border spinner-border-sm mr-1"></span>
+                  Print
+                </button>
               </td>
             </ng-container>
 
@@ -426,8 +432,8 @@
       <div class="card-body">
         <div class="d-flex justify-content-between mb-3">
           <div class="d-flex align-items-center">
-            <input type="text" class="form-control col-md-12 col-lg-12" [(ngModel)]="searchText" (input)="onSearchChangeMo()" placeholder="Find here..." />
-            <button type="submit" class="btn btn-primary ml-2" (click)="resetSearchMo()">Reset</button>
+            <input type="text" class="form-control col-md-12 col-lg-12" [(ngModel)]="searchTextDmo" (input)="onSearchChangeDmo()" placeholder="Find here..." />
+            <button type="submit" class="btn btn-primary ml-2" (click)="resetSearchDmo()">Reset</button>
           </div>
         </div>
 

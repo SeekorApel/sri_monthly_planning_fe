@@ -40,7 +40,8 @@ export class AddMoPpcComponent implements OnInit {
   errorMessage: string | null = null;
   workDay: any[];
   file: File | null = null;
-  loading:boolean = false;
+  loadingShowData:boolean = false;
+  loadingSaveData:boolean = false;
 
   //Error Message
   errorMessagesMinOrder: string[] = [];
@@ -436,7 +437,7 @@ export class AddMoPpcComponent implements OnInit {
       this.formHeaderMo.markAllAsTouched();
       return;
     }
-    this.loading = true;
+    this.loadingShowData = true;
     this.fillTheTableMo();
     this.isTableVisible = true;
   }
@@ -476,8 +477,6 @@ export class AddMoPpcComponent implements OnInit {
       productMerk: typeMoForm,
     };
 
-    console.log(data);
-
     this.moService.getDetailMarketingOrder(data).subscribe(
       (response: ApiResponse<DetailMarketingOrder[]>) => {
         this.detailMarketingOrder = response.data;
@@ -489,7 +488,7 @@ export class AddMoPpcComponent implements OnInit {
           item.lockStatusM1 = 0;
           item.lockStatusM2 = 0;
         });
-        this.loading = false;
+        this.loadingShowData = false;
       },
       (error) => {
         Swal.fire({
@@ -498,7 +497,7 @@ export class AddMoPpcComponent implements OnInit {
           text: error.message,
           confirmButtonText: 'OK',
         });
-        this.loading = false;
+        this.loadingShowData = false;
       }
     );
   }
@@ -541,12 +540,12 @@ export class AddMoPpcComponent implements OnInit {
       type: type,
     };
 
-    this.loading = true;
+    this.loadingSaveData = true;
 
     // Validate available months before proceeding
     this.validateAvailableMonths(varWd).then((isValid) => {
       if (!isValid) {
-        this.loading = false;
+        this.loadingSaveData = false;
         return;
       }
 
@@ -571,11 +570,11 @@ export class AddMoPpcComponent implements OnInit {
               this.navigateToViewMo();
             }
           });
-          this.loading = false;
+          this.loadingSaveData = false;
         },
         (err) => {
           Swal.fire('Error!', 'Error insert data Marketing Order.', 'error');
-          this.loading = false;
+          this.loadingSaveData = false;
         }
       );
     });
