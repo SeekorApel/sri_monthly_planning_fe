@@ -355,46 +355,112 @@ export class ViewWorkDayComponent implements OnInit {
     const shiftIndex = this.getShiftIndex(index);
     const startTime = this.perHourShift[`shift${shiftIndex}_START_TIME`];
     const endTime = this.perHourShift[`shift${shiftIndex}_END_TIME`];
-
+  
     if (startTime && endTime) {
       const start = this.convertTimeToMinutes(startTime);
       const end = this.convertTimeToMinutes(endTime);
-
-      // Calculate total time in hours (handle overnight shifts)
-      const totalMinutes = end >= start ? end - start : 24 * 60 - start + end;
-      this.perHourShift[`shift${shiftIndex}_TOTAL_TIME`] = totalMinutes;
+  
+      // Calculate total time in minutes (handle overnight shifts)
+      let totalMinutes = end >= start ? end - start : 24 * 60 - start + end;
+  
+      // Check if the day is Friday and only for Shift 1
+      const eventDate = this.newEvent.date; // Replace with your actual event date
+      const options: Intl.DateTimeFormatOptions = { weekday: 'long' };
+      const dayName = eventDate.toLocaleDateString('en-US', options);
+  
+      if (dayName === 'Friday' && shiftIndex === 1) {
+        const excludedStart = this.convertTimeToMinutes('11:40');
+        const excludedEnd = this.convertTimeToMinutes('12:40');
+  
+        // Adjust for overlap with the excluded period
+        if (start < excludedEnd && end > excludedStart) {
+          const overlapStart = Math.max(start, excludedStart);
+          const overlapEnd = Math.min(end, excludedEnd);
+          const overlapMinutes = overlapEnd - overlapStart;
+  
+          if (overlapMinutes > 0) {
+            totalMinutes -= overlapMinutes;
+          }
+        }
+      }
+  
+      this.perHourShift[`shift${shiftIndex}_TOTAL_TIME`] = Math.max(totalMinutes, 0); // Ensure no negative time
     }
-  }
+  }  
 
   updateTotalTimeOTTT(index: number): void {
     const shiftIndex = this.getShiftIndex(index);
     const startTime = this.ttperHourSwitches[`shift${shiftIndex}_START_TIME`];
     const endTime = this.ttperHourSwitches[`shift${shiftIndex}_END_TIME`];
-
+  
     if (startTime && endTime) {
       const start = this.convertTimeToMinutes(startTime);
       const end = this.convertTimeToMinutes(endTime);
-
-      // Calculate total time in hours (handle overnight shifts)
-      const totalMinutes = end >= start ? end - start : 24 * 60 - start + end;
-      this.ttperHourSwitches[`shift${shiftIndex}_TOTAL_TIME`] = totalMinutes;
+  
+      // Calculate total time in minutes (handle overnight shifts)
+      let totalMinutes = end >= start ? end - start : 24 * 60 - start + end;
+  
+      // Check if the day is Friday and only for Shift 1
+      const eventDate = this.newEvent.date; // Replace with your actual event date
+      const options: Intl.DateTimeFormatOptions = { weekday: 'long' };
+      const dayName = eventDate.toLocaleDateString('en-US', options);
+  
+      if (dayName === 'Friday' && shiftIndex === 1) {
+        const excludedStart = this.convertTimeToMinutes('11:40');
+        const excludedEnd = this.convertTimeToMinutes('12:40');
+  
+        // Adjust the total time if the shift spans the excluded period
+        if (start < excludedEnd && end > excludedStart) {
+          const overlapStart = Math.max(start, excludedStart);
+          const overlapEnd = Math.min(end, excludedEnd);
+          const overlapMinutes = overlapEnd - overlapStart;
+  
+          if (overlapMinutes > 0) {
+            totalMinutes -= overlapMinutes;
+          }
+        }
+      }
+  
+      this.ttperHourSwitches[`shift${shiftIndex}_TOTAL_TIME`] = Math.max(totalMinutes, 0); // Ensure no negative time
     }
   }
+  
   updateTotalTimeOTTL(index: number): void {
     const shiftIndex = this.getShiftIndex(index);
     const startTime = this.tlperHourSwitches[`shift${shiftIndex}_START_TIME`];
     const endTime = this.tlperHourSwitches[`shift${shiftIndex}_END_TIME`];
-
+  
     if (startTime && endTime) {
       const start = this.convertTimeToMinutes(startTime);
       const end = this.convertTimeToMinutes(endTime);
-
-      // Calculate total time in hours (handle overnight shifts)
-      const totalMinutes = end >= start ? end - start : 24 * 60 - start + end;
-      this.tlperHourSwitches[`shift${shiftIndex}_TOTAL_TIME`] = totalMinutes;
+  
+      // Calculate total time in minutes (handle overnight shifts)
+      let totalMinutes = end >= start ? end - start : 24 * 60 - start + end;
+  
+      // Check if the day is Friday and only for Shift 1
+      const eventDate = this.newEvent.date; // Replace with your actual event date
+      const options: Intl.DateTimeFormatOptions = { weekday: 'long' };
+      const dayName = eventDate.toLocaleDateString('en-US', options);
+  
+      if (dayName === 'Friday' && shiftIndex === 1) {
+        const excludedStart = this.convertTimeToMinutes('11:40');
+        const excludedEnd = this.convertTimeToMinutes('12:40');
+  
+        // Adjust the total time if the shift spans the excluded period
+        if (start < excludedEnd && end > excludedStart) {
+          const overlapStart = Math.max(start, excludedStart);
+          const overlapEnd = Math.min(end, excludedEnd);
+          const overlapMinutes = overlapEnd - overlapStart;
+  
+          if (overlapMinutes > 0) {
+            totalMinutes -= overlapMinutes;
+          }
+        }
+      }
+  
+      this.tlperHourSwitches[`shift${shiftIndex}_TOTAL_TIME`] = Math.max(totalMinutes, 0); // Ensure no negative time
     }
-  }
-
+  }  
 
   async saveHour(buffer: WDHoursSpecific) {
     const result = await Swal.fire({
