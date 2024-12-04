@@ -47,6 +47,7 @@ export class AddMoMarketingComponent implements OnInit {
   totalMoMonth1TL: number = 0;
   totalMoMonth2TL: number = 0;
   totalMoMonth3TL: number = 0;
+  loading:boolean = false;
 
   //Pagination
   pageOfItems: Array<any>;
@@ -1439,8 +1440,7 @@ export class AddMoMarketingComponent implements OnInit {
       moMonth2: item.moMonth2,
     }));
 
-    console.table(filteredData);
-
+    this.loading = true;
     this.moService.saveMarketingOrderMarketing(this.detailMarketingOrder).subscribe(
       (response) => {
         Swal.fire({
@@ -1453,6 +1453,7 @@ export class AddMoMarketingComponent implements OnInit {
             this.navigateToView();
           }
         });
+        this.loading = false;
       },
       (error) => {
         Swal.fire({
@@ -1461,6 +1462,7 @@ export class AddMoMarketingComponent implements OnInit {
           text: 'Failed to add marketing order details: ' + error.message,
           confirmButtonText: 'OK',
         });
+        this.loading = false;
       }
     );
   }
