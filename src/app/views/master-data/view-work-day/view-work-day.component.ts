@@ -335,13 +335,9 @@ export class ViewWorkDayComponent implements OnInit {
             this.perHourShift = response.data;
             break;
           case "OT_TT":
-            console.log("OT_TT ada");
-            console.log(response.data);
             this.ttperHourSwitches = response.data;
             break;
-            case "OT_TL":
-            console.log("OT_TL ada");
-            console.log(response.data);
+          case "OT_TL":
             this.tlperHourSwitches = response.data;
             break;
         }
@@ -489,16 +485,13 @@ export class ViewWorkDayComponent implements OnInit {
       if(this.tabset)
       this.tabset.tabs[0].active = true;
       if (day.weekend) {
-        console.log("sini w");
         this.weekend = true;
         this.title = "OverTime TT and TL";
       } else {
         this.weekend = false;
         if(this.overTimeSwitch){
-          console.log("sini wss");
           this.title = "OverTime TT and TL";
         }else{
-          console.log("sini wddd");
           this.title = "Normal Work Day";
         }
       }
