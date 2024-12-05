@@ -187,6 +187,14 @@ export class AddMoMarketingComponent implements OnInit {
     mo.moMonth2 = numericValue;
   }
 
+  allowOnlyNumbers(event: KeyboardEvent): void {
+    const charCode = event.charCode || event.keyCode;
+    // Cek apakah karakter adalah angka (0-9)
+    if (charCode < 48 || charCode > 57) {
+      event.preventDefault();
+    }
+  }
+
   formatNumber(value: any): string {
     if (value == null || value === '') {
       return '';
