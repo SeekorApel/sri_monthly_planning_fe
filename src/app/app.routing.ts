@@ -101,13 +101,6 @@ export const routes: Routes = [
         },
       },
       {
-        path: 'master-data/view-plant',
-        component: ViewPlantComponent,
-        data: {
-          title: 'Master Data / View Plant',
-        },
-      },
-      {
         path: 'master-data/view-setting',
         component: ViewSettingComponent,
         data: {
