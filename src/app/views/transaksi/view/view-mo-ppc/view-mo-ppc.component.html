@@ -72,14 +72,17 @@
 
             <!-- Action Column -->
             <ng-container matColumnDef="action">
-              <th *matHeaderCellDef style="min-width: 350px">Action</th>
+              <th *matHeaderCellDef style="min-width: 370px">Action</th>
               <td *matCellDef="let mo">
                 <button type="button" class="btn btn-md btn-secondary" (click)="navigateToDetail(mo.month0, mo.month1, mo.month2, mo.type)">Detail</button>
                 <button type="button" class="btn btn-md btn-primary ml-2" (click)="navigateToEdit(mo.moId)">Revision</button>
                 <button *ngIf="mo.statusFilled === 1" type="button" class="btn btn-md btn-danger ml-2" disabled>Disable</button>
                 <button *ngIf="mo.statusFilled === 2" type="button" class="btn btn-md btn-danger ml-2" (click)="disableMo(mo)">Disable</button>
                 <button *ngIf="mo.statusFilled === 3" type="button" class="btn btn-md btn-warning ml-2" (click)="enableMo(mo)">Enable</button>
-                <button type="button" class="btn btn-md btn-success ml-2" (click)="exportExcelMo(mo.moId)">Print</button>
+                <button type="button" [disabled]="loadingPrint[mo.moId]" class="btn btn-md btn-success ml-2" (click)="exportExcelMo(mo.moId)">
+                  <span *ngIf="loadingPrint[mo.moId]" class="spinner-border spinner-border-sm mr-1"></span>
+                  Print
+                </button>
               </td>
             </ng-container>
             <tr align="center" style="height: 20px" mat-header-row *matHeaderRowDef="displayedColumns"></tr>

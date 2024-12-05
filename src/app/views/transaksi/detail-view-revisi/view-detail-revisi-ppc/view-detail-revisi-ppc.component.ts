@@ -220,11 +220,20 @@ export class ViewDetailRevisiPpcComponent implements OnInit {
 
   showDataRevision(idMo: string) {
     this.loadingShow[idMo] = true;
+    Swal.fire({
+      title: 'Loading...',
+      html: 'Please wait while fetching data marketing order.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
     this.moService.getAllMoById(idMo).subscribe(
       (response: ApiResponse<any>) => {
         this.allData = response.data;
         this.fillAllData(this.allData);
         this.loadingShow[idMo] = false;
+        Swal.close();
       },
       (error) => {
         Swal.fire({
@@ -233,6 +242,7 @@ export class ViewDetailRevisiPpcComponent implements OnInit {
           text: 'Failed to load marketing order details: ' + error.message,
           confirmButtonText: 'OK',
         });
+        Swal.close();
         this.loadingShow[idMo] = false;
       }
     );
