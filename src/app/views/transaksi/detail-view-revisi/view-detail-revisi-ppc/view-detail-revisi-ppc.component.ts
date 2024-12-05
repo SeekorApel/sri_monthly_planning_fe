@@ -41,6 +41,8 @@ export class ViewDetailRevisiPpcComponent implements OnInit {
   detailMarketingOrder: DetailMarketingOrder[];
   headerRevision: string;
   detailMoRevision: string;
+  loadingShow: { [key: string]: boolean } = {};
+  loadingPrint: { [key: string]: boolean } = {};
 
   // Pagination Marketing Order
   displayedColumnsMo: string[] = ['no', 'moId', 'type', 'dateValid', 'revisionPpc', 'revisionMarketing', 'month0', 'month1', 'month2', 'action'];
@@ -217,10 +219,21 @@ export class ViewDetailRevisiPpcComponent implements OnInit {
   }
 
   showDataRevision(idMo: string) {
+    this.loadingShow[idMo] = true;
+    Swal.fire({
+      title: 'Loading...',
+      html: 'Please wait while fetching data marketing order.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
     this.moService.getAllMoById(idMo).subscribe(
       (response: ApiResponse<any>) => {
         this.allData = response.data;
         this.fillAllData(this.allData);
+        this.loadingShow[idMo] = false;
+        Swal.close();
       },
       (error) => {
         Swal.fire({
@@ -229,6 +242,8 @@ export class ViewDetailRevisiPpcComponent implements OnInit {
           text: 'Failed to load marketing order details: ' + error.message,
           confirmButtonText: 'OK',
         });
+        Swal.close();
+        this.loadingShow[idMo] = false;
       }
     );
   }
@@ -366,6 +381,7 @@ export class ViewDetailRevisiPpcComponent implements OnInit {
   }
 
   exportExcelMo(id: string): void {
+    this.loadingPrint[id] = true;
     this.moService.downloadExcelMo(id).subscribe(
       (response: Blob) => {
         const url = window.URL.createObjectURL(response);
@@ -374,6 +390,7 @@ export class ViewDetailRevisiPpcComponent implements OnInit {
         a.download = `Marketing_Order_${id}.xlsx`;
         a.click();
         window.URL.revokeObjectURL(url);
+        this.loadingPrint[id] = false;
       },
       (error) => {
         Swal.fire({
@@ -381,7 +398,7 @@ export class ViewDetailRevisiPpcComponent implements OnInit {
           title: 'Oops...',
           text: 'Gagal mendownload file. Silakan coba lagi!',
         });
-        console.error('Error downloading file:', error);
+        this.loadingPrint[id] = false;
       }
     );
   }

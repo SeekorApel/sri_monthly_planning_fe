@@ -41,10 +41,8 @@ import { ViewCtKapaComponent } from './views/master-data/view-ct-kapa/view-ct-ka
 import { ViewDDeliveryScheduleComponent } from './views/master-data/view-d-deliveryschedule/view-d-deliveryschedule.component';
 import { ViewMoMarketingComponent } from './views/transaksi/view/view-mo-marketing/view-mo-marketing.component';
 import { AddMoMarketingComponent } from './views/transaksi/add/add-mo-marketing/add-mo-marketing.component';
-import { DetailViewMoPpcComponent } from './views/transaksi/detail-view/detail-view-mo-ppc/detail-view-mo-ppc.component';
 import { EditMoPpcComponent } from './views/transaksi/edit/edit-mo-ppc/edit-mo-ppc.component';
 import { ViewCuringSizeComponent } from './views/master-data/view-curing-size/view-curing-size.component';
-import { DetailViewMoMarketingComponent } from './views/transaksi/detail-view-mo-marketing/detail-view-mo-marketing.component';
 import { EditMoMarketingComponent } from './views/transaksi/edit/edit-mo-marketing/edit-mo-marketing.component';
 import { ViewDetailRevisiPpcComponent } from './views/transaksi/detail-view-revisi/view-detail-revisi-ppc/view-detail-revisi-ppc.component';
 import { ViewWorkDayComponent } from './views/master-data/view-work-day/view-work-day.component';
@@ -95,13 +93,6 @@ export const routes: Routes = [
       title: 'Home',
     },
     children: [
-      {
-        path: 'master-data/view-plant',
-        component: ViewPlantComponent,
-        data: {
-          title: 'Master Data / View Plant',
-        },
-      },
       {
         path: 'master-data/view-plant',
         component: ViewPlantComponent,
@@ -348,24 +339,10 @@ export const routes: Routes = [
         },
       },
       {
-        path: 'transaksi/detail-mo-ppc/:idMo',
-        component: DetailViewMoPpcComponent,
-        data: {
-          title: 'Transaksi / Detail Marketing Order',
-        },
-      },
-      {
         path: 'transaksi/edit-mo-ppc/:idMo',
         component: EditMoPpcComponent,
         data: {
           title: 'Transaksi / Edit Marketing Order',
-        },
-      },
-      {
-        path: 'transaksi/detail-mo-marketing/:idMo',
-        component: DetailViewMoMarketingComponent,
-        data: {
-          title: 'Transaksi / Detail Marketing Order',
         },
       },
       {

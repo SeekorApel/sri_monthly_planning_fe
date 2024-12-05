@@ -30,6 +30,7 @@ export class EditMoPpcComponent implements OnInit {
   monthNames: string[] = ['', '', ''];
   allData: any;
   lastIdMo: string = '';
+  loading:boolean = false;
 
   marketingOrder: MarketingOrder = new MarketingOrder();
   headerMarketingOrder: any[] = [];
@@ -245,12 +246,23 @@ export class EditMoPpcComponent implements OnInit {
   }
 
   getAllData(idMo: String) {
+    Swal.fire({
+      title: 'Loading...',
+      html: 'Please wait while fetching data marketing order.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
+
     this.moService.getAllMoById(idMo).subscribe(
       (response: ApiResponse<any>) => {
+        Swal.close();
         this.allData = response.data;
         this.fillAllData(this.allData);
       },
       (error) => {
+        Swal.close();
         Swal.fire({
           icon: 'error',
           title: 'Error',
@@ -449,6 +461,7 @@ export class EditMoPpcComponent implements OnInit {
       detailMarketingOrder: this.detailMarketingOrder,
     };
 
+    this.loading = true;
     this.moService.saveMarketingOrderPPC(saveMo).subscribe(
       (response) => {
         Swal.fire({
@@ -461,9 +474,11 @@ export class EditMoPpcComponent implements OnInit {
             this.navigateToViewMo();
           }
         });
+        this.loading = false;
       },
       (err) => {
         Swal.fire('Error!', 'Error insert data Marketing Order.', 'error');
+        this.loading = false;
       }
     );
   }

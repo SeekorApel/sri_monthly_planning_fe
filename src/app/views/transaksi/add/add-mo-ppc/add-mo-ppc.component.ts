@@ -40,6 +40,8 @@ export class AddMoPpcComponent implements OnInit {
   errorMessage: string | null = null;
   workDay: any[];
   file: File | null = null;
+  loadingShowData:boolean = false;
+  loadingSaveData:boolean = false;
 
   //Error Message
   errorMessagesMinOrder: string[] = [];
@@ -435,6 +437,7 @@ export class AddMoPpcComponent implements OnInit {
       this.formHeaderMo.markAllAsTouched();
       return;
     }
+    this.loadingShowData = true;
     this.fillTheTableMo();
     this.isTableVisible = true;
   }
@@ -474,8 +477,6 @@ export class AddMoPpcComponent implements OnInit {
       productMerk: typeMoForm,
     };
 
-    console.log(data);
-
     this.moService.getDetailMarketingOrder(data).subscribe(
       (response: ApiResponse<DetailMarketingOrder[]>) => {
         this.detailMarketingOrder = response.data;
@@ -487,6 +488,7 @@ export class AddMoPpcComponent implements OnInit {
           item.lockStatusM1 = 0;
           item.lockStatusM2 = 0;
         });
+        this.loadingShowData = false;
       },
       (error) => {
         Swal.fire({
@@ -495,6 +497,7 @@ export class AddMoPpcComponent implements OnInit {
           text: error.message,
           confirmButtonText: 'OK',
         });
+        this.loadingShowData = false;
       }
     );
   }
@@ -537,9 +540,12 @@ export class AddMoPpcComponent implements OnInit {
       type: type,
     };
 
+    this.loadingSaveData = true;
+
     // Validate available months before proceeding
     this.validateAvailableMonths(varWd).then((isValid) => {
       if (!isValid) {
+        this.loadingSaveData = false;
         return;
       }
 
@@ -564,9 +570,11 @@ export class AddMoPpcComponent implements OnInit {
               this.navigateToViewMo();
             }
           });
+          this.loadingSaveData = false;
         },
         (err) => {
           Swal.fire('Error!', 'Error insert data Marketing Order.', 'error');
+          this.loadingSaveData = false;
         }
       );
     });
@@ -788,7 +796,7 @@ export class AddMoPpcComponent implements OnInit {
     setBorder(worksheet.getCell('N12'));
     worksheet.getCell('Q12').value = this.formHeaderMo.get('total_wt_0')?.value ?? 0; // "Month 1"
     worksheet.getCell('R12').value = this.formHeaderMo.get('total_wt_1')?.value ?? 0; // "Month 2"
-    worksheet.getCell('S12').value = this.formHeaderMo.get('total_wt_2')?.value ?? 0; // "Month 3"    
+    worksheet.getCell('S12').value = this.formHeaderMo.get('total_wt_2')?.value ?? 0; // "Month 3"
     worksheet.getCell('Q12').numFmt = '0.00';
     worksheet.getCell('R12').numFmt = '0.00';
     worksheet.getCell('S12').numFmt = '0.00';
