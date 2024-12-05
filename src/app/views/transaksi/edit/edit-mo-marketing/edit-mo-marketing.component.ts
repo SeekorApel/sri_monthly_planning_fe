@@ -225,12 +225,23 @@ export class EditMoMarketingComponent implements OnInit {
   }
 
   getAllData(idMo: String) {
+    Swal.fire({
+      title: 'Loading...',
+      html: 'Please wait while fetching data marketing order.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
+
     this.moService.getAllMoById(idMo).subscribe(
       (response: ApiResponse<any>) => {
+        Swal.close();
         this.allData = response.data;
         this.fillAllData(this.allData);
       },
       (error) => {
+        Swal.close();
         Swal.fire({
           icon: 'error',
           title: 'Error',

@@ -74,12 +74,12 @@
             <ng-container matColumnDef="action">
               <th *matHeaderCellDef style="min-width: 200px">Action</th>
               <td *matCellDef="let mo">
-                <button type="button" [disabled]="loadingShow" class="btn btn-md btn-secondary" (click)="showDataRevision(mo.moId)">
-                  <span *ngIf="loadingShow" class="spinner-border spinner-border-sm mr-1"></span>
+                <button type="button" [disabled]="loadingShow[mo.moId]" class="btn btn-md btn-secondary" (click)="showDataRevision(mo.moId)">
+                  <span *ngIf="loadingShow[mo.moId]" class="spinner-border spinner-border-sm mr-1"></span>
                   Show
                 </button>
-                <button type="button" [disabled]="loadingPrint" class="btn btn-md btn-success ml-2" (click)="exportExcelMo(mo.moId)">
-                  <span *ngIf="loadingPrint" class="spinner-border spinner-border-sm mr-1"></span>
+                <button type="button" [disabled]="loadingPrint[mo.moId]" class="btn btn-md btn-success ml-2" (click)="exportExcelMo(mo.moId)">
+                  <span *ngIf="loadingPrint[mo.moId]" class="spinner-border spinner-border-sm mr-1"></span>
                   Print
                 </button>
               </td>
