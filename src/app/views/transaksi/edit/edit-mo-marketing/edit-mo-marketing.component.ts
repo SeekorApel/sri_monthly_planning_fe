@@ -155,6 +155,21 @@ export class EditMoMarketingComponent implements OnInit {
     this.getLastIdMo();
   }
 
+  onInputFormat(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const value = input.value;
+    const numericValue = value.replace(/\./g, '').replace(/,/g, '.');
+    input.value = this.formatNumber(numericValue);
+  }
+
+  allowOnlyNumbers(event: KeyboardEvent): void {
+    const charCode = event.charCode || event.keyCode;
+    // Cek apakah karakter adalah angka (0-9)
+    if (charCode < 48 || charCode > 57) {
+      event.preventDefault();
+    }
+  }
+
   onInputChangeM0(mo: any, value: string) {
     const numericValue = Number(value.replace(/\./g, '').replace(',', '.'));
     mo.moMonth0 = numericValue;
