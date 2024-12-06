@@ -9,4 +9,5 @@ export class MarketingOrder {
   month2: Date;
   status: Number;
   statusFilled: Number;
+  selected: boolean;
 }

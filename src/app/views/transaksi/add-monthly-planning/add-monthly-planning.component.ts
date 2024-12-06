@@ -66,7 +66,7 @@ export class AddMonthlyPlanningComponent implements OnInit {
   pageOfItems: Array<any>;
   pageSize: number = 5;
   totalPages: number = 5;
-  displayedColumns: string[] = ['no', 'moId', 'type', 'dateValid', 'revisionPpc', 'revisionMarketing', 'month0', 'month1', 'month2', 'action'];
+  displayedColumns: string[] = ['select','no', 'moId', 'type', 'dateValid', 'revisionPpc', 'revisionMarketing', 'month0', 'month1', 'month2', 'action'];
   displayedColumnsMP: string[] = ['no', 'partNumber', 'dateDailyMp', 'totalPlan'];
   childHeadersColumnsMP: string[] = ['workDay'];
 
@@ -103,7 +103,9 @@ export class AddMonthlyPlanningComponent implements OnInit {
     this.searchText = '';
     this.dataSourceMO.filter = '';
   }
-
+  viewDetail(): void {
+    $('#changeMould').modal('show');
+  }
   getAllMarketingOrder(): void {
     this.moService.getAllMarketingOrder().subscribe(
       (response: ApiResponse<MarketingOrder[]>) => {
@@ -350,6 +352,7 @@ export class AddMonthlyPlanningComponent implements OnInit {
     const formattedDate = `${('0' + (dateObj.getDate())).slice(-2)}-${('0' + (dateObj.getMonth() + 1)).slice(-2)}-${dateObj.getFullYear()}`;
     return formattedDate;
   }
+ 
 
   fillDataShift(detailShiftMonthlyPlanCuring: DetailShiftMonthlyPlanCuring[]): void {
     // Reset nilai
@@ -416,6 +419,13 @@ export class AddMonthlyPlanningComponent implements OnInit {
 
   fillDataWorkDays(): void {
 
+  }
+
+  selectAll(event: any): void {
+    const checked = event.target.checked;
+    this.marketingOrders.forEach((order) => {
+      order.selected = checked;
+    });
   }
 
   navigateToViewMp() {

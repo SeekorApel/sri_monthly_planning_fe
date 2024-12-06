@@ -44,8 +44,9 @@ export class MonthlyPlanCuringService {
       );
     }
 
-  getAllMachineByItemCuring(): Observable<ApiResponse<any[]>> {
-    return this.http.get<ApiResponse<[]>>(environment.apiUrlWebAdmin + '/getMachineByItemCuring');
-  }
+    getAllMachineByItemCuring(mesin: string): Observable<ApiResponse<any>> {
+      return this.http.get<ApiResponse<any>>(`${environment.apiUrlWebAdmin}/getMachineByItemCuring?itemCuring=${mesin}`);
+    }
+    
 
 }

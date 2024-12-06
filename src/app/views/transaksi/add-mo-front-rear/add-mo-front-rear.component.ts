@@ -25,6 +25,7 @@ export class AddMoFrontRearComponent implements OnInit {
   //Declaration
   idMo: String;
   formHeaderMo: FormGroup;
+  formLimit: FormGroup;
   errorMessage: string | null = null;
   searchText: string = '';
   dataTemp: any[];
@@ -44,7 +45,7 @@ export class AddMoFrontRearComponent implements OnInit {
   detailMoRevision: string;
   capacity: string = '';
   checked = [];  // Your data source
-
+  machine: any;
 
   // Pagination Marketing Order
   displayedColumnsMo: string[] = ['no', 'moId', 'type', 'dateValid', 'revisionPpc', 'revisionMarketing', 'month0', 'month1', 'month2', 'action'];
@@ -53,9 +54,9 @@ export class AddMoFrontRearComponent implements OnInit {
   @ViewChild('paginatorMo') paginatorMo: MatPaginator;
 
   // Pagination Detail Marketing Order
-  headersColumnsDmo: string[] = ['no', 'category', 'partNumber', 'description', 'machineType', 'capacity', 'qtyPerMould', 'spareMould', 'mouldMonthlyPlan', 'qtyPerRak', 'minOrder', 'maxCap', 'initialStock', 'salesForecast', 'marketingOrder', 'action'];
+  headersColumnsDmo: string[] = ['select','no', 'category', 'partNumber', 'description', 'machineType', 'capacity', 'qtyPerMould', 'spareMould', 'mouldMonthlyPlan', 'qtyPerRak', 'minOrder', 'maxCap', 'initialStock', 'salesForecast', 'marketingOrder', 'action'];
   childHeadersColumnsDmo: string[] = ['maxCapMonth0', 'maxCapMonth1', 'maxCapMonth2', 'sfMonth0', 'sfMonth1', 'sfMonth2', 'moMonth0', 'moMonth1', 'moMonth2'];
-  rowDataDmo: string[] = ['no', 'category', 'partNumber', 'description', 'machineType', 'capacity', 'qtyPerMould', 'spareMould', 'mouldMonthlyPlan', 'qtyPerRak', 'minOrder', 'maxCapMonth0', 'maxCapMonth1', 'maxCapMonth2', 'initialStock', 'sfMonth0', 'sfMonth1', 'sfMonth2', 'moMonth0', 'moMonth1', 'moMonth2', 'action'];
+  rowDataDmo: string[] = ['select','no', 'category', 'partNumber', 'description', 'machineType', 'capacity', 'qtyPerMould', 'spareMould', 'mouldMonthlyPlan', 'qtyPerRak', 'minOrder', 'maxCapMonth0', 'maxCapMonth1', 'maxCapMonth2', 'initialStock', 'sfMonth0', 'sfMonth1', 'sfMonth2', 'moMonth0', 'moMonth1', 'moMonth2', 'action'];
   dataSourceDmo: MatTableDataSource<DetailMarketingOrder>;
   @ViewChild('sortDmo') sortDmo = new MatSort();
   @ViewChild('paginatorDmo') paginatorDmo: MatPaginator;
@@ -142,6 +143,18 @@ export class AddMoFrontRearComponent implements OnInit {
       upload_file_m1: [null, []],
       upload_file_m2: [null, []],
     });
+
+    this.formLimit = this.fb.group({
+      minLimit_0_2000: [''],
+      maxLimit_0_2000: [''],
+      minLimit_2001_10000: [''],
+      maxLimit_2001_10000: [''],
+      minLimit_10001_100000: [''],
+      maxLimit_10001_100000: [''],
+      minLimit_gt_100000: [''],
+      maxLimit_gt_100000: [''],
+    });
+    
   }
 
   ngOnInit(): void {
@@ -171,6 +184,21 @@ export class AddMoFrontRearComponent implements OnInit {
     );
   }
 
+  getMachine(mesin: string): void {
+    this.machine.getAllMachineByItemCuring(mesin).subscribe(
+      (response: ApiResponse<any>) => {
+        this.machine = response.data;
+      },
+      (error) => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Failed to load machine ' + error.message,
+          confirmButtonText: 'OK',
+        });
+      }
+    );
+  }
 
   onSearchChangeMo(): void {
     this.dataSourceMo.filter = this.searchText.trim().toLowerCase();
@@ -342,6 +370,8 @@ export class AddMoFrontRearComponent implements OnInit {
     this.updateMonthNames(this.headerMarketingOrder);
   }
 
+
+
   formatDecimal(value: number | null | undefined): string {
     if (value === undefined || value === null || value === 0) {
       return '0';
@@ -374,7 +404,7 @@ export class AddMoFrontRearComponent implements OnInit {
   }
 
   navigateToViewMo() {
-    this.router.navigate(['/transaksi/view-mo-ppc']);
+    this.router.navigate(['/transaksi/add-monthly-planning']);
   }
 
   exportExcelMo(id: string): void {
@@ -401,6 +431,11 @@ export class AddMoFrontRearComponent implements OnInit {
   viewDetail(): void {
     $('#dmpModal').modal('show');
   }
+
+  fillMachine(data: any) {
+  
+  }
+  
   mesin: string = '';
 
   gedungOptions: string[] = ['Gedung G', 'Gedung C', 'Gedung D', 'Gedung A', 'Gedung B', 'Gedung H'];
