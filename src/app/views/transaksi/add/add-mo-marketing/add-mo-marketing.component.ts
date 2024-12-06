@@ -26,6 +26,7 @@ import { NumberFormatService } from 'src/app/utils/number-format/number-format.s
 export class AddMoMarketingComponent implements OnInit {
   //Variable Declaration
   idMo: String;
+  capacityDb: string = '';
   searchText: string = '';
   monthNames: string[] = ['', '', ''];
   touchedRows: boolean[] = [];
@@ -40,14 +41,13 @@ export class AddMoMarketingComponent implements OnInit {
   headerMarketingOrder: HeaderMarketingOrder[];
   detailMarketingOrderUpdate: DetailMarketingOrder[];
   productCurring: ProductCurring[];
-  capacity: string = '';
   totalMoMonth1TT: number = 0;
   totalMoMonth2TT: number = 0;
   totalMoMonth3TT: number = 0;
   totalMoMonth1TL: number = 0;
   totalMoMonth2TL: number = 0;
   totalMoMonth3TL: number = 0;
-
+  loading:boolean = false;
 
   //Pagination
   pageOfItems: Array<any>;
@@ -68,7 +68,12 @@ export class AddMoMarketingComponent implements OnInit {
   //Touch status
   touchStatus: { [key: number]: { isTouchedM0: boolean } } = {};
 
-  constructor(private router: Router, private activeRoute: ActivatedRoute, private moService: MarketingOrderService, private fb: FormBuilder, private parsingNumberService: ParsingNumberService, private numberService: NumberFormatService) {
+  constructor(private router: Router,
+              private activeRoute: ActivatedRoute,
+              private moService: MarketingOrderService,
+              private fb: FormBuilder,
+              private parsingNumberService: ParsingNumberService,
+              private numberService: NumberFormatService) {
     this.formHeaderMo = this.fb.group({
       date: [null, []],
       type: [null, []],
@@ -146,87 +151,25 @@ export class AddMoMarketingComponent implements OnInit {
       note_order_tl_1: [null, []],
       note_order_tl_2: [null, []],
     });
+
+    this.moService.getCapacity().subscribe(
+      (response: ApiResponse<any>) => {
+        this.capacityDb = response.data;
+      },
+      (error) => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Failed to load capacity ' + error.message,
+          confirmButtonText: 'OK',
+        });
+      }
+    );
   }
 
   ngOnInit(): void {
     this.idMo = this.activeRoute.snapshot.paramMap.get('idMo');
     this.getAllData(this.idMo);
-    this.getCapacity();
-  }
-
-  onBlurFieldM0(index: number): void {
-    let mo = this.detailMarketingOrder[index];
-    if (mo.moMonth0 != null && mo.moMonth0 !== 0) {
-      this.validateM0(mo.moMonth0, mo.partNumber);
-    }
-  }
-
-  onBlurFieldM1(index: number): void {
-    let mo = this.detailMarketingOrder[index];
-    if (mo.moMonth1 != null && mo.moMonth1 !== 0) {
-      this.validateM1(mo.moMonth1, mo.partNumber);
-    }
-  }
-
-  onBlurFieldM2(index: number): void {
-    let mo = this.detailMarketingOrder[index];
-    if (mo.moMonth2 != null && mo.moMonth2 !== 0) {
-      this.validateM2(mo.moMonth2, mo.partNumber);
-    }
-  }
-
-  validateM0(value: any | null | 0, partNumber: number): string {
-    let data = this.detailMarketingOrder.find((dmo) => dmo.partNumber === partNumber);
-    if (data?.isTouchedM0) {
-      if (value < data.minOrder) {
-        return 'MO must not be less than the minimum order.';
-      }
-
-      if (value > data.maxCapMonth0) {
-        return 'MO cannot be more than the maximum order M1.';
-      }
-
-      if (value % data.qtyPerRak !== 0) {
-        return `MO must be a multiple of ${data.qtyPerRak}.`;
-      }
-    }
-    return null;
-  }
-
-  validateM1(value: any | null | 0, partNumber: number): string {
-    let data = this.detailMarketingOrder.find((dmo) => dmo.partNumber === partNumber);
-    if (data?.isTouchedM1) {
-      if (value < data.minOrder) {
-        return 'MO must not be less than the minimum order.';
-      }
-
-      if (value > data.maxCapMonth1) {
-        return 'MO cannot be more than the maximum order M2.';
-      }
-
-      if (value % data.qtyPerRak !== 0) {
-        return `MO must be a multiple of ${data.qtyPerRak}.`;
-      }
-    }
-    return null;
-  }
-
-  validateM2(value: any | null | 0, partNumber: number): string {
-    let data = this.detailMarketingOrder.find((dmo) => dmo.partNumber === partNumber);
-    if (data?.isTouchedM2) {
-      if (value < data.minOrder) {
-        return 'MO must not be less than the minimum order.';
-      }
-
-      if (value > data.maxCapMonth2) {
-        return 'MO cannot be more than the maximum order M3.';
-      }
-
-      if (value % data.qtyPerRak !== 0) {
-        return `MO must be a multiple of ${data.qtyPerRak}.`;
-      }
-    }
-    return null;
   }
 
   onInputChangeM0(mo: any, value: string) {
@@ -242,6 +185,14 @@ export class AddMoMarketingComponent implements OnInit {
   onInputChangeM2(mo: any, value: string): void {
     const numericValue = Number(value.replace(/\./g, '').replace(',', '.'));
     mo.moMonth2 = numericValue;
+  }
+
+  allowOnlyNumbers(event: KeyboardEvent): void {
+    const charCode = event.charCode || event.keyCode;
+    // Cek apakah karakter adalah angka (0-9)
+    if (charCode < 48 || charCode > 57) {
+      event.preventDefault();
+    }
   }
 
   formatNumber(value: any): string {
@@ -274,27 +225,6 @@ export class AddMoMarketingComponent implements OnInit {
     mo[field] = numericValue;
   }
 
-  isInvalidValue(value: any | null | undefined, minimumOrder: number, qtyPerRak: number, maxCapacity: number): boolean {
-    if (value == null) {
-      return false;
-    }
-    const moValue = parseFloat(value.toString().replace(/\./g, '').replace(/,/g, '.'));
-
-    if (moValue < minimumOrder) {
-      return true;
-    }
-
-    if (moValue % qtyPerRak !== 0 && moValue !== 0) {
-      return true;
-    }
-
-    if (moValue > maxCapacity) {
-      return true;
-    }
-
-    return false;
-  }
-
   separatorNumber(num: number): string {
     return this.parsingNumberService.separatorTableView(num);
   }
@@ -313,12 +243,23 @@ export class AddMoMarketingComponent implements OnInit {
   }
 
   getAllData(idMo: String) {
+    Swal.fire({
+      title: 'Loading...',
+      html: 'Please wait while fetching data marketing order.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
+
     this.moService.getAllMoById(idMo).subscribe(
       (response: ApiResponse<any>) => {
+        Swal.close();
         this.allData = response.data;
         this.fillAllData(this.allData);
       },
       (error) => {
+        Swal.close();
         Swal.fire({
           icon: 'error',
           title: 'Error',
@@ -332,7 +273,8 @@ export class AddMoMarketingComponent implements OnInit {
   fillAllData(data: any): void {
     this.headerMarketingOrder = data.dataHeaderMo;
     this.detailMarketingOrder = data.dataDetailMo;
-    this.productCurring = this.filterDuplicateItems(this.detailMarketingOrder);
+
+    console.log(this.detailMarketingOrder);
 
     this.touchedRows = new Array(this.detailMarketingOrder.length).fill(false);
     this.dataSource = new MatTableDataSource(this.detailMarketingOrder);
@@ -387,35 +329,6 @@ export class AddMoMarketingComponent implements OnInit {
     });
 
     this.updateMonthNames(this.headerMarketingOrder);
-  }
-
-  filterDuplicateItems(details: any[]): ProductCurring[] {
-    // Count occurrences of each itemCuring
-    const itemCount = details.reduce((acc, detail) => {
-      acc[detail.itemCuring] = (acc[detail.itemCuring] || 0) + 1;
-      return acc;
-    }, {} as Record<string, number>);
-
-    // Filter to get only items that appear more than once
-    const duplicates = Object.keys(itemCount).filter((item) => itemCount[item] > 1);
-
-    // Map the details to ProductCurring if they are in the duplicates array
-    const productCurring: ProductCurring[] = details
-      .filter((detail) => duplicates.includes(detail.itemCuring))
-      .map((detail) => {
-        const product = new ProductCurring();
-        product.partNumber = detail.partNumber; // Assuming partNumber is a single value
-        product.itemCuring = detail.itemCuring;
-        product.maxCapMonth0 = detail.maxCapMonth0;
-        product.maxCapMonth1 = detail.maxCapMonth1;
-        product.maxCapMonth2 = detail.maxCapMonth2;
-        product.moMonth0 = detail.moMonth0;
-        product.moMonth1 = detail.moMonth1;
-        product.moMonth2 = detail.moMonth2;
-        return product;
-      });
-
-    return productCurring;
   }
 
   formatNumberView(value: number) {
@@ -785,7 +698,7 @@ export class AddMoMarketingComponent implements OnInit {
     };
 
     worksheet.mergeCells('F19:F20');
-    worksheet.getCell('F19').value = 'Capacity 99,5%';
+    worksheet.getCell('F19').value = `Capacity ${this.capacityDb} %`;
     worksheet.getCell('F19').alignment = { vertical: 'middle', horizontal: 'center' };
     worksheet.getColumn('F').width = 18;
     setBorder(worksheet.getCell('F19'));
@@ -1309,7 +1222,7 @@ export class AddMoMarketingComponent implements OnInit {
 
       // Validate moMonth0 and update validation messages
       if (dmo.lockStatusM0 !== 1) {
-        if (moMonth0 === 0) {
+        if (moMonth0 === null) {
           dmo.validationMessageM0 = 'This field is required';
           hasInvalidInput = true;
         } else if (moMonth0 < dmo.minOrder) {
@@ -1326,7 +1239,7 @@ export class AddMoMarketingComponent implements OnInit {
 
       // Validate moMonth1 and update validation messages
       if (dmo.lockStatusM1 !== 1) {
-        if (moMonth1 === 0) {
+        if (moMonth1 === null) {
           dmo.validationMessageM1 = 'This field is required';
           hasInvalidInput = true;
         } else if (moMonth1 < dmo.minOrder) {
@@ -1343,7 +1256,7 @@ export class AddMoMarketingComponent implements OnInit {
 
       // Validate moMonth2 and update validation messages
       if (dmo.lockStatusM2 !== 1) {
-        if (moMonth2 === 0) {
+        if (moMonth2 === null) {
           dmo.validationMessageM2 = 'This field is required';
           hasInvalidInput = true;
         } else if (moMonth2 < dmo.minOrder) {
@@ -1362,22 +1275,37 @@ export class AddMoMarketingComponent implements OnInit {
     this.detailMarketingOrder.forEach((dmo) => {
       if (dmo.itemCuring) {
         if (curingGroupsM0[dmo.itemCuring] > dmo.maxCapMonth0) {
-          dmo.validationMessageM0 = 'Koncian HGP M1';
-          hasInvalidInput = true;
+          if (!dmo.validationMessageM0) {
+            dmo.validationMessageM0 = 'Maximal Capacity with the same curing item is overloaded';
+            hasInvalidInput = true;
+          }
         }
         if (curingGroupsM1[dmo.itemCuring] > dmo.maxCapMonth1) {
-          dmo.validationMessageM1 = 'Koncian HGP M2';
-          hasInvalidInput = true;
+          if (!dmo.validationMessageM1) {
+            dmo.validationMessageM1 = 'Maximal Capacity with the same curing item is overloaded';
+            hasInvalidInput = true;
+          }
         }
         if (curingGroupsM2[dmo.itemCuring] > dmo.maxCapMonth2) {
-          dmo.validationMessageM2 = 'Koncian HGP M3';
-          hasInvalidInput = true;
+          if (!dmo.validationMessageM2) {
+            dmo.validationMessageM2 = 'Maximal Capacity with the same curing item is overloaded';
+            hasInvalidInput = true;
+          }
         }
       }
     });
 
-    console.log(this.detailMarketingOrder);
+    if (hasInvalidInput) {
+      Swal.fire({
+        title: 'Warning!',
+        text: 'There is an invalid input on the detail marketing order form.',
+        icon: 'warning',
+        confirmButtonText: 'OK',
+      });
+      return;
+    }
 
+    //Validasi Total
     const maxCapTubeM0 = this.headerMarketingOrder[0].maxCapTube;
     const maxCapTlM0 = this.headerMarketingOrder[0].maxCapTl;
     const maxCapTtM0 = this.headerMarketingOrder[0].maxCapTt;
@@ -1402,49 +1330,165 @@ export class AddMoMarketingComponent implements OnInit {
     let totalMoTTMonth2 = 0;
     let totalMoTLMonth2 = 0;
 
-    if (hasInvalidInput) {
+    this.detailMarketingOrder.forEach((dmo) => {
+      if (dmo.category.includes('TL')) {
+        totalMoTLMonth0 += dmo.moMonth0;
+        totalMoTLMonth1 += dmo.moMonth1;
+        totalMoTLMonth2 += dmo.moMonth2;
+      }
+      if (dmo.category.includes('TT')) {
+        totalMoTTMonth0 += dmo.moMonth0;
+        totalMoTTMonth1 += dmo.moMonth1;
+        totalMoTTMonth2 += dmo.moMonth2;
+      }
+      if (dmo.category.includes('TUBE')) {
+        totalMoTTubeMonth0 += dmo.moMonth0;
+        totalMoTTubeMonth1 += dmo.moMonth1;
+        totalMoTTubeMonth2 += dmo.moMonth2;
+      }
+    });
+
+    //Validasi Total Mo TL
+    if (totalMoTLMonth0 > maxCapTlM0) {
       Swal.fire({
         title: 'Warning!',
-        text: 'There is an invalid input on the marketing order form.',
+        text: `Total Marketing Order TL must not exceed the total Maximum Capacity of TL ${this.formatSeparator(maxCapTlM0)} in month 1.`,
         icon: 'warning',
         confirmButtonText: 'OK',
       });
       return;
     }
 
-    //Parsing data text to number
-    this.detailMarketingOrder.forEach((mo) => {
-      mo.initialStock = mo.initialStock !== null ? parseFloat(mo.initialStock.toString().replace(/\./g, '')) : 0;
-      mo.sfMonth0 = mo.sfMonth0 !== null ? parseFloat(mo.sfMonth0.toString().replace(/\./g, '')) : 0;
-      mo.sfMonth1 = mo.sfMonth1 !== null ? parseFloat(mo.sfMonth1.toString().replace(/\./g, '')) : 0;
-      mo.sfMonth2 = mo.sfMonth2 !== null ? parseFloat(mo.sfMonth2.toString().replace(/\./g, '')) : 0;
-      mo.moMonth0 = mo.moMonth0 !== null ? parseFloat(mo.moMonth0.toString().replace(/\./g, '')) : 0;
-      mo.moMonth1 = mo.moMonth1 !== null ? parseFloat(mo.moMonth1.toString().replace(/\./g, '')) : 0;
-      mo.moMonth2 = mo.moMonth2 !== null ? parseFloat(mo.moMonth2.toString().replace(/\./g, '')) : 0;
-    });
+    if (totalMoTLMonth1 > maxCapTlM1) {
+      Swal.fire({
+        title: 'Warning!',
+        text: `Total Marketing Order TL must not exceed the total Maximum Capacity of TL ${this.formatSeparator(maxCapTlM1)} in month 2.`,
+        icon: 'warning',
+        confirmButtonText: 'OK',
+      });
+      return;
+    }
 
-    // this.moService.saveMarketingOrderMarketing(this.detailMarketingOrder).subscribe(
-    //   (response) => {
-    //     Swal.fire({
-    //       title: 'Success!',
-    //       text: 'Data Marketing Order Success added.',
-    //       icon: 'success',
-    //       confirmButtonText: 'OK',
-    //     }).then((result) => {
-    //       if (result.isConfirmed) {
-    //         this.navigateToView();
-    //       }
-    //     });
-    //   },
-    //   (error) => {
-    //     Swal.fire({
-    //       icon: 'error',
-    //       title: 'Error',
-    //       text: 'Failed to add marketing order details: ' + error.message,
-    //       confirmButtonText: 'OK',
-    //     });
-    //   }
-    // );
+    if (totalMoTLMonth2 > maxCapTlM2) {
+      Swal.fire({
+        title: 'Warning!',
+        text: `Total Marketing Order TL must not exceed the total Maximum Capacity of TL ${this.formatSeparator(maxCapTlM2)} in month 3.`,
+        icon: 'warning',
+        confirmButtonText: 'OK',
+      });
+      return;
+    }
+    //Validasi End Total Mo TL
+
+    //Validasi Total Mo TT
+    if (totalMoTTMonth0 > maxCapTtM0) {
+      Swal.fire({
+        title: 'Warning!',
+        text: `Total Marketing Order TT must not exceed the total Maximum Capacity of TT ${this.formatSeparator(maxCapTtM0)} in month 1.`,
+        icon: 'warning',
+        confirmButtonText: 'OK',
+      });
+      return;
+    }
+
+    if (totalMoTTMonth1 > maxCapTtM1) {
+      Swal.fire({
+        title: 'Warning!',
+        text: `Total Marketing Order TT must not exceed the total Maximum Capacity of TT ${this.formatSeparator(maxCapTtM1)} in month 2.`,
+        icon: 'warning',
+        confirmButtonText: 'OK',
+      });
+      return;
+    }
+
+    if (totalMoTTMonth2 > maxCapTtM2) {
+      Swal.fire({
+        title: 'Warning!',
+        text: `Total Marketing Order TT must not exceed the total Maximum Capacity of TT ${this.formatSeparator(maxCapTtM2)} in month 3.`,
+        icon: 'warning',
+        confirmButtonText: 'OK',
+      });
+      return;
+    }
+    //Validasi End Total Mo TT
+
+    //Validasi Total Mo Tube
+    if (totalMoTTubeMonth0 > maxCapTubeM0) {
+      Swal.fire({
+        title: 'Warning!',
+        text: `Total Marketing Order Tube must not exceed the total Maximum Capacity of Tube ${this.formatSeparator(maxCapTubeM0)} in month 1.`,
+        icon: 'warning',
+        confirmButtonText: 'OK',
+      });
+      return;
+    }
+
+    if (totalMoTTubeMonth1 > maxCapTubeM1) {
+      Swal.fire({
+        title: 'Warning!',
+        text: `Total Marketing Order Tube must not exceed the total Maximum Capacity of Tube ${this.formatSeparator(maxCapTubeM1)} in month 2.`,
+        icon: 'warning',
+        confirmButtonText: 'OK',
+      });
+      return;
+    }
+
+    if (totalMoTTubeMonth2 > maxCapTubeM2) {
+      Swal.fire({
+        title: 'Warning!',
+        text: `Total Marketing Order Tube must not exceed the total Maximum Capacity of Tube ${this.formatSeparator(maxCapTubeM2)} in month 3.`,
+        icon: 'warning',
+        confirmButtonText: 'OK',
+      });
+      return;
+    }
+    //Validasi End Total Mo Tube
+
+    //End Validasi Total
+
+    //Parsing data text to number
+    // this.detailMarketingOrder.forEach((mo) => {
+    //   mo.initialStock = mo.initialStock !== null ? parseFloat(mo.initialStock.toString().replace(/\./g, '')) : 0;
+    //   mo.sfMonth0 = mo.sfMonth0 !== null ? parseFloat(mo.sfMonth0.toString().replace(/\./g, '')) : 0;
+    //   mo.sfMonth1 = mo.sfMonth1 !== null ? parseFloat(mo.sfMonth1.toString().replace(/\./g, '')) : 0;
+    //   mo.sfMonth2 = mo.sfMonth2 !== null ? parseFloat(mo.sfMonth2.toString().replace(/\./g, '')) : 0;
+    //   mo.moMonth0 = mo.moMonth0 !== null ? parseFloat(mo.moMonth0.toString().replace(/\./g, '')) : 0;
+    //   mo.moMonth1 = mo.moMonth1 !== null ? parseFloat(mo.moMonth1.toString().replace(/\./g, '')) : 0;
+    //   mo.moMonth2 = mo.moMonth2 !== null ? parseFloat(mo.moMonth2.toString().replace(/\./g, '')) : 0;
+    // });
+
+    const filteredData = this.detailMarketingOrder.map((item) => ({
+      partNumber: item.partNumber,
+      moMonth0: item.moMonth0,
+      moMonth1: item.moMonth1,
+      moMonth2: item.moMonth2,
+    }));
+
+    this.loading = true;
+    this.moService.saveMarketingOrderMarketing(this.detailMarketingOrder).subscribe(
+      (response) => {
+        Swal.fire({
+          title: 'Success!',
+          text: 'Data Marketing Order Success added.',
+          icon: 'success',
+          confirmButtonText: 'OK',
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.navigateToView();
+          }
+        });
+        this.loading = false;
+      },
+      (error) => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Failed to add marketing order details: ' + error.message,
+          confirmButtonText: 'OK',
+        });
+        this.loading = false;
+      }
+    );
   }
 
   onFileChange(event: Event) {
@@ -1467,21 +1511,5 @@ export class AddMoMarketingComponent implements OnInit {
         input.value = '';
       }
     }
-  }
-
-  getCapacity(): void {
-    this.moService.getCapacity().subscribe(
-      (response: ApiResponse<any>) => {
-        this.capacity = response.data;
-      },
-      (error) => {
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'Failed to load capacity ' + error.message,
-          confirmButtonText: 'OK',
-        });
-      }
-    );
   }
 }

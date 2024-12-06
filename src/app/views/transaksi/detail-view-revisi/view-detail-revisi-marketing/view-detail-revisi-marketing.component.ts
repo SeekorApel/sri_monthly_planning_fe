@@ -14,21 +14,23 @@ import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
-  selector: 'app-view-detail-revisi-ppc',
-  templateUrl: './view-detail-revisi-ppc.component.html',
-  styleUrls: ['./view-detail-revisi-ppc.component.scss'],
+  selector: 'app-view-detail-revisi-marketing',
+  templateUrl: './view-detail-revisi-marketing.component.html',
+  styleUrls: ['./view-detail-revisi-marketing.component.scss'],
 })
-export class ViewDetailRevisiPpcComponent implements OnInit {
-  //Declaration
-  idMo: string;
+export class ViewDetailRevisiMarketingComponent implements OnInit {
+  idMo: String;
   capacityDb: string = '';
   formHeaderMo: FormGroup;
+  marketingOrders: MarketingOrder[] = [];
   errorMessage: string | null = null;
-  searchTextMo: string = '';
+  searchText: string = '';
   searchTextDmo: string = '';
   dataTemp: any[];
   dateUtil: typeof ParsingDate;
   marketingOrder: MarketingOrder;
+  headerMarketingOrder: HeaderMarketingOrder[];
+  detailMarketingOrder: DetailMarketingOrder[];
   isReadOnly: boolean = true;
   monthNames: string[] = ['', '', ''];
   month0: string;
@@ -36,9 +38,6 @@ export class ViewDetailRevisiPpcComponent implements OnInit {
   month2: string;
   type: string;
   allData: any;
-  marketingOrders: MarketingOrder[] = [];
-  headerMarketingOrder: HeaderMarketingOrder[];
-  detailMarketingOrder: DetailMarketingOrder[];
   headerRevision: string;
   detailMoRevision: string;
   loadingShow: { [key: string]: boolean } = {};
@@ -51,12 +50,16 @@ export class ViewDetailRevisiPpcComponent implements OnInit {
   @ViewChild('paginatorMo') paginatorMo: MatPaginator;
 
   // Pagination Detail Marketing Order
-  headersColumnsDmo: string[] = ['no', 'category', 'partNumber', 'description', 'machineType', 'capacity', 'qtyPerMould', 'spareMould', 'mouldMonthlyPlan', 'qtyPerRak', 'minOrder', 'maxCap', 'initialStock', 'salesForecast', 'marketingOrder'];
+  headersColumnsDmo: string[] = ['no', 'category', 'partNumber', 'description', 'machineType', 'capacity', 'mouldMonthlyPlan', 'qtyPerRak', 'minOrder', 'maxCap', 'initialStock', 'salesForecast', 'marketingOrder'];
   childHeadersColumnsDmo: string[] = ['maxCapMonth0', 'maxCapMonth1', 'maxCapMonth2', 'sfMonth0', 'sfMonth1', 'sfMonth2', 'moMonth0', 'moMonth1', 'moMonth2'];
-  rowDataDmo: string[] = ['no', 'category', 'partNumber', 'description', 'machineType', 'capacity', 'qtyPerMould', 'spareMould', 'mouldMonthlyPlan', 'qtyPerRak', 'minOrder', 'maxCapMonth0', 'maxCapMonth1', 'maxCapMonth2', 'initialStock', 'sfMonth0', 'sfMonth1', 'sfMonth2', 'moMonth0', 'moMonth1', 'moMonth2'];
+  rowDataDmo: string[] = ['no', 'category', 'partNumber', 'description', 'machineType', 'capacity', 'mouldMonthlyPlan', 'qtyPerRak', 'minOrder', 'maxCapMonth0', 'maxCapMonth1', 'maxCapMonth2', 'initialStock', 'sfMonth0', 'sfMonth1', 'sfMonth2', 'moMonth0', 'moMonth1', 'moMonth2'];
   dataSourceDmo: MatTableDataSource<DetailMarketingOrder>;
   @ViewChild('sortDmo') sortDmo = new MatSort();
   @ViewChild('paginatorDmo') paginatorDmo: MatPaginator;
+
+  pageOfItems: Array<any>;
+  pageSize: number = 5;
+  totalPages: number = 5;
 
   constructor(private router: Router, private moService: MarketingOrderService, private activeRoute: ActivatedRoute, private fb: FormBuilder, private parseDateService: ParsingDateService) {
     this.dateUtil = ParsingDate;
@@ -140,7 +143,6 @@ export class ViewDetailRevisiPpcComponent implements OnInit {
       upload_file_m1: [null, []],
       upload_file_m2: [null, []],
     });
-
     this.moService.getCapacity().subscribe(
       (response: ApiResponse<any>) => {
         this.capacityDb = response.data;
@@ -166,8 +168,17 @@ export class ViewDetailRevisiPpcComponent implements OnInit {
     this.detailMoRevision = 'Detail Marketing Order';
   }
 
+  onSearchChangeMo(): void {
+    this.dataSourceMo.filter = this.searchText.trim().toLowerCase();
+  }
+
   onSearchChangeDmo(): void {
     this.dataSourceDmo.filter = this.searchTextDmo.trim().toLowerCase();
+  }
+
+  resetSearchMo(): void {
+    this.searchText = '';
+    this.dataSourceMo.filter = '';
   }
 
   resetSearchDmo(): void {
@@ -175,17 +186,31 @@ export class ViewDetailRevisiPpcComponent implements OnInit {
     this.dataSourceDmo.filter = '';
   }
 
-  onSearchChangeMo(): void {
-    this.dataSourceMo.filter = this.searchTextMo.trim().toLowerCase();
-  }
-
-  resetSearchMo(): void {
-    this.searchTextMo = '';
-    this.dataSourceMo.filter = '';
-  }
-
   parseDate(dateParse: string): string {
     return this.parseDateService.convertDateToString(dateParse);
+  }
+
+  exportExcelMo(id: string): void {
+    this.loadingPrint[id] = true;
+    this.moService.downloadExcelMo(id).subscribe(
+      (response: Blob) => {
+        const url = window.URL.createObjectURL(response);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `Marketing_Order_${id}.xlsx`; // Nama file yang diinginkan
+        a.click();
+        window.URL.revokeObjectURL(url);
+        this.loadingPrint[id] = false;
+      },
+      (error) => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Gagal mendownload file. Silakan coba lagi!',
+        });
+        this.loadingPrint[id] = false;
+      }
+    );
   }
 
   getAllDetailRevision(month0: string, month1: string, month2: string, type: string): void {
@@ -242,32 +267,30 @@ export class ViewDetailRevisiPpcComponent implements OnInit {
           text: 'Failed to load marketing order details: ' + error.message,
           confirmButtonText: 'OK',
         });
-        Swal.close();
         this.loadingShow[idMo] = false;
+        Swal.close();
       }
     );
   }
 
   fillAllData(data: any) {
     this.headerMarketingOrder = data.dataHeaderMo;
-
     //Fill table
     this.detailMarketingOrder = data.dataDetailMo;
     this.dataSourceDmo = new MatTableDataSource(this.detailMarketingOrder);
     this.dataSourceDmo.sort = this.sortDmo;
     this.dataSourceDmo.paginator = this.paginatorDmo;
-
     let typeProduct = data.type;
 
     if (this.allData) {
-      this.headerRevision = `Header Marketing Order Rev ${data.revisionPpc}`;
-      this.detailMoRevision = `Detail Marketing Order Rev ${data.revisionPpc}`;
+      this.headerRevision = `Header Marketing Order Rev ${data.revisionMarketing}`;
+      this.detailMoRevision = `Detail Marketing Order Rev ${data.revisionMarketing}`;
     }
 
     this.formHeaderMo.patchValue({
       date: new Date(data.dateValid).toISOString().split('T')[0],
       type: data.type,
-      revision: data.revisionPpc,
+      revision: data.revisionMarketing,
 
       // Header Month 1
       month_0: this.formatDateToString(this.headerMarketingOrder[0].month),
@@ -356,6 +379,24 @@ export class ViewDetailRevisiPpcComponent implements OnInit {
     return value != null ? value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : '0';
   }
 
+  formatNumber(value: number): string {
+    if (value !== null && value !== undefined) {
+      // Mengubah angka menjadi string
+      let strValue = value.toString();
+
+      // Memisahkan bagian desimal dan bagian bulat
+      const parts = strValue.split('.');
+      const integerPart = parts[0];
+      const decimalPart = parts[1] ? ',' + parts[1] : '';
+
+      // Menambahkan separator ribuan
+      const formattedInteger = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+
+      return formattedInteger + decimalPart;
+    }
+    return '';
+  }
+
   formatDateToString(dateString) {
     const date = new Date(dateString);
     const year = date.getFullYear();
@@ -364,9 +405,9 @@ export class ViewDetailRevisiPpcComponent implements OnInit {
   }
 
   updateMonthNames(hm: HeaderMarketingOrder[]): void {
-    this.monthNames[0] = this.getMonthName(new Date(this.headerMarketingOrder[1].month));
-    this.monthNames[1] = this.getMonthName(new Date(this.headerMarketingOrder[2].month));
-    this.monthNames[2] = this.getMonthName(new Date(this.headerMarketingOrder[0].month));
+    this.monthNames[0] = this.getMonthName(new Date(this.headerMarketingOrder[0].month));
+    this.monthNames[1] = this.getMonthName(new Date(this.headerMarketingOrder[1].month));
+    this.monthNames[2] = this.getMonthName(new Date(this.headerMarketingOrder[2].month));
   }
 
   getMonthName(monthValue: Date): string {
@@ -377,29 +418,6 @@ export class ViewDetailRevisiPpcComponent implements OnInit {
   }
 
   navigateToViewMo() {
-    this.router.navigate(['/transaksi/view-mo-ppc']);
-  }
-
-  exportExcelMo(id: string): void {
-    this.loadingPrint[id] = true;
-    this.moService.downloadExcelMo(id).subscribe(
-      (response: Blob) => {
-        const url = window.URL.createObjectURL(response);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = `Marketing_Order_${id}.xlsx`;
-        a.click();
-        window.URL.revokeObjectURL(url);
-        this.loadingPrint[id] = false;
-      },
-      (error) => {
-        Swal.fire({
-          icon: 'error',
-          title: 'Oops...',
-          text: 'Gagal mendownload file. Silakan coba lagi!',
-        });
-        this.loadingPrint[id] = false;
-      }
-    );
+    this.router.navigate(['/transaksi/view-mo-marketing']);
   }
 }

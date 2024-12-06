@@ -24,12 +24,13 @@ import { ParsingNumberService } from 'src/app/utils/parsing-number/parsing-numbe
 export class EditMoPpcComponent implements OnInit {
   //Variable Declaration
   idMo: String;
+  capacityDb: string = '';
   formHeaderMo: FormGroup;
   isReadOnly: boolean = true;
   monthNames: string[] = ['', '', ''];
   allData: any;
   lastIdMo: string = '';
-  capacity: string = '';
+  loading:boolean = false;
 
   marketingOrder: MarketingOrder = new MarketingOrder();
   headerMarketingOrder: any[] = [];
@@ -125,13 +126,26 @@ export class EditMoPpcComponent implements OnInit {
       upload_file_m1: [null, [Validators.required]],
       upload_file_m2: [null, [Validators.required]],
     });
+
+    this.moService.getCapacity().subscribe(
+      (response: ApiResponse<any>) => {
+        this.capacityDb = response.data;
+      },
+      (error) => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Failed to load capacity ' + error.message,
+          confirmButtonText: 'OK',
+        });
+      }
+    );
   }
 
   ngOnInit(): void {
     this.idMo = this.activeRoute.snapshot.paramMap.get('idMo');
     this.getAllData(this.idMo);
     this.getLastIdMo();
-    this.getCapacity();
   }
 
   lockUpdate(partNumber: number, lockStatusField: string) {
@@ -232,12 +246,23 @@ export class EditMoPpcComponent implements OnInit {
   }
 
   getAllData(idMo: String) {
+    Swal.fire({
+      title: 'Loading...',
+      html: 'Please wait while fetching data marketing order.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
+
     this.moService.getAllMoById(idMo).subscribe(
       (response: ApiResponse<any>) => {
+        Swal.close();
         this.allData = response.data;
         this.fillAllData(this.allData);
       },
       (error) => {
+        Swal.close();
         Swal.fire({
           icon: 'error',
           title: 'Error',
@@ -280,6 +305,8 @@ export class EditMoPpcComponent implements OnInit {
       item.moMonth1 = item.moMonth1 !== null ? item.moMonth1 : 0;
       item.moMonth2 = item.moMonth2 !== null ? item.moMonth2 : 0;
     });
+
+    console.log(this.headerMarketingOrder[0].totalWdTube);
 
     let typeProduct = data.type;
     this.formHeaderMo.patchValue({
@@ -434,6 +461,7 @@ export class EditMoPpcComponent implements OnInit {
       detailMarketingOrder: this.detailMarketingOrder,
     };
 
+    this.loading = true;
     this.moService.saveMarketingOrderPPC(saveMo).subscribe(
       (response) => {
         Swal.fire({
@@ -446,9 +474,11 @@ export class EditMoPpcComponent implements OnInit {
             this.navigateToViewMo();
           }
         });
+        this.loading = false;
       },
       (err) => {
         Swal.fire('Error!', 'Error insert data Marketing Order.', 'error');
+        this.loading = false;
       }
     );
   }
@@ -512,21 +542,5 @@ export class EditMoPpcComponent implements OnInit {
 
   navigateToViewMo() {
     this.router.navigate(['/transaksi/view-mo-ppc']);
-  }
-
-  getCapacity(): void {
-    this.moService.getCapacity().subscribe(
-      (response: ApiResponse<any>) => {
-        this.capacity = response.data;
-      },
-      (error) => {
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'Failed to load capacity ' + error.message,
-          confirmButtonText: 'OK',
-        });
-      }
-    );
   }
 }

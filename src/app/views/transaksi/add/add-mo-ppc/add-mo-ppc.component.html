@@ -29,251 +29,179 @@
           <!-- Tabset -->
           <tabset>
             <tab heading="Month 1">
-              <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="month-input">Month And Year <span class="text-danger">*</span></label>
-                <div class="col-md-9">
+              <div class="form-row align-items-center">
+                <div class="col-md-4 min-height-form">
+                  <label>Month And Year <span class="text-danger">*</span></label>
                   <input class="form-control" formControlName="month_0" type="month" [ngClass]="{ 'is-invalid': formHeaderMo.get('month_0')?.invalid && formHeaderMo.get('month_0')?.touched }" (ngModelChange)="onChangeWorkDay()" />
                   <div *ngIf="formHeaderMo.get('month_0')?.invalid && formHeaderMo.get('month_0')?.touched" class="invalid-feedback">Month And Year is required</div>
                 </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="text-input">Normal Working Day</label>
-                <div class="col-md-9">
+                <div class="col-md-4 min-height-form">
+                  <label for="text-input">Normal Working Day</label>
                   <input type="text" formControlName="nwd_0" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="text-input">Normal Working Day Tube</label>
-                <div class="col-md-9">
+                <div class="col-md-4 min-height-form">
+                  <label for="text-input">Normal Working Day Tube</label>
                   <input type="text" formControlName="nwt_0" name="text-input" class="form-control" placeholder="0,00" (input)="onInputChange($event, 'nwt_0')" (input)="calculateTotalTube('nwt_0')" />
                 </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="text-input">Working Day Overtime Tube</label>
-                <div class="col-md-9">
+                <div class="col-md-4 min-height-form">
+                  <label for="text-input">Working Day Overtime Tube</label>
                   <input type="text" formControlName="ot_wt_0" name="text-input" class="form-control" placeholder="0,00" (input)="onInputChange($event, 'ot_wt_0')" (input)="calculateTotalTube('ot_wt_0')" />
                 </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="text-input">Working Day Overtime TL</label>
-                <div class="col-md-9">
+                <div class="col-md-4 min-height-form">
+                  <label for="text-input">Working Day Overtime TL</label>
                   <input type="text" formControlName="tl_ot_wd_0" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="text-input">Working Day Overtime TT</label>
-                <div class="col-md-9">
+                <div class="col-md-4 min-height-form">
+                  <label for="text-input">Working Day Overtime TT</label>
                   <input type="text" formControlName="tt_ot_wd_0" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="text-input">Total Working Day Tube</label>
-                <div class="col-md-9">
+                <div class="col-md-4 min-height-form">
+                  <label for="text-input">Total Working Day Tube</label>
                   <input formControlName="total_wt_0" type="text" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="text-input">Total Working Day Tire TL</label>
-                <div class="col-md-9">
+                <div class="col-md-4 min-height-form">
+                  <label for="text-input">Total Working Day Tire TL</label>
                   <input formControlName="total_tlwd_0" type="text" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="text-input">Total Working Day Tire TT</label>
-                <div class="col-md-9">
+                <div class="col-md-4 min-height-form">
+                  <label for="text-input">Total Working Day Tire TT</label>
                   <input formControlName="total_ttwd_0" type="text" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="text-input">Maximum Capacity Tube<span class="text-danger">*</span></label>
-                <div class="col-md-9">
+                <div class="col-md-4 min-height-form">
+                  <label for="text-input">Maximum Capacity Tube<span class="text-danger">*</span></label>
                   <input #max_tube_capa_0 type="text" formControlName="max_tube_capa_0" name="text-input" class="form-control" placeholder="0,00" [ngClass]="{ 'is-invalid': formHeaderMo.get('max_tube_capa_0')?.invalid && formHeaderMo.get('max_tube_capa_0')?.touched }" />
                   <div *ngIf="formHeaderMo.get('max_tube_capa_0')?.invalid && formHeaderMo.get('max_tube_capa_0')?.touched" class="invalid-feedback">Maximum Tube Capacity is required.</div>
                 </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="text-input">Maximum Capacity Tire TL<span class="text-danger">*</span></label>
-                <div class="col-md-9">
+                <div class="col-md-4 min-height-form">
+                  <label for="text-input">Maximum Capacity Tire TL<span class="text-danger">*</span></label>
                   <input type="text" formControlName="max_capa_tl_0" name="text-input" class="form-control" placeholder="0,00" [ngClass]="{ 'is-invalid': formHeaderMo.get('max_capa_tl_0')?.invalid && formHeaderMo.get('max_capa_tl_0')?.touched }" />
                   <div *ngIf="formHeaderMo.get('max_capa_tl_0')?.invalid && formHeaderMo.get('max_capa_tl_0')?.touched" class="invalid-feedback">Maximum Capacity Tire TL is required.</div>
                 </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="text-input">Maximum Capacity Tire TT <span class="text-danger">*</span></label>
-                <div class="col-md-9">
+                <div class="col-md-4 min-height-form">
+                  <label for="text-input">Maximum Capacity Tire TT<span class="text-danger">*</span></label>
                   <input type="text" formControlName="max_capa_tt_0" name="text-input" class="form-control" placeholder="0,00" [ngClass]="{ 'is-invalid': formHeaderMo.get('max_capa_tt_0')?.invalid && formHeaderMo.get('max_capa_tt_0')?.touched }" />
                   <div *ngIf="formHeaderMo.get('max_capa_tt_0')?.invalid && formHeaderMo.get('max_capa_tt_0')?.touched" class="invalid-feedback">Maximum Capacity Tire TT is required.</div>
                 </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="text-input">Note Order TL</label>
-                <div class="col-md-9">
+                <div class="col-md-4 min-height-form">
+                  <label for="text-input">Note Order TL</label>
                   <input type="text" formControlName="note_order_tl_0" name="text-input" class="form-control" />
                 </div>
               </div>
             </tab>
             <tab heading="Month 2">
-              <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="month-input">Month And Year</label>
-                <div class="col-md-9">
+              <div class="form-row align-items-center">
+                <div class="col-md-4 min-height-form">
+                  <label>Month And Year</label>
                   <input class="form-control" formControlName="month_1" type="month" [readOnly]="true" />
                 </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="text-input">Normal Working Day</label>
-                <div class="col-md-9">
+                <div class="col-md-4 min-height-form">
+                  <label for="text-input">Normal Working Day</label>
                   <input type="text" formControlName="nwd_1" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="text-input">Normal Working Day Tube</label>
-                <div class="col-md-9">
+                <div class="col-md-4 min-height-form">
+                  <label for="text-input">Normal Working Day Tube</label>
                   <input type="text" formControlName="nwt_1" name="text-input" class="form-control" placeholder="0,00" (input)="onInputChange($event, 'nwt_1')" (input)="calculateTotalTube('nwt_1')" />
                 </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="text-input">Working Day Overtime Tube</label>
-                <div class="col-md-9">
+                <div class="col-md-4 min-height-form">
+                  <label for="text-input">Working Day Overtime Tube</label>
                   <input type="text" formControlName="ot_wt_1" name="text-input" class="form-control" placeholder="0,00" (input)="onInputChange($event, 'ot_wt_1')" (input)="calculateTotalTube('ot_wt_1')" />
                 </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="text-input">Working Day Overtime TL</label>
-                <div class="col-md-9">
+                <div class="col-md-4 min-height-form">
+                  <label for="text-input">Working Day Overtime TL</label>
                   <input type="text" formControlName="tl_ot_wd_1" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="text-input">Working Day Overtime TT</label>
-                <div class="col-md-9">
+                <div class="col-md-4 min-height-form">
+                  <label for="text-input">Working Day Overtime TT</label>
                   <input type="text" formControlName="tt_ot_wd_1" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="text-input">Total Working Day Tube</label>
-                <div class="col-md-9">
+                <div class="col-md-4 min-height-form">
+                  <label for="text-input">Total Working Day Tube</label>
                   <input formControlName="total_wt_1" type="text" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="text-input">Total Working Day Tire TL</label>
-                <div class="col-md-9">
+                <div class="col-md-4 min-height-form">
+                  <label for="text-input">Total Working Day Tire TL</label>
                   <input formControlName="total_tlwd_1" type="text" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="text-input">Total Working Day Tire TT</label>
-                <div class="col-md-9">
+                <div class="col-md-4 min-height-form">
+                  <label for="text-input">Total Working Day Tire TT</label>
                   <input formControlName="total_ttwd_1" type="text" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="text-input">Maximum Capacity Tube<span class="text-danger"> *</span></label>
-                <div class="col-md-9">
-                  <input type="text" [ngClass]="{ 'is-invalid': formHeaderMo.get('max_tube_capa_1')?.invalid && formHeaderMo.get('max_tube_capa_1')?.touched }" formControlName="max_tube_capa_1" name="text-input" class="form-control" placeholder="0,00" />
+                <div class="col-md-4 min-height-form">
+                  <label for="text-input">Maximum Capacity Tube<span class="text-danger">*</span></label>
+                  <input #max_tube_capa_1 type="text" formControlName="max_tube_capa_1" name="text-input" class="form-control" placeholder="0,00" [ngClass]="{ 'is-invalid': formHeaderMo.get('max_tube_capa_1')?.invalid && formHeaderMo.get('max_tube_capa_1')?.touched }" />
                   <div *ngIf="formHeaderMo.get('max_tube_capa_1')?.invalid && formHeaderMo.get('max_tube_capa_1')?.touched" class="invalid-feedback">Maximum Tube Capacity is required.</div>
                 </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="text-input">Maximum Capacity Tire TL<span class="text-danger"> *</span></label>
-                <div class="col-md-9">
-                  <input type="text" [ngClass]="{ 'is-invalid': formHeaderMo.get('max_capa_tl_1')?.invalid && formHeaderMo.get('max_capa_tl_1')?.touched }" formControlName="max_capa_tl_1" name="text-input" class="form-control" placeholder="0,00" />
+                <div class="col-md-4 min-height-form">
+                  <label for="text-input">Maximum Capacity Tire TL<span class="text-danger">*</span></label>
+                  <input type="text" formControlName="max_capa_tl_1" name="text-input" class="form-control" placeholder="0,00" [ngClass]="{ 'is-invalid': formHeaderMo.get('max_capa_tl_1')?.invalid && formHeaderMo.get('max_capa_tl_1')?.touched }" />
                   <div *ngIf="formHeaderMo.get('max_capa_tl_1')?.invalid && formHeaderMo.get('max_capa_tl_1')?.touched" class="invalid-feedback">Maximum Capacity Tire TL is required.</div>
                 </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="text-input">Maximum Capacity Tire TT<span class="text-danger"> *</span></label>
-                <div class="col-md-9">
-                  <input type="text" [ngClass]="{ 'is-invalid': formHeaderMo.get('max_capa_tt_1')?.invalid && formHeaderMo.get('max_capa_tt_1')?.touched }" formControlName="max_capa_tt_1" name="text-input" class="form-control" placeholder="0,00" />
+                <div class="col-md-4 min-height-form">
+                  <label for="text-input">Maximum Capacity Tire TT<span class="text-danger">*</span></label>
+                  <input type="text" formControlName="max_capa_tt_1" name="text-input" class="form-control" placeholder="0,00" [ngClass]="{ 'is-invalid': formHeaderMo.get('max_capa_tt_1')?.invalid && formHeaderMo.get('max_capa_tt_1')?.touched }" />
                   <div *ngIf="formHeaderMo.get('max_capa_tt_1')?.invalid && formHeaderMo.get('max_capa_tt_1')?.touched" class="invalid-feedback">Maximum Capacity Tire TT is required.</div>
                 </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="text-input">Note Order TL</label>
-                <div class="col-md-9">
+                <div class="col-md-4 min-height-form">
+                  <label for="text-input">Note Order TL</label>
                   <input type="text" formControlName="note_order_tl_1" name="text-input" class="form-control" />
                 </div>
               </div>
             </tab>
             <tab heading="Month 3">
-              <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="month-input">Month And Year</label>
-                <div class="col-md-9">
+              <div class="form-row align-items-center">
+                <div class="col-md-4 min-height-form">
+                  <label>Month And Year</label>
                   <input class="form-control" formControlName="month_2" type="month" [readOnly]="true" />
                 </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="text-input">Normal Working Day</label>
-                <div class="col-md-9">
+                <div class="col-md-4 min-height-form">
+                  <label for="text-input">Normal Working Day</label>
                   <input type="text" formControlName="nwd_2" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="text-input">Normal Working Day Tube</label>
-                <div class="col-md-9">
+                <div class="col-md-4 min-height-form">
+                  <label for="text-input">Normal Working Day Tube</label>
                   <input type="text" formControlName="nwt_2" name="text-input" class="form-control" placeholder="0,00" (input)="onInputChange($event, 'nwt_2')" (input)="calculateTotalTube('nwt_2')" />
                 </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="text-input">Working Day Overtime Tube</label>
-                <div class="col-md-9">
+                <div class="col-md-4 min-height-form">
+                  <label for="text-input">Working Day Overtime Tube</label>
                   <input type="text" formControlName="ot_wt_2" name="text-input" class="form-control" placeholder="0,00" (input)="onInputChange($event, 'ot_wt_2')" (input)="calculateTotalTube('ot_wt_2')" />
                 </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="text-input">Working Day Overtime TL</label>
-                <div class="col-md-9">
+                <div class="col-md-4 min-height-form">
+                  <label for="text-input">Working Day Overtime TL</label>
                   <input type="text" formControlName="tl_ot_wd_2" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="text-input">Working Day Overtime TT</label>
-                <div class="col-md-9">
+                <div class="col-md-4 min-height-form">
+                  <label for="text-input">Working Day Overtime TT</label>
                   <input type="text" formControlName="tt_ot_wd_2" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="text-input">Total Working Day Tube</label>
-                <div class="col-md-9">
+                <div class="col-md-4 min-height-form">
+                  <label for="text-input">Total Working Day Tube</label>
                   <input formControlName="total_wt_2" type="text" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="text-input">Total Working Day Tire TL</label>
-                <div class="col-md-9">
+                <div class="col-md-4 min-height-form">
+                  <label for="text-input">Total Working Day Tire TL</label>
                   <input formControlName="total_tlwd_2" type="text" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="text-input">Total Working Day Tire TT</label>
-                <div class="col-md-9">
+                <div class="col-md-4 min-height-form">
+                  <label for="text-input">Total Working Day Tire TT</label>
                   <input formControlName="total_ttwd_2" type="text" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="text-input">Maximum Capacity Tube<span class="text-danger"> *</span></label>
-                <div class="col-md-9">
-                  <input type="text" formControlName="max_tube_capa_2" name="text-input" class="form-control" placeholder="0,00" [ngClass]="{ 'is-invalid': formHeaderMo.get('max_tube_capa_2')?.invalid && formHeaderMo.get('max_tube_capa_2')?.touched }" />
+                <div class="col-md-4 min-height-form">
+                  <label for="text-input">Maximum Capacity Tube<span class="text-danger">*</span></label>
+                  <input #max_tube_capa_2 type="text" formControlName="max_tube_capa_2" name="text-input" class="form-control" placeholder="0,00" [ngClass]="{ 'is-invalid': formHeaderMo.get('max_tube_capa_2')?.invalid && formHeaderMo.get('max_tube_capa_2')?.touched }" />
                   <div *ngIf="formHeaderMo.get('max_tube_capa_2')?.invalid && formHeaderMo.get('max_tube_capa_2')?.touched" class="invalid-feedback">Maximum Tube Capacity is required.</div>
                 </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="text-input">Maximum Capacity Tire TL<span class="text-danger"> *</span></label>
-                <div class="col-md-9">
+                <div class="col-md-4 min-height-form">
+                  <label for="text-input">Maximum Capacity Tire TL<span class="text-danger">*</span></label>
                   <input type="text" formControlName="max_capa_tl_2" name="text-input" class="form-control" placeholder="0,00" [ngClass]="{ 'is-invalid': formHeaderMo.get('max_capa_tl_2')?.invalid && formHeaderMo.get('max_capa_tl_2')?.touched }" />
                   <div *ngIf="formHeaderMo.get('max_capa_tl_2')?.invalid && formHeaderMo.get('max_capa_tl_2')?.touched" class="invalid-feedback">Maximum Capacity Tire TL is required.</div>
                 </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="text-input">Maximum Capacity Tire TT<span class="text-danger"> *</span></label>
-                <div class="col-md-9">
+                <div class="col-md-4 min-height-form">
+                  <label for="text-input">Maximum Capacity Tire TT<span class="text-danger">*</span></label>
                   <input type="text" formControlName="max_capa_tt_2" name="text-input" class="form-control" placeholder="0,00" [ngClass]="{ 'is-invalid': formHeaderMo.get('max_capa_tt_2')?.invalid && formHeaderMo.get('max_capa_tt_2')?.touched }" />
                   <div *ngIf="formHeaderMo.get('max_capa_tt_2')?.invalid && formHeaderMo.get('max_capa_tt_2')?.touched" class="invalid-feedback">Maximum Capacity Tire TT is required.</div>
                 </div>
-              </div>
-              <div class="form-group row">
-                <label class="col-md-3 col-form-label" for="text-input">Note Order TL</label>
-                <div class="col-md-9">
+                <div class="col-md-4 min-height-form">
+                  <label for="text-input">Note Order TL</label>
                   <input type="text" formControlName="note_order_tl_2" name="text-input" class="form-control" />
                 </div>
               </div>
@@ -282,7 +210,11 @@
         </form>
       </div>
       <div class="col-md-12 d-flex justify-content-end pb-4">
-        <button (click)="showDetailMo()" type="submit" class="btn btn-primary"><i class="fa fa-eye mr-2"></i>Show Detail</button>
+        <button (click)="showDetailMo()" [disabled]="loadingShowData" type="submit" class="btn btn-primary">
+          <i class="fa fa-eye mr-2"></i>
+          <span *ngIf="loadingShowData" class="spinner-border spinner-border-sm mr-1"></span>
+          Show Detail
+        </button>
       </div>
     </div>
   </div>
@@ -295,11 +227,19 @@
       </div>
       <div class="card-body">
         <div class="d-flex justify-content-between mb-3">
+          <!-- Bagian kiri: Pencarian dan Reset -->
           <div class="d-flex align-items-center">
             <input type="text" class="form-control col-md-12 col-lg-12" [(ngModel)]="searchText" (input)="onSearchChange()" placeholder="Find here..." />
             <button type="submit" class="btn btn-primary ml-2" (click)="resetSearch()">Reset</button>
           </div>
+          <!-- Bagian kanan: Download dan Upload -->
+          <div class="d-flex">
+            <button type="button" (click)="downloadTemplate()" class="btn btn-primary ml-2"><i class="fa fa-download fa-lg"></i> Download Template</button>
+            <button type="button" class="btn btn-success ml-2" data-toggle="modal" data-target="#uploadModal"><i class="fa fa-file-excel-o fa-lg"></i> Upload Excel</button>
+          </div>
         </div>
+
+        <!-- Table -->
         <div class="table-responsive">
           <table mat-table [dataSource]="dataSource" matSort class="table table-bordered table-sm">
             <!-- Header Column -->
@@ -331,10 +271,7 @@
             <ng-container matColumnDef="machineType">
               <th *matHeaderCellDef rowspan="2" style="min-width: 100px" mat-sort-header>Machine Type</th>
               <td *matCellDef="let mo; let i = index">
-                <select [(ngModel)]="mo.machineType" class="form-control"
-                [ngClass]="{'is-invalid': isSubmitted && !mo.machineType}"
-                [matTooltip]="isSubmitted && !mo.machineType ? 'This field is Required' : ''"
-                matTooltipPosition="right">
+                <select [(ngModel)]="mo.machineType" class="form-control" [ngClass]="{ 'is-invalid': isSubmitted && !mo.machineType }" [matTooltip]="isSubmitted && !mo.machineType ? 'This field is Required' : ''" matTooltipPosition="right">
                   <option [ngValue]="null" disabled></option>
                   <option value="A/B">A/B</option>
                   <option value="BOM">BOM</option>
@@ -344,7 +281,7 @@
 
             <!-- Capacity 99,5% Column -->
             <ng-container matColumnDef="capacity">
-              <th *matHeaderCellDef rowspan="2" style="min-width: 50px" mat-sort-header>Capacity {{ capacity + '%' }}</th>
+              <th *matHeaderCellDef rowspan="2" style="min-width: 50px" mat-sort-header>Capacity {{ capacityDb + '%' }}</th>
               <td class="text-right" *matCellDef="let mo">{{ separatorNumber(mo.capacity) }}</td>
             </ng-container>
 
@@ -376,15 +313,7 @@
             <ng-container matColumnDef="minOrder">
               <th *matHeaderCellDef rowspan="2" mat-sort-header style="min-width: 150px">Minimum Order</th>
               <td *matCellDef="let mo; let i = index">
-                <input
-                  type="text"
-                  [ngModel]="formatSeparator(mo.minOrder)"
-                  (ngModelChange)="onMinOrderChange(mo, $event)"
-                  [ngClass]="{'is-invalid': isSubmitted && !mo.minOrder}"
-                  [matTooltip]="isSubmitted && !mo.minOrder ? 'This field is Required' : ''"
-                  matTooltipPosition="right"
-                  class="text-right form-control"
-                />
+                <input type="text" [ngModel]="formatSeparator(mo.minOrder)" (ngModelChange)="onMinOrderChange(mo, $event)" [ngClass]="{ 'is-invalid': isSubmitted && !mo.minOrder }" [matTooltip]="isSubmitted && !mo.minOrder ? 'This field is Required' : ''" matTooltipPosition="right" class="text-right form-control" />
               </td>
             </ng-container>
 
@@ -454,11 +383,40 @@
           </table>
         </div>
         <!-- Pagination -->
-        <mat-paginator [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+        <mat-paginator [pageSizeOptions]="[20, 100, 200]" showFirstLastButtons></mat-paginator>
       </div>
       <div class="col-md-12 pb-4">
         <button (click)="navigateToViewMo()" class="btn btn-primary justify-content-start mr-2">Back</button>
-        <button (click)="saveAllMo()" type="submit" class="btn btn-success">Submit</button>
+        <button (click)="saveAllMo()" type="submit" [disabled]="loadingSaveData" class="btn btn-success">
+          <span *ngIf="loadingSaveData" class="spinner-border spinner-border-sm mr-1"></span>
+          Submit
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal for Upload Excel -->
+  <div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="uploadModalLabel">Upload Excel File</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="uploadForm">
+            <!-- Manual File Input -->
+            <div class="form-group mt-3">
+              <input type="file" class="form-control-file" id="manualFileInput" accept=".xls,.xlsx" (change)="onFileChange($event)" />
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-md btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-md btn-primary" data-dismiss="modal" id="uploadButton" (click)="uploadFileExcel()">Upload</button>
+        </div>
       </div>
     </div>
   </div>

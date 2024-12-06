@@ -148,10 +148,15 @@ export class MarketingOrderService {
     );
   }
 
-  getDetailMarketingOrder(totalHKTT1: number, totalHKTT2: number, totalHKTT3: number, totalHKTL1: number, totalHKTL2: number, totalHKTL3: number, productMerk: string): Observable<ApiResponse<DetailMarketingOrder[]>> {
-    // Prepare query parameters
-    let params = new HttpParams().set('totalHKTT1', totalHKTT1.toString()).set('totalHKTT2', totalHKTT2.toString()).set('totalHKTT3', totalHKTT3.toString()).set('totalHKTL1', totalHKTL1.toString()).set('totalHKTL2', totalHKTL2.toString()).set('totalHKTL3', totalHKTL3.toString()).set('productMerk', productMerk);
-    return this.http.get<ApiResponse<DetailMarketingOrder[]>>(environment.apiUrlWebAdmin + '/getDetailMarketingOrders', { params: params });
+  getDetailMarketingOrder(data: any): Observable<ApiResponse<DetailMarketingOrder[]>> {
+    return this.http.post<ApiResponse<DetailMarketingOrder[]>>(environment.apiUrlWebAdmin + '/getDetailMarketingOrders', data).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((err) => {
+        return throwError(err);
+      })
+    );
   }
 
   saveDetailRowMarketingOrder(dmo: DetailMarketingOrder[]): Observable<ApiResponse<DetailMarketingOrder>> {

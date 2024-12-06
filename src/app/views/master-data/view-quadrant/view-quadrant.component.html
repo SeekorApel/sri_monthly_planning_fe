@@ -22,48 +22,58 @@
 
       <!-- Table -->
       <div class="table-responsive">
-        <table class="table table-bordered table-striped table-sm">
-          <thead align="center">
-            <tr>
-              <th>No</th>
-              <th>Quadrant ID</th>
-              <th>Building ID</th>
-              <th>Quadrant Name</th>
-              <th>Status</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr align="center" *ngFor="let quadrant of pageOfItems; let i = index">
-              <td>{{ i + 1 }}</td>
-              <td>{{ quadrant.quadrant_ID }}</td>
-              <td>{{ quadrant.building_ID }}</td>
-              <td>{{ quadrant.quadrant_NAME }}</td>
-              <td [ngClass]="{ 'bg-success': quadrant.status === 1, 'bg-danger': quadrant.status !== 1 }">
-                {{ quadrant.status === 1 ? 'Active' : 'Deactive' }}
-              </td>
-              <td>
-                <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(quadrant.quadrant_ID)">Update</button>
-                <button type="button" class="btn btn-md ml-2" [ngClass]="{ 'btn-danger': quadrant.status === 1, 'btn-success': quadrant.status !== 1 }" (click)="quadrant.status === 1 ? deleteData(quadrant) : activateData(quadrant)">
-                  {{ quadrant.status === 1 ? 'Delete' : 'Active' }}
-                </button>
-              </td>
-            </tr>
-          </tbody>
+        <table mat-table [dataSource]="dataSource" matSort class="table table-bordered table-striped table-sm">
+          <ng-container matColumnDef="no" >
+            <th *matHeaderCellDef >No</th>
+            <td  *matCellDef="let element; let i = index">{{ i + 1 }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="quadrant_ID">
+            <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Quadrant ID</th>
+            <td class="angka" *matCellDef="let element">{{ element.quadrant_ID }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="building_NAME">
+            <th  *matHeaderCellDef mat-sort-header >Building Name</th>
+            <td class="huruf" *matCellDef="let element">{{ element.building_NAME }}</td>
+          </ng-container>
+          
+          <ng-container matColumnDef="quadrant_NAME">
+            <th  *matHeaderCellDef mat-sort-header >Quadrant Name</th>
+            <td class="huruf" *matCellDef="let element">{{ element.quadrant_NAME }}</td>
+          </ng-container>
+          
+          <ng-container matColumnDef="status">  
+            <th  *matHeaderCellDef mat-sort-header>Status</th>
+            <td *matCellDef="let element" [ngClass]="{ 'bg-success': element.status === 1, 'bg-danger': element.status !== 1 }">
+              {{ element.status === 1 ? 'Active' : 'Deactive' }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="action" >
+            <th *matHeaderCellDef style="min-width: 50px;">Action</th>
+            <td *matCellDef="let element">
+              <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(element.quadrant_ID)">Update</button>
+              <button type="button" class="btn btn-md ml-2" [ngClass]="{ 'btn-danger': element.status === 1, 'btn-success': element.status !== 1 }" (click)="element.status === 1 ? deleteData(element) : activateData(element)">
+                {{ element.status === 1 ? 'Delete' : 'Active' }}
+              </button>
+            </td>
+          </ng-container>
+
+          <tr align="center" style="height: 20px;" mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr align="center" mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
         </table>
-        <!-- Pagination -->
-        <nav>
-          <ul class="pagination">
-            <jw-pagination [items]="quadrants" [pageSize]="pageSize" [maxPages]="totalPages" (changePage)="onChangePage($event)"> </jw-pagination>
-          </ul>
-        </nav>
       </div>
+      <mat-paginator [pageSize]="pageSize"
+            [pageSizeOptions]="[5, 10, 20]"
+            showFirstLastButtons>
+      </mat-paginator>
     </div>
   </div>
 </div>
 
 <!-- Modal edit -->
-<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+<div class="modal fade" id="editModal" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -76,10 +86,18 @@
         <!-- Form with Reactive Forms -->
         <form [formGroup]="editQuadrantForm">
           <div class="form-group">
-            <label for="buildingID">Building ID</label>
-            <input [(ngModel)]="edtQuadrantObject.building_ID" type="text" class="form-control" id="buildingID" formControlName="buildingID" [ngClass]="{ 'is-invalid': editQuadrantForm.get('buildingID').invalid && editQuadrantForm.get('buildingID').touched }" />
-            <!-- Error message if plantName is empty -->
-            <div *ngIf="editQuadrantForm.get('buildingID').invalid && editQuadrantForm.get('buildingID').touched" class="invalid-feedback">Building ID is required.</div>
+            <label for="buildingID" style="min-width: 150px;">Building Name</label>
+            <div>
+              <ng-select2
+                formControlName="buildingID" 
+                id="buildingID"
+                name = "buildingID"
+                [(ngModel)]="edtQuadrantObject.building_ID"
+                [data]="uomOptions"
+                [options]="options"
+                [placeholder]="'Please Select'">
+              </ng-select2>
+            </div>
           </div>
           <div class="form-group">
             <label for="quadrantName">Quadrant Name</label>

@@ -15,19 +15,18 @@ import { AddMonthlyPlanningComponent } from './add-monthly-planning/add-monthly-
 import { ViewMoMarketingComponent } from './view/view-mo-marketing/view-mo-marketing.component';
 import { AddMoMarketingComponent } from './add/add-mo-marketing/add-mo-marketing.component';
 import { EditMoPpcComponent } from './edit/edit-mo-ppc/edit-mo-ppc.component';
-import { DetailViewMoPpcComponent } from './detail-view/detail-view-mo-ppc/detail-view-mo-ppc.component';
-import { DetailViewMoMarketingComponent } from './detail-view-mo-marketing/detail-view-mo-marketing.component';
 import { EditMoMarketingComponent } from './edit/edit-mo-marketing/edit-mo-marketing.component';
 import { ViewDetailRevisiPpcComponent } from './detail-view-revisi/view-detail-revisi-ppc/view-detail-revisi-ppc.component';
-import { ViewDetailRevisiMarketingComponent } from './view-detail-revisi-marketing/view-detail-revisi-marketing.component';
+import { ViewDetailRevisiMarketingComponent } from './detail-view-revisi/view-detail-revisi-marketing/view-detail-revisi-marketing.component';
 import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { AddMoFrontRearComponent } from './add-mo-front-rear/add-mo-front-rear.component';
 
+
 @NgModule({
-  declarations: [ViewMoPpcComponent, AddMoPpcComponent, ViewMonthlyPlanningComponent, AddMonthlyPlanningComponent, ViewMoMarketingComponent, AddMoMarketingComponent, EditMoPpcComponent, DetailViewMoPpcComponent, DetailViewMoMarketingComponent, EditMoMarketingComponent, ViewDetailRevisiPpcComponent, ViewDetailRevisiMarketingComponent, AddMoFrontRearComponent],
+  declarations: [ViewMoPpcComponent, AddMoPpcComponent, ViewMonthlyPlanningComponent, AddMonthlyPlanningComponent, ViewMoMarketingComponent, AddMoMarketingComponent, EditMoPpcComponent, EditMoMarketingComponent, ViewDetailRevisiPpcComponent, ViewDetailRevisiMarketingComponent, AddMoFrontRearComponent],
   imports: [CommonModule, FormsModule, ReactiveFormsModule, NgxSpinnerModule, NgSelect2Module, JwPaginationModule, TransaksiRoutingModule, TabsModule, ModalModule.forRoot(), ToastrModule.forRoot(), MatSortModule, MatTableModule, MatPaginatorModule, MatTooltipModule],
 })
 export class TransaksiModule { }

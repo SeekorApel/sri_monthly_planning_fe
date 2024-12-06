@@ -27,8 +27,11 @@ export class ViewMoPpcComponent implements OnInit {
   dataSource: MatTableDataSource<MarketingOrder>;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
+  loadingPrint: { [key: string]: boolean } = {};
 
-  constructor(private router: Router, private moService: MarketingOrderService, private parseDateService: ParsingDateService) {}
+  constructor(private router: Router, private moService: MarketingOrderService, private parseDateService: ParsingDateService) {
+    localStorage.removeItem('capacityPpc');
+  }
 
   ngOnInit(): void {
     this.getAllMarketingOrder();
@@ -170,6 +173,7 @@ export class ViewMoPpcComponent implements OnInit {
   }
 
   exportExcelMo(id: string): void {
+    this.loadingPrint[id] = true;
     this.moService.downloadExcelMo(id).subscribe(
       (response: Blob) => {
         const url = window.URL.createObjectURL(response);
@@ -178,6 +182,7 @@ export class ViewMoPpcComponent implements OnInit {
         a.download = `Marketing_Order_${id}.xlsx`; // Nama file yang diinginkan
         a.click();
         window.URL.revokeObjectURL(url);
+        this.loadingPrint[id] = false;
       },
       (error) => {
         Swal.fire({
@@ -185,7 +190,7 @@ export class ViewMoPpcComponent implements OnInit {
           title: 'Oops...',
           text: 'Gagal mendownload file. Silakan coba lagi!',
         });
-        console.error('Error downloading file:', error);
+        this.loadingPrint[id] = false;
       }
     );
   }

@@ -23,7 +23,8 @@ import { MatTableDataSource } from '@angular/material/table';
 })
 export class EditMoMarketingComponent implements OnInit {
   //Variable Declaration
-  idMo: String;
+  idMo: string;
+  capacityDb: string = '';
   searchTextDmo: string = '';
   formHeaderMo: FormGroup;
   isReadOnly: boolean = true;
@@ -31,9 +32,9 @@ export class EditMoMarketingComponent implements OnInit {
   allData: any;
   lastIdMo: string = '';
   file: File | null = null;
-  capacity: string = '';
   isSubmitted: boolean = false;
   typeMo: string = '';
+  loading:boolean = false;
 
   //Error message
   errorMessagesM0: string[] = [];
@@ -132,19 +133,10 @@ export class EditMoMarketingComponent implements OnInit {
       upload_file_m1: [null, [Validators.required]],
       upload_file_m2: [null, [Validators.required]],
     });
-  }
 
-  ngOnInit(): void {
-    this.idMo = this.activeRoute.snapshot.paramMap.get('idMo');
-    this.getAllData(this.idMo);
-    this.getLastIdMo();
-    this.getCapacity();
-  }
-
-  getCapacity(): void {
     this.moService.getCapacity().subscribe(
       (response: ApiResponse<any>) => {
-        this.capacity = response.data;
+        this.capacityDb = response.data;
       },
       (error) => {
         Swal.fire({
@@ -157,79 +149,25 @@ export class EditMoMarketingComponent implements OnInit {
     );
   }
 
-  onBlurFieldM0(index: number): void {
-    let mo = this.detailMarketingOrder[index];
-    if (mo.moMonth0 != null && mo.moMonth0 !== 0) {
-      this.validateM0(mo.moMonth0, mo.partNumber);
-    }
+  ngOnInit(): void {
+    this.idMo = this.activeRoute.snapshot.paramMap.get('idMo');
+    this.getAllData(this.idMo);
+    this.getLastIdMo();
   }
 
-  onBlurFieldM1(index: number): void {
-    let mo = this.detailMarketingOrder[index];
-    if (mo.moMonth1 != null && mo.moMonth1 !== 0) {
-      this.validateM1(mo.moMonth1, mo.partNumber);
-    }
+  onInputFormat(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const value = input.value;
+    const numericValue = value.replace(/\./g, '').replace(/,/g, '.');
+    input.value = this.formatNumber(numericValue);
   }
 
-  onBlurFieldM2(index: number): void {
-    let mo = this.detailMarketingOrder[index];
-    if (mo.moMonth2 != null && mo.moMonth2 !== 0) {
-      this.validateM2(mo.moMonth2, mo.partNumber);
+  allowOnlyNumbers(event: KeyboardEvent): void {
+    const charCode = event.charCode || event.keyCode;
+    // Cek apakah karakter adalah angka (0-9)
+    if (charCode < 48 || charCode > 57) {
+      event.preventDefault();
     }
-  }
-
-  validateM0(value: any | null | 0, partNumber: number): string {
-    let data = this.detailMarketingOrder.find((dmo) => dmo.partNumber === partNumber);
-    if (data?.isTouchedM0) {
-      if (value < data.minOrder) {
-        return 'MO must not be less than the minimum order.';
-      }
-
-      if (value > data.maxCapMonth0) {
-        return 'MO cannot be more than the maximum order M1.';
-      }
-
-      if (value % data.qtyPerRak !== 0) {
-        return `MO must be a multiple of ${data.qtyPerRak}.`;
-      }
-    }
-    return null;
-  }
-
-  validateM1(value: any | null | 0, partNumber: number): string {
-    let data = this.detailMarketingOrder.find((dmo) => dmo.partNumber === partNumber);
-    if (data?.isTouchedM1) {
-      if (value < data.minOrder) {
-        return 'MO must not be less than the minimum order.';
-      }
-
-      if (value > data.maxCapMonth1) {
-        return 'MO cannot be more than the maximum order M2.';
-      }
-
-      if (value % data.qtyPerRak !== 0) {
-        return `MO must be a multiple of ${data.qtyPerRak}.`;
-      }
-    }
-    return null;
-  }
-
-  validateM2(value: any | null | 0, partNumber: number): string {
-    let data = this.detailMarketingOrder.find((dmo) => dmo.partNumber === partNumber);
-    if (data?.isTouchedM2) {
-      if (value < data.minOrder) {
-        return 'MO must not be less than the minimum order.';
-      }
-
-      if (value > data.maxCapMonth2) {
-        return 'MO cannot be more than the maximum order M3.';
-      }
-
-      if (value % data.qtyPerRak !== 0) {
-        return `MO must be a multiple of ${data.qtyPerRak}.`;
-      }
-    }
-    return null;
   }
 
   onInputChangeM0(mo: any, value: string) {
@@ -302,12 +240,23 @@ export class EditMoMarketingComponent implements OnInit {
   }
 
   getAllData(idMo: String) {
+    Swal.fire({
+      title: 'Loading...',
+      html: 'Please wait while fetching data marketing order.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
+
     this.moService.getAllMoById(idMo).subscribe(
       (response: ApiResponse<any>) => {
+        Swal.close();
         this.allData = response.data;
         this.fillAllData(this.allData);
       },
       (error) => {
+        Swal.close();
         Swal.fire({
           icon: 'error',
           title: 'Error',
@@ -514,16 +463,22 @@ export class EditMoMarketingComponent implements OnInit {
     this.detailMarketingOrder.forEach((dmo) => {
       if (dmo.itemCuring) {
         if (curingGroupsM0[dmo.itemCuring] > dmo.maxCapMonth0) {
-          dmo.validationMessageM0 = 'Koncian HGP M1';
-          hasInvalidInput = true;
+          if (!dmo.validationMessageM0) {
+            dmo.validationMessageM0 = 'Maximal Capacity with the same curing item is overloaded';
+            hasInvalidInput = true;
+          }
         }
         if (curingGroupsM1[dmo.itemCuring] > dmo.maxCapMonth1) {
-          dmo.validationMessageM1 = 'Koncian HGP M2';
-          hasInvalidInput = true;
+          if (!dmo.validationMessageM1) {
+            dmo.validationMessageM1 = 'Maximal Capacity with the same curing item is overloaded';
+            hasInvalidInput = true;
+          }
         }
         if (curingGroupsM2[dmo.itemCuring] > dmo.maxCapMonth2) {
-          dmo.validationMessageM2 = 'Koncian HGP M3';
-          hasInvalidInput = true;
+          if (!dmo.validationMessageM2) {
+            dmo.validationMessageM2 = 'Maximal Capacity with the same curing item is overloaded';
+            hasInvalidInput = true;
+          }
         }
       }
     });
@@ -537,6 +492,147 @@ export class EditMoMarketingComponent implements OnInit {
       });
       return;
     }
+
+    //Validasi Total
+    const maxCapTubeM0 = this.headerMarketingOrder[0].maxCapTube;
+    const maxCapTlM0 = this.headerMarketingOrder[0].maxCapTl;
+    const maxCapTtM0 = this.headerMarketingOrder[0].maxCapTt;
+
+    const maxCapTubeM1 = this.headerMarketingOrder[1].maxCapTube;
+    const maxCapTlM1 = this.headerMarketingOrder[1].maxCapTl;
+    const maxCapTtM1 = this.headerMarketingOrder[1].maxCapTt;
+
+    const maxCapTubeM2 = this.headerMarketingOrder[2].maxCapTube;
+    const maxCapTlM2 = this.headerMarketingOrder[2].maxCapTl;
+    const maxCapTtM2 = this.headerMarketingOrder[2].maxCapTt;
+
+    let totalMoTTubeMonth0 = 0;
+    let totalMoTTMonth0 = 0;
+    let totalMoTLMonth0 = 0;
+
+    let totalMoTTubeMonth1 = 0;
+    let totalMoTTMonth1 = 0;
+    let totalMoTLMonth1 = 0;
+
+    let totalMoTTubeMonth2 = 0;
+    let totalMoTTMonth2 = 0;
+    let totalMoTLMonth2 = 0;
+
+    this.detailMarketingOrder.forEach((dmo) => {
+      if (dmo.category.includes('TL')) {
+        totalMoTLMonth0 += dmo.moMonth0;
+        totalMoTLMonth1 += dmo.moMonth1;
+        totalMoTLMonth2 += dmo.moMonth2;
+      }
+      if (dmo.category.includes('TT')) {
+        totalMoTTMonth0 += dmo.moMonth0;
+        totalMoTTMonth1 += dmo.moMonth1;
+        totalMoTTMonth2 += dmo.moMonth2;
+      }
+      if (dmo.category.includes('TUBE')) {
+        totalMoTTubeMonth0 += dmo.moMonth0;
+        totalMoTTubeMonth1 += dmo.moMonth1;
+        totalMoTTubeMonth2 += dmo.moMonth2;
+      }
+    });
+
+    //Validasi Total Mo TL
+    if (totalMoTLMonth0 > maxCapTlM0) {
+      Swal.fire({
+        title: 'Warning!',
+        text: `Total Marketing Order TL must not exceed the total Maximum Capacity of TL 1st month (${this.formatSeparatorView(maxCapTlM0)}).`,
+        icon: 'warning',
+        confirmButtonText: 'OK',
+      });
+      return;
+    }
+
+    if (totalMoTLMonth1 > maxCapTlM1) {
+      Swal.fire({
+        title: 'Warning!',
+        text: `Total Marketing Order TL must not exceed the total Maximum Capacity of TL 2st month (${this.formatSeparatorView(maxCapTlM1)}).`,
+        icon: 'warning',
+        confirmButtonText: 'OK',
+      });
+      return;
+    }
+
+    if (totalMoTLMonth2 > maxCapTlM2) {
+      Swal.fire({
+        title: 'Warning!',
+        text: `Total Marketing Order TL must not exceed the total Maximum Capacity of TL 3st month (${this.formatSeparatorView(maxCapTlM2)}).`,
+        icon: 'warning',
+        confirmButtonText: 'OK',
+      });
+      return;
+    }
+    //Validasi End Total Mo TL
+
+    //Validasi Total Mo TT
+    if (totalMoTTMonth0 > maxCapTtM0) {
+      Swal.fire({
+        title: 'Warning!',
+        text: `Total Marketing Order TT must not exceed the total Maximum Capacity of TT 1st month (${this.formatSeparatorView(maxCapTtM0)}).`,
+        icon: 'warning',
+        confirmButtonText: 'OK',
+      });
+      return;
+    }
+
+    if (totalMoTTMonth1 > maxCapTtM1) {
+      Swal.fire({
+        title: 'Warning!',
+        text: `Total Marketing Order TT must not exceed the total Maximum Capacity of TT 2st month (${this.formatSeparatorView(maxCapTtM1)}).`,
+        icon: 'warning',
+        confirmButtonText: 'OK',
+      });
+      return;
+    }
+
+    if (totalMoTTMonth2 > maxCapTtM2) {
+      Swal.fire({
+        title: 'Warning!',
+        text: `Total Marketing Order TT must not exceed the total Maximum Capacity of TT 3st month (${this.formatSeparatorView(maxCapTtM2)}).`,
+        icon: 'warning',
+        confirmButtonText: 'OK',
+      });
+      return;
+    }
+    //Validasi End Total Mo TT
+
+    //Validasi Total Mo Tube
+    if (totalMoTTubeMonth0 > maxCapTubeM0) {
+      Swal.fire({
+        title: 'Warning!',
+        text: `Total Marketing Order Tube must not exceed the total Maximum Capacity of Tube 1st month (${this.formatSeparatorView(maxCapTubeM0)}).`,
+        icon: 'warning',
+        confirmButtonText: 'OK',
+      });
+      return;
+    }
+
+    if (totalMoTTubeMonth1 > maxCapTubeM1) {
+      Swal.fire({
+        title: 'Warning!',
+        text: `Total Marketing Order Tube must not exceed the total Maximum Capacity of Tube 2st month (${this.formatSeparatorView(maxCapTubeM1)}).`,
+        icon: 'warning',
+        confirmButtonText: 'OK',
+      });
+      return;
+    }
+
+    if (totalMoTTubeMonth2 > maxCapTubeM2) {
+      Swal.fire({
+        title: 'Warning!',
+        text: `Total Marketing Order Tube must not exceed the total Maximum Capacity of Tube 3st month (${this.formatSeparatorView(maxCapTubeM2)}).`,
+        icon: 'warning',
+        confirmButtonText: 'OK',
+      });
+      return;
+    }
+    //Validasi End Total Mo Tube
+
+    //End Validasi Total
 
     const type = this.formHeaderMo.get('type')?.value;
 
@@ -587,14 +683,13 @@ export class EditMoMarketingComponent implements OnInit {
 
     this.detailMarketingOrder.forEach((mo) => {
       mo.moId = this.lastIdMo;
-
-      mo.initialStock = parseFloat(mo.initialStock?.toString().replace(/\./g, '') || '0') || 0;
-      mo.sfMonth0 = parseFloat(mo.sfMonth0?.toString().replace(/\./g, '') || '0') || 0;
-      mo.sfMonth1 = parseFloat(mo.sfMonth1?.toString().replace(/\./g, '') || '0') || 0;
-      mo.sfMonth2 = parseFloat(mo.sfMonth2?.toString().replace(/\./g, '') || '0') || 0;
-      mo.moMonth0 = parseFloat(mo.moMonth0?.toString().replace(/\./g, '') || '0') || 0;
-      mo.moMonth1 = parseFloat(mo.moMonth1?.toString().replace(/\./g, '') || '0') || 0;
-      mo.moMonth2 = parseFloat(mo.moMonth2?.toString().replace(/\./g, '') || '0') || 0;
+      // mo.initialStock = parseFloat(mo.initialStock?.toString().replace(/\./g, '') || '0') || 0;
+      // mo.sfMonth0 = parseFloat(mo.sfMonth0?.toString().replace(/\./g, '') || '0') || 0;
+      // mo.sfMonth1 = parseFloat(mo.sfMonth1?.toString().replace(/\./g, '') || '0') || 0;
+      // mo.sfMonth2 = parseFloat(mo.sfMonth2?.toString().replace(/\./g, '') || '0') || 0;
+      // mo.moMonth0 = parseFloat(mo.moMonth0?.toString().replace(/\./g, '') || '0') || 0;
+      // mo.moMonth1 = parseFloat(mo.moMonth1?.toString().replace(/\./g, '') || '0') || 0;
+      // mo.moMonth2 = parseFloat(mo.moMonth2?.toString().replace(/\./g, '') || '0') || 0;
     });
 
     const revisionMo = {
@@ -603,6 +698,15 @@ export class EditMoMarketingComponent implements OnInit {
       detailMarketingOrder: this.detailMarketingOrder,
     };
 
+    // const filteredData = this.detailMarketingOrder.map(item => ({
+    //   partNumber: item.partNumber,
+    //   moMonth0: item.moMonth0,
+    //   moMonth1: item.moMonth1,
+    //   moMonth2: item.moMonth2
+    // }));
+
+
+    this.loading = true;
     this.moService.updateMarketingOrderMarketing(revisionMo).subscribe(
       (response) => {
         Swal.fire({
@@ -615,9 +719,11 @@ export class EditMoMarketingComponent implements OnInit {
             this.navigateToViewMo();
           }
         });
+        this.loading = false;
       },
       (err) => {
         Swal.fire('Error!', 'Error insert data Marketing Order.', 'error');
+        this.loading = false;
       }
     );
   }
@@ -882,6 +988,9 @@ export class EditMoMarketingComponent implements OnInit {
     worksheet.getCell('Q13').value = this.headerMarketingOrder[0].airbagMachine; // "Month 1"
     worksheet.getCell('R13').value = this.headerMarketingOrder[1].airbagMachine; // "Month 2"
     worksheet.getCell('S13').value = this.headerMarketingOrder[2].airbagMachine; // "Month 3"
+    worksheet.getCell('Q13').numFmt = '#,##0';
+    worksheet.getCell('R13').numFmt = '#,##0';
+    worksheet.getCell('S13').numFmt = '#,##0';
     ['Q13', 'R13', 'S13'].forEach((cell) => {
       worksheet.getCell(cell).alignment = { vertical: 'middle', horizontal: 'center' };
     });
@@ -893,6 +1002,9 @@ export class EditMoMarketingComponent implements OnInit {
     worksheet.getCell('Q14').value = this.headerMarketingOrder[0].tl; // "Month 1"
     worksheet.getCell('R14').value = this.headerMarketingOrder[1].tl; // "Month 2"
     worksheet.getCell('S14').value = this.headerMarketingOrder[2].tl; // "Month 3"
+    worksheet.getCell('Q14').numFmt = '#,##0';
+    worksheet.getCell('R14').numFmt = '#,##0';
+    worksheet.getCell('S14').numFmt = '#,##0';
     ['Q14', 'R14', 'S14'].forEach((cell) => {
       worksheet.getCell(cell).alignment = { vertical: 'middle', horizontal: 'center' };
     });
@@ -904,6 +1016,9 @@ export class EditMoMarketingComponent implements OnInit {
     worksheet.getCell('Q15').value = this.headerMarketingOrder[0].tt; // "Month 1"
     worksheet.getCell('R15').value = this.headerMarketingOrder[1].tt; // "Month 2"
     worksheet.getCell('S15').value = this.headerMarketingOrder[2].tt; // "Month 3"
+    worksheet.getCell('Q15').numFmt = '#,##0';
+    worksheet.getCell('R15').numFmt = '#,##0';
+    worksheet.getCell('S15').numFmt = '#,##0';
     ['Q15', 'R15', 'S15'].forEach((cell) => {
       worksheet.getCell(cell).alignment = { vertical: 'middle', horizontal: 'center' };
     });
@@ -915,6 +1030,9 @@ export class EditMoMarketingComponent implements OnInit {
     worksheet.getCell('Q16').value = this.headerMarketingOrder[0].totalMo; // "Month 1"
     worksheet.getCell('R16').value = this.headerMarketingOrder[1].totalMo; // "Month 2"
     worksheet.getCell('S16').value = this.headerMarketingOrder[2].totalMo; // "Month 3"
+    worksheet.getCell('Q16').numFmt = '#,##0';
+    worksheet.getCell('R16').numFmt = '#,##0';
+    worksheet.getCell('S16').numFmt = '#,##0';
     ['Q16', 'R16', 'S16'].forEach((cell) => {
       worksheet.getCell(cell).alignment = { vertical: 'middle', horizontal: 'center' };
     });
@@ -926,6 +1044,9 @@ export class EditMoMarketingComponent implements OnInit {
     worksheet.getCell('Q17').value = this.headerMarketingOrder[0].tlPercentage; // "Month 1"
     worksheet.getCell('R17').value = this.headerMarketingOrder[1].tlPercentage; // "Month 2"
     worksheet.getCell('S17').value = this.headerMarketingOrder[2].tlPercentage; // "Month 3"
+    worksheet.getCell('Q17').numFmt = '0.00';
+    worksheet.getCell('R17').numFmt = '0.00';
+    worksheet.getCell('S17').numFmt = '0.00';
     ['Q17', 'R17', 'S17'].forEach((cell) => {
       worksheet.getCell(cell).alignment = { vertical: 'middle', horizontal: 'center' };
     });
@@ -937,6 +1058,9 @@ export class EditMoMarketingComponent implements OnInit {
     worksheet.getCell('Q18').value = this.headerMarketingOrder[0].tlPercentage; // "Month 1"
     worksheet.getCell('R18').value = this.headerMarketingOrder[1].tlPercentage; // "Month 2"
     worksheet.getCell('S18').value = this.headerMarketingOrder[2].tlPercentage; // "Month 3"
+    worksheet.getCell('Q18').numFmt = '0.00';
+    worksheet.getCell('R18').numFmt = '0.00';
+    worksheet.getCell('S18').numFmt = '0.00';
     ['Q18', 'R18', 'S18'].forEach((cell) => {
       worksheet.getCell(cell).alignment = { vertical: 'middle', horizontal: 'center' };
     });
@@ -962,32 +1086,6 @@ export class EditMoMarketingComponent implements OnInit {
       setBorder(worksheet.getCell(`S${row}`));
     }
 
-    worksheet.getCell('Q1').value = month0;
-    setBorder(worksheet.getCell('Q1'));
-
-    worksheet.getCell('R1').value = month1;
-    setBorder(worksheet.getCell('R1'));
-
-    worksheet.getCell('S1').value = month2;
-    setBorder(worksheet.getCell('S1'));
-
-    ['Q1', 'R1', 'S1'].forEach((cell) => {
-      const cellRef = worksheet.getCell(cell);
-      cellRef.alignment = { vertical: 'middle', horizontal: 'center' };
-      cellRef.font = {
-        name: 'Calibri Body',
-        size: 11,
-        bold: true,
-        italic: true,
-      };
-
-      cellRef.fill = {
-        type: 'pattern',
-        pattern: 'solid',
-        fgColor: { argb: 'FFDCE6F1' },
-      };
-    });
-
     ['N1', 'N2', 'N3', 'N4', 'N5', 'N6', 'N7', 'N8', 'N9', 'N10', 'N11', 'N12', 'N13', 'N14', 'N15', 'N16', 'N17', 'N18', 'N19'].forEach((cell) => {
       const cellRef = worksheet.getCell(cell);
       cellRef.font = {
@@ -998,7 +1096,7 @@ export class EditMoMarketingComponent implements OnInit {
       };
     });
 
-    ['Q1', 'Q2', 'Q3', 'Q4', 'Q5', 'Q6', 'Q7', 'Q8', 'Q9', 'Q10', 'Q11', 'Q12', 'Q13', 'Q14', 'Q15', 'Q16', 'Q17', 'Q18', 'Q19'].forEach((cell) => {
+    ['Q2', 'Q3', 'Q4', 'Q5', 'Q6', 'Q7', 'Q8', 'Q9', 'Q10', 'Q11', 'Q12', 'Q13', 'Q14', 'Q15', 'Q16', 'Q17', 'Q18', 'Q19'].forEach((cell) => {
       const cellRef = worksheet.getCell(cell);
       cellRef.alignment = { vertical: 'middle', horizontal: 'right' };
       cellRef.font = {
@@ -1009,7 +1107,7 @@ export class EditMoMarketingComponent implements OnInit {
       };
     });
 
-    ['R1', 'R2', 'R3', 'R4', 'R5', 'R6', 'R7', 'R8', 'R9', 'R10', 'R11', 'R12', 'R13', 'R14', 'R15', 'R16', 'R17', 'R18', 'R19'].forEach((cell) => {
+    ['R2', 'R3', 'R4', 'R5', 'R6', 'R7', 'R8', 'R9', 'R10', 'R11', 'R12', 'R13', 'R14', 'R15', 'R16', 'R17', 'R18', 'R19'].forEach((cell) => {
       const cellRef = worksheet.getCell(cell);
       cellRef.alignment = { vertical: 'middle', horizontal: 'right' };
       cellRef.font = {
@@ -1020,7 +1118,7 @@ export class EditMoMarketingComponent implements OnInit {
       };
     });
 
-    ['S1', 'S2', 'S3', 'S4', 'S5', 'S6', 'S7', 'S8', 'S9', 'S10', 'S11', 'S12', 'S13', 'S14', 'S15', 'S16', 'S17', 'S18', 'S19'].forEach((cell) => {
+    ['S2', 'S3', 'S4', 'S5', 'S6', 'S7', 'S8', 'S9', 'S10', 'S11', 'S12', 'S13', 'S14', 'S15', 'S16', 'S17', 'S18', 'S19'].forEach((cell) => {
       const cellRef = worksheet.getCell(cell);
       cellRef.alignment = { vertical: 'middle', horizontal: 'right' };
       cellRef.font = {
@@ -1057,7 +1155,7 @@ export class EditMoMarketingComponent implements OnInit {
 
     worksheet.mergeCells('D20:D21');
     worksheet.getCell('D20').value = 'Description';
-    worksheet.getCell('D20').alignment = { vertical: 'middle', horizontal: 'center' };
+    worksheet.getCell('D20').alignment = { vertical: 'middle', horizontal: 'left' };
     worksheet.getColumn('D').width = 41;
     setBorder(worksheet.getCell('D20'));
     worksheet.getCell('D20').fill = {
@@ -1172,7 +1270,7 @@ export class EditMoMarketingComponent implements OnInit {
       fgColor: { argb: 'FFDCE6F1' },
     };
 
-    worksheet.mergeCells('N20:P21');
+    worksheet.mergeCells('N20:P20');
     worksheet.getCell('N20').value = 'Sales Forecast';
     worksheet.getCell('N20').alignment = { vertical: 'middle', horizontal: 'center' };
     worksheet.getColumn('N').width = 20;
@@ -1365,7 +1463,19 @@ export class EditMoMarketingComponent implements OnInit {
         };
       }
 
-      ['B', 'C', 'D', 'E'].forEach((col) => {
+      //Style column description
+      ['D'].forEach((col) => {
+        const cell = worksheet.getCell(`${col}${rowIndex}`);
+        cell.alignment = { vertical: 'middle', horizontal: 'left' };
+        cell.border = {
+          top: { style: 'thin' },
+          left: { style: 'thin' },
+          bottom: { style: 'thin' },
+          right: { style: 'thin' },
+        };
+      });
+
+      ['B', 'C', 'E'].forEach((col) => {
         const cell = worksheet.getCell(`${col}${rowIndex}`);
         cell.alignment = { vertical: 'middle', horizontal: 'center' };
         cell.border = {
@@ -1522,7 +1632,6 @@ export class EditMoMarketingComponent implements OnInit {
             if (detail) {
               detail.initialStock = initialStockValue;
               detail.sfMonth0 = sfMonth0Value;
-              ``;
               detail.sfMonth1 = sfMonth1Value;
               detail.sfMonth2 = sfMonth2Value;
               detail.moMonth0 = detail.lockStatusM0 === 1 ? 0 : moMonth0Value;

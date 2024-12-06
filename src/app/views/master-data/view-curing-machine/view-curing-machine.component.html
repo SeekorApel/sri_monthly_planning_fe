@@ -1,7 +1,7 @@
 <div class="col-lg-12">
   <div class="card">
     <div class="card-header">
-      <strong><i class="fa fa-bars"></i>&nbsp;Master Data Curing Machine  </strong>
+      <strong><i class="fa fa-bars"></i>&nbsp;Master Data Curing Machine </strong>
     </div>
 
     <div class="card-body">
@@ -22,52 +22,69 @@
 
       <!-- Table -->
       <div class="table-responsive">
-        <table class="table table-bordered table-striped table-sm">
-          <thead align="center">
-          <tr>
-            <th>No</th>
-            <th>Work Center Text</th>
-            <th>Building ID</th>
-            <th>Machine Type</th>
-            <th>Cavity</th>
-            <th>Usage</th>
-            <th>Status</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr align="center" *ngFor="let curingmachine of pageOfItems; let i = index">
-            <td>{{ i + 1 }}</td>
-            <td>{{ curingmachine.work_CENTER_TEXT }}</td>
-            <td>{{ curingmachine.building_ID }}</td>
-            <td>{{ curingmachine.machine_TYPE }}</td>
-            <td>{{ curingmachine.cavity }}</td>
-            <td>{{ curingmachine.status_USAGE }}</td>
-            <td [ngClass]="{ 'bg-success': curingmachine.status === 1, 'bg-danger': curingmachine.status !== 1 }">
-              {{ curingmachine.status === 1 ? 'Active' : 'Deactive' }}
-            </td>  
-            <td>
-              <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(curingmachine.work_CENTER_TEXT)">Update</button>
-              <button type="button" class="btn btn-md ml-3" [ngClass]="{ 'btn-danger': curingmachine.status === 1, 'btn-success': curingmachine.status !== 1 }" (click)="curingmachine.status === 1 ? deleteData(curingmachine) : activateData(curingmachine)">
-                {{ curingmachine.status === 1 ? 'Delete' : 'Active' }}
+        <table mat-table [dataSource]="dataSource" matSort class="table table-bordered table-striped table-sm">
+          <ng-container matColumnDef="no" >
+            <th *matHeaderCellDef >No</th>
+            <td  *matCellDef="let element; let i = index">{{ i + 1 }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="work_CENTER_TEXT">
+            <th style="min-width: 300px;" *matHeaderCellDef mat-sort-header >Work Center Text</th>
+            <td class="huruf" *matCellDef="let element">{{ element.work_CENTER_TEXT }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="building_ID">
+            <th style="min-width: 200px;" *matHeaderCellDef mat-sort-header >Building Name</th>
+            <td class="huruf" *matCellDef="let element">{{ element.building_id }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="cavity">
+            <th  *matHeaderCellDef mat-sort-header >Cavity</th>
+            <td class="angka" *matCellDef="let element">{{ element.cavity }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="machine_TYPE">
+            <th style="min-width: 150px;" class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Machine Type</th>
+            <td class="huruf" *matCellDef="let element">{{ element.machine_TYPE }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="status_USAGE">
+            <th style="min-width: 150px;" *matHeaderCellDef mat-sort-header >Status Usage</th>
+            <td class="angka" *matCellDef="let element">{{ element.status_USAGE }}</td>
+          </ng-container>
+          
+          <ng-container matColumnDef="status">
+            <th style="min-width: 50px;"  *matHeaderCellDef mat-sort-header>Status</th>
+            <td *matCellDef="let element" [ngClass]="{ 'bg-success': element.status === 1, 'bg-danger': element.status !== 1 }">
+              {{ element.status === 1 ? 'Active' : 'Deactive' }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="action" >
+            <th style="min-width: 200px;" *matHeaderCellDef>Action</th>
+            <td *matCellDef="let element">
+              <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(element.work_CENTER_TEXT)">Update</button>
+              <button type="button" class="btn btn-md ml-2" [ngClass]="{ 'btn-danger': element.status === 1, 'btn-success': element.status !== 1 }" (click)="element.status === 1 ? deleteData(element) : activateData(element)">
+                {{ element.status === 1 ? 'Delete' : 'Active' }}
               </button>
             </td>
-          </tr>
-        </tbody>
+          </ng-container>
+
+          <tr align="center" style="height: 20px;" mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr align="center" mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
       </table>
       <!-- Pagination -->
-      <nav>
-        <ul class="pagination">
-          <jw-pagination [items]="curingmachines" [pageSize]="pageSize" [maxPages]="totalPages" (changePage)="onChangePage($event)"> </jw-pagination>
-        </ul>
-      </nav>
     </div>
+    <mat-paginator [pageSize]="pageSize"
+            [pageSizeOptions]="[5, 10, 20]"
+            showFirstLastButtons>
+      </mat-paginator>
     </div>
   </div>
 </div>
 
 <!-- Modal edit -->
-<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+<div class="modal fade" id="editModal" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -80,21 +97,35 @@
         <!-- Form with Reactive Forms -->
         <form [formGroup]="editCuringMachineForm">
           <div class="form-group">
-
-            <label for="buildingID">Building ID</label>
-            <input [(ngModel)]="edtCuringMachineObject.building_ID" type="text" class="form-control" id="buildingID" formControlName="buildingID" [ngClass]="{ 'is-invalid': editCuringMachineForm.get('buildingID').invalid && editCuringMachineForm.get('buildingID').touched }" />
-            <div *ngIf="editCuringMachineForm.get('buildingID').invalid && editCuringMachineForm.get('buildingID').touched" class="invalid-feedback">Building id is required.</div>
-            
-            <label for="machinetype">Curing Number</label>
+            <label for="buildingID" style="min-width: 150px;">Building Name</label>
+            <div>
+              <ng-select2
+                formControlName="buildingID" 
+                id="buildingID"
+                name = "buildingID"
+                [(ngModel)]="edtCuringMachineObject.building_ID"
+                [data]="uomOptions"
+                [options]="options"
+                [placeholder]="'Please Select'">
+              </ng-select2>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="machinetype">Machine Type</label>
             <input [(ngModel)]="edtCuringMachineObject.machine_TYPE" type="text" class="form-control" id="machinetype" formControlName="machinetype" [ngClass]="{ 'is-invalid': editCuringMachineForm.get('machinetype').invalid && editCuringMachineForm.get('machinetype').touched }" />
             <div *ngIf="editCuringMachineForm.get('machinetype').invalid && editCuringMachineForm.get('machinetype').touched" class="invalid-feedback">Curing number is required.</div>
+          </div>
 
+          <div class="form-group">
             <label for="cavity">Cavity</label>
-            <input [(ngModel)]="edtCuringMachineObject.cavity" type="text" class="form-control" id="cavity" formControlName="cavity" [ngClass]="{ 'is-invalid': editCuringMachineForm.get('cavity').invalid && editCuringMachineForm.get('cavity').touched }" />
+            <input [(ngModel)]="edtCuringMachineObject.cavity" type="number" min="0" class="form-control" id="cavity" formControlName="cavity" [ngClass]="{ 'is-invalid': editCuringMachineForm.get('cavity').invalid && editCuringMachineForm.get('cavity').touched }" />
             <div *ngIf="editCuringMachineForm.get('cavity').invalid && editCuringMachineForm.get('cavity').touched" class="invalid-feedback">Cavity is required.</div>
-            
+          </div>
+
+          <div class="form-group">
             <label for="statusUsage">Status Usage</label>
-            <input [(ngModel)]="edtCuringMachineObject.status_USAGE" type="number" class="form-control" id="statusUsage" formControlName="statusUsage" [ngClass]="{ 'is-invalid': editCuringMachineForm.get('statusUsage').invalid && editCuringMachineForm.get('statusUsage').touched }" />
+            <input [(ngModel)]="edtCuringMachineObject.status_USAGE" type="number" min="0" class="form-control" id="statusUsage" formControlName="statusUsage" [ngClass]="{ 'is-invalid': editCuringMachineForm.get('statusUsage').invalid && editCuringMachineForm.get('statusUsage').touched }" />
             <div *ngIf="editCuringMachineForm.get('statusUsage').invalid && editCuringMachineForm.get('statusUsage').touched" class="invalid-feedback">Status Usage is required.</div>
           </div>
         </form>

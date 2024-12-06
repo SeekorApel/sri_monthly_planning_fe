@@ -8,6 +8,10 @@ declare var $: any;
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSort } from '@angular/material/sort';
+import { MatPaginator } from '@angular/material/paginator';
+
 @Component({
   selector: 'app-view-item-assy',
   templateUrl: './view-item-assy.component.html',
@@ -28,6 +32,12 @@ export class ViewItemAssyComponent implements OnInit {
   pageOfItems: Array<any>;
   pageSize: number = 5;
   totalPages: number = 5;
+  sortBuffer: Array<any>;
+  displayedColumns: string[] = ['no', 'item_ASSY', 'status', 'action'];
+  dataSource: MatTableDataSource<Item_Assy>;
+
+  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(private itemAssyService: ItemAssyService, private fb: FormBuilder) { 
     this.editItemAssyForm = this.fb.group({
@@ -44,7 +54,10 @@ export class ViewItemAssyComponent implements OnInit {
     this.itemAssyService.getAllItemAssy().subscribe(
       (response: ApiResponse<Item_Assy[]>) => {
         this.itemAssys = response.data;
-        this.onChangePage(this.itemAssys.slice(0, this.pageSize));
+        this.dataSource = new MatTableDataSource(this.itemAssys);
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+        this.onChangePage(this.dataSource.data.slice(0, this.pageSize));
       },
       (error) => {
         this.errorMessage = 'Failed to load item assy: ' + error.message;
@@ -57,21 +70,23 @@ export class ViewItemAssyComponent implements OnInit {
   }
 
   onSearchChange(): void {
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
     // Lakukan filter berdasarkan nama plant yang mengandung text pencarian (case-insensitive)
-    const filteredItemAssy = this.itemAssys.filter(
-      (itemAssy) =>
-        itemAssy.item_ASSY
-          .toString()
-          .includes(this.searchText.toLowerCase()) ||
-          itemAssy.item_ASSY.toString().includes(this.searchText)
-    );
+    // const filteredItemAssy = this.itemAssys.filter(
+    //   (itemAssy) =>
+    //     itemAssy.item_ASSY
+    //       .toString()
+    //       .includes(this.searchText.toLowerCase()) ||
+    //       itemAssy.item_ASSY.toString().includes(this.searchText)
+    // );
 
-    // Tampilkan hasil filter pada halaman pertama
-    this.onChangePage(filteredItemAssy.slice(0, this.pageSize));
+    // // Tampilkan hasil filter pada halaman pertama
+    // this.onChangePage(filteredItemAssy.slice(0, this.pageSize));
   }
 
   resetSearch(): void {
     this.searchText = '';
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
     this.onChangePage(this.itemAssys.slice(0, this.pageSize));
   }
 

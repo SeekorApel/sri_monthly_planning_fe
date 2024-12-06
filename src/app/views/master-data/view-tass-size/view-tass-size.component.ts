@@ -7,6 +7,17 @@ import Swal from 'sweetalert2';
 declare var $: any;
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
+import { Select2OptionData } from 'ng-select2';
+import { Options } from 'select2';
+
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSort } from '@angular/material/sort';
+import { MatPaginator } from '@angular/material/paginator';
+import { MachineTassType } from 'src/app/models/machine-tass-type';
+import { MachineTassTypeService } from 'src/app/services/master-data/machine-tass-type/machine-tass-type.service';
+import { Size } from 'src/app/models/Size';
+import { SizeService } from 'src/app/services/master-data/size/size.service';
+
 @Component({
   selector: 'app-view-tass-size',
   templateUrl: './view-tass-size.component.html',
@@ -27,15 +38,65 @@ export class ViewTassSizeComponent implements OnInit {
   pageOfItems: Array<any>;
   pageSize: number = 5;
   totalPages: number = 5;
+  sortBuffer: Array<any>;
+  displayedColumns: string[] = ['no', 'tassize_ID', 'machinetasstype_NAME','size_NAME','capacity', 'status', 'action'];
+  dataSource: MatTableDataSource<Tass_Size>;
 
-  constructor(private tass_sizeService: TassSizeService, private fb: FormBuilder) { 
+  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+
+  public uomOptions: Array<Array<Select2OptionData>>;
+  public options: Options = { width: '100%'
+  };
+  uom: any;
+  machineTassType: MachineTassType[];
+  size: Size[];
+
+  constructor(private tass_sizeService: TassSizeService, private fb: FormBuilder, private machineTassTypeService: MachineTassTypeService, private sizeService: SizeService) { 
     this.editTassSizeForm = this.fb.group({
-      machinetasstype: ['', Validators.required],
+      machinetasstype_ID: ['', Validators.required],
       sizeid: ['', Validators.required],
       capacity: ['', Validators.required],
     });
+    
+    this.loadMachineTassType();
+    this.loadSize();
   }
 
+  private loadMachineTassType(): void {
+    this.machineTassTypeService.getAllMachineTassType().subscribe(
+      (response: ApiResponse<MachineTassType[]>) => {
+        this.machineTassType = response.data;
+        if (!this.uomOptions) {
+          this.uomOptions = [];
+        }
+        this.uomOptions[0] = this.machineTassType.map((element) => ({
+          id: element.machinetasstype_ID, // Ensure the ID is a string
+          text: element.machinetasstype_ID // Set the text to the plant name
+        }));
+      },
+      (error) => {
+        this.errorMessage = 'Failed to load Machine Tass Type: ' + error.message;
+      }
+    );
+  }
+  private loadSize(): void {
+    this.sizeService.getAllSize().subscribe(
+      (response: ApiResponse<Size[]>) => {
+        this.size = response.data;
+        if (!this.uomOptions) {
+          this.uomOptions = [];
+        }
+        this.uomOptions[1] = this.size.map((element) => ({
+          id: element.size_ID, // Ensure the ID is a string
+          text: element.size_ID, // Set the text to the name (or other property)
+        }));
+      },
+      (error) => {
+        this.errorMessage = 'Failed to load size: ' + error.message;
+      }
+    );
+  }
   ngOnInit(): void {
     this.getAllTassSize();
   }
@@ -44,7 +105,25 @@ export class ViewTassSizeComponent implements OnInit {
     this.tass_sizeService.getAllTassSize().subscribe(
       (response: ApiResponse<Tass_Size[]>) => {
         this.tass_sizes = response.data;
-        this.onChangePage(this.tass_sizes.slice(0, this.pageSize));
+        
+        this.tass_sizes = this.tass_sizes.map((tassSize) => {
+          const matchedMachineTassType = this.machineTassType.find(
+            (b) => b.machinetasstype_ID === (tassSize.machinetasstype_ID)
+          );
+          const matchedSize = this.size.find(
+            (c) => c.size_ID === (tassSize.size_ID)
+          );
+  
+          return {
+            ...tassSize, // Salin semua properti quadrant
+            machinetasstype_NAME: matchedMachineTassType ? matchedMachineTassType.machinetasstype_ID : null, // Tambahkan building_NAME jika ada kecocokan
+            size_NAME: matchedSize ? matchedSize.size_ID : null // Tambahkan building_NAME jika ada kecocokan
+          };
+        });
+        this.dataSource = new MatTableDataSource(this.tass_sizes);
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+        this.onChangePage(this.dataSource.data.slice(0, this.pageSize));
       },
       (error) => {
         this.errorMessage = 'Failed to load tass sizes: ' + error.message;
@@ -57,27 +136,30 @@ export class ViewTassSizeComponent implements OnInit {
   }
 
   onSearchChange(): void {
-    const filteredTassSizes = this.tass_sizes.filter(
-      (tass_size) =>
-        tass_size.machinetasstype_ID
-          .toLowerCase()
-          .includes(this.searchText.toLowerCase()) ||
-        tass_size.tassize_ID.toString().includes(this.searchText)||
-        tass_size.size_ID.toLowerCase().includes(this.searchText.toLowerCase())||
-        tass_size.capacity.toString().includes(this.searchText.toLowerCase())
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
+    // const filteredTassSizes = this.tass_sizes.filter(
+    //   (tass_size) =>
+    //     tass_size.machinetasstype_ID
+    //       .toLowerCase()
+    //       .includes(this.searchText.toLowerCase()) ||
+    //     tass_size.tassize_ID.toString().includes(this.searchText)||
+    //     tass_size.size_ID.toLowerCase().includes(this.searchText.toLowerCase())||
+    //     tass_size.capacity.toString().includes(this.searchText.toLowerCase())
         
-    );
+    // );
 
-    // Tampilkan hasil filter pada halaman pertama
-    this.onChangePage(filteredTassSizes.slice(0, this.pageSize));
+    // // Tampilkan hasil filter pada halaman pertama
+    // this.onChangePage(filteredTassSizes.slice(0, this.pageSize));
   }
 
   resetSearch(): void {
     this.searchText = '';
-    this.onChangePage(this.tass_sizes.slice(0, this.pageSize));
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
   }
 
   updateTassSize(): void {
+    const machineId = this.editTassSizeForm.get('machinetasstype_ID').value;
+  console.log('Machine ID:', machineId);
     
     this.tass_sizeService.updateTassSize(this.edtTassSizeObject).subscribe(
       (response) => {
@@ -98,6 +180,11 @@ export class ViewTassSizeComponent implements OnInit {
         Swal.fire('Error!', 'Error updating data.', 'error');
       }
     );
+  }
+
+  getDescSize(size_ID: string): string {
+    const size = this.size.find(b => b.size_ID === size_ID);
+    return size ? size.description : 'Unknown';
   }
 
   openModalEdit(idTassSize: number): void {

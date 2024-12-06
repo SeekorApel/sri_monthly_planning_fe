@@ -1,0 +1,21 @@
+::ng-deep .mat-sort-header-container {
+  justify-content: center;
+}
+.per-hour-wrapper {
+  display: flex;           /* Use flexbox for horizontal layout */
+  flex-wrap: wrap;         /* Allow wrapping if there are too many items */
+  justify-content: center;
+}
+
+.per-hour-wrapper-item {
+  flex: 0 0 calc(100%);  /* Each item takes up half the width minus the gap */
+  box-sizing: border-box;      /* Ensure padding and border are included in width */
+}
+// .modal {
+//   transform: translateX(-20%);
+// }
+.modal-content{
+  width: 1300px;
+  display: flex;
+  transform: translateX(-350px);
+}

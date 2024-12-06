@@ -7,6 +7,15 @@ import Swal from 'sweetalert2';
 import { saveAs } from 'file-saver';
 declare var $: any;
 import * as XLSX from 'xlsx';
+import { Select2OptionData } from 'ng-select2';
+import { Options } from 'select2';
+import { Setting } from 'src/app/models/Setting';
+import { SettingService } from 'src/app/services/master-data/setting/setting.service';
+
+
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSort } from '@angular/material/sort';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-view-machine-curing-type',
@@ -22,29 +31,74 @@ export class ViewMachineCuringTypeComponent implements OnInit {
   isEditMode: boolean = false;
   file: File | null = null;
   editMCTForm: FormGroup;
+  public uomOptionData: Array<Select2OptionData>;
+  public options: Options = {
+    width: '100%',
+    minimumResultsForSearch: 0,
+  };
+  settings: Setting[];
+
 
   // Pagination
   pageOfItems: Array<any>;
   pageSize: number = 5;
   totalPages: number = 5;
+  displayedColumns: string[] = ['no', 'machinecuringtype_ID','setting_ID','description','cavity','status','action'];
+  dataSource: MatTableDataSource<MachineCuringType>;
 
-  constructor(private machineCuringTypeService: MachineCuringTypeService, private fb: FormBuilder) {
+  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+
+  constructor(
+    private machineCuringTypeService: MachineCuringTypeService, 
+    private fb: FormBuilder,
+    private  settingService: SettingService,
+  ) {
     this.editMCTForm = this.fb.group({
       description: ['', Validators.required],
       setting: ['', Validators.required],
       cavity: ['', Validators.required],
     });
+    this.loadSetting();
   }
 
   ngOnInit(): void {
     this.getAllMachineCuringType();
   }
+  private loadSetting(): void {
+    this.settingService.getAllSetting().subscribe(
+      (response: ApiResponse<Setting[]>) => {
+        this.settings = response.data;
+
+        if (!this.uomOptionData) {
+          this.uomOptionData = [];
+        }
+
+        this.uomOptionData = this.settings.map((element) => ({
+          id: element.setting_ID.toString(), // Ensure the ID is a string
+          text: element.setting_KEY, // Set the text to the name (or other property)
+        }));
+      },
+      (error) => {
+        this.errorMessage = 'Failed to load Setting: ' + error.message;
+      }
+    );
+  }
 
   getAllMachineCuringType(): void {
     this.machineCuringTypeService.getAllMCT().subscribe(
       (response: ApiResponse<MachineCuringType[]>) => {
-        this.machineCuringTypes = response.data;
-        this.onChangePage(this.machineCuringTypes.slice(0, this.pageSize));
+        this.machineCuringTypes = response.data.map(curingT => {
+          const setting = this.settings.find(setting => setting.setting_ID === curingT.setting_ID);
+          return {
+            ...curingT,
+            setting_key: setting ? setting.setting_KEY : 'Unknown',
+          }
+        })
+        this.dataSource = new MatTableDataSource(this.machineCuringTypes);
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+        // this.onChangePage(this.machineCuringTypes.slice(0, this.pageSize));
       },
       (error) => {
         this.errorMessage = 'Failed to load Machine Curing Type: ' + error.message;
@@ -57,16 +111,12 @@ export class ViewMachineCuringTypeComponent implements OnInit {
   }
 
   onSearchChange(): void {
-    // Lakukan filter berdasarkan nama MCT yang mengandung text pencarian (case-insensitive)
-    const filteredMCT = this.machineCuringTypes.filter((mct) => mct.description.toLowerCase().includes(this.searchText.toLowerCase()) || mct.machinecuringtype_ID.toString().includes(this.searchText));
-
-    // Tampilkan hasil filter pada halaman pertama
-    this.onChangePage(filteredMCT.slice(0, this.pageSize));
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
   }
 
   resetSearch(): void {
     this.searchText = '';
-    this.onChangePage(this.machineCuringTypes.slice(0, this.pageSize));
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
   }
 
   updateMCT(): void {

@@ -8,6 +8,10 @@ declare var $: any;
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSort } from '@angular/material/sort';
+import { MatPaginator } from '@angular/material/paginator';
+
 @Component({
   selector: 'app-view-delivery-schedule',
   templateUrl: './view-delivery-schedule.component.html',
@@ -27,6 +31,12 @@ export class ViewDeliveryScheduleComponent implements OnInit {
   pageOfItems: Array<any>;
   pageSize: number = 5;
   totalPages: number = 5;
+  sortBuffer: Array<any>;
+  displayedColumns: string[] = ['no', 'ds_ID', 'effective_TIME','date_ISSUED', 'category', 'status', 'action'];
+  dataSource: MatTableDataSource<DeliverySchedule>;
+
+  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(private deliveryScheduleService: DeliveryScheduleService, private fb: FormBuilder) {
     this.editDeliveryScheduleForm = this.fb.group({
@@ -43,8 +53,17 @@ export class ViewDeliveryScheduleComponent implements OnInit {
   getAllDeliverySchedule(): void {
     this.deliveryScheduleService.getAllDeliverySchedule().subscribe(
       (response: ApiResponse<DeliverySchedule[]>) => {
-        this.deliverySchedules = response.data;
-        this.onChangePage(this.deliverySchedules.slice(0, this.pageSize));
+        this.deliverySchedules = response.data.map(element => {
+          return {
+            ...element,
+            formattedDate: new Date(element.effective_TIME).toLocaleDateString('en-US', { day: '2-digit', month: 'long', year: 'numeric' }),
+            formattedDateIssued: new Date(element.date_ISSUED).toLocaleDateString('en-US', { day: '2-digit', month: 'long', year: 'numeric' })
+          }
+        });
+        this.dataSource = new MatTableDataSource(this.deliverySchedules);
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+        this.onChangePage(this.dataSource.data.slice(0, this.pageSize));
       },
       (error) => {
         this.errorMessage = 'Failed to load delivery schedule: ' + error.message;
@@ -57,19 +76,13 @@ export class ViewDeliveryScheduleComponent implements OnInit {
   }
 
   onSearchChange(): void {
-    // Lakukan filter berdasarkan nama plant yang mengandung text pencarian (case-insensitive)
-    const filteredDeliverySchedul = this.deliverySchedules.filter((deliverySchedule) => 
-    deliverySchedule.effective_TIME.toString().includes(this.searchText) ||
-    deliverySchedule.date_ISSUED.toString().includes(this.searchText) ||
-    deliverySchedule.category.toLowerCase().includes(this.searchText.toLowerCase()));
-
-    // Tampilkan hasil filter pada halaman pertama
-    this.onChangePage(filteredDeliverySchedul.slice(0, this.pageSize));
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
   }
 
   resetSearch(): void {
     this.searchText = '';
-    this.onChangePage(this.deliverySchedules.slice(0, this.pageSize));
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
+    //this.dataSource.sort = this.sort;// this.onChangePage(this.deliverySchedules.slice(0, this.pageSize));
   }
 
   updateDeliverySchedule(): void {
@@ -94,6 +107,14 @@ export class ViewDeliveryScheduleComponent implements OnInit {
     );
   }
 
+  convertToInputDateFormat(dateString: string): string {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-indexed
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }  
+  
   openModalEdit(iddDeliverySchedule: number): void {
     this.isEditMode = true;
     this.getDeliveryScheduleById(iddDeliverySchedule);
@@ -104,6 +125,17 @@ export class ViewDeliveryScheduleComponent implements OnInit {
     this.deliveryScheduleService.getDeliveryScheduleById(iddDeliverySchedule).subscribe(
       (response: ApiResponse<DeliverySchedule>) => {
         this.edtDeliveryScheduleObject = response.data;
+
+        if (this.edtDeliveryScheduleObject.effective_TIME) {
+          this.edtDeliveryScheduleObject.effective_TIME = this.convertToInputDateFormat(
+            this.edtDeliveryScheduleObject.effective_TIME
+          );
+        }
+        if (this.edtDeliveryScheduleObject.date_ISSUED) {
+          this.edtDeliveryScheduleObject.date_ISSUED = this.convertToInputDateFormat(
+            this.edtDeliveryScheduleObject.date_ISSUED
+          );
+        }
       },
       (error) => {
         this.errorMessage = 'Failed to load delivery schedules: ' + error.message;

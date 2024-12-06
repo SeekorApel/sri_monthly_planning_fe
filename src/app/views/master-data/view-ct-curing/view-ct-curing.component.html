@@ -1,326 +1,516 @@
 <div class="col-lg-12">
-    <div class="card">
-      <div class="card-header">
-        <strong><i class="fa fa-bars"></i>&nbsp;Data CT Curing</strong>
-      </div>
-  
-      <div class="card-body">
-        <!-- Wrapper for the input and buttons in one row -->
-        <div class="d-flex justify-content-between mb-3">
-          <div class="d-flex align-items-center">
-            <input type="text" class="form-control col-md-12 col-lg-12" [(ngModel)]="searchText" (input)="onSearchChange()" placeholder="Find here..." />
-            <button type="submit" class="btn btn-primary ml-2" (click)="resetSearch()">Reset</button>
-          </div>
-  
-          <!-- Right side: Download Template and Export Excel buttons -->
-          <div>
-            <button type="button" class="btn btn-primary ml-2" (click)="downloadTemplate()"><i class="fa fa-download fa-lg"></i> Download Template</button>
-            <button type="button" class="btn btn-primary ml-2" (click)="downloadExcel()"><i class="fa fa-download fa-lg"></i> Export Excel</button>
-            <button type="button" class="btn btn-success ml-2" data-toggle="modal" data-target="#uploadModal"><i class="fa fa-file-excel-o fa-lg"></i> Upload Excel</button>
-          </div>
-        </div>
-        <div class="table-responsive">
-            <!-- Table -->
-            <table class="table table-bordered table-striped table-sm">
-                <thead  align="center">
-                <tr>
-                    <th style="min-width: '30px';">No</th>
-                    <th style="min-width: '100px';">CT Curing ID</th>
-                    <th style="min-width: '100px';">WIP</th>
-                    <th style="min-width: '225px';">Description</th>
-                    <th style="min-width: '150px';">Group Counter</th>
-                    <th style="min-width: '150px';">Var Group Counter</th>
-                    <th style="min-width: '100px';">Sequence</th>
-                    <th style="min-width: '100px';">WCT</th>
-                    <th style="min-width: '250px';">Operation Short Text</th>
-                    <th style="min-width: '150px';">Operation Unit</th>
-                    <th style="min-width: '150px';">Base Quantity</th>
-                    <th style="min-width: '150px';">Standard Value Unit</th>
-                    <th style="min-width: '100px';">CT Sec 1</th>
-                    <th style="min-width: '100px';">CT HR 1000</th>
-                    <th style="min-width: '150px';">WH Normal Shift 0</th>
-                    <th style="min-width: '150px';">WH Normal Shift 1</th>
-                    <th style="min-width: '150px';">WH Normal Shift 2</th>
-                    <th style="min-width: '150px';">WH Shift FRIDAY</th>
-                    <th style="min-width: '200px';">WH Total Normal Shift</th>
-                    <th style="min-width: '200px';">WH Total Shift FRIDAY</th>
-                    <th style="min-width: '150px';">Allow Normal Shift 0</th>
-                    <th style="min-width: '150px';">Allow Normal Shift 1</th>
-                    <th style="min-width: '150px';">Allow Normal Shift 2</th>
-                    <th style="min-width: '100px';">Allow Total</th>
-                    <th style="min-width: '200px';">OP Time Normal Shift 0</th>
-                    <th style="min-width: '200px';">OP Time Normal Shift 1</th>
-                    <th style="min-width: '200px';">OP Time Normal Shift 2</th>
-                    <th style="min-width: '200px';">OP Time Shift FRIDAY</th>
-                    <th style="min-width: '200px';">OP Time Total Normal Shift</th>
-                    <th style="min-width: '200px';">OP Time Total Shift FRIDAY</th>
-                    <th style="min-width: '150px';">Kaps Normal Shift 0</th>
-                    <th style="min-width: '150px';">Kaps Normal Shift 1</th>
-                    <th style="min-width: '150px';">Kaps Normal Shift 2</th>
-                    <th style="min-width: '150px';">Kaps Shift FRIDAY</th>
-                    <th style="min-width: '200px';">Kaps Total Normal Shift</th>
-                    <th style="min-width: '200px';">Kaps Total Shift FRIDAY</th>
-                    <th style="min-width: '200px';">Waktu Total CT Normal</th>
-                    <th style="min-width: '200px';">Waktu Total CT FRIDAY</th>
-                    <th style="min-width: '100px';">Status</th>
-                    <th style="min-width: '200px';">Action</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr align="center" *ngFor="let ctcuring of pageOfItems; let i = index">
-                    <td>{{ i + 1 }}</td>
-                    <td>{{ ctcuring.ct_CURING_ID }}</td>
-                    <td>{{ ctcuring.wip }}</td>
-                    <td>{{ ctcuring.part_NUMBER }}</td>
-                    <td>{{ ctcuring.group_COUNTER }}</td>
-                    <td>{{ ctcuring.var_GROUP_COUNTER }}</td>
-                    <td>{{ ctcuring.sequence }}</td>
-                    <td>{{ ctcuring.wct }}</td>
-                    <td>{{ ctcuring.operation_SHORT_TEXT }}</td>
-                    <td>{{ ctcuring.operation_UNIT }}</td>
-                    <td>{{ ctcuring.base_QUANTITY }}</td>
-                    <td>{{ ctcuring.standart_VALUE_UNIT }}</td>
-                    <td>{{ ctcuring.ct_SEC1 }}</td>
-                    <td>{{ ctcuring.ct_HR1000 }}</td>
-                    <td>{{ ctcuring.wh_NORMAL_SHIFT_0 }}</td>
-                    <td>{{ ctcuring.wh_NORMAL_SHIFT_1 }}</td>
-                    <td>{{ ctcuring.wh_NORMAL_SHIFT_2 }}</td>
-                    <td>{{ ctcuring.wh_SHIFT_FRIDAY }}</td>
-                    <td>{{ ctcuring.wh_TOTAL_NORMAL_SHIFT }}</td>
-                    <td>{{ ctcuring.wh_TOTAL_SHIFT_FRIDAY }}</td>
-                    <td>{{ ctcuring.allow_NORMAL_SHIFT_0 }}</td>
-                    <td>{{ ctcuring.allow_NORMAL_SHIFT_1 }}</td>
-                    <td>{{ ctcuring.allow_NORMAL_SHIFT_2 }}</td>
-                    <td>{{ ctcuring.allow_TOTAL }}</td>
-                    <td>{{ ctcuring.op_TIME_NORMAL_SHIFT_0 }}</td>
-                    <td>{{ ctcuring.op_TIME_NORMAL_SHIFT_1 }}</td>
-                    <td>{{ ctcuring.op_TIME_NORMAL_SHIFT_2 }}</td>
-                    <td>{{ ctcuring.op_TIME_SHIFT_FRIDAY }}</td>
-                    <td>{{ ctcuring.op_TIME_NORMAL_SHIFT }}</td>
-                    <td>{{ ctcuring.op_TIME_TOTAL_SHIFT_FRIDAY }}</td>
-                    <td>{{ ctcuring.kaps_NORMAL_SHIFT_0 }}</td>
-                    <td>{{ ctcuring.kaps_NORMAL_SHIFT_1 }}</td>
-                    <td>{{ ctcuring.kaps_NORMAL_SHIFT_2 }}</td>
-                    <td>{{ ctcuring.kaps_SHIFT_FRIDAY }}</td>
-                    <td>{{ ctcuring.kaps_TOTAL_NORMAL_SHIFT }}</td>
-                    <td>{{ ctcuring.kaps_TOTAL_SHIFT_FRIDAY }}</td>
-                    <td>{{ ctcuring.waktu_TOTAL_CT_NORMAL }}</td>
-                    <td>{{ ctcuring.waktu_TOTAL_CT_FRIDAY }}</td>
-                    <td [ngClass]="{ 'bg-success': ctcuring.status === 1, 'bg-danger': ctcuring.status !== 1 }">{{ ctcuring.status === 1 ? 'Active' : 'Deactive' }}</td>
-                    <td>
-                    <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(ctcuring.ct_CURING_ID)">Update</button>
-                    <button type="button" class="btn btn-md ml-2" [ngClass]="{ 'btn-danger': ctcuring.status === 1, 'btn-success': ctcuring.status !== 1 }" (click)="ctcuring.status === 1 ? deleteData(ctcuring) : activateData(ctcuring)">
-                      {{ ctcuring.status === 1 ? 'Delete' : 'Active' }}
-                    </button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-            <!-- Pagination -->
-            <nav>
-              <ul class="pagination">
-                <jw-pagination [items]="ctcurings" [pageSize]="pageSize" [maxPages]="totalPages" (changePage)="onChangePage($event)"> </jw-pagination>
-              </ul>
-            </nav>
-        </div>
-      </div>
+  <div class="card">
+    <div class="card-header">
+      <strong><i class="fa fa-bars"></i>&nbsp;Data CT Curing</strong>
     </div>
-  </div>
-  
-  <!-- Modal edit -->
-  <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="addModalLabel">Edit CT Curing</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
+
+    <div class="card-body">
+      <!-- Wrapper for the input and buttons in one row -->
+      <div class="d-flex justify-content-between mb-3">
+        <div class="d-flex align-items-center">
+          <input type="text" class="form-control col-md-12 col-lg-12" [(ngModel)]="searchText" (input)="onSearchChange()" placeholder="Find here..." />
+          <button type="submit" class="btn btn-primary ml-2" (click)="resetSearch()">Reset</button>
         </div>
-        <div class="modal-body">
-          <!-- Form with Reactive Forms -->
-          <form [formGroup]="editCTCuringForm">
-            <div class="form-group">
-              <label for="wip">WIP</label>
-              <input [(ngModel)]="edtCTCuringObject.wip" type="text" class="form-control" id="wip" formControlName="wip" [ngClass]="{ 'is-invalid': editCTCuringForm.get('wip').invalid && editCTCuringForm.get('wip').touched }" />
-              <div *ngIf="editCTCuringForm.get('wip').invalid && editCTCuringForm.get('wip').touched" class="invalid-feedback">WIP is required.</div>
 
-              <label for="description">Description</label>
-              <input [(ngModel)]="edtCTCuringObject.part_NUMBER" type="text" class="form-control" id="description" formControlName="description" [ngClass]="{ 'is-invalid': editCTCuringForm.get('description').invalid && editCTCuringForm.get('description').touched }" />
-              <div *ngIf="editCTCuringForm.get('description').invalid && editCTCuringForm.get('description').touched" class="invalid-feedback">Description is required.</div>
+        <!-- Right side: Download Template and Export Excel buttons -->
+        <div>
+          <button type="button" class="btn btn-primary ml-2" (click)="downloadTemplate()"><i class="fa fa-download fa-lg"></i> Download Template</button>
+          <button type="button" class="btn btn-primary ml-2" (click)="downloadExcel()"><i class="fa fa-download fa-lg"></i> Export Excel</button>
+          <button type="button" class="btn btn-success ml-2" data-toggle="modal" data-target="#uploadModal"><i class="fa fa-file-excel-o fa-lg"></i> Upload Excel</button>
+        </div>
+      </div>
+      <div class="table-responsive">
+        <table mat-table [dataSource]="dataSource" matSort class="table table-bordered table-striped table-sm">
+          <!-- No Column -->
+          <ng-container matColumnDef="no">
+            <th *matHeaderCellDef style="min-width: 50px" mat-sort-header>No</th>
+            <td *matCellDef="let element; let i = index">{{ i + 1 }}</td>
+          </ng-container>
 
-              <label for="groupcounter">Group Counter</label>
-              <input [(ngModel)]="edtCTCuringObject.group_COUNTER" type="text" class="form-control" id="groupcounter" formControlName="groupcounter" [ngClass]="{ 'is-invalid': editCTCuringForm.get('groupcounter').invalid && editCTCuringForm.get('groupcounter').touched }" />
-              <div *ngIf="editCTCuringForm.get('groupcounter').invalid && editCTCuringForm.get('groupcounter').touched" class="invalid-feedback">Group Counter is required.</div>
+          <!-- CT Curing ID Column -->
+          <ng-container matColumnDef="ct_CURING_ID">
+            <th *matHeaderCellDef style="min-width: 200px" mat-sort-header>CT Curing ID</th>
+            <td align="center" *matCellDef="let element">{{ element.ct_CURING_ID }}</td>
+          </ng-container>
 
-              <label for="vargroupcounter">Var Group Counter</label>
-              <input [(ngModel)]="edtCTCuringObject.var_GROUP_COUNTER" type="text" class="form-control" id="vargroupcounter" formControlName="vargroupcounter" [ngClass]="{ 'is-invalid': editCTCuringForm.get('vargroupcounter').invalid && editCTCuringForm.get('vargroupcounter').touched }" />
-              <div *ngIf="editCTCuringForm.get('vargroupcounter').invalid && editCTCuringForm.get('vargroupcounter').touched" class="invalid-feedback">Var Group Counter is required.</div>
+          <!-- WIP Column -->
+          <ng-container matColumnDef="wip">
+            <th *matHeaderCellDef style="min-width: 200px" mat-sort-header>WIP</th>
+            <td align="left" *matCellDef="let element">{{ element.wip }}</td>
+          </ng-container>
 
-              <label for="sequence">Sequence</label>
-              <input [(ngModel)]="edtCTCuringObject.sequence" type="number" class="form-control" id="sequence" formControlName="sequence" [ngClass]="{ 'is-invalid': editCTCuringForm.get('sequence').invalid && editCTCuringForm.get('sequence').touched }" />
-              <div *ngIf="editCTCuringForm.get('sequence').invalid && editCTCuringForm.get('sequence').touched" class="invalid-feedback">Sequence is required.</div>
+          <!-- Group Counter Column -->
+          <ng-container matColumnDef="group_COUNTER">
+            <th *matHeaderCellDef style="min-width: 200px" mat-sort-header>Group Counter</th>
+            <td align="left" *matCellDef="let element">{{ element.group_COUNTER }}</td>
+          </ng-container>
 
-              <label for="wct">WCT</label>
-              <input [(ngModel)]="edtCTCuringObject.wct" type="text" class="form-control" id="wct" formControlName="wct" [ngClass]="{ 'is-invalid': editCTCuringForm.get('wct').invalid && editCTCuringForm.get('wct').touched }" />
-              <div *ngIf="editCTCuringForm.get('wct').invalid && editCTCuringForm.get('wct').touched" class="invalid-feedback">WCT is required.</div>
+          <!-- Var Group Counter Column -->
+          <ng-container matColumnDef="var_GROUP_COUNTER">
+            <th *matHeaderCellDef style="min-width: 200px" mat-sort-header>Var Group Counter</th>
+            <td align="left" *matCellDef="let element">{{ element.var_GROUP_COUNTER }}</td>
+          </ng-container>
 
-              <label for="operationshorttext">Operation Short Text</label>
-              <input [(ngModel)]="edtCTCuringObject.operation_SHORT_TEXT" type="text" class="form-control" id="operationshorttext" formControlName="operationshorttext" [ngClass]="{ 'is-invalid': editCTCuringForm.get('operationshorttext').invalid && editCTCuringForm.get('operationshorttext').touched }" />
-              <div *ngIf="editCTCuringForm.get('operationshorttext').invalid && editCTCuringForm.get('operationshorttext').touched" class="invalid-feedback">Operation Short Text is required.</div>
+          <!-- Sequence Column -->
+          <ng-container matColumnDef="sequence">
+            <th *matHeaderCellDef style="min-width: 200px" mat-sort-header>Sequence</th>
+            <td align="right" *matCellDef="let element">{{ element.sequence }}</td>
+          </ng-container>
 
-              <label for="operationunit">Operation Unit</label>
-              <input [(ngModel)]="edtCTCuringObject.operation_UNIT" type="text" class="form-control" id="operationunit" formControlName="operationunit" [ngClass]="{ 'is-invalid': editCTCuringForm.get('operationunit').invalid && editCTCuringForm.get('operationunit').touched }" />
-              <div *ngIf="editCTCuringForm.get('operationunit').invalid && editCTCuringForm.get('operationunit').touched" class="invalid-feedback">Operation Unit is required.</div>
+          <!-- WCT Column -->
+          <ng-container matColumnDef="wct">
+            <th *matHeaderCellDef style="min-width: 200px" mat-sort-header>WCT</th>
+            <td align="left" *matCellDef="let element">{{ element.wct }}</td>
+          </ng-container>
 
-              <label for="basequantity">Base Quantity</label>
-              <input [(ngModel)]="edtCTCuringObject.base_QUANTITY" type="number" class="form-control" id="basequantity" formControlName="basequantity" [ngClass]="{ 'is-invalid': editCTCuringForm.get('basequantity').invalid && editCTCuringForm.get('basequantity').touched }" />
-              <div *ngIf="editCTCuringForm.get('basequantity').invalid && editCTCuringForm.get('basequantity').touched" class="invalid-feedback">Base Quantity is required.</div>
+          <!-- Operation Short Text Column -->
+          <ng-container matColumnDef="operation_SHORT_TEXT">
+            <th *matHeaderCellDef style="min-width: 200px" mat-sort-header>Operation Short Text</th>
+            <td align="left" *matCellDef="let element">{{ element.operation_SHORT_TEXT }}</td>
+          </ng-container>
 
-              <label for="standardvalueunit">Standard Value Unit</label>
-              <input [(ngModel)]="edtCTCuringObject.standart_VALUE_UNIT" type="text" class="form-control" id="standardvalueunit" formControlName="standardvalueunit" [ngClass]="{ 'is-invalid': editCTCuringForm.get('standardvalueunit').invalid && editCTCuringForm.get('standardvalueunit').touched }" />
-              <div *ngIf="editCTCuringForm.get('standardvalueunit').invalid && editCTCuringForm.get('standardvalueunit').touched" class="invalid-feedback">Standard Value Unit is required.</div>
+          <!-- Operation Unit Column -->
+          <ng-container matColumnDef="operation_UNIT">
+            <th *matHeaderCellDef style="min-width: 200px" mat-sort-header>Operation Unit</th>
+            <td align="left" *matCellDef="let element">{{ element.operation_UNIT }}</td>
+          </ng-container>
 
-              <label for="ctsec1">CT Sec 1</label>
-              <input [(ngModel)]="edtCTCuringObject.ct_SEC1" type="number" class="form-control" id="ctsec1" formControlName="ctsec1" [ngClass]="{ 'is-invalid': editCTCuringForm.get('ctsec1').invalid && editCTCuringForm.get('ctsec1').touched }" />
-              <div *ngIf="editCTCuringForm.get('ctsec1').invalid && editCTCuringForm.get('ctsec1').touched" class="invalid-feedback">CT Sec 1 is required.</div>
+          <!-- Base Quantity Column -->
+          <ng-container matColumnDef="base_QUANTITY">
+            <th *matHeaderCellDef style="min-width: 200px" mat-sort-header>Base Quantity</th>
+            <td align="right" *matCellDef="let element">{{ element.base_QUANTITY }}</td>
+          </ng-container>
 
-              <label for="cthr1000">CT HR 1000</label>
-              <input [(ngModel)]="edtCTCuringObject.ct_HR1000" type="number" class="form-control" id="cthr1000" formControlName="cthr1000" [ngClass]="{ 'is-invalid': editCTCuringForm.get('cthr1000').invalid && editCTCuringForm.get('cthr1000').touched }" />
-              <div *ngIf="editCTCuringForm.get('cthr1000').invalid && editCTCuringForm.get('cthr1000').touched" class="invalid-feedback">CT HR 1000 is required.</div>
+          <!-- Standard Value Unit Column -->
+          <ng-container matColumnDef="standart_VALUE_UNIT">
+            <th *matHeaderCellDef style="min-width: 200px" mat-sort-header>Standard Value Unit</th>
+            <td align="left" *matCellDef="let element">{{ element.standart_VALUE_UNIT }}</td>
+          </ng-container>
 
-              <label for="whnormalshift0">WH Normal Shift 0</label>
-              <input [(ngModel)]="edtCTCuringObject.wh_NORMAL_SHIFT_0" type="number" class="form-control" id="whnormalshift0" formControlName="whnormalshift0" [ngClass]="{ 'is-invalid': editCTCuringForm.get('whnormalshift0').invalid && editCTCuringForm.get('whnormalshift0').touched }" />
-              <div *ngIf="editCTCuringForm.get('whnormalshift0').invalid && editCTCuringForm.get('whnormalshift0').touched" class="invalid-feedback">WH Normal Shift 0 is required.</div>
+          <!-- CT Sec 1 Column -->
+          <ng-container matColumnDef="ct_SEC1">
+            <th *matHeaderCellDef style="min-width: 200px" mat-sort-header>CT Sec 1</th>
+            <td align="right" *matCellDef="let element">{{ element.ct_SEC1 }}</td>
+          </ng-container>
 
-              <label for="whnormalshift1">WH Normal Shift 1</label>
-              <input [(ngModel)]="edtCTCuringObject.wh_NORMAL_SHIFT_1" type="number" class="form-control" id="whnormalshift1" formControlName="whnormalshift1" [ngClass]="{ 'is-invalid': editCTCuringForm.get('whnormalshift1').invalid && editCTCuringForm.get('whnormalshift1').touched }" />
-              <div *ngIf="editCTCuringForm.get('whnormalshift1').invalid && editCTCuringForm.get('whnormalshift1').touched" class="invalid-feedback">WH Normal Shift 1 is required.</div>
+          <!-- CT HR 1000 Column -->
+          <ng-container matColumnDef="ct_HR1000">
+            <th *matHeaderCellDef style="min-width: 200px" mat-sort-header>CT HR 1000</th>
+            <td align="right" *matCellDef="let element">{{ element.ct_HR1000 }}</td>
+          </ng-container>
 
-              <label for="whnormalshift2">WH Normal Shift 2</label>
-              <input [(ngModel)]="edtCTCuringObject.wh_NORMAL_SHIFT_2" type="number" class="form-control" id="whnormalshift2" formControlName="whnormalshift2" [ngClass]="{ 'is-invalid': editCTCuringForm.get('whnormalshift2').invalid && editCTCuringForm.get('whnormalshift2').touched }" />
-              <div *ngIf="editCTCuringForm.get('whnormalshift2').invalid && editCTCuringForm.get('whnormalshift2').touched" class="invalid-feedback">WH Normal Shift 2 is required.</div>
+          <!-- WH Normal Shift 0 Column -->
+          <ng-container matColumnDef="wh_NORMAL_SHIFT_0">
+            <th *matHeaderCellDef style="min-width: 200px" mat-sort-header>WH Normal Shift 0</th>
+            <td align="right" *matCellDef="let element">{{ element.wh_NORMAL_SHIFT_0 }}</td>
+          </ng-container>
 
-              <label for="whshiftfriday">WH Shift Friday</label>
-              <input [(ngModel)]="edtCTCuringObject.wh_SHIFT_FRIDAY" type="number" class="form-control" id="whshiftfriday" formControlName="whshiftfriday" [ngClass]="{ 'is-invalid': editCTCuringForm.get('whshiftfriday').invalid && editCTCuringForm.get('whshiftfriday').touched }" />
-              <div *ngIf="editCTCuringForm.get('whshiftfriday').invalid && editCTCuringForm.get('whshiftfriday').touched" class="invalid-feedback">WH Shift Friday is required.</div>
+          <!-- WH Normal Shift 1 Column -->
+          <ng-container matColumnDef="wh_NORMAL_SHIFT_1">
+            <th *matHeaderCellDef style="min-width: 200px" mat-sort-header>WH Normal Shift 1</th>
+            <td align="right" *matCellDef="let element">{{ element.wh_NORMAL_SHIFT_1 }}</td>
+          </ng-container>
 
-              <label for="whtotalnormalshift">WH Total Normal Shift</label>
-              <input [(ngModel)]="edtCTCuringObject.wh_TOTAL_NORMAL_SHIFT" type="number" class="form-control" id="whtotalnormalshift" formControlName="whtotalnormalshift" [ngClass]="{ 'is-invalid': editCTCuringForm.get('whtotalnormalshift').invalid && editCTCuringForm.get('whtotalnormalshift').touched }" />
-              <div *ngIf="editCTCuringForm.get('whtotalnormalshift').invalid && editCTCuringForm.get('whtotalnormalshift').touched" class="invalid-feedback">WH Total Normal Shift is required.</div>
+          <!-- WH Normal Shift 2 Column -->
+          <ng-container matColumnDef="wh_NORMAL_SHIFT_2">
+            <th *matHeaderCellDef style="min-width: 200px" mat-sort-header>WH Normal Shift 2</th>
+            <td align="right" *matCellDef="let element">{{ element.wh_NORMAL_SHIFT_2 }}</td>
+          </ng-container>
 
-              <label for="whtotalshiftfriday">WH Total Shift Friday</label>
-              <input [(ngModel)]="edtCTCuringObject.wh_TOTAL_SHIFT_FRIDAY" type="number" class="form-control" id="whtotalshiftfriday" formControlName="whtotalshiftfriday" [ngClass]="{ 'is-invalid': editCTCuringForm.get('whtotalshiftfriday').invalid && editCTCuringForm.get('whtotalshiftfriday').touched }" />
-              <div *ngIf="editCTCuringForm.get('whtotalshiftfriday').invalid && editCTCuringForm.get('whtotalshiftfriday').touched" class="invalid-feedback">WH Total Shift Friday is required.</div>
+          <!-- WH Shift FRIDAY Column -->
+          <ng-container matColumnDef="wh_SHIFT_FRIDAY">
+            <th *matHeaderCellDef style="min-width: 200px" mat-sort-header>WH Shift FRIDAY</th>
+            <td align="right" *matCellDef="let element">{{ element.wh_SHIFT_FRIDAY }}</td>
+          </ng-container>
 
-              <label for="allownormalshift0">Allow Normal Shift 0</label>
-              <input [(ngModel)]="edtCTCuringObject.allow_NORMAL_SHIFT_0" type="number" class="form-control" id="allownormalshift0" formControlName="allownormalshift0" [ngClass]="{ 'is-invalid': editCTCuringForm.get('allownormalshift0').invalid && editCTCuringForm.get('allownormalshift0').touched }" />
-              <div *ngIf="editCTCuringForm.get('allownormalshift0').invalid && editCTCuringForm.get('allownormalshift0').touched" class="invalid-feedback">Allow Normal Shift 0 is required.</div>
+          <!-- WH Total Normal Shift Column -->
+          <ng-container matColumnDef="wh_TOTAL_NORMAL_SHIFT">
+            <th *matHeaderCellDef style="min-width: 200px" mat-sort-header>WH Total Normal Shift</th>
+            <td align="right" *matCellDef="let element">{{ element.wh_TOTAL_NORMAL_SHIFT }}</td>
+          </ng-container>
 
-              <label for="allownormalshift1">Allow Normal Shift 1</label>
-              <input [(ngModel)]="edtCTCuringObject.allow_NORMAL_SHIFT_1" type="number" class="form-control" id="allownormalshift1" formControlName="allownormalshift1" [ngClass]="{ 'is-invalid': editCTCuringForm.get('allownormalshift1').invalid && editCTCuringForm.get('allownormalshift1').touched }" />
-              <div *ngIf="editCTCuringForm.get('allownormalshift1').invalid && editCTCuringForm.get('allownormalshift1').touched" class="invalid-feedback">Allow Normal Shift 1 is required.</div>
+          <!-- WH Total Shift FRIDAY Column -->
+          <ng-container matColumnDef="wh_TOTAL_SHIFT_FRIDAY">
+            <th *matHeaderCellDef style="min-width: 200px" mat-sort-header>WH Total Shift FRIDAY</th>
+            <td align="right" *matCellDef="let element">{{ element.wh_TOTAL_SHIFT_FRIDAY }}</td>
+          </ng-container>
 
-              <label for="allownormalshift2">Allow Normal Shift 2</label>
-              <input [(ngModel)]="edtCTCuringObject.allow_NORMAL_SHIFT_2" type="number" class="form-control" id="allownormalshift2" formControlName="allownormalshift2" [ngClass]="{ 'is-invalid': editCTCuringForm.get('allownormalshift2').invalid && editCTCuringForm.get('allownormalshift2').touched }" />
-              <div *ngIf="editCTCuringForm.get('allownormalshift2').invalid && editCTCuringForm.get('allownormalshift2').touched" class="invalid-feedback">Allow Normal Shift 2 is required.</div>
+          <!-- Allow Normal Shift 0 Column -->
+          <ng-container matColumnDef="allow_NORMAL_SHIFT_0">
+            <th *matHeaderCellDef style="min-width: 200px" mat-sort-header>Allow Normal Shift 0</th>
+            <td align="right" *matCellDef="let element">{{ element.allow_NORMAL_SHIFT_0 }}</td>
+          </ng-container>
 
-              <label for="allowtotal">Allow Total</label>
-              <input [(ngModel)]="edtCTCuringObject.allow_TOTAL" type="number" class="form-control" id="allowtotal" formControlName="allowtotal" [ngClass]="{ 'is-invalid': editCTCuringForm.get('allowtotal').invalid && editCTCuringForm.get('allowtotal').touched }" />
-              <div *ngIf="editCTCuringForm.get('allowtotal').invalid && editCTCuringForm.get('allowtotal').touched" class="invalid-feedback">Allow Total is required.</div>
+          <!-- Allow Normal Shift 1 Column -->
+          <ng-container matColumnDef="allow_NORMAL_SHIFT_1">
+            <th *matHeaderCellDef style="min-width: 200px" mat-sort-header>Allow Normal Shift 1</th>
+            <td align="right" *matCellDef="let element">{{ element.allow_NORMAL_SHIFT_1 }}</td>
+          </ng-container>
 
-              <label for="optimenormalshift0">OP Time Normal Shift 0</label>
-              <input [(ngModel)]="edtCTCuringObject.op_TIME_NORMAL_SHIFT_0" type="number" class="form-control" id="optimenormalshift0" formControlName="optimenormalshift0" [ngClass]="{ 'is-invalid': editCTCuringForm.get('optimenormalshift0').invalid && editCTCuringForm.get('optimenormalshift0').touched }" />
-              <div *ngIf="editCTCuringForm.get('optimenormalshift0').invalid && editCTCuringForm.get('optimenormalshift0').touched" class="invalid-feedback">OP Time Normal Shift 0 is required.</div>
+          <!-- Allow Normal Shift 2 Column -->
+          <ng-container matColumnDef="allow_NORMAL_SHIFT_2">
+            <th *matHeaderCellDef style="min-width: 200px" mat-sort-header>Allow Normal Shift 2</th>
+            <td align="right" *matCellDef="let element">{{ element.allow_NORMAL_SHIFT_2 }}</td>
+          </ng-container>
 
-              <label for="optimenormalshift1">OP Time Normal Shift 1</label>
-              <input [(ngModel)]="edtCTCuringObject.op_TIME_NORMAL_SHIFT_1" type="number" class="form-control" id="optimenormalshift1" formControlName="optimenormalshift1" [ngClass]="{ 'is-invalid': editCTCuringForm.get('optimenormalshift1').invalid && editCTCuringForm.get('optimenormalshift1').touched }" />
-              <div *ngIf="editCTCuringForm.get('optimenormalshift1').invalid && editCTCuringForm.get('optimenormalshift1').touched" class="invalid-feedback">OP Time Normal Shift 1 is required.</div>
+          <!-- Allow Total Column -->
+          <ng-container matColumnDef="allow_TOTAL">
+            <th *matHeaderCellDef style="min-width: 200px" mat-sort-header>Allow Total</th>
+            <td align="right" *matCellDef="let element">{{ element.allow_TOTAL }}</td>
+          </ng-container>
 
-              <label for="optimenormalshift2">OP Time Normal Shift 2</label>
-              <input [(ngModel)]="edtCTCuringObject.op_TIME_NORMAL_SHIFT_2" type="number" class="form-control" id="optimenormalshift2" formControlName="optimenormalshift2" [ngClass]="{ 'is-invalid': editCTCuringForm.get('optimenormalshift2').invalid && editCTCuringForm.get('optimenormalshift2').touched }" />
-              <div *ngIf="editCTCuringForm.get('optimenormalshift2').invalid && editCTCuringForm.get('optimenormalshift2').touched" class="invalid-feedback">OP Time Normal Shift 2 is required.</div>
+          <!-- OP Time Normal Shift 0 Column -->
+          <ng-container matColumnDef="op_TIME_NORMAL_SHIFT_0">
+            <th *matHeaderCellDef style="min-width: 200px" mat-sort-header>OP Time Normal Shift 0</th>
+            <td align="right" *matCellDef="let element">{{ element.op_TIME_NORMAL_SHIFT_0 }}</td>
+          </ng-container>
 
-              <label for="optimeshiftfriday">OP Time Shift Friday</label>
-              <input [(ngModel)]="edtCTCuringObject.op_TIME_SHIFT_FRIDAY" type="number" class="form-control" id="optimeshiftfriday" formControlName="optimeshiftfriday" [ngClass]="{ 'is-invalid': editCTCuringForm.get('optimeshiftfriday').invalid && editCTCuringForm.get('optimeshiftfriday').touched }" />
-              <div *ngIf="editCTCuringForm.get('optimeshiftfriday').invalid && editCTCuringForm.get('optimeshiftfriday').touched" class="invalid-feedback">OP Time Shift Friday is required.</div>
+          <!-- OP Time Normal Shift 1 Column -->
+          <ng-container matColumnDef="op_TIME_NORMAL_SHIFT_1">
+            <th *matHeaderCellDef style="min-width: 200px" mat-sort-header>OP Time Normal Shift 1</th>
+            <td align="right" *matCellDef="let element">{{ element.op_TIME_NORMAL_SHIFT_1 }}</td>
+          </ng-container>
 
-              <label for="optimenormalshift">OP Time Normal Shift</label>
-              <input [(ngModel)]="edtCTCuringObject.op_TIME_NORMAL_SHIFT" type="number" class="form-control" id="optimenormalshift" formControlName="optimenormalshift" [ngClass]="{ 'is-invalid': editCTCuringForm.get('optimenormalshift').invalid && editCTCuringForm.get('optimenormalshift').touched }" />
-              <div *ngIf="editCTCuringForm.get('optimenormalshift').invalid && editCTCuringForm.get('optimenormalshift').touched" class="invalid-feedback">OP Time Total Normal Shift is required.</div>
+          <!-- OP Time Normal Shift 2 Column -->
+          <ng-container matColumnDef="op_TIME_NORMAL_SHIFT_2">
+            <th *matHeaderCellDef style="min-width: 200px" mat-sort-header>OP Time Normal Shift 2</th>
+            <td align="right" *matCellDef="let element">{{ element.op_TIME_NORMAL_SHIFT_2 }}</td>
+          </ng-container>
 
-              <label for="optimetotalshiftfriday">OP Time Total Shift Friday</label>
-              <input [(ngModel)]="edtCTCuringObject.op_TIME_TOTAL_SHIFT_FRIDAY" type="number" class="form-control" id="optimetotalshiftfriday" formControlName="optimetotalshiftfriday" [ngClass]="{ 'is-invalid': editCTCuringForm.get('optimetotalshiftfriday').invalid && editCTCuringForm.get('optimetotalshiftfriday').touched }" />
-              <div *ngIf="editCTCuringForm.get('optimetotalshiftfriday').invalid && editCTCuringForm.get('optimetotalshiftfriday').touched" class="invalid-feedback">OP Time Total Shift Friday is required.</div>
+          <!-- OP Time Shift FRIDAY Column -->
+          <ng-container matColumnDef="op_TIME_SHIFT_FRIDAY">
+            <th *matHeaderCellDef style="min-width: 200px" mat-sort-header>OP Time Shift FRIDAY</th>
+            <td align="right" *matCellDef="let element">{{ element.op_TIME_SHIFT_FRIDAY }}</td>
+          </ng-container>
 
-              <label for="kapsnormalshift0">Kaps Normal Shift 0</label>
-              <input [(ngModel)]="edtCTCuringObject.kaps_NORMAL_SHIFT_0" type="number" class="form-control" id="kapsnormalshift0" formControlName="kapsnormalshift0" [ngClass]="{ 'is-invalid': editCTCuringForm.get('kapsnormalshift0').invalid && editCTCuringForm.get('kapsnormalshift0').touched }" />
-              <div *ngIf="editCTCuringForm.get('kapsnormalshift0').invalid && editCTCuringForm.get('kapsnormalshift0').touched" class="invalid-feedback">Kaps Normal Shift 0 is required.</div>
-            
-              <label for="kapsnormalshift1">Kaps Normal Shift 1</label>
-              <input [(ngModel)]="edtCTCuringObject.kaps_NORMAL_SHIFT_1" type="number" class="form-control" id="kapsnormalshift1" formControlName="kapsnormalshift1" [ngClass]="{ 'is-invalid': editCTCuringForm.get('kapsnormalshift1').invalid && editCTCuringForm.get('kapsnormalshift1').touched }" />
-              <div *ngIf="editCTCuringForm.get('kapsnormalshift1').invalid && editCTCuringForm.get('kapsnormalshift1').touched" class="invalid-feedback">Kaps Normal Shift 1 is required.</div>
-            
-              <label for="kapsnormalshift2">Kaps Normal Shift 2</label>
-              <input [(ngModel)]="edtCTCuringObject.kaps_NORMAL_SHIFT_2" type="number" class="form-control" id="kapsnormalshift2" formControlName="kapsnormalshift2" [ngClass]="{ 'is-invalid': editCTCuringForm.get('kapsnormalshift2').invalid && editCTCuringForm.get('kapsnormalshift2').touched }" />
-              <div *ngIf="editCTCuringForm.get('kapsnormalshift2').invalid && editCTCuringForm.get('kapsnormalshift2').touched" class="invalid-feedback">Kaps Normal Shift 2 is required.</div>
-            
-              <label for="kapsshiftfriday">Kaps Shift Friday</label>
-              <input [(ngModel)]="edtCTCuringObject.kaps_SHIFT_FRIDAY" type="number" class="form-control" id="kapsshiftfriday" formControlName="kapsshiftfriday" [ngClass]="{ 'is-invalid': editCTCuringForm.get('kapsshiftfriday').invalid && editCTCuringForm.get('kapsshiftfriday').touched }" />
-              <div *ngIf="editCTCuringForm.get('kapsshiftfriday').invalid && editCTCuringForm.get('kapsshiftfriday').touched" class="invalid-feedback">Kaps Shift Friday is required.</div>
-            
-              <label for="kapstotalnormalshift">Kaps Total Normal Shift</label>
-              <input [(ngModel)]="edtCTCuringObject.kaps_TOTAL_NORMAL_SHIFT" type="number" class="form-control" id="kapstotalnormalshift" formControlName="kapstotalnormalshift" [ngClass]="{ 'is-invalid': editCTCuringForm.get('kapstotalnormalshift').invalid && editCTCuringForm.get('kapstotalnormalshift').touched }" />
-              <div *ngIf="editCTCuringForm.get('kapstotalnormalshift').invalid && editCTCuringForm.get('kapstotalnormalshift').touched" class="invalid-feedback">Kaps Total Normal Shift is required.</div>
-            
-              <label for="kapstotalshiftfriday">Kaps Total Shift Friday</label>
-              <input [(ngModel)]="edtCTCuringObject.kaps_TOTAL_SHIFT_FRIDAY" type="number" class="form-control" id="kapstotalshiftfriday" formControlName="kapstotalshiftfriday" [ngClass]="{ 'is-invalid': editCTCuringForm.get('kapstotalshiftfriday').invalid && editCTCuringForm.get('kapstotalshiftfriday').touched }" />
-              <div *ngIf="editCTCuringForm.get('kapstotalshiftfriday').invalid && editCTCuringForm.get('kapstotalshiftfriday').touched" class="invalid-feedback">Kaps Total Shift Friday is required.</div>
-            
-              <label for="waktutotalctnormal">Waktu Total CT Normal</label>
-              <input [(ngModel)]="edtCTCuringObject.waktu_TOTAL_CT_NORMAL" type="number" class="form-control" id="waktutotalctnormal" formControlName="waktutotalctnormal" [ngClass]="{ 'is-invalid': editCTCuringForm.get('waktutotalctnormal').invalid && editCTCuringForm.get('waktutotalctnormal').touched }" />
-              <div *ngIf="editCTCuringForm.get('waktutotalctnormal').invalid && editCTCuringForm.get('waktutotalctnormal').touched" class="invalid-feedback">Waktu Total CT Normal is required.</div>
-            
-              <label for="waktutotalctfriday">Waktu Total CT Friday</label>
-              <input [(ngModel)]="edtCTCuringObject.waktu_TOTAL_CT_FRIDAY" type="number" class="form-control" id="waktutotalctfriday" formControlName="waktutotalctfriday" [ngClass]="{ 'is-invalid': editCTCuringForm.get('waktutotalctfriday').invalid && editCTCuringForm.get('waktutotalctfriday').touched }" />
-              <div *ngIf="editCTCuringForm.get('waktutotalctfriday').invalid && editCTCuringForm.get('waktutotalctfriday').touched" class="invalid-feedback">Waktu Total CT Friday is required.</div>
-            
+          <!-- OP Time Total Normal Shift Column -->
+          <ng-container matColumnDef="op_TIME_NORMAL_SHIFT">
+            <th *matHeaderCellDef style="min-width: 200px" mat-sort-header>OP Time Normal Shift</th>
+            <td align="right" *matCellDef="let element">{{ element.op_TIME_NORMAL_SHIFT }}</td>
+          </ng-container>
+
+          <!-- OP Time Total Shift FRIDAY Column -->
+          <ng-container matColumnDef="op_TIME_TOTAL_SHIFT_FRIDAY">
+            <th *matHeaderCellDef style="min-width: 200px" mat-sort-header>OP Time Total Shift FRIDAY</th>
+            <td align="right" *matCellDef="let element">{{ element.op_TIME_TOTAL_SHIFT_FRIDAY }}</td>
+          </ng-container>
+
+          <!-- Kaps Normal Shift 0 Column -->
+          <ng-container matColumnDef="kaps_NORMAL_SHIFT_0">
+            <th *matHeaderCellDef style="min-width: 200px" mat-sort-header>Kaps Normal Shift 0</th>
+            <td align="right" *matCellDef="let element">{{ element.kaps_NORMAL_SHIFT_0 }}</td>
+          </ng-container>
+
+          <!-- Kaps Normal Shift 1 Column -->
+          <ng-container matColumnDef="kaps_NORMAL_SHIFT_1">
+            <th *matHeaderCellDef style="min-width: 200px" mat-sort-header>Kaps Normal Shift 1</th>
+            <td align="right" *matCellDef="let element">{{ element.kaps_NORMAL_SHIFT_1 }}</td>
+          </ng-container>
+
+          <!-- Kaps Normal Shift 2 Column -->
+          <ng-container matColumnDef="kaps_NORMAL_SHIFT_2">
+            <th *matHeaderCellDef style="min-width: 200px" mat-sort-header>Kaps Normal Shift 2</th>
+            <td align="right" *matCellDef="let element">{{ element.kaps_NORMAL_SHIFT_2 }}</td>
+          </ng-container>
+
+          <!-- Kaps Shift Friday Column -->
+          <ng-container matColumnDef="kaps_SHIFT_FRIDAY">
+            <th *matHeaderCellDef style="min-width: 200px" mat-sort-header>Kaps Shift Friday</th>
+            <td align="right" *matCellDef="let element">{{ element.kaps_SHIFT_FRIDAY }}</td>
+          </ng-container>
+
+          <!-- Kaps Total Normal Shift Column -->
+          <ng-container matColumnDef="kaps_TOTAL_NORMAL_SHIFT">
+            <th *matHeaderCellDef style="min-width: 200px" mat-sort-header>Kaps Total Normal Shift</th>
+            <td align="right" *matCellDef="let element">{{ element.kaps_TOTAL_NORMAL_SHIFT }}</td>
+          </ng-container>
+
+          <!-- Kaps Total Shift Friday Column -->
+          <ng-container matColumnDef="kaps_TOTAL_SHIFT_FRIDAY">
+            <th *matHeaderCellDef style="min-width: 200px" mat-sort-header>Kaps Total Shift Friday</th>
+            <td align="right" *matCellDef="let element">{{ element.kaps_TOTAL_SHIFT_FRIDAY }}</td>
+          </ng-container>
+
+          <!-- Waktu Total CT Normal Column -->
+          <ng-container matColumnDef="waktu_TOTAL_CT_NORMAL">
+            <th *matHeaderCellDef style="min-width: 200px" mat-sort-header>Waktu Total CT Normal</th>
+            <td align="right" *matCellDef="let element">{{ element.waktu_TOTAL_CT_NORMAL }}</td>
+          </ng-container>
+
+          <!-- Waktu Total CT Friday Column -->
+          <ng-container matColumnDef="waktu_TOTAL_CT_FRIDAY">
+            <th *matHeaderCellDef style="min-width: 200px" mat-sort-header>Waktu Total CT Friday</th>
+            <td align="right" *matCellDef="let element">{{ element.waktu_TOTAL_CT_FRIDAY }}</td>
+          </ng-container>
+
+          <!-- Status Column -->
+          <ng-container matColumnDef="status">
+            <th *matHeaderCellDef style="min-width: 120px" mat-sort-header>Status</th>
+            <td *matCellDef="let element" [ngClass]="{ 'bg-success': element.status === 1, 'bg-danger': element.status !== 1 }">
+              {{ element.status === 1 ? 'Active' : 'Deactive' }}
+            </td>
+          </ng-container>
+
+          <!-- Action Column -->
+          <ng-container matColumnDef="action">
+            <th *matHeaderCellDef style="min-width: 200px">Action</th>
+            <td *matCellDef="let element">
+              <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(element.ct_CURING_ID)">Update</button>
+              <button type="button" class="btn btn-md ml-2" [ngClass]="{ 'btn-danger': element.status === 1, 'btn-success': element.status !== 1 }" (click)="element.status === 1 ? deleteData(element) : activateData(element)">
+                {{ element.status === 1 ? 'Delete' : 'Active' }}
+              </button>
+            </td>
+          </ng-container>
+
+          <!-- Table Header and Rows -->
+          <tr align="center" style="height: 20px" mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr align="center" mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+      </div>
+      <!-- Pagination -->
+      <mat-paginator [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+
+      <!-- Modal edit -->
+      <div class="modal fade" id="editModal" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="addModalLabel">Edit CT Curing</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
             </div>
-                        
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <!-- Disable Update button if form is invalid -->
-          <button type="button" class="btn btn-primary" [disabled]="editCTCuringForm.invalid" (click)="updateCTCuring()">Update CT Curing</button>
-        </div>
-      </div>
-    </div>
-  </div>
-  
-  <!-- Modal for Upload Excel -->
-  <div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="uploadModalLabel">Upload Excel File</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <form id="uploadForm">
-            <!-- Manual File Input -->
-            <div class="form-group mt-3">
-              <input type="file" class="form-control-file" id="manualFileInput" accept=".xls,.xlsx" (change)="onFileChange($event)" />
+            <div class="modal-body per-hour-wrapper">
+              <!-- Form with Reactive Forms -->
+              <form [formGroup]="editCTCuringForm">
+                <div class="form-group per-hour-wrapper-item row">
+                  <div class="mx-3">
+                  <div class="form-group">
+                    <h6 for="wip">WIP</h6>
+                    <input [(ngModel)]="edtCTCuringObject.wip" type="text" class="form-control" id="wip" formControlName="wip" [ngClass]="{ 'is-invalid': editCTCuringForm.get('wip').invalid && editCTCuringForm.get('wip').touched }" />
+                    <div *ngIf="editCTCuringForm.get('wip').invalid && editCTCuringForm.get('wip').touched" class="invalid-feedback">WIP is required.</div>
+                  </div>
+                  <div class="form-group">
+                    <h6 for="groupcounter">Group Counter</h6>
+                    <input [(ngModel)]="edtCTCuringObject.group_COUNTER" type="text" class="form-control" id="groupcounter" formControlName="groupcounter" [ngClass]="{ 'is-invalid': editCTCuringForm.get('groupcounter').invalid && editCTCuringForm.get('groupcounter').touched }" />
+                    <div *ngIf="editCTCuringForm.get('groupcounter').invalid && editCTCuringForm.get('groupcounter').touched" class="invalid-feedback">Group Counter is required.</div>
+                  </div>
+                  <div class="form-group">
+                    <h6 for="vargroupcounter">Var Group Counter</h6>
+                    <input [(ngModel)]="edtCTCuringObject.var_GROUP_COUNTER" type="text" class="form-control" id="vargroupcounter" formControlName="vargroupcounter" [ngClass]="{ 'is-invalid': editCTCuringForm.get('vargroupcounter').invalid && editCTCuringForm.get('vargroupcounter').touched }" />
+                    <div *ngIf="editCTCuringForm.get('vargroupcounter').invalid && editCTCuringForm.get('vargroupcounter').touched" class="invalid-feedback">Var Group Counter is required.</div>
+                  </div>
+                  <div class="form-group">
+                    <h6 for="sequence">Sequence</h6>
+                    <input [(ngModel)]="edtCTCuringObject.sequence" type="number" class="form-control" id="sequence" formControlName="sequence" [ngClass]="{ 'is-invalid': editCTCuringForm.get('sequence').invalid && editCTCuringForm.get('sequence').touched }" />
+                    <div *ngIf="editCTCuringForm.get('sequence').invalid && editCTCuringForm.get('sequence').touched" class="invalid-feedback">Sequence is required.</div>
+                  </div>
+                  <div class="form-group">
+                    <h6 for="wct">WCT</h6>
+                    <input [(ngModel)]="edtCTCuringObject.wct" type="text" class="form-control" id="wct" formControlName="wct" [ngClass]="{ 'is-invalid': editCTCuringForm.get('wct').invalid && editCTCuringForm.get('wct').touched }" />
+                    <div *ngIf="editCTCuringForm.get('wct').invalid && editCTCuringForm.get('wct').touched" class="invalid-feedback">WCT is required.</div>
+                  </div>
+                  <div class="form-group">
+                    <h6 for="operationshorttext">Operation Short Text</h6>
+                    <input [(ngModel)]="edtCTCuringObject.operation_SHORT_TEXT" type="text" class="form-control" id="operationshorttext" formControlName="operationshorttext" [ngClass]="{ 'is-invalid': editCTCuringForm.get('operationshorttext').invalid && editCTCuringForm.get('operationshorttext').touched }" />
+                    <div *ngIf="editCTCuringForm.get('operationshorttext').invalid && editCTCuringForm.get('operationshorttext').touched" class="invalid-feedback">Operation Short Text is required.</div>
+                  </div>
+                  <div class="form-group">
+                    <h6 for="operationunit">Operation Unit</h6>
+                    <input [(ngModel)]="edtCTCuringObject.operation_UNIT" type="text" class="form-control" id="operationunit" formControlName="operationunit" [ngClass]="{ 'is-invalid': editCTCuringForm.get('operationunit').invalid && editCTCuringForm.get('operationunit').touched }" />
+                    <div *ngIf="editCTCuringForm.get('operationunit').invalid && editCTCuringForm.get('operationunit').touched" class="invalid-feedback">Operation Unit is required.</div>
+                  </div>
+                </div>
+                
+                
+                <div class="mx-3">
+                  <div class="form-group">
+                    <h6 for="basequantity">Base Quantity</h6>
+                    <input [(ngModel)]="edtCTCuringObject.base_QUANTITY" type="number" class="form-control" id="basequantity" formControlName="basequantity" [ngClass]="{ 'is-invalid': editCTCuringForm.get('basequantity').invalid && editCTCuringForm.get('basequantity').touched }" />
+                    <div *ngIf="editCTCuringForm.get('basequantity').invalid && editCTCuringForm.get('basequantity').touched" class="invalid-feedback">Base Quantity is required.</div>
+                  </div>
+                  <div class="form-group">
+                    <h6 for="standardvalueunit">Standard Value Unit</h6>
+                    <input [(ngModel)]="edtCTCuringObject.standart_VALUE_UNIT" type="text" class="form-control" id="standardvalueunit" formControlName="standardvalueunit" [ngClass]="{ 'is-invalid': editCTCuringForm.get('standardvalueunit').invalid && editCTCuringForm.get('standardvalueunit').touched }" />
+                    <div *ngIf="editCTCuringForm.get('standardvalueunit').invalid && editCTCuringForm.get('standardvalueunit').touched" class="invalid-feedback">Standard Value Unit is required.</div>
+                  </div>
+                  <div class="form-group">
+                    <h6 for="ctsec1">CT Sec 1</h6>
+                    <input [(ngModel)]="edtCTCuringObject.ct_SEC1" type="number" class="form-control" id="ctsec1" formControlName="ctsec1" [ngClass]="{ 'is-invalid': editCTCuringForm.get('ctsec1').invalid && editCTCuringForm.get('ctsec1').touched }" />
+                    <div *ngIf="editCTCuringForm.get('ctsec1').invalid && editCTCuringForm.get('ctsec1').touched" class="invalid-feedback">CT Sec 1 is required.</div>
+                  </div>
+                  <div class="form-group">
+                    <h6 for="cthr1000">CT HR 1000</h6>
+                    <input [(ngModel)]="edtCTCuringObject.ct_HR1000" type="number" class="form-control" id="cthr1000" formControlName="cthr1000" [ngClass]="{ 'is-invalid': editCTCuringForm.get('cthr1000').invalid && editCTCuringForm.get('cthr1000').touched }" />
+                    <div *ngIf="editCTCuringForm.get('cthr1000').invalid && editCTCuringForm.get('cthr1000').touched" class="invalid-feedback">CT HR 1000 is required.</div>
+                  </div>
+                  <div class="form-group">
+                    <h6 for="whnormalshift0">WH Normal Shift 0</h6>
+                    <input [(ngModel)]="edtCTCuringObject.wh_NORMAL_SHIFT_0" type="number" class="form-control" id="whnormalshift0" formControlName="whnormalshift0" [ngClass]="{ 'is-invalid': editCTCuringForm.get('whnormalshift0').invalid && editCTCuringForm.get('whnormalshift0').touched }" />
+                    <div *ngIf="editCTCuringForm.get('whnormalshift0').invalid && editCTCuringForm.get('whnormalshift0').touched" class="invalid-feedback">WH Normal Shift 0 is required.</div>
+                  </div>
+                  <div class="form-group">
+                    <h6 for="whnormalshift1">WH Normal Shift 1</h6>
+                    <input [(ngModel)]="edtCTCuringObject.wh_NORMAL_SHIFT_1" type="number" class="form-control" id="whnormalshift1" formControlName="whnormalshift1" [ngClass]="{ 'is-invalid': editCTCuringForm.get('whnormalshift1').invalid && editCTCuringForm.get('whnormalshift1').touched }" />
+                    <div *ngIf="editCTCuringForm.get('whnormalshift1').invalid && editCTCuringForm.get('whnormalshift1').touched" class="invalid-feedback">WH Normal Shift 1 is required.</div>
+                  </div>
+                  <div class="form-group">
+                    <h6 for="whnormalshift2">WH Normal Shift 2</h6>
+                    <input [(ngModel)]="edtCTCuringObject.wh_NORMAL_SHIFT_2" type="number" class="form-control" id="whnormalshift2" formControlName="whnormalshift2" [ngClass]="{ 'is-invalid': editCTCuringForm.get('whnormalshift2').invalid && editCTCuringForm.get('whnormalshift2').touched }" />
+                    <div *ngIf="editCTCuringForm.get('whnormalshift2').invalid && editCTCuringForm.get('whnormalshift2').touched" class="invalid-feedback">WH Normal Shift 2 is required.</div>
+                  </div>
+                </div>
+
+                <div class="mx-3">
+                  <div class="form-group">
+                    <h6 for="whshiftfriday">WH Shift Friday</h6>
+                    <input [(ngModel)]="edtCTCuringObject.wh_SHIFT_FRIDAY" type="number" class="form-control" id="whshiftfriday" formControlName="whshiftfriday" [ngClass]="{ 'is-invalid': editCTCuringForm.get('whshiftfriday').invalid && editCTCuringForm.get('whshiftfriday').touched }" />
+                    <div *ngIf="editCTCuringForm.get('whshiftfriday').invalid && editCTCuringForm.get('whshiftfriday').touched" class="invalid-feedback">WH Shift Friday is required.</div>
+                  </div>
+                  <div class="form-group">
+                    <h6 for="whtotalnormalshift">WH Total Normal Shift</h6>
+                    <input [(ngModel)]="edtCTCuringObject.wh_TOTAL_NORMAL_SHIFT" type="number" class="form-control" id="whtotalnormalshift" formControlName="whtotalnormalshift" [ngClass]="{ 'is-invalid': editCTCuringForm.get('whtotalnormalshift').invalid && editCTCuringForm.get('whtotalnormalshift').touched }" />
+                    <div *ngIf="editCTCuringForm.get('whtotalnormalshift').invalid && editCTCuringForm.get('whtotalnormalshift').touched" class="invalid-feedback">WH Total Normal Shift is required.</div>
+                  </div>
+                  <div class="form-group">
+                    <h6 for="whtotalshiftfriday">WH Total Shift Friday</h6>
+                    <input [(ngModel)]="edtCTCuringObject.wh_TOTAL_SHIFT_FRIDAY" type="number" class="form-control" id="whtotalshiftfriday" formControlName="whtotalshiftfriday" [ngClass]="{ 'is-invalid': editCTCuringForm.get('whtotalshiftfriday').invalid && editCTCuringForm.get('whtotalshiftfriday').touched }" />
+                    <div *ngIf="editCTCuringForm.get('whtotalshiftfriday').invalid && editCTCuringForm.get('whtotalshiftfriday').touched" class="invalid-feedback">WH Total Shift Friday is required.</div>
+                  </div>
+                  <div class="form-group">
+                    <h6 for="allownormalshift0">Allow Normal Shift 0</h6>
+                    <input [(ngModel)]="edtCTCuringObject.allow_NORMAL_SHIFT_0" type="number" class="form-control" id="allownormalshift0" formControlName="allownormalshift0" [ngClass]="{ 'is-invalid': editCTCuringForm.get('allownormalshift0').invalid && editCTCuringForm.get('allownormalshift0').touched }" />
+                    <div *ngIf="editCTCuringForm.get('allownormalshift0').invalid && editCTCuringForm.get('allownormalshift0').touched" class="invalid-feedback">Allow Normal Shift 0 is required.</div>
+                  </div>
+                  <div class="form-group">
+                    <h6 for="allownormalshift1">Allow Normal Shift 1</h6>
+                    <input [(ngModel)]="edtCTCuringObject.allow_NORMAL_SHIFT_1" type="number" class="form-control" id="allownormalshift1" formControlName="allownormalshift1" [ngClass]="{ 'is-invalid': editCTCuringForm.get('allownormalshift1').invalid && editCTCuringForm.get('allownormalshift1').touched }" />
+                    <div *ngIf="editCTCuringForm.get('allownormalshift1').invalid && editCTCuringForm.get('allownormalshift1').touched" class="invalid-feedback">Allow Normal Shift 1 is required.</div>
+                  </div>
+                  <div class="form-group">
+                    <h6 for="allownormalshift2">Allow Normal Shift 2</h6>
+                    <input [(ngModel)]="edtCTCuringObject.allow_NORMAL_SHIFT_2" type="number" class="form-control" id="allownormalshift2" formControlName="allownormalshift2" [ngClass]="{ 'is-invalid': editCTCuringForm.get('allownormalshift2').invalid && editCTCuringForm.get('allownormalshift2').touched }" />
+                    <div *ngIf="editCTCuringForm.get('allownormalshift2').invalid && editCTCuringForm.get('allownormalshift2').touched" class="invalid-feedback">Allow Normal Shift 2 is required.</div>
+                  </div>
+                  <div class="form-group">
+                    <h6 for="allowtotal">Allow Total</h6>
+                    <input [(ngModel)]="edtCTCuringObject.allow_TOTAL" type="number" class="form-control" id="allowtotal" formControlName="allowtotal" [ngClass]="{ 'is-invalid': editCTCuringForm.get('allowtotal').invalid && editCTCuringForm.get('allowtotal').touched }" />
+                    <div *ngIf="editCTCuringForm.get('allowtotal').invalid && editCTCuringForm.get('allowtotal').touched" class="invalid-feedback">Allow Total is required.</div>
+                  </div>
+                </div>
+
+                <div class="mx-3">
+                  <div class="form-group">
+                    <h6 for="optimenormalshift0">OP Time Normal Shift 0</h6>
+                    <input [(ngModel)]="edtCTCuringObject.op_TIME_NORMAL_SHIFT_0" type="number" class="form-control" id="optimenormalshift0" formControlName="optimenormalshift0" [ngClass]="{ 'is-invalid': editCTCuringForm.get('optimenormalshift0').invalid && editCTCuringForm.get('optimenormalshift0').touched }" />
+                    <div *ngIf="editCTCuringForm.get('optimenormalshift0').invalid && editCTCuringForm.get('optimenormalshift0').touched" class="invalid-feedback">OP Time Normal Shift 0 is required.</div>
+                  </div>
+                  <div class="form-group">
+                    <h6 for="optimenormalshift1">OP Time Normal Shift 1</h6>
+                    <input [(ngModel)]="edtCTCuringObject.op_TIME_NORMAL_SHIFT_1" type="number" class="form-control" id="optimenormalshift1" formControlName="optimenormalshift1" [ngClass]="{ 'is-invalid': editCTCuringForm.get('optimenormalshift1').invalid && editCTCuringForm.get('optimenormalshift1').touched }" />
+                    <div *ngIf="editCTCuringForm.get('optimenormalshift1').invalid && editCTCuringForm.get('optimenormalshift1').touched" class="invalid-feedback">OP Time Normal Shift 1 is required.</div>
+                  </div>
+                  <div class="form-group">
+                    <h6 for="optimenormalshift2">OP Time Normal Shift 2</h6>
+                    <input [(ngModel)]="edtCTCuringObject.op_TIME_NORMAL_SHIFT_2" type="number" class="form-control" id="optimenormalshift2" formControlName="optimenormalshift2" [ngClass]="{ 'is-invalid': editCTCuringForm.get('optimenormalshift2').invalid && editCTCuringForm.get('optimenormalshift2').touched }" />
+                    <div *ngIf="editCTCuringForm.get('optimenormalshift2').invalid && editCTCuringForm.get('optimenormalshift2').touched" class="invalid-feedback">OP Time Normal Shift 2 is required.</div>
+                  </div>
+                  <div class="form-group">
+                    <h6 for="optimeshiftfriday">OP Time Shift Friday</h6>
+                    <input [(ngModel)]="edtCTCuringObject.op_TIME_SHIFT_FRIDAY" type="number" class="form-control" id="optimeshiftfriday" formControlName="optimeshiftfriday" [ngClass]="{ 'is-invalid': editCTCuringForm.get('optimeshiftfriday').invalid && editCTCuringForm.get('optimeshiftfriday').touched }" />
+                    <div *ngIf="editCTCuringForm.get('optimeshiftfriday').invalid && editCTCuringForm.get('optimeshiftfriday').touched" class="invalid-feedback">OP Time Shift Friday is required.</div>
+                  </div>
+                  <div class="form-group">
+                    <h6 for="optimenormalshift">OP Time Total Normal Shift</h6>
+                    <input [(ngModel)]="edtCTCuringObject.op_TIME_NORMAL_SHIFT" type="number" class="form-control" id="optimenormalshift" formControlName="optimenormalshift" [ngClass]="{ 'is-invalid': editCTCuringForm.get('optimenormalshift').invalid && editCTCuringForm.get('optimenormalshift').touched }" />
+                    <div *ngIf="editCTCuringForm.get('optimenormalshift').invalid && editCTCuringForm.get('optimenormalshift').touched" class="invalid-feedback">OP Time Total Normal Shift is required.</div>
+                  </div>
+                  <div class="form-group">
+                    <h6 for="optimetotalshiftfriday">OP Time Total Shift Friday</h6>
+                    <input [(ngModel)]="edtCTCuringObject.op_TIME_TOTAL_SHIFT_FRIDAY" type="number" class="form-control" id="optimetotalshiftfriday" formControlName="optimetotalshiftfriday" [ngClass]="{ 'is-invalid': editCTCuringForm.get('optimetotalshiftfriday').invalid && editCTCuringForm.get('optimetotalshiftfriday').touched }" />
+                    <div *ngIf="editCTCuringForm.get('optimetotalshiftfriday').invalid && editCTCuringForm.get('optimetotalshiftfriday').touched" class="invalid-feedback">OP Time Total Shift Friday is required.</div>
+                  </div>
+                  <div class="form-group">
+                    <h6 for="kapsnormalshift0">Kaps Normal Shift 0</h6>
+                    <input [(ngModel)]="edtCTCuringObject.kaps_NORMAL_SHIFT_0" type="number" class="form-control" id="kapsnormalshift0" formControlName="kapsnormalshift0" [ngClass]="{ 'is-invalid': editCTCuringForm.get('kapsnormalshift0').invalid && editCTCuringForm.get('kapsnormalshift0').touched }" />
+                    <div *ngIf="editCTCuringForm.get('kapsnormalshift0').invalid && editCTCuringForm.get('kapsnormalshift0').touched" class="invalid-feedback">Kaps Normal Shift 0 is required.</div>
+                  </div>
+                </div>
+
+                <div class="mx-3">
+                  <div class="form-group">
+                    <h6 for="kapsnormalshift1">Kaps Normal Shift 1</h6>
+                    <input [(ngModel)]="edtCTCuringObject.kaps_NORMAL_SHIFT_1" type="number" class="form-control" id="kapsnormalshift1" formControlName="kapsnormalshift1" [ngClass]="{ 'is-invalid': editCTCuringForm.get('kapsnormalshift1').invalid && editCTCuringForm.get('kapsnormalshift1').touched }" />
+                    <div *ngIf="editCTCuringForm.get('kapsnormalshift1').invalid && editCTCuringForm.get('kapsnormalshift1').touched" class="invalid-feedback">Kaps Normal Shift 1 is required.</div>
+                  </div>
+                  <div class="form-group">
+                    <h6 for="kapsnormalshift2">Kaps Normal Shift 2</h6>
+                    <input [(ngModel)]="edtCTCuringObject.kaps_NORMAL_SHIFT_2" type="number" class="form-control" id="kapsnormalshift2" formControlName="kapsnormalshift2" [ngClass]="{ 'is-invalid': editCTCuringForm.get('kapsnormalshift2').invalid && editCTCuringForm.get('kapsnormalshift2').touched }" />
+                    <div *ngIf="editCTCuringForm.get('kapsnormalshift2').invalid && editCTCuringForm.get('kapsnormalshift2').touched" class="invalid-feedback">Kaps Normal Shift 2 is required.</div>
+                  </div>
+                  <div class="form-group">
+                    <h6 for="kapsshiftfriday">Kaps Shift Friday</h6>
+                    <input [(ngModel)]="edtCTCuringObject.kaps_SHIFT_FRIDAY" type="number" class="form-control" id="kapsshiftfriday" formControlName="kapsshiftfriday" [ngClass]="{ 'is-invalid': editCTCuringForm.get('kapsshiftfriday').invalid && editCTCuringForm.get('kapsshiftfriday').touched }" />
+                    <div *ngIf="editCTCuringForm.get('kapsshiftfriday').invalid && editCTCuringForm.get('kapsshiftfriday').touched" class="invalid-feedback">Kaps Shift Friday is required.</div>
+                  </div>
+                  <div class="form-group">
+                    <h6 for="kapstotalnormalshift">Kaps Total Normal Shift</h6>
+                    <input [(ngModel)]="edtCTCuringObject.kaps_TOTAL_NORMAL_SHIFT" type="number" class="form-control" id="kapstotalnormalshift" formControlName="kapstotalnormalshift" [ngClass]="{ 'is-invalid': editCTCuringForm.get('kapstotalnormalshift').invalid && editCTCuringForm.get('kapstotalnormalshift').touched }" />
+                    <div *ngIf="editCTCuringForm.get('kapstotalnormalshift').invalid && editCTCuringForm.get('kapstotalnormalshift').touched" class="invalid-feedback">Kaps Total Normal Shift is required.</div>
+                  </div>
+                  <div class="form-group">
+                    <h6 for="kapstotalshiftfriday">Kaps Total Shift Friday</h6>
+                    <input [(ngModel)]="edtCTCuringObject.kaps_TOTAL_SHIFT_FRIDAY" type="number" class="form-control" id="kapstotalshiftfriday" formControlName="kapstotalshiftfriday" [ngClass]="{ 'is-invalid': editCTCuringForm.get('kapstotalshiftfriday').invalid && editCTCuringForm.get('kapstotalshiftfriday').touched }" />
+                    <div *ngIf="editCTCuringForm.get('kapstotalshiftfriday').invalid && editCTCuringForm.get('kapstotalshiftfriday').touched" class="invalid-feedback">Kaps Total Shift Friday is required.</div>
+                  </div>
+                  <div class="form-group">
+                    <h6 for="waktutotalctnormal">Waktu Total CT Normal</h6>
+                    <input [(ngModel)]="edtCTCuringObject.waktu_TOTAL_CT_NORMAL" type="number" class="form-control" id="waktutotalctnormal" formControlName="waktutotalctnormal" [ngClass]="{ 'is-invalid': editCTCuringForm.get('waktutotalctnormal').invalid && editCTCuringForm.get('waktutotalctnormal').touched }" />
+                    <div *ngIf="editCTCuringForm.get('waktutotalctnormal').invalid && editCTCuringForm.get('waktutotalctnormal').touched" class="invalid-feedback">Waktu Total CT Normal is required.</div>
+                  </div>
+                  <div class="form-group">
+                    <h6 for="waktutotalctfriday">Waktu Total CT Friday</h6>
+                    <input [(ngModel)]="edtCTCuringObject.waktu_TOTAL_CT_FRIDAY" type="number" class="form-control" id="waktutotalctfriday" formControlName="waktutotalctfriday" [ngClass]="{ 'is-invalid': editCTCuringForm.get('waktutotalctfriday').invalid && editCTCuringForm.get('waktutotalctfriday').touched }" />
+                    <div *ngIf="editCTCuringForm.get('waktutotalctfriday').invalid && editCTCuringForm.get('waktutotalctfriday').touched" class="invalid-feedback">Waktu Total CT Friday is required.</div>
+                  </div>
+                </div>
+                </div>
+              </form>
             </div>
-          </form>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <!-- Disable Update button if form is invalid -->
+              <button type="button" class="btn btn-primary" [disabled]="editCTCuringForm.invalid" (click)="updateCTCuring()">Update CT Curing</button>
+            </div>
+          </div>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-md btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-md btn-primary" id="uploadButton" (click)="uploadFileExcel()">Upload</button>
+      </div>
+
+      <!-- Modal for Upload Excel -->
+      <div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="uploadModalLabel">Upload Excel File</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form id="uploadForm">
+                <!-- Manual File Input -->
+                <div class="form-group mt-3">
+                  <input type="file" class="form-control-file" id="manualFileInput" accept=".xls,.xlsx" (change)="onFileChange($event)" />
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-md btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-md btn-primary" id="uploadButton" (click)="uploadFileExcel()">Upload</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   </div>
-  
+</div>

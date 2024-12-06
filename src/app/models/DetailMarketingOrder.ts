@@ -20,8 +20,8 @@ export class DetailMarketingOrder {
   sfMonth1: Number;
   sfMonth2: Number;
   moMonth0: number;
-  moMonth1: Number;
-  moMonth2: Number;
+  moMonth1: number;
+  moMonth2: number;
   ppd: Number;
   cav: Number;
   status: Number;

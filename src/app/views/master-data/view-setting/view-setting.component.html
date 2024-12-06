@@ -22,44 +22,58 @@
 
       <!-- Table -->
       <div class="table-responsive">
-        <table class="table table-bordered table-striped table-sm">
-          <thead align="center">
-            <tr>
-              <th>No</th>
-              <th>Setting ID</th>
-              <th>Setting Key</th>
-              <th>Setting Value</th>
-              <th>Description</th>
-              <th>Status</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr align="center" *ngFor="let setting of pageOfItems; let i = index">
-              <td>{{ i + 1 }}</td>
-              <td>{{ setting.setting_ID }}</td>
-              <td>{{ setting.setting_KEY }}</td>
-              <td>{{ setting.setting_VALUE }}</td>
-              <td>{{ setting.description }}</td>
-              <td [ngClass]="{ 'bg-success': setting.status === 1, 'bg-danger': setting.status !== 1 }">
-                {{ setting.status === 1 ? 'Active' : 'Deactive' }}
-              </td>
-              <td>
-                <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(setting.setting_ID)">Update</button>
-                <button type="button" class="btn btn-md ml-2" [ngClass]="{ 'btn-danger': setting.status === 1, 'btn-success': setting.status !== 1 }" (click)="setting.status === 1 ? deleteData(setting) : activateData(setting)">
-                  {{ setting.status === 1 ? 'Delete' : 'Active' }}
-                </button>
-              </td>
-            </tr>
-          </tbody>
+        <table  mat-table [dataSource]="dataSource" matSort class="table table-bordered table-striped table-sm">
+          <ng-container matColumnDef="no" >
+            <th *matHeaderCellDef >No</th>
+            <td  *matCellDef="let element; let i = index">{{ i + 1 }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="setting_ID">
+            <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Setting ID</th>
+            <td class="angka" *matCellDef="let element">{{ element.setting_ID }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="setting_KEY">
+            <th  *matHeaderCellDef mat-sort-header >Setting Key</th>
+            <td class="huruf" *matCellDef="let element">{{ element.setting_KEY }}</td>
+          </ng-container>
+          
+          <ng-container matColumnDef="setting_VALUE">
+            <th  *matHeaderCellDef mat-sort-header >Setting Value</th>
+            <td class="huruf" *matCellDef="let element">{{ element.setting_VALUE }}</td>
+          </ng-container>
+          
+          <ng-container matColumnDef="description">
+            <th  *matHeaderCellDef mat-sort-header >Description</th>
+            <td class="huruf" *matCellDef="let element">{{ element.description }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="status">
+            <th  *matHeaderCellDef mat-sort-header >Status</th>
+            <td *matCellDef="let element" [ngClass]="{ 'bg-success': element.status === 1, 'bg-danger': element.status !== 1 }">
+              {{ element.status === 1 ? 'Active' : 'Deactive' }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="action" >
+            <th *matHeaderCellDef style="min-width: 200px;">Action</th>
+            <td *matCellDef="let element">
+              <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(element.setting_ID)">Update</button>
+              <button type="button" class="btn btn-md ml-2" [ngClass]="{ 'btn-danger': element.status === 1, 'btn-success': element.status !== 1 }" (click)="element.status === 1 ? deleteData(element) : activateData(element)">
+                {{ element.status === 1 ? 'Delete' : 'Active' }}
+              </button>
+            </td>
+          </ng-container>
+
+          <tr align="center" style="height: 20px;" mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr align="center" mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
         </table>
         <!-- Pagination -->
-        <nav>
-          <ul class="pagination">
-            <jw-pagination [items]="settings" [pageSize]="pageSize" [maxPages]="totalPages" (changePage)="onChangePage($event)"> </jw-pagination>
-          </ul>
-        </nav>
       </div>
+      <mat-paginator [pageSize]="pageSize"
+            [pageSizeOptions]="[5, 10, 20]"
+            showFirstLastButtons>
+      </mat-paginator>
     </div>
   </div>
 </div>

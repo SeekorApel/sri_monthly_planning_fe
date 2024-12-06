@@ -22,50 +22,64 @@
 
       <!-- Table -->
       <div class="table-responsive">
-        <table class="table table-bordered table-striped table-sm">
-          <thead align="center">
-            <tr>
-              <th>No</th>
-              <th>Product Type ID</th>
-              <th>Product Merk</th>
-              <th>Product Type</th>
-              <th>Category</th>
-              <th>Status</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr align="center" *ngFor="let productType of pageOfItems; let i = index">
-              <td>{{ i + 1 }}</td>
-              <td>{{ productType.product_TYPE_ID }}</td>
-              <td>{{ productType.product_MERK }}</td>
-              <td>{{ productType.product_TYPE }}</td>
-              <td>{{ productType.category }}</td>
-              <td [ngClass]="{ 'bg-success': productType.status === 1, 'bg-danger': productType.status !== 1 }">
-                {{ productType.status === 1 ? 'Active' : 'Deactive' }}
-              </td>
-              <td>
-                <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(productType.product_TYPE_ID)">Update</button>
-                <button type="button" class="btn btn-md ml-2" [ngClass]="{ 'btn-danger': productType.status === 1, 'btn-success': productType.status !== 1 }" (click)="productType.status === 1 ? deleteData(productType) : activateData(productType)">
-                  {{ productType.status === 1 ? 'Delete' : 'Active' }}
-                </button>
-              </td>
-            </tr>
-          </tbody>
+        <table mat-table [dataSource]="dataSource" matSort class="table table-bordered table-striped table-sm">
+          <ng-container matColumnDef="no" >
+            <th *matHeaderCellDef >No</th>
+            <td  *matCellDef="let element; let i = index">{{ i + 1 }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="product_TYPE_ID">
+            <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Product Type ID</th>
+            <td class="angka" *matCellDef="let element">{{ element.product_TYPE_ID }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="product_MERK">
+            <th  *matHeaderCellDef mat-sort-header >Product Merk</th>
+            <td class="huruf" *matCellDef="let element">{{ element.product_MERK }}</td>
+          </ng-container>
+          
+          <ng-container matColumnDef="product_TYPE">
+            <th  *matHeaderCellDef mat-sort-header >Product Type</th>
+            <td class="huruf" *matCellDef="let element">{{ element.product_TYPE }}</td>
+          </ng-container>
+          
+          <ng-container matColumnDef="category">
+            <th  *matHeaderCellDef mat-sort-header >Category</th>
+            <td class="huruf" *matCellDef="let element">{{ element.category }}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="status">
+            <th  *matHeaderCellDef mat-sort-header>Status</th>
+            <td *matCellDef="let element" [ngClass]="{ 'bg-success': element.status === 1, 'bg-danger': element.status !== 1 }">
+              {{ element.status === 1 ? 'Active' : 'Deactive' }}
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="action" >
+            <th *matHeaderCellDef style="min-width: 200px;">Action</th>
+            <td *matCellDef="let element">
+              <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(element.product_TYPE_ID)">Update</button>
+              <button type="button" class="btn btn-md ml-2" [ngClass]="{ 'btn-danger': element.status === 1, 'btn-success': element.status !== 1 }" (click)="element.status === 1 ? deleteData(element) : activateData(element)">
+                {{ element.status === 1 ? 'Delete' : 'Active' }}
+              </button>
+            </td>
+          </ng-container>
+
+          <tr align="center" style="height: 20px;" mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr align="center" mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
         </table>
         <!-- Pagination -->
-        <nav>
-          <ul class="pagination">
-            <jw-pagination [items]="productTypes" [pageSize]="pageSize" [maxPages]="totalPages" (changePage)="onChangePage($event)"> </jw-pagination>
-          </ul>
-        </nav>
       </div>
+      <mat-paginator [pageSize]="pageSize"
+            [pageSizeOptions]="[5, 10, 20]"
+            showFirstLastButtons>
+      </mat-paginator>
     </div>
   </div>
 </div>
 
 <!-- Modal edit -->
-<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+<div class="modal fade" id="editModal" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
@@ -85,9 +99,18 @@
           </div>
           <div class="form-group">
             <label for="productType">Product Type</label>
-            <input [(ngModel)]="edtProductTypeObject.product_TYPE" type="text" class="form-control" id="productType" formControlName="productType" [ngClass]="{ 'is-invalid': editProductTypeForm.get('productType').invalid && editProductTypeForm.get('productType').touched }" />
-            <!-- Error message if plantName is empty -->
-            <div *ngIf="editProductTypeForm.get('productType').invalid && editProductTypeForm.get('productType').touched" class="invalid-feedback">Product Type is required.</div>
+            <ng-select2
+                formControlName="productType" 
+                id="productType"
+                name = "productType"
+                [(ngModel)]="edtProductTypeObject.product_TYPE"
+                [data]="[
+                  { id: 'TT', text: 'TT' },
+                  { id: 'TL', text: 'TL' }, 
+                ]"
+                [options]="options"
+                [placeholder]="'Please Select'">
+              </ng-select2>
           </div>
           <div class="form-group">
             <label for="category">Category</label>

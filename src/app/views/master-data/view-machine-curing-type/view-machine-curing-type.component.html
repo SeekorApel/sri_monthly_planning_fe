@@ -22,104 +22,123 @@
 
       <!-- Table -->
       <div class="table-responsive">
-        <table class="table table-bordered table-striped table-sm" style="table-layout: auto">
-          <thead align="center">
-            <tr>
-              <th>No</th>
-              <th>Machine Curing Type ID</th>
-              <th>Setting ID</th>
-              <th>Description</th>
-              <th>Cavity</th>
-              <th>Status</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let mct of pageOfItems; let i = index">
-              <td>{{ i + 1 }}</td>
-              <td>{{ mct.machinecuringtype_ID }}</td>
-              <td>{{ mct.setting_ID }}</td>
-              <td>{{ mct.description }}</td>
-              <td>{{ mct.cavity }}</td>
-              <td [ngClass]="{ 'bg-success': mct.status === 1, 'bg-danger': mct.status !== 1 }">
-                {{ mct.status === 1 ? 'Active' : 'Deactive' }}
-              </td>
-              <td align="center">
-                <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(mct.machinecuringtype_ID)">Update</button>
-                <button type="button" class="btn btn-md ml-2" [ngClass]="{ 'btn-danger': mct.status === 1, 'btn-success': mct.status !== 1 }" (click)="mct.status === 1 ? deleteData(mct) : activateData(mct)">
-                  {{ mct.status === 1 ? 'Delete' : 'Active' }}
-                </button>
-              </td>
-            </tr>
-          </tbody>
+        <table mat-table [dataSource]="dataSource" matSort class="table table-bordered table-striped table-sm">
+          <!-- No Column -->
+          <ng-container matColumnDef="no">
+            <th *matHeaderCellDef style="min-width: 50px">No</th>
+            <td *matCellDef="let mct; let i = index">{{ i + 1 }}</td>
+          </ng-container>
+
+          <!-- Machine Curing Type ID Column -->
+          <ng-container matColumnDef="machinecuringtype_ID">
+            <th *matHeaderCellDef style="min-width: 150px" mat-sort-header>Machine Curing Type ID</th>
+            <td align="left" *matCellDef="let mct">{{ mct.machinecuringtype_ID }}</td>
+          </ng-container>
+
+          <!-- Setting ID Column -->
+          <ng-container matColumnDef="setting_ID">
+            <th *matHeaderCellDef style="min-width: 150px" mat-sort-header>Setting</th>
+            <td align="left" *matCellDef="let mct">{{ mct.setting_key }}</td>
+          </ng-container>
+
+          <!-- Description Column -->
+          <ng-container matColumnDef="description">
+            <th *matHeaderCellDef style="min-width: 200px" mat-sort-header>Description</th>
+            <td align="left" *matCellDef="let mct">{{ mct.description }}</td>
+          </ng-container>
+
+          <!-- Cavity Column -->
+          <ng-container matColumnDef="cavity">
+            <th *matHeaderCellDef style="min-width: 100px" mat-sort-header>Cavity</th>
+            <td align="right" *matCellDef="let mct" align="right">{{ mct.cavity }}</td>
+          </ng-container>
+
+          <!-- Status Column -->
+          <ng-container matColumnDef="status">
+            <th *matHeaderCellDef style="min-width: 100px" mat-sort-header>Status</th>
+            <td *matCellDef="let mct" [ngClass]="{ 'bg-success text-white': mct.status === 1, 'bg-danger text-white': mct.status !== 1 }">
+              {{ mct.status === 1 ? 'Active' : 'Deactive' }}
+            </td>
+          </ng-container>
+
+          <!-- Action Column -->
+          <ng-container matColumnDef="action">
+            <th *matHeaderCellDef style="min-width: 150px">Action</th>
+            <td *matCellDef="let mct" align="center">
+              <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(mct.machinecuringtype_ID)">Update</button>
+              <button type="button" class="btn btn-md ml-2" [ngClass]="{ 'btn-danger': mct.status === 1, 'btn-success': mct.status !== 1 }" (click)="mct.status === 1 ? deleteData(mct) : activateData(mct)">
+                {{ mct.status === 1 ? 'Delete' : 'Active' }}
+              </button>
+            </td>
+          </ng-container>
+
+          <!-- Header and Row Declaration -->
+          <tr align="center" style="height: 20px" mat-header-row *matHeaderRowDef="displayedColumns" align="center"></tr>
+          <tr align="center" mat-row *matRowDef="let row; columns: displayedColumns" align="center"></tr>
         </table>
       </div>
       <!-- Pagination -->
-      <nav>
-        <ul class="pagination">
-          <jw-pagination [items]="machineCuringTypes" [pageSize]="pageSize" [maxPages]="totalPages" (changePage)="onChangePage($event)"> </jw-pagination>
-        </ul>
-      </nav>
-    </div>
-  </div>
-</div>
+      <mat-paginator [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
 
-<!-- Modal edit -->
-<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="addModalLabel">Edit Machine Curing Type</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <!-- Form with Reactive Forms -->
-        <form [formGroup]="editMCTForm">
-          <div class="form-group">
-            <label for="setting">Setting</label>
-            <input [(ngModel)]="edtMCTObject.setting_ID" type="text" class="form-control" id="setting" formControlName="setting" [ngClass]="{ 'is-invalid': editMCTForm.get('setting').invalid && editMCTForm.get('setting').touched }" />
-            <label for="description">Description</label>
-            <input [(ngModel)]="edtMCTObject.description" type="text" class="form-control" id="description" formControlName="description" [ngClass]="{ 'is-invalid': editMCTForm.get('description').invalid && editMCTForm.get('description').touched }" />
-            <label for="cavity">Cavity</label>
-            <input [(ngModel)]="edtMCTObject.cavity" type="text" class="form-control" id="cavity" formControlName="cavity" [ngClass]="{ 'is-invalid': editMCTForm.get('cavity').invalid && editMCTForm.get('cavity').touched }" />
-            <!-- Error message if description is empty -->
-            <div *ngIf="editMCTForm.get('description').invalid && editMCTForm.get('description').touched" class="invalid-feedback">Machine Curing Type description is required.</div>
-            <div *ngIf="editMCTForm.get('cavity').invalid && editMCTForm.get('cavity').touched" class="invalid-feedback">Machine Curing Type cavity is required.</div>
+      <!-- Modal edit -->
+      <div class="modal fade" id="editModal" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="addModalLabel">Edit Machine Curing Type</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <!-- Form with Reactive Forms -->
+              <form [formGroup]="editMCTForm">
+                <h6 for="setting">Setting</h6>
+                <div class="col-md-13">
+                  <ng-select2 id="setting" name="setting" formControlName="setting" [(ngModel)]="edtMCTObject.setting_ID" [data]="uomOptionData" [options]="options"> </ng-select2>
+                </div>
+                <h6 for="description">Description</h6>
+                <input [(ngModel)]="edtMCTObject.description" type="text" class="form-control" id="descri ption" formControlName="description" [ngClass]="{ 'is-invalid': editMCTForm.get('description').invalid && editMCTForm.get('description').touched }" />
+                <h6 for="cavity">Cavity</h6>
+                <input [(ngModel)]="edtMCTObject.cavity" type="number" class="form-control" min="0" id="cavity" formControlName="cavity" [ngClass]="{ 'is-invalid': editMCTForm.get('cavity').invalid && editMCTForm.get('cavity').touched }" />
+                <!-- Error message if description is empty -->
+                <div *ngIf="editMCTForm.get('description').invalid && editMCTForm.get('description').touched" class="invalid-feedback">Machine Curing Type description is required.</div>
+                <div *ngIf="editMCTForm.get('cavity').invalid && editMCTForm.get('cavity').touched" class="invalid-feedback">Machine Curing Type cavity is required.</div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <!-- Disable Update button if form is invalid -->
+              <button type="button" class="btn btn-primary" [disabled]="editMCTForm.invalid" (click)="updateMCT()">Update Machine Curing Type</button>
+            </div>
           </div>
-        </form>
+        </div>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <!-- Disable Update button if form is invalid -->
-        <button type="button" class="btn btn-primary" [disabled]="editMCTForm.invalid" (click)="updateMCT()">Update Machine Curing Type</button>
-      </div>
-    </div>
-  </div>
-</div>
 
-<!-- Modal for Upload Excel -->
-<div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="uploadModalLabel">Upload Excel File</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form id="uploadForm">
-          <!-- Manual File Input -->
-          <div class="form-group mt-3">
-            <input type="file" class="form-control-file" id="manualFileInput" accept=".xls,.xlsx" (change)="onFileChange($event)" />
+      <!-- Modal for Upload Excel -->
+      <div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="uploadModalLabel">Upload Excel File</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form id="uploadForm">
+                <!-- Manual File Input -->
+                <div class="form-group mt-3">
+                  <input type="file" class="form-control-file" id="manualFileInput" accept=".xls,.xlsx" (change)="onFileChange($event)" />
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-md btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-md btn-primary" id="uploadButton" (click)="uploadFileExcel()">Upload</button>
+            </div>
           </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-md btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-md btn-primary" id="uploadButton" (click)="uploadFileExcel()">Upload</button>
+        </div>
       </div>
     </div>
   </div>

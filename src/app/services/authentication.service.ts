@@ -6,6 +6,7 @@ import { UserDetails } from '../models/UserDetails';
 import { HttpClient } from '@angular/common/http';
 import { User } from '../models/User';
 import { RestService } from './rest.service';
+import { MarketingOrderService } from './transaksi/marketing order/marketing-order.service';
 
 @Injectable({
   providedIn: 'root',
@@ -18,7 +19,7 @@ export class AuthenticationService {
   public token: string;
   private data: any;
 
-  constructor(private http: HttpClient, private rest: RestService) {
+  constructor(private http: HttpClient, private rest: RestService, private mo: MarketingOrderService) {
     this.currentUserSubject = new BehaviorSubject<UserDetails>(JSON.parse(localStorage.getItem('currentUser')));
     this.currentUser = this.currentUserSubject.asObservable();
   }

@@ -8,6 +8,10 @@ declare var $: any;
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSort } from '@angular/material/sort';
+import { MatPaginator } from '@angular/material/paginator';
+
 @Component({
   selector: 'app-view-routing-machine',
   templateUrl: './view-routing-machine.component.html',
@@ -28,10 +32,19 @@ export class ViewRoutingMachineComponent implements OnInit {
   pageOfItems: Array<any>;
   pageSize: number = 5;
   totalPages: number = 5;
+  sortBuffer: Array<any>;
+  displayedColumns: string[] = ['no', 'ct_ASSY_ID', 'wip','description', 'group_COUNTER', 'var_GROUP_COUNTER', 'sequence', 'wct', 'operation_SHORT_TEXT', 'operation_UNIT', 
+    'base_QUANTITY', 'standard_VALUE_UNIT', 'ct_SEC_1', 'ct_HR_1000', 'wh_NORMAL_SHIFT_0', 'wh_NORMAL_SHIFT_1', 'wh_NORMAL_SHIFT_2', 'wh_SHIFT_FRIDAY', 'wh_TOTAL_NORMAL_SHIFT',
+    'wh_TOTAL_SHIFT_FRIDAY', 'allow_NORMAL_SHIFT_0', 'allow_NORMAL_SHIFT_1', 'allow_NORMAL_SHIFT_2', 'allow_TOTAL', 'op_TIME_NORMAL_SHIFT_0', 'op_TIME_NORMAL_SHIFT_1', 'op_TIME_NORMAL_SHIFT_2',
+    'op_TIME_SHIFT_FRIDAY', 'op_TIME_TOTAL_NORMAL_SHIFT', 'op_TIME_TOTAL_SHIFT_FRIDAY', 'kaps_NORMAL_SHIFT_0', 'kaps_NORMAL_SHIFT_1', 'kaps_NORMAL_SHIFT_2', 'kaps_SHIFT_FRIDAY',
+    'kaps_TOTAL_NORMAL_SHIFT', 'kaps_TOTAL_SHIFT_FRIDAY', 'waktu_TOTAL_CT_NORMAL', 'waktu_TOTAL_CT_FRIDAY', 'status', 'action'];
+  dataSource: MatTableDataSource<RoutingMachine>;
+
+  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(private RoutingMachineService: RoutingService, private fb: FormBuilder) { 
     this.editRoutingMachineForm = this.fb.group({
-      CtAssyID: ['', Validators.required],
       wip: ['', Validators.required],
       description: ['', Validators.required],
       group_counter: ['', Validators.required],
@@ -79,7 +92,10 @@ export class ViewRoutingMachineComponent implements OnInit {
     this.RoutingMachineService.getAllCTAssy().subscribe(
       (response: ApiResponse<RoutingMachine[]>) => {
         this.routingMachines = response.data;
-        this.onChangePage(this.routingMachines.slice(0, this.pageSize));
+        this.dataSource = new MatTableDataSource(this.routingMachines);
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+        this.onChangePage(this.dataSource.data.slice(0, this.pageSize));
       },
       (error) => {
         this.errorMessage = 'Failed to load CT Assy: ' + error.message;
@@ -92,57 +108,59 @@ export class ViewRoutingMachineComponent implements OnInit {
   }
 
   onSearchChange(): void {
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
     // Lakukan filter berdasarkan nama plant yang mengandung text pencarian (case-insensitive)
-    const filteredPlants = this.routingMachines.filter(
-      (routingMachine) =>
-        routingMachine.ct_ASSY_ID
-          .toString()
-          .includes(this.searchText.toLowerCase()) ||
-          routingMachine.wip.toLowerCase().toString().includes(this.searchText.toLowerCase())||
-          routingMachine.description.toLowerCase().toString().includes(this.searchText.toLowerCase()) ||
-          routingMachine.group_COUNTER.toLowerCase().toString().includes(this.searchText.toLowerCase()) ||
-          routingMachine.var_GROUP_COUNTER.toLowerCase().toString().includes(this.searchText.toLowerCase()) ||
-          routingMachine.sequence.toString().includes(this.searchText) ||
-          routingMachine.wct.toLowerCase().toString().includes(this.searchText.toLowerCase()) ||
-          routingMachine.operation_SHORT_TEXT.toLowerCase().toString().includes(this.searchText.toLowerCase()) ||
-          routingMachine.operation_UNIT.toLowerCase().toString().includes(this.searchText.toLowerCase()) ||
-          routingMachine.base_QUANTITY.toString().includes(this.searchText) ||
-          routingMachine.standard_VALUE_UNIT.toLowerCase().toString().includes(this.searchText.toLowerCase()) ||
-          routingMachine.ct_SEC_1.toString().includes(this.searchText) ||
-          routingMachine.ct_HR_1000.toString().includes(this.searchText) ||
-          routingMachine.wh_NORMAL_SHIFT_0.toString().includes(this.searchText) ||
-          routingMachine.wh_NORMAL_SHIFT_1.toString().includes(this.searchText) ||
-          routingMachine.wh_NORMAL_SHIFT_2.toString().includes(this.searchText) ||
-          routingMachine.wh_SHIFT_FRIDAY.toString().includes(this.searchText) ||
-          routingMachine.wh_TOTAL_NORMAL_SHIFT.toString().includes(this.searchText) ||
-          routingMachine.wh_TOTAL_SHIFT_FRIDAY.toString().includes(this.searchText) ||
-          routingMachine.allow_NORMAL_SHIFT_0.toString().includes(this.searchText) ||
-          routingMachine.allow_NORMAL_SHIFT_1.toString().includes(this.searchText) ||
-          routingMachine.allow_NORMAL_SHIFT_2.toString().includes(this.searchText) ||
-          routingMachine.allow_TOTAL.toString().includes(this.searchText) ||
-          routingMachine.op_TIME_NORMAL_SHIFT_0.toString().includes(this.searchText) ||
-          routingMachine.op_TIME_NORMAL_SHIFT_1.toString().includes(this.searchText) ||
-          routingMachine.op_TIME_NORMAL_SHIFT_2.toString().includes(this.searchText) ||
-          routingMachine.op_TIME_SHIFT_FRIDAY.toString().includes(this.searchText) ||
-          routingMachine.op_TIME_TOTAL_NORMAL_SHIFT.toString().includes(this.searchText) ||
-          routingMachine.op_TIME_TOTAL_SHIFT_FRIDAY.toString().includes(this.searchText) ||
-          routingMachine.kaps_NORMAL_SHIFT_0.toString().includes(this.searchText) ||
-          routingMachine.kaps_NORMAL_SHIFT_1.toString().includes(this.searchText) ||
-          routingMachine.kaps_NORMAL_SHIFT_2.toString().includes(this.searchText) ||
-          routingMachine.kaps_SHIFT_FRIDAY.toString().includes(this.searchText) ||
-          routingMachine.kaps_TOTAL_NORMAL_SHIFT.toString().includes(this.searchText) ||
-          routingMachine.kaps_TOTAL_SHIFT_FRIDAY.toString().includes(this.searchText) ||
-          routingMachine.waktu_TOTAL_CT_NORMAL.toString().includes(this.searchText) ||
-          routingMachine.waktu_TOTAL_CT_FRIDAY.toString().includes(this.searchText) ||
-          routingMachine.status.toString().includes(this.searchText)
-    );
+    // const filteredPlants = this.routingMachines.filter(
+    //   (routingMachine) =>
+    //     routingMachine.ct_ASSY_ID
+    //       .toString()
+    //       .includes(this.searchText.toLowerCase()) ||
+    //       routingMachine.wip.toLowerCase().toString().includes(this.searchText.toLowerCase())||
+    //       routingMachine.description.toLowerCase().toString().includes(this.searchText.toLowerCase()) ||
+    //       routingMachine.group_COUNTER.toLowerCase().toString().includes(this.searchText.toLowerCase()) ||
+    //       routingMachine.var_GROUP_COUNTER.toLowerCase().toString().includes(this.searchText.toLowerCase()) ||
+    //       routingMachine.sequence.toString().includes(this.searchText) ||
+    //       routingMachine.wct.toLowerCase().toString().includes(this.searchText.toLowerCase()) ||
+    //       routingMachine.operation_SHORT_TEXT.toLowerCase().toString().includes(this.searchText.toLowerCase()) ||
+    //       routingMachine.operation_UNIT.toLowerCase().toString().includes(this.searchText.toLowerCase()) ||
+    //       routingMachine.base_QUANTITY.toString().includes(this.searchText) ||
+    //       routingMachine.standard_VALUE_UNIT.toLowerCase().toString().includes(this.searchText.toLowerCase()) ||
+    //       routingMachine.ct_SEC_1.toString().includes(this.searchText) ||
+    //       routingMachine.ct_HR_1000.toString().includes(this.searchText) ||
+    //       routingMachine.wh_NORMAL_SHIFT_0.toString().includes(this.searchText) ||
+    //       routingMachine.wh_NORMAL_SHIFT_1.toString().includes(this.searchText) ||
+    //       routingMachine.wh_NORMAL_SHIFT_2.toString().includes(this.searchText) ||
+    //       routingMachine.wh_SHIFT_FRIDAY.toString().includes(this.searchText) ||
+    //       routingMachine.wh_TOTAL_NORMAL_SHIFT.toString().includes(this.searchText) ||
+    //       routingMachine.wh_TOTAL_SHIFT_FRIDAY.toString().includes(this.searchText) ||
+    //       routingMachine.allow_NORMAL_SHIFT_0.toString().includes(this.searchText) ||
+    //       routingMachine.allow_NORMAL_SHIFT_1.toString().includes(this.searchText) ||
+    //       routingMachine.allow_NORMAL_SHIFT_2.toString().includes(this.searchText) ||
+    //       routingMachine.allow_TOTAL.toString().includes(this.searchText) ||
+    //       routingMachine.op_TIME_NORMAL_SHIFT_0.toString().includes(this.searchText) ||
+    //       routingMachine.op_TIME_NORMAL_SHIFT_1.toString().includes(this.searchText) ||
+    //       routingMachine.op_TIME_NORMAL_SHIFT_2.toString().includes(this.searchText) ||
+    //       routingMachine.op_TIME_SHIFT_FRIDAY.toString().includes(this.searchText) ||
+    //       routingMachine.op_TIME_TOTAL_NORMAL_SHIFT.toString().includes(this.searchText) ||
+    //       routingMachine.op_TIME_TOTAL_SHIFT_FRIDAY.toString().includes(this.searchText) ||
+    //       routingMachine.kaps_NORMAL_SHIFT_0.toString().includes(this.searchText) ||
+    //       routingMachine.kaps_NORMAL_SHIFT_1.toString().includes(this.searchText) ||
+    //       routingMachine.kaps_NORMAL_SHIFT_2.toString().includes(this.searchText) ||
+    //       routingMachine.kaps_SHIFT_FRIDAY.toString().includes(this.searchText) ||
+    //       routingMachine.kaps_TOTAL_NORMAL_SHIFT.toString().includes(this.searchText) ||
+    //       routingMachine.kaps_TOTAL_SHIFT_FRIDAY.toString().includes(this.searchText) ||
+    //       routingMachine.waktu_TOTAL_CT_NORMAL.toString().includes(this.searchText) ||
+    //       routingMachine.waktu_TOTAL_CT_FRIDAY.toString().includes(this.searchText) ||
+    //       routingMachine.status.toString().includes(this.searchText)
+    // );
 
-    // Tampilkan hasil filter pada halaman pertama
-    this.onChangePage(filteredPlants.slice(0, this.pageSize));
+    // // Tampilkan hasil filter pada halaman pertama
+    // this.onChangePage(filteredPlants.slice(0, this.pageSize));
   }
 
   resetSearch(): void {
     this.searchText = '';
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
     this.onChangePage(this.routingMachines.slice(0, this.pageSize));
   }
 
@@ -253,7 +271,7 @@ export class ViewRoutingMachineComponent implements OnInit {
     this.RoutingMachineService.exportRoutingMachineExcel().subscribe({
       next: (response) => {
         // Menggunakan nama file yang sudah ditentukan di backend
-        const filename = 'ROUTING_MACHINE_DATA.xlsx'; // Nama file bisa dinamis jika diperlukan
+        const filename = 'CT_ASSY_DATA.xlsx'; // Nama file bisa dinamis jika diperlukan
         saveAs(response, filename); // Mengunduh file
       },
       error: (err) => {

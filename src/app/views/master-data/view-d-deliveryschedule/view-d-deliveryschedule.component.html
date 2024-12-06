@@ -22,48 +22,72 @@
 
       <!-- Table -->
       <div class="table-responsive">
-        <table class="table table-bordered table-striped table-sm" style="table-layout: auto">
-          <thead align="center">
-            <tr>
-              <th>No</th>
-              <th>Detail Delivery Schedule ID</th>
-              <th>Delivery Schedule ID</th>
-              <th>Part Number</th>
-              <th>Date</th>
-              <th>Total Delivery</th>
-              <th>Status</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let detail of pageOfItems; let i = index">
-              <td>{{ i + 1 }}</td>
-              <td>{{ detail.detail_DS_ID }}</td>
-              <td>{{ detail.ds_ID }}</td>
-              <td>{{ detail.part_NUM }}</td>
-              <td>{{ detail.date_DS }}</td>
-              <td>{{ detail.total_DELIVERY }}</td>
-              <td [ngClass]="{ 'bg-success': detail.status === 1, 'bg-danger': detail.status !== 1 }">
-                {{ detail.status === 1 ? 'Active' : 'Deactive' }}
-              </td>
-              <td align="center">
-                <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(detail.detail_DS_ID)">Update</button>
-                <button type="button" class="btn btn-md ml-2" [ngClass]="{ 'btn-danger': detail.status === 1, 'btn-success': detail.status !== 1 }" (click)="detail.status === 1 ? deleteData(detail) : activateData(detail)">
-                  {{ detail.status === 1 ? 'Delete' : 'Active' }}
-                </button>
-              </td>
-            </tr>
-          </tbody>
+        <table mat-table [dataSource]="dataSource" matSort matSort class="table table-bordered table-striped table-sm">
+          <!-- No Column -->
+          <ng-container matColumnDef="no">
+            <th *matHeaderCellDef style="min-width: 50px">No</th>
+            <td *matCellDef="let detail; let i = index">{{ i + 1 }}</td>
+          </ng-container>
+
+          <!-- Detail Delivery Schedule ID Column -->
+          <ng-container matColumnDef="detail_DS_ID">
+            <th *matHeaderCellDef style="min-width: 200px" mat-sort-header>Detail Delivery Schedule ID</th>
+            <td align="center" *matCellDef="let detail">{{ detail.detail_DS_ID }}</td>
+          </ng-container>
+
+          <!-- Delivery Schedule ID Column -->
+          <ng-container matColumnDef="ds_ID">
+            <th *matHeaderCellDef style="min-width: 180px" mat-sort-header>Delivery Schedule ID</th>
+            <td align="right" *matCellDef="let detail">{{ detail.ds_ID }}</td>
+          </ng-container>
+
+          <!-- Part Number Column -->
+          <ng-container matColumnDef="part_NUM">
+            <th *matHeaderCellDef style="min-width: 200px" mat-sort-header>Part Number</th>
+            <td align="right" *matCellDef="let detail">{{ detail.part_NUM }}</td>
+          </ng-container>
+
+          <!-- Date Column -->
+          <ng-container matColumnDef="date_DS">
+            <th *matHeaderCellDef style="min-width: 250px" mat-sort-header>Date</th>
+            <td align="" *matCellDef="let detail">{{ detail.formattedDate }}</td>
+          </ng-container>
+
+          <!-- Total Delivery Column -->
+          <ng-container matColumnDef="total_DELIVERY">
+            <th *matHeaderCellDef style="min-width: 150px" mat-sort-header>Total Delivery</th>
+            <td *matCellDef="let detail" align="right">{{ detail.total_DELIVERY }}</td>
+          </ng-container>
+
+          <!-- Status Column -->
+          <ng-container matColumnDef="status">
+            <th *matHeaderCellDef style="min-width: 100px" mat-sort-header>Status</th>
+            <td *matCellDef="let detail" [ngClass]="{ 'bg-success text-white': detail.status === 1, 'bg-danger text-white': detail.status !== 1 }">
+              {{ detail.status === 1 ? 'Active' : 'Deactive' }}
+            </td>
+          </ng-container>
+
+          <!-- Action Column -->
+          <ng-container matColumnDef="action">
+            <th *matHeaderCellDef style="min-width: 200px">Action</th>
+            <td *matCellDef="let detail">
+              <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(detail.detail_DS_ID)">Update</button>
+              <button type="button" class="btn btn-md ml-3" [ngClass]="{ 'btn-danger': detail.status === 1, 'btn-success': detail.status !== 1 }" (click)="detail.status === 1 ? deleteData(detail) : activateData(detail)">
+                {{ detail.status === 1 ? 'Delete' : 'Active' }}
+              </button>
+            </td>
+          </ng-container>
+
+          <!-- Add header and row declarations -->
+          <tr align="center" style="height: 20px" mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr align="center" mat-row *matRowDef="let row; columns: displayedColumns"></tr>
         </table>
-        <nav>
-          <ul class="pagination">
-            <jw-pagination [items]="ddeliveryScedules" [pageSize]="pageSize" [maxPages]="totalPages" (changePage)="onChangePage($event)"> </jw-pagination>
-          </ul>
-        </nav>
       </div>
+      <!-- Pagination -->
+      <mat-paginator [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
 
       <!-- Modal edit -->
-      <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+      <div class="modal fade" id="editModal" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">
@@ -75,22 +99,23 @@
             <div class="modal-body">
               <form [formGroup]="editDDeliveryScheduleTypeForm">
                 <div class="form-group">
-                  <label for="dsID">Delivery Schedule</label>
-                  <input [(ngModel)]="editDDeliveryScheduleTypeObject.ds_ID" type="text" class="form-control" id="dsID" formControlName="dsID" [ngClass]="{ 'is-invalid': editDDeliveryScheduleTypeForm.get('dsID').invalid && editDDeliveryScheduleTypeForm.get('dsID').touched }" />
-                  <div *ngIf="editDDeliveryScheduleTypeForm.get('dsID').invalid && editDDeliveryScheduleTypeForm.get('dsID').touched" class="invalid-feedback">Delivery Schedule is required.</div>
+                  <h6 for="dsID">Delivery Schedule</h6>
+                  <div class="col-md-13">
+                    <ng-select2 id="dsID" name="dsID" formControlName="dsID" [(ngModel)]="editDDeliveryScheduleTypeObject.ds_ID" [data]="uomOptionData" [options]="options"> </ng-select2>
+                  </div>
                 </div>
                 <div class="form-group">
-                  <label for="partNum">Part Number</label>
+                  <h6 for="partNum">Part Number</h6>
                   <input [(ngModel)]="editDDeliveryScheduleTypeObject.part_NUM" type="text" class="form-control" id="partNum" formControlName="partNum" [ngClass]="{ 'is-invalid': editDDeliveryScheduleTypeForm.get('partNum').invalid && editDDeliveryScheduleTypeForm.get('partNum').touched }" />
                   <div *ngIf="editDDeliveryScheduleTypeForm.get('partNum').invalid && editDDeliveryScheduleTypeForm.get('partNum').touched" class="invalid-feedback">Part Number is required.</div>
                 </div>
                 <div class="form-group">
-                  <label for="date">Date</label>
+                  <h6 for="date">Date</h6>
                   <input [(ngModel)]="editDDeliveryScheduleTypeObject.date_DS" type="text" class="form-control" id="date" formControlName="date" [ngClass]="{ 'is-invalid': editDDeliveryScheduleTypeForm.get('date').invalid && editDDeliveryScheduleTypeForm.get('date').touched }" />
                   <div *ngIf="editDDeliveryScheduleTypeForm.get('date').invalid && editDDeliveryScheduleTypeForm.get('date').touched" class="invalid-feedback">Date is required.</div>
                 </div>
                 <div class="form-group">
-                  <label for="totalDelvery">Total Delivery</label>
+                  <h6 for="totalDelvery">Total Delivery</h6>
                   <input [(ngModel)]="editDDeliveryScheduleTypeObject.total_DELIVERY" type="text" class="form-control" id="totalDelvery" formControlName="totalDelvery" [ngClass]="{ 'is-invalid': editDDeliveryScheduleTypeForm.get('totalDelvery').invalid && editDDeliveryScheduleTypeForm.get('totalDelvery').touched }" />
                   <div *ngIf="editDDeliveryScheduleTypeForm.get('totalDelvery').invalid && editDDeliveryScheduleTypeForm.get('totalDelvery').touched" class="invalid-feedback">Total Delivery is required.</div>
                 </div>

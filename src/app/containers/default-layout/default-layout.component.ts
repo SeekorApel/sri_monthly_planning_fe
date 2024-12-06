@@ -19,6 +19,7 @@ export class DefaultLayoutComponent {
 
   constructor(private authenticationService: AuthenticationService, private router: Router) {
     //PERSONAL INFORMATION
+    // localStorage.clear();
     let currentUserSubject = JSON.parse(localStorage.getItem('currentUser'));
     this.nrp = currentUserSubject.userName;
     this.name = currentUserSubject.fullName;
@@ -30,32 +31,31 @@ export class DefaultLayoutComponent {
 
     this.masterPPC = [
       { name: 'Plant', url: '/master-data/view-plant', icon: 'cil-minus' },
-      { name: 'Setting', url: '/master-data/view-setting', icon: 'cil-minus' },
-      { name: 'Quadrant', url: '/master-data/view-quadrant', icon: 'cil-minus' },
-      { name: 'ProductType', url: '/master-data/view-product-type', icon: 'cil-minus' },
-      { name: 'Product', url: '/master-data/view-product', icon: 'cil-minus' },
-      { name: 'Pattern', url: '/master-data/view-pattern', icon: 'cil-minus' },
-      { name: 'Machine Tass', url: '/master-data/view-machine-tass', icon: 'cil-minus' },
-      { name: 'Detail Delivery Schedule', url: '/master-data/view-d-deliveryschedule', icon: 'cil-minus' },
-      { name: 'Machine Curing Type', url: '/master-data/view-machine-curing-type', icon: 'cil-minus' },
-      { name: 'Machine Tass Type', url: '/master-data/view-machine-tass-type', icon: 'cil-minus' },
-      { name: 'Machine Extruding', url: '/master-data/view-machine-extruding', icon: 'cil-minus' },
-      { name: 'CT Kapa', url: '/master-data/view-ct-kapa', icon: 'cil-minus' },
       { name: 'Building', url: '/master-data/view-building', icon: 'cil-minus' },
       { name: 'Building Distance', url: '/master-data/view-bdistance', icon: 'cil-minus' },
+      { name: 'Quadrant', url: '/master-data/view-quadrant', icon: 'cil-minus' },
       { name: 'Quadrant Distance', url: '/master-data/view-qdistance', icon: 'cil-minus' },
-      { name: 'Size', url: '/master-data/view-size', icon: 'cil-minus' },
-      { name: 'Routing Machine', url: '/master-data/view-routing-machine', icon: 'cil-minus' },
-      { name: 'Delivery Schedule', url: '/master-data/view-delivery-schedule', icon: 'cil-minus' },
-      { name: 'Tass Size', url: '/master-data/view-tass-size', icon: 'cil-minus' },
-      { name: 'Item Curing', url: '/master-data/view-item-curing', icon: 'cil-minus' },
-      { name: 'Max Capacity', url: '/master-data/view-max-capacity', icon: 'cil-minus' },
-      { name: 'Curing Machine', url: '/master-data/view-curing-machine', icon: 'cil-minus' },
-      { name: 'CT Curing', url: '/master-data/view-ct-curing', icon: 'cil-minus' },
-      { name: 'Machine Allowence', url: '/master-data/view-machine-allowence', icon: 'cil-minus' },
-      { name: 'Item Assy', url: '/master-data/view-item-assy', icon: 'cil-minus' },
+      { name: 'Machine Curing', url: '/master-data/view-curing-machine', icon: 'cil-minus' },
+      { name: 'Machine Curing Type', url: '/master-data/view-machine-curing-type', icon: 'cil-minus' },
+      { name: 'Machine Tass', url: '/master-data/view-machine-tass', icon: 'cil-minus' },
+      { name: 'Machine Tass Type', url: '/master-data/view-machine-tass-type', icon: 'cil-minus' },
       { name: 'Machine Extruding', url: '/master-data/view-machine-extruding', icon: 'cil-minus' },
+      { name: 'Machine Allowence', url: '/master-data/view-machine-allowence', icon: 'cil-minus' },
+      { name: 'Curing Size', url: '/master-data/view-curing-size', icon: 'cil-minus' },
+      { name: 'Tass Size', url: '/master-data/view-tass-size', icon: 'cil-minus' },
+      { name: 'Max Capacity', url: '/master-data/view-max-capacity', icon: 'cil-minus' },
+      { name: 'Pattern', url: '/master-data/view-pattern', icon: 'cil-minus' },
+      { name: 'Size', url: '/master-data/view-size', icon: 'cil-minus' },
+      { name: 'ProductType', url: '/master-data/view-product-type', icon: 'cil-minus' },
+      { name: 'Item Curing', url: '/master-data/view-item-curing', icon: 'cil-minus' },
+      { name: 'Item Assy', url: '/master-data/view-item-assy', icon: 'cil-minus' },
+      { name: 'Product', url: '/master-data/view-product', icon: 'cil-minus' },
       { name: 'CT Kapa', url: '/master-data/view-ct-kapa', icon: 'cil-minus' },
+      { name: 'CT Curing', url: '/master-data/view-ct-curing', icon: 'cil-minus' },
+      { name: 'CT Assy', url: '/master-data/view-routing-machine', icon: 'cil-minus' },
+      { name: 'Setting', url: '/master-data/view-setting', icon: 'cil-minus' },
+      { name: 'Delivery Schedule', url: '/master-data/view-delivery-schedule', icon: 'cil-minus' },
+      { name: 'Detail Delivery Schedule', url: '/master-data/view-d-deliveryschedule', icon: 'cil-minus' },
       { name: 'Work Day', url: '/master-data/view-work-day', icon: 'cil-minus' },
     ];
 

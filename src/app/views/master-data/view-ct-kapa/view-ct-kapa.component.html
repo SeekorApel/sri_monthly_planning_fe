@@ -22,151 +22,190 @@
 
       <!-- Table -->
       <div class="table-responsive">
-        <table class="table table-bordered table-striped table-sm" style="table-layout: auto">
-          <thead align="center">
-            <tr>
-              <th>No</th>
-              <th>ID CT Kapa</th>
-              <th>Item Curing</th>
-              <th>Type Curing</th>
-              <th>Description</th>
-              <th>Cycle Time</th>
-              <th>Shift</th>
-              <th>Kapa Per Shift</th>
-              <th>Last Update Data</th>
-              <th>Machine</th>
-              <th>Status</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let ctkapa of pageOfItems; let i = index">
-              <td>{{ i + 1 }}</td>
-              <td>{{ ctkapa.id_CT_KAPA }}</td>
-              <td>{{ ctkapa.item_CURING }}</td>
-              <td>{{ ctkapa.type_CURING }}</td>
-              <td>{{ ctkapa.description }}</td>
-              <td>{{ ctkapa.cycle_TIME }}</td>
-              <td>{{ ctkapa.shift }}</td>
-              <td>{{ ctkapa.kapa_PERSHIFT }}</td>
-              <td>{{ ctkapa.last_UPDATE_DATA }}</td>
-              <td>{{ ctkapa.machine }}</td>
-              <td [ngClass]="{ 'bg-success': ctkapa.status === 1, 'bg-danger': ctkapa.status !== 1 }">
-                {{ ctkapa.status === 1 ? 'Active' : 'Deactive' }}
-              </td>
-              <td align="center">
-                <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(ctkapa.id_CT_KAPA)">Update</button>
-                <button type="button" class="btn btn-md ml-3" [ngClass]="{ 'btn-danger': ctkapa.status === 1, 'btn-success': ctkapa.status !== 1 }" (click)="ctkapa.status === 1 ? deleteData(ctkapa) : activateData(ctkapa)">
-                  {{ ctkapa.status === 1 ? 'Delete' : 'Active' }}
-                </button>
-              </td>
-            </tr>
-          </tbody>
+        <table mat-table [dataSource]="dataSource" matSort class="table table-bordered table-striped table-sm">
+          <!-- No Column -->
+          <ng-container matColumnDef="no">
+            <th *matHeaderCellDef style="min-width: 50px">No</th>
+            <td *matCellDef="let ctkapa; let i = index">{{ i + 1 }}</td>
+          </ng-container>
+
+          <!-- ID CT Kapa Column -->
+          <ng-container matColumnDef="id_CT_KAPA">
+            <th *matHeaderCellDef style="min-width: 130px" mat-sort-header>ID CT Kapa</th>
+            <td align="center" *matCellDef="let ctkapa">{{ ctkapa.id_CT_KAPA }}</td>
+          </ng-container>
+
+          <!-- Item Curing Column -->
+          <ng-container matColumnDef="item_CURING">
+            <th *matHeaderCellDef style="min-width: 130px" mat-sort-header>Item Curing</th>
+            <td align="left" *matCellDef="let ctkapa">{{ ctkapa.item_CURING }}</td>
+          </ng-container>
+
+          <!-- Type Curing Column -->
+          <ng-container matColumnDef="type_CURING">
+            <th *matHeaderCellDef style="min-width: 130px" mat-sort-header>Type Curing</th>
+            <td align="left" *matCellDef="let ctkapa">{{ ctkapa.type_CURING }}</td>
+          </ng-container>
+
+          <!-- Description Column -->
+          <ng-container matColumnDef="description">
+            <th *matHeaderCellDef style="min-width: 150px" mat-sort-header>Description</th>
+            <td align="left" *matCellDef="let ctkapa">{{ ctkapa.description }}</td>
+          </ng-container>
+
+          <!-- Cycle Time Column -->
+          <ng-container matColumnDef="cycle_TIME">
+            <th *matHeaderCellDef style="min-width: 130px" mat-sort-header>Cycle Time</th>
+            <td align="right" *matCellDef="let ctkapa">{{ ctkapa.cycle_TIME }}</td>
+          </ng-container>
+
+          <!-- Shift Column -->
+          <ng-container matColumnDef="shift">
+            <th *matHeaderCellDef style="min-width: 100px" mat-sort-header>Shift</th>
+            <td align="right" *matCellDef="let ctkapa">{{ ctkapa.shift }}</td>
+          </ng-container>
+
+          <!-- Kapa Per Shift Column -->
+          <ng-container matColumnDef="kapa_PERSHIFT">
+            <th *matHeaderCellDef style="min-width: 130px" mat-sort-header>Kapa Per Shift</th>
+            <td align="right" *matCellDef="let ctkapa">{{ ctkapa.kapa_PERSHIFT }}</td>
+          </ng-container>
+
+          <!-- Last Update Data Column -->
+          <ng-container matColumnDef="last_UPDATE_DATA">
+            <th *matHeaderCellDef style="min-width: 140px" mat-sort-header>Last Update Data</th>
+            <td align="right" *matCellDef="let ctkapa">{{ ctkapa.last_UPDATE_DATA }}</td>
+          </ng-container>
+
+          <!-- Machine Column -->
+          <ng-container matColumnDef="machine">
+            <th *matHeaderCellDef style="min-width: 130px" mat-sort-header>Machine</th>
+            <td *matCellDef="let ctkapa">{{ ctkapa.machine }}</td>
+          </ng-container>
+
+          <!-- Status Column -->
+          <ng-container matColumnDef="status">
+            <th *matHeaderCellDef style="min-width: 150px" mat-sort-header>Status</th>
+            <td align="center" *matCellDef="let ctkapa" [ngClass]="{ 'bg-success text-white': ctkapa.status === 1, 'bg-danger text-white': ctkapa.status !== 1 }">
+              {{ ctkapa.status === 1 ? 'Active' : 'Deactive' }}
+            </td>
+          </ng-container>
+
+          <!-- Action Column -->
+          <ng-container matColumnDef="action">
+            <th *matHeaderCellDef style="min-width: 200px">Action</th>
+            <td *matCellDef="let ctkapa" align="center">
+              <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(ctkapa.id_CT_KAPA)">Update</button>
+              <button type="button" class="btn btn-md ml-3" [ngClass]="{ 'btn-danger': ctkapa.status === 1, 'btn-success': ctkapa.status !== 1 }" (click)="ctkapa.status === 1 ? deleteData(ctkapa) : activateData(ctkapa)">
+                {{ ctkapa.status === 1 ? 'Delete' : 'Active' }}
+              </button>
+            </td>
+          </ng-container>
+
+          <!-- Header and Row Declaration -->
+          <tr align="center" style="height: 20px" mat-header-row *matHeaderRowDef="displayedColumns" align="center"></tr>
+          <tr align="center" mat-row *matRowDef="let row; columns: displayedColumns" align="center"></tr>
         </table>
       </div>
       <!-- Pagination -->
-      <nav>
-        <ul class="pagination">
-          <jw-pagination [items]="ctkapas" [pageSize]="pageSize" [maxPages]="totalPages" (changePage)="onChangePage($event)"> </jw-pagination>
-        </ul>
-      </nav>
-    </div>
-  </div>
-</div>
+      <mat-paginator [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
 
-<!-- Modal edit -->
-<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="addModalLabel">Edit CT Kapa</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+      <!-- Modal edit -->
+      <div class="modal fade" id="editModal" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="addModalLabel">Edit CT Kapa</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <!-- Form with Reactive Forms -->
+              <form [formGroup]="editCtKapaForm">
+                <div class="form-group">
+                  <h6 for="itemCuring">Item Curing</h6>
+                  <div class="col-md-13">
+                    <ng-select2 id="itemCuring" name="itemCuring" formControlName="itemCuring" [(ngModel)]="editCtKapaObject.item_CURING" [data]="uomOptionData[0]" [options]="options"> </ng-select2>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <h6 for="typeCuring">Type Curing</h6>
+                  <div class="col-md-13">
+                    <ng-select2 id="typeCuring" name="typeCuring" formControlName="typeCuring" [(ngModel)]="editCtKapaObject.type_CURING" [data]="uomOptionData[1]" [options]="options"> </ng-select2>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <h6 for="deskripsi">Description</h6>
+                  <input [(ngModel)]="editCtKapaObject.description" type="text" class="form-control" id="deskripsi" formControlName="deskripsi" [ngClass]="{ 'is-invalid': editCtKapaForm.get('deskripsi').invalid && editCtKapaForm.get('deskripsi').touched }" />
+                  <!-- Error message if plantName is empty -->
+                  <div *ngIf="editCtKapaForm.get('deskripsi').invalid && editCtKapaForm.get('deskripsi').touched" class="invalid-feedback">description name is required.</div>
+                </div>
+                <div class="form-group">
+                  <h6 for="cycleTime">Cycle Time</h6>
+                  <input [(ngModel)]="editCtKapaObject.cycle_TIME" type="text" class="form-control" id="cycleTime" formControlName="cycleTime" [ngClass]="{ 'is-invalid': editCtKapaForm.get('cycleTime').invalid && editCtKapaForm.get('cycleTime').touched }" />
+                  <!-- Error message if plantName is empty -->
+                  <div *ngIf="editCtKapaForm.get('cycleTime').invalid && editCtKapaForm.get('cycleTime').touched" class="invalid-feedback">cycleTime is required.</div>
+                </div>
+                <div class="form-group">
+                  <h6 for="shift">Shift</h6>
+                  <input [(ngModel)]="editCtKapaObject.shift" type="text" class="form-control" id="shift" formControlName="shift" [ngClass]="{ 'is-invalid': editCtKapaForm.get('shift').invalid && editCtKapaForm.get('shift').touched }" />
+                  <!-- Error message if plantName is empty -->
+                  <div *ngIf="editCtKapaForm.get('shift').invalid && editCtKapaForm.get('shift').touched" class="invalid-feedback">Shift is required.</div>
+                </div>
+                <div class="form-group">
+                  <h6 for="kapaPershift">Kapa PerShift</h6>
+                  <input [(ngModel)]="editCtKapaObject.kapa_PERSHIFT" type="text" class="form-control" id="kapaPershift" formControlName="kapaPershift" [ngClass]="{ 'is-invalid': editCtKapaForm.get('kapaPershift').invalid && editCtKapaForm.get('kapaPershift').touched }" />
+                  <!-- Error message if plantName is empty -->
+                  <div *ngIf="editCtKapaForm.get('kapaPershift').invalid && editCtKapaForm.get('kapaPershift').touched" class="invalid-feedback">Kapa Per Shift is required.</div>
+                </div>
+                <div class="form-group">
+                  <h6 for="lastUpdateData">Last Update Data</h6>
+                  <input [(ngModel)]="editCtKapaObject.last_UPDATE_DATA" type="text" class="form-control" id="lastUpdateData" formControlName="lastUpdateData" [ngClass]="{ 'is-invalid': editCtKapaForm.get('lastUpdateData').invalid && editCtKapaForm.get('lastUpdateData').touched }" />
+                  <!-- Error message if plantName is empty -->
+                  <div *ngIf="editCtKapaForm.get('lastUpdateData').invalid && editCtKapaForm.get('lastUpdateData').touched" class="invalid-feedback">CT Kapa name is required.</div>
+                </div>
+                <div class="form-group">
+                  <h6 for="machine">Machine</h6>
+                  <input [(ngModel)]="editCtKapaObject.machine" type="text" class="form-control" id="machine" formControlName="machine" [ngClass]="{ 'is-invalid': editCtKapaForm.get('machine').invalid && editCtKapaForm.get('machine').touched }" />
+                  <!-- Error message if plantName is empty -->
+                  <div *ngIf="editCtKapaForm.get('machine').invalid && editCtKapaForm.get('machine').touched" class="invalid-feedback">Machine name is required.</div>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <!-- Disable Update button if form is invalid -->
+              <button type="button" class="btn btn-primary" [disabled]="editCtKapaForm.invalid" (click)="updatePattern()">Update CT Kapa</button>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="modal-body">
-        <!-- Form with Reactive Forms -->
-        <form [formGroup]="editCtKapaForm">
-          <div class="form-group">
-            <label for="itemCuring">Item Curing</label>
-            <input [(ngModel)]="editCtKapaObject.item_CURING" type="text" class="form-control" id="itemCuring" formControlName="itemCuring" [ngClass]="{ 'is-invalid': editCtKapaForm.get('itemCuring').invalid && editCtKapaForm.get('itemCuring').touched }" />
-            <!-- Error message if plantName is empty -->
-            <div *ngIf="editCtKapaForm.get('itemCuring').invalid && editCtKapaForm.get('itemCuring').touched" class="invalid-feedback">Item Curing name is required.</div>
-          </div>
-          <div class="form-group">
-            <label for="typeCuring">Type Curing</label>
-            <input [(ngModel)]="editCtKapaObject.type_CURING" type="text" class="form-control" id="typeCuring" formControlName="typeCuring" [ngClass]="{ 'is-invalid': editCtKapaForm.get('typeCuring').invalid && editCtKapaForm.get('typeCuring').touched }" />
-            <!-- Error message if plantName is empty -->
-            <div *ngIf="editCtKapaForm.get('typeCuring').invalid && editCtKapaForm.get('typeCuring').touched" class="invalid-feedback">Type Curing name is required.</div>
-          </div>
-          <div class="form-group">
-            <label for="deskripsi">Description</label>
-            <input [(ngModel)]="editCtKapaObject.description" type="text" class="form-control" id="deskripsi" formControlName="deskripsi" [ngClass]="{ 'is-invalid': editCtKapaForm.get('deskripsi').invalid && editCtKapaForm.get('deskripsi').touched }" />
-            <!-- Error message if plantName is empty -->
-            <div *ngIf="editCtKapaForm.get('deskripsi').invalid && editCtKapaForm.get('deskripsi').touched" class="invalid-feedback">description name is required.</div>
-          </div>
-          <div class="form-group">
-            <label for="cycleTime">Cycle Time</label>
-            <input [(ngModel)]="editCtKapaObject.cycle_TIME" type="text" class="form-control" id="cycleTime" formControlName="cycleTime" [ngClass]="{ 'is-invalid': editCtKapaForm.get('cycleTime').invalid && editCtKapaForm.get('cycleTime').touched }" />
-            <!-- Error message if plantName is empty -->
-            <div *ngIf="editCtKapaForm.get('cycleTime').invalid && editCtKapaForm.get('cycleTime').touched" class="invalid-feedback">cycleTime is required.</div>
-          </div>
-          <div class="form-group">
-            <label for="shift">Shift</label>
-            <input [(ngModel)]="editCtKapaObject.shift" type="text" class="form-control" id="shift" formControlName="shift" [ngClass]="{ 'is-invalid': editCtKapaForm.get('shift').invalid && editCtKapaForm.get('shift').touched }" />
-            <!-- Error message if plantName is empty -->
-            <div *ngIf="editCtKapaForm.get('shift').invalid && editCtKapaForm.get('shift').touched" class="invalid-feedback">Shift is required.</div>
-          </div>
-          <div class="form-group">
-            <label for="kapaPershift">Kapa PerShift</label>
-            <input [(ngModel)]="editCtKapaObject.kapa_PERSHIFT" type="text" class="form-control" id="kapaPershift" formControlName="kapaPershift" [ngClass]="{ 'is-invalid': editCtKapaForm.get('kapaPershift').invalid && editCtKapaForm.get('kapaPershift').touched }" />
-            <!-- Error message if plantName is empty -->
-            <div *ngIf="editCtKapaForm.get('kapaPershift').invalid && editCtKapaForm.get('kapaPershift').touched" class="invalid-feedback">Kapa Per Shift is required.</div>
-          </div>
-          <div class="form-group">
-            <label for="lastUpdateData">Last Update Data</label>
-            <input [(ngModel)]="editCtKapaObject.last_UPDATE_DATA" type="text" class="form-control" id="lastUpdateData" formControlName="lastUpdateData" [ngClass]="{ 'is-invalid': editCtKapaForm.get('lastUpdateData').invalid && editCtKapaForm.get('lastUpdateData').touched }" />
-            <!-- Error message if plantName is empty -->
-            <div *ngIf="editCtKapaForm.get('lastUpdateData').invalid && editCtKapaForm.get('lastUpdateData').touched" class="invalid-feedback">CT Kapa name is required.</div>
-          </div>
-          <div class="form-group">
-            <label for="machine">Machine</label>
-            <input [(ngModel)]="editCtKapaObject.machine" type="text" class="form-control" id="machine" formControlName="machine" [ngClass]="{ 'is-invalid': editCtKapaForm.get('machine').invalid && editCtKapaForm.get('machine').touched }" />
-            <!-- Error message if plantName is empty -->
-            <div *ngIf="editCtKapaForm.get('machine').invalid && editCtKapaForm.get('machine').touched" class="invalid-feedback">Machine name is required.</div>
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <!-- Disable Update button if form is invalid -->
-        <button type="button" class="btn btn-primary" [disabled]="editCtKapaForm.invalid" (click)="updatePattern()">Update CT Kapa</button>
-      </div>
-    </div>
-  </div>
-</div>
 
-<!-- Modal for Upload Excel -->
-<div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="uploadModalLabel">Upload Excel File</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form id="uploadForm">
-          <!-- Manual File Input -->
-          <div class="form-group mt-3">
-            <input type="file" class="form-control-file" id="manualFileInput" accept=".xls,.xlsx" (change)="onFileChange($event)" />
+      <!-- Modal for Upload Excel -->
+      <div class="modal fade" id="uploadModal" role="dialog" aria-labelledby="uploadModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="uploadModalLabel">Upload Excel File</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form id="uploadForm">
+                <!-- Manual File Input -->
+                <div class="form-group mt-3">
+                  <input type="file" class="form-control-file" id="manualFileInput" accept=".xls,.xlsx" (change)="onFileChange($event)" />
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-md btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-md btn-primary" id="uploadButton" (click)="uploadFileExcel()">Upload</button>
+            </div>
           </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-md btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-md btn-primary" id="uploadButton" (click)="uploadFileExcel()">Upload</button>
+        </div>
       </div>
     </div>
   </div>

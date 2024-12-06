@@ -22,95 +22,106 @@
 
       <!-- Table -->
       <div class="table-responsive">
-        <table class="table table-bordered table-striped table-sm">
-          <thead align="center">
-            <tr>
-              <th>No</th>
-              <th>Plant ID</th>
-              <th>Plant Name</th>
-              <th>Status</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr align="center" *ngFor="let plant of pageOfItems; let i = index">
-              <td>{{ i + 1 }}</td>
-              <td>{{ plant.plant_ID }}</td>
-              <td>{{ plant.plant_NAME }}</td>
-              <td [ngClass]="{ 'bg-success': plant.status === 1, 'bg-danger': plant.status !== 1 }">
-                {{ plant.status === 1 ? 'Active' : 'Deactive' }}
-              </td>
-              <td>
-                <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(plant.plant_ID)">Update</button>
-                <button type="button" class="btn btn-md ml-2" [ngClass]="{ 'btn-danger': plant.status === 1, 'btn-success': plant.status !== 1 }" (click)="plant.status === 1 ? deleteData(plant) : activateData(plant)">
-                  {{ plant.status === 1 ? 'Delete' : 'Active' }}
-                </button>
-              </td>
-            </tr>
-          </tbody>
+        <table mat-table [dataSource]="dataSource" matSort class="table table-bordered table-striped table-sm">
+          <!-- No Column -->
+          <ng-container matColumnDef="no">
+            <th *matHeaderCellDef style="min-width: 50px">No</th>
+            <td *matCellDef="let element; let i = index">{{ i + 1 }}</td>
+          </ng-container>
+
+          <!-- Plant ID Column -->
+          <ng-container matColumnDef="plant_ID">
+            <th *matHeaderCellDef style="min-width: 130px" mat-sort-header>Plant ID</th>
+            <td align="center" *matCellDef="let element">{{ element.plant_ID }}</td>
+          </ng-container>
+
+          <!-- Plant Name Column -->
+          <ng-container matColumnDef="plant_NAME">
+            <th *matHeaderCellDef style="min-width: 100px" mat-sort-header="">Plant Name</th>
+            <td align="left" *matCellDef="let element">{{ element.plant_NAME }}</td>
+          </ng-container>
+
+          <!-- Status Column -->
+          <ng-container matColumnDef="status">
+            <th *matHeaderCellDef style="min-width: 100px" mat-sort-header="">Status</th>
+            <td *matCellDef="let element" [ngClass]="{ 'bg-success': element.status === 1, 'bg-danger': element.status !== 1 }">
+              {{ element.status === 1 ? 'Active' : 'Deactive' }}
+            </td>
+          </ng-container>
+
+          <!-- Action Column -->
+          <ng-container matColumnDef="action">
+            <th *matHeaderCellDef style="min-width: 150px">Action</th>
+            <td *matCellDef="let element" align="center">
+              <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(element.plant_ID)">Update</button>
+              <button type="button" class="btn btn-md ml-3" [ngClass]="{ 'btn-danger': element.status === 1, 'btn-success': element.status !== 1 }" (click)="element.status === 1 ? deleteData(element) : activateData(element)">
+                {{ element.status === 1 ? 'Delete' : 'Active' }}
+              </button>
+            </td>
+          </ng-container>
+
+          <!-- Add header and row declarations -->
+          <tr align="center" style="height: 20px" mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr align="center" mat-row *matRowDef="let row; columns: displayedColumns"></tr>
         </table>
-        <!-- Pagination -->
-        <nav>
-          <ul class="pagination">
-            <jw-pagination [items]="plants" [pageSize]="pageSize" [maxPages]="totalPages" (changePage)="onChangePage($event)"> </jw-pagination>
-          </ul>
-        </nav>
       </div>
-    </div>
-  </div>
-</div>
+      <!-- Pagination -->
+      <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
 
-<!-- Modal edit -->
-<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="addModalLabel">Edit Plant</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <!-- Form with Reactive Forms -->
-        <form [formGroup]="editPlantForm">
-          <div class="form-group">
-            <label for="plantName">Plant Name</label>
-            <input [(ngModel)]="edtPlantObject.plant_NAME" type="text" class="form-control" id="plantName" formControlName="plantName" [ngClass]="{ 'is-invalid': editPlantForm.get('plantName').invalid && editPlantForm.get('plantName').touched }" />
-            <!-- Error message if plantName is empty -->
-            <div *ngIf="editPlantForm.get('plantName').invalid && editPlantForm.get('plantName').touched" class="invalid-feedback">Plant name is required.</div>
+      <!-- Modal edit -->
+      <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="addModalLabel">Edit Plant</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <!-- Form with Reactive Forms -->
+              <form [formGroup]="editPlantForm">
+                <div class="form-group">
+                  <h6 for="plant_name">Plant Name</h6>
+                  <input [(ngModel)]="edtPlantObject.plant_NAME" type="text" class="form-control" id="plant_name" formControlName="plant_name" [ngClass]="{ 'is-invalid': editPlantForm.get('plant_name').invalid && editPlantForm.get('plant_name').touched }" />
+                  <!-- Error message if plant_name is empty -->
+                  <div *ngIf="editPlantForm.get('plant_name').invalid && editPlantForm.get('plant_name').touched" class="invalid-feedback">Plant name is required.</div>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <!-- Disable Update button if form is invalid -->
+              <button type="button" class="btn btn-primary" [disabled]="editPlantForm.invalid" (click)="updatePlant()">Update Plant</button>
+            </div>
           </div>
-        </form>
+        </div>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <!-- Disable Update button if form is invalid -->
-        <button type="button" class="btn btn-primary" [disabled]="editPlantForm.invalid" (click)="updatePlant()">Update Plant</button>
-      </div>
-    </div>
-  </div>
-</div>
 
-<!-- Modal for Upload Excel -->
-<div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="uploadModalLabel">Upload Excel File</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form id="uploadForm">
-          <!-- Manual File Input -->
-          <div class="form-group mt-3">
-            <input type="file" class="form-control-file" id="manualFileInput" accept=".xls,.xlsx" (change)="onFileChange($event)" />
+      <!-- Modal for Upload Excel -->
+      <div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="uploadModalLabel">Upload Excel File</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form id="uploadForm">
+                <!-- Manual File Input -->
+                <div class="form-group mt-3">
+                  <input type="file" class="form-control-file" id="manualFileInput" accept=".xls,.xlsx" (change)="onFileChange($event)" />
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-md btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-md btn-primary" id="uploadButton" (click)="uploadFileExcel()">Upload</button>
+            </div>
           </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-md btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-md btn-primary" id="uploadButton" (click)="uploadFileExcel()">Upload</button>
+        </div>
       </div>
     </div>
   </div>

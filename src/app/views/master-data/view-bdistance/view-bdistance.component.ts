@@ -4,18 +4,24 @@ import { BDistance } from 'src/app/models/BDistance';
 import { ApiResponse } from 'src/app/response/Response';
 import { BDistanceService } from 'src/app/services/master-data/Bdistance/Bdistance.service';
 import Swal from 'sweetalert2';
+import { Select2OptionData } from 'ng-select2';
+import { Options } from 'select2';
+import { Building } from 'src/app/models/Building';
+import { BuildingService } from 'src/app/services/master-data/building/building.service';
+
 declare var $: any;
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
-
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSort } from '@angular/material/sort';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-view-bdistance',
   templateUrl: './view-bdistance.component.html',
-  styleUrls: ['./view-bdistance.component.scss']
+  styleUrls: ['./view-bdistance.component.scss'],
 })
 export class ViewBDistanceComponent implements OnInit {
-
   //Variable Declaration
   bdistances: BDistance[] = [];
   searchText: string = '';
@@ -24,19 +30,34 @@ export class ViewBDistanceComponent implements OnInit {
   isEditMode: boolean = false;
   file: File | null = null;
   editBDistanceForm: FormGroup;
+  buildings: Building[];
+  public uomOptionData: Array<Select2OptionData>;
+  public options: Options = {
+    width: '100%',
+    minimumResultsForSearch: 0,
+  };
 
   // Pagination
   pageOfItems: Array<any>;
   pageSize: number = 5;
   totalPages: number = 5;
+  displayedColumns: string[] = ['no', 'id_B_DISTANCE', 'building_ID_1', 'building_ID_2', 'distance', 'status', 'action'];
+  dataSource: MatTableDataSource<BDistance>;
   isDataEmpty: boolean = true; // Flag untuk mengecek apakah data kosong
+  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  constructor(private bdistanceService: BDistanceService, private fb: FormBuilder) { 
+  constructor(private bdistanceService: BDistanceService, private fb: FormBuilder, private buildingService: BuildingService) {
     this.editBDistanceForm = this.fb.group({
       building1: ['', Validators.required],
       building2: ['', Validators.required],
       distance: ['', Validators.required],
     });
+    this.loadBuilding();
+  }
+  getBuildingName(buildingId: number): string {
+    const building = this.buildings.find(b => b.building_ID === buildingId);
+    return building ? building.building_NAME : 'Unknown';
   }
 
   ngOnInit(): void {
@@ -46,9 +67,24 @@ export class ViewBDistanceComponent implements OnInit {
   getAllBuildingDistance(): void {
     this.bdistanceService.getAllBuildingDistance().subscribe(
       (response: ApiResponse<BDistance[]>) => {
-        this.bdistances = response.data;
+        this.bdistances = response.data.map(bdistance => {
+          const building1 = this.buildings.find(
+            bd => bd.building_ID === bdistance.building_ID_1
+          );
+          const building2 = this.buildings.find(
+            bd => bd.building_ID === bdistance.building_ID_2
+          );
+          return {
+            ...bdistance,
+            building_1: building1 ? building1.building_NAME : 'Unknown',
+            building_2: building2 ? building2.building_NAME : 'Unknown',
+          }
+        });
         this.isDataEmpty = this.bdistances.length === 0; // Update status data kosong
-        this.onChangePage(this.bdistances.slice(0, this.pageSize));
+        this.dataSource = new MatTableDataSource(this.bdistances);
+        this.dataSource.sort = this.sort;
+        this.dataSource.paginator = this.paginator;
+        // this.onChangePage(this.bdistances.slice(0, this.pageSize));
       },
       (error) => {
         this.errorMessage = 'Failed to load building distances: ' + error.message;
@@ -62,28 +98,34 @@ export class ViewBDistanceComponent implements OnInit {
   }
 
   onSearchChange(): void {
-    
-    const filteredBDistances = this.bdistances.filter(
-      (bdistance) =>
-        bdistance.id_B_DISTANCE.toString()
-          .toLowerCase()
-          .includes(this.searchText.toLowerCase()) ||
-          bdistance.building_ID_1.toString().includes(this.searchText)||
-          bdistance.building_ID_2.toString().includes(this.searchText)||
-          bdistance.distance.toString().includes(this.searchText)
-    );
-
-    // Tampilkan hasil filter pada halaman pertama
-    this.onChangePage(filteredBDistances.slice(0, this.pageSize));
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
   }
 
   resetSearch(): void {
     this.searchText = '';
-    this.onChangePage(this.bdistances.slice(0, this.pageSize));
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
+  }
+  private loadBuilding(): void {
+    this.buildingService.getAllBuilding().subscribe(
+      (response: ApiResponse<Building[]>) => {
+        this.buildings = response.data;
+
+        if (!this.uomOptionData) {
+          this.uomOptionData = [];
+        }
+
+        this.uomOptionData = this.buildings.map((element) => ({
+          id: element.building_ID.toString(), // Ensure the ID is a string
+          text: element.building_NAME, // Set the text to the name (or other property)
+        }));
+      },
+      (error) => {
+        this.errorMessage = 'Failed to load Building: ' + error.message;
+      }
+    );
   }
 
   updateBuildingDistance(): void {
-    
     this.bdistanceService.updateBuildingDistance(this.edtBDistanceObject).subscribe(
       (response) => {
         // SweetAlert setelah update berhasil
@@ -148,7 +190,6 @@ export class ViewBDistanceComponent implements OnInit {
     });
   }
 
-
   openModalUpload(): void {
     $('#uploadModal').modal('show');
   }
@@ -159,7 +200,6 @@ export class ViewBDistanceComponent implements OnInit {
     link.download = 'Layout_Building_Distance.xlsx';
     link.click();
   }
-
 
   onFileChange(event: Event) {
     const input = event.target as HTMLInputElement;
@@ -183,7 +223,6 @@ export class ViewBDistanceComponent implements OnInit {
       }
     }
   }
-
 
   uploadFileExcel() {
     if (this.file) {
@@ -257,7 +296,7 @@ export class ViewBDistanceComponent implements OnInit {
       },
       error: (err) => {
         console.error('Download error:', err);
-      }
+      },
     });
   }
 }
