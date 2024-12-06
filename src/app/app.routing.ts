@@ -51,6 +51,7 @@ import { AddMoFrontRearComponent } from './views/transaksi/add-mo-front-rear/add
 import { AddArDefactRejectComponent } from './views/transaksi/add-ar-defact-reject/add-ar-defact-reject.component';
 
 
+
 export const routes: Routes = [
   {
     path: '',
