@@ -15,16 +15,43 @@ import { catchError, map } from 'rxjs/operators';
 export class MarketingOrderService {
   constructor(private http: HttpClient) {}
 
-  getDetailMarketingOrderPpc(idMo: String): Observable<ApiResponse<any>> {
-    return this.http.get<ApiResponse<any>>(environment.apiUrlWebAdmin + '/getMoById/' + idMo);
+  getAvaiableMonth(data: any): Observable<ApiResponse<any>> {
+    return this.http.post<ApiResponse<any>>(environment.apiUrlWebAdmin + '/getMonthAvailable', data).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((err) => {
+        return throwError(err);
+      })
+    );
   }
 
+  getLastIdMo(): Observable<ApiResponse<string>> {
+    return this.http.get<ApiResponse<string>>(environment.apiUrlWebAdmin + '/getLastIdMo');
+  }
+
+  getCapacity(): Observable<ApiResponse<any>> {
+    return this.http.get<ApiResponse<any>>(environment.apiUrlWebAdmin + '/getCapacity');
+  }
+
+  //Get All Mo PPC
   getAllMarketingOrder(): Observable<ApiResponse<MarketingOrder[]>> {
-    return this.http.get<ApiResponse<[]>>(environment.apiUrlWebAdmin + '/getAllMarketingOrders');
+    return this.http.get<ApiResponse<[]>>(environment.apiUrlWebAdmin + '/getAllMarketingOrderLatest');
   }
 
-  saveMarketingOrder(mo: MarketingOrder): Observable<ApiResponse<MarketingOrder>> {
-    return this.http.post<ApiResponse<MarketingOrder>>(environment.apiUrlWebAdmin + '/saveMarketingOrder', mo).pipe(
+  //Get All Mo Marketing By role
+  getAllMarketingOrderMarketing(role: string): Observable<ApiResponse<MarketingOrder[]>> {
+    let params = new HttpParams().set('role', role);
+    return this.http.get<ApiResponse<[]>>(environment.apiUrlWebAdmin + '/getAllMarketingOrderMarketing', { params });
+  }
+
+  //get all data mo (MO, Header, Detail)
+  getAllMoById(idMo: String): Observable<ApiResponse<any>> {
+    return this.http.get<ApiResponse<any>>(environment.apiUrlWebAdmin + '/getAllMoById/' + idMo);
+  }
+
+  saveMarketingOrderPPC(mo: any): Observable<ApiResponse<any>> {
+    return this.http.post<ApiResponse<any>>(environment.apiUrlWebAdmin + '/saveMarketingOrderPPC', mo).pipe(
       map((response) => {
         return response;
       }),
@@ -34,8 +61,8 @@ export class MarketingOrderService {
     );
   }
 
-  saveHeaderMarketingOrder(hmo: HeaderMarketingOrder[]): Observable<ApiResponse<HeaderMarketingOrder>> {
-    return this.http.post<ApiResponse<HeaderMarketingOrder>>(environment.apiUrlWebAdmin + '/saveHeaderMO', hmo).pipe(
+  saveMarketingOrderMarketing(dtmo: DetailMarketingOrder[]): Observable<ApiResponse<any>> {
+    return this.http.post<ApiResponse<any>>(environment.apiUrlWebAdmin + '/saveMarketingOrderMarketing', dtmo).pipe(
       map((response) => {
         return response;
       }),
@@ -45,33 +72,8 @@ export class MarketingOrderService {
     );
   }
 
-  saveWorkDay(wd: WorkDay[]) {
-    console.log('ini wd', wd);
-  }
-
-  getRowDetailMarketingOrder(totalHKTT1: number, totalHKTT2: number, totalHKTT3: number, totalHKTL1: number, totalHKTL2: number, totalHKTL3: number, productMerk: string): Observable<ApiResponse<DetailMarketingOrder[]>> {
-    // Prepare query parameters
-    let params = new HttpParams().set('totalHKTT1', totalHKTT1.toString()).set('totalHKTT2', totalHKTT2.toString()).set('totalHKTT3', totalHKTT3.toString()).set('totalHKTL1', totalHKTL1.toString()).set('totalHKTL2', totalHKTL2.toString()).set('totalHKTL3', totalHKTL3.toString()).set('productMerk', productMerk);
-    return this.http.get<ApiResponse<DetailMarketingOrder[]>>(environment.apiUrlWebAdmin + '/getDetailMarketingOrders', { params: params });
-  }
-
-  saveDetailRowMarketingOrder(dmo: DetailMarketingOrder[]): Observable<ApiResponse<DetailMarketingOrder>> {
-    return this.http.post<ApiResponse<DetailMarketingOrder>>(environment.apiUrlWebAdmin + '/saveDetailMO', dmo).pipe(
-      map((response) => {
-        return response;
-      }),
-      catchError((err) => {
-        return throwError(err);
-      })
-    );
-  }
-
-  getDetailMarketingOrderMarketing(idMo: String): Observable<ApiResponse<any>> {
-    return this.http.get<ApiResponse<any>>(environment.apiUrlWebAdmin + '/getDetailMoMarketing/' + idMo);
-  }
-
-  addMarketingOrderMarketing(dtmo: DetailMarketingOrder[]) {
-    return this.http.post<ApiResponse<any>>(environment.apiUrlWebAdmin + '/updateDetailMOMarketing', dtmo).pipe(
+  updateMarketingOrderMarketing(mo: any): Observable<ApiResponse<any>> {
+    return this.http.post<ApiResponse<any>>(environment.apiUrlWebAdmin + '/revisiMarketingOrderMarketing', mo).pipe(
       map((response) => {
         return response;
       }),
@@ -102,4 +104,84 @@ export class MarketingOrderService {
       })
     );
   }
+
+  getWorkDay(data: any): Observable<ApiResponse<any>> {
+    return this.http.post<ApiResponse<any>>(environment.apiUrlWebAdmin + '/getWorkday', data).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((err) => {
+        return throwError(err);
+      })
+    );
+  }
+
+  downloadExcelMo(idMo: string) {
+    return this.http.get(environment.apiUrlWebAdmin + '/exportMOExcel/' + idMo, { responseType: 'blob' });
+  }
+
+  getAllDetailRevision(month0: string, month1: string, month2: string, type: string): Observable<ApiResponse<MarketingOrder[]>> {
+    let params = new HttpParams().set('month0', month0).set('month1', month1).set('month2', month2).set('type', type);
+    return this.http.get<ApiResponse<[]>>(environment.apiUrlWebAdmin + '/getAllDetailRevisionMo', { params });
+  }
+
+  //Not used Alll
+  saveMarketingOrder(mo: MarketingOrder): Observable<ApiResponse<MarketingOrder>> {
+    return this.http.post<ApiResponse<MarketingOrder>>(environment.apiUrlWebAdmin + '/saveMarketingOrder', mo).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((err) => {
+        return throwError(err);
+      })
+    );
+  }
+
+  saveHeaderMarketingOrder(hmo: HeaderMarketingOrder[]): Observable<ApiResponse<HeaderMarketingOrder>> {
+    return this.http.post<ApiResponse<HeaderMarketingOrder>>(environment.apiUrlWebAdmin + '/saveHeaderMO', hmo).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((err) => {
+        return throwError(err);
+      })
+    );
+  }
+
+  getDetailMarketingOrder(data: any): Observable<ApiResponse<DetailMarketingOrder[]>> {
+    return this.http.post<ApiResponse<DetailMarketingOrder[]>>(environment.apiUrlWebAdmin + '/getDetailMarketingOrders', data).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((err) => {
+        return throwError(err);
+      })
+    );
+  }
+
+  saveDetailRowMarketingOrder(dmo: DetailMarketingOrder[]): Observable<ApiResponse<DetailMarketingOrder>> {
+    return this.http.post<ApiResponse<DetailMarketingOrder>>(environment.apiUrlWebAdmin + '/saveDetailMO', dmo).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((err) => {
+        return throwError(err);
+      })
+    );
+  }
+
+  getDetailMoMarketing(idMo: String): Observable<ApiResponse<any>> {
+    return this.http.get<ApiResponse<any>>(environment.apiUrlWebAdmin + '/getDetailMoMarketing/' + idMo);
+  }
+
+  // saveMarketingOrderMarketing(dtmo: DetailMarketingOrder[]) {
+  //   return this.http.post<ApiResponse<any>>(environment.apiUrlWebAdmin + '/saveMarketingOrderMarketing', dtmo).pipe(
+  //     map((response) => {
+  //       return response;
+  //     }),
+  //     catchError((err) => {
+  //       return throwError(err);
+  //     })
+  //   );
+  // }
 }

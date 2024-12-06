@@ -11,8 +11,8 @@ import { RegisterComponent } from './views/register/register.component';
 import { AuthGuard } from './services/auth.guard';
 import { DashboardComponent } from './views/dashboard/dashboard.component';
 import { ViewPlantComponent } from './views/master-data/view-plant/view-plant.component';
-import { ViewMoPpcComponent } from './views/transaksi/view-mo-ppc/view-mo-ppc.component';
-import { AddMoPpcComponent } from './views/transaksi/add-mo-ppc/add-mo-ppc.component';
+import { ViewMoPpcComponent } from './views/transaksi/view/view-mo-ppc/view-mo-ppc.component';
+import { AddMoPpcComponent } from './views/transaksi/add/add-mo-ppc/add-mo-ppc.component';
 import { ViewSettingComponent } from './views/master-data/view-setting/view-setting.component';
 import { ViewQuadrantComponent } from './views/master-data/view-quadrant/view-quadrant.component';
 import { ViewProductTypeComponent } from './views/master-data/view-product-type/view-product-type.component';
@@ -39,12 +39,14 @@ import { ViewItemAssyComponent } from './views/master-data/view-item-assy/view-i
 import { ViewMachineExtrudingComponent } from './views/master-data/view-machine-extruding/view-machine-extruding.component';
 import { ViewCtKapaComponent } from './views/master-data/view-ct-kapa/view-ct-kapa.component';
 import { ViewDDeliveryScheduleComponent } from './views/master-data/view-d-deliveryschedule/view-d-deliveryschedule.component';
-import { ViewMoMarketingComponent } from './views/transaksi/view-mo-marketing/view-mo-marketing.component';
-import { AddMoMarketingComponent } from './views/transaksi/add-mo-marketing/add-mo-marketing.component';
-import { DetailViewMoPpcComponent } from './views/transaksi/detail-view-mo-ppc/detail-view-mo-ppc.component';
-import { EditMoPpcComponent } from './views/transaksi/edit-mo-ppc/edit-mo-ppc.component';
+import { ViewMoMarketingComponent } from './views/transaksi/view/view-mo-marketing/view-mo-marketing.component';
+import { AddMoMarketingComponent } from './views/transaksi/add/add-mo-marketing/add-mo-marketing.component';
+import { EditMoPpcComponent } from './views/transaksi/edit/edit-mo-ppc/edit-mo-ppc.component';
 import { ViewCuringSizeComponent } from './views/master-data/view-curing-size/view-curing-size.component';
+import { EditMoMarketingComponent } from './views/transaksi/edit/edit-mo-marketing/edit-mo-marketing.component';
+import { ViewDetailRevisiPpcComponent } from './views/transaksi/detail-view-revisi/view-detail-revisi-ppc/view-detail-revisi-ppc.component';
 import { ViewWorkDayComponent } from './views/master-data/view-work-day/view-work-day.component';
+import { ViewDetailRevisiMarketingComponent } from './views/transaksi/detail-view-revisi/view-detail-revisi-marketing/view-detail-revisi-marketing.component';
 
 export const routes: Routes = [
   {
@@ -91,13 +93,6 @@ export const routes: Routes = [
       title: 'Home',
     },
     children: [
-      {
-        path: 'master-data/view-plant',
-        component: ViewPlantComponent,
-        data: {
-          title: 'Master Data / View Plant',
-        },
-      },
       {
         path: 'master-data/view-plant',
         component: ViewPlantComponent,
@@ -344,17 +339,31 @@ export const routes: Routes = [
         },
       },
       {
-        path: 'transaksi/detail-mo-ppc/:idMo',
-        component: DetailViewMoPpcComponent,
-        data: {
-          title: 'Transaksi / Detail Marketing Order',
-        },
-      },
-      {
         path: 'transaksi/edit-mo-ppc/:idMo',
         component: EditMoPpcComponent,
         data: {
           title: 'Transaksi / Edit Marketing Order',
+        },
+      },
+      {
+        path: 'transaksi/edit-mo-marketing/:idMo',
+        component: EditMoMarketingComponent,
+        data: {
+          title: 'Transaksi / Edit Marketing Order',
+        },
+      },
+      {
+        path: 'transaksi/view-revisi-mo-ppc/:month0/:month1/:month2/:type',
+        component: ViewDetailRevisiPpcComponent,
+        data: {
+          title: 'Transaksi / Revisi Marketing Order',
+        },
+      },
+      {
+        path: 'transaksi/view-revisi-mo-marketing/:month0/:month1/:month2/:type',
+        component: ViewDetailRevisiMarketingComponent,
+        data: {
+          title: 'Transaksi / Revisi Marketing Order',
         },
       },
       {

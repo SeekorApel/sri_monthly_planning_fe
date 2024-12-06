@@ -43,11 +43,11 @@ export class ViewQuadrantComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   public uomOptions: Array<Select2OptionData>;
-  public options: Options = { width: '100%'};
+  public options: Options = { width: '100%' };
   uom: any;
-  building: Building[] =[];
+  building: Building[] = [];
 
-  constructor(private quadrantService: QuadrantService, private fb: FormBuilder, private buildingService: BuildingService) { 
+  constructor(private quadrantService: QuadrantService, private fb: FormBuilder, private buildingService: BuildingService) {
     this.editQuadrantForm = this.fb.group({
       quadrantName: ['', Validators.required],
       buildingID: ['', Validators.required],
@@ -63,7 +63,7 @@ export class ViewQuadrantComponent implements OnInit {
       (error) => {
         this.errorMessage = 'Failed to load building: ' + error.message;
       }
-    );
+    );
   }
 
   getBuildingName(building_ID: number): string {
@@ -108,7 +108,7 @@ export class ViewQuadrantComponent implements OnInit {
   onSearchChange(): void {
     this.dataSource.filter = this.searchText.trim().toLowerCase();
     // Lakukan filter berdasarkan nama plant yang mengandung text pencarian (case-insensitive)
-    
+
   }
 
   resetSearch(): void {

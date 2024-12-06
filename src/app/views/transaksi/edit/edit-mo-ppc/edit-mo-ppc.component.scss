@@ -1,0 +1,29 @@
+::ng-deep .mat-sort-header-container {
+  justify-content: center;
+}
+
+.mat-cell {
+  padding-top: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.mat-cell:last-of-type{
+  padding-right: 5px;
+}
+
+.mat-cell:first-of-type{
+  padding-left: 5px;
+}
+
+.locked-background {
+  background-color: red;
+}
+
+.min-height-form {
+  min-height: 80px;
+}
+
+.table-responsive {
+  max-height: 1200px;
+}

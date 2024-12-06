@@ -1,6 +1,6 @@
 export class MarketingOrder {
   moId: String;
-  type: string;
+  type: String;
   dateValid: Date;
   revisionPpc: Number;
   revisionMarketing: Number;
