@@ -43,7 +43,12 @@ import { ViewMoMarketingComponent } from './views/transaksi/view/view-mo-marketi
 import { AddMoMarketingComponent } from './views/transaksi/add/add-mo-marketing/add-mo-marketing.component';
 import { EditMoPpcComponent } from './views/transaksi/edit/edit-mo-ppc/edit-mo-ppc.component';
 import { ViewCuringSizeComponent } from './views/master-data/view-curing-size/view-curing-size.component';
+import { EditMoMarketingComponent } from './views/transaksi/edit/edit-mo-marketing/edit-mo-marketing.component';
+import { ViewDetailRevisiPpcComponent } from './views/transaksi/detail-view-revisi/view-detail-revisi-ppc/view-detail-revisi-ppc.component';
 import { ViewWorkDayComponent } from './views/master-data/view-work-day/view-work-day.component';
+import { ViewDetailRevisiMarketingComponent } from './views/transaksi/detail-view-revisi/view-detail-revisi-marketing/view-detail-revisi-marketing.component';
+import { AddMoFrontRearComponent } from './views/transaksi/add-mo-front-rear/add-mo-front-rear.component';
+
 
 export const routes: Routes = [
   {
@@ -340,6 +345,34 @@ export const routes: Routes = [
         component: EditMoPpcComponent,
         data: {
           title: 'Transaksi / Edit Marketing Order',
+        },
+      },
+      {
+        path: 'transaksi/edit-mo-marketing/:idMo',
+        component: EditMoMarketingComponent,
+        data: {
+          title: 'Transaksi / Edit Marketing Order',
+        },
+      },
+      {
+        path: 'transaksi/view-revisi-mo-ppc/:month0/:month1/:month2/:type',
+        component: ViewDetailRevisiPpcComponent,
+        data: {
+          title: 'Transaksi / Revisi Marketing Order',
+        },
+      },
+      {
+        path: 'transaksi/view-revisi-mo-marketing/:month0/:month1/:month2/:type',
+        component: ViewDetailRevisiMarketingComponent,
+        data: {
+          title: 'Transaksi / Revisi Marketing Order',
+        },
+      },
+      {
+        path: 'transaksi/add-mo-front-rear/:month0/:month1/:month2/:type',
+        component: AddMoFrontRearComponent,
+        data: {
+          title: 'Transaksi / Add MO Front Rear',
         },
       },
       {
