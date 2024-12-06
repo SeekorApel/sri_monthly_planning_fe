@@ -49,7 +49,7 @@
           </ng-container>
 
           <ng-container matColumnDef="status">
-            <th  *matHeaderCellDef>Status</th>
+            <th  *matHeaderCellDef mat-sort-header>Status</th>
             <td *matCellDef="let element" [ngClass]="{ 'bg-success': element.status === 1, 'bg-danger': element.status !== 1 }">
               {{ element.status === 1 ? 'Active' : 'Deactive' }}
             </td>
@@ -105,8 +105,8 @@
                 name = "productType"
                 [(ngModel)]="edtProductTypeObject.product_TYPE"
                 [data]="[
-                  { id: 'FED', text: 'FED' },
-                  { id: 'FDR', text: 'FDR' },
+                  { id: 'TT', text: 'TT' },
+                  { id: 'TL', text: 'TL' }, 
                 ]"
                 [options]="options"
                 [placeholder]="'Please Select'">

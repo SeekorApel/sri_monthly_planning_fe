@@ -34,7 +34,7 @@
           </ng-container> -->
 
           <ng-container matColumnDef="id_MACHINE">
-            <th  *matHeaderCellDef mat-sort-header >Work Center Text</th>
+            <th  *matHeaderCellDef mat-sort-header >ID Machine</th>
             <td class="huruf" *matCellDef="let element">{{ element.id_MACHINE }}</td>
           </ng-container>
           
@@ -69,7 +69,7 @@
           </ng-container>
 
           <ng-container matColumnDef="status">
-            <th  *matHeaderCellDef style="min-width: 70px;">Status</th>
+            <th mat-sort-header *matHeaderCellDef style="min-width: 70px;">Status</th>
             <td *matCellDef="let element" [ngClass]="{ 'bg-success': element.status === 1, 'bg-danger': element.status !== 1 }">
               {{ element.status === 1 ? 'Active' : 'Deactive' }}
             </td>

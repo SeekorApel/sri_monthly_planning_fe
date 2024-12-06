@@ -15,6 +15,10 @@ import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { Curing_Machine } from 'src/app/models/Curing_Machine';
 import { CuringMachineService } from 'src/app/services/master-data/curing-machine/curing-machine.service';
+import { MachineTass } from 'src/app/models/machine-tass';
+import { MachineTassService } from 'src/app/services/master-data/machine-tass/machine-tass.service';
+import { MachineExtruding } from 'src/app/models/machine-extruding';
+import { MachineExtrudingService } from 'src/app/services/master-data/machine-extruding/machine-extruding.service';
 
 @Component({
   selector: 'app-view-machine-allowence',
@@ -47,8 +51,10 @@ export class ViewMachineAllowenceComponent implements OnInit {
   public options: Options = { width: '100%'};
   uom: any;
   curingMachine: Curing_Machine[] =[];
+  tassMachine: MachineTass[] =[];
+  extrudingMachine: MachineExtruding[] =[];
 
-  constructor(private machineAllowenceService: MachineAllowenceService, private fb: FormBuilder, private curingMachineService: CuringMachineService) { 
+  constructor(private machineAllowenceService: MachineAllowenceService, private fb: FormBuilder, private curingMachineService: CuringMachineService, private tassMachineService: MachineTassService, private extrudingMachineService: MachineExtrudingService) { 
     this.editMachineAllowenceForm = this.fb.group({
       idMachine: ['', Validators.required],
       personResponsible: ['', Validators.required],
@@ -60,16 +66,42 @@ export class ViewMachineAllowenceComponent implements OnInit {
     });
     curingMachineService.getAllMachineCuring().subscribe(
       (response: ApiResponse<Curing_Machine[]>) => {
-        this.curingMachine = response.data;
-        this.uomOptions = this.curingMachine.map((element) => ({
+        const curingOptions = response.data.map((element) => ({
           id: element.work_CENTER_TEXT, // Ensure the ID is a string
-          text: element.work_CENTER_TEXT // Set the text to the plant name
+          text: element.work_CENTER_TEXT // Set the text to the work center text
         }));
+    
+        tassMachineService.getAllMachineTass().subscribe(
+          (response: ApiResponse<MachineTass[]>) => {
+            const tassOptions = response.data.map((element) => ({
+              id: element.id_MACHINE_TASS, // Ensure the ID is a string
+              text: element.id_MACHINE_TASS // Set the text to the machine ID
+            }));
+    
+            extrudingMachineService.getAllMachineExtruding().subscribe(
+              (response: ApiResponse<MachineExtruding[]>) => {
+                const extrudingOptions = response.data.map((element) => ({
+                  id: element.ID_machine_ext, // Ensure the ID is a string
+                  text: element.type // Set the text to the machine ID
+                }));
+        
+                // Combine both options into uomOptions
+                this.uomOptions = [...curingOptions, ...tassOptions, ...extrudingOptions];
+              },
+              (error) => {
+                this.errorMessage = 'Failed to load tass machine: ' + error.message;
+              }
+            );
+          },
+          (error) => {
+            this.errorMessage = 'Failed to load tass machine: ' + error.message;
+          }
+        );
       },
       (error) => {
         this.errorMessage = 'Failed to load curing machine: ' + error.message;
       }
-    );
+    );    
   }
 
   ngOnInit(): void {
@@ -119,6 +151,7 @@ export class ViewMachineAllowenceComponent implements OnInit {
 
   resetSearch(): void {
     this.searchText = '';
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
     this.onChangePage(this.machineAllowences.slice(0, this.pageSize));
   }
 
