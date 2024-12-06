@@ -150,7 +150,7 @@ export class AddMonthlyPlanningComponent implements OnInit {
       const month = String(dateObj.getMonth() + 1).padStart(2, '0');
       const year = dateObj.getFullYear();
 
-      return `${day}-${month}-${year}`;
+      return ${day}-${month}-${year};
     };
 
     // Mengonversi ketiga tanggal
@@ -161,6 +161,10 @@ export class AddMonthlyPlanningComponent implements OnInit {
 
     // Menggunakan string tanggal yang sudah dikonversi
     this.router.navigate(['/transaksi/add-mo-front-rear/', month0, month1, month2, type]);
+  }
+
+  navigateToAddArDefectReject(idMo: String) {
+    this.router.navigate(['/transaksi/add-mo-ar-defect-reject/', idMo]);
   }
 
   fillBodyTableMp(): void {
@@ -244,7 +248,7 @@ export class AddMonthlyPlanningComponent implements OnInit {
 
     this.fillDataHeaderDate(dailyPlans);
 
-    // Merging data based on `detailIdCuring`
+    // Merging data based on detailIdCuring
     let mergedData: any[] = [];
 
     // Loop over each daily plan
@@ -306,7 +310,7 @@ export class AddMonthlyPlanningComponent implements OnInit {
       const date2 = new Date(mp.dateDailyMp);
 
       // Format the date to dd-MM-yyyy
-      const formattedDate = `${('0' + (date2.getDate())).slice(-2)}-${('0' + (date2.getMonth() + 1)).slice(-2)}-${date2.getFullYear()}`;
+      const formattedDate = ${('0' + (date2.getDate())).slice(-2)}-${('0' + (date2.getMonth() + 1)).slice(-2)}-${date2.getFullYear()};
       console.log('Formatted Date:', formattedDate);
 
       const matchingData = this.description.find(
@@ -349,7 +353,7 @@ export class AddMonthlyPlanningComponent implements OnInit {
     }
     const dateObj = new Date(date);
 
-    const formattedDate = `${('0' + (dateObj.getDate())).slice(-2)}-${('0' + (dateObj.getMonth() + 1)).slice(-2)}-${dateObj.getFullYear()}`;
+    const formattedDate = ${('0' + (dateObj.getDate())).slice(-2)}-${('0' + (dateObj.getMonth() + 1)).slice(-2)}-${dateObj.getFullYear()};
     return formattedDate;
   }
  
