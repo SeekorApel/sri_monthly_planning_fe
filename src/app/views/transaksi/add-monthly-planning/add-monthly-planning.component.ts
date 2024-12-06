@@ -163,6 +163,10 @@ export class AddMonthlyPlanningComponent implements OnInit {
     this.router.navigate(['/transaksi/add-mo-front-rear/', month0, month1, month2, type]);
   }
 
+  navigateToAddArDefectReject(idMo: String) {
+    this.router.navigate(['/transaksi/add-mo-ar-defect-reject/', idMo]);
+  }
+
   fillBodyTableMp(): void {
     this.getDailyMonthPlan();
   }
