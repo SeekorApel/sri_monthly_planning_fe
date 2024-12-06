@@ -1,5 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild} from '@angular/core';
 import { Router } from '@angular/router';
+import { MonthlyPlanCuringService } from 'src/app/services/transaksi/monthly plan curing/monthly-plan-curing.service';
+import { MatTableDataSource } from '@angular/material/table';
+import { ParsingDateService } from 'src/app/utils/parsing-date/parsing-date.service';
+import { MatSort } from '@angular/material/sort';
+import { MatPaginator } from '@angular/material/paginator';
+import { ApiResponse } from 'src/app/response/Response';
+import { MonthlyPlanning } from 'src/app/models/MonthlyPlanning';
+import Swal from 'sweetalert2';
+
 
 @Component({
   selector: 'app-view-monthly-planning',
@@ -8,22 +17,72 @@ import { Router } from '@angular/router';
 })
 export class ViewMonthlyPlanningComponent implements OnInit {
 
-  monthlyPlannings: any[] = [];
+  monthlyPlannings: MonthlyPlanning[] = [];
+  searchText: string = '';
 
-  constructor(private router: Router) { }
+   // Pagination
+   pageOfItems: Array<any>;
+   pageSize: number = 5;
+   totalPages: number = 5;
+   displayedColumns: string[] = ['no', 'mpCuringId', 'docNumber', 'effectiveDate', 'revision', 'workDay', 'overtime', 'monthOf', 'kadept', 'kassiePp','section','issueDate','action'];
+   dataSource: MatTableDataSource<MonthlyPlanning>;
+   @ViewChild(MatSort) sort: MatSort;
+   @ViewChild(MatPaginator) paginator: MatPaginator;
+
+  constructor(private router: Router, private mpService: MonthlyPlanCuringService, private parseDateService: ParsingDateService) { }
 
   ngOnInit(): void {
-    this.monthlyPlannings = [
-      { no: 1, documentNo: 'CM-701-0001', effectiveDate: 'NOV-2022', revision: 1, kadept: "Poizy", kasiepp: "DIR", workDay: "4", overtime: 20, monthOf: "08/2022", section: "TIRE", issueDate:"16-Jul-2022", status: 1 },
-      { no: 2, documentNo: 'CM-701-0002', effectiveDate: 'DEC-2022', revision: 2, kadept: "Aeronshiki", kasiepp: "DIR", workDay: "5", overtime: 11, monthOf: "09/2022", section: "TIRE", issueDate:"19-Dec-2022", status: 1 },
-      { no: 3, documentNo: 'CM-701-0003', effectiveDate: 'JAN-2023', revision: 1, kadept: "Dogma", kasiepp: "DIR", workDay: "6", overtime: 11, monthOf: "10/2023", section: "TIRE", issueDate:"24-Sep-2024", status: 1 },
-      { no: 4, documentNo: 'CM-701-0004', effectiveDate: 'FEB-2023', revision: 3, kadept: "Shakariki", kasiepp: "DIR", workDay: "7", overtime: 12, monthOf: "11/2023", section: "TIRE", issueDate:"30-Jul-2024", status: 1 },
-      { no: 5, documentNo: 'CM-701-0005', effectiveDate: 'MAR-2023', revision: 1, kadept: "Shigaraki", kasiepp: "DIR", workDay: "9", overtime: 13, monthOf: "12/2023", section: "TIRE", issueDate:"31-Jul-2024", status: 1 }
-    ];
+    this.getAllMarketingOrder();
   }
 
   navigateToAdd(){
     this.router.navigate(['/transaksi/add-monthly-planning'])
+  }
+
+  parseDate(dateParse: string): string {
+    return this.parseDateService.convertDateToString(dateParse);
+  }
+
+  onSearchChange(): void {
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
+  }
+
+  resetSearch(): void {
+    this.searchText = '';
+    this.dataSource.filter = '';
+  }
+
+  getAllMarketingOrder(): void {
+    this.mpService.getAllMonthlyPlanning().subscribe(
+      (response: ApiResponse<MonthlyPlanning[]>) => {
+        this.monthlyPlannings = response.data;
+        console.table(this.monthlyPlannings)
+        if (this.monthlyPlannings.length === 0) {
+          Swal.fire({
+            icon: 'info',
+            title: 'No Data',
+            text: 'No marketing orders found.',
+            timer: null,
+            showConfirmButton: true,
+            confirmButtonText: 'Ok',
+          });
+        } else {
+          this.monthlyPlannings = response.data;
+          this.dataSource = new MatTableDataSource(this.monthlyPlannings);
+          this.dataSource.sort = this.sort;
+          this.dataSource.paginator = this.paginator;
+        }
+      },
+      (error) => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Failed to load marketing orders: ' + error.message,
+          timer: 3000,
+          showConfirmButton: false,
+        });
+      }
+    );
   }
 
 }

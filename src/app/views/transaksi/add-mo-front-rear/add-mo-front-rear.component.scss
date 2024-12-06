@@ -1,0 +1,51 @@
+.sticky {
+  position: sticky;
+  left: 0;
+  background: white;
+  z-index: 2;
+  /* Lebih tinggi agar di atas elemen lainnya */
+  box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.1);
+  /* Tambahkan efek bayangan */
+}
+
+::ng-deep .mat-sort-header-container {
+  justify-content: center;
+}
+
+.locked-background {
+  background-color: red;
+}
+
+
+::ng-deep .mat-sort-header-container {
+  justify-content: center;
+}
+
+.mat-cell {
+  padding-top: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.mat-cell:last-of-type{
+  padding-right: 5px;
+}
+
+.mat-cell:first-of-type{
+  padding-left: 5px;
+}
+
+th.mat-header-cell input[type="checkbox"] {
+  display: none; /* Menyembunyikan checkbox di header */
+}
+
+/* Ensuring that the checkbox is inline and centered */
+th.mat-header-cell, td.mat-cell {
+  text-align: center; /* Centering the content horizontally */
+  vertical-align: middle; /* Aligning vertically */
+}
+
+input[type="checkbox"] {
+  margin: 0;
+  display: inline; /* Ensures the checkbox is inline with other content */
+}
