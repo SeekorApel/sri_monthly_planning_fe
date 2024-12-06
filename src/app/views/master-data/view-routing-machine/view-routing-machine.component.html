@@ -214,7 +214,7 @@
           </ng-container>
 
           <ng-container matColumnDef="status">
-            <th style="min-width: 70px;" *matHeaderCellDef>Status</th>
+            <th style="min-width: 70px;" *matHeaderCellDef mat-sort-header>Status</th>
             <td *matCellDef="let element" [ngClass]="{ 'bg-success': element.status === 1, 'bg-danger': element.status !== 1 }">
               {{ element.status === 1 ? 'Active' : 'Deactive' }}
             </td>

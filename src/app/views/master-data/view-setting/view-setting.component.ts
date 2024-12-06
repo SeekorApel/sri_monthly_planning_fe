@@ -51,10 +51,21 @@ export class ViewSettingComponent implements OnInit {
     this.getAllSetting();
   }
 
+  normalizeDecimal(value: string | number): string {
+    if (typeof value === 'number') {
+      return value.toString().replace('.', ',');
+    }
+    return value.replace('.', ',');
+  }  
+
   getAllSetting(): void {
     this.settingService.getAllSetting().subscribe(
       (response: ApiResponse<Setting[]>) => {
-        this.settings = response.data;
+        this.settings = response.data.map(setting => ({
+          ...setting,
+          // Asumsikan 'amount' adalah field yang berisi nilai desimal
+          setting_VALUE: this.normalizeDecimal(setting.setting_VALUE)
+        }));
         this.dataSource = new MatTableDataSource(this.settings);
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
@@ -89,6 +100,7 @@ export class ViewSettingComponent implements OnInit {
 
   resetSearch(): void {
     this.searchText = '';
+    this.dataSource.filter = this.searchText.trim().toLowerCase();
     this.onChangePage(this.settings.slice(0, this.pageSize));
   }
 

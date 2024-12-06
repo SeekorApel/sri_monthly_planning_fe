@@ -38,7 +38,7 @@ export class ViewCuringSizeComponent implements OnInit {
   pageSize: number = 5;
   totalPages: number = 5;
   sortBuffer: Array<any>;
-  displayedColumns: string[] = ['no', 'curingsize_ID', 'machinecuringtype_ID','size_NAME', 'capacity', 'status', 'action'];
+  displayedColumns: string[] = ['no', 'curingsize_ID', 'machinecuringtype_ID','size_ID', 'capacity', 'status', 'action'];
   dataSource: MatTableDataSource<Curing_Size>;
 
   @ViewChild(MatSort) sort: MatSort;
@@ -112,7 +112,7 @@ export class ViewCuringSizeComponent implements OnInit {
   
           return {
             ...curingSize, // Salin semua properti quadrant
-            size_NAME: matchedSize ? matchedSize.description : null // Tambahkan building_NAME jika ada kecocokan
+            size_ID: matchedSize ? matchedSize.size_ID : null // Tambahkan building_NAME jika ada kecocokan
           };
         });
         this.dataSource = new MatTableDataSource(this.curingSizes);

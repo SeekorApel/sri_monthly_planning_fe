@@ -36,7 +36,7 @@
 
           <ng-container matColumnDef="part_NUMBER">
             <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Product Part Number</th>
-            <td class="angka" *matCellDef="let element">{{ element.part_NUMBER }}</td>
+            <td class="angka" *matCellDef="let element">{{ element.product_ID }}</td>
           </ng-container>
 
           <ng-container matColumnDef="machine_curing_TYPE_ID">
@@ -65,7 +65,7 @@
           </ng-container>
 
           <ng-container matColumnDef="status">
-            <th style="min-width: 70px;" *matHeaderCellDef>Status</th>
+            <th style="min-width: 70px;" *matHeaderCellDef mat-sort-header>Status</th>
             <td *matCellDef="let element" [ngClass]="{ 'bg-success': element.status === 1, 'bg-danger': element.status !== 1 }">
               {{ element.status === 1 ? 'Active' : 'Deactive' }}
             </td>
