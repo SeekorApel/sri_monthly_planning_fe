@@ -730,6 +730,7 @@ export class ViewWorkDayComponent implements OnInit {
   
 
   async overtimeOn() {
+    this.Loading = true;
     try {
       const response = await this.workDayService.turnOnOvertime(this.getdateselected()).toPromise();
       if (response.data) {
@@ -741,6 +742,7 @@ export class ViewWorkDayComponent implements OnInit {
     } catch (error: any) {
       this.errorMessage = 'Failed to update work day hours: ' + error.message;
     }
+    this.Loading = false;
   }
   
   async OffWorkday() {
