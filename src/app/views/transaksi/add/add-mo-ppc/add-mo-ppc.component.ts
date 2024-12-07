@@ -40,8 +40,8 @@ export class AddMoPpcComponent implements OnInit {
   errorMessage: string | null = null;
   workDay: any[];
   file: File | null = null;
-  loadingShowData:boolean = false;
-  loadingSaveData:boolean = false;
+  loadingShowData: boolean = false;
+  loadingSaveData: boolean = false;
 
   //Error Message
   errorMessagesMinOrder: string[] = [];
@@ -90,15 +90,15 @@ export class AddMoPpcComponent implements OnInit {
       total_ttwd_1: [null, []],
       total_tlwd_2: [null, []],
       total_ttwd_2: [null, []],
-      max_tube_capa_0: [null, [Validators.required]],
-      max_tube_capa_1: [null, [Validators.required]],
-      max_tube_capa_2: [null, [Validators.required]],
-      max_capa_tl_0: [null, [Validators.required]],
-      max_capa_tt_0: [null, [Validators.required]],
-      max_capa_tl_1: [null, [Validators.required]],
-      max_capa_tt_1: [null, [Validators.required]],
-      max_capa_tl_2: [null, [Validators.required]],
-      max_capa_tt_2: [null, [Validators.required]],
+      max_tube_capa_0: [200000, [Validators.required]],
+      max_tube_capa_1: [200000, [Validators.required]],
+      max_tube_capa_2: [200000, [Validators.required]],
+      max_capa_tl_0: [472460, [Validators.required]],
+      max_capa_tt_0: [38800, [Validators.required]],
+      max_capa_tl_1: [441640, [Validators.required]],
+      max_capa_tt_1: [26720, [Validators.required]],
+      max_capa_tl_2: [463640, [Validators.required]],
+      max_capa_tt_2: [29840, [Validators.required]],
       note_order_tl_0: [null, []],
       note_order_tl_1: [null, []],
       note_order_tl_2: [null, []],
@@ -107,6 +107,7 @@ export class AddMoPpcComponent implements OnInit {
     this.moService.getCapacity().subscribe(
       (response: ApiResponse<any>) => {
         this.capacityDb = response.data;
+        console.log("Response capacity: ", this.capacityDb)
       },
       (error) => {
         Swal.fire({
@@ -147,16 +148,17 @@ export class AddMoPpcComponent implements OnInit {
     this.subscribeToValueChanges('max_capa_tt_2');
   }
 
-  getLastIdMo(): void {
+  getLastIdMo(): void{
     this.moService.getLastIdMo().subscribe(
       (response: ApiResponse<string>) => {
         this.lastIdMo = response.data;
+        console.log("Response lastId: ", this.lastIdMo)
       },
       (error) => {
         Swal.fire({
           icon: 'error',
           title: 'Error',
-          text: 'Failed to load data: ' + error.message,
+          text: 'Failed to load last IDMo: ' + error.message,
         });
       }
     );
@@ -437,6 +439,8 @@ export class AddMoPpcComponent implements OnInit {
       this.formHeaderMo.markAllAsTouched();
       return;
     }
+    console.log("init max cap setting : ", this.capacityDb)
+    console.log("init last id MO : ", this.lastIdMo)
     this.loadingShowData = true;
     this.fillTheTableMo();
     this.isTableVisible = true;
@@ -558,6 +562,8 @@ export class AddMoPpcComponent implements OnInit {
         detailMarketingOrder: this.detailMarketingOrder,
       };
 
+      console.log(saveMo);
+
       this.moService.saveMarketingOrderPPC(saveMo).subscribe(
         (response) => {
           Swal.fire({
@@ -650,7 +656,6 @@ export class AddMoPpcComponent implements OnInit {
   }
 
   downloadTemplate() {
-    console.log("sampe sini",this.headerMarketingOrder);
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet('Form Input MO');
     const month0 = this.monthNames[0];
@@ -881,8 +886,8 @@ export class AddMoPpcComponent implements OnInit {
     worksheet.getCell('N17').alignment = { vertical: 'middle', horizontal: 'left' };
     setBorder(worksheet.getCell('N17'));
     worksheet.getCell('Q17').value = this.formHeaderMo.get('max_capa_tt_0')?.value; // "Month 1"
-    worksheet.getCell('R17').value = this.formHeaderMo.get('max_capa_tt_1')?.value;  // "Month 2"
-    worksheet.getCell('S17').value = this.formHeaderMo.get('max_capa_tt_2')?.value;  // "Month 3"
+    worksheet.getCell('R17').value = this.formHeaderMo.get('max_capa_tt_1')?.value; // "Month 2"
+    worksheet.getCell('S17').value = this.formHeaderMo.get('max_capa_tt_2')?.value; // "Month 3"
     worksheet.getCell('Q17').numFmt = '#,##0';
     worksheet.getCell('R17').numFmt = '#,##0';
     worksheet.getCell('S17').numFmt = '#,##0';
@@ -1427,7 +1432,6 @@ export class AddMoPpcComponent implements OnInit {
             const partNumber = Number(worksheet[`C${row + 1}`]?.v) || null; // Kolom C
             const machineType = String(worksheet[`E${row + 1}`]?.v) || null; // Kolom I
             const minOrder = Number(worksheet[`I${row + 1}`]?.v) || null; // Kolom E
-            console.log("sini",machineType);
 
             // Mencari dan memperbarui nilai dalam detailMarketingOrder
             const detail = this.detailMarketingOrder.find((item) => item.partNumber === partNumber);

@@ -705,27 +705,28 @@ export class EditMoMarketingComponent implements OnInit {
     //   moMonth2: item.moMonth2
     // }));
 
+    console.log("Hasil Edit", revisionMo);
 
     this.loading = true;
-    this.moService.updateMarketingOrderMarketing(revisionMo).subscribe(
-      (response) => {
-        Swal.fire({
-          title: 'Success!',
-          text: 'Data Marketing Order successfully Revision.',
-          icon: 'success',
-          confirmButtonText: 'OK',
-        }).then((result) => {
-          if (result.isConfirmed) {
-            this.navigateToViewMo();
-          }
-        });
-        this.loading = false;
-      },
-      (err) => {
-        Swal.fire('Error!', 'Error insert data Marketing Order.', 'error');
-        this.loading = false;
-      }
-    );
+    // this.moService.updateMarketingOrderMarketing(revisionMo).subscribe(
+    //   (response) => {
+    //     Swal.fire({
+    //       title: 'Success!',
+    //       text: 'Data Marketing Order successfully Revision.',
+    //       icon: 'success',
+    //       confirmButtonText: 'OK',
+    //     }).then((result) => {
+    //       if (result.isConfirmed) {
+    //         this.navigateToViewMo();
+    //       }
+    //     });
+    //     this.loading = false;
+    //   },
+    //   (err) => {
+    //     Swal.fire('Error!', 'Error insert data Marketing Order.', 'error');
+    //     this.loading = false;
+    //   }
+    // );
   }
 
   downloadTemplate() {

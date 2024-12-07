@@ -1,680 +1,533 @@
 <div class="animated fadeIn">
-    <!-- Header Marketing Order -->
-    <div class="col-md-12">
-        <div class="card">
-            <div class="card-header">
-                <strong>Edit Header Marketing Order</strong>
+  <!-- Header Marketing Order -->
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-header">
+        <strong>Edit Header Marketing Order</strong>
+      </div>
+      <div class="card-body">
+        <form [formGroup]="formHeaderMo" class="form form-horizontal">
+          <div class="form-group row">
+            <label class="col-md-3 col-form-label">Date</label>
+            <div class="col-md-9">
+              <input class="form-control" type="date" formControlName="date" placeholder="date" [readOnly]="isReadOnly" />
             </div>
-            <div class="card-body">
-                <form [formGroup]="formHeaderMo" class="form form-horizontal">
-                    <div class="form-group row">
-                        <label class="col-md-3 col-form-label">Date</label>
-                        <div class="col-md-9">
-                            <input class="form-control" type="date" formControlName="date" placeholder="date"
-                                [readOnly]="isReadOnly" />
-                        </div>
-                    </div>
+          </div>
 
-                    <div class="form-group row">
-                        <label class="col-md-3 col-form-label" for="type">Type</label>
-                        <div class="col-md-9">
-                            <input class="form-control" type="text" formControlName="type" placeholder="type"
-                                [readOnly]="isReadOnly" />
-                        </div>
-                    </div>
-
-                    <div class="form-group row">
-                        <label class="col-md-3 col-form-label">Revision</label>
-                        <div class="col-md-9">
-                            <input class="form-control" type="text" formControlName="revision" placeholder="1,2,3...."
-                                [readOnly]="isReadOnly" />
-                        </div>
-                    </div>
-
-                    <!-- Tabset -->
-                    <tabset>
-                        <tab heading="Month 1">
-                            <div class="form-row align-items-center">
-                                <div class="col-md-4 min-height-form">
-                                    <label>Month And Year</label>
-                                    <input class="form-control input-month-year" formControlName="month_0" type="month"
-                                        [readOnly]="true" />
-                                </div>
-                                <div class="col-md-4 min-height-form">
-                                    <label for="text-input">Normal Working Day</label>
-                                    <input type="text" formControlName="nwd_0" name="text-input" class="form-control"
-                                        placeholder="0,00" [readOnly]="isReadOnly" />
-                                </div>
-                                <div class="col-md-4 min-height-form">
-                                    <label for="text-input">Normal Working Day Tube</label>
-                                    <input type="text" formControlName="nwt_0" name="text-input" class="form-control"
-                                        placeholder="0,00" (input)="onInputChange($event, 'nwt_0')"
-                                        (input)="calculateTotalTube('nwt_0')" />
-                                </div>
-                                <div class="col-md-4 min-height-form">
-                                    <label for="text-input">Working Day Overtime Tube</label>
-                                    <input type="text" formControlName="ot_wt_0" name="text-input" class="form-control"
-                                        placeholder="0,00" (input)="onInputChange($event, 'ot_wt_0')"
-                                        (input)="calculateTotalTube('ot_wt_0')" />
-                                </div>
-                                <div class="col-md-4 min-height-form">
-                                    <label for="text-input">Working Day Overtime TL</label>
-                                    <input type="text" formControlName="tl_ot_wd_0" name="text-input"
-                                        class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
-                                </div>
-                                <div class="col-md-4 min-height-form">
-                                    <label for="text-input">Working Day Overtime TT</label>
-                                    <input type="text" formControlName="tt_ot_wd_0" name="text-input"
-                                        class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
-                                </div>
-                                <div class="col-md-4 min-height-form">
-                                    <label for="text-input">Total Working Day Tube</label>
-                                    <input formControlName="total_wt_0" type="text" name="text-input"
-                                        class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
-                                </div>
-                                <div class="col-md-4 min-height-form">
-                                    <label for="text-input">Total Working Day Tire TL</label>
-                                    <input formControlName="total_tlwd_0" type="text" name="text-input"
-                                        class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
-                                </div>
-                                <div class="col-md-4 min-height-form">
-                                    <label for="text-input">Total Working Day Tire TT</label>
-                                    <input formControlName="total_ttwd_0" type="text" name="text-input"
-                                        class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
-                                </div>
-                                <div class="col-md-4 min-height-form">
-                                    <label for="text-input">Maximum Capacity Tube</label>
-                                    <input type="text" (input)="onInputChange($event, 'max_tube_capa_0')"
-                                        [ngClass]="{ 'is-invalid': formHeaderMo.get('max_tube_capa_0')?.invalid && formHeaderMo.get('max_tube_capa_0')?.touched }"
-                                        formControlName="max_tube_capa_0" name="text-input" class="form-control"
-                                        placeholder="0,00" />
-                                    <div *ngIf="formHeaderMo.get('max_tube_capa_0')?.invalid && formHeaderMo.get('max_tube_capa_0')?.touched"
-                                        class="invalid-feedback">Maximum Tube Capacity is required.</div>
-                                </div>
-                                <div class="col-md-4 min-height-form">
-                                    <label for="text-input">Maximum Capacity Tire TL</label>
-                                    <input type="text" (input)="onInputChange($event, 'max_capa_tl_0')"
-                                        [ngClass]="{ 'is-invalid': formHeaderMo.get('max_capa_tl_0')?.invalid && formHeaderMo.get('max_capa_tl_0')?.touched }"
-                                        formControlName="max_capa_tl_0" name="text-input" class="form-control"
-                                        placeholder="0,00" />
-                                    <div *ngIf="formHeaderMo.get('max_capa_tl_0')?.invalid && formHeaderMo.get('max_capa_tl_0')?.touched"
-                                        class="invalid-feedback">Maximum Capacity Tire TL is required.</div>
-                                </div>
-                                <div class="col-md-4 min-height-form">
-                                    <label for="text-input">Maximum Capacity Tire TT</label>
-                                    <input type="text" (input)="onInputChange($event, 'max_capa_tt_0')"
-                                        [ngClass]="{ 'is-invalid': formHeaderMo.get('max_capa_tt_0')?.invalid && formHeaderMo.get('max_capa_tt_0')?.touched }"
-                                        formControlName="max_capa_tt_0" name="text-input" class="form-control"
-                                        placeholder="0,00" />
-                                    <div *ngIf="formHeaderMo.get('max_capa_tt_0')?.invalid && formHeaderMo.get('max_capa_tt_0')?.touched"
-                                        class="invalid-feedback">Maximum Capacity Tire TT is required.</div>
-                                </div>
-                                <div class="col-md-4 min-height-form">
-                                    <label for="text-input">Capacity Machine Airbag</label>
-                                    <input type="text" formControlName="machine_airbag_m0" name="text-input"
-                                        class="form-control" [readOnly]="isReadOnly" />
-                                </div>
-                                <div class="col-md-4 min-height-form" *ngIf="formHeaderMo.get('type')?.value !== 'FDR'">
-                                    <label for="text-input">FED TL</label>
-                                    <input type="text" formControlName="fed_tl_m0" name="text-input"
-                                        class="form-control" [readOnly]="isReadOnly" />
-                                </div>
-                                <div class="col-md-4 min-height-form" *ngIf="formHeaderMo.get('type')?.value !== 'FED'">
-                                    <label for="text-input">FDR TL</label>
-                                    <input type="text" formControlName="fdr_tl_m0" name="text-input"
-                                        class="form-control" [readOnly]="isReadOnly" />
-                                </div>
-                                <div class="col-md-4 min-height-form" *ngIf="formHeaderMo.get('type')?.value !== 'FDR'">
-                                    <label for="text-input">FED TT</label>
-                                    <input type="text" formControlName="fed_tt_m0" name="text-input"
-                                        class="form-control" [readOnly]="isReadOnly" />
-                                </div>
-                                <div class="col-md-4 min-height-form" *ngIf="formHeaderMo.get('type')?.value !== 'FED'">
-                                    <label for="text-input">FDR TT</label>
-                                    <input type="text" formControlName="fdr_tt_m0" name="text-input"
-                                        class="form-control" [readOnly]="isReadOnly" />
-                                </div>
-                                <div class="col-md-4 min-height-form">
-                                    <label for="text-input">Total Marketing Order</label>
-                                    <input type="text" formControlName="total_mo_m0" name="text-input"
-                                        class="form-control" [readOnly]="isReadOnly" />
-                                </div>
-                                <div class="col-md-4 min-height-form" *ngIf="formHeaderMo.get('type')?.value !== 'FDR'">
-                                    <label for="text-input">% FED TL</label>
-                                    <input type="text" formControlName="fed_TL_percentage_m0" name="text-input"
-                                        class="form-control" [readOnly]="isReadOnly" />
-                                </div>
-                                <div class="col-md-4 min-height-form" *ngIf="formHeaderMo.get('type')?.value !== 'FED'">
-                                    <label for="text-input">% FDR TL</label>
-                                    <input type="text" formControlName="fdr_TL_percentage_m0" name="text-input"
-                                        class="form-control" [readOnly]="isReadOnly" />
-                                </div>
-                                <div class="col-md-4 min-height-form" *ngIf="formHeaderMo.get('type')?.value !== 'FDR'">
-                                    <label for="text-input">% FED TT</label>
-                                    <input type="text" formControlName="fed_TT_percentage_m0" name="text-input"
-                                        class="form-control" [readOnly]="isReadOnly" />
-                                </div>
-                                <div class="col-md-4 min-height-form" *ngIf="formHeaderMo.get('type')?.value !== 'FED'">
-                                    <label for="text-input">% FDR TT</label>
-                                    <input type="text" formControlName="fdr_TT_percentage_m0" name="text-input"
-                                        class="form-control" [readOnly]="isReadOnly" />
-                                </div>
-                                <div class="col-md-4 min-height-form">
-                                    <label for="text-input">Note Order TL</label>
-                                    <input type="text" formControlName="note_tl_m0" name="text-input"
-                                        class="form-control" />
-                                </div>
-                            </div>
-                        </tab>
-                        <tab heading="Month 2">
-                            <div class="form-row align-items-center">
-                                <div class="col-md-4 min-height-form">
-                                    <label>Month And Year</label>
-                                    <input class="form-control input-month-year" formControlName="month_1" type="month"
-                                        [readOnly]="true" />
-                                </div>
-                                <div class="col-md-4 min-height-form">
-                                    <label for="text-input">Normal Working Day</label>
-                                    <input type="text" formControlName="nwd_1" name="text-input" class="form-control"
-                                        placeholder="0,00" [readOnly]="isReadOnly" />
-                                </div>
-                                <div class="col-md-4 min-height-form">
-                                    <label for="text-input">Normal Working Day Tube</label>
-                                    <input type="text" formControlName="nwt_1" name="text-input" class="form-control"
-                                        placeholder="0,00" (input)="onInputChange($event, 'nwt_1')"
-                                        (input)="calculateTotalTube('nwt_1')" />
-                                </div>
-                                <div class="col-md-4 min-height-form">
-                                    <label for="text-input">Working Day Overtime Tube</label>
-                                    <input type="text" formControlName="ot_wt_1" name="text-input" class="form-control"
-                                        placeholder="0,00" (input)="onInputChange($event, 'ot_wt_1')"
-                                        (input)="calculateTotalTube('ot_wt_1')" />
-                                </div>
-                                <div class="col-md-4 min-height-form">
-                                    <label for="text-input">Working Day Overtime TL</label>
-                                    <input type="text" formControlName="tl_ot_wd_1" name="text-input"
-                                        class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
-                                </div>
-                                <div class="col-md-4 min-height-form">
-                                    <label for="text-input">Working Day Overtime TT</label>
-                                    <input type="text" formControlName="tt_ot_wd_1" name="text-input"
-                                        class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
-                                </div>
-                                <div class="col-md-4 min-height-form">
-                                    <label for="text-input">Total Working Day Tube</label>
-                                    <input formControlName="total_wt_1" type="text" name="text-input"
-                                        class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
-                                </div>
-                                <div class="col-md-4 min-height-form">
-                                    <label for="text-input">Total Working Day Tire TL</label>
-                                    <input formControlName="total_tlwd_1" type="text" name="text-input"
-                                        class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
-                                </div>
-                                <div class="col-md-4 min-height-form">
-                                    <label for="text-input">Total Working Day Tire TT</label>
-                                    <input formControlName="total_ttwd_1" type="text" name="text-input"
-                                        class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
-                                </div>
-                                <div class="col-md-4 min-height-form">
-                                    <label for="text-input">Maximum Capacity Tube</label>
-                                    <input type="text" (input)="onInputChange($event, 'max_tube_capa_1')"
-                                        [ngClass]="{ 'is-invalid': formHeaderMo.get('max_tube_capa_1')?.invalid && formHeaderMo.get('max_tube_capa_1')?.touched }"
-                                        formControlName="max_tube_capa_1" name="text-input" class="form-control"
-                                        placeholder="0,00" />
-                                    <div *ngIf="formHeaderMo.get('max_tube_capa_1')?.invalid && formHeaderMo.get('max_tube_capa_1')?.touched"
-                                        class="invalid-feedback">Maximum Tube Capacity is required.</div>
-                                </div>
-                                <div class="col-md-4 min-height-form">
-                                    <label for="text-input">Maximum Capacity Tire TL</label>
-                                    <input type="text" (input)="onInputChange($event, 'max_capa_tl_1')"
-                                        [ngClass]="{ 'is-invalid': formHeaderMo.get('max_capa_tl_1')?.invalid && formHeaderMo.get('max_capa_tl_1')?.touched }"
-                                        formControlName="max_capa_tl_1" name="text-input" class="form-control"
-                                        placeholder="0,00" />
-                                    <div *ngIf="formHeaderMo.get('max_capa_tl_1')?.invalid && formHeaderMo.get('max_capa_tl_1')?.touched"
-                                        class="invalid-feedback">Maximum Capacity Tire TL is required.</div>
-                                </div>
-                                <div class="col-md-4 min-height-form">
-                                    <label for="text-input">Maximum Capacity Tire TT</label>
-                                    <input type="text" (input)="onInputChange($event, 'max_capa_tt_1')"
-                                        [ngClass]="{ 'is-invalid': formHeaderMo.get('max_capa_tt_1')?.invalid && formHeaderMo.get('max_capa_tt_1')?.touched }"
-                                        formControlName="max_capa_tt_1" name="text-input" class="form-control"
-                                        placeholder="0,00" />
-                                    <div *ngIf="formHeaderMo.get('max_capa_tt_1')?.invalid && formHeaderMo.get('max_capa_tt_1')?.touched"
-                                        class="invalid-feedback">Maximum Capacity Tire TT is required.</div>
-                                </div>
-                                <div class="col-md-4 min-height-form">
-                                    <label for="text-input">Capacity Machine Airbag</label>
-                                    <input type="text" formControlName="machine_airbag_m1" name="text-input"
-                                        class="form-control" [readOnly]="isReadOnly" />
-                                </div>
-                                <div class="col-md-4 min-height-form" *ngIf="formHeaderMo.get('type')?.value !== 'FDR'">
-                                    <label for="text-input">FED TL</label>
-                                    <input type="text" formControlName="fed_tl_m1" name="text-input"
-                                        class="form-control" [readOnly]="isReadOnly" />
-                                </div>
-                                <div class="col-md-4 min-height-form" *ngIf="formHeaderMo.get('type')?.value !== 'FED'">
-                                    <label for="text-input">FDR TL</label>
-                                    <input type="text" formControlName="fdr_tl_m1" name="text-input"
-                                        class="form-control" [readOnly]="isReadOnly" />
-                                </div>
-                                <div class="col-md-4 min-height-form" *ngIf="formHeaderMo.get('type')?.value !== 'FDR'">
-                                    <label for="text-input">FED TT</label>
-                                    <input type="text" formControlName="fed_tt_m1" name="text-input"
-                                        class="form-control" [readOnly]="isReadOnly" />
-                                </div>
-                                <div class="col-md-4 min-height-form" *ngIf="formHeaderMo.get('type')?.value !== 'FED'">
-                                    <label for="text-input">FDR TT</label>
-                                    <input type="text" formControlName="fdr_tt_m1" name="text-input"
-                                        class="form-control" [readOnly]="isReadOnly" />
-                                </div>
-                                <div class="col-md-4 min-height-form">
-                                    <label for="text-input">Total Marketing Order</label>
-                                    <input type="text" formControlName="total_mo_m1" name="text-input"
-                                        class="form-control" [readOnly]="isReadOnly" />
-                                </div>
-                                <div class="col-md-4 min-height-form" *ngIf="formHeaderMo.get('type')?.value !== 'FDR'">
-                                    <label for="text-input">% FED TL</label>
-                                    <input type="text" formControlName="fed_TL_percentage_m1" name="text-input"
-                                        class="form-control" [readOnly]="isReadOnly" />
-                                </div>
-                                <div class="col-md-4 min-height-form" *ngIf="formHeaderMo.get('type')?.value !== 'FED'">
-                                    <label for="text-input">% FDR TL</label>
-                                    <input type="text" formControlName="fdr_TL_percentage_m1" name="text-input"
-                                        class="form-control" [readOnly]="isReadOnly" />
-                                </div>
-                                <div class="col-md-4 min-height-form" *ngIf="formHeaderMo.get('type')?.value !== 'FDR'">
-                                    <label for="text-input">% FED TT</label>
-                                    <input type="text" formControlName="fed_TT_percentage_m1" name="text-input"
-                                        class="form-control" [readOnly]="isReadOnly" />
-                                </div>
-                                <div class="col-md-4 min-height-form" *ngIf="formHeaderMo.get('type')?.value !== 'FED'">
-                                    <label for="text-input">% FDR TT</label>
-                                    <input type="text" formControlName="fdr_TT_percentage_m1" name="text-input"
-                                        class="form-control" [readOnly]="isReadOnly" />
-                                </div>
-                                <div class="col-md-4 min-height-form">
-                                    <label for="text-input">Note Order TL</label>
-                                    <input type="text" formControlName="note_tl_m1" name="text-input"
-                                        class="form-control" />
-                                </div>
-                            </div>
-                        </tab>
-                        <tab heading="Month 3">
-                            <div class="form-row align-items-center">
-                                <div class="col-md-4 min-height-form">
-                                    <label>Month And Year</label>
-                                    <input class="form-control input-month-year" formControlName="month_2" type="month"
-                                        [readOnly]="true" />
-                                </div>
-                                <div class="col-md-4 min-height-form">
-                                    <label for="text-input">Normal Working Day</label>
-                                    <input type="text" formControlName="nwd_2" name="text-input" class="form-control"
-                                        placeholder="0,00" [readOnly]="isReadOnly" />
-                                </div>
-                                <div class="col-md-4 min-height-form">
-                                    <label for="text-input">Normal Working Day Tube</label>
-                                    <input type="text" formControlName="nwt_2" name="text-input" class="form-control"
-                                        placeholder="0,00" (input)="onInputChange($event, 'nwt_2')"
-                                        (input)="calculateTotalTube('nwt_2')" />
-                                </div>
-                                <div class="col-md-4 min-height-form">
-                                    <label for="text-input">Working Day Overtime Tube</label>
-                                    <input type="text" formControlName="ot_wt_2" name="text-input" class="form-control"
-                                        placeholder="0,00" (input)="onInputChange($event, 'ot_wt_2')"
-                                        (input)="calculateTotalTube('ot_wt_2')" />
-                                </div>
-                                <div class="col-md-4 min-height-form">
-                                    <label for="text-input">Working Day Overtime TL</label>
-                                    <input type="text" formControlName="tl_ot_wd_2" name="text-input"
-                                        class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
-                                </div>
-                                <div class="col-md-4 min-height-form">
-                                    <label for="text-input">Working Day Overtime TT</label>
-                                    <input type="text" formControlName="tt_ot_wd_2" name="text-input"
-                                        class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
-                                </div>
-                                <div class="col-md-4 min-height-form">
-                                    <label for="text-input">Total Working Day Tube</label>
-                                    <input formControlName="total_wt_2" type="text" name="text-input"
-                                        class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
-                                </div>
-                                <div class="col-md-4 min-height-form">
-                                    <label for="text-input">Total Working Day Tire TL</label>
-                                    <input formControlName="total_tlwd_2" type="text" name="text-input"
-                                        class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
-                                </div>
-                                <div class="col-md-4 min-height-form">
-                                    <label for="text-input">Total Working Day Tire TT</label>
-                                    <input formControlName="total_ttwd_2" type="text" name="text-input"
-                                        class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
-                                </div>
-                                <div class="col-md-4 min-height-form">
-                                    <label for="text-input">Maximum Capacity Tube</label>
-                                    <input type="text" (input)="onInputChange($event, 'max_tube_capa_2')"
-                                        [ngClass]="{ 'is-invalid': formHeaderMo.get('max_tube_capa_2')?.invalid && formHeaderMo.get('max_tube_capa_2')?.touched }"
-                                        formControlName="max_tube_capa_2" name="text-input" class="form-control"
-                                        placeholder="0,00" />
-                                    <div *ngIf="formHeaderMo.get('max_tube_capa_2')?.invalid && formHeaderMo.get('max_tube_capa_2')?.touched"
-                                        class="invalid-feedback">Maximum Tube Capacity is required.</div>
-                                </div>
-                                <div class="col-md-4 min-height-form">
-                                    <label for="text-input">Maximum Capacity Tire TL</label>
-                                    <input type="text" (input)="onInputChange($event, 'max_capa_tl_2')"
-                                        [ngClass]="{ 'is-invalid': formHeaderMo.get('max_capa_tl_2')?.invalid && formHeaderMo.get('max_capa_tl_2')?.touched }"
-                                        formControlName="max_capa_tl_2" name="text-input" class="form-control"
-                                        placeholder="0,00" />
-                                    <div *ngIf="formHeaderMo.get('max_capa_tl_2')?.invalid && formHeaderMo.get('max_capa_tl_2')?.touched"
-                                        class="invalid-feedback">Maximum Capacity Tire TL is required.</div>
-                                </div>
-                                <div class="col-md-4 min-height-form">
-                                    <label for="text-input">Maximum Capacity Tire TT</label>
-                                    <input type="text" (input)="onInputChange($event, 'max_capa_tt_2')"
-                                        [ngClass]="{ 'is-invalid': formHeaderMo.get('max_capa_tt_2')?.invalid && formHeaderMo.get('max_capa_tt_2')?.touched }"
-                                        formControlName="max_capa_tt_2" name="text-input" class="form-control"
-                                        placeholder="0,00" />
-                                    <div *ngIf="formHeaderMo.get('max_capa_tt_2')?.invalid && formHeaderMo.get('max_capa_tt_2')?.touched"
-                                        class="invalid-feedback">Maximum Capacity Tire TT is required.</div>
-                                </div>
-                                <div class="col-md-4 min-height-form">
-                                    <label for="text-input">Capacity Machine Airbag</label>
-                                    <input type="text" formControlName="machine_airbag_m2" name="text-input"
-                                        class="form-control" [readOnly]="isReadOnly" />
-                                </div>
-                                <div class="col-md-4 min-height-form" *ngIf="formHeaderMo.get('type')?.value !== 'FDR'">
-                                    <label for="text-input">FED TL</label>
-                                    <input type="text" formControlName="fed_tl_m2" name="text-input"
-                                        class="form-control" [readOnly]="isReadOnly" />
-                                </div>
-                                <div class="col-md-4 min-height-form" *ngIf="formHeaderMo.get('type')?.value !== 'FED'">
-                                    <label for="text-input">FDR TL</label>
-                                    <input type="text" formControlName="fdr_tl_m2" name="text-input"
-                                        class="form-control" [readOnly]="isReadOnly" />
-                                </div>
-                                <div class="col-md-4 min-height-form" *ngIf="formHeaderMo.get('type')?.value !== 'FDR'">
-                                    <label for="text-input">FED TT</label>
-                                    <input type="text" formControlName="fed_tt_m2" name="text-input"
-                                        class="form-control" [readOnly]="isReadOnly" />
-                                </div>
-                                <div class="col-md-4 min-height-form" *ngIf="formHeaderMo.get('type')?.value !== 'FED'">
-                                    <label for="text-input">FDR TT</label>
-                                    <input type="text" formControlName="fdr_tt_m2" name="text-input"
-                                        class="form-control" [readOnly]="isReadOnly" />
-                                </div>
-                                <div class="col-md-4 min-height-form">
-                                    <label for="text-input">Total Marketing Order</label>
-                                    <input type="text" formControlName="total_mo_m2" name="text-input"
-                                        class="form-control" [readOnly]="isReadOnly" />
-                                </div>
-                                <div class="col-md-4 min-height-form" *ngIf="formHeaderMo.get('type')?.value !== 'FDR'">
-                                    <label for="text-input">% FED TL</label>
-                                    <input type="text" formControlName="fed_TL_percentage_m2" name="text-input"
-                                        class="form-control" [readOnly]="isReadOnly" />
-                                </div>
-                                <div class="col-md-4 min-height-form" *ngIf="formHeaderMo.get('type')?.value !== 'FED'">
-                                    <label for="text-input">% FDR TL</label>
-                                    <input type="text" formControlName="fdr_TL_percentage_m2" name="text-input"
-                                        class="form-control" [readOnly]="isReadOnly" />
-                                </div>
-                                <div class="col-md-4 min-height-form" *ngIf="formHeaderMo.get('type')?.value !== 'FDR'">
-                                    <label for="text-input">% FED TT</label>
-                                    <input type="text" formControlName="fed_TT_percentage_m2" name="text-input"
-                                        class="form-control" [readOnly]="isReadOnly" />
-                                </div>
-                                <div class="col-md-4 min-height-form" *ngIf="formHeaderMo.get('type')?.value !== 'FED'">
-                                    <label for="text-input">% FDR TT</label>
-                                    <input type="text" formControlName="fdr_TT_percentage_m2" name="text-input"
-                                        class="form-control" [readOnly]="isReadOnly" />
-                                </div>
-                                <div class="col-md-4 min-height-form">
-                                    <label for="text-input">Note Order TL</label>
-                                    <input type="text" formControlName="note_tl_m2" name="text-input"
-                                        class="form-control" />
-                                </div>
-                            </div>
-                        </tab>
-                    </tabset>
-                </form>
+          <div class="form-group row">
+            <label class="col-md-3 col-form-label" for="type">Type</label>
+            <div class="col-md-9">
+              <input class="form-control" type="text" formControlName="type" placeholder="type" [readOnly]="isReadOnly" />
             </div>
-        </div>
-    </div>
+          </div>
 
-    <!-- Detail Marketing Order -->
-    <div class="col-md-12">
-        <div class="card">
-            <div class="card-header">
-                <strong>Edit Detail Marketing Order</strong>
+          <div class="form-group row">
+            <label class="col-md-3 col-form-label">Revision</label>
+            <div class="col-md-9">
+              <input class="form-control" type="text" formControlName="revision" placeholder="1,2,3...." [readOnly]="isReadOnly" />
             </div>
-            <div class="card-body">
-                <div class="d-flex justify-content-between mb-3">
-                    <div class="d-flex align-items-center">
-                        <input type="text" class="form-control col-md-12 col-lg-12" [(ngModel)]="searchTextDmo"
-                            (input)="onSearchChangeDmo()" placeholder="Find here..." />
-                        <button type="submit" class="btn btn-primary ml-2" (click)="resetSearchDmo()">Reset</button>
-                    </div>
+          </div>
+
+          <!-- Tabset -->
+          <tabset>
+            <tab heading="Month 1">
+              <div class="form-row align-items-center">
+                <div class="col-md-4 min-height-form">
+                  <label>Month And Year</label>
+                  <input class="form-control input-month-year" formControlName="month_0" type="month" [readOnly]="true" />
                 </div>
-                <!-- Table -->
-                <div class="table-responsive">
-                    <table mat-table matSort #sortDmo="matSort" [dataSource]="dataSourceDmo"
-                        class="table table-bordered table-sm">
-                        <ng-container matColumnDef="no" sticky>
-                            <th *matHeaderCellDef style="min-width: 50px" rowspan="2">No</th>
-                            <td mat-cell class="text-center" *matCellDef="let mo; let i = index">{{ i + 1 }}</td>
-                        </ng-container>
-
-                        <!-- Category Column -->
-                        <ng-container matColumnDef="category" sticky>
-                            <th *matHeaderCellDef rowspan="2" style="min-width: 150px" mat-sort-header>Category</th>
-                            <td mat-cell class="text-center" *matCellDef="let element">{{ element.category }}</td>
-                        </ng-container>
-
-                        <!-- Partnumber Column -->
-                        <ng-container matColumnDef="partNumber" sticky>
-                            <th *matHeaderCellDef rowspan="2" style="min-width: 150px" mat-sort-header>Item</th>
-                            <td mat-cell class="text-center" *matCellDef="let mo">{{ mo.partNumber }}</td>
-                        </ng-container>
-
-                        <!-- Description Column -->
-                        <ng-container matColumnDef="description" sticky>
-                            <th *matHeaderCellDef rowspan="2" style="min-width: 250px" mat-sort-header>Description</th>
-                            <td class="text-left" *matCellDef="let mo">{{ mo.description }}</td>
-                        </ng-container>
-
-                        <!-- Machine Type Column -->
-                        <ng-container matColumnDef="machineType">
-                            <th *matHeaderCellDef rowspan="2" style="min-width: 100px" mat-sort-header>Machine Type</th>
-                            <td class="text-center" *matCellDef="let mo">
-                                <select [(ngModel)]="mo.machineType" class="form-control">
-                                    <option [ngValue]="null" disabled></option>
-                                    <option value="A/B">A/B</option>
-                                    <option value="BOM">BOM</option>
-                                </select>
-                            </td>
-                        </ng-container>
-
-                        <!-- Capacity 99,5% Column -->
-                        <ng-container matColumnDef="capacity">
-                            <th *matHeaderCellDef rowspan="2" style="min-width: 50px" mat-sort-header>Capacity {{
-                                capacityDb + '%' }}</th>
-                            <td class="text-right" *matCellDef="let mo">{{ formatSeparatorView(mo.capacity) }}</td>
-                        </ng-container>
-
-                        <!-- Quantity mould Column -->
-                        <ng-container matColumnDef="qtyPerMould">
-                            <th *matHeaderCellDef rowspan="2" style="min-width: 50px" mat-sort-header>Qty Mould</th>
-                            <td class="text-right" *matCellDef="let mo">{{ formatSeparatorView(mo.qtyPerMould) }}</td>
-                        </ng-container>
-
-                        <!-- Mould Spare Column -->
-                        <ng-container matColumnDef="spareMould">
-                            <th *matHeaderCellDef rowspan="2" style="min-width: 50px" mat-sort-header>Mould Spare</th>
-                            <td class="text-right" *matCellDef="let mo">{{ formatSeparatorView(mo.spareMould) }}</td>
-                        </ng-container>
-
-                        <!-- Mould Plan Column -->
-                        <ng-container matColumnDef="mouldMonthlyPlan">
-                            <th *matHeaderCellDef rowspan="2" style="min-width: 50px" mat-sort-header>Mould Plan</th>
-                            <td class="text-right" *matCellDef="let mo">{{ formatSeparatorView(mo.mouldMonthlyPlan) }}
-                            </td>
-                        </ng-container>
-
-                        <!-- Qty PerRak Column -->
-                        <ng-container matColumnDef="qtyPerRak">
-                            <th *matHeaderCellDef rowspan="2" style="min-width: 50px" mat-sort-header>Qty PerRak</th>
-                            <td class="text-right" *matCellDef="let mo">{{ formatSeparatorView(mo.qtyPerRak) }}</td>
-                        </ng-container>
-
-                        <!-- Minimum Order Column -->
-                        <ng-container matColumnDef="minOrder">
-                            <th *matHeaderCellDef rowspan="2" mat-sort-header style="min-width: 150px">Minimum Order
-                            </th>
-                            <td class="text-right" *matCellDef="let mo">
-                                <input type="text" [ngModel]="formatSeparatorView(mo.minOrder)"
-                                    class="text-right form-control"
-                                    (input)="onInputChangeMinimumOrder($event, mo, 'minOrder', i)" />
-                            </td>
-                        </ng-container>
-
-                        <!-- Maximum Capacity Column -->
-                        <ng-container matColumnDef="maxCap">
-                            <th mat-sort-header style="min-width: 350px" *matHeaderCellDef colspan="3">Maximum Capacity
-                            </th>
-                        </ng-container>
-
-                        <!-- Initial Stock Column -->
-                        <ng-container matColumnDef="initialStock">
-                            <th mat-sort-header style="min-width: 150px" rowspan="2" *matHeaderCellDef>Initial Stock
-                            </th>
-                            <td class="text-right" *matCellDef="let mo">{{ formatSeparatorView(mo.initialStock) }}</td>
-                        </ng-container>
-
-                        <!-- Sales Forecast Column -->
-                        <ng-container matColumnDef="salesForecast">
-                            <th mat-sort-header style="min-width: 350px" *matHeaderCellDef colspan="3">Sales Forecast
-                            </th>
-                        </ng-container>
-
-                        <!-- Marketing Order Column -->
-                        <ng-container matColumnDef="marketingOrder">
-                            <th mat-sort-header style="min-width: 350px" *matHeaderCellDef colspan="3"
-                                class="sticky-column">Marketing Order</th>
-                        </ng-container>
-
-                        <!-- Child header Column -->
-
-                        <!-- maxCapMonth0 Column -->
-                        <ng-container matColumnDef="maxCapMonth0">
-                            <th mat-sort-header *matHeaderCellDef style="min-width: 80px" class="child-column">{{
-                                monthNames[0] || 'Month 1' }}</th>
-                            <td mat-cell *matCellDef="let mo" class="text-right">{{ formatSeparatorView(mo.maxCapMonth0)
-                                }}</td>
-                        </ng-container>
-
-                        <!-- maxCapMonth1 Column -->
-                        <ng-container matColumnDef="maxCapMonth1">
-                            <th mat-sort-header *matHeaderCellDef style="min-width: 80px" class="child-column">{{
-                                monthNames[1] || 'Month 2' }}</th>
-                            <td mat-cell *matCellDef="let mo" class="text-right">{{ formatSeparatorView(mo.maxCapMonth1)
-                                }}</td>
-                        </ng-container>
-
-                        <!-- maxCapMonth2 Column -->
-                        <ng-container matColumnDef="maxCapMonth2">
-                            <th mat-sort-header *matHeaderCellDef style="min-width: 80px" class="child-column">{{
-                                monthNames[2] || 'Month 3' }}</th>
-                            <td mat-cell *matCellDef="let mo" class="text-right">{{ formatSeparatorView(mo.maxCapMonth2)
-                                }}</td>
-                        </ng-container>
-
-                        <!-- sfMonth0 Column -->
-                        <ng-container matColumnDef="sfMonth0">
-                            <th mat-sort-header *matHeaderCellDef style="min-width: 80px">{{ monthNames[0] || 'Month 1'
-                                }}</th>
-                            <td mat-cell *matCellDef="let mo" class="text-right">{{ formatSeparatorView(mo.sfMonth0) }}
-                            </td>
-                        </ng-container>
-
-                        <!-- sfMonth1 Column -->
-                        <ng-container matColumnDef="sfMonth1">
-                            <th mat-sort-header *matHeaderCellDef style="min-width: 80px">{{ monthNames[1] || 'Month 1'
-                                }}</th>
-                            <td mat-cell *matCellDef="let mo" class="text-right">{{ formatSeparatorView(mo.sfMonth1) }}
-                            </td>
-                        </ng-container>
-
-                        <!-- sfMonth2 Column -->
-                        <ng-container matColumnDef="sfMonth2">
-                            <th mat-sort-header *matHeaderCellDef style="min-width: 80px">{{ monthNames[2] || 'Month 1'
-                                }}</th>
-                            <td mat-cell *matCellDef="let mo" class="text-right">{{ formatSeparatorView(mo.sfMonth2) }}
-                            </td>
-                        </ng-container>
-
-                        <!-- moMonth0 Column -->
-                        <ng-container matColumnDef="moMonth0">
-                            <th mat-sort-header *matHeaderCellDef style="min-width: 80px" class="child-column">{{
-                                monthNames[0] || 'Month 1' }}</th>
-                            <td mat-cell *matCellDef="let mo" class="text-right">{{ formatSeparatorView(mo.moMonth0) }}
-                            </td>
-                        </ng-container>
-
-                        <!-- moMonth1 Column -->
-                        <ng-container matColumnDef="moMonth1">
-                            <th mat-sort-header *matHeaderCellDef style="min-width: 80px" class="child-column">{{
-                                monthNames[1] || 'Month 1' }}</th>
-                            <td mat-cell *matCellDef="let mo" class="text-right">{{ formatSeparatorView(mo.moMonth1) }}
-                            </td>
-                        </ng-container>
-
-                        <!-- moMonth2 Column -->
-                        <ng-container matColumnDef="moMonth2">
-                            <th mat-sort-header *matHeaderCellDef style="min-width: 80px" class="child-column">{{
-                                monthNames[2] || 'Month 2' }}</th>
-                            <td mat-cell *matCellDef="let mo" class="text-right">{{ formatSeparatorView(mo.moMonth2) }}
-                            </td>
-                        </ng-container>
-
-                        <!-- AR Column -->
-                        <ng-container matColumnDef="ar">
-                            <th *matHeaderCellDef rowspan="2" mat-sort-header style="min-width: 100px">% AR</th>
-                            <td class="text-right" *matCellDef="let mo">
-                                <input type="text" [ngModel]="(mo.ar)" class="text-right form-control" />
-                            </td>
-                        </ng-container>
-
-                        <!-- DEFECT Column -->
-                        <ng-container matColumnDef="defect">
-                            <th *matHeaderCellDef rowspan="2" mat-sort-header style="min-width: 100px">% Defect</th>
-                            <td class="text-right" *matCellDef="let mo">
-                                <input type="text" [ngModel]="(mo.defect)" class="text-right form-control" />
-                            </td>
-                        </ng-container>
-
-                        <!-- REJECT Column -->
-                        <ng-container matColumnDef="reject">
-                            <th *matHeaderCellDef rowspan="2" mat-sort-header style="min-width: 100px">% Reject</th>
-                            <td class="text-right" *matCellDef="let mo">
-                                <input type="text" [ngModel]="(mo.reject)" class="text-right form-control" />
-                            </td>
-                        </ng-container>
-
-                        <tr align="center" style="height: 30px" mat-header-row
-                            *matHeaderRowDef="headersColumnsDmo; sticky: true"></tr>
-                        <tr align="center" style="height: 30px" mat-header-row
-                            *matHeaderRowDef="childHeadersColumnsDmo; sticky: true"></tr>
-                        <tr style="height: 30px" mat-row *matRowDef="let row; columns: rowDataDmo"></tr>
-                    </table>
+                <div class="col-md-4 min-height-form">
+                  <label for="text-input">Normal Working Day</label>
+                  <input type="text" formControlName="nwd_0" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                 </div>
-                <!-- Pagination -->
-                <mat-paginator #paginatorDmo [pageSizeOptions]="[20, 100, 200]" showFirstLastButtons></mat-paginator>
-            </div>
-        </div>
+                <div class="col-md-4 min-height-form">
+                  <label for="text-input">Normal Working Day Tube</label>
+                  <input type="text" formControlName="nwt_0" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                </div>
+                <div class="col-md-4 min-height-form">
+                  <label for="text-input">Working Day Overtime Tube</label>
+                  <input type="text" formControlName="ot_wt_0" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                </div>
+                <div class="col-md-4 min-height-form">
+                  <label for="text-input">Working Day Overtime TL</label>
+                  <input type="text" formControlName="tl_ot_wd_0" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                </div>
+                <div class="col-md-4 min-height-form">
+                  <label for="text-input">Working Day Overtime TT</label>
+                  <input type="text" formControlName="tt_ot_wd_0" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                </div>
+                <div class="col-md-4 min-height-form">
+                  <label for="text-input">Total Working Day Tube</label>
+                  <input formControlName="total_wt_0" type="text" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                </div>
+                <div class="col-md-4 min-height-form">
+                  <label for="text-input">Total Working Day Tire TL</label>
+                  <input formControlName="total_tlwd_0" type="text" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                </div>
+                <div class="col-md-4 min-height-form">
+                  <label for="text-input">Total Working Day Tire TT</label>
+                  <input formControlName="total_ttwd_0" type="text" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                </div>
+                <div class="col-md-4 min-height-form">
+                  <label for="text-input">Maximum Capacity Tube</label>
+                  <input type="text" formControlName="max_tube_capa_0" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                </div>
+                <div class="col-md-4 min-height-form">
+                  <label for="text-input">Maximum Capacity Tire TL</label>
+                  <input type="text" formControlName="max_capa_tl_0" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                </div>
+                <div class="col-md-4 min-height-form">
+                  <label for="text-input">Maximum Capacity Tire TT</label>
+                  <input type="text" formControlName="max_capa_tt_0" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                </div>
+                <div class="col-md-4 min-height-form">
+                  <label for="text-input">Capacity Machine Airbag</label>
+                  <input type="text" formControlName="machine_airbag_m0" name="text-input" class="form-control" [readOnly]="isReadOnly" />
+                </div>
+                <div class="col-md-4 min-height-form" *ngIf="formHeaderMo.get('type')?.value !== 'FDR'">
+                  <label for="text-input">FED TL</label>
+                  <input type="text" formControlName="fed_tl_m0" name="text-input" class="form-control" [readOnly]="isReadOnly" />
+                </div>
+                <div class="col-md-4 min-height-form" *ngIf="formHeaderMo.get('type')?.value !== 'FED'">
+                  <label for="text-input">FDR TL</label>
+                  <input type="text" formControlName="fdr_tl_m0" name="text-input" class="form-control" [readOnly]="isReadOnly" />
+                </div>
+                <div class="col-md-4 min-height-form" *ngIf="formHeaderMo.get('type')?.value !== 'FDR'">
+                  <label for="text-input">FED TT</label>
+                  <input type="text" formControlName="fed_tt_m0" name="text-input" class="form-control" [readOnly]="isReadOnly" />
+                </div>
+                <div class="col-md-4 min-height-form" *ngIf="formHeaderMo.get('type')?.value !== 'FED'">
+                  <label for="text-input">FDR TT</label>
+                  <input type="text" formControlName="fdr_tt_m0" name="text-input" class="form-control" [readOnly]="isReadOnly" />
+                </div>
+                <div class="col-md-4 min-height-form">
+                  <label for="text-input">Total Marketing Order</label>
+                  <input type="text" formControlName="total_mo_m0" name="text-input" class="form-control" [readOnly]="isReadOnly" />
+                </div>
+                <div class="col-md-4 min-height-form" *ngIf="formHeaderMo.get('type')?.value !== 'FDR'">
+                  <label for="text-input">% FED TL</label>
+                  <input type="text" formControlName="fed_TL_percentage_m0" name="text-input" class="form-control" [readOnly]="isReadOnly" />
+                </div>
+                <div class="col-md-4 min-height-form" *ngIf="formHeaderMo.get('type')?.value !== 'FED'">
+                  <label for="text-input">% FDR TL</label>
+                  <input type="text" formControlName="fdr_TL_percentage_m0" name="text-input" class="form-control" [readOnly]="isReadOnly" />
+                </div>
+                <div class="col-md-4 min-height-form" *ngIf="formHeaderMo.get('type')?.value !== 'FDR'">
+                  <label for="text-input">% FED TT</label>
+                  <input type="text" formControlName="fed_TT_percentage_m0" name="text-input" class="form-control" [readOnly]="isReadOnly" />
+                </div>
+                <div class="col-md-4 min-height-form" *ngIf="formHeaderMo.get('type')?.value !== 'FED'">
+                  <label for="text-input">% FDR TT</label>
+                  <input type="text" formControlName="fdr_TT_percentage_m0" name="text-input" class="form-control" [readOnly]="isReadOnly" />
+                </div>
+                <div class="col-md-4 min-height-form">
+                  <label for="text-input">Note Order TL</label>
+                  <input type="text" formControlName="note_order_tl_0" name="text-input" class="form-control" [readOnly]="isReadOnly" />
+                </div>
+              </div>
+            </tab>
+            <tab heading="Month 2">
+              <div class="form-row align-items-center">
+                <div class="col-md-4 min-height-form">
+                  <label>Month And Year</label>
+                  <input class="form-control input-month-year" formControlName="month_1" type="month" [readOnly]="true" />
+                </div>
+                <div class="col-md-4 min-height-form">
+                  <label for="text-input">Normal Working Day</label>
+                  <input type="text" formControlName="nwd_1" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                </div>
+                <div class="col-md-4 min-height-form">
+                  <label for="text-input">Normal Working Day Tube</label>
+                  <input type="text" formControlName="nwt_1" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                </div>
+                <div class="col-md-4 min-height-form">
+                  <label for="text-input">Working Day Overtime Tube</label>
+                  <input type="text" formControlName="ot_wt_1" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                </div>
+                <div class="col-md-4 min-height-form">
+                  <label for="text-input">Working Day Overtime TL</label>
+                  <input type="text" formControlName="tl_ot_wd_1" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                </div>
+                <div class="col-md-4 min-height-form">
+                  <label for="text-input">Working Day Overtime TT</label>
+                  <input type="text" formControlName="tt_ot_wd_1" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                </div>
+                <div class="col-md-4 min-height-form">
+                  <label for="text-input">Total Working Day Tube</label>
+                  <input formControlName="total_wt_1" type="text" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                </div>
+                <div class="col-md-4 min-height-form">
+                  <label for="text-input">Total Working Day Tire TL</label>
+                  <input formControlName="total_tlwd_1" type="text" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                </div>
+                <div class="col-md-4 min-height-form">
+                  <label for="text-input">Total Working Day Tire TT</label>
+                  <input formControlName="total_ttwd_1" type="text" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                </div>
+                <div class="col-md-4 min-height-form">
+                  <label for="text-input">Maximum Capacity Tube</label>
+                  <input type="text" formControlName="max_tube_capa_1" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                </div>
+                <div class="col-md-4 min-height-form">
+                  <label for="text-input">Maximum Capacity Tire TL</label>
+                  <input type="text" formControlName="max_capa_tl_1" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                </div>
+                <div class="col-md-4 min-height-form">
+                  <label for="text-input">Maximum Capacity Tire TT</label>
+                  <input type="text" formControlName="max_capa_tt_1" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                </div>
+                <div class="col-md-4 min-height-form">
+                  <label for="text-input">Capacity Machine Airbag</label>
+                  <input type="text" formControlName="machine_airbag_m1" name="text-input" class="form-control" [readOnly]="isReadOnly" />
+                </div>
+                <div class="col-md-4 min-height-form" *ngIf="formHeaderMo.get('type')?.value !== 'FDR'">
+                  <label for="text-input">FED TL</label>
+                  <input type="text" formControlName="fed_tl_m1" name="text-input" class="form-control" [readOnly]="isReadOnly" />
+                </div>
+                <div class="col-md-4 min-height-form" *ngIf="formHeaderMo.get('type')?.value !== 'FED'">
+                  <label for="text-input">FDR TL</label>
+                  <input type="text" formControlName="fdr_tl_m1" name="text-input" class="form-control" [readOnly]="isReadOnly" />
+                </div>
+                <div class="col-md-4 min-height-form" *ngIf="formHeaderMo.get('type')?.value !== 'FDR'">
+                  <label for="text-input">FED TT</label>
+                  <input type="text" formControlName="fed_tt_m1" name="text-input" class="form-control" [readOnly]="isReadOnly" />
+                </div>
+                <div class="col-md-4 min-height-form" *ngIf="formHeaderMo.get('type')?.value !== 'FED'">
+                  <label for="text-input">FDR TT</label>
+                  <input type="text" formControlName="fdr_tt_m1" name="text-input" class="form-control" [readOnly]="isReadOnly" />
+                </div>
+                <div class="col-md-4 min-height-form">
+                  <label for="text-input">Total Marketing Order</label>
+                  <input type="text" formControlName="total_mo_m1" name="text-input" class="form-control" [readOnly]="isReadOnly" />
+                </div>
+                <div class="col-md-4 min-height-form" *ngIf="formHeaderMo.get('type')?.value !== 'FDR'">
+                  <label for="text-input">% FED TL</label>
+                  <input type="text" formControlName="fed_TL_percentage_m1" name="text-input" class="form-control" [readOnly]="isReadOnly" />
+                </div>
+                <div class="col-md-4 min-height-form" *ngIf="formHeaderMo.get('type')?.value !== 'FED'">
+                  <label for="text-input">% FDR TL</label>
+                  <input type="text" formControlName="fdr_TL_percentage_m1" name="text-input" class="form-control" [readOnly]="isReadOnly" />
+                </div>
+                <div class="col-md-4 min-height-form" *ngIf="formHeaderMo.get('type')?.value !== 'FDR'">
+                  <label for="text-input">% FED TT</label>
+                  <input type="text" formControlName="fed_TT_percentage_m1" name="text-input" class="form-control" [readOnly]="isReadOnly" />
+                </div>
+                <div class="col-md-4 min-height-form" *ngIf="formHeaderMo.get('type')?.value !== 'FED'">
+                  <label for="text-input">% FDR TT</label>
+                  <input type="text" formControlName="fdr_TT_percentage_m1" name="text-input" class="form-control" [readOnly]="isReadOnly" />
+                </div>
+                <div class="col-md-4 min-height-form">
+                  <label for="text-input">Note Order TL</label>
+                  <input type="text" formControlName="note_order_tl_1" name="text-input" class="form-control" [readOnly]="isReadOnly" />
+                </div>
+              </div>
+            </tab>
+            <tab heading="Month 3">
+              <div class="form-row align-items-center">
+                <div class="col-md-4 min-height-form">
+                  <label>Month And Year</label>
+                  <input class="form-control input-month-year" formControlName="month_2" type="month" [readOnly]="true" />
+                </div>
+                <div class="col-md-4 min-height-form">
+                  <label for="text-input">Normal Working Day</label>
+                  <input type="text" formControlName="nwd_2" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                </div>
+                <div class="col-md-4 min-height-form">
+                  <label for="text-input">Normal Working Day Tube</label>
+                  <input type="text" formControlName="nwt_2" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                </div>
+                <div class="col-md-4 min-height-form">
+                  <label for="text-input">Working Day Overtime Tube</label>
+                  <input type="text" formControlName="ot_wt_2" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                </div>
+                <div class="col-md-4 min-height-form">
+                  <label for="text-input">Working Day Overtime TL</label>
+                  <input type="text" formControlName="tl_ot_wd_2" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                </div>
+                <div class="col-md-4 min-height-form">
+                  <label for="text-input">Working Day Overtime TT</label>
+                  <input type="text" formControlName="tt_ot_wd_2" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                </div>
+                <div class="col-md-4 min-height-form">
+                  <label for="text-input">Total Working Day Tube</label>
+                  <input formControlName="total_wt_2" type="text" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                </div>
+                <div class="col-md-4 min-height-form">
+                  <label for="text-input">Total Working Day Tire TL</label>
+                  <input formControlName="total_tlwd_2" type="text" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                </div>
+                <div class="col-md-4 min-height-form">
+                  <label for="text-input">Total Working Day Tire TT</label>
+                  <input formControlName="total_ttwd_2" type="text" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                </div>
+                <div class="col-md-4 min-height-form">
+                  <label for="text-input">Maximum Capacity Tube</label>
+                  <input type="text" formControlName="max_tube_capa_2" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                </div>
+                <div class="col-md-4 min-height-form">
+                  <label for="text-input">Maximum Capacity Tire TL</label>
+                  <input type="text" formControlName="max_capa_tl_2" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                </div>
+                <div class="col-md-4 min-height-form">
+                  <label for="text-input">Maximum Capacity Tire TT</label>
+                  <input type="text" formControlName="max_capa_tt_2" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                </div>
+                <div class="col-md-4 min-height-form">
+                  <label for="text-input">Capacity Machine Airbag</label>
+                  <input type="text" formControlName="machine_airbag_m2" name="text-input" class="form-control" [readOnly]="isReadOnly" />
+                </div>
+                <div class="col-md-4 min-height-form" *ngIf="formHeaderMo.get('type')?.value !== 'FDR'">
+                  <label for="text-input">FED TL</label>
+                  <input type="text" formControlName="fed_tl_m2" name="text-input" class="form-control" [readOnly]="isReadOnly" />
+                </div>
+                <div class="col-md-4 min-height-form" *ngIf="formHeaderMo.get('type')?.value !== 'FED'">
+                  <label for="text-input">FDR TL</label>
+                  <input type="text" formControlName="fdr_tl_m2" name="text-input" class="form-control" [readOnly]="isReadOnly" />
+                </div>
+                <div class="col-md-4 min-height-form" *ngIf="formHeaderMo.get('type')?.value !== 'FDR'">
+                  <label for="text-input">FED TT</label>
+                  <input type="text" formControlName="fed_tt_m2" name="text-input" class="form-control" [readOnly]="isReadOnly" />
+                </div>
+                <div class="col-md-4 min-height-form" *ngIf="formHeaderMo.get('type')?.value !== 'FED'">
+                  <label for="text-input">FDR TT</label>
+                  <input type="text" formControlName="fdr_tt_m2" name="text-input" class="form-control" [readOnly]="isReadOnly" />
+                </div>
+                <div class="col-md-4 min-height-form">
+                  <label for="text-input">Total Marketing Order</label>
+                  <input type="text" formControlName="total_mo_m2" name="text-input" class="form-control" [readOnly]="isReadOnly" />
+                </div>
+                <div class="col-md-4 min-height-form" *ngIf="formHeaderMo.get('type')?.value !== 'FDR'">
+                  <label for="text-input">% FED TL</label>
+                  <input type="text" formControlName="fed_TL_percentage_m2" name="text-input" class="form-control" [readOnly]="isReadOnly" />
+                </div>
+                <div class="col-md-4 min-height-form" *ngIf="formHeaderMo.get('type')?.value !== 'FED'">
+                  <label for="text-input">% FDR TL</label>
+                  <input type="text" formControlName="fdr_TL_percentage_m2" name="text-input" class="form-control" [readOnly]="isReadOnly" />
+                </div>
+                <div class="col-md-4 min-height-form" *ngIf="formHeaderMo.get('type')?.value !== 'FDR'">
+                  <label for="text-input">% FED TT</label>
+                  <input type="text" formControlName="fed_TT_percentage_m2" name="text-input" class="form-control" [readOnly]="isReadOnly" />
+                </div>
+                <div class="col-md-4 min-height-form" *ngIf="formHeaderMo.get('type')?.value !== 'FED'">
+                  <label for="text-input">% FDR TT</label>
+                  <input type="text" formControlName="fdr_TT_percentage_m2" name="text-input" class="form-control" [readOnly]="isReadOnly" />
+                </div>
+                <div class="col-md-4 min-height-form">
+                  <label for="text-input">Note Order TL</label>
+                  <input type="text" formControlName="note_order_tl_2" name="text-input" class="form-control" [readOnly]="isReadOnly" />
+                </div>
+              </div>
+            </tab>
+          </tabset>
+        </form>
+      </div>
     </div>
+  </div>
 
-    <div class="col-md-12 pb-4">
-        <button (click)="navigateToViewMo()" class="btn btn-primary justify-content-start mr-2">Back</button>
-        <button (click)="editMo()" [disabled]="loading" type="submit" class="btn btn-success">
-            <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
-            Edit
-        </button>
+  <!-- Detail Marketing Order -->
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-header">
+        <strong>Edit Detail Marketing Order</strong>
+      </div>
+      <div class="card-body">
+        <div class="d-flex justify-content-between mb-3">
+          <div class="d-flex align-items-center">
+            <input type="text" class="form-control col-md-12 col-lg-12" [(ngModel)]="searchTextDmo" (input)="onSearchChangeDmo()" placeholder="Find here..." />
+            <button type="submit" class="btn btn-primary ml-2" (click)="resetSearchDmo()">Reset</button>
+          </div>
+
+          <!-- Bagian kanan: Download dan Upload -->
+          <div class="d-flex">
+            <button type="button" (click)="downloadTemplate()" class="btn btn-primary ml-2"><i class="fa fa-download fa-lg"></i> Download Template</button>
+            <button type="button" class="btn btn-success ml-2" data-toggle="modal" data-target="#uploadModal"><i class="fa fa-file-excel-o fa-lg"></i> Upload Excel</button>
+          </div>
+        </div>
+        <!-- Table -->
+        <div class="table-responsive">
+          <table mat-table matSort #sortDmo="matSort" [dataSource]="dataSourceDmo" class="table table-bordered table-sm">
+            <ng-container matColumnDef="no" sticky>
+              <th *matHeaderCellDef style="min-width: 50px" rowspan="2">No</th>
+              <td mat-cell class="text-center" *matCellDef="let mo; let i = index">{{ i + 1 }}</td>
+            </ng-container>
+
+            <!-- Category Column -->
+            <ng-container matColumnDef="category" sticky>
+              <th *matHeaderCellDef rowspan="2" style="min-width: 150px" mat-sort-header>Category</th>
+              <td mat-cell class="text-center" *matCellDef="let element">{{ element.category }}</td>
+            </ng-container>
+
+            <!-- Partnumber Column -->
+            <ng-container matColumnDef="partNumber" sticky>
+              <th *matHeaderCellDef rowspan="2" style="min-width: 150px" mat-sort-header>Item</th>
+              <td mat-cell class="text-center" *matCellDef="let mo">{{ mo.partNumber }}</td>
+            </ng-container>
+
+            <!-- Description Column -->
+            <ng-container matColumnDef="description" sticky>
+              <th *matHeaderCellDef rowspan="2" style="min-width: 250px" mat-sort-header>Description</th>
+              <td class="text-left" *matCellDef="let mo">{{ mo.description }}</td>
+            </ng-container>
+
+            <!-- Machine Type Column -->
+            <ng-container matColumnDef="machineType">
+              <th *matHeaderCellDef rowspan="2" style="min-width: 100px" mat-sort-header>Machine Type</th>
+              <td class="text-center" *matCellDef="let mo">{{ mo.machineType }}</td>
+            </ng-container>
+
+            <!-- Capacity 99,5% Column -->
+            <ng-container matColumnDef="capacity">
+              <th *matHeaderCellDef rowspan="2" style="min-width: 50px" mat-sort-header>Capacity {{ capacityDb + '%' }}</th>
+              <td class="text-right" *matCellDef="let mo">{{ formatSeparatorView(mo.capacity) }}</td>
+            </ng-container>
+
+            <!-- Quantity mould Column -->
+            <ng-container matColumnDef="qtyPerMould">
+              <th *matHeaderCellDef rowspan="2" style="min-width: 50px" mat-sort-header>Qty Mould</th>
+              <td class="text-right" *matCellDef="let mo">{{ formatSeparatorView(mo.qtyPerMould) }}</td>
+            </ng-container>
+
+            <!-- Mould Spare Column -->
+            <ng-container matColumnDef="spareMould">
+              <th *matHeaderCellDef rowspan="2" style="min-width: 50px" mat-sort-header>Mould Spare</th>
+              <td class="text-right" *matCellDef="let mo">{{ formatSeparatorView(mo.spareMould) }}</td>
+            </ng-container>
+
+            <!-- Mould Plan Column -->
+            <ng-container matColumnDef="mouldMonthlyPlan">
+              <th *matHeaderCellDef rowspan="2" style="min-width: 50px" mat-sort-header>Mould Plan</th>
+              <td class="text-right" *matCellDef="let mo">{{ formatSeparatorView(mo.mouldMonthlyPlan) }}</td>
+            </ng-container>
+
+            <!-- Qty PerRak Column -->
+            <ng-container matColumnDef="qtyPerRak">
+              <th *matHeaderCellDef rowspan="2" style="min-width: 50px" mat-sort-header>Qty PerRak</th>
+              <td class="text-right" *matCellDef="let mo">{{ formatSeparatorView(mo.qtyPerRak) }}</td>
+            </ng-container>
+
+            <!-- Minimum Order Column -->
+            <ng-container matColumnDef="minOrder">
+              <th *matHeaderCellDef rowspan="2" mat-sort-header style="min-width: 150px">Minimum Order</th>
+              <td class="text-right" *matCellDef="let mo">{{ formatSeparatorView(mo.minOrder) }}</td>
+            </ng-container>
+
+            <!-- Maximum Capacity Column -->
+            <ng-container matColumnDef="maxCap">
+              <th mat-sort-header style="min-width: 350px" *matHeaderCellDef colspan="3">Maximum Capacity</th>
+            </ng-container>
+
+            <!-- Initial Stock Column -->
+            <ng-container matColumnDef="initialStock">
+              <th mat-sort-header style="min-width: 150px" rowspan="2" *matHeaderCellDef>Initial Stock</th>
+              <td class="text-right" *matCellDef="let mo">{{ formatSeparatorView(mo.initialStock) }}</td>
+            </ng-container>
+
+            <!-- Sales Forecast Column -->
+            <ng-container matColumnDef="salesForecast">
+              <th mat-sort-header style="min-width: 350px" *matHeaderCellDef colspan="3">Sales Forecast</th>
+            </ng-container>
+
+            <!-- Marketing Order Column -->
+            <ng-container matColumnDef="marketingOrder">
+              <th mat-sort-header style="min-width: 350px" *matHeaderCellDef colspan="3" class="sticky-column">Marketing Order</th>
+            </ng-container>
+
+            <!-- Child header Column -->
+
+            <!-- maxCapMonth0 Column -->
+            <ng-container matColumnDef="maxCapMonth0">
+              <th mat-sort-header *matHeaderCellDef style="min-width: 80px" class="child-column">{{ monthNames[0] || 'Month 1' }}</th>
+              <td mat-cell *matCellDef="let mo" class="text-right">{{ formatSeparatorView(mo.maxCapMonth0) }}</td>
+            </ng-container>
+
+            <!-- maxCapMonth1 Column -->
+            <ng-container matColumnDef="maxCapMonth1">
+              <th mat-sort-header *matHeaderCellDef style="min-width: 80px" class="child-column">{{ monthNames[1] || 'Month 2' }}</th>
+              <td mat-cell *matCellDef="let mo" class="text-right">{{ formatSeparatorView(mo.maxCapMonth1) }}</td>
+            </ng-container>
+
+            <!-- maxCapMonth2 Column -->
+            <ng-container matColumnDef="maxCapMonth2">
+              <th mat-sort-header *matHeaderCellDef style="min-width: 80px" class="child-column">{{ monthNames[2] || 'Month 3' }}</th>
+              <td mat-cell *matCellDef="let mo" class="text-right">{{ formatSeparatorView(mo.maxCapMonth2) }}</td>
+            </ng-container>
+
+            <!-- sfMonth0 Column -->
+            <ng-container matColumnDef="sfMonth0">
+              <th mat-sort-header *matHeaderCellDef style="min-width: 80px">{{ monthNames[0] || 'Month 1' }}</th>
+              <td mat-cell *matCellDef="let mo" class="text-right">{{ formatSeparatorView(mo.sfMonth0) }}</td>
+            </ng-container>
+
+            <!-- sfMonth1 Column -->
+            <ng-container matColumnDef="sfMonth1">
+              <th mat-sort-header *matHeaderCellDef style="min-width: 80px">{{ monthNames[1] || 'Month 1' }}</th>
+              <td mat-cell *matCellDef="let mo" class="text-right">{{ formatSeparatorView(mo.sfMonth1) }}</td>
+            </ng-container>
+
+            <!-- sfMonth2 Column -->
+            <ng-container matColumnDef="sfMonth2">
+              <th mat-sort-header *matHeaderCellDef style="min-width: 80px">{{ monthNames[2] || 'Month 1' }}</th>
+              <td mat-cell *matCellDef="let mo" class="text-right">{{ formatSeparatorView(mo.sfMonth2) }}</td>
+            </ng-container>
+
+            <!-- moMonth0 Column -->
+            <ng-container matColumnDef="moMonth0">
+              <th mat-sort-header *matHeaderCellDef style="min-width: 80px" class="child-column">{{ monthNames[0] || 'Month 1' }}</th>
+              <td mat-cell *matCellDef="let mo" class="text-right">{{ formatSeparatorView(mo.moMonth0) }}</td>
+            </ng-container>
+
+            <!-- moMonth1 Column -->
+            <ng-container matColumnDef="moMonth1">
+              <th mat-sort-header *matHeaderCellDef style="min-width: 80px" class="child-column">{{ monthNames[1] || 'Month 1' }}</th>
+              <td mat-cell *matCellDef="let mo" class="text-right">{{ formatSeparatorView(mo.moMonth1) }}</td>
+            </ng-container>
+
+            <!-- moMonth2 Column -->
+            <ng-container matColumnDef="moMonth2">
+              <th mat-sort-header *matHeaderCellDef style="min-width: 80px" class="child-column">{{ monthNames[2] || 'Month 2' }}</th>
+              <td mat-cell *matCellDef="let mo" class="text-right">{{ formatSeparatorView(mo.moMonth2) }}</td>
+            </ng-container>
+
+            <!-- AR Column -->
+            <ng-container matColumnDef="ar">
+              <th *matHeaderCellDef rowspan="2" mat-sort-header style="min-width: 100px">% AR</th>
+              <td class="text-right" *matCellDef="let mo">
+                <input type="text" [ngModel]="mo.ar" class="text-right form-control" />
+              </td>
+            </ng-container>
+
+            <!-- DEFECT Column -->
+            <ng-container matColumnDef="defect">
+              <th *matHeaderCellDef rowspan="2" mat-sort-header style="min-width: 100px">% Defect</th>
+              <td class="text-right" *matCellDef="let mo">
+                <input type="text" [ngModel]="mo.defect" class="text-right form-control" />
+              </td>
+            </ng-container>
+
+            <!-- REJECT Column -->
+            <ng-container matColumnDef="reject">
+              <th *matHeaderCellDef rowspan="2" mat-sort-header style="min-width: 100px">% Reject</th>
+              <td class="text-right" *matCellDef="let mo">
+                <input type="text" [ngModel]="mo.reject" class="text-right form-control" />
+              </td>
+            </ng-container>
+
+            <tr align="center" style="height: 30px" mat-header-row *matHeaderRowDef="headersColumnsDmo; sticky: true"></tr>
+            <tr align="center" style="height: 30px" mat-header-row *matHeaderRowDef="childHeadersColumnsDmo; sticky: true"></tr>
+            <tr style="height: 30px" mat-row *matRowDef="let row; columns: rowDataDmo"></tr>
+          </table>
+        </div>
+        <!-- Pagination -->
+        <mat-paginator #paginatorDmo [pageSizeOptions]="[20, 100, 200]" showFirstLastButtons></mat-paginator>
+      </div>
     </div>
+  </div>
+
+  <div class="col-md-12 pb-4">
+    <button (click)="navigateToViewMo()" class="btn btn-primary justify-content-start mr-2">Back</button>
+    <button (click)="editMo()" [disabled]="loading" type="submit" class="btn btn-success">
+      <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+      Edit
+    </button>
+  </div>
 </div>
