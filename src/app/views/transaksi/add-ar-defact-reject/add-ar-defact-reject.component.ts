@@ -1316,6 +1316,8 @@ export class AddArDefactRejectComponent implements OnInit {
               detail.isTouchedM0 = true;
             }
           }
+
+          console.log(this.detailMarketingOrder);
         } else {
           console.error('File tidak dapat dibaca sebagai ArrayBuffer');
         }
@@ -1324,5 +1326,7 @@ export class AddArDefactRejectComponent implements OnInit {
       reader.readAsArrayBuffer(this.file); // Membaca file sebagai ArrayBuffer
       $('#uploadModal').modal('hide');
     }
+
+
   }
 }
