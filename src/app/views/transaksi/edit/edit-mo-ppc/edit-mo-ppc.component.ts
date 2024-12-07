@@ -30,7 +30,7 @@ export class EditMoPpcComponent implements OnInit {
   monthNames: string[] = ['', '', ''];
   allData: any;
   lastIdMo: string = '';
-  loading:boolean = false;
+  loading: boolean = false;
 
   marketingOrder: MarketingOrder = new MarketingOrder();
   headerMarketingOrder: any[] = [];

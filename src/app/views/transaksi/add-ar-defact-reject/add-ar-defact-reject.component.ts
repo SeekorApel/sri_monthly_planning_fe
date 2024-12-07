@@ -30,6 +30,7 @@ export class AddArDefactRejectComponent implements OnInit {
   allData: any;
   lastIdMo: string = '';
   loading: boolean = false;
+  file: File | null = null;
 
   marketingOrder: MarketingOrder = new MarketingOrder();
   headerMarketingOrder: any[] = [];
@@ -1253,5 +1254,75 @@ export class AddArDefactRejectComponent implements OnInit {
     const timestamp = indonesiaTime.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }).replace(':', '');
     const fileName = `From_AR_Defect_Reject_MO_${monthFn}_${year}_${timestamp}.xlsx`;
     return fileName;
+  }
+
+  onFileChange(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      const file = input.files[0];
+      const fileName = file.name.toLowerCase();
+
+      // Validasi ekstensi file
+      if (fileName.endsWith('.xls') || fileName.endsWith('.xlsx')) {
+        this.file = file;
+      } else {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Invalid File Type',
+          text: 'Please upload a valid Excel file (.xls or .xlsx).',
+          confirmButtonText: 'OK',
+        });
+        this.file = null;
+        input.value = '';
+      }
+    }
+  }
+
+  uploadFileExcel() {
+    if (this.file) {
+      const formData = new FormData();
+      formData.append('file', this.file);
+
+      // Membaca file Excel
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        // Memastikan hasil pembacaan adalah ArrayBuffer
+        const result = e.target.result;
+        if (result instanceof ArrayBuffer) {
+          const data = new Uint8Array(result);
+          const workbook = XLSX.read(data, { type: 'array' });
+
+          // Ambil nama sheet pertama
+          const firstSheetName = workbook.SheetNames[0];
+          const worksheet = workbook.Sheets[firstSheetName];
+
+          // Menentukan kolom yang akan dibaca (M sampai S)
+          const startRow = 21; // Baris awal
+          const endRow = worksheet['!ref'] ? XLSX.utils.decode_range(worksheet['!ref']).e.r : startRow; // Menghitung baris terakhir
+
+          // Membaca data dari kolom
+          for (let row = startRow - 1; row <= endRow; row++) {
+            const partNumber = Number(worksheet[`C${row + 1}`]?.v) || null; // Kolom C
+            const ar = Number(worksheet[`T${row + 1}`]?.v) || null; // Kolom T
+            const defect = Number(worksheet[`U${row + 1}`]?.v) || null; // Kolom U
+            const reject = Number(worksheet[`V${row + 1}`]?.v) || null; // Kolom V
+
+            // Mencari dan memperbarui nilai dalam detailMarketingOrder
+            const detail = this.detailMarketingOrder.find((item) => item.partNumber === partNumber);
+            if (detail) {
+              detail.ar = ar;
+              detail.defect = defect;
+              detail.reject = reject;
+              detail.isTouchedM0 = true;
+            }
+          }
+        } else {
+          console.error('File tidak dapat dibaca sebagai ArrayBuffer');
+        }
+      };
+
+      reader.readAsArrayBuffer(this.file); // Membaca file sebagai ArrayBuffer
+      $('#uploadModal').modal('hide');
+    }
   }
 }
