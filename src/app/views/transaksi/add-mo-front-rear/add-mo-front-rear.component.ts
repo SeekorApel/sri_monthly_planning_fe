@@ -6,6 +6,7 @@ import { HeaderMarketingOrder } from 'src/app/models/HeaderMarketingOrder';
 import { MarketingOrder } from 'src/app/models/MarketingOrder';
 import { ApiResponse } from 'src/app/response/Response';
 import { MarketingOrderService } from 'src/app/services/transaksi/marketing order/marketing-order.service';
+import { MonthlyPlanCuringService } from 'src/app/services/transaksi/monthly plan curing/monthly-plan-curing.service';
 import { ParsingDate } from 'src/app/utils/ParsingDate';
 import Swal from 'sweetalert2';
 import { MatTableDataSource } from '@angular/material/table';
@@ -45,7 +46,9 @@ export class AddMoFrontRearComponent implements OnInit {
   detailMoRevision: string;
   capacity: string = '';
   checked = [];  // Your data source
-  machine: any;
+  machine: any[] = [];
+  itemCuring: string = '';
+  selectedItemCuring: string = '';
 
   // Pagination Marketing Order
   displayedColumnsMo: string[] = ['no', 'moId', 'type', 'dateValid', 'revisionPpc', 'revisionMarketing', 'month0', 'month1', 'month2', 'action'];
@@ -54,14 +57,14 @@ export class AddMoFrontRearComponent implements OnInit {
   @ViewChild('paginatorMo') paginatorMo: MatPaginator;
 
   // Pagination Detail Marketing Order
-  headersColumnsDmo: string[] = ['select','no', 'category', 'partNumber', 'description', 'machineType', 'capacity', 'qtyPerMould', 'spareMould', 'mouldMonthlyPlan', 'qtyPerRak', 'minOrder', 'maxCap', 'initialStock', 'salesForecast', 'marketingOrder', 'ar','defect','reject','action'];
+  headersColumnsDmo: string[] = ['select', 'no', 'category', 'partNumber', 'description', 'machineType', 'capacity', 'qtyPerMould', 'spareMould', 'mouldMonthlyPlan', 'qtyPerRak', 'minOrder', 'maxCap', 'initialStock', 'salesForecast', 'marketingOrder', 'action'];
   childHeadersColumnsDmo: string[] = ['maxCapMonth0', 'maxCapMonth1', 'maxCapMonth2', 'sfMonth0', 'sfMonth1', 'sfMonth2', 'moMonth0', 'moMonth1', 'moMonth2'];
-  rowDataDmo: string[] = ['select','no', 'category', 'partNumber', 'description', 'machineType', 'capacity', 'qtyPerMould', 'spareMould', 'mouldMonthlyPlan', 'qtyPerRak', 'minOrder', 'maxCapMonth0', 'maxCapMonth1', 'maxCapMonth2', 'initialStock', 'sfMonth0', 'sfMonth1', 'sfMonth2', 'moMonth0', 'moMonth1', 'moMonth2', 'action'];
+  rowDataDmo: string[] = ['select', 'no', 'category', 'partNumber', 'description', 'machineType', 'capacity', 'qtyPerMould', 'spareMould', 'mouldMonthlyPlan', 'qtyPerRak', 'minOrder', 'maxCapMonth0', 'maxCapMonth1', 'maxCapMonth2', 'initialStock', 'sfMonth0', 'sfMonth1', 'sfMonth2', 'moMonth0', 'moMonth1', 'moMonth2', 'action'];
   dataSourceDmo: MatTableDataSource<DetailMarketingOrder>;
   @ViewChild('sortDmo') sortDmo = new MatSort();
   @ViewChild('paginatorDmo') paginatorDmo: MatPaginator;
 
-  constructor(private router: Router, private moService: MarketingOrderService, private activeRoute: ActivatedRoute, private fb: FormBuilder, private parseDateService: ParsingDateService) {
+  constructor(private router: Router, private moService: MarketingOrderService, private mpService: MonthlyPlanCuringService, private activeRoute: ActivatedRoute, private fb: FormBuilder, private parseDateService: ParsingDateService) {
     this.dateUtil = ParsingDate;
     this.formHeaderMo = this.fb.group({
       date: [null, []],
@@ -138,7 +141,9 @@ export class AddMoFrontRearComponent implements OnInit {
       fdr_TL_percentage_m2: [null, []],
       fed_TT_percentage_m2: [null, []],
       fdr_TT_percentage_m2: [null, []],
-      note_tl_m2: [null, []],
+      note_order_tl_0: [null, []],
+      note_order_tl_1: [null, []],
+      note_order_tl_2: [null, []],
       upload_file_m0: [null, []],
       upload_file_m1: [null, []],
       upload_file_m2: [null, []],
@@ -154,50 +159,20 @@ export class AddMoFrontRearComponent implements OnInit {
       minLimit_gt_100000: [''],
       maxLimit_gt_100000: [''],
     });
-    
+
   }
 
   ngOnInit(): void {
-    this.month0 = this.activeRoute.snapshot.paramMap.get('month0');
-    this.month1 = this.activeRoute.snapshot.paramMap.get('month1');
-    this.month2 = this.activeRoute.snapshot.paramMap.get('month2');
-    this.type = this.activeRoute.snapshot.paramMap.get('type');
-    this.getAllDetailRevision(this.month0, this.month1, this.month2, this.type);
+    // this.month0 = this.activeRoute.snapshot.paramMap.get('month0');
+    // this.month1 = this.activeRoute.snapshot.paramMap.get('month1');
+    // this.month2 = this.activeRoute.snapshot.paramMap.get('month2');
+    // this.type = this.activeRoute.snapshot.paramMap.get('type');
+    // this.getAllDetailRevision(this.month0, this.month1, this.month2, this.type);
+    this.idMo = this.activeRoute.snapshot.paramMap.get('idMo');
+    this.getAllData(this.idMo);
     this.headerRevision = 'Header Marketing Order';
     this.detailMoRevision = 'Detail Marketing Order';
     this.getCapacity();
-  }
-
-  getCapacity(): void {
-    this.moService.getCapacity().subscribe(
-      (response: ApiResponse<any>) => {
-        this.capacity = response.data;
-      },
-      (error) => {
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'Failed to load capacity ' + error.message,
-          confirmButtonText: 'OK',
-        });
-      }
-    );
-  }
-
-  getMachine(mesin: string): void {
-    this.machine.getAllMachineByItemCuring(mesin).subscribe(
-      (response: ApiResponse<any>) => {
-        this.machine = response.data;
-      },
-      (error) => {
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'Failed to load machine ' + error.message,
-          confirmButtonText: 'OK',
-        });
-      }
-    );
   }
 
   onSearchChangeMo(): void {
@@ -226,43 +201,136 @@ export class AddMoFrontRearComponent implements OnInit {
     this.checked.forEach(item => item.selected = selected);
   }
 
-  getAllDetailRevision(month0: string, month1: string, month2: string, type: string): void {
-    this.moService.getAllDetailRevision(month0, month1, month2, type).subscribe(
-      (response: ApiResponse<MarketingOrder[]>) => {
-        this.marketingOrders = response.data;
-        if (this.marketingOrders.length === 0) {
-          Swal.fire({
-            icon: 'info',
-            title: 'No Data',
-            text: 'No marketing orders found.',
-            timer: 3000,
-            showConfirmButton: false,
-          });
-        } else {
-          this.dataSourceMo = new MatTableDataSource(this.marketingOrders);
-          this.dataSourceMo.sort = this.sortMo;
-          this.dataSourceMo.paginator = this.paginatorMo;
-        }
+  formatDecimal(value: number | null | undefined): string {
+    if (value === undefined || value === null || value === 0) {
+      return '0';
+    }
+    return value.toFixed(2).replace('.', ',');
+  }
+
+  formatSeparator(value: number | null | undefined): string {
+    return value != null ? value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : '0';
+  }
+
+  formatDateToString(dateString) {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    return `${year}-${month}`;
+  }
+
+  updateMonthNames(hm: HeaderMarketingOrder[]): void {
+    this.monthNames[0] = this.getMonthName(new Date(this.headerMarketingOrder[1].month));
+    this.monthNames[1] = this.getMonthName(new Date(this.headerMarketingOrder[2].month));
+    this.monthNames[2] = this.getMonthName(new Date(this.headerMarketingOrder[0].month));
+  }
+
+  getMonthName(monthValue: Date): string {
+    if (monthValue) {
+      return monthValue.toLocaleString('default', { month: 'short' }).toUpperCase();
+    }
+    return '';
+  }
+
+  navigateToViewMo() {
+    this.router.navigate(['/transaksi/add-monthly-planning']);
+  }
+
+  getCapacity(): void {
+    this.moService.getCapacity().subscribe(
+      (response: ApiResponse<any>) => {
+        this.capacity = response.data;
       },
       (error) => {
         Swal.fire({
           icon: 'error',
           title: 'Error',
-          text: 'Failed to load marketing orders: ' + error.message,
-          timer: 3000,
-          showConfirmButton: false,
+          text: 'Failed to load capacity ' + error.message,
+          confirmButtonText: 'OK',
         });
       }
     );
   }
 
-  showDataRevision(idMo: string) {
+
+  // getAllDetailRevision(month0: string, month1: string, month2: string, type: string): void {
+  //   this.moService.getAllDetailRevision(month0, month1, month2, type).subscribe(
+  //     (response: ApiResponse<MarketingOrder[]>) => {
+  //       this.marketingOrders = response.data;
+  //       if (this.marketingOrders.length === 0) {
+  //         Swal.fire({
+  //           icon: 'info',
+  //           title: 'No Data',
+  //           text: 'No marketing orders found.',
+  //           timer: 3000,
+  //           showConfirmButton: false,
+  //         });
+  //       } else {
+  //         this.dataSourceMo = new MatTableDataSource(this.marketingOrders);
+  //         this.dataSourceMo.sort = this.sortMo;
+  //         this.dataSourceMo.paginator = this.paginatorMo;
+  //       }
+  //     },
+  //     (error) => {
+  //       Swal.fire({
+  //         icon: 'error',
+  //         title: 'Error',
+  //         text: 'Failed to load marketing orders: ' + error.message,
+  //         timer: 3000,
+  //         showConfirmButton: false,
+  //       });
+  //     }
+  //   );
+  // }
+
+  // showDataRevision(idMo: string): void {
+  //   this.moService.getAllMoById(idMo).subscribe(
+  //     (response: ApiResponse<any>) => {
+  //       this.allData = response.data;
+
+  //       // Pastikan dataDetailMo ada dan item pertama memiliki itemCuring
+  //       const dataDetailMo = this.allData.dataDetailMo;
+  //       if (dataDetailMo && dataDetailMo.length > 0) {
+  //         const itemCuring = dataDetailMo[0].itemCuring;  // Akses itemCuring dari elemen pertama
+  //         console.log("item curing showDataRevision: " + itemCuring);
+
+  //         // Simpan itemCuring ke variabel global
+  //         this.itemCuring = itemCuring;
+  //       } else {
+  //         console.log("dataDetailMo atau item pertama tidak ditemukan");
+  //       }
+
+  //       this.fillAllData(this.allData);
+  //     },
+  //     (error) => {
+  //       Swal.fire({
+  //         icon: 'error',
+  //         title: 'Error',
+  //         text: 'Failed to load marketing order details: ' + error.message,
+  //         confirmButtonText: 'OK',
+  //       });
+  //     }
+  //   );
+  // }
+
+  getAllData(idMo: String) {
+    Swal.fire({
+      title: 'Loading...',
+      html: 'Please wait while fetching data marketing order.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
+
     this.moService.getAllMoById(idMo).subscribe(
       (response: ApiResponse<any>) => {
+        Swal.close();
         this.allData = response.data;
         this.fillAllData(this.allData);
       },
       (error) => {
+        Swal.close();
         Swal.fire({
           icon: 'error',
           title: 'Error',
@@ -370,43 +438,6 @@ export class AddMoFrontRearComponent implements OnInit {
     this.updateMonthNames(this.headerMarketingOrder);
   }
 
-
-
-  formatDecimal(value: number | null | undefined): string {
-    if (value === undefined || value === null || value === 0) {
-      return '0';
-    }
-    return value.toFixed(2).replace('.', ',');
-  }
-
-  formatSeparator(value: number | null | undefined): string {
-    return value != null ? value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.') : '0';
-  }
-
-  formatDateToString(dateString) {
-    const date = new Date(dateString);
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    return `${year}-${month}`;
-  }
-
-  updateMonthNames(hm: HeaderMarketingOrder[]): void {
-    this.monthNames[0] = this.getMonthName(new Date(this.headerMarketingOrder[1].month));
-    this.monthNames[1] = this.getMonthName(new Date(this.headerMarketingOrder[2].month));
-    this.monthNames[2] = this.getMonthName(new Date(this.headerMarketingOrder[0].month));
-  }
-
-  getMonthName(monthValue: Date): string {
-    if (monthValue) {
-      return monthValue.toLocaleString('default', { month: 'short' }).toUpperCase();
-    }
-    return '';
-  }
-
-  navigateToViewMo() {
-    this.router.navigate(['/transaksi/add-monthly-planning']);
-  }
-
   exportExcelMo(id: string): void {
     this.moService.downloadExcelMo(id).subscribe(
       (response: Blob) => {
@@ -428,39 +459,51 @@ export class AddMoFrontRearComponent implements OnInit {
     );
   }
 
-  viewDetail(): void {
-    $('#dmpModal').modal('show');
+  viewDetail(itemCuring: string): void {
+    this.selectedItemCuring = itemCuring; // Simpan itemCuring yang dipilih
+    console.log('Item Curing:', itemCuring);
+
+    if (itemCuring) {
+      // Reset data yang ada di modal
+      this.machineEntries = []; // Hapus data lama sebelum menambah baris baru
+
+      // Ambil data mesin untuk itemCuring yang baru
+      this.getMachine(itemCuring);
+
+      // Tampilkan modal setelah data direset
+      $('#dmpModal').modal('show');
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Item curing not found',
+        confirmButtonText: 'OK',
+      });
+    }
   }
 
-  fillMachine(data: any) {
-  
-  }
-  
   mesin: string = '';
 
   gedungOptions: string[] = ['Gedung G', 'Gedung C', 'Gedung D', 'Gedung A', 'Gedung B', 'Gedung H'];
-  mesinOptions: string[] = [
-    'CURING BOM 4 CAVITY GD G NO.001', 'CURING BOM 4 CAVITY GD G NO.002', 'CURING BOM 4 CAVITY GD G NO.003',
-    'CURING BOM 4 CAVITY GD G NO.004', 'CURING BOM 4 CAVITY GD G NO.005', 'CURING BOM 4 CAVITY GD C NO.001',
-    'CURING BOM 4 CAVITY GD C NO.002', 'CURING BOM 4 CAVITY GD C NO.003', 'CURING BOM 4 CAVITY GD C NO.004',
-    'CURING BOM 4 CAVITY GD C NO.005', 'CURING BOM 4 CAVITY GD D NO.001', 'CURING BOM 4 CAVITY GD D NO.002',
-    'CURING BOM 4 CAVITY GD D NO.003', 'CURING BOM 4 CAVITY GD D NO.004', 'CURING BOM 4 CAVITY GD D NO.005',
-    'CURING AB 5 ST CHOP GD A NO.013', 'CURING AB 5 ST CHOP GD A NO.014', 'CURING AB 5 ST CHOP GD A NO.015',
-    'CURING AB 5 ST CHOP GD A NO.016', 'CURING AB 5 ST CHOP GD B NO.001', 'CURING AB 5 ST CHOP GD B NO.002',
-    'CURING AB 5 ST CHOP GD B NO.003', 'CURING BOM 4 CAVITY GD H NO.020', 'CURING BOM 4 CAVITY GD H NO.021'
-  ];
-
   selectedGedung: string = '';
-  machineEntries: { gedung: string, mesin: string, filteredMesinOptions: string[] }[] = [];
+  machineEntries: Array<{ selectedGedung: string, filteredMesinOptions: string[], selectedMachine: string }> = [];
+  selectedMachine: string = '';
+  mesinOptions: string[] = []; // All machines from the API
 
-  onGedungSelect(index: number) {
+  // Method for selecting Gedung
+  onGedungSelect(index: number): void {
+    console.log(`Gedung selected at index ${index}:`, this.machineEntries[index].selectedGedung);
     this.filterMachines(index); // Apply the filter when Gedung is selected in a particular row
   }
 
-  filterMachines(index: number) {
-    const selectedGedung = this.machineEntries[index].gedung;
+  // Filter Machines based on Gedung selection
+  filterMachines(index: number): void {
+    const selectedGedung = this.machineEntries[index].selectedGedung;
+    console.log(`Filtering machines for Gedung: ${selectedGedung}`);
+
     let filteredOptions: string[] = [];
 
+    // Filter based on Gedung selection
     if (selectedGedung === 'Gedung G') {
       filteredOptions = this.mesinOptions.filter(mesin => mesin.toLowerCase().includes('gd g'));
     } else if (selectedGedung === 'Gedung C') {
@@ -474,20 +517,65 @@ export class AddMoFrontRearComponent implements OnInit {
     } else if (selectedGedung === 'Gedung H') {
       filteredOptions = this.mesinOptions.filter(mesin => mesin.toLowerCase().includes('gd h'));
     }
+    console.log(`Filtered machines for index ${index}:`, filteredOptions);
 
+    // Update the filtered options for the selected machine entry
     this.machineEntries[index].filteredMesinOptions = filteredOptions;
   }
 
-  addRow() {
-    this.machineEntries.push({ gedung: '', mesin: '', filteredMesinOptions: [] });
+  // Function to fetch machines from the API based on the selected item curing
+  getMachine(itemCuring: string): void {
+    this.mpService.getAllMachineByItemCuring(itemCuring).subscribe(
+      (response: ApiResponse<any>) => {
+        const machines = response.data.map((machine: any) => machine.operationShortText);
+        this.mesinOptions = machines;
+
+        // Update the machine entries with the available machines
+        this.machineEntries.forEach((entry) => {
+          entry.filteredMesinOptions = machines; // Set all machines initially
+        });
+
+        // Set the default value for the last added row (if any)
+        if (this.machineEntries.length > 0) {
+          this.machineEntries[this.machineEntries.length - 1].selectedMachine = machines[0] || ''; // Default to first machine
+        }
+      },
+      (error) => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Failed to load machines: ' + error.message,
+          confirmButtonText: 'OK',
+        });
+      }
+    );
   }
 
-  // Method untuk menghapus entri dari tabel
-  removeEntry(entry: { gedung: string, mesin: string, filteredMesinOptions: string[] }) {
-    const index = this.machineEntries.findIndex(e => e === entry); // Menggunakan findIndex untuk mencocokkan entri
-    if (index > -1) {
-      this.machineEntries.splice(index, 1); // Menghapus entri berdasarkan index
+  // Add row functionality
+  addRow(): void {
+    if (this.selectedItemCuring) {
+      // Add new row and call getMachine to fetch machines for the selected item curing
+      this.machineEntries.push({ selectedGedung: '', filteredMesinOptions: [], selectedMachine: '' });
+      this.getMachine(this.selectedItemCuring); // Call getMachine with selected item curing
+    } else {
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'Item Curing not selected',
+        confirmButtonText: 'OK',
+      });
     }
   }
+
+
+
+  // Method untuk menghapus entri dari tabel
+  removeEntry(entry: any) {
+    const index = this.machineEntries.indexOf(entry);
+    if (index > -1) {
+      this.machineEntries.splice(index, 1);
+    }
+  }
+
 
 }
