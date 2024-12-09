@@ -78,6 +78,13 @@ export class ViewCuringMachineComponent implements OnInit {
     this.getAllCuringMachines();
   }
 
+  allowOnlyNumbers(event: KeyboardEvent) {
+    const charCode = event.which ? event.which : event.keyCode;
+    if (charCode < 48 || charCode > 57) {
+      event.preventDefault(); // Prevent non-numeric input
+    }
+  }
+
   getAllCuringMachines(): void {
     this.curingmachineService.getAllMachineCuring().subscribe(
       (response: ApiResponse<Curing_Machine[]>) => {

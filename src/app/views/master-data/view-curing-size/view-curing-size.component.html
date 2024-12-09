@@ -92,7 +92,7 @@
           <!-- Form with Reactive Forms -->
           <form [formGroup]="editCuringSizeForm">
             <div class="form-group">
-              <label for="machineCuringTypeID">Machine Curing Type ID</label>
+              <label for="machineCuringTypeID">Machine Curing Type</label>
               <div>
                 <ng-select2
                   formControlName="machineCuringTypeID" 
@@ -106,7 +106,7 @@
               </div>
             </div>
             <div class="form-group">
-              <label for="sizeID">Size ID</label>
+              <label for="sizeID">Size</label>
               <div>
                 <ng-select2
                   formControlName="sizeID" 
@@ -121,7 +121,7 @@
             </div>
             <div class="form-group">
               <label for="capacity">Capacity</label>
-              <input [(ngModel)]="edtCuringSizeObject.capacity" type="number" min="0" class="form-control" id="capacity" formControlName="capacity" [ngClass]="{ 'is-invalid': editCuringSizeForm.get('capacity').invalid && editCuringSizeForm.get('capacity').touched }" />
+              <input [(ngModel)]="edtCuringSizeObject.capacity" type="text" min="0" class="form-control" id="capacity" formControlName="capacity" (keypress)="allowOnlyNumbers($event)" [ngClass]="{ 'is-invalid': editCuringSizeForm.get('capacity').invalid && editCuringSizeForm.get('capacity').touched }" />
               <!-- Error message if plantName is empty -->
               <div *ngIf="editCuringSizeForm.get('capacity').invalid && editCuringSizeForm.get('capacity').touched" class="invalid-feedback">Capacity is required.</div>
             </div>

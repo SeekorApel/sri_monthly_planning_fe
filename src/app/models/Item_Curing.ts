@@ -3,6 +3,8 @@ export class Item_Curing {
   machine_TYPE: string;        
   kapa_PER_MOULD: number;  
   number_OF_MOULD: number;  
+  spare_MOULD: number;  
+  mould_MONTHLY_PLAN: number;  
   status: number;           
   creation_DATE: Date;     
   created_BY: string;       

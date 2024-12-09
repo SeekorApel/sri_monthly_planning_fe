@@ -75,6 +75,24 @@ export class ViewQuadrantComponent implements OnInit {
     this.getAllQuadrant();
   }
 
+  validateForm() {
+    const quadrantControl = this.editQuadrantForm.get('quadrantName');
+
+    if (quadrantControl?.hasError('required') && quadrantControl.touched) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Validation Error',
+        text: 'Quadrant name is required!'
+      });
+    } else if (quadrantControl?.hasError('maxlength') && quadrantControl.touched) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Validation Error',
+        text: 'Quadrant name must not exceed 255 characters!'
+      });
+    }
+  }
+
   getAllQuadrant(): void {
     this.quadrantService.getAllQuadrant().subscribe(
       (response: ApiResponse<Quadrant[]>) => {

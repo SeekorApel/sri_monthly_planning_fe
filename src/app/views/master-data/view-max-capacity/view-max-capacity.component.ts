@@ -104,6 +104,13 @@ export class ViewMaxCapacityComponent implements OnInit {
     this.getAllMaxCapacity();
   }
 
+  allowOnlyNumbers(event: KeyboardEvent) {
+    const charCode = event.which ? event.which : event.keyCode;
+    if (charCode < 48 || charCode > 57) {
+      event.preventDefault(); // Prevent non-numeric input
+    }
+  }
+
   getAllMaxCapacity(): void {
     this.maxCapacityService.getAllMaxCapacity().subscribe(
       (response: ApiResponse<Max_Capacity[]>) => {

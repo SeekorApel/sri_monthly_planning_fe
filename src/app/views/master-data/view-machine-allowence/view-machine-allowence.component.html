@@ -34,7 +34,7 @@
           </ng-container> -->
 
           <ng-container matColumnDef="id_MACHINE">
-            <th  *matHeaderCellDef mat-sort-header >ID Machine</th>
+            <th  *matHeaderCellDef mat-sort-header >Machine ID</th>
             <td class="huruf" *matCellDef="let element">{{ element.id_MACHINE }}</td>
           </ng-container>
           
@@ -133,31 +133,31 @@
           </div>
           <div class="form-group">
             <label for="shift1">Shift 1</label>
-            <input [(ngModel)]="edtMachineAllowenceObject.shift_1" type="text" class="form-control" id="shift1" formControlName="shift1" [ngClass]="{ 'is-invalid': editMachineAllowenceForm.get('shift1').invalid && editMachineAllowenceForm.get('shift1').touched }" />
+            <input [(ngModel)]="edtMachineAllowenceObject.shift_1" type="text" class="form-control" id="shift1" formControlName="shift1" (keypress)="allowOnlyNumbers($event)" [ngClass]="{ 'is-invalid': editMachineAllowenceForm.get('shift1').invalid && editMachineAllowenceForm.get('shift1').touched }" />
             <!-- Error message if plantName is empty -->
             <div *ngIf="editMachineAllowenceForm.get('shift1').invalid && editMachineAllowenceForm.get('shift1').touched" class="invalid-feedback">Shift 1 is required.</div>
           </div>
           <div class="form-group">
             <label for="shift2">Shift 2</label>
-            <input [(ngModel)]="edtMachineAllowenceObject.shift_2" type="text" class="form-control" id="shift2" formControlName="shift2" [ngClass]="{ 'is-invalid': editMachineAllowenceForm.get('shift2').invalid && editMachineAllowenceForm.get('shift2').touched }" />
+            <input [(ngModel)]="edtMachineAllowenceObject.shift_2" type="text" class="form-control" id="shift2" formControlName="shift2" (keypress)="allowOnlyNumbers($event)" [ngClass]="{ 'is-invalid': editMachineAllowenceForm.get('shift2').invalid && editMachineAllowenceForm.get('shift2').touched }" />
             <!-- Error message if plantName is empty -->
             <div *ngIf="editMachineAllowenceForm.get('shift2').invalid && editMachineAllowenceForm.get('shift2').touched" class="invalid-feedback">Shift 2 is required.</div>
           </div>
           <div class="form-group">
             <label for="shift3">Shift 3</label>
-            <input [(ngModel)]="edtMachineAllowenceObject.shift_3" type="text" class="form-control" id="shift3" formControlName="shift3" [ngClass]="{ 'is-invalid': editMachineAllowenceForm.get('shift3').invalid && editMachineAllowenceForm.get('shift3').touched }" />
+            <input [(ngModel)]="edtMachineAllowenceObject.shift_3" type="text" class="form-control" id="shift3" formControlName="shift3" (keypress)="allowOnlyNumbers($event)" [ngClass]="{ 'is-invalid': editMachineAllowenceForm.get('shift3').invalid && editMachineAllowenceForm.get('shift3').touched }" />
             <!-- Error message if plantName is empty -->
             <div *ngIf="editMachineAllowenceForm.get('shift3').invalid && editMachineAllowenceForm.get('shift3').touched" class="invalid-feedback">Shift 3 is required.</div>
           </div>
           <div class="form-group">
             <label for="shift1Friday">Shift 1 Friday</label>
-            <input [(ngModel)]="edtMachineAllowenceObject.shift_1_FRIDAY" type="text" class="form-control" id="shift1Friday" formControlName="shift1Friday" [ngClass]="{ 'is-invalid': editMachineAllowenceForm.get('shift1Friday').invalid && editMachineAllowenceForm.get('shift1Friday').touched }" />
+            <input [(ngModel)]="edtMachineAllowenceObject.shift_1_FRIDAY" type="text" class="form-control" id="shift1Friday" formControlName="shift1Friday" (keypress)="allowOnlyNumbers($event)" [ngClass]="{ 'is-invalid': editMachineAllowenceForm.get('shift1Friday').invalid && editMachineAllowenceForm.get('shift1Friday').touched }" />
             <!-- Error message if plantName is empty -->
             <div *ngIf="editMachineAllowenceForm.get('shift1Friday').invalid && editMachineAllowenceForm.get('shift1Friday').touched" class="invalid-feedback">Shift 1 friday  is required.</div>
           </div>
           <div class="form-group">
             <label for="totalShift123">Total Shift 123</label>
-            <input [(ngModel)]="edtMachineAllowenceObject.total_SHIFT_123" type="text" class="form-control" id="totalShift123" formControlName="totalShift123" [ngClass]="{ 'is-invalid': editMachineAllowenceForm.get('totalShift123').invalid && editMachineAllowenceForm.get('totalShift123').touched }" />
+            <input [(ngModel)]="edtMachineAllowenceObject.total_SHIFT_123" type="text" class="form-control" id="totalShift123" formControlName="totalShift123"  [ngClass]="{ 'is-invalid': editMachineAllowenceForm.get('totalShift123').invalid && editMachineAllowenceForm.get('totalShift123').touched }" />
             <!-- Error message if plantName is empty -->
             <div *ngIf="editMachineAllowenceForm.get('totalShift123').invalid && editMachineAllowenceForm.get('totalShift123').touched" class="invalid-feedback">Total Shift 123 is required.</div>
           </div>

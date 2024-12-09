@@ -100,6 +100,13 @@ export class ViewCuringSizeComponent implements OnInit {
     this.getAllCuringSize();
   }
 
+  allowOnlyNumbers(event: KeyboardEvent) {
+    const charCode = event.which ? event.which : event.keyCode;
+    if (charCode < 48 || charCode > 57) {
+      event.preventDefault(); // Prevent non-numeric input
+    }
+  }
+  
   getAllCuringSize(): void {
     this.curingSizeService.getAllCuringSize().subscribe(
       (response: ApiResponse<Curing_Size[]>) => {
@@ -111,8 +118,8 @@ export class ViewCuringSizeComponent implements OnInit {
           );
   
           return {
-            ...curingSize, // Salin semua properti quadrant
-            size_ID: matchedSize ? matchedSize.size_ID : null // Tambahkan building_NAME jika ada kecocokan
+            ...curingSize,
+            size_ID: matchedSize ? matchedSize.size_ID : null
           };
         });
         this.dataSource = new MatTableDataSource(this.curingSizes);

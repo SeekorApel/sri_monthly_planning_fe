@@ -99,7 +99,7 @@
             <div *ngIf="editDeliveryScheduleForm.get('effectiveTime').invalid && editDeliveryScheduleForm.get('effectiveTime').touched" class="invalid-feedback">Effective time is required.</div>
           </div>
           <div class="form-group">
-            <label for="dataIssue">Data Issue</label>
+            <label for="dataIssue">Data Issued</label>
             <input [(ngModel)]="edtDeliveryScheduleObject.date_ISSUED" type="date" class="form-control" id="dataIssue" formControlName="dataIssue" [ngClass]="{ 'is-invalid': editDeliveryScheduleForm.get('dataIssue').invalid && editDeliveryScheduleForm.get('dataIssue').touched }" />
             <!-- Error message if plantName is empty -->
             <div *ngIf="editDeliveryScheduleForm.get('dataIssue').invalid && editDeliveryScheduleForm.get('dataIssue').touched" class="invalid-feedback">Data Issue is required.</div>

@@ -108,6 +108,13 @@ export class ViewMachineAllowenceComponent implements OnInit {
     this.getAllMachineAllowence();
   }
 
+  allowOnlyNumbers(event: KeyboardEvent) {
+    const charCode = event.which ? event.which : event.keyCode;
+    if (charCode < 48 || charCode > 57) {
+      event.preventDefault(); // Prevent non-numeric input
+    }
+  }
+
   getAllMachineAllowence(): void {
     this.machineAllowenceService.getAllMachineAllowence().subscribe(
       (response: ApiResponse<machineAllowence[]>) => {
