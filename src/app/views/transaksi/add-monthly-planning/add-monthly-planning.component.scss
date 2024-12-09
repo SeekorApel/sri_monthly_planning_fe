@@ -4,8 +4,12 @@
 }
 
 .overtime-header {
-  background-color: green;
-  color: white;
+  background-color: yellow;
+  color: black;
+}
+.semi-off{
+  background-color: cyan;
+  color: black;
 }
 
 .hoverable {
@@ -16,3 +20,24 @@
   background-color: #f0f0f0; /* Mengubah warna latar belakang saat hover */
 }
 
+::ng-deep .mat-sort-header-container {
+  justify-content: center;
+}
+
+.mat-cell {
+  padding-top: 5px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.mat-cell:last-of-type{
+  padding-right: 5px;
+}
+
+.mat-cell:first-of-type{
+  padding-left: 5px;
+}
+
+th.mat-header-cell input[type="checkbox"] {
+  display: none; /* Menyembunyikan checkbox di header */
+}

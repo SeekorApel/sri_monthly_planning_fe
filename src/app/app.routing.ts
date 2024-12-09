@@ -41,15 +41,17 @@ import { ViewCtKapaComponent } from './views/master-data/view-ct-kapa/view-ct-ka
 import { ViewDDeliveryScheduleComponent } from './views/master-data/view-d-deliveryschedule/view-d-deliveryschedule.component';
 import { ViewMoMarketingComponent } from './views/transaksi/view/view-mo-marketing/view-mo-marketing.component';
 import { AddMoMarketingComponent } from './views/transaksi/add/add-mo-marketing/add-mo-marketing.component';
-import { DetailViewMoPpcComponent } from './views/transaksi/detail-view/detail-view-mo-ppc/detail-view-mo-ppc.component';
 import { EditMoPpcComponent } from './views/transaksi/edit/edit-mo-ppc/edit-mo-ppc.component';
 import { ViewCuringSizeComponent } from './views/master-data/view-curing-size/view-curing-size.component';
-import { DetailViewMoMarketingComponent } from './views/transaksi/detail-view-mo-marketing/detail-view-mo-marketing.component';
 import { EditMoMarketingComponent } from './views/transaksi/edit/edit-mo-marketing/edit-mo-marketing.component';
 import { ViewDetailRevisiPpcComponent } from './views/transaksi/detail-view-revisi/view-detail-revisi-ppc/view-detail-revisi-ppc.component';
 import { ViewPmStopMachineComponent } from './views/master-data/view-pm-stop-machine/view-pm-stop-machine.component';
 import { ViewWorkDayComponent } from './views/master-data/view-work-day/view-work-day.component';
 import { ViewDetailRevisiMarketingComponent } from './views/transaksi/detail-view-revisi/view-detail-revisi-marketing/view-detail-revisi-marketing.component';
+import { AddMoFrontRearComponent } from './views/transaksi/add-mo-front-rear/add-mo-front-rear.component';
+import { AddArDefactRejectComponent } from './views/transaksi/add-ar-defact-reject/add-ar-defact-reject.component';
+
+
 
 export const routes: Routes = [
   {
@@ -96,13 +98,6 @@ export const routes: Routes = [
       title: 'Home',
     },
     children: [
-      {
-        path: 'master-data/view-plant',
-        component: ViewPlantComponent,
-        data: {
-          title: 'Master Data / View Plant',
-        },
-      },
       {
         path: 'master-data/view-plant',
         component: ViewPlantComponent,
@@ -356,24 +351,10 @@ export const routes: Routes = [
         },
       },
       {
-        path: 'transaksi/detail-mo-ppc/:idMo',
-        component: DetailViewMoPpcComponent,
-        data: {
-          title: 'Transaksi / Detail Marketing Order',
-        },
-      },
-      {
         path: 'transaksi/edit-mo-ppc/:idMo',
         component: EditMoPpcComponent,
         data: {
           title: 'Transaksi / Edit Marketing Order',
-        },
-      },
-      {
-        path: 'transaksi/detail-mo-marketing/:idMo',
-        component: DetailViewMoMarketingComponent,
-        data: {
-          title: 'Transaksi / Detail Marketing Order',
         },
       },
       {
@@ -395,6 +376,20 @@ export const routes: Routes = [
         component: ViewDetailRevisiMarketingComponent,
         data: {
           title: 'Transaksi / Revisi Marketing Order',
+        },
+      },
+      {
+        path: 'transaksi/add-mo-front-rear/:month0/:month1/:month2/:type',
+        component: AddMoFrontRearComponent,
+        data: {
+          title: 'Transaksi / Add MO Front Rear',
+        },
+      },
+      {
+        path: 'transaksi/add-mo-ar-defect-reject/:idMo',
+        component: AddArDefactRejectComponent,
+        data: {
+          title: 'Transaksi / Add MO AR, Defect, Reject',
         },
       },
       {
@@ -446,4 +441,4 @@ export const routes: Routes = [
   imports: [RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy' })],
   exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

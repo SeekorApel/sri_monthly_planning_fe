@@ -13,19 +13,21 @@ import { ParsingDateService } from 'src/app/utils/parsing-date/parsing-date.serv
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 
+declare var $: any;
+
 @Component({
-  selector: 'app-view-detail-revisi-ppc',
-  templateUrl: './view-detail-revisi-ppc.component.html',
-  styleUrls: ['./view-detail-revisi-ppc.component.scss'],
+  selector: 'app-add-mo-front-rear',
+  templateUrl: './add-mo-front-rear.component.html',
+  styleUrls: ['./add-mo-front-rear.component.scss']
 })
-export class ViewDetailRevisiPpcComponent implements OnInit {
+export class AddMoFrontRearComponent implements OnInit {
+
   //Declaration
-  idMo: string;
-  capacityDb: string = '';
+  idMo: String;
   formHeaderMo: FormGroup;
+  formLimit: FormGroup;
   errorMessage: string | null = null;
-  searchTextMo: string = '';
-  searchTextDmo: string = '';
+  searchText: string = '';
   dataTemp: any[];
   dateUtil: typeof ParsingDate;
   marketingOrder: MarketingOrder;
@@ -41,8 +43,9 @@ export class ViewDetailRevisiPpcComponent implements OnInit {
   detailMarketingOrder: DetailMarketingOrder[];
   headerRevision: string;
   detailMoRevision: string;
-  loadingShow: { [key: string]: boolean } = {};
-  loadingPrint: { [key: string]: boolean } = {};
+  capacity: string = '';
+  checked = [];  // Your data source
+  machine: any;
 
   // Pagination Marketing Order
   displayedColumnsMo: string[] = ['no', 'moId', 'type', 'dateValid', 'revisionPpc', 'revisionMarketing', 'month0', 'month1', 'month2', 'action'];
@@ -51,9 +54,9 @@ export class ViewDetailRevisiPpcComponent implements OnInit {
   @ViewChild('paginatorMo') paginatorMo: MatPaginator;
 
   // Pagination Detail Marketing Order
-  headersColumnsDmo: string[] = ['no', 'category', 'partNumber', 'description', 'machineType', 'capacity', 'qtyPerMould', 'spareMould', 'mouldMonthlyPlan', 'qtyPerRak', 'minOrder', 'maxCap', 'initialStock', 'salesForecast', 'marketingOrder'];
+  headersColumnsDmo: string[] = ['select','no', 'category', 'partNumber', 'description', 'machineType', 'capacity', 'qtyPerMould', 'spareMould', 'mouldMonthlyPlan', 'qtyPerRak', 'minOrder', 'maxCap', 'initialStock', 'salesForecast', 'marketingOrder','action'];
   childHeadersColumnsDmo: string[] = ['maxCapMonth0', 'maxCapMonth1', 'maxCapMonth2', 'sfMonth0', 'sfMonth1', 'sfMonth2', 'moMonth0', 'moMonth1', 'moMonth2'];
-  rowDataDmo: string[] = ['no', 'category', 'partNumber', 'description', 'machineType', 'capacity', 'qtyPerMould', 'spareMould', 'mouldMonthlyPlan', 'qtyPerRak', 'minOrder', 'maxCapMonth0', 'maxCapMonth1', 'maxCapMonth2', 'initialStock', 'sfMonth0', 'sfMonth1', 'sfMonth2', 'moMonth0', 'moMonth1', 'moMonth2'];
+  rowDataDmo: string[] = ['select','no', 'category', 'partNumber', 'description', 'machineType', 'capacity', 'qtyPerMould', 'spareMould', 'mouldMonthlyPlan', 'qtyPerRak', 'minOrder', 'maxCapMonth0', 'maxCapMonth1', 'maxCapMonth2', 'initialStock', 'sfMonth0', 'sfMonth1', 'sfMonth2', 'moMonth0', 'moMonth1', 'moMonth2', 'action'];
   dataSourceDmo: MatTableDataSource<DetailMarketingOrder>;
   @ViewChild('sortDmo') sortDmo = new MatSort();
   @ViewChild('paginatorDmo') paginatorDmo: MatPaginator;
@@ -141,9 +144,34 @@ export class ViewDetailRevisiPpcComponent implements OnInit {
       upload_file_m2: [null, []],
     });
 
+    this.formLimit = this.fb.group({
+      minLimit_0_2000: [''],
+      maxLimit_0_2000: [''],
+      minLimit_2001_10000: [''],
+      maxLimit_2001_10000: [''],
+      minLimit_10001_100000: [''],
+      maxLimit_10001_100000: [''],
+      minLimit_gt_100000: [''],
+      maxLimit_gt_100000: [''],
+    });
+    
+  }
+
+  ngOnInit(): void {
+    this.month0 = this.activeRoute.snapshot.paramMap.get('month0');
+    this.month1 = this.activeRoute.snapshot.paramMap.get('month1');
+    this.month2 = this.activeRoute.snapshot.paramMap.get('month2');
+    this.type = this.activeRoute.snapshot.paramMap.get('type');
+    this.getAllDetailRevision(this.month0, this.month1, this.month2, this.type);
+    this.headerRevision = 'Header Marketing Order';
+    this.detailMoRevision = 'Detail Marketing Order';
+    this.getCapacity();
+  }
+
+  getCapacity(): void {
     this.moService.getCapacity().subscribe(
       (response: ApiResponse<any>) => {
-        this.capacityDb = response.data;
+        this.capacity = response.data;
       },
       (error) => {
         Swal.fire({
@@ -156,36 +184,46 @@ export class ViewDetailRevisiPpcComponent implements OnInit {
     );
   }
 
-  ngOnInit(): void {
-    this.month0 = this.activeRoute.snapshot.paramMap.get('month0');
-    this.month1 = this.activeRoute.snapshot.paramMap.get('month1');
-    this.month2 = this.activeRoute.snapshot.paramMap.get('month2');
-    this.type = this.activeRoute.snapshot.paramMap.get('type');
-    this.getAllDetailRevision(this.month0, this.month1, this.month2, this.type);
-    this.headerRevision = 'Header Marketing Order';
-    this.detailMoRevision = 'Detail Marketing Order';
-  }
-
-  onSearchChangeDmo(): void {
-    this.dataSourceDmo.filter = this.searchTextDmo.trim().toLowerCase();
-  }
-
-  resetSearchDmo(): void {
-    this.searchTextDmo = '';
-    this.dataSourceDmo.filter = '';
+  getMachine(mesin: string): void {
+    this.machine.getAllMachineByItemCuring(mesin).subscribe(
+      (response: ApiResponse<any>) => {
+        this.machine = response.data;
+      },
+      (error) => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Failed to load machine ' + error.message,
+          confirmButtonText: 'OK',
+        });
+      }
+    );
   }
 
   onSearchChangeMo(): void {
-    this.dataSourceMo.filter = this.searchTextMo.trim().toLowerCase();
+    this.dataSourceMo.filter = this.searchText.trim().toLowerCase();
   }
 
   resetSearchMo(): void {
-    this.searchTextMo = '';
+    this.searchText = '';
     this.dataSourceMo.filter = '';
   }
 
   parseDate(dateParse: string): string {
     return this.parseDateService.convertDateToString(dateParse);
+  }
+
+  isAllSelected() {
+    return this.checked.every(item => item.selected);
+  }
+
+  isSomeSelected() {
+    return this.checked.some(item => item.selected) && !this.isAllSelected();
+  }
+
+  selectAll(event) {
+    const selected = event.checked;
+    this.checked.forEach(item => item.selected = selected);
   }
 
   getAllDetailRevision(month0: string, month1: string, month2: string, type: string): void {
@@ -219,21 +257,10 @@ export class ViewDetailRevisiPpcComponent implements OnInit {
   }
 
   showDataRevision(idMo: string) {
-    this.loadingShow[idMo] = true;
-    Swal.fire({
-      title: 'Loading...',
-      html: 'Please wait while fetching data marketing order.',
-      allowOutsideClick: false,
-      didOpen: () => {
-        Swal.showLoading();
-      },
-    });
     this.moService.getAllMoById(idMo).subscribe(
       (response: ApiResponse<any>) => {
         this.allData = response.data;
         this.fillAllData(this.allData);
-        this.loadingShow[idMo] = false;
-        Swal.close();
       },
       (error) => {
         Swal.fire({
@@ -242,8 +269,6 @@ export class ViewDetailRevisiPpcComponent implements OnInit {
           text: 'Failed to load marketing order details: ' + error.message,
           confirmButtonText: 'OK',
         });
-        Swal.close();
-        this.loadingShow[idMo] = false;
       }
     );
   }
@@ -345,6 +370,8 @@ export class ViewDetailRevisiPpcComponent implements OnInit {
     this.updateMonthNames(this.headerMarketingOrder);
   }
 
+
+
   formatDecimal(value: number | null | undefined): string {
     if (value === undefined || value === null || value === 0) {
       return '0';
@@ -377,11 +404,10 @@ export class ViewDetailRevisiPpcComponent implements OnInit {
   }
 
   navigateToViewMo() {
-    this.router.navigate(['/transaksi/view-mo-ppc']);
+    this.router.navigate(['/transaksi/add-monthly-planning']);
   }
 
   exportExcelMo(id: string): void {
-    this.loadingPrint[id] = true;
     this.moService.downloadExcelMo(id).subscribe(
       (response: Blob) => {
         const url = window.URL.createObjectURL(response);
@@ -390,7 +416,6 @@ export class ViewDetailRevisiPpcComponent implements OnInit {
         a.download = `Marketing_Order_${id}.xlsx`;
         a.click();
         window.URL.revokeObjectURL(url);
-        this.loadingPrint[id] = false;
       },
       (error) => {
         Swal.fire({
@@ -398,8 +423,71 @@ export class ViewDetailRevisiPpcComponent implements OnInit {
           title: 'Oops...',
           text: 'Gagal mendownload file. Silakan coba lagi!',
         });
-        this.loadingPrint[id] = false;
+        console.error('Error downloading file:', error);
       }
     );
   }
+
+  viewDetail(): void {
+    $('#dmpModal').modal('show');
+  }
+
+  fillMachine(data: any) {
+  
+  }
+  
+  mesin: string = '';
+
+  gedungOptions: string[] = ['Gedung G', 'Gedung C', 'Gedung D', 'Gedung A', 'Gedung B', 'Gedung H'];
+  mesinOptions: string[] = [
+    'CURING BOM 4 CAVITY GD G NO.001', 'CURING BOM 4 CAVITY GD G NO.002', 'CURING BOM 4 CAVITY GD G NO.003',
+    'CURING BOM 4 CAVITY GD G NO.004', 'CURING BOM 4 CAVITY GD G NO.005', 'CURING BOM 4 CAVITY GD C NO.001',
+    'CURING BOM 4 CAVITY GD C NO.002', 'CURING BOM 4 CAVITY GD C NO.003', 'CURING BOM 4 CAVITY GD C NO.004',
+    'CURING BOM 4 CAVITY GD C NO.005', 'CURING BOM 4 CAVITY GD D NO.001', 'CURING BOM 4 CAVITY GD D NO.002',
+    'CURING BOM 4 CAVITY GD D NO.003', 'CURING BOM 4 CAVITY GD D NO.004', 'CURING BOM 4 CAVITY GD D NO.005',
+    'CURING AB 5 ST CHOP GD A NO.013', 'CURING AB 5 ST CHOP GD A NO.014', 'CURING AB 5 ST CHOP GD A NO.015',
+    'CURING AB 5 ST CHOP GD A NO.016', 'CURING AB 5 ST CHOP GD B NO.001', 'CURING AB 5 ST CHOP GD B NO.002',
+    'CURING AB 5 ST CHOP GD B NO.003', 'CURING BOM 4 CAVITY GD H NO.020', 'CURING BOM 4 CAVITY GD H NO.021'
+  ];
+
+  selectedGedung: string = '';
+  machineEntries: { gedung: string, mesin: string, filteredMesinOptions: string[] }[] = [];
+
+  onGedungSelect(index: number) {
+    this.filterMachines(index); // Apply the filter when Gedung is selected in a particular row
+  }
+
+  filterMachines(index: number) {
+    const selectedGedung = this.machineEntries[index].gedung;
+    let filteredOptions: string[] = [];
+
+    if (selectedGedung === 'Gedung G') {
+      filteredOptions = this.mesinOptions.filter(mesin => mesin.toLowerCase().includes('gd g'));
+    } else if (selectedGedung === 'Gedung C') {
+      filteredOptions = this.mesinOptions.filter(mesin => mesin.toLowerCase().includes('gd c'));
+    } else if (selectedGedung === 'Gedung D') {
+      filteredOptions = this.mesinOptions.filter(mesin => mesin.toLowerCase().includes('gd d'));
+    } else if (selectedGedung === 'Gedung A') {
+      filteredOptions = this.mesinOptions.filter(mesin => mesin.toLowerCase().includes('gd a'));
+    } else if (selectedGedung === 'Gedung B') {
+      filteredOptions = this.mesinOptions.filter(mesin => mesin.toLowerCase().includes('gd b'));
+    } else if (selectedGedung === 'Gedung H') {
+      filteredOptions = this.mesinOptions.filter(mesin => mesin.toLowerCase().includes('gd h'));
+    }
+
+    this.machineEntries[index].filteredMesinOptions = filteredOptions;
+  }
+
+  addRow() {
+    this.machineEntries.push({ gedung: '', mesin: '', filteredMesinOptions: [] });
+  }
+
+  // Method untuk menghapus entri dari tabel
+  removeEntry(entry: { gedung: string, mesin: string, filteredMesinOptions: string[] }) {
+    const index = this.machineEntries.findIndex(e => e === entry); // Menggunakan findIndex untuk mencocokkan entri
+    if (index > -1) {
+      this.machineEntries.splice(index, 1); // Menghapus entri berdasarkan index
+    }
+  }
+
 }

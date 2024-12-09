@@ -96,7 +96,7 @@ export class ViewQuadrantComponent implements OnInit {
         this.onChangePage(this.dataSource.data.slice(0, this.pageSize));
       },
       (error) => {
-        this.errorMessage = 'Failed to load plants: ' + error.message;
+        this.errorMessage = 'Failed to load quadrants: ' + error.message;
       }
     );
   }
@@ -123,7 +123,7 @@ export class ViewQuadrantComponent implements OnInit {
         // SweetAlert setelah update berhasil
         Swal.fire({
           title: 'Success!',
-          text: 'Data plant successfully updated.',
+          text: 'Data quadrant successfully updated.',
           icon: 'success',
           confirmButtonText: 'OK',
         }).then((result) => {
@@ -159,7 +159,7 @@ export class ViewQuadrantComponent implements OnInit {
   deleteData(quadrant: Quadrant): void {
     Swal.fire({
       title: 'Are you sure?',
-      text: 'This data plant will be deleted!',
+      text: 'This data quadrant will be deleted!',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -185,7 +185,7 @@ export class ViewQuadrantComponent implements OnInit {
   activateData(quadrant: Quadrant): void {
     Swal.fire({
       title: 'Are you sure?',
-      text: 'This data plant will be Activated!',
+      text: 'This data quadrant will be Activated!',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',

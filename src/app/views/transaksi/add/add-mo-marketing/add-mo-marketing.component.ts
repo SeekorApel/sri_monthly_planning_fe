@@ -47,6 +47,7 @@ export class AddMoMarketingComponent implements OnInit {
   totalMoMonth1TL: number = 0;
   totalMoMonth2TL: number = 0;
   totalMoMonth3TL: number = 0;
+  loading:boolean = false;
 
   //Pagination
   pageOfItems: Array<any>;
@@ -67,7 +68,12 @@ export class AddMoMarketingComponent implements OnInit {
   //Touch status
   touchStatus: { [key: number]: { isTouchedM0: boolean } } = {};
 
-  constructor(private router: Router, private activeRoute: ActivatedRoute, private moService: MarketingOrderService, private fb: FormBuilder, private parsingNumberService: ParsingNumberService, private numberService: NumberFormatService) {
+  constructor(private router: Router,
+              private activeRoute: ActivatedRoute,
+              private moService: MarketingOrderService,
+              private fb: FormBuilder,
+              private parsingNumberService: ParsingNumberService,
+              private numberService: NumberFormatService) {
     this.formHeaderMo = this.fb.group({
       date: [null, []],
       type: [null, []],
@@ -181,6 +187,14 @@ export class AddMoMarketingComponent implements OnInit {
     mo.moMonth2 = numericValue;
   }
 
+  allowOnlyNumbers(event: KeyboardEvent): void {
+    const charCode = event.charCode || event.keyCode;
+    // Cek apakah karakter adalah angka (0-9)
+    if (charCode < 48 || charCode > 57) {
+      event.preventDefault();
+    }
+  }
+
   formatNumber(value: any): string {
     if (value == null || value === '') {
       return '';
@@ -229,12 +243,23 @@ export class AddMoMarketingComponent implements OnInit {
   }
 
   getAllData(idMo: String) {
+    Swal.fire({
+      title: 'Loading...',
+      html: 'Please wait while fetching data marketing order.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
+
     this.moService.getAllMoById(idMo).subscribe(
       (response: ApiResponse<any>) => {
+        Swal.close();
         this.allData = response.data;
         this.fillAllData(this.allData);
       },
       (error) => {
+        Swal.close();
         Swal.fire({
           icon: 'error',
           title: 'Error',
@@ -1439,8 +1464,7 @@ export class AddMoMarketingComponent implements OnInit {
       moMonth2: item.moMonth2,
     }));
 
-    console.table(filteredData);
-
+    this.loading = true;
     this.moService.saveMarketingOrderMarketing(this.detailMarketingOrder).subscribe(
       (response) => {
         Swal.fire({
@@ -1453,6 +1477,7 @@ export class AddMoMarketingComponent implements OnInit {
             this.navigateToView();
           }
         });
+        this.loading = false;
       },
       (error) => {
         Swal.fire({
@@ -1461,6 +1486,7 @@ export class AddMoMarketingComponent implements OnInit {
           text: 'Failed to add marketing order details: ' + error.message,
           confirmButtonText: 'OK',
         });
+        this.loading = false;
       }
     );
   }

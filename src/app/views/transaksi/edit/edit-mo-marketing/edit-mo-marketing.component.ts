@@ -34,6 +34,7 @@ export class EditMoMarketingComponent implements OnInit {
   file: File | null = null;
   isSubmitted: boolean = false;
   typeMo: string = '';
+  loading:boolean = false;
 
   //Error message
   errorMessagesM0: string[] = [];
@@ -154,6 +155,21 @@ export class EditMoMarketingComponent implements OnInit {
     this.getLastIdMo();
   }
 
+  onInputFormat(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    const value = input.value;
+    const numericValue = value.replace(/\./g, '').replace(/,/g, '.');
+    input.value = this.formatNumber(numericValue);
+  }
+
+  allowOnlyNumbers(event: KeyboardEvent): void {
+    const charCode = event.charCode || event.keyCode;
+    // Cek apakah karakter adalah angka (0-9)
+    if (charCode < 48 || charCode > 57) {
+      event.preventDefault();
+    }
+  }
+
   onInputChangeM0(mo: any, value: string) {
     const numericValue = Number(value.replace(/\./g, '').replace(',', '.'));
     mo.moMonth0 = numericValue;
@@ -224,12 +240,23 @@ export class EditMoMarketingComponent implements OnInit {
   }
 
   getAllData(idMo: String) {
+    Swal.fire({
+      title: 'Loading...',
+      html: 'Please wait while fetching data marketing order.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
+
     this.moService.getAllMoById(idMo).subscribe(
       (response: ApiResponse<any>) => {
+        Swal.close();
         this.allData = response.data;
         this.fillAllData(this.allData);
       },
       (error) => {
+        Swal.close();
         Swal.fire({
           icon: 'error',
           title: 'Error',
@@ -678,8 +705,8 @@ export class EditMoMarketingComponent implements OnInit {
     //   moMonth2: item.moMonth2
     // }));
 
-    // console.table(filteredData);
 
+    this.loading = true;
     this.moService.updateMarketingOrderMarketing(revisionMo).subscribe(
       (response) => {
         Swal.fire({
@@ -692,9 +719,11 @@ export class EditMoMarketingComponent implements OnInit {
             this.navigateToViewMo();
           }
         });
+        this.loading = false;
       },
       (err) => {
         Swal.fire('Error!', 'Error insert data Marketing Order.', 'error');
+        this.loading = false;
       }
     );
   }

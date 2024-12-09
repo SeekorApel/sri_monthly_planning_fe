@@ -34,13 +34,13 @@
             </ng-container>
   
             <ng-container matColumnDef="machinecuringtype_ID">
-              <th  *matHeaderCellDef mat-sort-header >Machine Curing Type ID</th>
+              <th  *matHeaderCellDef mat-sort-header >Machine Curing Type</th>
               <td class="huruf" *matCellDef="let element">{{ element.machinecuringtype_ID }}</td>
             </ng-container>
             
-            <ng-container matColumnDef="size_NAME">
-              <th  *matHeaderCellDef mat-sort-header >Description Size</th>
-              <td class="huruf" *matCellDef="let element">{{ element.size_NAME }}</td>
+            <ng-container matColumnDef="size_ID">
+              <th  *matHeaderCellDef mat-sort-header >Size</th>
+              <td class="huruf" *matCellDef="let element">{{ element.size_ID }}</td>
             </ng-container>
             
             <ng-container matColumnDef="capacity">
@@ -49,7 +49,7 @@
             </ng-container>
   
             <ng-container matColumnDef="status">
-              <th style="min-width: 70px;" *matHeaderCellDef>Status</th>
+              <th style="min-width: 70px;" mat-sort-header *matHeaderCellDef>Status</th>
               <td *matCellDef="let element" [ngClass]="{ 'bg-success': element.status === 1, 'bg-danger': element.status !== 1 }">
                 {{ element.status === 1 ? 'Active' : 'Deactive' }}
               </td>

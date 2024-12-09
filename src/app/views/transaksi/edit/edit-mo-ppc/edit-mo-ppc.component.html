@@ -540,13 +540,16 @@
           </table>
         </div>
         <!-- Pagination -->
-        <mat-paginator #paginatorDmo [pageSizeOptions]="[10, 20, 50]" showFirstLastButtons></mat-paginator>
+        <mat-paginator #paginatorDmo [pageSizeOptions]="[20, 100, 200]" showFirstLastButtons></mat-paginator>
       </div>
     </div>
   </div>
 
   <div class="col-md-12 pb-4">
     <button (click)="navigateToViewMo()" class="btn btn-primary justify-content-start mr-2">Back</button>
-    <button (click)="editMo()" type="submit" class="btn btn-success">Edit</button>
+    <button (click)="editMo()" [disabled]="loading" type="submit" class="btn btn-success">
+      <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+      Edit
+    </button>
   </div>
 </div>

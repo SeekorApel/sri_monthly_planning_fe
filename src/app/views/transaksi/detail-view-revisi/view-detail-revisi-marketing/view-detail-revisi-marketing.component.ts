@@ -25,6 +25,7 @@ export class ViewDetailRevisiMarketingComponent implements OnInit {
   marketingOrders: MarketingOrder[] = [];
   errorMessage: string | null = null;
   searchText: string = '';
+  searchTextDmo: string = '';
   dataTemp: any[];
   dateUtil: typeof ParsingDate;
   marketingOrder: MarketingOrder;
@@ -39,6 +40,8 @@ export class ViewDetailRevisiMarketingComponent implements OnInit {
   allData: any;
   headerRevision: string;
   detailMoRevision: string;
+  loadingShow: { [key: string]: boolean } = {};
+  loadingPrint: { [key: string]: boolean } = {};
 
   // Pagination Marketing Order
   displayedColumnsMo: string[] = ['no', 'moId', 'type', 'dateValid', 'revisionPpc', 'revisionMarketing', 'month0', 'month1', 'month2', 'action'];
@@ -169,9 +172,18 @@ export class ViewDetailRevisiMarketingComponent implements OnInit {
     this.dataSourceMo.filter = this.searchText.trim().toLowerCase();
   }
 
+  onSearchChangeDmo(): void {
+    this.dataSourceDmo.filter = this.searchTextDmo.trim().toLowerCase();
+  }
+
   resetSearchMo(): void {
     this.searchText = '';
     this.dataSourceMo.filter = '';
+  }
+
+  resetSearchDmo(): void {
+    this.searchTextDmo = '';
+    this.dataSourceDmo.filter = '';
   }
 
   parseDate(dateParse: string): string {
@@ -179,6 +191,7 @@ export class ViewDetailRevisiMarketingComponent implements OnInit {
   }
 
   exportExcelMo(id: string): void {
+    this.loadingPrint[id] = true;
     this.moService.downloadExcelMo(id).subscribe(
       (response: Blob) => {
         const url = window.URL.createObjectURL(response);
@@ -187,6 +200,7 @@ export class ViewDetailRevisiMarketingComponent implements OnInit {
         a.download = `Marketing_Order_${id}.xlsx`; // Nama file yang diinginkan
         a.click();
         window.URL.revokeObjectURL(url);
+        this.loadingPrint[id] = false;
       },
       (error) => {
         Swal.fire({
@@ -194,7 +208,7 @@ export class ViewDetailRevisiMarketingComponent implements OnInit {
           title: 'Oops...',
           text: 'Gagal mendownload file. Silakan coba lagi!',
         });
-        console.error('Error downloading file:', error);
+        this.loadingPrint[id] = false;
       }
     );
   }
@@ -230,10 +244,21 @@ export class ViewDetailRevisiMarketingComponent implements OnInit {
   }
 
   showDataRevision(idMo: string) {
+    this.loadingShow[idMo] = true;
+    Swal.fire({
+      title: 'Loading...',
+      html: 'Please wait while fetching data marketing order.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
     this.moService.getAllMoById(idMo).subscribe(
       (response: ApiResponse<any>) => {
         this.allData = response.data;
         this.fillAllData(this.allData);
+        this.loadingShow[idMo] = false;
+        Swal.close();
       },
       (error) => {
         Swal.fire({
@@ -242,6 +267,8 @@ export class ViewDetailRevisiMarketingComponent implements OnInit {
           text: 'Failed to load marketing order details: ' + error.message,
           confirmButtonText: 'OK',
         });
+        this.loadingShow[idMo] = false;
+        Swal.close();
       }
     );
   }

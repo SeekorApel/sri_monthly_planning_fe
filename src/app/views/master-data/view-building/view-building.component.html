@@ -43,14 +43,14 @@
           </ng-container>
 
           <ng-container matColumnDef="status">
-            <th  *matHeaderCellDef>Status</th>
+            <th  *matHeaderCellDef mat-sort-header>Status</th>
             <td *matCellDef="let element" [ngClass]="{ 'bg-success': element.status === 1, 'bg-danger': element.status !== 1 }">
               {{ element.status === 1 ? 'Active' : 'Deactive' }}
             </td>
           </ng-container>
 
           <ng-container matColumnDef="action" >
-            <th *matHeaderCellDef style="min-width: 200px;">Action</th>
+            <th *matHeaderCellDef style="width: 200px;">Action</th>
             <td *matCellDef="let element">
               <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(element.building_ID)">Update</button>
               <button type="button" class="btn btn-md ml-2" [ngClass]="{ 'btn-danger': element.status === 1, 'btn-success': element.status !== 1 }" (click)="element.status === 1 ? deleteData(element) : activateData(element)">

@@ -452,7 +452,7 @@
             <ng-container matColumnDef="sfMonth0">
               <th mat-sort-header *matHeaderCellDef style="min-width: 80px">{{ monthNames[0] || 'Month 1' }}</th>
               <td mat-cell *matCellDef="let mo">
-                <input type="text" [ngModel]="formatNumber(mo.sfMonth0)" (ngModelChange)="onInputChange($event, mo, 'sfMonth0')" (input)="onInputFormat($event)" class="text-right form-control" />
+                <input type="text" (keypress)="allowOnlyNumbers($event)" [ngModel]="formatNumber(mo.sfMonth0)" (ngModelChange)="onInputChange($event, mo, 'sfMonth0')" (input)="onInputFormat($event)" class="text-right form-control" />
               </td>
             </ng-container>
 
@@ -460,7 +460,7 @@
             <ng-container matColumnDef="sfMonth1">
               <th mat-sort-header *matHeaderCellDef style="min-width: 80px">{{ monthNames[1] || 'Month 1' }}</th>
               <td mat-cell *matCellDef="let mo">
-                <input type="text" [ngModel]="formatNumber(mo.sfMonth1)" (ngModelChange)="onInputChange($event, mo, 'sfMonth1')" (input)="onInputFormat($event)" class="text-right form-control" />
+                <input type="text" (keypress)="allowOnlyNumbers($event)" [ngModel]="formatNumber(mo.sfMonth1)" (ngModelChange)="onInputChange($event, mo, 'sfMonth1')" (input)="onInputFormat($event)" class="text-right form-control" />
               </td>
             </ng-container>
 
@@ -468,7 +468,7 @@
             <ng-container matColumnDef="sfMonth2">
               <th mat-sort-header *matHeaderCellDef style="min-width: 80px">{{ monthNames[2] || 'Month 1' }}</th>
               <td mat-cell *matCellDef="let mo">
-                <input type="text" [ngModel]="formatNumber(mo.sfMonth2)" (ngModelChange)="onInputChange($event, mo, 'sfMonth2')" (input)="onInputFormat($event)" class="text-right form-control" />
+                <input type="text" (keypress)="allowOnlyNumbers($event)" [ngModel]="formatNumber(mo.sfMonth2)" (ngModelChange)="onInputChange($event, mo, 'sfMonth2')" (input)="onInputFormat($event)" class="text-right form-control" />
               </td>
             </ng-container>
 
@@ -476,7 +476,7 @@
             <ng-container matColumnDef="moMonth0">
               <th mat-sort-header *matHeaderCellDef style="min-width: 80px" class="child-column">{{ monthNames[0] || 'Month 1' }}</th>
               <td mat-cell *matCellDef="let mo; let i = index" class="text-right" [ngClass]="{ 'locked-background': mo.lockStatusM0 === 1 }">
-                <input *ngIf="mo.lockStatusM0 !== 1" type="text" [ngModel]="formatNumber(mo.moMonth0)" (ngModelChange)="onInputChangeM0(mo, $event)" [ngClass]="{ 'is-invalid': isSubmitted && mo.validationMessageM0 }" [matTooltip]="isSubmitted && mo.validationMessageM0 ? mo.validationMessageM0 : ''" matTooltipPosition="right" class="text-right form-control" />
+                <input *ngIf="mo.lockStatusM0 !== 1" type="text" (keypress)="allowOnlyNumbers($event)" [ngModel]="formatNumber(mo.moMonth0)" (ngModelChange)="onInputChangeM0(mo, $event)" [ngClass]="{ 'is-invalid': isSubmitted && mo.validationMessageM0 }" [matTooltip]="isSubmitted && mo.validationMessageM0 ? mo.validationMessageM0 : ''" matTooltipPosition="right" class="text-right form-control" />
               </td>
             </ng-container>
 
@@ -484,7 +484,7 @@
             <ng-container matColumnDef="moMonth1">
               <th mat-sort-header *matHeaderCellDef style="min-width: 80px" class="child-column">{{ monthNames[1] || 'Month 1' }}</th>
               <td mat-cell *matCellDef="let mo; let i = index" class="text-right" [ngClass]="{ 'locked-background': mo.lockStatusM1 === 1 }">
-                <input *ngIf="mo.lockStatusM1 !== 1" type="text" [ngModel]="formatNumber(mo.moMonth1)" (ngModelChange)="onInputChangeM1(mo, $event)" [ngClass]="{ 'is-invalid': isSubmitted && mo.validationMessageM1 }" [matTooltip]="isSubmitted && mo.validationMessageM1 ? mo.validationMessageM1 : ''" matTooltipPosition="right" class="text-right form-control" />
+                <input *ngIf="mo.lockStatusM1 !== 1" type="text" (keypress)="allowOnlyNumbers($event)" [ngModel]="formatNumber(mo.moMonth1)" (ngModelChange)="onInputChangeM1(mo, $event)" [ngClass]="{ 'is-invalid': isSubmitted && mo.validationMessageM1 }" [matTooltip]="isSubmitted && mo.validationMessageM1 ? mo.validationMessageM1 : ''" matTooltipPosition="right" class="text-right form-control" />
               </td>
             </ng-container>
 
@@ -492,7 +492,7 @@
             <ng-container matColumnDef="moMonth2">
               <th mat-sort-header *matHeaderCellDef style="min-width: 80px" class="child-column">{{ monthNames[2] || 'Month 2' }}</th>
               <td mat-cell *matCellDef="let mo; let i = index" class="text-right" [ngClass]="{ 'locked-background': mo.lockStatusM2 === 1 }">
-                <input *ngIf="mo.lockStatusM2 !== 1" type="text" [ngModel]="formatNumber(mo.moMonth2)" (ngModelChange)="onInputChangeM2(mo, $event)" [ngClass]="{ 'is-invalid': isSubmitted && mo.validationMessageM2 }" [matTooltip]="isSubmitted && mo.validationMessageM2 ? mo.validationMessageM2 : ''" matTooltipPosition="right" class="text-right form-control" />
+                <input *ngIf="mo.lockStatusM2 !== 1" type="text" (keypress)="allowOnlyNumbers($event)" [ngModel]="formatNumber(mo.moMonth2)" (ngModelChange)="onInputChangeM2(mo, $event)" [ngClass]="{ 'is-invalid': isSubmitted && mo.validationMessageM2 }" [matTooltip]="isSubmitted && mo.validationMessageM2 ? mo.validationMessageM2 : ''" matTooltipPosition="right" class="text-right form-control" />
               </td>
             </ng-container>
 
@@ -506,7 +506,10 @@
       </div>
       <div class="col-md-12 pb-4">
         <button (click)="navigateToViewMo()" class="btn btn-primary justify-content-start mr-2">Back</button>
-        <button (click)="editMo()" type="submit" class="btn btn-success">Edit</button>
+        <button (click)="editMo()" [disabled]="loading" type="submit" class="btn btn-success">
+          <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+          Edit
+        </button>
       </div>
     </div>
   </div>

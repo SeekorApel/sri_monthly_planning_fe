@@ -15,14 +15,13 @@ import { ParsingDateService } from 'src/app/utils/parsing-date/parsing-date.serv
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { ParsingNumberService } from 'src/app/utils/parsing-number/parsing-number.service';
-
 @Component({
-  selector: 'app-edit-mo-ppc',
-  templateUrl: './edit-mo-ppc.component.html',
-  styleUrls: ['./edit-mo-ppc.component.scss'],
+  selector: 'app-add-ar-defact-reject',
+  templateUrl: './add-ar-defact-reject.component.html',
+  styleUrls: ['./add-ar-defact-reject.component.scss']
 })
-export class EditMoPpcComponent implements OnInit {
-  //Variable Declaration
+export class AddArDefactRejectComponent implements OnInit {
+
   idMo: String;
   capacityDb: string = '';
   formHeaderMo: FormGroup;
@@ -37,9 +36,9 @@ export class EditMoPpcComponent implements OnInit {
   detailMarketingOrder: DetailMarketingOrder[];
 
   // Pagination Detail Marketing Order
-  headersColumnsDmo: string[] = ['no', 'category', 'partNumber', 'description', 'machineType', 'capacity', 'qtyPerMould', 'spareMould', 'mouldMonthlyPlan', 'qtyPerRak', 'minOrder', 'maxCap', 'initialStock', 'salesForecast', 'marketingOrder', 'status'];
-  childHeadersColumnsDmo: string[] = ['maxCapMonth0', 'maxCapMonth1', 'maxCapMonth2', 'sfMonth0', 'sfMonth1', 'sfMonth2', 'moMonth0', 'moMonth1', 'moMonth2', 'lockStatusM0', 'lockStatusM1', 'lockStatusM2'];
-  rowDataDmo: string[] = ['no', 'category', 'partNumber', 'description', 'machineType', 'capacity', 'qtyPerMould', 'spareMould', 'mouldMonthlyPlan', 'qtyPerRak', 'minOrder', 'maxCapMonth0', 'maxCapMonth1', 'maxCapMonth2', 'initialStock', 'sfMonth0', 'sfMonth1', 'sfMonth2', 'moMonth0', 'moMonth1', 'moMonth2', 'lockStatusM0', 'lockStatusM1', 'lockStatusM2'];
+  headersColumnsDmo: string[] = ['no', 'category', 'partNumber', 'description', 'machineType', 'capacity', 'qtyPerMould', 'spareMould', 'mouldMonthlyPlan', 'qtyPerRak', 'minOrder', 'maxCap', 'initialStock', 'salesForecast', 'marketingOrder', 'ar', 'defect', 'reject'];
+  childHeadersColumnsDmo: string[] = ['maxCapMonth0', 'maxCapMonth1', 'maxCapMonth2', 'sfMonth0', 'sfMonth1', 'sfMonth2', 'moMonth0', 'moMonth1', 'moMonth2'];
+  rowDataDmo: string[] = ['no', 'category', 'partNumber', 'description', 'machineType', 'capacity', 'qtyPerMould', 'spareMould', 'mouldMonthlyPlan', 'qtyPerRak', 'minOrder', 'maxCapMonth0', 'maxCapMonth1', 'maxCapMonth2', 'initialStock', 'sfMonth0', 'sfMonth1', 'sfMonth2', 'moMonth0', 'moMonth1', 'moMonth2', 'ar', 'defect', 'reject'];
   dataSourceDmo: MatTableDataSource<DetailMarketingOrder>;
   @ViewChild('sortDmo') sortDmo = new MatSort();
   @ViewChild('paginatorDmo') paginatorDmo: MatPaginator;
@@ -543,4 +542,5 @@ export class EditMoPpcComponent implements OnInit {
   navigateToViewMo() {
     this.router.navigate(['/transaksi/view-mo-ppc']);
   }
+
 }

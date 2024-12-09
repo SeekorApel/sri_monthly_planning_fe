@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DetailViewMoPpcComponent } from './detail-view-mo-ppc.component';
+import { AddArDefactRejectComponent } from './add-ar-defact-reject.component';
 
-describe('DetailViewMoPpcComponent', () => {
-  let component: DetailViewMoPpcComponent;
-  let fixture: ComponentFixture<DetailViewMoPpcComponent>;
+describe('AddArDefactRejectComponent', () => {
+  let component: AddArDefactRejectComponent;
+  let fixture: ComponentFixture<AddArDefactRejectComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ DetailViewMoPpcComponent ]
+      declarations: [ AddArDefactRejectComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DetailViewMoPpcComponent);
+    fixture = TestBed.createComponent(AddArDefactRejectComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
