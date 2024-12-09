@@ -95,7 +95,7 @@
                 </div>
                 <div class="form-group">
                   <h6 for="Type">Type</h6>
-                  <input [(ngModel)]="editMachineExtrudingTypeObject.type" type="text" class="form-control" id="Type" formControlName="Type" [ngClass]="{ 'is-invalid': editMachineExtrudingTypeForm.get('Type').invalid && editMachineExtrudingTypeForm.get('Type').touched }" />
+                  <input [(ngModel)]="editMachineExtrudingTypeObject.type" maxlength="9" type="text" class="form-control" id="Type" formControlName="Type" [ngClass]="{ 'is-invalid': editMachineExtrudingTypeForm.get('Type').invalid && editMachineExtrudingTypeForm.get('Type').touched }" />
                   <!-- Error message if plantName is empty -->
                   <div *ngIf="editMachineExtrudingTypeForm.get('Type').invalid && editMachineExtrudingTypeForm.get('Type').touched" class="invalid-feedback">Machine Extruding Description name is required.</div>
                 </div>

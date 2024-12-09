@@ -38,7 +38,7 @@
           <!-- Setting ID Column -->
           <ng-container matColumnDef="setting_ID">
             <th *matHeaderCellDef style="min-width: 150px" mat-sort-header>Setting</th>
-            <td align="left" *matCellDef="let mtt">{{ mtt.setting_key }}</td>
+            <td align="left" *matCellDef="let mtt">{{ mtt.setting_value }}</td>
           </ng-container>
 
           <!-- Description Column -->
@@ -96,7 +96,7 @@
                 </div>
                 <div class="form-group">
                   <h6 for="description">Description</h6>
-                  <input [(ngModel)]="edtMachineTassTypeObject.description" type="text" class="form-control" id="description" formControlName="description" [ngClass]="{ 'is-invalid': editMachineTassTypeForm.get('description').invalid && editMachineTassTypeForm.get('description').touched }" />
+                  <input [(ngModel)]="edtMachineTassTypeObject.description" maxlength="254" type="text" class="form-control" id="description" formControlName="description" [ngClass]="{ 'is-invalid': editMachineTassTypeForm.get('description').invalid && editMachineTassTypeForm.get('description').touched }" />
                   <!-- Error message if plantName is empty -->
                   <div *ngIf="editMachineTassTypeForm.get('description').invalid && editMachineTassTypeForm.get('description').touched" class="invalid-feedback">Machine Tass Type Description name is required.</div>
                 </div>

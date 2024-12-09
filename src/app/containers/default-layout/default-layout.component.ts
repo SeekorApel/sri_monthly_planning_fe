@@ -56,6 +56,7 @@ export class DefaultLayoutComponent {
       { name: 'Machine Allowence', url: '/master-data/view-machine-allowence', icon: 'cil-minus' },
       { name: 'Item Assy', url: '/master-data/view-item-assy', icon: 'cil-minus' },
       { name: 'Curing Size', url: '/master-data/view-curing-size', icon: 'cil-minus' },
+      { name: 'PM Stop Machine', url: '/master-data/view-pm-stop-machine', icon: 'cil-minus' },
       { name: 'Work Day', url: '/master-data/view-work-day', icon: 'cil-minus' },
     ];
 

@@ -6,7 +6,7 @@ import { CTCuringService } from 'src/app/services/master-data/ct-curing/ct-curin
 import Swal from 'sweetalert2';
 declare var $: any;
 import * as XLSX from 'xlsx';
-import { saveAs } from 'file-saver';  
+import { saveAs } from 'file-saver';
 import { Select2OptionData } from 'ng-select2';
 import { Options } from 'select2';
 
@@ -36,7 +36,7 @@ export class ViewCtCuringComponent implements OnInit {
   pageOfItems: Array<any>;
   pageSize: number = 5;
   totalPages: number = 5;
-  displayedColumns: string[] = ['no', 'ct_CURING_ID', 'wip', 'group_COUNTER', 'var_GROUP_COUNTER', 'sequence', 'wct', 'operation_SHORT_TEXT', 'operation_UNIT', 'base_QUANTITY', 'standart_VALUE_UNIT', 'ct_SEC1', 'ct_HR1000', 'wh_NORMAL_SHIFT_0', 'wh_NORMAL_SHIFT_1', 'wh_NORMAL_SHIFT_2', 'wh_SHIFT_FRIDAY', 'wh_TOTAL_NORMAL_SHIFT', 'wh_TOTAL_SHIFT_FRIDAY', 'allow_NORMAL_SHIFT_0', 'allow_NORMAL_SHIFT_1', 'allow_NORMAL_SHIFT_2', 'allow_TOTAL', 'op_TIME_NORMAL_SHIFT_0', 'op_TIME_NORMAL_SHIFT_1', 'op_TIME_NORMAL_SHIFT_2', 'op_TIME_SHIFT_FRIDAY', 'op_TIME_NORMAL_SHIFT', 'op_TIME_TOTAL_SHIFT_FRIDAY', 'kaps_NORMAL_SHIFT_0', 'kaps_NORMAL_SHIFT_1', 'kaps_NORMAL_SHIFT_2', 'kaps_SHIFT_FRIDAY', 'kaps_TOTAL_NORMAL_SHIFT', 'kaps_TOTAL_SHIFT_FRIDAY', 'waktu_TOTAL_CT_NORMAL', 'waktu_TOTAL_CT_FRIDAY', 'status', 'action'];
+  displayedColumns: string[] = ['no', 'ct_CURING_ID', 'wip', 'group_COUNTER', 'var_GROUP_COUNTER', 'sequence', 'wct', 'operation_SHORT_TEXT', 'operation_UNIT', 'base_QUANTITY', 'standart_VALUE_UNIT', 'ct_SEC1', 'ct_HR1000', 'wh_NORMAL_SHIFT_1', 'wh_NORMAL_SHIFT_2', 'wh_NORMAL_SHIFT_3', 'wh_SHIFT_FRIDAY', 'wh_TOTAL_NORMAL_SHIFT', 'wh_TOTAL_SHIFT_FRIDAY', 'allow_NORMAL_SHIFT_1', 'allow_NORMAL_SHIFT_2', 'allow_NORMAL_SHIFT_3', 'allow_TOTAL', 'op_TIME_NORMAL_SHIFT_1', 'op_TIME_NORMAL_SHIFT_2', 'op_TIME_NORMAL_SHIFT_3', 'op_TIME_SHIFT_FRIDAY', 'op_TIME_NORMAL_SHIFT', 'op_TIME_TOTAL_SHIFT_FRIDAY', 'kaps_NORMAL_SHIFT_1', 'kaps_NORMAL_SHIFT_2', 'kaps_NORMAL_SHIFT_3', 'kaps_SHIFT_FRIDAY', 'kaps_TOTAL_NORMAL_SHIFT', 'kaps_TOTAL_SHIFT_FRIDAY', 'waktu_TOTAL_CT_NORMAL', 'waktu_TOTAL_CT_FRIDAY', 'status', 'action'];
   dataSource: MatTableDataSource<CT_Curing>;
   public uomOptionData: Array<Select2OptionData>;
   public options: Options = {
@@ -60,25 +60,25 @@ export class ViewCtCuringComponent implements OnInit {
       standardvalueunit: ['', Validators.required],
       ctsec1: ['', Validators.required],
       cthr1000: ['', Validators.required],
-      whnormalshift0: ['', Validators.required],
       whnormalshift1: ['', Validators.required],
       whnormalshift2: ['', Validators.required],
+      whnormalshift3: ['', Validators.required],
       whshiftfriday: ['', Validators.required],
       whtotalnormalshift: ['', Validators.required],
       whtotalshiftfriday: ['', Validators.required],
-      allownormalshift0: ['', Validators.required],
       allownormalshift1: ['', Validators.required],
       allownormalshift2: ['', Validators.required],
+      allownormalshift3: ['', Validators.required],
       allowtotal: ['', Validators.required],
-      optimenormalshift0: ['', Validators.required],
       optimenormalshift1: ['', Validators.required],
       optimenormalshift2: ['', Validators.required],
+      optimenormalshift3: ['', Validators.required],
       optimeshiftfriday: ['', Validators.required],
       optimenormalshift: ['', Validators.required],
       optimetotalshiftfriday: ['', Validators.required],
-      kapsnormalshift0: ['', Validators.required],
       kapsnormalshift1: ['', Validators.required],
       kapsnormalshift2: ['', Validators.required],
+      kapsnormalshift3: ['', Validators.required],
       kapsshiftfriday: ['', Validators.required],
       kapstotalnormalshift: ['', Validators.required],
       kapstotalshiftfriday: ['', Validators.required],
@@ -89,6 +89,15 @@ export class ViewCtCuringComponent implements OnInit {
 
   ngOnInit(): void {
     this.getAllCTCuring();
+  }
+
+  validateNumberInput(event: KeyboardEvent): void {
+    const charCode = event.key.charCodeAt(0);
+
+    // Kode ASCI 48 - 57 angka (0-9) yang bisa diketik
+    if ((charCode < 48 || charCode > 57)&& charCode !== 46) {
+      event.preventDefault();
+    }
   }
 
   getAllCTCuring(): void {

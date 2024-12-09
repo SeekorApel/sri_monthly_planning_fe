@@ -97,13 +97,13 @@
                 <div class="col-md-13">
                   <ng-select2 id="setting" name="setting" formControlName="setting" [(ngModel)]="edtMCTObject.setting_ID" [data]="uomOptionData" [options]="options"> </ng-select2>
                 </div>
-                <h6 for="description">Description</h6>
-                <input [(ngModel)]="edtMCTObject.description" type="text" class="form-control" id="descri ption" formControlName="description" [ngClass]="{ 'is-invalid': editMCTForm.get('description').invalid && editMCTForm.get('description').touched }" />
-                <h6 for="cavity">Cavity</h6>
-                <input [(ngModel)]="edtMCTObject.cavity" type="number" class="form-control" min="0" id="cavity" formControlName="cavity" [ngClass]="{ 'is-invalid': editMCTForm.get('cavity').invalid && editMCTForm.get('cavity').touched }" />
-                <!-- Error message if description is empty -->
+                <h6 for="description" class="mt-2">Description</h6>
+                <input [(ngModel)]="edtMCTObject.description" type="text" maxlength="254" class="form-control" id="descri ption" formControlName="description" [ngClass]="{ 'is-invalid': editMCTForm.get('description').invalid && editMCTForm.get('description').touched }" />
                 <div *ngIf="editMCTForm.get('description').invalid && editMCTForm.get('description').touched" class="invalid-feedback">Machine Curing Type description is required.</div>
-                <div *ngIf="editMCTForm.get('cavity').invalid && editMCTForm.get('cavity').touched" class="invalid-feedback">Machine Curing Type cavity is required.</div>
+                <h6 for="cavity" class="mt-2">Cavity</h6>
+                <input [(ngModel)]="edtMCTObject.cavity" type="text" maxlength="9" onpaste="return false" (keypress)="validateNumberInput($event)" class="form-control" min="0" id="cavity" formControlName="cavity" [ngClass]="{ 'is-invalid': editMCTForm.get('cavity').invalid && editMCTForm.get('cavity').touched }" />
+                <!-- Error message if -->
+                <div *ngIf="editMCTForm.get('cavity').hasError('required')" class="invalid-feedback">Machine Curing Type cavity is required.</div>
               </form>
             </div>
             <div class="modal-footer">
