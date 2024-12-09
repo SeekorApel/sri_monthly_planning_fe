@@ -562,14 +562,24 @@ export class AddMoPpcComponent implements OnInit {
         detailMarketingOrder: this.detailMarketingOrder,
       };
 
-      console.log(saveMo);
+      Swal.fire({
+        icon: 'info',
+        title: 'Processing...',
+        html: 'Please wait while save data marketing order.',
+        allowOutsideClick: false,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
 
       this.moService.saveMarketingOrderPPC(saveMo).subscribe(
         (response) => {
+          Swal.close();
           Swal.fire({
             title: 'Success!',
             text: 'Data Marketing Order successfully Added.',
             icon: 'success',
+            allowOutsideClick: false,
             confirmButtonText: 'OK',
           }).then((result) => {
             if (result.isConfirmed) {
@@ -579,6 +589,7 @@ export class AddMoPpcComponent implements OnInit {
           this.loadingSaveData = false;
         },
         (err) => {
+          Swal.close();
           Swal.fire('Error!', 'Error insert data Marketing Order.', 'error');
           this.loadingSaveData = false;
         }

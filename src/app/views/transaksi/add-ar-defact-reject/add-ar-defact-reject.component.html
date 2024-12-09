@@ -492,7 +492,15 @@
             <ng-container matColumnDef="ar">
               <th *matHeaderCellDef rowspan="2" mat-sort-header style="min-width: 100px">% AR</th>
               <td class="text-right" *matCellDef="let mo">
-                <input type="text" [ngModel]="mo.ar" class="text-right form-control" />
+                <input
+                type="text"
+                (ngModelChange)="onInputChangeAr(mo, $event)"
+                [ngModel]="mo.ar"
+                (keypress)="allowOnlyNumbers($event)"
+                (input)="restrictToMaxLength($event)"
+                class="text-right form-control"
+                maxlength="3"
+              />
               </td>
             </ng-container>
 
@@ -500,7 +508,15 @@
             <ng-container matColumnDef="defect">
               <th *matHeaderCellDef rowspan="2" mat-sort-header style="min-width: 100px">% Defect</th>
               <td class="text-right" *matCellDef="let mo">
-                <input type="text" [ngModel]="mo.defect" class="text-right form-control" />
+              <input
+                type="text"
+                (ngModelChange)="onInputChangeDefect(mo, $event)"
+                [ngModel]="mo.defect"
+                (keypress)="allowOnlyNumbers($event)"
+                (input)="restrictToMaxLength($event)"
+                class="text-right form-control"
+                maxlength="3"
+              />
               </td>
             </ng-container>
 
@@ -508,7 +524,15 @@
             <ng-container matColumnDef="reject">
               <th *matHeaderCellDef rowspan="2" mat-sort-header style="min-width: 100px">% Reject</th>
               <td class="text-right" *matCellDef="let mo">
-                <input type="text" [ngModel]="mo.reject" class="text-right form-control" />
+              <input
+                type="text"
+                (ngModelChange)="onInputChangeDefect(mo, $event)"
+                [ngModel]="mo.reject"
+                (keypress)="allowOnlyNumbers($event)"
+                (input)="restrictToMaxLength($event)"
+                class="text-right form-control"
+                maxlength="3"
+              />
               </td>
             </ng-container>
 
@@ -532,7 +556,7 @@
   <div class="col-md-12 pb-4">
     <button (click)="navigateToViewAddMp()" class="btn btn-primary justify-content-start mr-2">Back</button>
     <button (click)="validate()" type="submit" class="btn btn-warning mr-2">Validate</button>
-    <button (click)="finalizationMo()" [disabled]="loading" type="submit" class="btn btn-success">
+    <button (click)="finalizationMo()" [disabled]="true" type="submit" class="btn btn-success">
       <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
       Submit
     </button>

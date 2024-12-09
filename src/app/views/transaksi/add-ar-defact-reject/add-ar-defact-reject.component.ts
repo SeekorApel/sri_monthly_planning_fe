@@ -126,6 +126,9 @@ export class AddArDefactRejectComponent implements OnInit {
       upload_file_m0: [null, [Validators.required]],
       upload_file_m1: [null, [Validators.required]],
       upload_file_m2: [null, [Validators.required]],
+      note_order_tl_0: [],
+      note_order_tl_1: [],
+      note_order_tl_2: [],
     });
 
     this.moService.getCapacity().subscribe(
@@ -162,6 +165,37 @@ export class AddArDefactRejectComponent implements OnInit {
     const inputValue = event.target.value;
     const formattedValue = this.parsingNumberService.separatorAndDecimalInput(inputValue);
     this.formHeaderMo.get(formControlName)?.setValue(formattedValue, { emitEvent: false });
+  }
+
+  onInputChangeAr(mo: any, value: string): void {
+    const numericValue = Number(value.replace(/\./g, '').replace(',', '.'));
+    mo.ar = numericValue;
+  }
+
+  onInputChangeDefect(mo: any, value: string): void {
+    const numericValue = Number(value.replace(/\./g, '').replace(',', '.'));
+    mo.defect = numericValue;
+  }
+
+  formatNumber(value: any): string {
+    if (value == null || value === '') {
+      return '';
+    }
+    return Number(value).toLocaleString('id-ID');
+  }
+
+  allowOnlyNumbers(event: KeyboardEvent): void {
+    const charCode = event.which ? event.which : event.keyCode;
+    if (charCode < 48 || charCode > 57) {
+      event.preventDefault(); // Hanya izinkan angka
+    }
+  }
+
+  restrictToMaxLength(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    if (input.value.length > 3) {
+      input.value = input.value.slice(0, 3); // Batasi hingga 3 digit
+    }
   }
 
   getAllData(idMo: String) {
@@ -224,9 +258,10 @@ export class AddArDefactRejectComponent implements OnInit {
       item.moMonth0 = item.moMonth0 !== null ? item.moMonth0 : 0;
       item.moMonth1 = item.moMonth1 !== null ? item.moMonth1 : 0;
       item.moMonth2 = item.moMonth2 !== null ? item.moMonth2 : 0;
+      item.ar = 100;
+      item.defect = 0;
+      item.reject = 0;
     });
-
-    console.log(this.headerMarketingOrder[0].totalWdTube);
 
     let typeProduct = data.type;
     this.formHeaderMo.patchValue({
@@ -307,8 +342,6 @@ export class AddArDefactRejectComponent implements OnInit {
       total_mo_m2: this.formatSeparatorView(this.headerMarketingOrder[2].totalMo),
       note_tl_m2: this.headerMarketingOrder[2].noteOrderTl,
     });
-
-    console.table(this.headerMarketingOrder);
 
     this.updateMonthNames(this.headerMarketingOrder);
   }
@@ -413,23 +446,23 @@ export class AddArDefactRejectComponent implements OnInit {
     return null;
   }
 
-  formatNumber(value: number): string {
-    if (value !== null && value !== undefined) {
-      // Mengubah angka menjadi string
-      let strValue = value.toString();
+  // formatNumber(value: number): string {
+  //   if (value !== null && value !== undefined) {
+  //     // Mengubah angka menjadi string
+  //     let strValue = value.toString();
 
-      // Memisahkan bagian desimal dan bagian bulat
-      const parts = strValue.split('.');
-      const integerPart = parts[0];
-      const decimalPart = parts[1] ? ',' + parts[1] : '';
+  //     // Memisahkan bagian desimal dan bagian bulat
+  //     const parts = strValue.split('.');
+  //     const integerPart = parts[0];
+  //     const decimalPart = parts[1] ? ',' + parts[1] : '';
 
-      // Menambahkan separator ribuan
-      const formattedInteger = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+  //     // Menambahkan separator ribuan
+  //     const formattedInteger = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
 
-      return formattedInteger + decimalPart;
-    }
-    return '';
-  }
+  //     return formattedInteger + decimalPart;
+  //   }
+  //   return '';
+  // }
 
   formatDateToString(dateString) {
     const date = new Date(dateString);
@@ -1177,8 +1210,13 @@ export class AddArDefactRejectComponent implements OnInit {
       worksheet.getCell(`P${rowIndex}`).numFmt = '#,##0';
 
       //Format AR, Defect, Reject
+      worksheet.getCell(`T${rowIndex}`).value = item.ar / 100;
       worksheet.getCell(`T${rowIndex}`).numFmt = '0%';
+
+      worksheet.getCell(`U${rowIndex}`).value = item.defect / 100;
       worksheet.getCell(`U${rowIndex}`).numFmt = '0%';
+
+      worksheet.getCell(`V${rowIndex}`).value = item.reject / 100;
       worksheet.getCell(`V${rowIndex}`).numFmt = '0%';
 
       if (item.lockStatusM0 !== 1) {
@@ -1407,7 +1445,7 @@ export class AddArDefactRejectComponent implements OnInit {
             const partNumber = Number(worksheet[`C${row + 1}`]?.v) || null; // Kolom C
             const ar = worksheet[`T${row + 1}`]?.v != null ? Number(worksheet[`T${row + 1}`].v) * 100 : null; // Kolom T
             const defect = worksheet[`U${row + 1}`]?.v != null ? Number(worksheet[`U${row + 1}`].v) * 100 : null; // Kolom U
-            const reject = worksheet[`V${row + 1}`]?.v != null ? Number(worksheet[`V${row + 1}`].v) * 100 : null; // Kolom V
+            const reject = 100 - ar; // Kolom V
 
             // Mencari dan memperbarui nilai dalam detailMarketingOrder
             const detail = this.detailMarketingOrder.find((item) => item.partNumber === partNumber);
@@ -1423,56 +1461,54 @@ export class AddArDefactRejectComponent implements OnInit {
             icon: 'error',
             title: 'Gagal Membaca File',
             text: 'File tidak dapat dibaca sebagai ArrayBuffer.',
-            confirmButtonText: 'OK'
+            confirmButtonText: 'OK',
           });
         }
       };
       reader.readAsArrayBuffer(this.file); // Membaca file sebagai ArrayBuffer
       $('#uploadModal').modal('hide');
     }
-
-
   }
 
   validate() {
+    let curingGroupsM0: { [key: string]: number } = {};
+
+    // Perulangan untuk set ar * MO
     this.detailMarketingOrder.forEach((dmo) => {
       let arValue = dmo.ar / 100;
-      let defectValue = dmo.defect / 100;
-      let rejectValue = dmo.reject / 100;
-      console.log(dmo.reject)
       // Hitung nilai ArMoM1
-      if(dmo.moMonth0 !== 0){
+      if (dmo.moMonth0 !== 0) {
         dmo.ArMoM1 = Math.round(dmo.moMonth0 / (1 - (1 - arValue)));
       } else {
         dmo.ArMoM1 = 0;
       }
 
-      if (dmo.moMonth0 !== 0) {
-        const divisor = 1 - rejectValue;
-        if (divisor !== 0) {
-          dmo.RjMoM1 = Math.round(dmo.ArMoM1 / divisor);
-        } else {
-          dmo.RjMoM1 = 0;
-        }
-      } else {
-        dmo.RjMoM1 = 0;
+      if (dmo.itemCuring) {
+        curingGroupsM0[dmo.itemCuring] = (curingGroupsM0[dmo.itemCuring] || 0) + dmo.ArMoM1;
       }
-      
 
       arValue = null;
-      rejectValue = null;
     });
 
-    // Tampilkan hasil dalam table
-    console.table(
-      this.detailMarketingOrder.map((dmo) => ({
-        partNumber: dmo.partNumber,
-        description: dmo.description,
-        moMonth1: dmo.moMonth0,
-        Total_Ar: dmo.ArMoM1,
-        Total_Reject: dmo.RjMoM1,
-        itemCuring: dmo.itemCuring,
-      }))
-    );
+    // Set semua nilai menjadi 0
+    let curingGroups50Percent: { [key: string]: number } = {};
+
+    // Melakukan perhitungan 50% setelah semua nilai diset menjadi 0
+    for (const key in curingGroupsM0) {
+      if (curingGroupsM0.hasOwnProperty(key)) {
+        curingGroups50Percent[key] = curingGroupsM0[key] * 0.5;
+      }
+    }
+
+    this.detailMarketingOrder.forEach((dmo) => {
+      let oldValue = dmo.moMonth0;
+      // Cek hanya item curing yang ada di percentageTotal dan kategori mengandung 'HGP'
+      if (dmo.itemCuring && curingGroups50Percent[dmo.itemCuring] && dmo.category && dmo.category.includes('HGP')) {
+        let percentageValue = curingGroups50Percent[dmo.itemCuring];
+        if (oldValue < percentageValue) {
+          dmo.moMonth0 = percentageValue;
+        }
+      }
+    });
   }
 }
