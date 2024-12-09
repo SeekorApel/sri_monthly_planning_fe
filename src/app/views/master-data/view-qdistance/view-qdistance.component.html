@@ -37,13 +37,13 @@
 
           <!-- Quadrant ID 1 Column -->
           <ng-container matColumnDef="quadrant_ID_1">
-            <th *matHeaderCellDef style="min-width: 200px" mat-sort-header>Quadrant ID 1</th>
+            <th *matHeaderCellDef style="min-width: 200px" mat-sort-header>Quadrant 1</th>
             <td align="left" *matCellDef="let qdistance">{{ qdistance.quadrant_1 }}</td>
           </ng-container>
 
           <!-- Quadrant ID 2 Column -->
           <ng-container matColumnDef="quadrant_ID_2">
-            <th *matHeaderCellDef style="min-width: 200px" mat-sort-header>Quadrant ID 2</th>
+            <th *matHeaderCellDef style="min-width: 200px" mat-sort-header>Quadrant 2</th>
             <td align="left" *matCellDef="let qdistance">{{ qdistance.quadrant_2 }}</td>
           </ng-container>
 
@@ -107,7 +107,7 @@
                 </div>
                 <div class="form-group">
                   <h6 for="distance">Distance</h6>
-                  <input [(ngModel)]="edtQDistancesObject.distance" type="text" class="form-control" id="distance" formControlName="distance" [ngClass]="{ 'is-invalid': editQDistancesForm.get('distance').invalid && editQDistancesForm.get('distance').touched }" />
+                  <input [(ngModel)]="edtQDistancesObject.distance" maxlength="9" type="text" (keypress)="validateNumberInput($event)" class="form-control" id="distance" formControlName="distance" [ngClass]="{ 'is-invalid': editQDistancesForm.get('distance').invalid && editQDistancesForm.get('distance').touched }" />
                   <div *ngIf="editQDistancesForm.get('distance').invalid && editQDistancesForm.get('distance').touched" class="invalid-feedback">Distance Value is required.</div>
                 </div>
               </form>

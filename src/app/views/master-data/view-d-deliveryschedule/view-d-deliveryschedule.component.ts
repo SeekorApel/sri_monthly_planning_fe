@@ -68,6 +68,7 @@ export class ViewDDeliveryScheduleComponent implements OnInit {
   ngOnInit(): void {
     this.getAllDDeliverySchedule();
   }
+  
 
   getAllDDeliverySchedule(): void {
     this.ddeliveryschedule.getAllDDeliverySchedule().subscribe(
@@ -76,7 +77,8 @@ export class ViewDDeliveryScheduleComponent implements OnInit {
           // Create a new object with the formatted date
           return {
             ...element, // Keep all other properties
-            formattedDate: new Date(element.date_DS).toLocaleDateString('en-US', { day: '2-digit', month: 'short', year: 'numeric' })
+            formattedDate: new Date(element.date_DS).toLocaleDateString('id-ID', { day: '2-digit', month: '2-digit', year: 'numeric' }).replace(/\//g, '-'),
+            formatTotalDelivery: element.total_DELIVERY.toLocaleString('id-ID')
           };
         });
         this.dataSource = new MatTableDataSource(this.ddeliveryScedules);
@@ -186,16 +188,34 @@ export class ViewDDeliveryScheduleComponent implements OnInit {
     this.getDDeliveryScheduleByID(idDetail);
     $('#editModal').modal('show');
   }
+  formatedate(date: Date):string{
+    const formattedDate = new Date(date)
+    .toLocaleDateString('en-CA');
+    return formattedDate;
+  }
 
   getDDeliveryScheduleByID(idDetail: number): void {
     this.ddeliveryschedule.getDDeliveryScheduleByID(idDetail).subscribe(
       (response: ApiResponse<DDeliverySchedule>) => {
         this.editDDeliveryScheduleTypeObject = response.data;
+        const formattedDate = this.formatedate(this.editDDeliveryScheduleTypeObject.date_DS);
+        this.editDDeliveryScheduleTypeForm.patchValue({
+            date: formattedDate
+        })
       },
       (error) => {
         this.errorMessage = 'Failed to load Detail Delivery Schedule: ' + error.message;
       }
     );
+    
+  }
+  validateNumberInput(event: KeyboardEvent): void {
+    const charCode = event.key.charCodeAt(0);
+
+    // Kode ASCI 48 - 57 angka (0-9) yang bisa diketik
+    if (charCode < 48 || charCode > 57) {
+      event.preventDefault();
+    }
   }
 
   deleteData(ddeliveryschedulee: DDeliverySchedule): void {
