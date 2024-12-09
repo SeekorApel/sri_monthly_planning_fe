@@ -28,6 +28,9 @@ export class DetailMarketingOrder {
   lockStatusM0: number;
   lockStatusM1: number;
   lockStatusM2: number;
+  ar: number;
+  defect: number;
+  reject: number;
   // Optional properties for tracking input state
   isTouchedM0?: boolean = false;
   isTouchedM1?: boolean = false;

@@ -92,12 +92,40 @@ export class ViewWorkDayComponent implements OnInit {
   async handleShiftChange(shiftIndex: number, shift: string) {
     this.Loading = true;
     const ftargetDate = this.getdateselected();
-  
     try {
       if (this.shift1Switches[shiftIndex]) {
+        const Times = [
+          { start: '23:30', end: '07:10' }, // Shift 3
+          { start: '07:00', end: '15:50' }, // Shift 1
+          { start: '15:50', end: '23:30' }, // Shift 2
+        ];
+        try{
+          const response = await this.workDayService.updateShiftTimes(
+            Times[shiftIndex].start,
+            Times[shiftIndex].end,
+            this.getdateselected(),
+            this.perHourShift.description,
+            shiftIndex == 0 ? 3 : shiftIndex
+          ).toPromise();
+          this.perHourShift = response.data;
+        } catch (error) {
+          this.errorMessage = 'Failed to update work day specific: ' + error.message;
+        }
         const response = await this.workDayService.turnOnShift(ftargetDate, shift).toPromise();
         this.work_days = response.data;
       } else {
+        try{
+          const response = await this.workDayService.updateShiftTimes(
+            "00:00",
+            "00:00",
+            this.getdateselected(),
+            this.perHourShift.description,
+            shiftIndex == 0 ? 3 : shiftIndex
+          ).toPromise();
+          this.perHourShift = response.data;
+        } catch (error) {
+          this.errorMessage = 'Failed to update work day specific: ' + error.message;
+        }
         const response = await this.workDayService.turnOffShift(ftargetDate, shift).toPromise();
         this.work_days = response.data;
       }
@@ -120,9 +148,38 @@ export class ViewWorkDayComponent implements OnInit {
     
     try {
       if (this.tlSwitches[shiftIndex]) {
+        const Times = [
+          { start: '23:30', end: '07:10' }, // Shift 3
+          { start: '07:00', end: '15:50' }, // Shift 1
+          { start: '15:50', end: '23:30' }, // Shift 2
+        ];
+        try{
+          const response = await this.workDayService.updateShiftTimes(
+            Times[shiftIndex].start,
+            Times[shiftIndex].end,
+            this.getdateselected(),
+            this.tlperHourSwitches.description,
+            shiftIndex == 0 ? 3 : shiftIndex
+          ).toPromise();
+          this.tlperHourSwitches = response.data;
+        } catch (error) {
+          this.errorMessage = 'Failed to update work day specific: ' + error.message;
+        }
         const response = await this.workDayService.turnOnShift(ftargetDate, ot[shiftIndex]).toPromise();
         this.work_days = response.data;
       } else {
+        try{
+          const response = await this.workDayService.updateShiftTimes(
+            "00:00",
+            "00:00",
+            this.getdateselected(),
+            this.tlperHourSwitches.description,
+            shiftIndex == 0 ? 3 : shiftIndex
+          ).toPromise();
+          this.tlperHourSwitches = response.data;
+        } catch (error) {
+          this.errorMessage = 'Failed to update work day specific: ' + error.message;
+        }
         const response = await this.workDayService.turnOffShift(ftargetDate, ot[shiftIndex]).toPromise();
         this.work_days = response.data;
       }
@@ -144,9 +201,38 @@ export class ViewWorkDayComponent implements OnInit {
   
     try {
       if (this.ttSwitches[shiftIndex]) {
+        const Times = [
+          { start: '23:30', end: '07:10' }, // Shift 3
+          { start: '07:00', end: '15:50' }, // Shift 1
+          { start: '15:50', end: '23:30' }, // Shift 2
+        ];
+        try{
+          const response = await this.workDayService.updateShiftTimes(
+            Times[shiftIndex].start,
+            Times[shiftIndex].end,
+            this.getdateselected(),
+            this.ttperHourSwitches.description,
+            shiftIndex == 0 ? 3 : shiftIndex
+          ).toPromise();
+          this.ttperHourSwitches = response.data;
+        } catch (error) {
+          this.errorMessage = 'Failed to update work day specific: ' + error.message;
+        }
         const response = await this.workDayService.turnOnShift(ftargetDate, ot[shiftIndex]).toPromise();
         this.work_days = response.data;
       } else {
+        try{
+          const response = await this.workDayService.updateShiftTimes(
+            "00:00",
+            "00:00",
+            this.getdateselected(),
+            this.ttperHourSwitches.description,
+            shiftIndex == 0 ? 3 : shiftIndex
+          ).toPromise();
+          this.ttperHourSwitches = response.data;
+        } catch (error) {
+          this.errorMessage = 'Failed to update work day specific: ' + error.message;
+        }
         const response = await this.workDayService.turnOffShift(ftargetDate, ot[shiftIndex]).toPromise();
         this.work_days = response.data;
       }
@@ -466,12 +552,20 @@ export class ViewWorkDayComponent implements OnInit {
     if (result.isConfirmed) {
       try {
         const response = await this.workDayService.updateDWorkDayHoursSpecific(buffer).toPromise();
-        if (response) {
+        if (response.data) {
           await Swal.fire({
             icon: 'success',
             title: 'Success',
             text: 'Work day hours saved successfully!',
           });
+          try{
+            const response = await this.workDayService.getWorkDayByDate(this.getdateselected()).toPromise();
+            if(response.data){
+              this.selectedDay.detail = response.data;
+            }
+          }catch (error: any) {
+            this.errorMessage = 'Failed to get updated work day: ' + error.message;
+          }
           this.refreshWorkday();
           this.selectDay(this.selectedDay);
           this.tabset.tabs[1].active = true;
@@ -618,7 +712,7 @@ export class ViewWorkDayComponent implements OnInit {
   
     // Assign shift switches
     const { iwd_SHIFT_1, iwd_SHIFT_2, iwd_SHIFT_3, iot_TL_1, iot_TL_2, iot_TL_3, iot_TT_1, iot_TT_2, iot_TT_3 } =
-      this.selectedDay.detail;
+    this.selectedDay.detail;
   
     this.shift1Switches = [iwd_SHIFT_3, iwd_SHIFT_1, iwd_SHIFT_2];
   
@@ -636,6 +730,7 @@ export class ViewWorkDayComponent implements OnInit {
   
 
   async overtimeOn() {
+    this.Loading = true;
     try {
       const response = await this.workDayService.turnOnOvertime(this.getdateselected()).toPromise();
       if (response.data) {
@@ -647,6 +742,7 @@ export class ViewWorkDayComponent implements OnInit {
     } catch (error: any) {
       this.errorMessage = 'Failed to update work day hours: ' + error.message;
     }
+    this.Loading = false;
   }
   
   async OffWorkday() {
@@ -663,7 +759,22 @@ export class ViewWorkDayComponent implements OnInit {
       iwd_SHIFT_3: 0,
       off: 1,
     });
-
+    if(!this.overTimeSwitch){
+      try {
+        for (let i = 1; i <= 3; i++) {
+          const response = await this.workDayService.updateShiftTimes(
+            "00:00",
+            "00:00",
+            this.getdateselected(),
+            this.perHourShift.description,
+            i
+          ).toPromise();
+          this.perHourShift = response.data;
+        }
+      } catch (error) {
+        this.errorMessage = 'Failed to update work day specific: ' + error.message;
+      }  
+    }
     try {
       const response = await this.workDayService.updateWorkDay(this.selectedDay.detail).toPromise();
       if (response.data) {
@@ -680,6 +791,26 @@ export class ViewWorkDayComponent implements OnInit {
 
   async OnWorkday() {
     this.Loading = true;
+    const Times = [
+      { start: '23:30', end: '07:10' }, // Shift 3
+      { start: '07:00', end: '15:50' }, // Shift 1
+      { start: '15:50', end: '23:30' }, // Shift 2
+    ];
+    
+    try {
+      for (let i = 0; i < Times.length; i++) {
+        const response = await this.workDayService.updateShiftTimes(
+          Times[i].start,
+          Times[i].end,
+          this.getdateselected(),
+          this.perHourShift.description,
+          i === 0 ? 3 : i
+        ).toPromise();
+        this.perHourShift = response.data;
+      }
+    } catch (error) {
+      this.errorMessage = 'Failed to update work day specific: ' + error.message;
+    }    
     try {
       if (this.weekend) {
         Object.assign(this.selectedDay.detail, {

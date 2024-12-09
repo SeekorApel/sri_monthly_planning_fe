@@ -47,6 +47,10 @@ import { EditMoMarketingComponent } from './views/transaksi/edit/edit-mo-marketi
 import { ViewDetailRevisiPpcComponent } from './views/transaksi/detail-view-revisi/view-detail-revisi-ppc/view-detail-revisi-ppc.component';
 import { ViewWorkDayComponent } from './views/master-data/view-work-day/view-work-day.component';
 import { ViewDetailRevisiMarketingComponent } from './views/transaksi/detail-view-revisi/view-detail-revisi-marketing/view-detail-revisi-marketing.component';
+import { AddMoFrontRearComponent } from './views/transaksi/add-mo-front-rear/add-mo-front-rear.component';
+import { AddArDefactRejectComponent } from './views/transaksi/add-ar-defact-reject/add-ar-defact-reject.component';
+
+
 
 export const routes: Routes = [
   {
@@ -367,6 +371,20 @@ export const routes: Routes = [
         },
       },
       {
+        path: 'transaksi/add-mo-front-rear/:month0/:month1/:month2/:type',
+        component: AddMoFrontRearComponent,
+        data: {
+          title: 'Transaksi / Add MO Front Rear',
+        },
+      },
+      {
+        path: 'transaksi/add-mo-ar-defect-reject/:idMo',
+        component: AddArDefactRejectComponent,
+        data: {
+          title: 'Transaksi / Add MO AR, Defect, Reject',
+        },
+      },
+      {
         path: 'base',
         loadChildren: () => import('./views/base/base.module').then((m) => m.BaseModule),
       },
@@ -415,4 +433,4 @@ export const routes: Routes = [
   imports: [RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy' })],
   exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}
