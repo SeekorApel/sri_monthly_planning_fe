@@ -69,7 +69,7 @@ export class ViewMachineTassTypeComponent implements OnInit {
 
         this.uomOptionData = this.settings.map((element) => ({
           id: element.setting_ID.toString(), // Ensure the ID is a string
-          text: element.description, // Set the text to the name (or other property)
+          text: element.setting_VALUE, // Set the text to the name (or other property)
         }));
       },
       (error) => {
@@ -85,7 +85,7 @@ export class ViewMachineTassTypeComponent implements OnInit {
           const setting = this.settings.find(setting => setting.setting_ID === machineTassT.setting_ID);
           return {
             ...machineTassT,
-            setting_key: setting ? setting.setting_KEY : 'Unknown',
+            setting_value: setting ? setting.setting_VALUE : 'Unknown',
           }
         })
         this.dataSource = new MatTableDataSource(this.mtt);

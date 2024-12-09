@@ -1,0 +1,236 @@
+<div class="col-lg-12">
+  <div class="card">
+    <div class="card-header">
+      <strong><i class="fa fa-bars"></i>&nbsp;Master Data PM Stop Machine</strong>
+    </div>
+
+    <div class="card-body">
+      <!-- Wrapper for the input and buttons in one row -->
+      <div class="d-flex justify-content-between mb-3">
+        <div class="d-flex align-items-center">
+          <input type="text" class="form-control col-md-12 col-lg-12" [(ngModel)]="searchText" (input)="onSearchChange()" placeholder="Find here..." />
+          <button type="submit" class="btn btn-primary ml-2" (click)="resetSearch()">Reset</button>
+        </div>
+
+        <!-- Right side: Download Template and Export Excel buttons -->
+        <div>
+          <button type="button" class="btn btn-primary ml-2" (click)="openModaldd()"><i class="fa fa-plus fa-lg"></i> Create PM Stop Machine</button>
+          <button type="button" class="btn btn-primary ml-2" (click)="downloadTemplate()"><i class="fa fa-download fa-lg"></i> Download Template</button>
+          <button type="button" class="btn btn-primary ml-2" (click)="downloadExcel()"><i class="fa fa-download fa-lg"></i> Export Excel</button>
+          <button type="button" class="btn btn-success ml-2" data-toggle="modal" data-target="#uploadModal"><i class="fa fa-file-excel-o fa-lg"></i> Upload Excel</button>
+        </div>
+      </div>
+
+      <!-- Table -->
+      <div class="table-responsive">
+        <table mat-table [dataSource]="dataSource" matSort class="table table-bordered table-striped table-sm">
+          <!-- No Column -->
+          <ng-container matColumnDef="no">
+            <th *matHeaderCellDef style="min-width: 50px">No</th>
+            <td *matCellDef="let element; let i = index">{{ i + 1 }}</td>
+          </ng-container>
+
+          <!-- Stop Machine ID Column -->
+          <ng-container matColumnDef="stop_MACHINE_ID">
+            <th *matHeaderCellDef style="min-width: 150px" mat-sort-header>Stop Machine ID</th>
+            <td align="center" *matCellDef="let element">{{ element.stop_MACHINE_ID }}</td>
+          </ng-container>
+
+          <!-- Work Center Text Column -->
+          <ng-container matColumnDef="work_CENTER_TEXT">
+            <th *matHeaderCellDef style="min-width: 100px" mat-sort-header="">Work Center Text</th>
+            <td align="left" *matCellDef="let element">{{ element.work_CENTER_TEXT }}</td>
+          </ng-container>
+
+          <!-- Start Date Column -->
+          <ng-container matColumnDef="start_DATE">
+            <th *matHeaderCellDef style="min-width: 100px" mat-sort-header="">Start Date</th>
+            <td align="center" *matCellDef="let element">{{ element.formattedStartDate }}</td>
+          </ng-container>
+
+          <!-- Start Time Column -->
+          <ng-container matColumnDef="start_TIME">
+            <th *matHeaderCellDef style="min-width: 100px" mat-sort-header="">Start Time</th>
+            <td align="center" *matCellDef="let element">{{ element.start_TIME }}</td>
+          </ng-container>
+
+          <!-- End Date Column -->
+          <ng-container matColumnDef="end_DATE">
+            <th *matHeaderCellDef style="min-width: 100px" mat-sort-header="">End Date</th>
+            <td align="center" *matCellDef="let element">{{ element.formattedEndDate }}</td>
+          </ng-container>
+
+          <!-- End Time Column -->
+          <ng-container matColumnDef="end_TIME">
+            <th *matHeaderCellDef style="min-width: 100px" mat-sort-header="">End Time</th>
+            <td align="center" *matCellDef="let element">{{ element.end_TIME }}</td>
+          </ng-container>
+
+          <!-- Status Column -->
+          <ng-container matColumnDef="status">
+            <th *matHeaderCellDef style="min-width: 100px" mat-sort-header="">Status</th>
+            <td *matCellDef="let element" [ngClass]="{ 'bg-success': element.status === 1, 'bg-danger': element.status !== 1 }">
+              {{ element.status === 1 ? 'Active' : 'Deactive' }}
+            </td>
+          </ng-container>
+
+          <!-- Action Column -->
+          <ng-container matColumnDef="action">
+            <th *matHeaderCellDef style="min-width: 170px">Action</th>
+            <td *matCellDef="let element" align="center">
+              <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(element.stop_MACHINE_ID)">Update</button>
+              <button type="button" class="btn btn-md ml-3" [ngClass]="{ 'btn-danger': element.status === 1, 'btn-success': element.status !== 1 }" (click)="element.status === 1 ? deleteData(element) : activateData(element)">
+                {{ element.status === 1 ? 'Delete' : 'Active' }}
+              </button>
+            </td>
+          </ng-container>
+
+          <!-- Add header and row declarations -->
+          <tr align="center" style="height: 20px" mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr align="center" mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        </table>
+      </div>
+      <!-- Pagination -->
+      <mat-paginator [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+
+      <!-- Modal edit -->
+      <div class="modal fade" id="editModal" role="dialog" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="addModalLabel">Edit PM Stop Machine</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <!-- Form with Reactive Forms -->
+              <form [formGroup]="edtPmStopMachineFrom">
+                <div class="form-group">
+                  <h6 for="work_CENTER_TEXTedit">Work Center Text</h6>
+                  <div class="col-md-13">
+                    <ng-select2 id="work_CENTER_TEXTedit" name="work_CENTER_TEXTedit" formControlName="work_CENTER_TEXTedit" [(ngModel)]="edtPmStopMachineObject.work_CENTER_TEXT" [data]="uomOptionData" [options]="options"> </ng-select2>
+                  </div>
+                </div>  
+                <div class="form-group">
+                  <h6 for="start_DATE">Start Date</h6>
+                  <input [(ngModel)]="edtPmStopMachineObject.start_DATE" type="date" class="form-control" id="start_DATE" formControlName="start_DATE" [ngClass]="{ 'is-invalid': edtPmStopMachineFrom.get('start_DATE').invalid && edtPmStopMachineFrom.get('start_DATE').touched }" />
+                  <div *ngIf="edtPmStopMachineFrom.get('start_DATE').invalid && edtPmStopMachineFrom.get('start_DATE').touched" class="invalid-feedback">Start Date PM Stop Machine is required.</div>
+                  <div *ngIf="edtPmStopMachineFrom.hasError('invalidStartDate') && edtPmStopMachineFrom.touched" class="text-danger">Start date must not be earlier than today.</div>                    
+                </div>
+                <div class="form-group">
+                  <h6 for="start_TIME">Start Time</h6>
+                  <input [(ngModel)]="edtPmStopMachineObject.start_TIME" type="time" class="form-control" id="start_TIME" formControlName="start_TIME" [ngClass]="{ 'is-invalid': edtPmStopMachineFrom.get('start_TIME').invalid && edtPmStopMachineFrom.get('start_TIME').touched }" />
+                  <!-- Error message if starttime is empty -->
+                  <div *ngIf="edtPmStopMachineFrom.get('start_TIME').invalid && edtPmStopMachineFrom.get('start_TIME').touched" class="invalid-feedback">Start Time PM Stop Machine is required.</div>
+                </div>
+                <div class="form-group">
+                  <h6 for="end_DATE">End Date</h6>
+                  <input [(ngModel)]="edtPmStopMachineObject.end_DATE" type="date" class="form-control" id="end_DATE" formControlName="end_DATE" [ngClass]="{ 'is-invalid': edtPmStopMachineFrom.get('end_DATE').invalid && edtPmStopMachineFrom.get('end_DATE').touched }" />
+                  <!-- Error message if Enddate is empty -->
+                  <div *ngIf="edtPmStopMachineFrom.get('end_DATE').invalid && edtPmStopMachineFrom.get('end_DATE').touched" class="invalid-feedback">End Date PM Stop Machine is required.</div>
+                  <div *ngIf="edtPmStopMachineFrom.hasError('invalidDate') && edtPmStopMachineFrom.touched" class="text-danger">End date cannot be earlier than start date.</div>
+                </div>
+                <div class="form-group">
+                  <h6 for="end_TIME">End Time</h6>
+                  <input [(ngModel)]="edtPmStopMachineObject.end_TIME" type="time" class="form-control" id="end_TIME" formControlName="end_TIME" [ngClass]="{ 'is-invalid': edtPmStopMachineFrom.get('end_TIME').invalid && edtPmStopMachineFrom.get('end_TIME').touched }" />
+                  <!-- Error message if enddate is empty -->
+                  <div *ngIf="edtPmStopMachineFrom.get('end_TIME').invalid && edtPmStopMachineFrom.get('end_TIME').touched" class="invalid-feedback">End Time PM Stop Machine is required.</div>
+                  <div class="text-danger" *ngIf="edtPmStopMachineFrom.errors?.invalidTime">End Time must be greater than Start Time.</div>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <!-- Disable Update button if form is invalid -->
+              <button type="button" class="btn btn-primary" [disabled]="edtPmStopMachineFrom.invalid" (click)="updatePMStopMachine()">Update</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal Add -->
+      <div class="modal fade" id="AddModal" role="dialog" aria-labelledby="addModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="addModalLabel">Add PM Stop Machine</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <!-- Form with Reactive Forms -->
+              <form [formGroup]="AddPmStopMachineForm">
+                <div class="form-group">
+                  <h6 for="work_CENTER_TEXTadd">Work Center Text</h6>
+                  <div class="col-md-13">
+                    <ng-select2 [(ngModel)]="AddPmStopMachineObject.work_CENTER_TEXT" id="work_CENTER_TEXTadd" name="work_CENTER_TEXTadd" formControlName="work_CENTER_TEXTadd" [data]="uomOptionData" [options]="options"></ng-select2>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <h6 for="start_DATE">Start Date</h6>
+                  <input [(ngModel)]="AddPmStopMachineObject.start_DATE" type="date" class="form-control" id="start_DATE" formControlName="start_DATE" [ngClass]="{ 'is-invalid': AddPmStopMachineForm.get('start_DATE').invalid && AddPmStopMachineForm.get('start_DATE').touched }" />
+                  <!-- Error message if startdate is empty -->
+                  <div *ngIf="AddPmStopMachineForm.get('start_DATE').invalid && AddPmStopMachineForm.get('start_DATE').touched" class="invalid-feedback">Start Date PM Stop Machine is required.</div>
+                  <div *ngIf="AddPmStopMachineForm.hasError('invalidStartDate') && AddPmStopMachineForm.touched" class="text-danger">Start date must not be earlier than today.</div>                    
+                  </div> 
+                <div class="form-group">
+                  <h6 for="start_TIME">Start Time</h6>
+                  <input [(ngModel)]="AddPmStopMachineObject.start_TIME" type="time" class="form-control" id="start_TIME" formControlName="start_TIME" [ngClass]="{ 'is-invalid': AddPmStopMachineForm.get('start_TIME').invalid && AddPmStopMachineForm.get('start_TIME').touched }" />
+                  <!-- Error message if starttime is empty -->
+                  <div *ngIf="AddPmStopMachineForm.get('start_TIME').invalid && AddPmStopMachineForm.get('start_TIME').touched" class="invalid-feedback">Start Time PM Stop Machine is required.</div>
+                </div>
+                <div class="form-group">
+                  <h6 for="end_DATE">End Date</h6>
+                  <input [(ngModel)]="AddPmStopMachineObject.end_DATE" type="date" class="form-control" id="end_DATE" formControlName="end_DATE" [ngClass]="{ 'is-invalid': AddPmStopMachineForm.get('end_DATE').invalid && AddPmStopMachineForm.get('end_DATE').touched }" />
+                  <!-- Error message if Enddate is empty -->
+                  <div *ngIf="AddPmStopMachineForm.get('end_DATE').invalid && AddPmStopMachineForm.get('end_DATE').touched" class="invalid-feedback">End Date PM Stop Machine is required.</div>
+                  <div *ngIf="AddPmStopMachineForm.hasError('invalidDate') && AddPmStopMachineForm.touched" class="text-danger">End date cannot be earlier than start date.</div>
+                </div>
+                <div class="form-group">
+                  <h6 for="end_TIME">End Time</h6>
+                  <input [(ngModel)]="AddPmStopMachineObject.end_TIME" type="time" class="form-control" id="end_TIME" formControlName="end_TIME" [ngClass]="{ 'is-invalid': AddPmStopMachineForm.get('end_TIME').invalid && AddPmStopMachineForm.get('end_TIME').touched }" />
+                  <!-- Error message if enddate is empty -->
+                  <div *ngIf="AddPmStopMachineForm.get('end_TIME').invalid && AddPmStopMachineForm.get('end_TIME').touched" class="invalid-feedback">End Time PM Stop Machine is required.</div>
+                  <div class="text-danger" *ngIf="AddPmStopMachineForm.errors?.invalidTime">End Time must be greater than Start Time.</div>
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+              <!-- Disable Update button if form is invalid -->
+              <button type="button" class="btn btn-primary" [disabled]="AddPmStopMachineForm.invalid" (click)="savePmStopMachine()">Save</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal for Upload Excel -->
+      <div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="uploadModalLabel">Upload Excel File</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form id="uploadForm">
+                <!-- Manual File Input -->
+                <div class="form-group mt-3">
+                  <input type="file" class="form-control-file" id="manualFileInput" accept=".xls,.xlsx" (change)="onFileChange($event)" />
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-md btn-secondary" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-md btn-primary" id="uploadButton" (click)="uploadFileExcel()">Upload</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
