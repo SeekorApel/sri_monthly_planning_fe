@@ -41,7 +41,7 @@ export class ViewMachineAllowenceComponent implements OnInit {
   pageSize: number = 5;
   totalPages: number = 5;
   sortBuffer: Array<any>;
-  displayedColumns: string[] = ['no', 'id_MACHINE','person_RESPONSIBLE', 'shift_1', 'shift_2', 'shift_1_FRIDAY', 'total_SHIFT_123', 'status', 'action'];
+  displayedColumns: string[] = ['no', 'machine_ALLOW_ID', 'id_MACHINE','person_RESPONSIBLE', 'shift_1', 'shift_2','shift_3', 'shift_1_FRIDAY', 'total_SHIFT_123', 'status', 'action'];
   dataSource: MatTableDataSource<machineAllowence>;
 
   @ViewChild(MatSort) sort: MatSort;
