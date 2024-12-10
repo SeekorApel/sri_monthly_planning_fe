@@ -8,6 +8,11 @@ import * as XLSX from 'xlsx';
 import { Select2OptionData } from 'ng-select2';
 import { Options } from 'select2';
 import { Curing_Machine } from 'src/app/models/Curing_Machine';
+import { MachineTass } from 'src/app/models/machine-tass';
+import { MachineTassService } from 'src/app/services/master-data/machine-tass/machine-tass.service';
+import { MachineExtruding } from 'src/app/models/machine-extruding';
+import { MachineExtrudingService } from 'src/app/services/master-data/machine-extruding/machine-extruding.service';
+
 import { PMStopMachine } from 'src/app/models/pm-stop-machine';
 import { PMStopMachineService } from 'src/app/services/master-data/PM_Stop_Machine/pm_stop_MACHINE.service';
 import { CuringMachineService } from 'src/app/services/master-data/curing-machine/curing-machine.service';
@@ -40,7 +45,8 @@ export class ViewPmStopMachineComponent implements OnInit {
   };
   minDate: string;
   curingMachines: Curing_Machine[];
-  
+  tassMachine: MachineTass[] = [];
+  extrudingMachine: MachineExtruding[] = [];
 
   // Pagination
   pageOfItems: Array<any>;
@@ -52,11 +58,11 @@ export class ViewPmStopMachineComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  constructor(private pmStopService: PMStopMachineService, private fb: FormBuilder, private curingMachineService: CuringMachineService) {
+  constructor(private pmStopService: PMStopMachineService, private fb: FormBuilder, private curingMachineService: CuringMachineService, private tassMachineService: MachineTassService, private extrudingMachineService: MachineExtrudingService) {
     this.edtPmStopMachineFrom = this.fb.group(
       {
         work_CENTER_TEXTedit: ['', Validators.required],
-        start_DATE: ['',  Validators.required],
+        start_DATE: ['', Validators.required],
         start_TIME: ['', Validators.required],
         end_DATE: ['', Validators.required],
         end_TIME: ['', Validators.required],
@@ -77,7 +83,44 @@ export class ViewPmStopMachineComponent implements OnInit {
         validators: [this.timeValidator, this.dateValidator, this.minStartDate], // Tambahkan validator khusus di sini
       }
     );
-    this.loadCuringMachine();
+    curingMachineService.getAllMachineCuring().subscribe(
+      (response: ApiResponse<Curing_Machine[]>) => {
+        const curingOptions = response.data.map((element) => ({
+          id: element.work_CENTER_TEXT, // Ensure the ID is a string
+          text: element.work_CENTER_TEXT, // Set the text to the work center text
+        }));
+
+        tassMachineService.getAllMachineTass().subscribe(
+          (response: ApiResponse<MachineTass[]>) => {
+            const tassOptions = response.data.map((element) => ({
+              id: element.id_MACHINE_TASS, // Ensure the ID is a string
+              text: element.id_MACHINE_TASS, // Set the text to the machine ID
+            }));
+
+            extrudingMachineService.getAllMachineExtruding().subscribe(
+              (response: ApiResponse<MachineExtruding[]>) => {
+                const extrudingOptions = response.data.map((element) => ({
+                  id: element.ID_machine_ext, // Ensure the ID is a string
+                  text: element.type, // Set the text to the machine ID
+                }));
+
+                // Combine both options into uomOptions
+                this.uomOptionData = [...curingOptions, ...tassOptions, ...extrudingOptions];
+              },
+              (error) => {
+                this.errorMessage = 'Failed to load tass machine: ' + error.message;
+              }
+            );
+          },
+          (error) => {
+            this.errorMessage = 'Failed to load tass machine: ' + error.message;
+          }
+        );
+      },
+      (error) => {
+        this.errorMessage = 'Failed to load curing machine: ' + error.message;
+      }
+    );
     this.subscribeToFormChanges();
   }
 
@@ -88,47 +131,49 @@ export class ViewPmStopMachineComponent implements OnInit {
       console.error('Start date must not be earlier than today.');
     }
   }
-  
-  private timeValidator(control: AbstractControl): ValidationErrors | null {
-    const startTime = control.get('start_TIME')?.value;
-    const endTime = control.get('end_TIME')?.value;
-    const startDate = control.get('start_DATE')?.value;
-    const endDate = control.get('end_DATE')?.value;
 
+  private timeValidator(control: AbstractControl): ValidationErrors | null {
+    const startTime = control.get('start_TIME')?.value; // Format HH:mm
+    const endTime = control.get('end_TIME')?.value; // Format HH:mm
+    const startDate = control.get('start_DATE')?.value; // Format YYYY-MM-DD
+    const endDate = control.get('end_DATE')?.value; // Format YYYY-MM-DD
+  
+    if (!startTime || !endTime || !startDate || !endDate) {
+      return null; // Tidak ada cukup data untuk validasi
+    }
+  
+    const now = new Date();
     const dateStart = new Date(startDate);
     const dateEnd = new Date(endDate);
-
+  
+    // Gabungkan startTime dengan startDate
+    const [startHours, startMinutes] = startTime.split(':').map(Number);
+    const fullStartTime = new Date(dateStart);
+    fullStartTime.setHours(startHours, startMinutes, 0, 0);
+  
+    // Validasi jika startTime kurang dari waktu sekarang
+    if (fullStartTime < now) {
+      console.log("Waktu sekarang: ", now);
+      return { invalidStartTime: true }; // Error waktu mulai tidak valid
+    }
+  
+    // Validasi jika tanggal mulai dan akhir sama
     if (dateStart.getTime() === dateEnd.getTime()) {
-      if (startTime && endTime && startTime >= endTime) {
-        return { invalidTime: true }; // Invalid time range
+      const [endHours, endMinutes] = endTime.split(':').map(Number);
+      const fullEndTime = new Date(dateEnd);
+      fullEndTime.setHours(endHours, endMinutes, 0, 0);
+  
+      if (fullStartTime >= fullEndTime) {
+        return { invalidTimeRange: true }; // Error rentang waktu tidak valid
       }
     }
-
+  
     return null; // Valid
   }
+  
 
   ngOnInit(): void {
-    
     this.getAllPmStopMachine();
-  }
-
-  private loadCuringMachine(): void {
-    this.curingMachineService.getAllMachineCuring().subscribe(
-      (response: ApiResponse<Curing_Machine[]>) => {
-        this.curingMachines = response.data;
-
-        if (!this.uomOptionData) {
-          this.uomOptionData = [];
-        }
-        this.uomOptionData = this.curingMachines.map((element) => ({
-          id: element.work_CENTER_TEXT.toString(), // Ensure the ID is a string
-          text: element.work_CENTER_TEXT, // Set the text to the name (or other property)
-        }));
-      },
-      (error) => {
-        this.errorMessage = 'Failed to load Curing Machine: ' + error.message;
-      }
-    );
   }
   formatedate(date: Date): string {
     const formattedDate = new Date(date).toLocaleDateString('en-CA');
@@ -148,8 +193,8 @@ export class ViewPmStopMachineComponent implements OnInit {
     const today = new Date();
     const min = today.toISOString().split('T')[0];
 
-    if(startDate < min){
-      return { invalidStartDate: true }
+    if (startDate < min) {
+      return { invalidStartDate: true };
     }
     return null;
   }
@@ -157,7 +202,6 @@ export class ViewPmStopMachineComponent implements OnInit {
   private dateValidator(control: AbstractControl): ValidationErrors | null {
     const startDate = control.get('start_DATE')?.value;
     const endDate = control.get('end_DATE')?.value;
-    
 
     if (startDate && endDate) {
       const start = new Date(startDate);
@@ -268,7 +312,7 @@ export class ViewPmStopMachineComponent implements OnInit {
   }
   resetEditForm(): void {
     this.AddPmStopMachineForm.reset();
-    this.edtPmStopMachineFrom.reset(); 
+    this.edtPmStopMachineFrom.reset();
     this.isEditMode = false;
     this.isAddMode = false;
   }
@@ -373,7 +417,7 @@ export class ViewPmStopMachineComponent implements OnInit {
           }).then(() => {
             $('#editModal').modal('hide');
             window.location.reload();
-            this.getAllPmStopMachine(); 
+            this.getAllPmStopMachine();
           });
         },
         (error) => {
