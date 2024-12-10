@@ -100,7 +100,7 @@
           </div>
           <div class="form-group">
             <label for="buildingName">Building Name</label>
-            <input [(ngModel)]="edtBuildingObject.building_NAME" type="text" class="form-control" id="buildingName" formControlName="buildingName" [ngClass]="{ 'is-invalid': editBuildingForm.get('buildingName').invalid && editBuildingForm.get('buildingName').touched }" />
+            <input [(ngModel)]="edtBuildingObject.building_NAME" maxlength="254" type="text" class="form-control" id="buildingName" formControlName="buildingName" [ngClass]="{ 'is-invalid': editBuildingForm.get('buildingName').invalid && editBuildingForm.get('buildingName').touched }" />
             <div *ngIf="editBuildingForm.get('buildingName').invalid && editBuildingForm.get('buildingName').touched" class="invalid-feedback">Building name is required.</div>
           </div>
         </form>

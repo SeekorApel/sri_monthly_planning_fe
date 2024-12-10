@@ -102,23 +102,23 @@
         <form [formGroup]="editItemCuringForm">
           <div class="form-group">
             <label for="machineType">Machine Type</label>
-            <input [(ngModel)]="edtItemCuringObject.machine_TYPE" type="text" class="form-control" id="machineType" formControlName="machineType" [ngClass]="{ 'is-invalid': editItemCuringForm.get('machineType').invalid && editItemCuringForm.get('machineType').touched }" />
+            <input [(ngModel)]="edtItemCuringObject.machine_TYPE" type="text" maxlength="9" class="form-control" id="machineType" formControlName="machineType" [ngClass]="{ 'is-invalid': editItemCuringForm.get('machineType').invalid && editItemCuringForm.get('machineType').touched }" />
             <div *ngIf="editItemCuringForm.get('machineType').invalid && editItemCuringForm.get('machineType').touched" class="invalid-feedback">Machine type is required.</div>
             
             <label for="kapaPerMould">Kapa per Mould</label>
-            <input [(ngModel)]="edtItemCuringObject.kapa_PER_MOULD" type="text" class="form-control" id="kapaPerMould" formControlName="kapaPerMould" (keypress)="allowOnlyNumbers($event)" [ngClass]="{ 'is-invalid': editItemCuringForm.get('kapaPerMould').invalid && editItemCuringForm.get('kapaPerMould').touched }" />
+            <input [(ngModel)]="edtItemCuringObject.kapa_PER_MOULD" maxlength="19" type="text" class="form-control" id="kapaPerMould" formControlName="kapaPerMould" (keypress)="allowOnlyNumbers($event)" [ngClass]="{ 'is-invalid': editItemCuringForm.get('kapaPerMould').invalid && editItemCuringForm.get('kapaPerMould').touched }" />
             <div *ngIf="editItemCuringForm.get('kapaPerMould').invalid && editItemCuringForm.get('kapaPerMould').touched" class="invalid-feedback">Kapa per mould is required.</div>
 
             <label for="numberOfMould">Number of Mould</label>
-            <input [(ngModel)]="edtItemCuringObject.number_OF_MOULD" type="text" class="form-control" id="numberOfMould" formControlName="numberOfMould" (keypress)="allowOnlyNumbers($event)" [ngClass]="{ 'is-invalid': editItemCuringForm.get('numberOfMould').invalid && editItemCuringForm.get('numberOfMould').touched }" />
+            <input [(ngModel)]="edtItemCuringObject.number_OF_MOULD" maxlength="19" type="text" class="form-control" id="numberOfMould" formControlName="numberOfMould" (keypress)="allowOnlyNumbers($event)" [ngClass]="{ 'is-invalid': editItemCuringForm.get('numberOfMould').invalid && editItemCuringForm.get('numberOfMould').touched }" />
             <div *ngIf="editItemCuringForm.get('numberOfMould').invalid && editItemCuringForm.get('numberOfMould').touched" class="invalid-feedback">Number of mould is required.</div>
             
             <label for="spareMould">Spare Mould</label>
-            <input [(ngModel)]="edtItemCuringObject.spare_MOULD" type="text" class="form-control" id="spareMould" formControlName="spareMould" (keypress)="allowOnlyNumbers($event)" [ngClass]="{ 'is-invalid': editItemCuringForm.get('spareMould').invalid && editItemCuringForm.get('spareMould').touched }" />
+            <input [(ngModel)]="edtItemCuringObject.spare_MOULD" maxlength="19" type="text" class="form-control" id="spareMould" formControlName="spareMould" (keypress)="allowOnlyNumbers($event)" [ngClass]="{ 'is-invalid': editItemCuringForm.get('spareMould').invalid && editItemCuringForm.get('spareMould').touched }" />
             <div *ngIf="editItemCuringForm.get('spareMould').invalid && editItemCuringForm.get('spareMould').touched" class="invalid-feedback">spare mould is required.</div>
             
             <label for="mouldMonthlyPlan">Mould Monthly Plan</label>
-            <input [(ngModel)]="edtItemCuringObject.mould_MONTHLY_PLAN" type="text" class="form-control" id="mouldMonthlyPlan" (keypress)="allowOnlyNumbers($event)" formControlName="mouldMonthlyPlan" [ngClass]="{ 'is-invalid': editItemCuringForm.get('mouldMonthlyPlan').invalid && editItemCuringForm.get('mouldMonthlyPlan').touched }" />
+            <input [(ngModel)]="edtItemCuringObject.mould_MONTHLY_PLAN" maxlength="19" type="text" class="form-control" id="mouldMonthlyPlan" (keypress)="allowOnlyNumbers($event)" formControlName="mouldMonthlyPlan" [ngClass]="{ 'is-invalid': editItemCuringForm.get('mouldMonthlyPlan').invalid && editItemCuringForm.get('mouldMonthlyPlan').touched }" />
             <div *ngIf="editItemCuringForm.get('mouldMonthlyPlan').invalid && editItemCuringForm.get('mouldMonthlyPlan').touched" class="invalid-feedback">mould monthly plan is required.</div>
           </div>
         </form>

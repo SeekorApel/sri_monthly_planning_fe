@@ -93,7 +93,7 @@
         <form [formGroup]="editProductTypeForm">
           <div class="form-group">
             <label for="productMerk">Product Merk</label>
-            <input [(ngModel)]="edtProductTypeObject.product_MERK" type="text" class="form-control" id="productType" formControlName="productMerk" [ngClass]="{ 'is-invalid': editProductTypeForm.get('productMerk').invalid && editProductTypeForm.get('productMerk').touched }" />
+            <input [(ngModel)]="edtProductTypeObject.product_MERK" maxlength="254" type="text" class="form-control" id="productType" formControlName="productMerk" [ngClass]="{ 'is-invalid': editProductTypeForm.get('productMerk').invalid && editProductTypeForm.get('productMerk').touched }" />
             <!-- Error message if plantName is empty -->
             <div *ngIf="editProductTypeForm.get('productMerk').invalid && editProductTypeForm.get('productMerk').touched" class="invalid-feedback">Product Merk is required.</div>
           </div>
@@ -114,7 +114,7 @@
           </div>
           <div class="form-group">
             <label for="category">Category</label>
-            <input [(ngModel)]="edtProductTypeObject.category" type="text" class="form-control" id="category" formControlName="category" [ngClass]="{ 'is-invalid': editProductTypeForm.get('category').invalid && editProductTypeForm.get('category').touched }" />
+            <input [(ngModel)]="edtProductTypeObject.category" maxlength="254" type="text" class="form-control" id="category" formControlName="category" [ngClass]="{ 'is-invalid': editProductTypeForm.get('category').invalid && editProductTypeForm.get('category').touched }" />
             <!-- Error message if plantName is empty -->
             <div *ngIf="editProductTypeForm.get('category').invalid && editProductTypeForm.get('category').touched" class="invalid-feedback">Category is required.</div>
           </div>

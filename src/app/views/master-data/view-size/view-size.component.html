@@ -87,7 +87,7 @@
         <form [formGroup]="editSizeForm">
           <div class="form-group">
             <label for="description">Size Name</label>
-            <input [(ngModel)]="edtSizeObject.description" type="text" class="form-control" id="description" formControlName="description" [ngClass]="{ 'is-invalid': editSizeForm.get('description').invalid && editSizeForm.get('description').touched }" />
+            <input [(ngModel)]="edtSizeObject.description" maxlength="254" type="text" class="form-control" id="description" formControlName="description" [ngClass]="{ 'is-invalid': editSizeForm.get('description').invalid && editSizeForm.get('description').touched }" />
             <div *ngIf="editSizeForm.get('description').invalid && editSizeForm.get('description').touched" class="invalid-feedback">Description is required.</div>
           </div>
         </form>
