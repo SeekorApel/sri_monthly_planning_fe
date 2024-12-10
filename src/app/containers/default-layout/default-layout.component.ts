@@ -54,6 +54,7 @@ export class DefaultLayoutComponent {
       { name: 'CT Curing', url: '/master-data/view-ct-curing', icon: 'cil-minus' },
       { name: 'CT Assy', url: '/master-data/view-routing-machine', icon: 'cil-minus' },
       { name: 'Setting', url: '/master-data/view-setting', icon: 'cil-minus' },
+      { name: 'PM Stop Machine', url: '/master-data/view-pm-stop-machine', icon: 'cil-minus' },
       { name: 'Delivery Schedule', url: '/master-data/view-delivery-schedule', icon: 'cil-minus' },
       { name: 'Detail Delivery Schedule', url: '/master-data/view-d-deliveryschedule', icon: 'cil-minus' },
       { name: 'Work Day', url: '/master-data/view-work-day', icon: 'cil-minus' },

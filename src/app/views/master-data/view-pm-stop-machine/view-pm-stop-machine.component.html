@@ -111,18 +111,19 @@
                   <div class="col-md-13">
                     <ng-select2 id="work_CENTER_TEXTedit" name="work_CENTER_TEXTedit" formControlName="work_CENTER_TEXTedit" [(ngModel)]="edtPmStopMachineObject.work_CENTER_TEXT" [data]="uomOptionData" [options]="options"> </ng-select2>
                   </div>
-                </div>  
+                </div>
                 <div class="form-group">
                   <h6 for="start_DATE">Start Date</h6>
                   <input [(ngModel)]="edtPmStopMachineObject.start_DATE" type="date" class="form-control" id="start_DATE" formControlName="start_DATE" [ngClass]="{ 'is-invalid': edtPmStopMachineFrom.get('start_DATE').invalid && edtPmStopMachineFrom.get('start_DATE').touched }" />
                   <div *ngIf="edtPmStopMachineFrom.get('start_DATE').invalid && edtPmStopMachineFrom.get('start_DATE').touched" class="invalid-feedback">Start Date PM Stop Machine is required.</div>
-                  <div *ngIf="edtPmStopMachineFrom.hasError('invalidStartDate') && edtPmStopMachineFrom.touched" class="text-danger">Start date must not be earlier than today.</div>                    
+                  <div *ngIf="edtPmStopMachineFrom.hasError('invalidStartDate') && edtPmStopMachineFrom.touched" class="text-danger">Start date must not be earlier than today.</div>
                 </div>
                 <div class="form-group">
                   <h6 for="start_TIME">Start Time</h6>
                   <input [(ngModel)]="edtPmStopMachineObject.start_TIME" type="time" class="form-control" id="start_TIME" formControlName="start_TIME" [ngClass]="{ 'is-invalid': edtPmStopMachineFrom.get('start_TIME').invalid && edtPmStopMachineFrom.get('start_TIME').touched }" />
                   <!-- Error message if starttime is empty -->
                   <div *ngIf="edtPmStopMachineFrom.get('start_TIME').invalid && edtPmStopMachineFrom.get('start_TIME').touched" class="invalid-feedback">Start Time PM Stop Machine is required.</div>
+                  <div class="text-danger" *ngIf="edtPmStopMachineFrom.errors?.invalidStartTime">Start Time must be greater than Now.</div>
                 </div>
                 <div class="form-group">
                   <h6 for="end_DATE">End Date</h6>
@@ -136,7 +137,7 @@
                   <input [(ngModel)]="edtPmStopMachineObject.end_TIME" type="time" class="form-control" id="end_TIME" formControlName="end_TIME" [ngClass]="{ 'is-invalid': edtPmStopMachineFrom.get('end_TIME').invalid && edtPmStopMachineFrom.get('end_TIME').touched }" />
                   <!-- Error message if enddate is empty -->
                   <div *ngIf="edtPmStopMachineFrom.get('end_TIME').invalid && edtPmStopMachineFrom.get('end_TIME').touched" class="invalid-feedback">End Time PM Stop Machine is required.</div>
-                  <div class="text-danger" *ngIf="edtPmStopMachineFrom.errors?.invalidTime">End Time must be greater than Start Time.</div>
+                  <div class="text-danger" *ngIf="edtPmStopMachineFrom.errors?.invalidTimeRange">End Time must be greater than Start Time.</div>
                 </div>
               </form>
             </div>
@@ -173,8 +174,8 @@
                   <input [(ngModel)]="AddPmStopMachineObject.start_DATE" type="date" class="form-control" id="start_DATE" formControlName="start_DATE" [ngClass]="{ 'is-invalid': AddPmStopMachineForm.get('start_DATE').invalid && AddPmStopMachineForm.get('start_DATE').touched }" />
                   <!-- Error message if startdate is empty -->
                   <div *ngIf="AddPmStopMachineForm.get('start_DATE').invalid && AddPmStopMachineForm.get('start_DATE').touched" class="invalid-feedback">Start Date PM Stop Machine is required.</div>
-                  <div *ngIf="AddPmStopMachineForm.hasError('invalidStartDate') && AddPmStopMachineForm.touched" class="text-danger">Start date must not be earlier than today.</div>                    
-                  </div> 
+                  <div *ngIf="AddPmStopMachineForm.hasError('invalidStartDate') && AddPmStopMachineForm.touched" class="text-danger">Start date must not be earlier than today.</div>
+                </div>
                 <div class="form-group">
                   <h6 for="start_TIME">Start Time</h6>
                   <input [(ngModel)]="AddPmStopMachineObject.start_TIME" type="time" class="form-control" id="start_TIME" formControlName="start_TIME" [ngClass]="{ 'is-invalid': AddPmStopMachineForm.get('start_TIME').invalid && AddPmStopMachineForm.get('start_TIME').touched }" />
