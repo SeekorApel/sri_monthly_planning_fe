@@ -30,7 +30,7 @@
 
           <ng-container matColumnDef="product_TYPE_ID">
             <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Product Type ID</th>
-            <td class="angka" *matCellDef="let element">{{ element.product_TYPE_ID }}</td>
+            <td *matCellDef="let element">{{ element.product_TYPE_ID }}</td>
           </ng-container>
 
           <ng-container matColumnDef="product_MERK">

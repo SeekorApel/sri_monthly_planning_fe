@@ -29,7 +29,7 @@
 
           <ng-container matColumnDef="item_CURING">
             <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Item Curing</th>
-            <td class="huruf" *matCellDef="let element">{{ element.item_CURING }}</td>
+            <td *matCellDef="let element">{{ element.item_CURING }}</td>
           </ng-container>
 
           <ng-container matColumnDef="machine_TYPE">

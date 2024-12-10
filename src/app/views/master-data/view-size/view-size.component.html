@@ -32,7 +32,7 @@
           <!-- Size ID Column -->
           <ng-container matColumnDef="size_ID">
             <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Size ID</th>
-            <td class="huruf" *matCellDef="let element">{{ element.size_ID }}</td>
+            <td *matCellDef="let element">{{ element.size_ID }}</td>
           </ng-container>
 
           <!-- Description Column -->

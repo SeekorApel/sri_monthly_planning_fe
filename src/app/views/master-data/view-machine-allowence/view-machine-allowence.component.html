@@ -34,8 +34,8 @@
           </ng-container> -->
 
           <ng-container matColumnDef="id_MACHINE">
-            <th  *matHeaderCellDef mat-sort-header >Machine ID</th>
-            <td class="huruf" *matCellDef="let element">{{ element.id_MACHINE }}</td>
+            <th style="min-width: 300px;" *matHeaderCellDef mat-sort-header >Machine ID</th>
+            <td *matCellDef="let element">{{ element.id_MACHINE }}</td>
           </ng-container>
           
           <ng-container matColumnDef="person_RESPONSIBLE">

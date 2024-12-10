@@ -30,7 +30,7 @@
 
           <ng-container matColumnDef="ct_ASSY_ID">
             <th style="min-width: 150px;" class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Cycle Time Assy ID</th>
-            <td class="angka" *matCellDef="let element">{{ element.ct_ASSY_ID }}</td>
+            <td *matCellDef="let element">{{ element.ct_ASSY_ID }}</td>
           </ng-container>
 
           <ng-container matColumnDef="wip">

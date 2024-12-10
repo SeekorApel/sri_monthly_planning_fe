@@ -15,6 +15,8 @@ import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { BuildingService } from 'src/app/services/master-data/building/building.service';
 import { Building } from 'src/app/models/Building';
+import { MachineCuringType } from 'src/app/models/machine-curing-type';
+import { MachineCuringTypeService } from 'src/app/services/master-data/machine-curing-type/machine-curing-type.service';
 
 @Component({
   selector: 'app-view-curing-machine',
@@ -43,28 +45,56 @@ export class ViewCuringMachineComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  public uomOptions: Array<Select2OptionData>;
+  public uomOptions: Array<Array<Select2OptionData>>;
   public options: Options = { width: '100%'};
   uom: any;
   building: Building[] =[];
+  machineCuringType: MachineCuringType[] =[];
 
-  constructor(private curingmachineService: CuringMachineService, private fb: FormBuilder, private buildingService: BuildingService) { 
+  constructor(private curingmachineService: CuringMachineService, private fb: FormBuilder, private buildingService: BuildingService, private machineCuringTypeService: MachineCuringTypeService) { 
     this.editCuringMachineForm = this.fb.group({
-      machinetype: ['', Validators.required],
+      machine_TYPE: ['', Validators.required],
       buildingID: ['', Validators.required],
       cavity: ['', Validators.required],
       statusUsage: ['', Validators.required],
     });
-    buildingService.getAllBuilding().subscribe(
+    
+    this.loadBuilding();
+    this.loadMachineCuringType();
+  }
+
+  private loadBuilding(): void {
+    this.buildingService.getAllBuilding().subscribe(
       (response: ApiResponse<Building[]>) => {
         this.building = response.data;
-        this.uomOptions = this.building.map((element) => ({
+        if (!this.uomOptions) {
+          this.uomOptions = [];
+        }
+        this.uomOptions[0] = this.building.map((element) => ({
           id: element.building_ID.toString(), // Ensure the ID is a string
           text: element.building_NAME // Set the text to the plant name
         }));
       },
       (error) => {
         this.errorMessage = 'Failed to load building: ' + error.message;
+      }
+    );
+  }
+
+  private loadMachineCuringType(): void {
+    this.machineCuringTypeService.getAllMCT().subscribe(
+      (response: ApiResponse<MachineCuringType[]>) => {
+        this.machineCuringType = response.data;
+        if (!this.uomOptions) {
+          this.uomOptions = [];
+        }
+        this.uomOptions[1] = this.machineCuringType.map((element) => ({
+          id: element.machinecuringtype_ID.toString(), // Ensure the ID is a string
+          text: element.machinecuringtype_ID.toString() // Set the text to the plant name
+        }));
+      },
+      (error) => {
+        this.errorMessage = 'Failed to load machine curing type: ' + error.message;
       }
     );
   }
@@ -88,16 +118,17 @@ export class ViewCuringMachineComponent implements OnInit {
   getAllCuringMachines(): void {
     this.curingmachineService.getAllMachineCuring().subscribe(
       (response: ApiResponse<Curing_Machine[]>) => {
-        this.curingmachines = response.data.map(curingmachine => {
+        this.curingmachines = response.data.map((curingmachine) => {
           const building = this.building.find(
-            bd=> bd.building_ID === curingmachine.building_ID
+            (b)=> b.building_ID === curingmachine.building_ID
           );
 
           return {
             ...curingmachine,
-            building_id: building ? building.building_NAME : 'Unknown'
-          }
+            building_id: building ? building.building_NAME : null
+          };
         });
+
         this.dataSource = new MatTableDataSource(this.curingmachines);
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
