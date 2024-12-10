@@ -116,6 +116,17 @@ export class MarketingOrderService {
     );
   }
 
+  arRejectDefect(mo: any): Observable<ApiResponse<any>> {
+    return this.http.post<ApiResponse<any>>(environment.apiUrlWebAdmin + '/arRejectDefectMo', mo).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((err) => {
+        return throwError(err);
+      })
+    );
+  }
+
   downloadExcelMo(idMo: string) {
     return this.http.get(environment.apiUrlWebAdmin + '/exportMOExcel/' + idMo, { responseType: 'blob' });
   }
@@ -125,54 +136,54 @@ export class MarketingOrderService {
     return this.http.get<ApiResponse<[]>>(environment.apiUrlWebAdmin + '/getAllDetailRevisionMo', { params });
   }
 
-  //Not used Alll
-  saveMarketingOrder(mo: MarketingOrder): Observable<ApiResponse<MarketingOrder>> {
-    return this.http.post<ApiResponse<MarketingOrder>>(environment.apiUrlWebAdmin + '/saveMarketingOrder', mo).pipe(
-      map((response) => {
-        return response;
-      }),
-      catchError((err) => {
-        return throwError(err);
-      })
-    );
-  }
+  //Not used Alll ke bawah
+  // saveMarketingOrder(mo: MarketingOrder): Observable<ApiResponse<MarketingOrder>> {
+  //   return this.http.post<ApiResponse<MarketingOrder>>(environment.apiUrlWebAdmin + '/saveMarketingOrder', mo).pipe(
+  //     map((response) => {
+  //       return response;
+  //     }),
+  //     catchError((err) => {
+  //       return throwError(err);
+  //     })
+  //   );
+  // }
 
-  saveHeaderMarketingOrder(hmo: HeaderMarketingOrder[]): Observable<ApiResponse<HeaderMarketingOrder>> {
-    return this.http.post<ApiResponse<HeaderMarketingOrder>>(environment.apiUrlWebAdmin + '/saveHeaderMO', hmo).pipe(
-      map((response) => {
-        return response;
-      }),
-      catchError((err) => {
-        return throwError(err);
-      })
-    );
-  }
+  // saveHeaderMarketingOrder(hmo: HeaderMarketingOrder[]): Observable<ApiResponse<HeaderMarketingOrder>> {
+  //   return this.http.post<ApiResponse<HeaderMarketingOrder>>(environment.apiUrlWebAdmin + '/saveHeaderMO', hmo).pipe(
+  //     map((response) => {
+  //       return response;
+  //     }),
+  //     catchError((err) => {
+  //       return throwError(err);
+  //     })
+  //   );
+  // }
 
-  getDetailMarketingOrder(data: any): Observable<ApiResponse<DetailMarketingOrder[]>> {
-    return this.http.post<ApiResponse<DetailMarketingOrder[]>>(environment.apiUrlWebAdmin + '/getDetailMarketingOrders', data).pipe(
-      map((response) => {
-        return response;
-      }),
-      catchError((err) => {
-        return throwError(err);
-      })
-    );
-  }
+  // getDetailMarketingOrder(data: any): Observable<ApiResponse<DetailMarketingOrder[]>> {
+  //   return this.http.post<ApiResponse<DetailMarketingOrder[]>>(environment.apiUrlWebAdmin + '/getDetailMarketingOrders', data).pipe(
+  //     map((response) => {
+  //       return response;
+  //     }),
+  //     catchError((err) => {
+  //       return throwError(err);
+  //     })
+  //   );
+  // }
 
-  saveDetailRowMarketingOrder(dmo: DetailMarketingOrder[]): Observable<ApiResponse<DetailMarketingOrder>> {
-    return this.http.post<ApiResponse<DetailMarketingOrder>>(environment.apiUrlWebAdmin + '/saveDetailMO', dmo).pipe(
-      map((response) => {
-        return response;
-      }),
-      catchError((err) => {
-        return throwError(err);
-      })
-    );
-  }
+  // saveDetailRowMarketingOrder(dmo: DetailMarketingOrder[]): Observable<ApiResponse<DetailMarketingOrder>> {
+  //   return this.http.post<ApiResponse<DetailMarketingOrder>>(environment.apiUrlWebAdmin + '/saveDetailMO', dmo).pipe(
+  //     map((response) => {
+  //       return response;
+  //     }),
+  //     catchError((err) => {
+  //       return throwError(err);
+  //     })
+  //   );
+  // }
 
-  getDetailMoMarketing(idMo: String): Observable<ApiResponse<any>> {
-    return this.http.get<ApiResponse<any>>(environment.apiUrlWebAdmin + '/getDetailMoMarketing/' + idMo);
-  }
+  // getDetailMoMarketing(idMo: String): Observable<ApiResponse<any>> {
+  //   return this.http.get<ApiResponse<any>>(environment.apiUrlWebAdmin + '/getDetailMoMarketing/' + idMo);
+  // }
 
   // saveMarketingOrderMarketing(dtmo: DetailMarketingOrder[]) {
   //   return this.http.post<ApiResponse<any>>(environment.apiUrlWebAdmin + '/saveMarketingOrderMarketing', dtmo).pipe(
