@@ -1,4 +1,4 @@
-export class QDistance {
+  export class QDistance {
   id_Q_DISTANCE: number;
   quadrant_ID_1: number;        
   quadrant_ID_2: number;        

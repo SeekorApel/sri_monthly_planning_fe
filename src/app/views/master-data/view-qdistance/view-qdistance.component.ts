@@ -85,22 +85,26 @@ export class ViewQDistanceComponent implements OnInit {
       }
     );
   }
+  validateNumberInput(event: KeyboardEvent): void {
+    const charCode = event.key.charCodeAt(0);
+
+    // Kode ASCI 48 - 57 angka (0-9) yang bisa diketik
+    if (charCode < 48 || charCode > 57) {
+      event.preventDefault();
+    }
+  }
 
   getAllQuadrantDistance(): void {
     this.qdistanceService.getAllQuadrantDistance().subscribe(
       (response: ApiResponse<QDistance[]>) => {
-        this.qdistances = response.data.map(qdistance => {
-          const quadrant1 = this.quadrant.find(
-            qd => qd.quadrant_ID === qdistance.quadrant_ID_1
-          );
-          const quadrant2 = this.quadrant.find(
-            qd => qd.quadrant_ID === qdistance.quadrant_ID_2
-          );
+        this.qdistances = response.data.map((qdistance) => {
+          const quadrant1 = this.quadrant.find((qd) => qd.quadrant_ID == qdistance.quadrant_ID_1);
+          const quadrant2 = this.quadrant.find((qd) => qd.quadrant_ID == qdistance.quadrant_ID_2);
           return {
             ...qdistance,
             quadrant_1: quadrant1 ? quadrant1.quadrant_NAME : 'Unknown',
             quadrant_2: quadrant2 ? quadrant2.quadrant_NAME : 'Unknown',
-          }
+          };
         });
         this.isDataEmpty = this.qdistances.length === 0; // Update status data kosong
         this.dataSource = new MatTableDataSource(this.qdistances);
@@ -140,6 +144,7 @@ export class ViewQDistanceComponent implements OnInit {
           if (result.isConfirmed) {
             $('#editModal').modal('hide');
             window.location.reload();
+            this.loadQdistance();
           }
         });
       },

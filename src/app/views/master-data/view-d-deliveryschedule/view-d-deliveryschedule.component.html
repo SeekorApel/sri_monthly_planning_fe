@@ -56,7 +56,7 @@
           <!-- Total Delivery Column -->
           <ng-container matColumnDef="total_DELIVERY">
             <th *matHeaderCellDef style="min-width: 150px" mat-sort-header>Total Delivery</th>
-            <td *matCellDef="let detail" align="right">{{ detail.total_DELIVERY }}</td>
+            <td *matCellDef="let detail" align="right">{{ detail.formatTotalDelivery }}</td>
           </ng-container>
 
           <!-- Status Column -->
@@ -106,17 +106,17 @@
                 </div>
                 <div class="form-group">
                   <h6 for="partNum">Part Number</h6>
-                  <input [(ngModel)]="editDDeliveryScheduleTypeObject.part_NUM" type="text" class="form-control" id="partNum" formControlName="partNum" [ngClass]="{ 'is-invalid': editDDeliveryScheduleTypeForm.get('partNum').invalid && editDDeliveryScheduleTypeForm.get('partNum').touched }" />
+                  <input [(ngModel)]="editDDeliveryScheduleTypeObject.part_NUM" maxlength="19" type="text" (keypress)="validateNumberInput($event)" onpaste="return false"  class="form-control" id="partNum" formControlName="partNum" [ngClass]="{ 'is-invalid': editDDeliveryScheduleTypeForm.get('partNum').invalid && editDDeliveryScheduleTypeForm.get('partNum').touched }" />
                   <div *ngIf="editDDeliveryScheduleTypeForm.get('partNum').invalid && editDDeliveryScheduleTypeForm.get('partNum').touched" class="invalid-feedback">Part Number is required.</div>
                 </div>
                 <div class="form-group">
                   <h6 for="date">Date</h6>
-                  <input [(ngModel)]="editDDeliveryScheduleTypeObject.date_DS" type="text" class="form-control" id="date" formControlName="date" [ngClass]="{ 'is-invalid': editDDeliveryScheduleTypeForm.get('date').invalid && editDDeliveryScheduleTypeForm.get('date').touched }" />
+                  <input [(ngModel)]="editDDeliveryScheduleTypeObject.date_DS" type="date" class="form-control" id="date" formControlName="date" [ngClass]="{ 'is-invalid': editDDeliveryScheduleTypeForm.get('date').invalid && editDDeliveryScheduleTypeForm.get('date').touched }" />
                   <div *ngIf="editDDeliveryScheduleTypeForm.get('date').invalid && editDDeliveryScheduleTypeForm.get('date').touched" class="invalid-feedback">Date is required.</div>
                 </div>
                 <div class="form-group">
                   <h6 for="totalDelvery">Total Delivery</h6>
-                  <input [(ngModel)]="editDDeliveryScheduleTypeObject.total_DELIVERY" type="text" class="form-control" id="totalDelvery" formControlName="totalDelvery" [ngClass]="{ 'is-invalid': editDDeliveryScheduleTypeForm.get('totalDelvery').invalid && editDDeliveryScheduleTypeForm.get('totalDelvery').touched }" />
+                  <input [(ngModel)]="editDDeliveryScheduleTypeObject.total_DELIVERY" maxlength="9" (paste)="false" type="text" (keypress)="validateNumberInput($event)" onpaste="return false" class="form-control" id="totalDelvery" formControlName="totalDelvery" [ngClass]="{ 'is-invalid': editDDeliveryScheduleTypeForm.get('totalDelvery').invalid && editDDeliveryScheduleTypeForm.get('totalDelvery').touched }" />
                   <div *ngIf="editDDeliveryScheduleTypeForm.get('totalDelvery').invalid && editDDeliveryScheduleTypeForm.get('totalDelvery').touched" class="invalid-feedback">Total Delivery is required.</div>
                 </div>
               </form>
