@@ -94,7 +94,7 @@
         <form [formGroup]="editDeliveryScheduleForm">
           <div class="form-group">
             <label for="effectiveTime">Effective Time</label>
-            <input [(ngModel)]="edtDeliveryScheduleObject.effective_TIME" type="date" class="form-control" id="effectiveTime" formControlName="effectiveTime" [ngClass]="{ 'is-invalid': editDeliveryScheduleForm.get('effectiveTime').invalid && editDeliveryScheduleForm.get('effectiveTime').touched }" />
+            <input [(ngModel)]="edtDeliveryScheduleObject.effective_TIME"  type="date" class="form-control" id="effectiveTime" formControlName="effectiveTime" [ngClass]="{ 'is-invalid': editDeliveryScheduleForm.get('effectiveTime').invalid && editDeliveryScheduleForm.get('effectiveTime').touched }" />
             <!-- Error message if plantName is empty -->
             <div *ngIf="editDeliveryScheduleForm.get('effectiveTime').invalid && editDeliveryScheduleForm.get('effectiveTime').touched" class="invalid-feedback">Effective time is required.</div>
           </div>
@@ -106,7 +106,7 @@
           </div>
           <div class="form-group">
             <label for="category">Category</label>
-            <input [(ngModel)]="edtDeliveryScheduleObject.category" type="text" class="form-control" id="category" formControlName="category" [ngClass]="{ 'is-invalid': editDeliveryScheduleForm.get('dataIssue').invalid && editDeliveryScheduleForm.get('dataIssue').touched }" />
+            <input [(ngModel)]="edtDeliveryScheduleObject.category" maxlength="9" type="text" class="form-control" id="category" formControlName="category" [ngClass]="{ 'is-invalid': editDeliveryScheduleForm.get('dataIssue').invalid && editDeliveryScheduleForm.get('dataIssue').touched }" />
             <!-- Error message if plantName is empty -->
             <div *ngIf="editDeliveryScheduleForm.get('category').invalid && editDeliveryScheduleForm.get('category').touched" class="invalid-feedback">Category is required.</div>
           </div>

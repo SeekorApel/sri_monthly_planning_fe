@@ -121,7 +121,7 @@
             </div>
             <div class="form-group">
               <label for="capacity">Capacity</label>
-              <input [(ngModel)]="edtCuringSizeObject.capacity" type="text" min="0" class="form-control" id="capacity" formControlName="capacity" (keypress)="allowOnlyNumbers($event)" [ngClass]="{ 'is-invalid': editCuringSizeForm.get('capacity').invalid && editCuringSizeForm.get('capacity').touched }" />
+              <input [(ngModel)]="edtCuringSizeObject.capacity" maxlength="4" type="text" min="0" class="form-control" id="capacity" formControlName="capacity" (keypress)="allowOnlyNumbers($event)" [ngClass]="{ 'is-invalid': editCuringSizeForm.get('capacity').invalid && editCuringSizeForm.get('capacity').touched }" />
               <!-- Error message if plantName is empty -->
               <div *ngIf="editCuringSizeForm.get('capacity').invalid && editCuringSizeForm.get('capacity').touched" class="invalid-feedback">Capacity is required.</div>
             </div>
