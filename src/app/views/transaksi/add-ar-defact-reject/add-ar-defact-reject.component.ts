@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import Swal from 'sweetalert2';
@@ -44,6 +44,7 @@ export class AddArDefactRejectComponent implements OnInit {
   dataSourceDmo: MatTableDataSource<DetailMarketingOrder>;
   @ViewChild('sortDmo') sortDmo = new MatSort();
   @ViewChild('paginatorDmo') paginatorDmo: MatPaginator;
+  @ViewChild('fileInput') fileInput: ElementRef;
   searchTextDmo: string = '';
 
   constructor(private router: Router, private activeRoute: ActivatedRoute, private fb: FormBuilder, private moService: MarketingOrderService, private parsingNumberService: ParsingNumberService) {
@@ -1470,8 +1471,13 @@ export class AddArDefactRejectComponent implements OnInit {
         }
       };
       reader.readAsArrayBuffer(this.file); // Membaca file sebagai ArrayBuffer
+      this.resetFileInput();
       $('#uploadModal').modal('hide');
     }
+  }
+
+  resetFileInput() {
+    this.fileInput.nativeElement.value = '';
   }
 
   validate() {
@@ -1520,4 +1526,5 @@ export class AddArDefactRejectComponent implements OnInit {
       }
     });
   }
+
 }
