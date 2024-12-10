@@ -261,6 +261,7 @@ export class AddArDefactRejectComponent implements OnInit {
       item.ar = 100;
       item.defect = 0;
       item.reject = 0;
+      item.moMonth0Original = item.moMonth0;
     });
 
     let typeProduct = data.type;
@@ -1456,6 +1457,9 @@ export class AddArDefactRejectComponent implements OnInit {
               detail.isTouchedM0 = true;
             }
           }
+
+          //Validasi HGP yang sama AR, Defect, Reject
+          this.validate();
         } else {
           Swal.fire({
             icon: 'error',
@@ -1477,8 +1481,9 @@ export class AddArDefactRejectComponent implements OnInit {
     this.detailMarketingOrder.forEach((dmo) => {
       let arValue = dmo.ar / 100;
       // Hitung nilai ArMoM1
-      if (dmo.moMonth0 !== 0) {
-        dmo.ArMoM1 = Math.round(dmo.moMonth0 / (1 - (1 - arValue)));
+      if (dmo.moMonth0Original !== 0) {
+        dmo.ArMoM1 = Math.round(dmo.moMonth0Original / (1 - (1 - arValue)));
+        dmo.moMonth0 = dmo.ArMoM1
       } else {
         dmo.ArMoM1 = 0;
       }
@@ -1490,22 +1495,26 @@ export class AddArDefactRejectComponent implements OnInit {
       arValue = null;
     });
 
-    // Set semua nilai menjadi 0
     let curingGroups50Percent: { [key: string]: number } = {};
 
-    // Melakukan perhitungan 50% setelah semua nilai diset menjadi 0
+    // Melakukan perhitungan 50%
     for (const key in curingGroupsM0) {
       if (curingGroupsM0.hasOwnProperty(key)) {
-        curingGroups50Percent[key] = curingGroupsM0[key] * 0.5;
+        let value = curingGroupsM0[key] * 0.5;
+        // Logika khusus untuk membulatkan nilai .5 ke bawah
+        if (value % 1 === 0.5) {
+          curingGroups50Percent[key] = Math.floor(value);
+        } else {
+          curingGroups50Percent[key] = Math.round(value);
+        }
       }
     }
 
     this.detailMarketingOrder.forEach((dmo) => {
-      let oldValue = dmo.moMonth0;
       // Cek hanya item curing yang ada di percentageTotal dan kategori mengandung 'HGP'
       if (dmo.itemCuring && curingGroups50Percent[dmo.itemCuring] && dmo.category && dmo.category.includes('HGP')) {
         let percentageValue = curingGroups50Percent[dmo.itemCuring];
-        if (oldValue < percentageValue) {
+        if (dmo.moMonth0Original < percentageValue) {
           dmo.moMonth0 = percentageValue;
         }
       }
