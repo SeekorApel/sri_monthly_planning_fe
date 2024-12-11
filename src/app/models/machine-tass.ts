@@ -2,7 +2,7 @@ export class MachineTass {
   id_MACHINE_TASS: string;
   building_ID:  number;
   floor: number;
-  type: string;
+  machinetasstype_ID: string;
   status: number;
   machine_NUMBER: number;
   work_CENTER_TEXT: string;
