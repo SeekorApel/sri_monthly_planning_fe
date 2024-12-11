@@ -16,6 +16,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { ParsingNumberService } from 'src/app/utils/parsing-number/parsing-number.service';
 declare var $: any;
+import { DatePipe } from '@angular/common'
 @Component({
   selector: 'app-add-ar-defact-reject',
   templateUrl: './add-ar-defact-reject.component.html',
@@ -23,6 +24,8 @@ declare var $: any;
 })
 export class AddArDefactRejectComponent implements OnInit {
   idMo: String;
+  dateValidFed: string;
+  dateValidFdr: string;
   dateMoMonth0: string;
   dateMoMonth1: string;
   dateMoMonth2: string;
@@ -48,6 +51,80 @@ export class AddArDefactRejectComponent implements OnInit {
   headerMarketingOrder: any[] = [];
   detailMarketingOrder: DetailMarketingOrder[];
 
+  objVar = {
+    monthFedM0: '',
+    monthFedM1: '',
+    monthFedM2: '',
+    monthFdrM0: '',
+    monthFdrM1: '',
+    monthFdrM2: '',
+  };
+
+  objVarFed = {
+    // Bulan 1
+    monthFedM0: '',
+    nwd_0: '',
+    nwt_0: '',
+    ot_wt_0: '',
+    tl_ot_wd_0: '',
+    tt_ot_wd_0: '',
+    total_wt_0: '',
+    total_tlwd_0: '',
+    total_ttwd_0: '',
+    max_tube_capa_0: '',
+    max_capa_tl_0: '',
+    max_capa_tt_0: '',
+    machine_airbag_m0: '',
+    fed_tl_m0: '',
+    fed_tt_m0: '',
+    fed_TL_percentage_m0: '',
+    fed_TT_percentage_m0: '',
+    total_mo_m0: '',
+    note_tl_m0: '',
+
+    // Bulan 2
+    monthFedM1: '',
+    nwd_1: '',
+    nwt_1: '',
+    ot_wt_1: '',
+    tl_ot_wd_1: '',
+    tt_ot_wd_1: '',
+    total_wt_1: '',
+    total_tlwd_1: '',
+    total_ttwd_1: '',
+    max_tube_capa_1: '',
+    max_capa_tl_1: '',
+    max_capa_tt_1: '',
+    machine_airbag_m1: '',
+    fed_tl_m1: '',
+    fed_tt_m1: '',
+    fed_TL_percentage_m1: '',
+    fed_TT_percentage_m1: '',
+    total_mo_m1: '',
+    note_tl_m1: '',
+
+    //Bulan 3
+    monthFedM2: '',
+    nwd_2: '',
+    nwt_2: '',
+    ot_wt_2: '',
+    tl_ot_wd_2: '',
+    tt_ot_wd_2: '',
+    total_wt_2: '',
+    total_tlwd_2: '',
+    total_ttwd_2: '',
+    max_tube_capa_2: '',
+    max_capa_tl_2: '',
+    max_capa_tt_2: '',
+    machine_airbag_m2: '',
+    fed_tl_m2: '',
+    fed_tt_m2: '',
+    fed_TL_percentage_m2: '',
+    fed_TT_percentage_m2: '',
+    total_mo_m2: '',
+    note_tl_m2: '',
+  }
+
   // Pagination Detail Marketing Order
   headersColumnsDmo: string[] = ['no', 'category', 'partNumber', 'description', 'machineType', 'capacity', 'qtyPerMould', 'spareMould', 'mouldMonthlyPlan', 'qtyPerRak', 'minOrder', 'maxCap', 'initialStock', 'salesForecast', 'marketingOrder', 'ar', 'defect', 'reject', 'itemCuring'];
   childHeadersColumnsDmo: string[] = ['maxCapMonth0', 'maxCapMonth1', 'maxCapMonth2', 'sfMonth0', 'sfMonth1', 'sfMonth2', 'moMonth0', 'moMonth1', 'moMonth2'];
@@ -58,7 +135,7 @@ export class AddArDefactRejectComponent implements OnInit {
   @ViewChild('fileInput') fileInput: ElementRef;
   searchTextDmo: string = '';
 
-  constructor(private router: Router, private activeRoute: ActivatedRoute, private fb: FormBuilder, private moService: MarketingOrderService, private parsingNumberService: ParsingNumberService) {
+  constructor(private router: Router, private activeRoute: ActivatedRoute, private fb: FormBuilder, private moService: MarketingOrderService, private parsingNumberService: ParsingNumberService, public datepipe: DatePipe) {
     this.formHeaderMo = this.fb.group({
       date: [null, []],
       type: [null, []],
@@ -242,6 +319,8 @@ export class AddArDefactRejectComponent implements OnInit {
         this.moFdr = response.data.moFdr;
         this.hmoFdr = response.data.headerMarketingOrderFdr;
         this.dmoFdr = response.data.detailMarketingOrderFdr;
+
+        this.setData();
       },
       (error) => {
         Swal.close();
@@ -253,6 +332,41 @@ export class AddArDefactRejectComponent implements OnInit {
         });
       }
     );
+  }
+
+  setData(): void {
+    this.dateValidFed = this.datepipe.transform(this.moFed.dateValid, 'yyyy-MM-dd');
+
+    //Header Month 1
+    this.objVarFed.monthFedM0 = this.datepipe.transform(this.hmoFed[0].month, 'yyyy-MM');
+    this.objVarFed.nwd_0 = this.formatDecimalView(this.hmoFed[0].wdNormalTire),
+    this.objVarFed.nwt_0 = this.formatDecimalView(this.hmoFed[0].wdNormalTube),
+    this.objVarFed.ot_wt_0 = this.formatDecimalView(this.hmoFed[0].wdOtTube),
+    this.objVarFed.tl_ot_wd_0 = this.formatDecimalView(this.hmoFed[0].wdOtTl),
+    this.objVarFed.tt_ot_wd_0 = this.formatDecimalView(this.hmoFed[0].wdOtTt),
+    this.objVarFed.total_wt_0 = this.formatDecimalView(this.hmoFed[0].totalWdTube),
+    this.objVarFed.total_tlwd_0 = this.formatDecimalView(this.hmoFed[0].totalWdTl),
+    this.objVarFed.total_ttwd_0 = this.formatDecimalView(this.hmoFed[0].totalWdTt),
+    this.objVarFed.max_tube_capa_0 = this.formatSeparatorView(this.hmoFed[0].maxCapTube),
+    this.objVarFed.max_capa_tl_0 = this.formatSeparatorView(this.hmoFed[0].maxCapTl),
+    this.objVarFed.max_capa_tt_0 = this.formatSeparatorView(this.hmoFed[0].maxCapTt),
+    this.objVarFed.machine_airbag_m0 = this.formatSeparatorView(this.hmoFed[0].airbagMachine),
+    this.objVarFed.fed_tl_m0 = this.formatSeparatorView(this.hmoFed[0].tl),
+    this.objVarFed.fed_tt_m0 = this.formatSeparatorView(this.hmoFed[0].tt),
+    this.objVarFed.fed_TL_percentage_m0 = this.formatDecimalView(this.hmoFed[0].tlPercentage),
+    this.objVarFed.fed_TT_percentage_m0 = this.formatDecimalView(this.hmoFed[0].ttPercentage),
+    this.objVarFed.total_mo_m0 = this.formatSeparatorView(this.hmoFed[0].totalMo),
+    this.objVarFed.note_tl_m0 = this.hmoFed[0].noteOrderTl,
+
+
+      this.objVar.monthFedM1 = this.datepipe.transform(this.hmoFed[1].month, 'yyyy-MM');
+    this.objVar.monthFedM2 = this.datepipe.transform(this.hmoFed[2].month, 'yyyy-MM');
+
+
+    this.dateValidFdr = this.datepipe.transform(this.moFdr.dateValid, 'yyyy-MM-dd');
+    this.objVar.monthFdrM0 = this.datepipe.transform(this.hmoFdr[0].month, 'yyyy-MM');
+    this.objVar.monthFdrM1 = this.datepipe.transform(this.hmoFdr[1].month, 'yyyy-MM');
+    this.objVar.monthFdrM2 = this.datepipe.transform(this.hmoFdr[2].month, 'yyyy-MM');
   }
 
   getLastIdMo(): void {
