@@ -23,6 +23,9 @@ declare var $: any;
 })
 export class AddArDefactRejectComponent implements OnInit {
   idMo: String;
+  dateMoMonth0: string;
+  dateMoMonth1: string;
+  dateMoMonth2: string;
   capacityDb: string = '';
   formHeaderMo: FormGroup;
   isReadOnly: boolean = true;
@@ -32,6 +35,14 @@ export class AddArDefactRejectComponent implements OnInit {
   loading: boolean = false;
   file: File | null = null;
   typeMo: string = '';
+
+  moFed: MarketingOrder = new MarketingOrder();
+  hmoFed: any[] = [];
+  dmoFed: DetailMarketingOrder[];
+
+  moFdr: MarketingOrder = new MarketingOrder();
+  hmoFdr: any[] = [];
+  dmoFdr: DetailMarketingOrder[];
 
   marketingOrder: MarketingOrder = new MarketingOrder();
   headerMarketingOrder: any[] = [];
@@ -149,7 +160,10 @@ export class AddArDefactRejectComponent implements OnInit {
 
   ngOnInit(): void {
     this.idMo = this.activeRoute.snapshot.paramMap.get('idMo');
-    this.getAllData(this.idMo);
+    this.dateMoMonth0 = this.activeRoute.snapshot.paramMap.get('month0');
+    this.dateMoMonth1 = this.activeRoute.snapshot.paramMap.get('month1');
+    this.dateMoMonth2 = this.activeRoute.snapshot.paramMap.get('month2');
+    this.getAllData(this.dateMoMonth0, this.dateMoMonth1, this.dateMoMonth2);
     this.getLastIdMo();
   }
 
@@ -199,7 +213,7 @@ export class AddArDefactRejectComponent implements OnInit {
     }
   }
 
-  getAllData(idMo: String) {
+  getAllData(moMonth0Param: string, moMonth1Param: string, moMonth2Param: string) {
     Swal.fire({
       title: 'Loading...',
       html: 'Please wait while fetching data marketing order.',
@@ -209,11 +223,25 @@ export class AddArDefactRejectComponent implements OnInit {
       },
     });
 
-    this.moService.getAllMoById(idMo).subscribe(
+    let data = {
+      moMonth0: moMonth0Param,
+      moMonth1: moMonth1Param,
+      moMonth2: moMonth2Param,
+    };
+
+    this.moService.getAllTypeMoByMonth(data).subscribe(
       (response: ApiResponse<any>) => {
         Swal.close();
-        this.allData = response.data;
-        this.fillAllData(this.allData);
+
+        //Set MO FED
+        this.moFed = response.data.moFed;
+        this.hmoFed = response.data.headerMarketingOrderFed;
+        this.dmoFed = response.data.detailMarketingOrderFed;
+
+        //Set MO FDR
+        this.moFdr = response.data.moFdr;
+        this.hmoFdr = response.data.headerMarketingOrderFdr;
+        this.dmoFdr = response.data.detailMarketingOrderFdr;
       },
       (error) => {
         Swal.close();
@@ -348,107 +376,15 @@ export class AddArDefactRejectComponent implements OnInit {
     this.updateMonthNames(this.headerMarketingOrder);
   }
 
-  // finalizationMo(): void {
-  //   const type = this.formHeaderMo.get('type')?.value;
-
-  //   //Set data Save MO
-  //   this.marketingOrder.moId = this.lastIdMo;
-  //   this.marketingOrder.dateValid = this.formHeaderMo.get('date')?.value;
-  //   this.marketingOrder.type = this.formHeaderMo.get('type')?.value;
-  //   this.marketingOrder.revisionPpc = this.formHeaderMo.get('revision')?.value;
-  //   this.marketingOrder.revisionMarketing = this.allData.revisionMarketing;
-  //   this.marketingOrder.month0 = new Date(this.formHeaderMo.get('month_0')?.value);
-  //   this.marketingOrder.month1 = new Date(this.formHeaderMo.get('month_1')?.value);
-  //   this.marketingOrder.month2 = new Date(this.formHeaderMo.get('month_2')?.value);
-  //   this.marketingOrder.statusFilled = this.allData.statusFilled;
-
-  //   //Set data save Header Mo
-  //   this.headerMarketingOrder = [];
-  //   for (let i = 0; i < 3; i++) {
-  //     let nwdValue = this.parseFormattedValue(this.formHeaderMo.get(`nwd_${i}`)?.value);
-  //     let nwtValue = this.parseFormattedValue(this.formHeaderMo.get(`nwt_${i}`)?.value);
-  //     let otWdTubeValue = this.parseFormattedValue(this.formHeaderMo.get(`ot_wt_${i}`)?.value);
-  //     let totalWdTube = this.parseFormattedValue(this.formHeaderMo.get(`total_wt_${i}`)?.value);
-
-  //     // Validate: if nwt is null or not filled, set it to nwd
-  //     if (nwtValue === null) {
-  //       nwtValue = nwdValue;
-  //       otWdTubeValue = 0;
-  //       totalWdTube = nwtValue + otWdTubeValue;
-  //     }
-
-  //     const tlField = type === 'FDR' ? `fdr_tl_m${i}` : `fed_tl_m${i}`;
-  //     const ttField = type === 'FDR' ? `fdr_tt_m${i}` : `fed_tt_m${i}`;
-
-  //     const tlFieldPercentage = type === 'FDR' ? `fdr_TL_percentage_m${i}` : `fed_TL_percentage_m${i}`;
-  //     const ttFieldPercentage = type === 'FDR' ? `fdr_TT_percentage_m${i}` : `fed_TT_percentage_m${i}`;
-
-  //     this.headerMarketingOrder.push({
-  //       moId: this.lastIdMo,
-  //       month: new Date(this.formHeaderMo.get(`month_${i}`)?.value),
-  //       wdNormalTire: this.parseFormattedValue(this.formHeaderMo.get(`nwd_${i}`)?.value),
-  //       wdNormalTube: nwtValue,
-  //       wdOtTube: otWdTubeValue,
-  //       wdOtTl: this.parseFormattedValue(this.formHeaderMo.get(`tl_ot_wd_${i}`)?.value),
-  //       wdOtTt: this.parseFormattedValue(this.formHeaderMo.get(`tt_ot_wd_${i}`)?.value),
-  //       totalWdTube: totalWdTube,
-  //       totalWdTl: this.parseFormattedValue(this.formHeaderMo.get(`total_tlwd_${i}`)?.value || ''),
-  //       totalWdTt: this.parseFormattedValue(this.formHeaderMo.get(`total_ttwd_${i}`)?.value || ''),
-  //       maxCapTube: this.parseFormattedValue(this.formHeaderMo.get(`max_tube_capa_${i}`)?.value || ''),
-  //       maxCapTl: this.parseFormattedValue(this.formHeaderMo.get(`max_capa_tl_${i}`)?.value || ''),
-  //       maxCapTt: this.parseFormattedValue(this.formHeaderMo.get(`max_capa_tt_${i}`)?.value || ''),
-  //       airbagMachine: this.parseFormattedValue(this.formHeaderMo.get(`machine_airbag_m${i}`)?.value || ''),
-  //       tl: this.parseFormattedValue(this.formHeaderMo.get(tlField)?.value || ''),
-  //       tt: this.parseFormattedValue(this.formHeaderMo.get(ttField)?.value || ''),
-  //       totalMo: this.parseFormattedValue(this.formHeaderMo.get(`total_mo_m${i}`)?.value || ''),
-  //       tlPercentage: this.parseFormattedValue(this.formHeaderMo.get(tlFieldPercentage)?.value || ''),
-  //       ttPercentage: this.parseFormattedValue(this.formHeaderMo.get(ttFieldPercentage)?.value || ''),
-  //       noteOrderTl: this.formHeaderMo.get(`note_tl_m${i}`)?.value,
-  //     });
-  //   }
-
-  //   //Set data save Detail Mo
-  //   this.detailMarketingOrder.forEach((item) => {
-  //     item.moId = this.lastIdMo;
-  //   });
-
-  //   const saveMo = {
-  //     marketingOrder: this.marketingOrder,
-  //     headerMarketingOrder: this.headerMarketingOrder,
-  //     detailMarketingOrder: this.detailMarketingOrder,
-  //   };
-
-  //   this.loading = true;
-  //   this.moService.saveMarketingOrderPPC(saveMo).subscribe(
-  //     (response) => {
-  //       Swal.fire({
-  //         title: 'Success!',
-  //         text: 'Data Marketing Order successfully Revision.',
-  //         icon: 'success',
-  //         confirmButtonText: 'OK',
-  //       }).then((result) => {
-  //         if (result.isConfirmed) {
-  //           this.navigateToViewAddMp();
-  //         }
-  //       });
-  //       this.loading = false;
-  //     },
-  //     (err) => {
-  //       Swal.fire('Error!', 'Error insert data Marketing Order.', 'error');
-  //       this.loading = false;
-  //     }
-  //   );
-  // }
-
-  editMo(): void {
+  finalizationMo(): void {
     const type = this.formHeaderMo.get('type')?.value;
 
     //Set data Save MO
     this.marketingOrder.moId = this.lastIdMo;
     this.marketingOrder.dateValid = this.formHeaderMo.get('date')?.value;
     this.marketingOrder.type = this.formHeaderMo.get('type')?.value;
-    this.marketingOrder.revisionMarketing = this.formHeaderMo.get('revision')?.value;
-    this.marketingOrder.revisionPpc = this.allData.revisionPpc;
+    this.marketingOrder.revisionPpc = this.formHeaderMo.get('revision')?.value;
+    this.marketingOrder.revisionMarketing = this.allData.revisionMarketing;
     this.marketingOrder.month0 = new Date(this.formHeaderMo.get('month_0')?.value);
     this.marketingOrder.month1 = new Date(this.formHeaderMo.get('month_1')?.value);
     this.marketingOrder.month2 = new Date(this.formHeaderMo.get('month_2')?.value);
@@ -457,6 +393,18 @@ export class AddArDefactRejectComponent implements OnInit {
     //Set data save Header Mo
     this.headerMarketingOrder = [];
     for (let i = 0; i < 3; i++) {
+      let nwdValue = this.parseFormattedValue(this.formHeaderMo.get(`nwd_${i}`)?.value);
+      let nwtValue = this.parseFormattedValue(this.formHeaderMo.get(`nwt_${i}`)?.value);
+      let otWdTubeValue = this.parseFormattedValue(this.formHeaderMo.get(`ot_wt_${i}`)?.value);
+      let totalWdTube = this.parseFormattedValue(this.formHeaderMo.get(`total_wt_${i}`)?.value);
+
+      // Validate: if nwt is null or not filled, set it to nwd
+      if (nwtValue === null) {
+        nwtValue = nwdValue;
+        otWdTubeValue = 0;
+        totalWdTube = nwtValue + otWdTubeValue;
+      }
+
       const tlField = type === 'FDR' ? `fdr_tl_m${i}` : `fed_tl_m${i}`;
       const ttField = type === 'FDR' ? `fdr_tt_m${i}` : `fed_tt_m${i}`;
 
@@ -467,17 +415,16 @@ export class AddArDefactRejectComponent implements OnInit {
         moId: this.lastIdMo,
         month: new Date(this.formHeaderMo.get(`month_${i}`)?.value),
         wdNormalTire: this.parseFormattedValue(this.formHeaderMo.get(`nwd_${i}`)?.value),
-        wdNormalTube: this.parseFormattedValue(this.formHeaderMo.get(`nwt_${i}`)?.value),
-        wdOtTube: this.parseFormattedValue(this.formHeaderMo.get(`ot_wt_${i}`)?.value),
+        wdNormalTube: nwtValue,
+        wdOtTube: otWdTubeValue,
         wdOtTl: this.parseFormattedValue(this.formHeaderMo.get(`tl_ot_wd_${i}`)?.value),
         wdOtTt: this.parseFormattedValue(this.formHeaderMo.get(`tt_ot_wd_${i}`)?.value),
-        totalWdTube: this.parseFormattedValue(this.formHeaderMo.get(`total_wt_${i}`)?.value),
+        totalWdTube: totalWdTube,
         totalWdTl: this.parseFormattedValue(this.formHeaderMo.get(`total_tlwd_${i}`)?.value || ''),
         totalWdTt: this.parseFormattedValue(this.formHeaderMo.get(`total_ttwd_${i}`)?.value || ''),
         maxCapTube: this.parseFormattedValue(this.formHeaderMo.get(`max_tube_capa_${i}`)?.value || ''),
         maxCapTl: this.parseFormattedValue(this.formHeaderMo.get(`max_capa_tl_${i}`)?.value || ''),
         maxCapTt: this.parseFormattedValue(this.formHeaderMo.get(`max_capa_tt_${i}`)?.value || ''),
-        looping: this.parseFormattedValue(this.formHeaderMo.get(`looping_m${i}`)?.value || ''),
         airbagMachine: this.parseFormattedValue(this.formHeaderMo.get(`machine_airbag_m${i}`)?.value || ''),
         tl: this.parseFormattedValue(this.formHeaderMo.get(tlField)?.value || ''),
         tt: this.parseFormattedValue(this.formHeaderMo.get(ttField)?.value || ''),
@@ -488,18 +435,48 @@ export class AddArDefactRejectComponent implements OnInit {
       });
     }
 
-    //Set detailMo
-    this.detailMarketingOrder.forEach((mo) => {
-      mo.moId = this.lastIdMo;
+    //Set data save Detail Mo
+    this.detailMarketingOrder.forEach((item) => {
+      item.moId = this.lastIdMo;
     });
 
-    const revisionMo = {
+    const saveMo = {
       marketingOrder: this.marketingOrder,
       headerMarketingOrder: this.headerMarketingOrder,
       detailMarketingOrder: this.detailMarketingOrder,
     };
 
     this.loading = true;
+    Swal.fire({
+      icon: 'info',
+      title: 'Processing...',
+      html: 'Please wait while save data marketing order.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
+    this.moService.arRejectDefect(saveMo).subscribe(
+      (response) => {
+        Swal.close();
+        Swal.fire({
+          title: 'Success!',
+          text: 'Data Marketing Order successfully Revision.',
+          icon: 'success',
+          confirmButtonText: 'OK',
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.navigateToViewAddMp();
+          }
+        });
+        this.loading = false;
+      },
+      (err) => {
+        Swal.close();
+        Swal.fire('Error!', 'Error insert data Marketing Order.', 'error');
+        this.loading = false;
+      }
+    );
   }
 
   parseFormattedValue(formattedValue: string | null): number | null {
@@ -1551,7 +1528,7 @@ export class AddArDefactRejectComponent implements OnInit {
       // Hitung nilai ArMoM1
       if (dmo.moMonth0Original !== 0) {
         dmo.ArMoM1 = Math.round(dmo.moMonth0Original / (1 - (1 - arValue)));
-        dmo.moMonth0 = dmo.ArMoM1
+        dmo.moMonth0 = dmo.ArMoM1;
       } else {
         dmo.ArMoM1 = 0;
       }
@@ -1588,5 +1565,4 @@ export class AddArDefactRejectComponent implements OnInit {
       }
     });
   }
-
 }

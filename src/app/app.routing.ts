@@ -378,7 +378,7 @@ export const routes: Routes = [
         },
       },
       {
-        path: 'transaksi/add-mo-ar-defect-reject/:idMo',
+        path: 'transaksi/add-mo-ar-defect-reject/:month0/:month1/:month2',
         component: AddArDefactRejectComponent,
         data: {
           title: 'Transaksi / Add MO AR, Defect, Reject',

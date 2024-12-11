@@ -1,33 +1,85 @@
 <div class="animated fadeIn">
+
+  <!-- Marketing Order -->
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-header">
+        <strong>Marketing Order</strong>
+      </div>
+      <div class="card-body">
+        <tabset>
+          <tab heading="FED">
+            <div class="form-group row">
+              <label class="col-md-3 col-form-label">Date</label>
+              <div class="col-md-9">
+                <input class="form-control" [(ngModel)]="moFed.dateValid" type="date" placeholder="date" [readOnly]="isReadOnly" />
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label class="col-md-3 col-form-label" for="type">Type</label>
+              <div class="col-md-9">
+                <input class="form-control" [(ngModel)]="moFed.type" type="text" placeholder="type" [readOnly]="isReadOnly" />
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label class="col-md-3 col-form-label">Revision PPC</label>
+              <div class="col-md-9">
+                <input class="form-control" type="text" [(ngModel)]="moFed.revisionPpc" placeholder="1,2,3...." [readOnly]="isReadOnly" />
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label class="col-md-3 col-form-label">Revision Marketing</label>
+              <div class="col-md-9">
+                <input class="form-control" type="text" [(ngModel)]="moFed.revisionMarketing" placeholder="1,2,3...." [readOnly]="isReadOnly" />
+              </div>
+            </div>
+          </tab>
+          <tab heading="FDR">
+            <div class="form-group row">
+              <label class="col-md-3 col-form-label">Date</label>
+              <div class="col-md-9">
+                <input class="form-control" type="date" placeholder="date" [readOnly]="isReadOnly" />
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label class="col-md-3 col-form-label" for="type">Type</label>
+              <div class="col-md-9">
+                <input class="form-control" [(ngModel)]="moFdr.type" type="text" placeholder="type" [readOnly]="isReadOnly" />
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label class="col-md-3 col-form-label">Revision PPC</label>
+              <div class="col-md-9">
+                <input class="form-control" type="text" [(ngModel)]="moFdr.revisionPpc" placeholder="1,2,3...." [readOnly]="isReadOnly" />
+              </div>
+            </div>
+
+            <div class="form-group row">
+              <label class="col-md-3 col-form-label">Revision Marketing</label>
+              <div class="col-md-9">
+                <input class="form-control" type="text" [(ngModel)]="moFdr.revisionMarketing" placeholder="1,2,3...." [readOnly]="isReadOnly" />
+              </div>
+            </div>
+          </tab>
+        </tabset>
+      </div>
+    </div>
+  </div>
+   <!-- End Marketing Order -->
+
   <!-- Header Marketing Order -->
   <div class="col-md-12">
     <div class="card">
       <div class="card-header">
-        <strong>Edit Header Marketing Order</strong>
+        <strong>Header Marketing Order</strong>
       </div>
       <div class="card-body">
         <form [formGroup]="formHeaderMo" class="form form-horizontal">
-          <div class="form-group row">
-            <label class="col-md-3 col-form-label">Date</label>
-            <div class="col-md-9">
-              <input class="form-control" type="date" formControlName="date" placeholder="date" [readOnly]="isReadOnly" />
-            </div>
-          </div>
-
-          <div class="form-group row">
-            <label class="col-md-3 col-form-label" for="type">Type</label>
-            <div class="col-md-9">
-              <input class="form-control" type="text" formControlName="type" placeholder="type" [readOnly]="isReadOnly" />
-            </div>
-          </div>
-
-          <div class="form-group row">
-            <label class="col-md-3 col-form-label">Revision</label>
-            <div class="col-md-9">
-              <input class="form-control" type="text" formControlName="revision" placeholder="1,2,3...." [readOnly]="isReadOnly" />
-            </div>
-          </div>
-
           <!-- Tabset -->
           <tabset>
             <tab heading="Month 1">
@@ -555,7 +607,7 @@
 
   <div class="col-md-12 pb-4">
     <button (click)="navigateToViewAddMp()" class="btn btn-primary justify-content-start mr-2">Back</button>
-    <button (click)="finalizationMo()" [disabled]="true" type="submit" class="btn btn-success">
+    <button (click)="finalizationMo()" [disabled]="loading" type="submit" class="btn btn-success">
       <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
       Submit
     </button>

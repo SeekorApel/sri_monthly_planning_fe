@@ -136,6 +136,32 @@ export class MarketingOrderService {
     return this.http.get<ApiResponse<[]>>(environment.apiUrlWebAdmin + '/getAllDetailRevisionMo', { params });
   }
 
+  getDetailMarketingOrder(data: any): Observable<ApiResponse<DetailMarketingOrder[]>> {
+    return this.http.post<ApiResponse<DetailMarketingOrder[]>>(environment.apiUrlWebAdmin + '/getDetailMarketingOrders', data).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((err) => {
+        return throwError(err);
+      })
+    );
+  }
+
+  getAllMoOnlyMonth(): Observable<ApiResponse<any[]>> {
+    return this.http.get<ApiResponse<[]>>(environment.apiUrlWebAdmin + '/getAllMoOnlyMonth');
+  }
+
+  getAllTypeMoByMonth(data: any): Observable<ApiResponse<any>> {
+    return this.http.post<ApiResponse<any>>(environment.apiUrlWebAdmin + '/getAllTypeMarketingOrder', data).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((err) => {
+        return throwError(err);
+      })
+    );
+  }
+
   //Not used Alll ke bawah
   // saveMarketingOrder(mo: MarketingOrder): Observable<ApiResponse<MarketingOrder>> {
   //   return this.http.post<ApiResponse<MarketingOrder>>(environment.apiUrlWebAdmin + '/saveMarketingOrder', mo).pipe(
@@ -150,17 +176,6 @@ export class MarketingOrderService {
 
   // saveHeaderMarketingOrder(hmo: HeaderMarketingOrder[]): Observable<ApiResponse<HeaderMarketingOrder>> {
   //   return this.http.post<ApiResponse<HeaderMarketingOrder>>(environment.apiUrlWebAdmin + '/saveHeaderMO', hmo).pipe(
-  //     map((response) => {
-  //       return response;
-  //     }),
-  //     catchError((err) => {
-  //       return throwError(err);
-  //     })
-  //   );
-  // }
-
-  // getDetailMarketingOrder(data: any): Observable<ApiResponse<DetailMarketingOrder[]>> {
-  //   return this.http.post<ApiResponse<DetailMarketingOrder[]>>(environment.apiUrlWebAdmin + '/getDetailMarketingOrders', data).pipe(
   //     map((response) => {
   //       return response;
   //     }),

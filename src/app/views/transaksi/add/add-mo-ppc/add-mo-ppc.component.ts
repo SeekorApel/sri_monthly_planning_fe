@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MarketingOrder } from 'src/app/models/MarketingOrder';
@@ -58,6 +58,7 @@ export class AddMoPpcComponent implements OnInit {
   dataSource: MatTableDataSource<DetailMarketingOrder>;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild('fileInput') fileInput: ElementRef;
 
   constructor(private router: Router, private fb: FormBuilder, private moService: MarketingOrderService, private parsingNumberService: ParsingNumberService, private numberService: NumberFormatService) {
     this.formHeaderMo = this.fb.group({
@@ -90,15 +91,15 @@ export class AddMoPpcComponent implements OnInit {
       total_ttwd_1: [null, []],
       total_tlwd_2: [null, []],
       total_ttwd_2: [null, []],
-      max_tube_capa_0: [200000, [Validators.required]],
-      max_tube_capa_1: [200000, [Validators.required]],
-      max_tube_capa_2: [200000, [Validators.required]],
-      max_capa_tl_0: [472460, [Validators.required]],
-      max_capa_tt_0: [38800, [Validators.required]],
-      max_capa_tl_1: [441640, [Validators.required]],
-      max_capa_tt_1: [26720, [Validators.required]],
-      max_capa_tl_2: [463640, [Validators.required]],
-      max_capa_tt_2: [29840, [Validators.required]],
+      max_tube_capa_0: [null, [Validators.required]],
+      max_tube_capa_1: [null, [Validators.required]],
+      max_tube_capa_2: [null, [Validators.required]],
+      max_capa_tl_0: [null, [Validators.required]],
+      max_capa_tt_0: [null, [Validators.required]],
+      max_capa_tl_1: [null, [Validators.required]],
+      max_capa_tt_1: [null, [Validators.required]],
+      max_capa_tl_2: [null, [Validators.required]],
+      max_capa_tt_2: [null, [Validators.required]],
       note_order_tl_0: [null, []],
       note_order_tl_1: [null, []],
       note_order_tl_2: [null, []],
@@ -146,6 +147,10 @@ export class AddMoPpcComponent implements OnInit {
     this.subscribeToValueChanges('max_tube_capa_2');
     this.subscribeToValueChanges('max_capa_tl_2');
     this.subscribeToValueChanges('max_capa_tt_2');
+  }
+
+  resetFileInput() {
+    this.fileInput.nativeElement.value = '';
   }
 
   getLastIdMo(): void{
@@ -1455,11 +1460,16 @@ export class AddMoPpcComponent implements OnInit {
             }
           }
         } else {
-          console.error('File tidak dapat dibaca sebagai ArrayBuffer');
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'File tidak dapat dibaca',
+          });
         }
       };
 
       reader.readAsArrayBuffer(this.file); // Membaca file sebagai ArrayBuffer
+      this.resetFileInput();
       $('#uploadModal').modal('hide');
     }
   }

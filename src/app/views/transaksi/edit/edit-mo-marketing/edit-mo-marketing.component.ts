@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DetailMarketingOrder } from 'src/app/models/DetailMarketingOrder';
@@ -51,6 +51,7 @@ export class EditMoMarketingComponent implements OnInit {
   dataSource: MatTableDataSource<DetailMarketingOrder>;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild('fileInput') fileInput: ElementRef;
 
   constructor(private router: Router, private activeRoute: ActivatedRoute, private fb: FormBuilder, private moService: MarketingOrderService, private parsingNumberService: ParsingNumberService) {
     this.formHeaderMo = this.fb.group({
@@ -129,9 +130,6 @@ export class EditMoMarketingComponent implements OnInit {
       fed_TT_percentage_m2: [null, []],
       fdr_TT_percentage_m2: [null, []],
       note_tl_m2: [null, []],
-      upload_file_m0: [null, [Validators.required]],
-      upload_file_m1: [null, [Validators.required]],
-      upload_file_m2: [null, [Validators.required]],
     });
 
     this.moService.getCapacity().subscribe(
@@ -154,6 +152,11 @@ export class EditMoMarketingComponent implements OnInit {
     this.getAllData(this.idMo);
     this.getLastIdMo();
   }
+
+  resetFileInput() {
+    this.fileInput.nativeElement.value = '';
+  }
+
 
   onInputFormat(event: Event): void {
     const input = event.target as HTMLInputElement;
@@ -208,7 +211,6 @@ export class EditMoMarketingComponent implements OnInit {
 
   isInvalidValue(value: any | null | undefined, index: number): boolean {
     let data = this.detailMarketingOrder[index];
-    console.log(data);
     return false;
   }
 
@@ -683,13 +685,6 @@ export class EditMoMarketingComponent implements OnInit {
 
     this.detailMarketingOrder.forEach((mo) => {
       mo.moId = this.lastIdMo;
-      // mo.initialStock = parseFloat(mo.initialStock?.toString().replace(/\./g, '') || '0') || 0;
-      // mo.sfMonth0 = parseFloat(mo.sfMonth0?.toString().replace(/\./g, '') || '0') || 0;
-      // mo.sfMonth1 = parseFloat(mo.sfMonth1?.toString().replace(/\./g, '') || '0') || 0;
-      // mo.sfMonth2 = parseFloat(mo.sfMonth2?.toString().replace(/\./g, '') || '0') || 0;
-      // mo.moMonth0 = parseFloat(mo.moMonth0?.toString().replace(/\./g, '') || '0') || 0;
-      // mo.moMonth1 = parseFloat(mo.moMonth1?.toString().replace(/\./g, '') || '0') || 0;
-      // mo.moMonth2 = parseFloat(mo.moMonth2?.toString().replace(/\./g, '') || '0') || 0;
     });
 
     const revisionMo = {
@@ -698,35 +693,38 @@ export class EditMoMarketingComponent implements OnInit {
       detailMarketingOrder: this.detailMarketingOrder,
     };
 
-    // const filteredData = this.detailMarketingOrder.map(item => ({
-    //   partNumber: item.partNumber,
-    //   moMonth0: item.moMonth0,
-    //   moMonth1: item.moMonth1,
-    //   moMonth2: item.moMonth2
-    // }));
-
-    console.log("Hasil Edit", revisionMo);
-
+    Swal.fire({
+      icon: 'info',
+      title: 'Processing...',
+      html: 'Please wait while save data marketing order.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
     this.loading = true;
-    // this.moService.updateMarketingOrderMarketing(revisionMo).subscribe(
-    //   (response) => {
-    //     Swal.fire({
-    //       title: 'Success!',
-    //       text: 'Data Marketing Order successfully Revision.',
-    //       icon: 'success',
-    //       confirmButtonText: 'OK',
-    //     }).then((result) => {
-    //       if (result.isConfirmed) {
-    //         this.navigateToViewMo();
-    //       }
-    //     });
-    //     this.loading = false;
-    //   },
-    //   (err) => {
-    //     Swal.fire('Error!', 'Error insert data Marketing Order.', 'error');
-    //     this.loading = false;
-    //   }
-    // );
+    this.moService.updateMarketingOrderMarketing(revisionMo).subscribe(
+      (response) => {
+        Swal.close();
+        Swal.fire({
+          title: 'Success!',
+          text: 'Data Marketing Order successfully Revision.',
+          icon: 'success',
+          allowOutsideClick: false,
+          confirmButtonText: 'OK',
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.navigateToViewMo();
+          }
+        });
+        this.loading = false;
+      },
+      (err) => {
+        Swal.close();
+        Swal.fire('Error!', 'Error insert data Marketing Order.', 'error');
+        this.loading = false;
+      }
+    );
   }
 
   downloadTemplate() {
@@ -1644,11 +1642,16 @@ export class EditMoMarketingComponent implements OnInit {
             }
           }
         } else {
-          console.error('File tidak dapat dibaca sebagai ArrayBuffer');
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'File tidak dapat dibaca',
+          });
         }
       };
 
       reader.readAsArrayBuffer(this.file); // Membaca file sebagai ArrayBuffer
+      this.resetFileInput();
       $('#uploadModal').modal('hide');
     }
   }

@@ -122,9 +122,6 @@ export class EditMoPpcComponent implements OnInit {
       fed_TT_percentage_m2: [null, []],
       fdr_TT_percentage_m2: [null, []],
       note_tl_m2: [null, []],
-      upload_file_m0: [null, [Validators.required]],
-      upload_file_m1: [null, [Validators.required]],
-      upload_file_m2: [null, [Validators.required]],
     });
 
     this.moService.getCapacity().subscribe(
@@ -306,8 +303,6 @@ export class EditMoPpcComponent implements OnInit {
       item.moMonth2 = item.moMonth2 !== null ? item.moMonth2 : 0;
     });
 
-    console.log(this.headerMarketingOrder[0].totalWdTube);
-
     let typeProduct = data.type;
     this.formHeaderMo.patchValue({
       date: new Date(data.dateValid).toISOString().split('T')[0],
@@ -461,9 +456,19 @@ export class EditMoPpcComponent implements OnInit {
       detailMarketingOrder: this.detailMarketingOrder,
     };
 
+    Swal.fire({
+      icon: 'info',
+      title: 'Processing...',
+      html: 'Please wait while save data marketing order.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
     this.loading = true;
     this.moService.saveMarketingOrderPPC(saveMo).subscribe(
       (response) => {
+        Swal.close();
         Swal.fire({
           title: 'Success!',
           text: 'Data Marketing Order successfully Revision.',
@@ -477,6 +482,7 @@ export class EditMoPpcComponent implements OnInit {
         this.loading = false;
       },
       (err) => {
+        Swal.close();
         Swal.fire('Error!', 'Error insert data Marketing Order.', 'error');
         this.loading = false;
       }

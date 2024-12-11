@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Route, Router } from '@angular/router';
 import { DetailMarketingOrder } from 'src/app/models/DetailMarketingOrder';
@@ -59,6 +59,7 @@ export class AddMoMarketingComponent implements OnInit {
   dataSource: MatTableDataSource<DetailMarketingOrder>;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild('fileInput') fileInput: ElementRef;
 
   //Error message
   errorMessagesM0: string[] = [];
@@ -170,6 +171,10 @@ export class AddMoMarketingComponent implements OnInit {
   ngOnInit(): void {
     this.idMo = this.activeRoute.snapshot.paramMap.get('idMo');
     this.getAllData(this.idMo);
+  }
+
+  resetFileInput() {
+    this.fileInput.nativeElement.value = '';
   }
 
   onInputChangeM0(mo: any, value: string) {
@@ -1177,13 +1182,18 @@ export class AddMoMarketingComponent implements OnInit {
             }
           }
         } else {
-          console.error('File tidak dapat dibaca sebagai ArrayBuffer');
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'File tidak dapat dibaca',
+          });
         }
       };
 
       reader.readAsArrayBuffer(this.file); // Membaca file sebagai ArrayBuffer
       this.isTableVisible = true;
       $('#uploadModal').modal('hide');
+      this.resetFileInput();
     }
   }
 

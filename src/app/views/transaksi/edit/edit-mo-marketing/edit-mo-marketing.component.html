@@ -122,7 +122,7 @@
                 </div>
                 <div class="col-md-4 min-height-form">
                   <label for="text-input">Note Order TL</label>
-                  <input type="text" formControlName="note_order_tl_0" name="text-input" class="form-control" [readOnly]="isReadOnly" />
+                  <input type="text" formControlName="note_tl_m0" name="text-input" class="form-control" [readOnly]="isReadOnly" />
                 </div>
               </div>
             </tab>
@@ -218,7 +218,7 @@
                 </div>
                 <div class="col-md-4 min-height-form">
                   <label for="text-input">Note Order TL</label>
-                  <input type="text" formControlName="note_order_tl_1" name="text-input" class="form-control" [readOnly]="isReadOnly" />
+                  <input type="text" formControlName="note_tl_m1" name="text-input" class="form-control" [readOnly]="isReadOnly" />
                 </div>
               </div>
             </tab>
@@ -314,7 +314,7 @@
                 </div>
                 <div class="col-md-4 min-height-form">
                   <label for="text-input">Note Order TL</label>
-                  <input type="text" formControlName="note_order_tl_2" name="text-input" class="form-control" [readOnly]="isReadOnly" />
+                  <input type="text" formControlName="note_tl_m2" name="text-input" class="form-control" [readOnly]="isReadOnly" />
                 </div>
               </div>
             </tab>
@@ -520,7 +520,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="uploadModalLabel">Upload Excel File</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <button type="button" class="close" (click)="resetFileInput()" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
@@ -528,12 +528,12 @@
           <form id="uploadForm">
             <!-- Manual File Input -->
             <div class="form-group mt-3">
-              <input type="file" class="form-control-file" id="manualFileInput" accept=".xls,.xlsx" (change)="onFileChange($event)" />
+              <input type="file" #fileInput class="form-control-file" id="manualFileInput" accept=".xls,.xlsx" (change)="onFileChange($event)" />
             </div>
           </form>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-md btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-md btn-secondary" (click)="resetFileInput()" data-dismiss="modal">Close</button>
           <button type="button" class="btn btn-md btn-primary" data-dismiss="modal" id="uploadButton" (click)="uploadFileExcel()">Upload</button>
         </div>
       </div>

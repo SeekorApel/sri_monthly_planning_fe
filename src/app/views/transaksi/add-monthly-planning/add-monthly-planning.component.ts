@@ -23,7 +23,6 @@ declare var $: any;
   styleUrls: ['./add-monthly-planning.component.scss'],
 })
 export class AddMonthlyPlanningComponent implements OnInit {
-
   // Variable declaration
   selectedDetail: { idDetailDaily: number; countProduction: number } | null = null;
   dateHeadersTass: any[] = [];
@@ -31,8 +30,6 @@ export class AddMonthlyPlanningComponent implements OnInit {
   monthlyPlanningTass: any[] = [];
   dailyMonthlyPlanningTass: any[] = [];
   shiftMonthlyPlanningTass: any[] = [];
-
-
 
   detailMonthlyPlanCuring: DetailMonthlyPlanningCuring[] = [];
   dailyMonthlyPlanningCuring: DetailDailyMonthlyPlanCuring[] = [];
@@ -66,7 +63,7 @@ export class AddMonthlyPlanningComponent implements OnInit {
   pageOfItems: Array<any>;
   pageSize: number = 5;
   totalPages: number = 5;
-  displayedColumns: string[] = ['select','no', 'moId', 'type', 'dateValid', 'revisionPpc', 'revisionMarketing', 'month0', 'month1', 'month2', 'action'];
+  displayedColumns: string[] = ['select', 'no', 'month0', 'month1', 'month2', 'action'];
   displayedColumnsMP: string[] = ['no', 'partNumber', 'dateDailyMp', 'totalPlan'];
   childHeadersColumnsMP: string[] = ['workDay'];
 
@@ -85,10 +82,11 @@ export class AddMonthlyPlanningComponent implements OnInit {
     this.showMonthlyPlanning = true;
   }
 
-  constructor(private router: Router, private moService: MarketingOrderService, private mpService: MonthlyPlanCuringService, private parseDateService: ParsingDateService) { }
+  constructor(private router: Router, private moService: MarketingOrderService, private mpService: MonthlyPlanCuringService, private parseDateService: ParsingDateService) {}
 
   ngOnInit(): void {
-    this.getAllMarketingOrder();
+    //this.getAllMarketingOrder();
+    this.getAllMoOnlyMonth();
   }
 
   parseDate(dateParse: string): string {
@@ -106,10 +104,18 @@ export class AddMonthlyPlanningComponent implements OnInit {
   viewDetail(): void {
     $('#changeMould').modal('show');
   }
-  getAllMarketingOrder(): void {
-    this.moService.getAllMarketingOrder().subscribe(
-      (response: ApiResponse<MarketingOrder[]>) => {
-        this.marketingOrders = response.data;
+
+  getAllMoOnlyMonth(): void {
+    this.moService.getAllMoOnlyMonth().subscribe(
+      (response: ApiResponse<any[]>) => {
+        let mapMonth = response.data.map((order) => {
+          return {
+            month0: new Date(order.MONTH0),
+            month1: new Date(order.MONTH1),
+            month2: new Date(order.MONTH2),
+          };
+        });
+        this.marketingOrders = mapMonth;
         if (this.marketingOrders.length === 0) {
           Swal.fire({
             icon: 'info',
@@ -120,7 +126,6 @@ export class AddMonthlyPlanningComponent implements OnInit {
             confirmButtonText: 'Ok',
           });
         } else {
-          this.marketingOrders = response.data;
           this.dataSourceMO = new MatTableDataSource(this.marketingOrders);
           this.dataSourceMO.sort = this.sort;
           this.dataSourceMO.paginator = this.paginator;
@@ -137,6 +142,38 @@ export class AddMonthlyPlanningComponent implements OnInit {
       }
     );
   }
+
+  // getAllMarketingOrder(): void {
+  //   this.moService.getAllMarketingOrder().subscribe(
+  //     (response: ApiResponse<MarketingOrder[]>) => {
+  //       this.marketingOrders = response.data;
+  //       if (this.marketingOrders.length === 0) {
+  //         Swal.fire({
+  //           icon: 'info',
+  //           title: 'No Data',
+  //           text: 'No marketing orders found.',
+  //           timer: null,
+  //           showConfirmButton: true,
+  //           confirmButtonText: 'Ok',
+  //         });
+  //       } else {
+  //         this.marketingOrders = response.data;
+  //         this.dataSourceMO = new MatTableDataSource(this.marketingOrders);
+  //         this.dataSourceMO.sort = this.sort;
+  //         this.dataSourceMO.paginator = this.paginator;
+  //       }
+  //     },
+  //     (error) => {
+  //       Swal.fire({
+  //         icon: 'error',
+  //         title: 'Error',
+  //         text: 'Failed to load marketing orders: ' + error.message,
+  //         timer: 3000,
+  //         showConfirmButton: false,
+  //       });
+  //     }
+  //   );
+  // }
 
   navigateToDetailMo(m0: any, m1: any, m3: any, typeProduct: string) {
     const formatDate = (date: any): string => {
@@ -163,9 +200,13 @@ export class AddMonthlyPlanningComponent implements OnInit {
     this.router.navigate(['/transaksi/add-mo-front-rear/', month0, month1, month2, type]);
   }
 
-  navigateToAddArDefectReject(idMo: String) {
-    this.router.navigate(['/transaksi/add-mo-ar-defect-reject/', idMo]);
+  navigateToAddArDefectReject(month0: Date, month1: Date, month2: Date) {
+    const formattedMonth0 = `${month0.getDate().toString().padStart(2, '0')}-${(month0.getMonth() + 1).toString().padStart(2, '0')}-${month0.getFullYear()}`;
+    const formattedMonth1 = `${month1.getDate().toString().padStart(2, '0')}-${(month1.getMonth() + 1).toString().padStart(2, '0')}-${month1.getFullYear()}`;
+    const formattedMonth2 = `${month2.getDate().toString().padStart(2, '0')}-${(month2.getMonth() + 1).toString().padStart(2, '0')}-${month2.getFullYear()}`;
+    this.router.navigate(['/transaksi/add-mo-ar-defect-reject/', formattedMonth0, formattedMonth1, formattedMonth2]);
   }
+
 
   fillBodyTableMp(): void {
     this.getDailyMonthPlan();
@@ -229,7 +270,6 @@ export class AddMonthlyPlanningComponent implements OnInit {
     $('#dmpModal').modal('show');
   }
 
-
   handleCellClick(detailDailyId: number, hDateTass: any): void {
     console.log('Selected detail id:', detailDailyId);
     console.log('Selected Date:', hDateTass);
@@ -253,13 +293,9 @@ export class AddMonthlyPlanningComponent implements OnInit {
 
     // Loop over each daily plan
     dailyPlans.forEach((daily, index) => {
-      const matchingMonthly = monthlyPlans.find(
-        (monthly) => monthly.detailIdCuring === daily.detailIdCuring
-      );
+      const matchingMonthly = monthlyPlans.find((monthly) => monthly.detailIdCuring === daily.detailIdCuring);
 
-      const matchingSizePa = sizePa.find(
-        (sizeEntry) => sizeEntry.partNumber === (matchingMonthly?.partNumber || daily.partNumber)
-      );
+      const matchingSizePa = sizePa.find((sizeEntry) => sizeEntry.partNumber === (matchingMonthly?.partNumber || daily.partNumber));
 
       const dailyData = {
         no: index + 1,
@@ -281,11 +317,9 @@ export class AddMonthlyPlanningComponent implements OnInit {
         workDay: daily.workDay,
         totalPlan: daily.totalPlan,
       };
-      console.table("WFF" + dailyData);
+      console.table('WFF' + dailyData);
 
-      const existingEntry = mergedData.find(
-        (entry) => entry.partNumber === dailyData.partNumber && entry.detailIdCuring === dailyData.detailIdCuring
-      );
+      const existingEntry = mergedData.find((entry) => entry.partNumber === dailyData.partNumber && entry.detailIdCuring === dailyData.detailIdCuring);
 
       if (!existingEntry) {
         mergedData.push(dailyData);
@@ -302,48 +336,44 @@ export class AddMonthlyPlanningComponent implements OnInit {
     this.dataSourceMP.paginator = this.paginator;
   }
 
-
   fillDataHeaderDate(dailyPlans: MonthlyDailyPlan[]): void {
     const uniqueDates = new Set(); // To track already used dates
-    this.dateHeadersTass = dailyPlans.map(mp => {
-      const date = new Date(mp.dateDailyMp);
-      const date2 = new Date(mp.dateDailyMp);
+    this.dateHeadersTass = dailyPlans
+      .map((mp) => {
+        const date = new Date(mp.dateDailyMp);
+        const date2 = new Date(mp.dateDailyMp);
 
-      // Format the date to dd-MM-yyyy
-      const formattedDate = `${('0' + (date2.getDate())).slice(-2)}-${('0' + (date2.getMonth() + 1)).slice(-2)}-${date2.getFullYear()}`;
-      console.log('Formatted Date:', formattedDate);
+        // Format the date to dd-MM-yyyy
+        const formattedDate = `${('0' + date2.getDate()).slice(-2)}-${('0' + (date2.getMonth() + 1)).slice(-2)}-${date2.getFullYear()}`;
+        console.log('Formatted Date:', formattedDate);
 
-      const matchingData = this.description.find(
-        (header) => this.formatDate(header.dateDailyMp) === formattedDate
-      );
+        const matchingData = this.description.find((header) => this.formatDate(header.dateDailyMp) === formattedDate);
 
-      const i = 0;
-      // Check if the date has already been added
-      if (!uniqueDates.has(formattedDate)) {
-        uniqueDates.add(formattedDate); // Mark this date as used
+        const i = 0;
+        // Check if the date has already been added
+        if (!uniqueDates.has(formattedDate)) {
+          uniqueDates.add(formattedDate); // Mark this date as used
 
-        return {
-          date: formattedDate,
-          dateDisplay: date.getDate().toString(),
-          isOff: matchingData.description === 'OFF', // Off day logic
-          isOvertime: matchingData.description === 'OT_TT' || matchingData.description === 'OT_TL', // Overtime day logic
-          semiOff: matchingData.description === 'SEMI_OFF',
-          status: mp.workDay === 0 ? 'off' : (mp.workDay > 8 ? 'overtime' : 'normal'),
-          workingDay: mp.workDay,
-          totalPlan: mp.totalPlan
-        };
-      }
+          return {
+            date: formattedDate,
+            dateDisplay: date.getDate().toString(),
+            isOff: matchingData.description === 'OFF', // Off day logic
+            isOvertime: matchingData.description === 'OT_TT' || matchingData.description === 'OT_TL', // Overtime day logic
+            semiOff: matchingData.description === 'SEMI_OFF',
+            status: mp.workDay === 0 ? 'off' : mp.workDay > 8 ? 'overtime' : 'normal',
+            workingDay: mp.workDay,
+            totalPlan: mp.totalPlan,
+          };
+        }
 
-      return null; // Return null for duplicate dates
-    }).filter(header => header !== null); // Filter out any null values
+        return null; // Return null for duplicate dates
+      })
+      .filter((header) => header !== null); // Filter out any null values
   }
-
 
   getTotalPlan(idCuring: number, date: string): number | string {
     // Cari data yang sesuai dengan idCuring dan tanggal
-    const matchingData = this.monly.find(
-      (header) => this.formatDate(header.dateDailyMp) === date && header.detailIdCuring === idCuring
-    );
+    const matchingData = this.monly.find((header) => this.formatDate(header.dateDailyMp) === date && header.detailIdCuring === idCuring);
     return matchingData ? matchingData.totalPlan : '-';
   }
 
@@ -353,10 +383,9 @@ export class AddMonthlyPlanningComponent implements OnInit {
     }
     const dateObj = new Date(date);
 
-    const formattedDate = `${('0' + (dateObj.getDate())).slice(-2)}-${('0' + (dateObj.getMonth() + 1)).slice(-2)}-${dateObj.getFullYear()}`;
+    const formattedDate = `${('0' + dateObj.getDate()).slice(-2)}-${('0' + (dateObj.getMonth() + 1)).slice(-2)}-${dateObj.getFullYear()}`;
     return formattedDate;
   }
- 
 
   fillDataShift(detailShiftMonthlyPlanCuring: DetailShiftMonthlyPlanCuring[]): void {
     // Reset nilai
@@ -365,7 +394,7 @@ export class AddMonthlyPlanningComponent implements OnInit {
     this.kapaShift2 = 0;
     this.kapaShift3 = 0;
     this.totalKapa = 0;
-    this.shift= 0;
+    this.shift = 0;
     this.wct = '';
     this.changeDate = '';
 
@@ -377,7 +406,7 @@ export class AddMonthlyPlanningComponent implements OnInit {
       this.kapaShift3 += item.kapaShift3 || 0;
       this.totalKapa += item.totalKapa || 0;
       this.changeDate += this.formatDate(item.changeDate);
-      this.wct += item.wct === null? '': item.wct;
+      this.wct += item.wct === null ? '' : item.wct;
       this.shift += item.shift;
     });
   }
@@ -421,9 +450,7 @@ export class AddMonthlyPlanningComponent implements OnInit {
   //   });
   // }
 
-  fillDataWorkDays(): void {
-
-  }
+  fillDataWorkDays(): void {}
 
   selectAll(event: any): void {
     const checked = event.target.checked;
