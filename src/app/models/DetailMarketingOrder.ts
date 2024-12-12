@@ -40,4 +40,5 @@ export class DetailMarketingOrder {
   validationMessageM0: string = '';
   validationMessageM1: string = '';
   validationMessageM2: string = '';
+  selected?: boolean; 
 }

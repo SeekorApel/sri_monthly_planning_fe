@@ -148,6 +148,18 @@ export class MarketingOrderService {
     );
   }
 
+  updateLimitHeaderMO(hmo: HeaderMarketingOrder[]): Observable<ApiResponse<HeaderMarketingOrder>> {
+    return this.http.post<ApiResponse<HeaderMarketingOrder>>(environment.apiUrlWebAdmin + '/updateHeaderMOLimit', hmo).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((err) => {
+        return throwError(err);
+      })
+    );
+  }
+
+
   getDetailMarketingOrder(data: any): Observable<ApiResponse<DetailMarketingOrder[]>> {
     return this.http.post<ApiResponse<DetailMarketingOrder[]>>(environment.apiUrlWebAdmin + '/getDetailMarketingOrders', data).pipe(
       map((response) => {

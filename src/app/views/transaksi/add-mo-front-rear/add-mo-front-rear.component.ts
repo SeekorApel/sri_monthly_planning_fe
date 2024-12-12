@@ -4,15 +4,19 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { DetailMarketingOrder } from 'src/app/models/DetailMarketingOrder';
 import { HeaderMarketingOrder } from 'src/app/models/HeaderMarketingOrder';
 import { MarketingOrder } from 'src/app/models/MarketingOrder';
+import { FrontRear } from 'src/app/models/FrontRear';
 import { ApiResponse } from 'src/app/response/Response';
 import { MarketingOrderService } from 'src/app/services/transaksi/marketing order/marketing-order.service';
 import { MonthlyPlanCuringService } from 'src/app/services/transaksi/monthly plan curing/monthly-plan-curing.service';
+import { FrontRearService } from 'src/app/services/transaksi/front rear/front-rear.service';
+
 import { ParsingDate } from 'src/app/utils/ParsingDate';
 import Swal from 'sweetalert2';
 import { MatTableDataSource } from '@angular/material/table';
 import { ParsingDateService } from 'src/app/utils/parsing-date/parsing-date.service';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
+import { TempMachineProduct } from 'src/app/models/TempMachineProduct';
 
 declare var $: any;
 
@@ -27,6 +31,7 @@ export class AddMoFrontRearComponent implements OnInit {
   idMo: String;
   formHeaderMo: FormGroup;
   formLimit: FormGroup;
+
   errorMessage: string | null = null;
   searchText: string = '';
   dataTemp: any[];
@@ -38,6 +43,7 @@ export class AddMoFrontRearComponent implements OnInit {
   month1: string;
   month2: string;
   type: string;
+
   allData: any;
   marketingOrders: MarketingOrder[] = [];
   headerMarketingOrder: HeaderMarketingOrder[];
@@ -47,8 +53,18 @@ export class AddMoFrontRearComponent implements OnInit {
   capacity: string = '';
   checked = [];  // Your data source
   machine: any[] = [];
+
+  //Cheating machine
   itemCuring: string = '';
   selectedItemCuring: string = '';
+  selectedPartNumber: number = 0;
+
+  //Cheating front rear
+  frontRear: FrontRear[];
+  selectedList: any[] = []; // Data yang akan ditambahkan ke list
+  showFrontRear: boolean = false;
+  isCheckboxInvalid = false;
+
 
   // Pagination Marketing Order
   displayedColumnsMo: string[] = ['no', 'moId', 'type', 'dateValid', 'revisionPpc', 'revisionMarketing', 'month0', 'month1', 'month2', 'action'];
@@ -64,7 +80,7 @@ export class AddMoFrontRearComponent implements OnInit {
   @ViewChild('sortDmo') sortDmo = new MatSort();
   @ViewChild('paginatorDmo') paginatorDmo: MatPaginator;
 
-  constructor(private router: Router, private moService: MarketingOrderService, private mpService: MonthlyPlanCuringService, private activeRoute: ActivatedRoute, private fb: FormBuilder, private parseDateService: ParsingDateService) {
+  constructor(private router: Router, private moService: MarketingOrderService, private mpService: MonthlyPlanCuringService, private frontrear: FrontRearService, private activeRoute: ActivatedRoute, private fb: FormBuilder, private parseDateService: ParsingDateService) {
     this.dateUtil = ParsingDate;
     this.formHeaderMo = this.fb.group({
       date: [null, []],
@@ -147,27 +163,20 @@ export class AddMoFrontRearComponent implements OnInit {
       upload_file_m0: [null, []],
       upload_file_m1: [null, []],
       upload_file_m2: [null, []],
-    });
 
-    this.formLimit = this.fb.group({
-      minLimit_0_2000: [''],
-      maxLimit_0_2000: [''],
-      minLimit_2001_10000: [''],
-      maxLimit_2001_10000: [''],
-      minLimit_10001_100000: [''],
-      maxLimit_10001_100000: [''],
-      minLimit_gt_100000: [''],
-      maxLimit_gt_100000: [''],
+      minLimit_0_2000: [null, []],
+      maxLimit_0_2000: [null, []],
+      minLimit_2001_10000: [null, []],
+      maxLimit_2001_10000: [null, []],
+      minLimit_10001_100000: [null, []],
+      maxLimit_10001_100000: [null, []],
+      minLimit_gt_100000: [null, []],
+      maxLimit_gt_100000: [null, []],
     });
 
   }
 
   ngOnInit(): void {
-    // this.month0 = this.activeRoute.snapshot.paramMap.get('month0');
-    // this.month1 = this.activeRoute.snapshot.paramMap.get('month1');
-    // this.month2 = this.activeRoute.snapshot.paramMap.get('month2');
-    // this.type = this.activeRoute.snapshot.paramMap.get('type');
-    // this.getAllDetailRevision(this.month0, this.month1, this.month2, this.type);
     this.idMo = this.activeRoute.snapshot.paramMap.get('idMo');
     this.getAllData(this.idMo);
     this.headerRevision = 'Header Marketing Order';
@@ -251,67 +260,6 @@ export class AddMoFrontRearComponent implements OnInit {
       }
     );
   }
-
-
-  // getAllDetailRevision(month0: string, month1: string, month2: string, type: string): void {
-  //   this.moService.getAllDetailRevision(month0, month1, month2, type).subscribe(
-  //     (response: ApiResponse<MarketingOrder[]>) => {
-  //       this.marketingOrders = response.data;
-  //       if (this.marketingOrders.length === 0) {
-  //         Swal.fire({
-  //           icon: 'info',
-  //           title: 'No Data',
-  //           text: 'No marketing orders found.',
-  //           timer: 3000,
-  //           showConfirmButton: false,
-  //         });
-  //       } else {
-  //         this.dataSourceMo = new MatTableDataSource(this.marketingOrders);
-  //         this.dataSourceMo.sort = this.sortMo;
-  //         this.dataSourceMo.paginator = this.paginatorMo;
-  //       }
-  //     },
-  //     (error) => {
-  //       Swal.fire({
-  //         icon: 'error',
-  //         title: 'Error',
-  //         text: 'Failed to load marketing orders: ' + error.message,
-  //         timer: 3000,
-  //         showConfirmButton: false,
-  //       });
-  //     }
-  //   );
-  // }
-
-  // showDataRevision(idMo: string): void {
-  //   this.moService.getAllMoById(idMo).subscribe(
-  //     (response: ApiResponse<any>) => {
-  //       this.allData = response.data;
-
-  //       // Pastikan dataDetailMo ada dan item pertama memiliki itemCuring
-  //       const dataDetailMo = this.allData.dataDetailMo;
-  //       if (dataDetailMo && dataDetailMo.length > 0) {
-  //         const itemCuring = dataDetailMo[0].itemCuring;  // Akses itemCuring dari elemen pertama
-  //         console.log("item curing showDataRevision: " + itemCuring);
-
-  //         // Simpan itemCuring ke variabel global
-  //         this.itemCuring = itemCuring;
-  //       } else {
-  //         console.log("dataDetailMo atau item pertama tidak ditemukan");
-  //       }
-
-  //       this.fillAllData(this.allData);
-  //     },
-  //     (error) => {
-  //       Swal.fire({
-  //         icon: 'error',
-  //         title: 'Error',
-  //         text: 'Failed to load marketing order details: ' + error.message,
-  //         confirmButtonText: 'OK',
-  //       });
-  //     }
-  //   );
-  // }
 
   getAllData(idMo: String) {
     Swal.fire({
@@ -459,18 +407,61 @@ export class AddMoFrontRearComponent implements OnInit {
     );
   }
 
-  viewDetail(itemCuring: string): void {
-    this.selectedItemCuring = itemCuring; // Simpan itemCuring yang dipilih
+  // Define a variable to store saved entries
+  savedEntries: any[] = [];
+
+  // Function to save the current selections
+  saveEntries(): void {
+    // Save current machineEntries to savedEntries
+    this.savedEntries = [...this.machineEntries];
+    Swal.fire({
+      icon: 'success',
+      title: 'Data Saved',
+      text: 'Machine details have been successfully saved.',
+      confirmButtonText: 'OK',
+    });
+    console.log(this.savedEntries);
+  }
+
+  // Function to load saved entries
+  loadSavedEntries(): void {
+    console.table("yooooo " + this.savedEntries);
+    if (this.savedEntries.length > 0) {
+      // Restore saved entries to machineEntries
+      this.machineEntries = this.savedEntries.map(entry => ({
+        selectedGedung: entry.selectedGedung,
+        selectedMachine: entry.selectedMachine,
+        filteredMesinOptions: [...entry.filteredMesinOptions], // Ensure options are preserved
+      }));
+    } else {
+      Swal.fire({
+        icon: 'info',
+        title: 'No Data',
+        text: 'No saved data found. Starting with a fresh entry.',
+        confirmButtonText: 'OK',
+      });
+    }
+  }
+
+  // Update the viewDetail method to load saved data
+  viewDetail(itemCuring: string, partNumber: number): void {
+    this.selectedItemCuring = itemCuring; // Save selected itemCuring
+    this.selectedPartNumber = partNumber; // Save selected partnumber
+
     console.log('Item Curing:', itemCuring);
+    console.log('Item Curing:', partNumber);
+
 
     if (itemCuring) {
-      // Reset data yang ada di modal
-      this.machineEntries = []; // Hapus data lama sebelum menambah baris baru
+      // Check if saved entries exist
+      if (this.savedEntries.length > 0) {
+        this.loadSavedEntries(); // Load saved data
+      } else {
+        this.machineEntries = []; // Clear existing data
+        this.getMachine(itemCuring); // Fetch fresh data
+      }
 
-      // Ambil data mesin untuk itemCuring yang baru
-      this.getMachine(itemCuring);
-
-      // Tampilkan modal setelah data direset
+      // Show the modal
       $('#dmpModal').modal('show');
     } else {
       Swal.fire({
@@ -491,36 +482,29 @@ export class AddMoFrontRearComponent implements OnInit {
   mesinOptions: string[] = []; // All machines from the API
 
   // Method for selecting Gedung
-  onGedungSelect(index: number): void {
-    console.log(`Gedung selected at index ${index}:`, this.machineEntries[index].selectedGedung);
-    this.filterMachines(index); // Apply the filter when Gedung is selected in a particular row
+  onGedungSelect(entry: any, selectedGedung: string): void {
+    entry.filteredMesinOptions = this.filterMachines(selectedGedung);
   }
 
-  // Filter Machines based on Gedung selection
-  filterMachines(index: number): void {
-    const selectedGedung = this.machineEntries[index].selectedGedung;
-    console.log(`Filtering machines for Gedung: ${selectedGedung}`);
+  filterMachines(selectedGedung: string): string[] {
+    if (!selectedGedung) return this.mesinOptions;
 
-    let filteredOptions: string[] = [];
-
-    // Filter based on Gedung selection
+    // Filter options based on Gedung
     if (selectedGedung === 'Gedung G') {
-      filteredOptions = this.mesinOptions.filter(mesin => mesin.toLowerCase().includes('gd g'));
+      return this.mesinOptions.filter((mesin) => mesin.toLowerCase().includes('gd g'));
     } else if (selectedGedung === 'Gedung C') {
-      filteredOptions = this.mesinOptions.filter(mesin => mesin.toLowerCase().includes('gd c'));
+      return this.mesinOptions.filter((mesin) => mesin.toLowerCase().includes('gd c'));
     } else if (selectedGedung === 'Gedung D') {
-      filteredOptions = this.mesinOptions.filter(mesin => mesin.toLowerCase().includes('gd d'));
+      return this.mesinOptions.filter((mesin) => mesin.toLowerCase().includes('gd d'));
     } else if (selectedGedung === 'Gedung A') {
-      filteredOptions = this.mesinOptions.filter(mesin => mesin.toLowerCase().includes('gd a'));
+      return this.mesinOptions.filter((mesin) => mesin.toLowerCase().includes('gd a'));
     } else if (selectedGedung === 'Gedung B') {
-      filteredOptions = this.mesinOptions.filter(mesin => mesin.toLowerCase().includes('gd b'));
+      return this.mesinOptions.filter((mesin) => mesin.toLowerCase().includes('gd b'));
     } else if (selectedGedung === 'Gedung H') {
-      filteredOptions = this.mesinOptions.filter(mesin => mesin.toLowerCase().includes('gd h'));
+      return this.mesinOptions.filter((mesin) => mesin.toLowerCase().includes('gd h'));
     }
-    console.log(`Filtered machines for index ${index}:`, filteredOptions);
 
-    // Update the filtered options for the selected machine entry
-    this.machineEntries[index].filteredMesinOptions = filteredOptions;
+    return this.mesinOptions;
   }
 
   // Function to fetch machines from the API based on the selected item curing
@@ -530,14 +514,10 @@ export class AddMoFrontRearComponent implements OnInit {
         const machines = response.data.map((machine: any) => machine.operationShortText);
         this.mesinOptions = machines;
 
-        // Update the machine entries with the available machines
-        this.machineEntries.forEach((entry) => {
-          entry.filteredMesinOptions = machines; // Set all machines initially
-        });
-
-        // Set the default value for the last added row (if any)
+        // Set machines only for the latest added row
         if (this.machineEntries.length > 0) {
-          this.machineEntries[this.machineEntries.length - 1].selectedMachine = machines[0] || ''; // Default to first machine
+          const lastEntry = this.machineEntries[this.machineEntries.length - 1];
+          lastEntry.filteredMesinOptions = [...machines]; // Independent copy
         }
       },
       (error) => {
@@ -551,12 +531,21 @@ export class AddMoFrontRearComponent implements OnInit {
     );
   }
 
+
   // Add row functionality
   addRow(): void {
     if (this.selectedItemCuring) {
-      // Add new row and call getMachine to fetch machines for the selected item curing
-      this.machineEntries.push({ selectedGedung: '', filteredMesinOptions: [], selectedMachine: '' });
-      this.getMachine(this.selectedItemCuring); // Call getMachine with selected item curing
+      // Add new row with independent filteredMesinOptions
+      this.machineEntries.push({
+        selectedGedung: '',
+        filteredMesinOptions: [...this.mesinOptions], // Create a fresh copy
+        selectedMachine: ''
+      });
+
+      // Fetch machines for the selected item curing (if not already fetched)
+      if (!this.mesinOptions.length) {
+        this.getMachine(this.selectedItemCuring);
+      }
     } else {
       Swal.fire({
         icon: 'error',
@@ -567,8 +556,6 @@ export class AddMoFrontRearComponent implements OnInit {
     }
   }
 
-
-
   // Method untuk menghapus entri dari tabel
   removeEntry(entry: any) {
     const index = this.machineEntries.indexOf(entry);
@@ -576,6 +563,150 @@ export class AddMoFrontRearComponent implements OnInit {
       this.machineEntries.splice(index, 1);
     }
   }
+  frontRearCounter: number = 1;
+  i: number = 1;
 
+  //FRONT REAR  
+  // FRONT REAR  
+  addToSelectedList() {
+    const selectedItems = this.dataSourceDmo.data.filter((mo) => mo.selected);
+  
+    if (selectedItems.length > 0) {
+      this.isCheckboxInvalid = false; // Reset validasi jika ada data yang dicentang
+      const currentFrontRear = this.frontRearCounter;
+  
+      selectedItems.forEach((item) => {
+        this.selectedList.push({
+          ...item,
+          frontRear: currentFrontRear
+        });
+      });
+  
+      this.frontRearCounter++;
+      this.dataSourceDmo.data.forEach((mo) => (mo.selected = false)); // Reset checkbox
+      this.showFrontRear = true; // Tampilkan tabel list
+    } else {
+      this.isCheckboxInvalid = true; // Tampilkan validasi
+      this.showFrontRear = false; // Sembunyikan tabel list
+  
+      // Tampilkan pesan kesalahan menggunakan SweetAlert
+      Swal.fire({
+        icon: 'error',
+        title: 'Oops...',
+        text: 'Please check at least one item before adding to the list.',
+        confirmButtonText: 'OK'
+      });
+    }
+  }
+
+  saveDataFrontRear() {
+    // Construct FrontRear objects from selectedList
+    const frontRearItems: FrontRear[] = this.selectedList.map(item => ({
+      id_FRONT_REAR: item.frontRear,
+      detail_ID_MO: item.detailId,
+      status: 1,
+      creation_DATE: new Date(),
+      created_BY: null,
+      last_UPDATE_DATE: new Date(),
+      last_UPDATED_BY: null,
+    }));
+  
+    console.log(this.selectedList.length);
+    console.table(frontRearItems);
+  
+    // Call the API to save the FrontRear items as a batch
+    return this.frontrear.saveFrontRearItems(frontRearItems);
+  }
+
+  saveTempMachineProduct() {
+    // Construct FrontRear objects from selectedList
+    const Tempitem: TempMachineProduct[] = this.selectedList.map(item => ({
+      part_NUMBER: item.frontRear,
+      work_CENTER_TEXT: item.detailId
+    }));
+  
+    console.log(this.selectedList.length);
+  
+    // Call the API to save the FrontRear items as a batch
+    return this.frontrear.saveTempMachineProduct(Tempitem);
+  }
+  
+  updateLimitHeaderMO() {
+    console.log('PPP');
+  
+    // Mengambil data dari form
+    const headerMarketingOrder: HeaderMarketingOrder = {
+      headerId: 0, // Atur sesuai kebutuhan
+      moId: this.idMo, // Pastikan ada kontrol untuk moId di form
+      month: this.formHeaderMo.get('date').value, // Pastikan ada kontrol untuk date di form
+      wdNormalTire: Number(this.formHeaderMo.get('nwt_0').value),
+      wdOtTl: Number(this.formHeaderMo.get('ot_wt_0').value),
+      wdOtTt: Number(this.formHeaderMo.get('ot_wt_1').value),
+      wdNormalTube: Number(this.formHeaderMo.get('nwd_0').value),
+      wdOtTube: Number(this.formHeaderMo.get('ot_wt_2').value),
+      totalWdTl: Number(this.formHeaderMo.get('total_wt_0').value),
+      totalWdTt: Number(this.formHeaderMo.get('total_wt_1').value),
+      totalWdTube: Number(this.formHeaderMo.get('total_wt_2').value),
+      maxCapTube: Number(this.formHeaderMo.get('max_tube_capa_0').value),
+      maxCapTl: Number(this.formHeaderMo.get('max_capa_tl_0').value),
+      maxCapTt: Number(this.formHeaderMo.get('max_capa_tt_0').value),
+      airbagMachine: Number(this.formHeaderMo.get('machine_airbag_m0').value),
+      tl: Number(this.formHeaderMo.get('fed_tl_m0').value),
+      tt: Number(this.formHeaderMo.get('fed_tt_m0').value),
+      totalMo: Number(this.formHeaderMo.get('total_mo_m0').value),
+      tlPercentage: Number(this.formHeaderMo.get('fed_TL_percentage_m0').value),
+      ttPercentage: Number(this.formHeaderMo.get('fed_TT_percentage_m0').value),
+      noteOrderTl: this.formHeaderMo.get('note_tl_m0').value,
+      minLimit0: Number(this.formHeaderMo.get('minLimit_0_2000').value),
+      maxLimit0: Number(this.formHeaderMo.get('maxLimit_0_2000').value),
+      minLimit1: Number(this.formHeaderMo.get('minLimit_2001_10000').value),
+      maxLimit1: Number(this.formHeaderMo.get('maxLimit_2001_10000').value),
+      minLimit2: Number(this.formHeaderMo.get('minLimit_10001_100000').value),
+      maxLimit2: Number(this.formHeaderMo.get('maxLimit_10001_100000').value),
+      minLimit3: Number(this.formHeaderMo.get('minLimit_gt_100000').value),
+      maxLimit3: Number(this.formHeaderMo.get('maxLimit_gt_100000').value),
+      mouldChange: 0, // Atur sesuai kebutuhan
+      looping: Number(this.formHeaderMo.get('looping_m0').value), // Pastikan ada kontrol untuk looping di form
+      status: 1 // Atur sesuai kebutuhan
+    };
+  
+    // Mengupdate limit header MO
+    return this.moService.updateLimitHeaderMO([headerMarketingOrder]);
+  }
+  
+  saveAndUpdate() {
+    const saveFrontRear$ = this.saveDataFrontRear();
+    const updateHeaderMo$ = this.updateLimitHeaderMO();
+  
+    if (!saveFrontRear$ || !updateHeaderMo$) {
+      return; // Handle if either operation is invalid
+    }
+  
+    // Execute both operations and show a combined response
+    saveFrontRear$.subscribe(
+      () => {
+        updateHeaderMo$.subscribe(
+          () => {
+            Swal.fire({
+              title: 'Success!',
+              text: 'Data Marketing Order successfully processed.',
+              icon: 'success',
+              confirmButtonText: 'OK',
+            }).then((result) => {
+              if (result.isConfirmed) {
+                this.navigateToViewMo();
+              }
+            });
+          },
+          (err) => {
+            Swal.fire('Error!', 'Error updating data Limit Marketing Order.', 'error');
+          }
+        );
+      },
+      (err) => {
+        Swal.fire('Error!', 'Error inserting data Front Rear.', 'error');
+      }
+    );
+  }
 
 }

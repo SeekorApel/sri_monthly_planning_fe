@@ -1,0 +1,399 @@
+<div class="animated fadeIn">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <strong>Header Monthly Palnning</strong>
+        </div>
+        <div class="card-body">
+          <form id="formHeaderMp" [formGroup]="formHeaderMp" class="form form-horizontal">
+            <div class="form-group row">
+              <label class="col-md-3 col-form-label" for="month-input">Document Number</label>
+              <div class="col-md-9">
+                <input class="form-control" formControlName="docNumber" [readOnly]="isReadOnly" />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 col-form-label" for="month-input">Effective Date</label>
+              <div class="col-md-9">
+                <input class="form-control" formControlName="effectiveDate" [readOnly]="isReadOnly" />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 col-form-label" for="text-input">Revision</label>
+              <div class="col-md-9">
+                <input type="number" class="form-control" formControlName="revision" [readOnly]="isReadOnly" />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 col-form-label" for="text-input">Workday</label>
+              <div class="col-md-9">
+                <input type="number" class="form-control" formControlName="workDay" [readOnly]="isReadOnly" />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 col-form-label" for="text-input">Overtime</label>
+              <div class="col-md-9">
+                <input type="number" class="form-control"  formControlName="overtime" [readOnly]="isReadOnly"/>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 col-form-label">Month of</label>
+              <div class="col-md-9">
+                <input class="form-control" formControlName="monthOf" [readOnly]="isReadOnly" />
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 col-form-label" for="text-input">Kadept</label>
+              <div class="col-md-9">
+                <input type="text" class="form-control" formControlName="kadept" [readOnly]="isReadOnly"/>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 col-form-label" for="text-input">Kassie pp</label>
+              <div class="col-md-9">
+                <input type="text" class="form-control" formControlName="kassiePp" [readOnly]="isReadOnly"/>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 col-form-label" for="text-input">Section</label>
+              <div class="col-md-9">
+                <input type="text" class="form-control" formControlName="section" [readOnly]="isReadOnly"/>
+              </div>
+            </div>
+            <div class="form-group row">
+              <label class="col-md-3 col-form-label">Issue Date</label>
+              <div class="col-md-9">
+                <input class="form-control" formControlName="issueDate" [readOnly]="isReadOnly" />
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    
+      <div *ngIf="showMonthlyPlanning" class="card">
+        <div class="card-header">
+          <strong>Table Detail Monthly Palnning</strong>
+        </div>
+        <div class="card-body">
+          <div class="d-flex justify-content-between mb-3">
+            <div class="d-flex align-items-center">
+            </div>
+            <button class="btn btn-success" (click)="viewDetail()" id="addButton">Change Mould Data</button>
+          </div>
+  
+          <tabset>
+            <tab heading="CURING">
+              <div class="table-responsive">
+                <table class="table table-bordered table-striped table-sm" [dataSource]="dataSourceMP">
+                  <thead>
+                    <tr align="center">
+                      <th rowspan="2" class="align-middle">No</th>
+                      <th rowspan="2" style="min-width: 150px" class="align-middle">Partnumber</th>
+                      <th rowspan="2" style="min-width: 150px" class="align-middle">Size</th>
+                      <th rowspan="2" style="min-width: 120px" class="align-middle">Pattern</th>
+  
+                      <th *ngFor="let hDateTass of dateHeadersTass" style="min-width: 70px"
+                        [ngClass]="{ 'off-header': hDateTass.isOff,'semi-off': hDateTass.semiOff, 'overtime-header': hDateTass.isOvertime }"
+                        (click)="handleCellClick(partNumber, hDateTass)">
+                        {{ hDateTass.dateDisplay }}
+                      </th>
+  
+                      <th rowspan="2" style="min-width: 120px" class="align-middle">Total</th>
+                      <th rowspan="2" style="min-width: 120px" class="align-middle">Net Full Fillment</th>
+                      <th rowspan="2" style="min-width: 120px" class="align-middle">Gross Req</th>
+                      <th rowspan="2" style="min-width: 120px" class="align-middle">Net Req</th>
+                      <th colspan="3" style="min-width: 120px" class="align-middle">Req Customer</th>
+                      <th colspan="1" style="min-width: 120px" class="align-middle">Selisih</th>
+                    </tr>
+  
+                    <!-- Baris kedua -->
+                    <tr align="center">
+                      <th style="min-width: 70px" *ngFor="let cHeaderWo of dateHeadersTass">
+                        {{ cHeaderWo.workingDay }}
+                      </th>
+                      <th class="align-middle">AHM/OEM</th>
+                      <th class="align-middle">AHM/REM</th>
+                      <th class="align-middle">AHM/FDR</th>
+                      <th class="align-middle">OFS</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let mp of monthlyDailyPlan; let i = index" align="center">
+                      <td>{{ i + 1 }}</td>
+                      <td>{{ mp.partNumber }}</td>
+                      <td>{{ mp.size }}</td>
+                      <td>{{ mp.pattern }}</td>
+  
+                      <!-- Dynamically bind the dates -->
+                      <td *ngFor="let hDateTass of dateHeadersTass" class="hoverable"
+                        (click)="handleCellClick(mp.detailIdCuring, hDateTass.date)">
+                        {{ getTotalPlan(mp.detailIdCuring, hDateTass.date) }}
+                      </td>
+  
+                      <td>{{ mp.total }}</td>
+                      <td>
+                        <input type="number" [(ngModel)]="mp.netFulfilment" class="form-control" />
+                      </td>
+                      <td>
+                        <input type="number" [(ngModel)]="mp.grossReq" class="form-control" />
+                      </td>
+                      <td>
+                        <input type="number" [(ngModel)]="mp.netReq" class="form-control" />
+                      </td>
+                      <td>
+                        <input type="number" [(ngModel)]="mp.reqAhmOem" class="form-control" />
+                      </td>
+                      <td>
+                        <input type="number" [(ngModel)]="mp.reqAhmRem" class="form-control" />
+                      </td>
+                      <td>
+                        <input type="number" [(ngModel)]="mp.reqFdr" class="form-control" />
+                      </td>
+                      <td>
+                        <input type="number" [(ngModel)]="mp.differenceOfs" class="form-control" />
+                      </td>
+                    </tr>
+                  </tbody>
+  
+                </table>
+              </div>
+            </tab>
+  
+            <!-- Tab Tass -->
+            <tab heading="TASS">
+              <div class="table-responsive">
+                <table class="table table-bordered table-striped table-sm">
+                  <thead>
+                    <tr align="center">
+                      <th rowspan="2" class="align-middle">No</th>
+                      <th rowspan="2" style="min-width: 150px" class="align-middle">Partnumber</th>
+                      <th rowspan="2" style="min-width: 150px" class="align-middle">Size</th>
+                      <th rowspan="2" style="min-width: 120px" class="align-middle">Pattern</th>
+  
+                      <th *ngFor="let hDateTass of dateHeadersTass" style="min-width: 70px"
+                        [ngClass]="{ 'off-header': hDateTass.isOff, 'overtime-header': hDateTass.isOvertime }"
+                        (click)="handleCellClick(partNumber, hDateTass.date2)">
+                        {{ hDateTass.date }} <!-- Only day part shown in header -->
+                      </th>
+                      <th rowspan="2" style="min-width: 120px" class="align-middle">Total</th>
+                      <th rowspan="2" style="min-width: 120px" class="align-middle">Net Full Fillment</th>
+                      <th rowspan="2" style="min-width: 120px" class="align-middle">Gross Req</th>
+                      <th rowspan="2" style="min-width: 120px" class="align-middle">Net Req</th>
+                      <th colspan="3" style="min-width: 120px" class="align-middle">Req Customer</th>
+                      <th colspan="1" style="min-width: 120px" class="align-middle">Selisih</th>
+                    </tr>
+  
+                    <!-- Baris kedua -->
+                    <tr align="center">
+                      <th style="min-width: 70px" *ngFor="let cHeaderWo of dateHeadersTass">
+                        {{ cHeaderWo.workingDay }}
+                      </th>
+                      <th class="align-middle">AHM/OEM</th>
+                      <th class="align-middle">AHM/REM</th>
+                      <th class="align-middle">AHM/FDR</th>
+                      <th class="align-middle">OFS</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let mpTass of monthlyDailyPlan; let i = index" align="center">
+                      <td>{{ i + 1 }}</td>
+                      <td>{{ mpTass.partNumber }}</td>
+                      <td>{{ mpTass.size }}</td>
+                      <td>{{ mpTass.pattern }}</td>
+                      <td *ngFor="let dailyMp of mpTass.detailDailyMp" class="hoverable" (click)="openDmpModal(dailyMp)">
+                        {{ mpTass.totalPlan }}
+                      </td>
+                      <td>{{ mpTass.total }}</td>
+                      <td>
+                        <input type="number" [(ngModel)]="mpTass.netFullFillment" class="form-control" />
+                      </td>
+                      <td>
+                        <input type="number" [(ngModel)]="mpTass.grossReq" class="form-control" />
+                      </td>
+                      <td>
+                        <input type="number" [(ngModel)]="mpTass.netReq" class="form-control" />
+                      </td>
+                      <td>
+                        <input type="number" [(ngModel)]="mpTass.reqAhmRem" class="form-control" />
+                      </td>
+                      <td>
+                        <input type="number" [(ngModel)]="mpTass.reqAhmRem" class="form-control" />
+                      </td>
+                      <td>
+                        <input type="number" [(ngModel)]="mpTass.reqAhmRem" class="form-control" />
+                      </td>
+                      <td>
+                        <input type="number" [(ngModel)]="mpTass.total" class="form-control" />
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </tab>
+          </tabset>
+        </div>
+      </div>
+    </div>
+  
+    <div class="col-md-12 pb-4">
+      <button (click)="navigateToViewMp()" class="btn btn-primary justify-content-start mr-2">Kembali</button>
+      <button type="submit" class="btn btn-success">Submit</button>
+    </div>
+  </div>
+  
+  <!-- Modal Detail Daily -->
+  <div class="modal fade" id="dmpModal" tabindex="-1" role="dialog" aria-labelledby="Detail Daily Monthly Planning"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addModalLabel">Detail Daily Monthly Planning</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <!-- Shift Table -->
+            <div class="form-group">
+              <label>Production by Shift:</label>
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th>Shift</th>
+                    <th>Production Count</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Shift 1</td>
+                    <td>{{ kapaShift1 }}</td>
+                  </tr>
+                  <tr>
+                    <td>Shift 2</td>
+                    <td>{{ kapaShift2 }}</td>
+                  </tr>
+                  <tr>
+                    <td>Shift 3</td>
+                    <td>{{ kapaShift3 }}</td>
+                  </tr>
+                  <tr>
+                    <td><strong>Total Production per Day</strong></td>
+                    <td><strong>{{ totalKapa }}</strong></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+  
+            <!-- Machine and Building Table -->
+            <div class="form-group">
+              <label>Machine:</label>
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th>Machine</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>{{ workCenterText }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+  
+            <div class="form-group" *ngIf="changeDate || wct || shift">
+              <label>Change Mould</label>
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th>Change Date</th>
+                    <th>Work Center Text</th>
+                    <th>Shift</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>{{ changeDate }}</td>
+                    <td>{{ wct }}</td>
+                    <td>{{ shift }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Modal Detail Mesin -->
+  <div class="modal fade " id="changeMould" tabindex="-1" role="dialog" aria-labelledby="Detail Daily Monthly Planning"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document" style="max-width: 40%;">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addModalLabel">Detail Change Mould</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <table id="machineTable" class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Filter</th>
+                  <th>Search</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <select class="form-control">
+                      <option value=""></option>
+                      <option>Date Change</option>
+                      <option>PartNumber</option>
+                      <option>Work Text Center</option>
+                    </select>
+                  </td>
+                  <td>
+                    <input type="text" class="form-control" placeholder="Search...">
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <table id="resultsTable" class="table table-striped table-bordered">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Date Change</th>
+                  <th>PartNumber</th>
+                  <th>Work Text Center</th>
+                  <th>Shift</th>
+  
+                </tr>
+              </thead>
+              <tbody>
+                <!-- Example Row -->
+                <tr>
+                  <td>1</td>
+                  <td>2024-11-28</td>
+                  <td>1031003051033</td>
+                  <td>CURING BOM 4 CAVITY GD D NO.010</td>
+                  <td>1</td>
+                </tr>
+                <!-- Add dynamic rows here -->
+              </tbody>
+            </table>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>

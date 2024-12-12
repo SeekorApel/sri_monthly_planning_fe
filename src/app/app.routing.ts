@@ -49,6 +49,8 @@ import { ViewWorkDayComponent } from './views/master-data/view-work-day/view-wor
 import { ViewDetailRevisiMarketingComponent } from './views/transaksi/detail-view-revisi/view-detail-revisi-marketing/view-detail-revisi-marketing.component';
 import { AddMoFrontRearComponent } from './views/transaksi/add-mo-front-rear/add-mo-front-rear.component';
 import { AddArDefactRejectComponent } from './views/transaksi/add-ar-defact-reject/add-ar-defact-reject.component';
+import { ViewDetailMonthlyPlanningComponent } from './views/transaksi/view-detail-monthly-planning/view-detail-monthly-planning.component';
+
 
 
 export const routes: Routes = [
@@ -304,6 +306,13 @@ export const routes: Routes = [
         component: ViewMonthlyPlanningComponent,
         data: {
           title: 'Transaksi / View Monthly Planning',
+        },
+      },
+      {
+        path: 'transaksi/view-detail-monthly-planning/:docNum',
+        component: ViewDetailMonthlyPlanningComponent,
+        data: {
+          title: 'Transaksi / View Detail Monthly Planning',
         },
       },
       {
