@@ -105,9 +105,9 @@ export class AddMonthlyPlanningComponent implements OnInit {
     this.dataSourceMO.filter = '';
   }
 
-  navigateToDetailMo(idMo: String) {
-    this.router.navigate(['/transaksi/add-mo-front-rear/', idMo]);
-  }
+  // navigateToDetailMo(idMo: String) {
+  //   this.router.navigate(['/transaksi/add-mo-front-rear/', idMo]);
+  // }
 
   navigateToAddArDefectReject(idMo: String) {
     this.router.navigate(['/transaksi/add-mo-ar-defect-reject/', idMo]);
@@ -153,6 +153,31 @@ export class AddMonthlyPlanningComponent implements OnInit {
 
   fillBodyTableMp(month: number, year: number, percentage: number, limitChange: number): void {
     this.getDailyMonthPlan(month, year, percentage, limitChange);
+  }
+
+  navigateToDetailMo(m0: any, m1: any, m3: any, typeProduct: string) {
+    const formatDate = (date: any): string => {
+      const dateObj = date instanceof Date ? date : new Date(date);
+
+      if (isNaN(dateObj.getTime())) {
+        throw new Error('Invalid date provided');
+      }
+
+      const day = String(dateObj.getDate()).padStart(2, '0');
+      const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+      const year = dateObj.getFullYear();
+
+      return ${day}-${month}-${year};
+    };
+
+    // Mengonversi ketiga tanggal
+    const month0 = formatDate(m0);
+    const month1 = formatDate(m1);
+    const month2 = formatDate(m3);
+    const type = typeProduct;
+
+    // Menggunakan string tanggal yang sudah dikonversi
+    this.router.navigate(['/transaksi/add-mo-front-rear/', month0, month1, month2, type]);
   }
 
   getDailyMonthPlan(month: number, year: number, percentage: number, limitChange: number) {
@@ -243,7 +268,7 @@ export class AddMonthlyPlanningComponent implements OnInit {
 
     this.fillDataHeaderDate(dailyPlans);
 
-    // Merging data based on `detailIdCuring`
+    // Merging data based on detailIdCuring
     let mergedData: any[] = [];
 
     // Loop over each daily plan
@@ -310,7 +335,7 @@ export class AddMonthlyPlanningComponent implements OnInit {
       const date2 = new Date(mp.dateDailyMp);
 
       // Format the date to dd-MM-yyyy
-      const formattedDate = `${('0' + (date2.getDate())).slice(-2)}-${('0' + (date2.getMonth() + 1)).slice(-2)}-${date2.getFullYear()}`;
+      const formattedDate = ${('0' + (date2.getDate())).slice(-2)}-${('0' + (date2.getMonth() + 1)).slice(-2)}-${date2.getFullYear()};
       console.log('Formatted Date:', formattedDate);
 
       const matchingData = this.description.find(
@@ -397,7 +422,7 @@ export class AddMonthlyPlanningComponent implements OnInit {
     }
     const dateObj = new Date(date);
 
-    const formattedDate = `${('0' + (dateObj.getDate())).slice(-2)}-${('0' + (dateObj.getMonth() + 1)).slice(-2)}-${dateObj.getFullYear()}`;
+    const formattedDate = ${('0' + (dateObj.getDate())).slice(-2)}-${('0' + (dateObj.getMonth() + 1)).slice(-2)}-${dateObj.getFullYear()};
     return formattedDate;
   }
 
