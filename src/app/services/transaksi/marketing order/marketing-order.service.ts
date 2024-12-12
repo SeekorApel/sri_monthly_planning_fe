@@ -136,6 +136,41 @@ export class MarketingOrderService {
     return this.http.get<ApiResponse<[]>>(environment.apiUrlWebAdmin + '/getAllDetailRevisionMo', { params });
   }
 
+  updateLimitHeaderMO(hmo: HeaderMarketingOrder[]): Observable<ApiResponse<HeaderMarketingOrder>> {
+    return this.http.post<ApiResponse<HeaderMarketingOrder>>(environment.apiUrlWebAdmin + '/updateHeaderMOLimit', hmo).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((err) => {
+        return throwError(err);
+      })
+    );
+  }
+
+
+  //Not used Alll
+  saveMarketingOrder(mo: MarketingOrder): Observable<ApiResponse<MarketingOrder>> {
+    return this.http.post<ApiResponse<MarketingOrder>>(environment.apiUrlWebAdmin + '/saveMarketingOrder', mo).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((err) => {
+        return throwError(err);
+      })
+    );
+  }
+
+  saveHeaderMarketingOrder(hmo: HeaderMarketingOrder[]): Observable<ApiResponse<HeaderMarketingOrder>> {
+    return this.http.post<ApiResponse<HeaderMarketingOrder>>(environment.apiUrlWebAdmin + '/saveHeaderMO', hmo).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((err) => {
+        return throwError(err);
+      })
+    );
+  }
+  
   getDetailMarketingOrder(data: any): Observable<ApiResponse<DetailMarketingOrder[]>> {
     return this.http.post<ApiResponse<DetailMarketingOrder[]>>(environment.apiUrlWebAdmin + '/getDetailMarketingOrders', data).pipe(
       map((response) => {

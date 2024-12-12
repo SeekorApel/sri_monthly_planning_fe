@@ -39,6 +39,10 @@ export class ViewMonthlyPlanningComponent implements OnInit {
     this.router.navigate(['/transaksi/add-monthly-planning'])
   }
 
+  navigateToDetail(docNum: string): void {
+    this.router.navigate(['/transaksi/view-detail-monthly-planning', docNum]);
+  }  
+
   parseDate(dateParse: string): string {
     return this.parseDateService.convertDateToString(dateParse);
   }

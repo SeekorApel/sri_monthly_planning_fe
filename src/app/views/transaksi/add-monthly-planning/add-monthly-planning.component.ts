@@ -5,6 +5,7 @@ import { DetailDailyMonthlyPlanCuring } from 'src/app/models/DetailDailyMonthlPl
 import { DetailMonthlyPlanningCuring } from 'src/app/models/DetailMonthlyPlanningCuring';
 import { DetailShiftMonthlyPlanCuring } from 'src/app/models/DetailShiftMonthlyPlanCuring';
 import { MonthlyDailyPlan } from 'src/app/models/DetailMonthlyPlan';
+import { ChangeMould } from 'src/app/models/ChangeMould';
 
 import { ApiResponse } from 'src/app/response/Response';
 import { MarketingOrderService } from 'src/app/services/transaksi/marketing order/marketing-order.service';
@@ -37,15 +38,19 @@ export class AddMonthlyPlanningComponent implements OnInit {
   monthlyDailyPlan: MonthlyDailyPlan[] = [];
   monly: MonthlyDailyPlan[] = [];
   description: any[] = [];
+  changeMould: ChangeMould[] = [];
+  productDetails: any[] = [];
 
   marketingOrders: MarketingOrder[] = [];
   searchText: string = '';
   allData: any;
-  workCenterText: string = '';
+  workCenterText: string[] = [];
   kapaShift1: number = 0;
   kapaShift2: number = 0;
   kapaShift3: number = 0;
   totalKapa: number = 0;
+
+  partNum: number = 0;
   shift: number = 0;
   wct: string = '';
   changeDate: string = '';
@@ -76,12 +81,6 @@ export class AddMonthlyPlanningComponent implements OnInit {
   monthlyPlanningsCurring: any[] = [];
   showMonthlyPlanning: boolean = false;
 
-  generateMonthlyPlanning() {
-    this.fillBodyTableMp();
-
-    this.showMonthlyPlanning = true;
-  }
-
   constructor(private router: Router, private moService: MarketingOrderService, private mpService: MonthlyPlanCuringService, private parseDateService: ParsingDateService) {}
 
   ngOnInit(): void {
@@ -100,9 +99,6 @@ export class AddMonthlyPlanningComponent implements OnInit {
   resetSearch(): void {
     this.searchText = '';
     this.dataSourceMO.filter = '';
-  }
-  viewDetail(): void {
-    $('#changeMould').modal('show');
   }
 
   getAllMoOnlyMonth(): void {
@@ -143,37 +139,20 @@ export class AddMonthlyPlanningComponent implements OnInit {
     );
   }
 
-  // getAllMarketingOrder(): void {
-  //   this.moService.getAllMarketingOrder().subscribe(
-  //     (response: ApiResponse<MarketingOrder[]>) => {
-  //       this.marketingOrders = response.data;
-  //       if (this.marketingOrders.length === 0) {
-  //         Swal.fire({
-  //           icon: 'info',
-  //           title: 'No Data',
-  //           text: 'No marketing orders found.',
-  //           timer: null,
-  //           showConfirmButton: true,
-  //           confirmButtonText: 'Ok',
-  //         });
-  //       } else {
-  //         this.marketingOrders = response.data;
-  //         this.dataSourceMO = new MatTableDataSource(this.marketingOrders);
-  //         this.dataSourceMO.sort = this.sort;
-  //         this.dataSourceMO.paginator = this.paginator;
-  //       }
-  //     },
-  //     (error) => {
-  //       Swal.fire({
-  //         icon: 'error',
-  //         title: 'Error',
-  //         text: 'Failed to load marketing orders: ' + error.message,
-  //         timer: 3000,
-  //         showConfirmButton: false,
-  //       });
-  //     }
-  //   );
-  // }
+  generateMonthlyPlanning() {
+    const data = {
+      month: 11,
+      year: 2024,
+      percentage: 5,
+      limitChange: 4
+    };
+
+    this.fillBodyTableMp(data.month, data.year, data.percentage, data.limitChange);
+
+  }
+  fillBodyTableMp(month: number, year: number, percentage: number, limitChange: number): void {
+    this.getDailyMonthPlan(month, year, percentage, limitChange);
+  }
 
   navigateToDetailMo(m0: any, m1: any, m3: any, typeProduct: string) {
     const formatDate = (date: any): string => {
@@ -207,35 +186,27 @@ export class AddMonthlyPlanningComponent implements OnInit {
     this.router.navigate(['/transaksi/add-mo-ar-defect-reject/', formattedMonth0, formattedMonth1, formattedMonth2]);
   }
 
+  getDailyMonthPlan(month: number, year: number, percentage: number, limitChange: number) {
+    // Menampilkan dialog loading
+    Swal.fire({
+      icon: 'info',
+      title: 'Processing...',
+      html: 'Please wait while we generate the monthly plan. This might take a while.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading(); // Menampilkan spinner
+      },
+    });
 
-  fillBodyTableMp(): void {
-    this.getDailyMonthPlan();
-  }
-
-  // getDailyMonthPlan(partNumber: number) {
-  //   this.mpService.getDailyMonthlyPlan(partNumber).subscribe(
-  //     (response: ApiResponse<any>) => {
-  //       this.allData = response.data;
-  //       this.fillAllData(this.allData);
-  //     },
-  //     (error) => {
-  //       Swal.fire({
-  //         icon: 'error',
-  //         title: 'Error',
-  //         text: 'Failed to load marketing order details: ' + error.message,
-  //         confirmButtonText: 'OK',
-  //       });
-  //     }
-  //   );
-  // }
-
-  getDailyMonthPlan() {
-    this.mpService.getDailyMonthlyPlan().subscribe(
+    this.mpService.generateDetailMp(month, year, percentage, limitChange).subscribe(
       (response: ApiResponse<any>) => {
+        Swal.close(); // Menutup dialog loading setelah sukses
+        this.showMonthlyPlanning = true;
         this.allData = response.data;
         this.fillAllData(this.allData);
       },
       (error) => {
+        Swal.close(); // Menutup dialog loading jika terjadi error
         Swal.fire({
           icon: 'error',
           title: 'Error',
@@ -268,6 +239,12 @@ export class AddMonthlyPlanningComponent implements OnInit {
 
   openDmpModal(): void {
     $('#dmpModal').modal('show');
+  }
+
+  viewDetail(): void {
+    this.fillChangeMould(this.changeMould);
+
+    $('#changeMould').modal('show');
   }
 
   handleCellClick(detailDailyId: number, hDateTass: any): void {
@@ -389,66 +366,49 @@ export class AddMonthlyPlanningComponent implements OnInit {
 
   fillDataShift(detailShiftMonthlyPlanCuring: DetailShiftMonthlyPlanCuring[]): void {
     // Reset nilai
-    this.workCenterText = '';
+    this.workCenterText = [];
     this.kapaShift1 = 0;
     this.kapaShift2 = 0;
     this.kapaShift3 = 0;
     this.totalKapa = 0;
-    this.shift = 0;
-    this.wct = '';
-    this.changeDate = '';
 
     // Loop untuk mengisi data
     detailShiftMonthlyPlanCuring.forEach((item) => {
-      this.workCenterText += item.workCenterText || this.workCenterText;
-      this.kapaShift1 += item.kapaShift1 || 0;
-      this.kapaShift2 += item.kapaShift2 || 0;
-      this.kapaShift3 += item.kapaShift3 || 0;
-      this.totalKapa += item.totalKapa || 0;
-      this.changeDate += this.formatDate(item.changeDate);
-      this.wct += item.wct === null ? '' : item.wct;
-      this.shift += item.shift;
+      if (item.work_CENTER_TEXT) {
+        this.workCenterText.push(item.work_CENTER_TEXT); // Tambahkan ke array
+      }
+      this.kapaShift1 += item.kapa_SHIFT_1 || 0;
+      this.kapaShift2 += item.kapa_SHIFT_2 || 0;
+      this.kapaShift3 += item.kapa_SHIFT_3 || 0;
+      this.totalKapa += item.total_KAPA || 0;
     });
   }
 
-  // fillDataShift(detailShiftMonthlyPlanCuring: DetailShiftMonthlyPlanCuring[]): void {
-  //   // Reset nilai
-  //   this.workCenterText = [];
-  //   this.kapaShift1 = 0;
-  //   this.kapaShift2 = 0;
-  //   this.kapaShift3 = 0;
-  //   this.totalKapa = 0;
-  //   this.shift = [];  // Ubah menjadi array
-  //   this.wct = [];
-  //   this.changeDate = [];
+  
+  filteredChangeMould: any[] = [];  // Data yang sudah difilter
+  filterType: string = 'changeDate';  // Default filter type
+  searchTerm: string = '';  // Term pencarian
 
-  //   // Loop untuk mengisi data
-  //   detailShiftMonthlyPlanCuring.forEach((item) => {
-  //     // Menambahkan ke array jika ada
-  //     if (item.workCenterText) {
-  //       this.workCenterText.push(item.workCenterText);
-  //     }
-  //     this.kapaShift1 += item.kapaShift1 || 0;
-  //     this.kapaShift2 += item.kapaShift2 || 0;
-  //     this.kapaShift3 += item.kapaShift3 || 0;
-  //     this.totalKapa += item.totalKapa || 0;
+  fillChangeMould(changeMould: any[]): void {
+    this.changeMould = changeMould;
+    this.filteredChangeMould = [...changeMould]; // Menampilkan data awal
+  }
 
-  //     // Menggunakan formatDate untuk tanggal
-  //     if (item.changeDate) {
-  //       this.changeDate.push(this.formatDate(item.changeDate));
-  //     }
+  // Fungsi untuk menerapkan filter berdasarkan pilihan dan pencarian
+  applyFilter(): void {
+    let filteredData = this.changeMould;
 
-  //     // Menambahkan ke array wct jika tidak null
-  //     if (item.wct !== null && item.wct !== undefined) {
-  //       this.wct.push(item.wct);
-  //     }
+    // Filter berdasarkan searchTerm
+    if (this.searchTerm) {
+      filteredData = filteredData.filter(item => {
+        const field = item[this.filterType];
+        return field && field.toString().toLowerCase().includes(this.searchTerm.toLowerCase());
+      });
+    }
 
-  //     // Menambahkan nilai shift ke dalam array
-  //     if (item.shift !== undefined) {
-  //       this.shift.push(item.shift);
-  //     }
-  //   });
-  // }
+    // Update hasil filter
+    this.filteredChangeMould = filteredData;
+  }
 
   fillDataWorkDays(): void {}
 
