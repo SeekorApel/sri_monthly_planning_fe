@@ -573,11 +573,9 @@ export class AddArDefactRejectComponent implements OnInit {
   }
 
   finalizationMo(): void {
-    console.log('jawa');
     this.dmoFdr = this.detailMarketingOrder.filter((order) => order.description.includes('FDR'));
     this.dmoFed = this.detailMarketingOrder.filter((order) => order.description.includes('FED'));
 
-    console.log(this.dmoFdr.length);
     const saveMo = {
       moFed: this.moFed,
       headerMarketingOrderFed: this.hmoFed,
@@ -588,37 +586,40 @@ export class AddArDefactRejectComponent implements OnInit {
       detailMarketingOrderFdr: this.dmoFdr,
     };
 
-    // this.loading = true;
-    // Swal.fire({
-    //   icon: 'info',
-    //   title: 'Processing...',
-    //   html: 'Please wait while save data marketing order.',
-    //   allowOutsideClick: false,
-    //   didOpen: () => {
-    //     Swal.showLoading();
-    //   },
-    // });
-    // this.moService.arRejectDefect(saveMo).subscribe(
-    //   (response) => {
-    //     Swal.close();
-    //     Swal.fire({
-    //       title: 'Success!',
-    //       text: 'Data Marketing Order successfully Revision.',
-    //       icon: 'success',
-    //       confirmButtonText: 'OK',
-    //     }).then((result) => {
-    //       if (result.isConfirmed) {
-    //         this.navigateToViewAddMp();
-    //       }
-    //     });
-    //     this.loading = false;
-    //   },
-    //   (err) => {
-    //     Swal.close();
-    //     Swal.fire('Error!', 'Error insert data Marketing Order.', 'error');
-    //     this.loading = false;
-    //   }
-    // );
+    console.log(saveMo);
+
+    this.loading = true;
+    Swal.fire({
+      icon: 'info',
+      title: 'Processing...',
+      html: 'Please wait while save data marketing order.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
+
+    this.moService.arRejectDefect(saveMo).subscribe(
+      (response) => {
+        Swal.close();
+        Swal.fire({
+          title: 'Success!',
+          text: 'Data Marketing Order successfully Revision.',
+          icon: 'success',
+          confirmButtonText: 'OK',
+        }).then((result) => {
+          if (result.isConfirmed) {
+            this.navigateToViewAddMp();
+          }
+        });
+        this.loading = false;
+      },
+      (err) => {
+        Swal.close();
+        Swal.fire('Error!', 'Error insert data Marketing Order.', 'error');
+        this.loading = false;
+      }
+    );
   }
 
   parseFormattedValue(formattedValue: string | null): number | null {
