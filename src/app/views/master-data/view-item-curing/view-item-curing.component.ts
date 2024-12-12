@@ -33,7 +33,7 @@ export class ViewItemCuringComponent implements OnInit {
   pageSize: number = 5;
   totalPages: number = 5;
   sortBuffer: Array<any>;
-  displayedColumns: string[] = ['no', 'item_CURING', 'machine_TYPE','kapa_PER_MOULD','number_OF_MOULD', 'status', 'action'];
+  displayedColumns: string[] = ['no', 'item_CURING', 'machine_TYPE','kapa_PER_MOULD','number_OF_MOULD', 'spare_MOULD', 'mould_MONTHLY_PLAN',  'status', 'action'];
   dataSource: MatTableDataSource<Item_Curing>;
 
   @ViewChild(MatSort) sort: MatSort;
@@ -43,12 +43,21 @@ export class ViewItemCuringComponent implements OnInit {
     this.editItemCuringForm = this.fb.group({
       machineType: ['', Validators.required],
       kapaPerMould: ['', Validators.required],
-      numberOfMould: ['', Validators.required]
+      numberOfMould: ['', Validators.required],
+      spareMould: ['', Validators.required],
+      mouldMonthlyPlan: ['', Validators.required]
     });
   }
 
   ngOnInit(): void {
     this.getAllItemCuring();
+  }
+
+  allowOnlyNumbers(event: KeyboardEvent) {
+    const charCode = event.which ? event.which : event.keyCode;
+    if (charCode < 48 || charCode > 57) {
+      event.preventDefault(); // Prevent non-numeric input
+    }
   }
   
   getAllItemCuring(): void {
