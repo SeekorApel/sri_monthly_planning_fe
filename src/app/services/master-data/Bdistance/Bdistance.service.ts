@@ -90,7 +90,7 @@ export class BDistanceService {
       );
   }
 
-  activateQuadrantDistance(bdistance: BDistance): Observable<ApiResponse<BDistance>> {
+  activateBuildingDistance(bdistance: BDistance): Observable<ApiResponse<BDistance>> {
     return this.http.post<ApiResponse<BDistance>>(environment.apiUrlWebAdmin + '/restoreBuildingDistance', bdistance, { headers: this.getHeaders() }).pipe(
       map((response) => {
         return response;

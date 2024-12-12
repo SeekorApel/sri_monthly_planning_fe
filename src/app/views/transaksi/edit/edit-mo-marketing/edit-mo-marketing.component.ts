@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DetailMarketingOrder } from 'src/app/models/DetailMarketingOrder';
@@ -45,12 +45,13 @@ export class EditMoMarketingComponent implements OnInit {
   headerMarketingOrder: any[] = [];
   detailMarketingOrder: DetailMarketingOrder[] = [];
 
-  headersColumns: string[] = ['no', 'category', 'partNumber', 'description', 'machineType', 'capacity', 'mouldMonthlyPlan', 'qtyPerRak', 'minOrder', 'maxCap', 'initialStock', 'salesForecast', 'marketingOrder'];
+  headersColumns: string[] = ['no', 'category', 'partNumber', 'description', 'machineType', 'capacity', 'mouldMonthlyPlan', 'qtyPerRak', 'minOrder', 'maxCap', 'initialStock', 'salesForecast', 'marketingOrder', 'itemCuring'];
   childHeadersColumns: string[] = ['maxCapMonth0', 'maxCapMonth1', 'maxCapMonth2', 'sfMonth0', 'sfMonth1', 'sfMonth2', 'moMonth0', 'moMonth1', 'moMonth2'];
-  rowData: string[] = ['no', 'category', 'partNumber', 'description', 'machineType', 'capacity', 'mouldMonthlyPlan', 'qtyPerRak', 'minOrder', 'maxCapMonth0', 'maxCapMonth1', 'maxCapMonth2', 'initialStock', 'sfMonth0', 'sfMonth1', 'sfMonth2', 'moMonth0', 'moMonth1', 'moMonth2'];
+  rowData: string[] = ['no', 'category', 'partNumber', 'description', 'machineType', 'capacity', 'mouldMonthlyPlan', 'qtyPerRak', 'minOrder', 'maxCapMonth0', 'maxCapMonth1', 'maxCapMonth2', 'initialStock', 'sfMonth0', 'sfMonth1', 'sfMonth2', 'moMonth0', 'moMonth1', 'moMonth2', 'itemCuring'];
   dataSource: MatTableDataSource<DetailMarketingOrder>;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild('fileInput') fileInput: ElementRef;
 
   constructor(private router: Router, private activeRoute: ActivatedRoute, private fb: FormBuilder, private moService: MarketingOrderService, private parsingNumberService: ParsingNumberService) {
     this.formHeaderMo = this.fb.group({
@@ -129,9 +130,6 @@ export class EditMoMarketingComponent implements OnInit {
       fed_TT_percentage_m2: [null, []],
       fdr_TT_percentage_m2: [null, []],
       note_tl_m2: [null, []],
-      upload_file_m0: [null, [Validators.required]],
-      upload_file_m1: [null, [Validators.required]],
-      upload_file_m2: [null, [Validators.required]],
     });
 
     this.moService.getCapacity().subscribe(
@@ -154,6 +152,11 @@ export class EditMoMarketingComponent implements OnInit {
     this.getAllData(this.idMo);
     this.getLastIdMo();
   }
+
+  resetFileInput() {
+    this.fileInput.nativeElement.value = '';
+  }
+
 
   onInputFormat(event: Event): void {
     const input = event.target as HTMLInputElement;
@@ -208,7 +211,6 @@ export class EditMoMarketingComponent implements OnInit {
 
   isInvalidValue(value: any | null | undefined, index: number): boolean {
     let data = this.detailMarketingOrder[index];
-    console.log(data);
     return false;
   }
 
@@ -417,7 +419,7 @@ export class EditMoMarketingComponent implements OnInit {
           dmo.validationMessageM0 = 'MO must not be less than the minimum order.';
           hasInvalidInput = true;
         } else if (moMonth0 > dmo.maxCapMonth0) {
-          dmo.validationMessageM0 = 'MO cannot be more than the maximum order M1.';
+          dmo.validationMessageM0 = 'MO cannot be more than the maximum capacity M1.';
           hasInvalidInput = true;
         } else if (moMonth0 % dmo.qtyPerRak !== 0) {
           dmo.validationMessageM0 = `MO must be a multiple of ${dmo.qtyPerRak}.`;
@@ -434,7 +436,7 @@ export class EditMoMarketingComponent implements OnInit {
           dmo.validationMessageM1 = 'MO must not be less than the minimum order.';
           hasInvalidInput = true;
         } else if (moMonth1 > dmo.maxCapMonth1) {
-          dmo.validationMessageM1 = 'MO cannot be more than the maximum order M2.';
+          dmo.validationMessageM1 = 'MO cannot be more than the maximum capacity M2.';
           hasInvalidInput = true;
         } else if (moMonth1 % dmo.qtyPerRak !== 0) {
           dmo.validationMessageM1 = `MO must be a multiple of ${dmo.qtyPerRak}.`;
@@ -451,7 +453,7 @@ export class EditMoMarketingComponent implements OnInit {
           dmo.validationMessageM2 = 'MO must not be less than the minimum order.';
           hasInvalidInput = true;
         } else if (moMonth2 > dmo.maxCapMonth2) {
-          dmo.validationMessageM2 = 'MO cannot be more than the maximum order M3.';
+          dmo.validationMessageM2 = 'MO cannot be more than the maximum capacity M3.';
           hasInvalidInput = true;
         } else if (moMonth2 % dmo.qtyPerRak !== 0) {
           dmo.validationMessageM2 = `MO must be a multiple of ${dmo.qtyPerRak}.`;
@@ -683,13 +685,6 @@ export class EditMoMarketingComponent implements OnInit {
 
     this.detailMarketingOrder.forEach((mo) => {
       mo.moId = this.lastIdMo;
-      // mo.initialStock = parseFloat(mo.initialStock?.toString().replace(/\./g, '') || '0') || 0;
-      // mo.sfMonth0 = parseFloat(mo.sfMonth0?.toString().replace(/\./g, '') || '0') || 0;
-      // mo.sfMonth1 = parseFloat(mo.sfMonth1?.toString().replace(/\./g, '') || '0') || 0;
-      // mo.sfMonth2 = parseFloat(mo.sfMonth2?.toString().replace(/\./g, '') || '0') || 0;
-      // mo.moMonth0 = parseFloat(mo.moMonth0?.toString().replace(/\./g, '') || '0') || 0;
-      // mo.moMonth1 = parseFloat(mo.moMonth1?.toString().replace(/\./g, '') || '0') || 0;
-      // mo.moMonth2 = parseFloat(mo.moMonth2?.toString().replace(/\./g, '') || '0') || 0;
     });
 
     const revisionMo = {
@@ -698,21 +693,24 @@ export class EditMoMarketingComponent implements OnInit {
       detailMarketingOrder: this.detailMarketingOrder,
     };
 
-    // const filteredData = this.detailMarketingOrder.map(item => ({
-    //   partNumber: item.partNumber,
-    //   moMonth0: item.moMonth0,
-    //   moMonth1: item.moMonth1,
-    //   moMonth2: item.moMonth2
-    // }));
-
-
+    Swal.fire({
+      icon: 'info',
+      title: 'Processing...',
+      html: 'Please wait while save data marketing order.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
     this.loading = true;
     this.moService.updateMarketingOrderMarketing(revisionMo).subscribe(
       (response) => {
+        Swal.close();
         Swal.fire({
           title: 'Success!',
           text: 'Data Marketing Order successfully Revision.',
           icon: 'success',
+          allowOutsideClick: false,
           confirmButtonText: 'OK',
         }).then((result) => {
           if (result.isConfirmed) {
@@ -722,6 +720,7 @@ export class EditMoMarketingComponent implements OnInit {
         this.loading = false;
       },
       (err) => {
+        Swal.close();
         Swal.fire('Error!', 'Error insert data Marketing Order.', 'error');
         this.loading = false;
       }
@@ -1643,11 +1642,16 @@ export class EditMoMarketingComponent implements OnInit {
             }
           }
         } else {
-          console.error('File tidak dapat dibaca sebagai ArrayBuffer');
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'File tidak dapat dibaca',
+          });
         }
       };
 
       reader.readAsArrayBuffer(this.file); // Membaca file sebagai ArrayBuffer
+      this.resetFileInput();
       $('#uploadModal').modal('hide');
     }
   }

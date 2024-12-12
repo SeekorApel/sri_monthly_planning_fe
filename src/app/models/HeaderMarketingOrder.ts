@@ -21,5 +21,16 @@ export class HeaderMarketingOrder {
   tlPercentage: number;
   ttPercentage: number;
   noteOrderTl: string;
+  
+  minLimit0: number;
+  minLimit1: number;
+  minLimit2: number;
+  minLimit3: number;
+  maxLimit0: number;
+  maxLimit1: number;
+  maxLimit2: number;
+  maxLimit3: number;
+  mouldChange: number;
+
   status: number;
 }

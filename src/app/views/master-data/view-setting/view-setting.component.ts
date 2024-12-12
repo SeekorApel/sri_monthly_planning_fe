@@ -58,6 +58,13 @@ export class ViewSettingComponent implements OnInit {
     return value.replace('.', ',');
   }  
 
+  denormalizeDecimal(value: string | number): string {
+  if (typeof value === 'string') {
+    return value.replace(',', '.');
+  }
+    return value.toString();
+  }
+
   getAllSetting(): void {
     this.settingService.getAllSetting().subscribe(
       (response: ApiResponse<Setting[]>) => {

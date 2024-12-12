@@ -22,31 +22,44 @@ export class MonthlyPlanCuringService {
     return this.http.get<ApiResponse<[]>>(environment.apiUrlWebAdmin + '/getAllMonthlyPlanning');
   }
 
-  //get all data mp (MP, Header, Detail)
-  // getDailyMonthlyPlan(partNumber: number): Observable<ApiResponse<any>> {
-  //   return this.http.get<ApiResponse<any>>(`${environment.apiUrlWebAdmin}/getMonthlyPlan?partNumber=${partNumber}`
-  //   );
-  // }
-
-  getDailyMonthlyPlan(): Observable<ApiResponse<any>> {
-    return this.http.get<ApiResponse<any>>(`${environment.apiUrlWebAdmin}/getMonthlyPlan`);
+  getDetailMonthlyPlan(): Observable<ApiResponse<any>> {
+    return this.http.get<ApiResponse<any>>(`${environment.apiUrlWebAdmin}/getDetailMonthlyPlan`);
   }
 
-    //get detail shift
-    getDetailShiftMonthlyPlan(detailDailyId: number, actualDate: string): Observable<ApiResponse<DetailShiftMonthlyPlanCuring[]>> {
-      const params = new HttpParams()
-        .set('detailDailyId', detailDailyId.toString())
-        .set('actualDate', actualDate); // Pastikan format sesuai dengan backend (misal: "dd-MM-yyyy")
+  getDetailMonthlyPlanById(docNum: string): Observable<ApiResponse<any>> {
+    return this.http.get<ApiResponse<any>>(
+      `${environment.apiUrlWebAdmin}/getDetailMonthlyPlanById/` + docNum,
+    );
+  } 
   
-      return this.http.get<ApiResponse<DetailShiftMonthlyPlanCuring[]>>(
-        `${environment.apiUrlWebAdmin}/getDetailShiftMonthlyPlan`, 
-        { params }
-      );
-    }
+  generateDetailMp(month: number, year: number, percentage: number, limitChange: number): Observable<ApiResponse<any>> {
+    const params = new HttpParams()
+      .set('month', month)
+      .set('year', year)
+      .set('percentage', percentage)
+      .set('limitChange', limitChange);
+  
+    return this.http.get<ApiResponse<any>>(
+      `${environment.apiUrlWebAdmin}/generateDetailMp`,
+      { params }
+    );
+  }
 
-    getAllMachineByItemCuring(mesin: string): Observable<ApiResponse<any>> {
-      return this.http.get<ApiResponse<any>>(`${environment.apiUrlWebAdmin}/getMachineByItemCuring?itemCuring=${mesin}`);
-    }
-    
+  //get detail shift
+  getDetailShiftMonthlyPlan(detailDailyId: number, actualDate: string): Observable<ApiResponse<DetailShiftMonthlyPlanCuring[]>> {
+    const params = new HttpParams()
+      .set('detailDailyId', detailDailyId.toString())
+      .set('actualDate', actualDate); // Pastikan format sesuai dengan backend (misal: "dd-MM-yyyy")
+
+    return this.http.get<ApiResponse<DetailShiftMonthlyPlanCuring[]>>(
+      `${environment.apiUrlWebAdmin}/getDetailShiftMonthlyPlan`,
+      { params }
+    );
+  }
+
+  getAllMachineByItemCuring(mesin: string): Observable<ApiResponse<any>> {
+    return this.http.get<ApiResponse<any>>(`${environment.apiUrlWebAdmin}/getMachineByItemCuring?itemCuring=${mesin}`);
+  }
+
 
 }

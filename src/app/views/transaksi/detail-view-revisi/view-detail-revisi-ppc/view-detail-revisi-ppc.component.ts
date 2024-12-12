@@ -136,9 +136,9 @@ export class ViewDetailRevisiPpcComponent implements OnInit {
       fed_TT_percentage_m2: [null, []],
       fdr_TT_percentage_m2: [null, []],
       note_tl_m2: [null, []],
-      upload_file_m0: [null, []],
-      upload_file_m1: [null, []],
-      upload_file_m2: [null, []],
+      note_order_tl_0: [null, []],
+      note_order_tl_1: [null, []],
+      note_order_tl_2: [null, []],
     });
 
     this.moService.getCapacity().subscribe(

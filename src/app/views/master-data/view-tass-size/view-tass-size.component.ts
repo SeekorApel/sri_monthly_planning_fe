@@ -62,7 +62,14 @@ export class ViewTassSizeComponent implements OnInit {
     this.loadMachineTassType();
     this.loadSize();
   }
+  validateNumberInput(event: KeyboardEvent): void {
+    const charCode = event.key.charCodeAt(0);
 
+    // Kode ASCI 48 - 57 angka (0-9) yang bisa diketik
+    if (charCode < 48 || charCode > 57) {
+      event.preventDefault();
+    }
+  }
   private loadMachineTassType(): void {
     this.machineTassTypeService.getAllMachineTassType().subscribe(
       (response: ApiResponse<MachineTassType[]>) => {

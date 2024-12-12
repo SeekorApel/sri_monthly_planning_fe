@@ -19,7 +19,15 @@
 .hoverable:hover {
   background-color: #f0f0f0; /* Mengubah warna latar belakang saat hover */
 }
-
+.sticky {
+  position: sticky;
+  left: 0;
+  background: white;
+  z-index: 2;
+  /* Lebih tinggi agar di atas elemen lainnya */
+  box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.1);
+  /* Tambahkan efek bayangan */
+}
 ::ng-deep .mat-sort-header-container {
   justify-content: center;
 }
@@ -40,4 +48,37 @@
 
 th.mat-header-cell input[type="checkbox"] {
   display: none; /* Menyembunyikan checkbox di header */
+}
+
+/* Membuat modal lebih lebar */
+.modal-dialog {
+  max-width: 60%;  /* Perbesar lebar modal */
+}
+
+.modal-body {
+  padding-bottom: 10px;  /* Menambahkan padding agar modal tidak terlalu rapat */
+  max-height: 70vh;      /* Atur ketinggian modal maksimal */
+  overflow-y: auto;      /* Scroll vertikal untuk isi modal */
+}
+
+/* Menambahkan scroll pada tabel */
+.table-wrapper {
+  max-height: 400px; /* Tentukan tinggi maksimum yang diinginkan */
+  overflow-y: auto;  /* Menambahkan scroll vertikal */
+}
+
+/* Membekukan header tabel */
+#resultsTable thead th {
+  position: sticky;
+  top: 0;
+  background-color: #fff; /* Agar tidak transparan saat sticky */
+  z-index: 1;
+}
+
+/* Membekukan filter */
+#machineTable thead th {
+  position: sticky;
+  top: 0;
+  background-color: #fff;
+  z-index: 1;
 }

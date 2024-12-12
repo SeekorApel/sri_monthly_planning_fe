@@ -30,12 +30,12 @@
           </ng-container>
 
           <ng-container matColumnDef="max_CAP_ID">
-            <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Max Capacity ID</th>
-            <td class="angka" *matCellDef="let element">{{ element.max_CAP_ID }}</td>
+            <th style="min-width: 130px;" class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Max Capacity ID</th>
+            <td *matCellDef="let element">{{ element.max_CAP_ID }}</td>
           </ng-container>
 
           <ng-container matColumnDef="part_NUMBER">
-            <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Product Part Number</th>
+            <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Part Number</th>
             <td class="angka" *matCellDef="let element">{{ element.product_ID }}</td>
           </ng-container>
 
@@ -124,7 +124,7 @@
           </div>
 
           <div class="form-group">
-            <label for="machinecuringtype_ID" style="min-width: 150px;">Machine Curing Type ID</label>
+            <label for="machinecuringtype_ID" style="min-width: 150px;">Machine Curing Type</label>
             <div>
               <ng-select2
                 formControlName="machinecuringtype_ID" 
@@ -140,28 +140,28 @@
 
           <div class="form-group">
             <label for="cycle_TIME">Cycle Time</label>
-            <input [(ngModel)]="edtMaxCapacityObject.cycle_TIME" type="text" class="form-control" id="cycle_TIME" formControlName="cycle_TIME" [ngClass]="{ 'is-invalid': editMaxCapacityForm.get('cycle_TIME').invalid && editMaxCapacityForm.get('cycle_TIME').touched }" />
+            <input [(ngModel)]="edtMaxCapacityObject.cycle_TIME" maxlength="19" type="text" class="form-control" id="cycle_TIME" formControlName="cycle_TIME" (keypress)="allowOnlyNumbers($event)" [ngClass]="{ 'is-invalid': editMaxCapacityForm.get('cycle_TIME').invalid && editMaxCapacityForm.get('cycle_TIME').touched }" />
             <!-- Error message if plantName is empty -->
             <div *ngIf="editMaxCapacityForm.get('cycle_TIME').invalid && editMaxCapacityForm.get('cycle_TIME').touched" class="invalid-feedback">Cycle Time is required.</div>
           </div>
 
           <div class="form-group">
             <label for="capacity_SHIFT_1">Capacity Shift 1</label>
-            <input [(ngModel)]="edtMaxCapacityObject.capacity_SHIFT_1" type="text" class="form-control" id="capacity_SHIFT_1" formControlName="capacity_SHIFT_1" [ngClass]="{ 'is-invalid': editMaxCapacityForm.get('capacity_SHIFT_1').invalid && editMaxCapacityForm.get('capacity_SHIFT_1').touched }" />
+            <input [(ngModel)]="edtMaxCapacityObject.capacity_SHIFT_1" maxlength="19" type="text" class="form-control" id="capacity_SHIFT_1" formControlName="capacity_SHIFT_1" (keypress)="allowOnlyNumbers($event)" [ngClass]="{ 'is-invalid': editMaxCapacityForm.get('capacity_SHIFT_1').invalid && editMaxCapacityForm.get('capacity_SHIFT_1').touched }" />
             <!-- Error message if plantName is empty -->
             <div *ngIf="editMaxCapacityForm.get('capacity_SHIFT_1').invalid && editMaxCapacityForm.get('capacity_SHIFT_1').touched" class="invalid-feedback">Capacity Shift 1 is required.</div>
           </div>
 
           <div class="form-group">
             <label for="capacity_SHIFT_2">Capacity Shift 2</label>
-            <input [(ngModel)]="edtMaxCapacityObject.capacity_SHIFT_2" type="text" class="form-control" id="capacity_SHIFT_2" formControlName="capacity_SHIFT_2" [ngClass]="{ 'is-invalid': editMaxCapacityForm.get('capacity_SHIFT_2').invalid && editMaxCapacityForm.get('capacity_SHIFT_2').touched }" />
+            <input [(ngModel)]="edtMaxCapacityObject.capacity_SHIFT_2" maxlength="19" type="text" class="form-control" id="capacity_SHIFT_2" formControlName="capacity_SHIFT_2" (keypress)="allowOnlyNumbers($event)" [ngClass]="{ 'is-invalid': editMaxCapacityForm.get('capacity_SHIFT_2').invalid && editMaxCapacityForm.get('capacity_SHIFT_2').touched }" />
             <!-- Error message if plantName is empty -->
             <div *ngIf="editMaxCapacityForm.get('capacity_SHIFT_2').invalid && editMaxCapacityForm.get('capacity_SHIFT_2').touched" class="invalid-feedback">Capacity Shift 2 is required.</div>
           </div>
 
           <div class="form-group">
             <label for="capacity_SHIFT_3">Capacity Shift 3</label>
-            <input [(ngModel)]="edtMaxCapacityObject.capacity_SHIFT_3" type="text" class="form-control" id="capacity_SHIFT_3" formControlName="capacity_SHIFT_3" [ngClass]="{ 'is-invalid': editMaxCapacityForm.get('capacity_SHIFT_3').invalid && editMaxCapacityForm.get('capacity_SHIFT_3').touched }" />
+            <input [(ngModel)]="edtMaxCapacityObject.capacity_SHIFT_3" maxlength="19" type="text" class="form-control" id="capacity_SHIFT_3" formControlName="capacity_SHIFT_3" (keypress)="allowOnlyNumbers($event)" [ngClass]="{ 'is-invalid': editMaxCapacityForm.get('capacity_SHIFT_3').invalid && editMaxCapacityForm.get('capacity_SHIFT_3').touched }" />
             <!-- Error message if plantName is empty -->
             <div *ngIf="editMaxCapacityForm.get('capacity_SHIFT_3').invalid && editMaxCapacityForm.get('capacity_SHIFT_3').touched" class="invalid-feedback">Capacity Shift 3 is required.</div>
           </div>

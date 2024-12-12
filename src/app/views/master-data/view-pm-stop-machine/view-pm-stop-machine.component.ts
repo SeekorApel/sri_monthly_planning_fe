@@ -68,7 +68,7 @@ export class ViewPmStopMachineComponent implements OnInit {
         end_TIME: ['', Validators.required],
       },
       {
-        validators: [this.timeValidator, this.dateValidator, this.minStartDate], // Tambahkan validator khusus di sini
+        validators: [this.timeValidator], // Tambahkan validator khusus di sini
       }
     );
     this.AddPmStopMachineForm = this.fb.group(
@@ -80,7 +80,7 @@ export class ViewPmStopMachineComponent implements OnInit {
         end_TIME: ['', Validators.required],
       },
       {
-        validators: [this.timeValidator, this.dateValidator, this.minStartDate], // Tambahkan validator khusus di sini
+        validators: [this.timeValidator, this.minStartDate, this.dateValidator], // Tambahkan validator khusus di sini
       }
     );
     curingMachineService.getAllMachineCuring().subscribe(
@@ -137,40 +137,39 @@ export class ViewPmStopMachineComponent implements OnInit {
     const endTime = control.get('end_TIME')?.value; // Format HH:mm
     const startDate = control.get('start_DATE')?.value; // Format YYYY-MM-DD
     const endDate = control.get('end_DATE')?.value; // Format YYYY-MM-DD
-  
+
     if (!startTime || !endTime || !startDate || !endDate) {
       return null; // Tidak ada cukup data untuk validasi
     }
-  
+
     const now = new Date();
     const dateStart = new Date(startDate);
     const dateEnd = new Date(endDate);
-  
+
     // Gabungkan startTime dengan startDate
     const [startHours, startMinutes] = startTime.split(':').map(Number);
     const fullStartTime = new Date(dateStart);
     fullStartTime.setHours(startHours, startMinutes, 0, 0);
-  
+
     // Validasi jika startTime kurang dari waktu sekarang
     if (fullStartTime < now) {
-      console.log("Waktu sekarang: ", now);
-      return { invalidStartTime: true }; // Error waktu mulai tidak valid
+      console.log('Waktu sekarang: ', now);
+      return { invalidStartTime: true };
     }
-  
+
     // Validasi jika tanggal mulai dan akhir sama
     if (dateStart.getTime() === dateEnd.getTime()) {
       const [endHours, endMinutes] = endTime.split(':').map(Number);
       const fullEndTime = new Date(dateEnd);
       fullEndTime.setHours(endHours, endMinutes, 0, 0);
-  
+
       if (fullStartTime >= fullEndTime) {
         return { invalidTimeRange: true }; // Error rentang waktu tidak valid
       }
     }
-  
+
     return null; // Valid
   }
-  
 
   ngOnInit(): void {
     this.getAllPmStopMachine();
@@ -227,7 +226,6 @@ export class ViewPmStopMachineComponent implements OnInit {
         this.dataSource = new MatTableDataSource(this.pmStopMachines);
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
-        // this.onChangePage(this.machineCuringTypes.slice(0, this.pageSize));
       },
       (error) => {
         this.errorMessage = 'Failed to load PM Stop Machine: ' + error.message;
@@ -328,12 +326,14 @@ export class ViewPmStopMachineComponent implements OnInit {
         // Default nilai waktu ke null jika tidak ada
         const startTime = this.edtPmStopMachineObject.start_TIME || null;
         const endTime = this.edtPmStopMachineObject.end_TIME || null;
+        // const wct = this.edtPmStopMachineObject.work_CENTER_TEXT || "null";
 
         this.edtPmStopMachineFrom.patchValue({
+          // work_CENTER_TEXT: wct,
           start_DATE: formattedStartDate,
           end_DATE: formattedEndDate,
-          // start_TIME: startTime,
-          // end_TIME: endTime,
+          start_TIME: startTime,
+          end_TIME: endTime,
         });
       },
       (error) => {
