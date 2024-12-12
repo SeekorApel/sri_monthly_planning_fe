@@ -16,7 +16,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { ParsingNumberService } from 'src/app/utils/parsing-number/parsing-number.service';
 declare var $: any;
-import { DatePipe } from '@angular/common'
+import { DatePipe } from '@angular/common';
 @Component({
   selector: 'app-add-ar-defact-reject',
   templateUrl: './add-ar-defact-reject.component.html',
@@ -40,11 +40,11 @@ export class AddArDefactRejectComponent implements OnInit {
   typeMo: string = '';
 
   moFed: MarketingOrder = new MarketingOrder();
-  hmoFed: any[] = [];
+  hmoFed: HeaderMarketingOrder[] = [];
   dmoFed: DetailMarketingOrder[];
 
   moFdr: MarketingOrder = new MarketingOrder();
-  hmoFdr: any[] = [];
+  hmoFdr: HeaderMarketingOrder[] = [];
   dmoFdr: DetailMarketingOrder[];
 
   marketingOrder: MarketingOrder = new MarketingOrder();
@@ -123,7 +123,72 @@ export class AddArDefactRejectComponent implements OnInit {
     fed_TT_percentage_m2: '',
     total_mo_m2: '',
     note_tl_m2: '',
-  }
+  };
+
+  objVarFdr = {
+    // Bulan 1
+    monthFdrM0: '',
+    nwd_0: '',
+    nwt_0: '',
+    ot_wt_0: '',
+    tl_ot_wd_0: '',
+    tt_ot_wd_0: '',
+    total_wt_0: '',
+    total_tlwd_0: '',
+    total_ttwd_0: '',
+    max_tube_capa_0: '',
+    max_capa_tl_0: '',
+    max_capa_tt_0: '',
+    machine_airbag_m0: '',
+    fdr_tl_m0: '',
+    fdr_tt_m0: '',
+    fdr_TL_percentage_m0: '',
+    fdr_TT_percentage_m0: '',
+    total_mo_m0: '',
+    note_tl_m0: '',
+
+    // Bulan 2
+    monthFdrM1: '',
+    nwd_1: '',
+    nwt_1: '',
+    ot_wt_1: '',
+    tl_ot_wd_1: '',
+    tt_ot_wd_1: '',
+    total_wt_1: '',
+    total_tlwd_1: '',
+    total_ttwd_1: '',
+    max_tube_capa_1: '',
+    max_capa_tl_1: '',
+    max_capa_tt_1: '',
+    machine_airbag_m1: '',
+    fdr_tl_m1: '',
+    fdr_tt_m1: '',
+    fdr_TL_percentage_m1: '',
+    fdr_TT_percentage_m1: '',
+    total_mo_m1: '',
+    note_tl_m1: '',
+
+    //Bulan 3
+    monthFdrM2: '',
+    nwd_2: '',
+    nwt_2: '',
+    ot_wt_2: '',
+    tl_ot_wd_2: '',
+    tt_ot_wd_2: '',
+    total_wt_2: '',
+    total_tlwd_2: '',
+    total_ttwd_2: '',
+    max_tube_capa_2: '',
+    max_capa_tl_2: '',
+    max_capa_tt_2: '',
+    machine_airbag_m2: '',
+    fdr_tl_m2: '',
+    fdr_tt_m2: '',
+    fdr_TL_percentage_m2: '',
+    fdr_TT_percentage_m2: '',
+    total_mo_m2: '',
+    note_tl_m2: '',
+  };
 
   // Pagination Detail Marketing Order
   headersColumnsDmo: string[] = ['no', 'category', 'partNumber', 'description', 'machineType', 'capacity', 'qtyPerMould', 'spareMould', 'mouldMonthlyPlan', 'qtyPerRak', 'minOrder', 'maxCap', 'initialStock', 'salesForecast', 'marketingOrder', 'ar', 'defect', 'reject', 'itemCuring'];
@@ -337,36 +402,159 @@ export class AddArDefactRejectComponent implements OnInit {
   setData(): void {
     this.dateValidFed = this.datepipe.transform(this.moFed.dateValid, 'yyyy-MM-dd');
 
+    //Set header FED
     //Header Month 1
     this.objVarFed.monthFedM0 = this.datepipe.transform(this.hmoFed[0].month, 'yyyy-MM');
-    this.objVarFed.nwd_0 = this.formatDecimalView(this.hmoFed[0].wdNormalTire),
-    this.objVarFed.nwt_0 = this.formatDecimalView(this.hmoFed[0].wdNormalTube),
-    this.objVarFed.ot_wt_0 = this.formatDecimalView(this.hmoFed[0].wdOtTube),
-    this.objVarFed.tl_ot_wd_0 = this.formatDecimalView(this.hmoFed[0].wdOtTl),
-    this.objVarFed.tt_ot_wd_0 = this.formatDecimalView(this.hmoFed[0].wdOtTt),
-    this.objVarFed.total_wt_0 = this.formatDecimalView(this.hmoFed[0].totalWdTube),
-    this.objVarFed.total_tlwd_0 = this.formatDecimalView(this.hmoFed[0].totalWdTl),
-    this.objVarFed.total_ttwd_0 = this.formatDecimalView(this.hmoFed[0].totalWdTt),
-    this.objVarFed.max_tube_capa_0 = this.formatSeparatorView(this.hmoFed[0].maxCapTube),
-    this.objVarFed.max_capa_tl_0 = this.formatSeparatorView(this.hmoFed[0].maxCapTl),
-    this.objVarFed.max_capa_tt_0 = this.formatSeparatorView(this.hmoFed[0].maxCapTt),
-    this.objVarFed.machine_airbag_m0 = this.formatSeparatorView(this.hmoFed[0].airbagMachine),
-    this.objVarFed.fed_tl_m0 = this.formatSeparatorView(this.hmoFed[0].tl),
-    this.objVarFed.fed_tt_m0 = this.formatSeparatorView(this.hmoFed[0].tt),
-    this.objVarFed.fed_TL_percentage_m0 = this.formatDecimalView(this.hmoFed[0].tlPercentage),
-    this.objVarFed.fed_TT_percentage_m0 = this.formatDecimalView(this.hmoFed[0].ttPercentage),
-    this.objVarFed.total_mo_m0 = this.formatSeparatorView(this.hmoFed[0].totalMo),
-    this.objVarFed.note_tl_m0 = this.hmoFed[0].noteOrderTl,
+    this.objVarFed.nwd_0 = this.formatDecimalView(this.hmoFed[0].wdNormalTire);
+    this.objVarFed.nwt_0 = this.formatDecimalView(this.hmoFed[0].wdNormalTube);
+    this.objVarFed.ot_wt_0 = this.formatDecimalView(this.hmoFed[0].wdOtTube);
+    this.objVarFed.tl_ot_wd_0 = this.formatDecimalView(this.hmoFed[0].wdOtTl);
+    this.objVarFed.tt_ot_wd_0 = this.formatDecimalView(this.hmoFed[0].wdOtTt);
+    this.objVarFed.total_wt_0 = this.formatDecimalView(this.hmoFed[0].totalWdTube);
+    this.objVarFed.total_tlwd_0 = this.formatDecimalView(this.hmoFed[0].totalWdTl);
+    this.objVarFed.total_ttwd_0 = this.formatDecimalView(this.hmoFed[0].totalWdTt);
+    this.objVarFed.max_tube_capa_0 = this.formatSeparatorView(this.hmoFed[0].maxCapTube);
+    this.objVarFed.max_capa_tl_0 = this.formatSeparatorView(this.hmoFed[0].maxCapTl);
+    this.objVarFed.max_capa_tt_0 = this.formatSeparatorView(this.hmoFed[0].maxCapTt);
+    this.objVarFed.machine_airbag_m0 = this.formatSeparatorView(this.hmoFed[0].airbagMachine);
+    this.objVarFed.fed_tl_m0 = this.formatSeparatorView(this.hmoFed[0].tl);
+    this.objVarFed.fed_tt_m0 = this.formatSeparatorView(this.hmoFed[0].tt);
+    this.objVarFed.fed_TL_percentage_m0 = this.formatDecimalView(this.hmoFed[0].tlPercentage);
+    this.objVarFed.fed_TT_percentage_m0 = this.formatDecimalView(this.hmoFed[0].ttPercentage);
+    this.objVarFed.total_mo_m0 = this.formatSeparatorView(this.hmoFed[0].totalMo);
+    this.objVarFed.note_tl_m0 = this.hmoFed[0].noteOrderTl;
 
+    //Header Month 2
+    this.objVarFed.monthFedM1 = this.datepipe.transform(this.hmoFed[1].month, 'yyyy-MM');
+    this.objVarFed.nwd_1 = this.formatDecimalView(this.hmoFed[1].wdNormalTire);
+    this.objVarFed.nwt_1 = this.formatDecimalView(this.hmoFed[1].wdNormalTube);
+    this.objVarFed.ot_wt_1 = this.formatDecimalView(this.hmoFed[1].wdOtTube);
+    this.objVarFed.tl_ot_wd_1 = this.formatDecimalView(this.hmoFed[1].wdOtTl);
+    this.objVarFed.tt_ot_wd_1 = this.formatDecimalView(this.hmoFed[1].wdOtTt);
+    this.objVarFed.total_wt_1 = this.formatDecimalView(this.hmoFed[1].totalWdTube);
+    this.objVarFed.total_tlwd_1 = this.formatDecimalView(this.hmoFed[1].totalWdTl);
+    this.objVarFed.total_ttwd_1 = this.formatDecimalView(this.hmoFed[1].totalWdTt);
+    this.objVarFed.max_tube_capa_1 = this.formatSeparatorView(this.hmoFed[1].maxCapTube);
+    this.objVarFed.max_capa_tl_1 = this.formatSeparatorView(this.hmoFed[1].maxCapTl);
+    this.objVarFed.max_capa_tt_1 = this.formatSeparatorView(this.hmoFed[1].maxCapTt);
+    this.objVarFed.machine_airbag_m1 = this.formatSeparatorView(this.hmoFed[1].airbagMachine);
+    this.objVarFed.fed_tl_m1 = this.formatSeparatorView(this.hmoFed[1].tl);
+    this.objVarFed.fed_tt_m1 = this.formatSeparatorView(this.hmoFed[1].tt);
+    this.objVarFed.fed_TL_percentage_m1 = this.formatDecimalView(this.hmoFed[1].tlPercentage);
+    this.objVarFed.fed_TT_percentage_m1 = this.formatDecimalView(this.hmoFed[1].ttPercentage);
+    this.objVarFed.total_mo_m1 = this.formatSeparatorView(this.hmoFed[1].totalMo);
+    this.objVarFed.note_tl_m1 = this.hmoFed[1].noteOrderTl;
 
-      this.objVar.monthFedM1 = this.datepipe.transform(this.hmoFed[1].month, 'yyyy-MM');
-    this.objVar.monthFedM2 = this.datepipe.transform(this.hmoFed[2].month, 'yyyy-MM');
+    //Header Month 3
+    this.objVarFed.monthFedM2 = this.datepipe.transform(this.hmoFed[2].month, 'yyyy-MM');
+    this.objVarFed.nwd_2 = this.formatDecimalView(this.hmoFed[2].wdNormalTire);
+    this.objVarFed.nwt_2 = this.formatDecimalView(this.hmoFed[2].wdNormalTube);
+    this.objVarFed.ot_wt_2 = this.formatDecimalView(this.hmoFed[2].wdOtTube);
+    this.objVarFed.tl_ot_wd_2 = this.formatDecimalView(this.hmoFed[2].wdOtTl);
+    this.objVarFed.tt_ot_wd_2 = this.formatDecimalView(this.hmoFed[2].wdOtTt);
+    this.objVarFed.total_wt_2 = this.formatDecimalView(this.hmoFed[2].totalWdTube);
+    this.objVarFed.total_tlwd_2 = this.formatDecimalView(this.hmoFed[2].totalWdTl);
+    this.objVarFed.total_ttwd_2 = this.formatDecimalView(this.hmoFed[2].totalWdTt);
+    this.objVarFed.max_tube_capa_2 = this.formatSeparatorView(this.hmoFed[2].maxCapTube);
+    this.objVarFed.max_capa_tl_2 = this.formatSeparatorView(this.hmoFed[2].maxCapTl);
+    this.objVarFed.max_capa_tt_2 = this.formatSeparatorView(this.hmoFed[2].maxCapTt);
+    this.objVarFed.machine_airbag_m2 = this.formatSeparatorView(this.hmoFed[2].airbagMachine);
+    this.objVarFed.fed_tl_m2 = this.formatSeparatorView(this.hmoFed[2].tl);
+    this.objVarFed.fed_tt_m2 = this.formatSeparatorView(this.hmoFed[2].tt);
+    this.objVarFed.fed_TL_percentage_m2 = this.formatDecimalView(this.hmoFed[2].tlPercentage);
+    this.objVarFed.fed_TT_percentage_m2 = this.formatDecimalView(this.hmoFed[2].ttPercentage);
+    this.objVarFed.total_mo_m2 = this.formatSeparatorView(this.hmoFed[2].totalMo);
+    this.objVarFed.note_tl_m2 = this.hmoFed[1].noteOrderTl;
 
+    //End Header FED
 
     this.dateValidFdr = this.datepipe.transform(this.moFdr.dateValid, 'yyyy-MM-dd');
-    this.objVar.monthFdrM0 = this.datepipe.transform(this.hmoFdr[0].month, 'yyyy-MM');
-    this.objVar.monthFdrM1 = this.datepipe.transform(this.hmoFdr[1].month, 'yyyy-MM');
-    this.objVar.monthFdrM2 = this.datepipe.transform(this.hmoFdr[2].month, 'yyyy-MM');
+
+    //Start header FDR
+    //Bulan 1
+    this.objVarFdr.monthFdrM0 = this.datepipe.transform(this.hmoFdr[0].month, 'yyyy-MM');
+    this.objVarFdr.nwd_0 = this.formatDecimalView(this.hmoFdr[0].wdNormalTire);
+    this.objVarFdr.nwt_0 = this.formatDecimalView(this.hmoFdr[0].wdNormalTube);
+    this.objVarFdr.ot_wt_0 = this.formatDecimalView(this.hmoFdr[0].wdOtTube);
+    this.objVarFdr.tl_ot_wd_0 = this.formatDecimalView(this.hmoFdr[0].wdOtTl);
+    this.objVarFdr.tt_ot_wd_0 = this.formatDecimalView(this.hmoFdr[0].wdOtTt);
+    this.objVarFdr.total_wt_0 = this.formatDecimalView(this.hmoFdr[0].totalWdTube);
+    this.objVarFdr.total_tlwd_0 = this.formatDecimalView(this.hmoFdr[0].totalWdTl);
+    this.objVarFdr.total_ttwd_0 = this.formatDecimalView(this.hmoFdr[0].totalWdTt);
+    this.objVarFdr.max_tube_capa_0 = this.formatSeparatorView(this.hmoFdr[0].maxCapTube);
+    this.objVarFdr.max_capa_tl_0 = this.formatSeparatorView(this.hmoFdr[0].maxCapTl);
+    this.objVarFdr.max_capa_tt_0 = this.formatSeparatorView(this.hmoFdr[0].maxCapTt);
+    this.objVarFdr.machine_airbag_m0 = this.formatSeparatorView(this.hmoFdr[0].airbagMachine);
+    this.objVarFdr.fdr_tl_m0 = this.formatSeparatorView(this.hmoFdr[0].tl);
+    this.objVarFdr.fdr_tt_m0 = this.formatSeparatorView(this.hmoFdr[0].tt);
+    this.objVarFdr.fdr_TL_percentage_m0 = this.formatDecimalView(this.hmoFdr[0].tlPercentage);
+    this.objVarFdr.fdr_TT_percentage_m0 = this.formatDecimalView(this.hmoFdr[0].ttPercentage);
+    this.objVarFdr.total_mo_m0 = this.formatSeparatorView(this.hmoFdr[0].totalMo);
+    this.objVarFdr.note_tl_m0 = this.hmoFdr[0].noteOrderTl;
+
+    //Bulan 2
+    this.objVarFdr.monthFdrM1 = this.datepipe.transform(this.hmoFdr[1].month, 'yyyy-MM');
+    this.objVarFdr.nwd_1 = this.formatDecimalView(this.hmoFdr[1].wdNormalTire);
+    this.objVarFdr.nwt_1 = this.formatDecimalView(this.hmoFdr[1].wdNormalTube);
+    this.objVarFdr.ot_wt_1 = this.formatDecimalView(this.hmoFdr[1].wdOtTube);
+    this.objVarFdr.tl_ot_wd_1 = this.formatDecimalView(this.hmoFdr[1].wdOtTl);
+    this.objVarFdr.tt_ot_wd_1 = this.formatDecimalView(this.hmoFdr[1].wdOtTt);
+    this.objVarFdr.total_wt_1 = this.formatDecimalView(this.hmoFdr[1].totalWdTube);
+    this.objVarFdr.total_tlwd_1 = this.formatDecimalView(this.hmoFdr[1].totalWdTl);
+    this.objVarFdr.total_ttwd_1 = this.formatDecimalView(this.hmoFdr[1].totalWdTt);
+    this.objVarFdr.max_tube_capa_1 = this.formatSeparatorView(this.hmoFdr[1].maxCapTube);
+    this.objVarFdr.max_capa_tl_1 = this.formatSeparatorView(this.hmoFdr[1].maxCapTl);
+    this.objVarFdr.max_capa_tt_1 = this.formatSeparatorView(this.hmoFdr[1].maxCapTt);
+    this.objVarFdr.machine_airbag_m1 = this.formatSeparatorView(this.hmoFdr[1].airbagMachine);
+    this.objVarFdr.fdr_tl_m1 = this.formatSeparatorView(this.hmoFdr[1].tl);
+    this.objVarFdr.fdr_tt_m1 = this.formatSeparatorView(this.hmoFdr[1].tt);
+    this.objVarFdr.fdr_TL_percentage_m1 = this.formatDecimalView(this.hmoFdr[1].tlPercentage);
+    this.objVarFdr.fdr_TT_percentage_m1 = this.formatDecimalView(this.hmoFdr[1].ttPercentage);
+    this.objVarFdr.total_mo_m1 = this.formatSeparatorView(this.hmoFdr[1].totalMo);
+    this.objVarFdr.note_tl_m1 = this.hmoFdr[1].noteOrderTl;
+
+    //Bulan 2
+    this.objVarFdr.monthFdrM2 = this.datepipe.transform(this.hmoFdr[2].month, 'yyyy-MM');
+    this.objVarFdr.nwd_2 = this.formatDecimalView(this.hmoFdr[2].wdNormalTire);
+    this.objVarFdr.nwt_2 = this.formatDecimalView(this.hmoFdr[2].wdNormalTube);
+    this.objVarFdr.ot_wt_2 = this.formatDecimalView(this.hmoFdr[2].wdOtTube);
+    this.objVarFdr.tl_ot_wd_2 = this.formatDecimalView(this.hmoFdr[2].wdOtTl);
+    this.objVarFdr.tt_ot_wd_2 = this.formatDecimalView(this.hmoFdr[2].wdOtTt);
+    this.objVarFdr.total_wt_2 = this.formatDecimalView(this.hmoFdr[2].totalWdTube);
+    this.objVarFdr.total_tlwd_2 = this.formatDecimalView(this.hmoFdr[2].totalWdTl);
+    this.objVarFdr.total_ttwd_2 = this.formatDecimalView(this.hmoFdr[2].totalWdTt);
+    this.objVarFdr.max_tube_capa_2 = this.formatSeparatorView(this.hmoFdr[2].maxCapTube);
+    this.objVarFdr.max_capa_tl_2 = this.formatSeparatorView(this.hmoFdr[2].maxCapTl);
+    this.objVarFdr.max_capa_tt_2 = this.formatSeparatorView(this.hmoFdr[2].maxCapTt);
+    this.objVarFdr.machine_airbag_m2 = this.formatSeparatorView(this.hmoFdr[2].airbagMachine);
+    this.objVarFdr.fdr_tl_m2 = this.formatSeparatorView(this.hmoFdr[2].tl);
+    this.objVarFdr.fdr_tt_m2 = this.formatSeparatorView(this.hmoFdr[2].tt);
+    this.objVarFdr.fdr_TL_percentage_m2 = this.formatDecimalView(this.hmoFdr[2].tlPercentage);
+    this.objVarFdr.fdr_TT_percentage_m2 = this.formatDecimalView(this.hmoFdr[2].ttPercentage);
+    this.objVarFdr.total_mo_m2 = this.formatSeparatorView(this.hmoFdr[2].totalMo);
+    this.objVarFdr.note_tl_m2 = this.hmoFdr[2].noteOrderTl;
+
+    //Fill table Detail Marketing Order
+    this.detailMarketingOrder = [...this.dmoFed, ...this.dmoFdr];
+    this.dataSourceDmo = new MatTableDataSource(this.detailMarketingOrder);
+    this.dataSourceDmo.sort = this.sortDmo;
+    this.dataSourceDmo.paginator = this.paginatorDmo;
+
+    this.detailMarketingOrder.forEach((item) => {
+      item.initialStock = item.initialStock !== null ? item.initialStock : 0;
+      item.sfMonth0 = item.sfMonth0 !== null ? item.sfMonth0 : 0;
+      item.sfMonth1 = item.sfMonth1 !== null ? item.sfMonth1 : 0;
+      item.sfMonth2 = item.sfMonth2 !== null ? item.sfMonth2 : 0;
+      item.moMonth0 = item.moMonth0 !== null ? item.moMonth0 : 0;
+      item.moMonth1 = item.moMonth1 !== null ? item.moMonth1 : 0;
+      item.moMonth2 = item.moMonth2 !== null ? item.moMonth2 : 0;
+      item.ar = 100;
+      item.defect = 0;
+      item.reject = 0;
+      item.moMonth0Original = item.moMonth0;
+    });
+
+    this.updateMonthNames(this.hmoFed);
   }
 
   getLastIdMo(): void {
@@ -384,213 +572,53 @@ export class AddArDefactRejectComponent implements OnInit {
     );
   }
 
-  fillAllData(data: any) {
-    this.headerMarketingOrder = data.dataHeaderMo;
-    //Fill table
-    this.detailMarketingOrder = data.dataDetailMo;
-    this.dataSourceDmo = new MatTableDataSource(this.detailMarketingOrder);
-    this.dataSourceDmo.sort = this.sortDmo;
-    this.dataSourceDmo.paginator = this.paginatorDmo;
-    this.typeMo = data.type;
-
-    this.detailMarketingOrder.forEach((item) => {
-      item.initialStock = item.initialStock !== null ? item.initialStock : 0;
-      item.sfMonth0 = item.sfMonth0 !== null ? item.sfMonth0 : 0;
-      item.sfMonth1 = item.sfMonth1 !== null ? item.sfMonth1 : 0;
-      item.sfMonth2 = item.sfMonth2 !== null ? item.sfMonth2 : 0;
-      item.moMonth0 = item.moMonth0 !== null ? item.moMonth0 : 0;
-      item.moMonth1 = item.moMonth1 !== null ? item.moMonth1 : 0;
-      item.moMonth2 = item.moMonth2 !== null ? item.moMonth2 : 0;
-      item.ar = 100;
-      item.defect = 0;
-      item.reject = 0;
-      item.moMonth0Original = item.moMonth0;
-    });
-
-    let typeProduct = data.type;
-    this.formHeaderMo.patchValue({
-      date: new Date(data.dateValid).toISOString().split('T')[0],
-      type: data.type,
-      revision: data.revisionPpc,
-
-      // Header Month 1
-      month_0: this.formatDateToString(this.headerMarketingOrder[0].month),
-      nwd_0: this.formatDecimalView(this.headerMarketingOrder[0].wdNormalTire),
-      nwt_0: this.formatDecimalView(this.headerMarketingOrder[0].wdNormalTube),
-      ot_wt_0: this.formatDecimalView(this.headerMarketingOrder[0].wdOtTube),
-      tl_ot_wd_0: this.formatDecimalView(this.headerMarketingOrder[0].wdOtTl),
-      tt_ot_wd_0: this.formatDecimalView(this.headerMarketingOrder[0].wdOtTt),
-      total_wt_0: this.formatDecimalView(this.headerMarketingOrder[0].totalWdTube),
-      total_tlwd_0: this.formatDecimalView(this.headerMarketingOrder[0].totalWdTl),
-      total_ttwd_0: this.formatDecimalView(this.headerMarketingOrder[0].totalWdTt),
-      max_tube_capa_0: this.formatSeparatorView(this.headerMarketingOrder[0].maxCapTube),
-      max_capa_tl_0: this.formatSeparatorView(this.headerMarketingOrder[0].maxCapTl),
-      max_capa_tt_0: this.formatSeparatorView(this.headerMarketingOrder[0].maxCapTt),
-      machine_airbag_m0: this.formatSeparatorView(this.headerMarketingOrder[0].airbagMachine),
-      fed_tl_m0: typeProduct === 'FED' ? this.formatSeparatorView(this.headerMarketingOrder[0].tl) : null,
-      fed_tt_m0: typeProduct === 'FED' ? this.formatSeparatorView(this.headerMarketingOrder[0].tt) : null,
-      fdr_tl_m0: typeProduct === 'FDR' ? this.formatSeparatorView(this.headerMarketingOrder[0].tl) : null,
-      fdr_tt_m0: typeProduct === 'FDR' ? this.formatSeparatorView(this.headerMarketingOrder[0].tt) : null,
-      fed_TL_percentage_m0: typeProduct === 'FED' ? this.formatDecimalView(this.headerMarketingOrder[0].tlPercentage) : null,
-      fed_TT_percentage_m0: typeProduct === 'FED' ? this.formatDecimalView(this.headerMarketingOrder[0].ttPercentage) : null,
-      fdr_TL_percentage_m0: typeProduct === 'FDR' ? this.formatDecimalView(this.headerMarketingOrder[0].tlPercentage) : null,
-      fdr_TT_percentage_m0: typeProduct === 'FDR' ? this.formatDecimalView(this.headerMarketingOrder[0].ttPercentage) : null,
-      total_mo_m0: this.formatSeparatorView(this.headerMarketingOrder[0].totalMo),
-      note_tl_m0: this.headerMarketingOrder[0].noteOrderTl,
-      // Header Month 2
-      month_1: this.formatDateToString(this.headerMarketingOrder[1].month),
-      nwd_1: this.formatDecimalView(this.headerMarketingOrder[1].wdNormalTire),
-      nwt_1: this.formatDecimalView(this.headerMarketingOrder[1].wdNormalTube),
-      ot_wt_1: this.formatDecimalView(this.headerMarketingOrder[1].wdOtTube),
-      tl_ot_wd_1: this.formatDecimalView(this.headerMarketingOrder[1].wdOtTl),
-      tt_ot_wd_1: this.formatDecimalView(this.headerMarketingOrder[1].wdOtTt),
-      total_wt_1: this.formatDecimalView(this.headerMarketingOrder[1].totalWdTube),
-      total_tlwd_1: this.formatDecimalView(this.headerMarketingOrder[1].totalWdTl),
-      total_ttwd_1: this.formatDecimalView(this.headerMarketingOrder[1].totalWdTt),
-      max_tube_capa_1: this.formatSeparatorView(this.headerMarketingOrder[1].maxCapTube),
-      max_capa_tl_1: this.formatSeparatorView(this.headerMarketingOrder[1].maxCapTl),
-      max_capa_tt_1: this.formatSeparatorView(this.headerMarketingOrder[1].maxCapTt),
-      machine_airbag_m1: this.formatSeparatorView(this.headerMarketingOrder[1].airbagMachine),
-      fed_tl_m1: typeProduct === 'FED' ? this.formatSeparatorView(this.headerMarketingOrder[1].tl) : null,
-      fed_tt_m1: typeProduct === 'FED' ? this.formatSeparatorView(this.headerMarketingOrder[1].tt) : null,
-      fdr_tl_m1: typeProduct === 'FDR' ? this.formatSeparatorView(this.headerMarketingOrder[1].tl) : null,
-      fdr_tt_m1: typeProduct === 'FDR' ? this.formatSeparatorView(this.headerMarketingOrder[1].tt) : null,
-      fed_TL_percentage_m1: typeProduct === 'FED' ? this.formatDecimalView(this.headerMarketingOrder[1].tlPercentage) : null,
-      fed_TT_percentage_m1: typeProduct === 'FED' ? this.formatDecimalView(this.headerMarketingOrder[1].ttPercentage) : null,
-      fdr_TL_percentage_m1: typeProduct === 'FDR' ? this.formatDecimalView(this.headerMarketingOrder[1].tlPercentage) : null,
-      fdr_TT_percentage_m1: typeProduct === 'FDR' ? this.formatDecimalView(this.headerMarketingOrder[1].ttPercentage) : null,
-      total_mo_m1: this.formatSeparatorView(this.headerMarketingOrder[1].totalMo),
-      note_tl_m1: this.headerMarketingOrder[1].noteOrderTl,
-      // Header Month 3
-      month_2: this.formatDateToString(this.headerMarketingOrder[2].month),
-      nwd_2: this.formatDecimalView(this.headerMarketingOrder[2].wdNormalTire),
-      nwt_2: this.formatDecimalView(this.headerMarketingOrder[2].wdNormalTube),
-      ot_wt_2: this.formatDecimalView(this.headerMarketingOrder[2].wdOtTube),
-      tl_ot_wd_2: this.formatDecimalView(this.headerMarketingOrder[2].wdOtTl),
-      tt_ot_wd_2: this.formatDecimalView(this.headerMarketingOrder[2].wdOtTt),
-      total_wt_2: this.formatDecimalView(this.headerMarketingOrder[2].totalWdTube),
-      total_tlwd_2: this.formatDecimalView(this.headerMarketingOrder[2].totalWdTl),
-      total_ttwd_2: this.formatDecimalView(this.headerMarketingOrder[2].totalWdTt),
-      max_tube_capa_2: this.formatSeparatorView(this.headerMarketingOrder[2].maxCapTube),
-      max_capa_tl_2: this.formatSeparatorView(this.headerMarketingOrder[2].maxCapTl),
-      max_capa_tt_2: this.formatSeparatorView(this.headerMarketingOrder[2].maxCapTt),
-      machine_airbag_m2: this.formatSeparatorView(this.headerMarketingOrder[2].airbagMachine),
-      fed_tl_m2: typeProduct === 'FED' ? this.formatSeparatorView(this.headerMarketingOrder[2].tl) : null,
-      fed_tt_m2: typeProduct === 'FED' ? this.formatSeparatorView(this.headerMarketingOrder[2].tt) : null,
-      fdr_tl_m2: typeProduct === 'FDR' ? this.formatSeparatorView(this.headerMarketingOrder[2].tl) : null,
-      fdr_tt_m2: typeProduct === 'FDR' ? this.formatSeparatorView(this.headerMarketingOrder[2].tt) : null,
-      fed_TL_percentage_m2: typeProduct === 'FED' ? this.formatDecimalView(this.headerMarketingOrder[2].tlPercentage) : null,
-      fed_TT_percentage_m2: typeProduct === 'FED' ? this.formatDecimalView(this.headerMarketingOrder[2].ttPercentage) : null,
-      fdr_TL_percentage_m2: typeProduct === 'FDR' ? this.formatDecimalView(this.headerMarketingOrder[2].tlPercentage) : null,
-      fdr_TT_percentage_m2: typeProduct === 'FDR' ? this.formatDecimalView(this.headerMarketingOrder[2].ttPercentage) : null,
-      total_mo_m2: this.formatSeparatorView(this.headerMarketingOrder[2].totalMo),
-      note_tl_m2: this.headerMarketingOrder[2].noteOrderTl,
-    });
-
-    this.updateMonthNames(this.headerMarketingOrder);
-  }
-
   finalizationMo(): void {
-    const type = this.formHeaderMo.get('type')?.value;
+    console.log('jawa');
+    this.dmoFdr = this.detailMarketingOrder.filter((order) => order.description.includes('FDR'));
+    this.dmoFed = this.detailMarketingOrder.filter((order) => order.description.includes('FED'));
 
-    //Set data Save MO
-    this.marketingOrder.moId = this.lastIdMo;
-    this.marketingOrder.dateValid = this.formHeaderMo.get('date')?.value;
-    this.marketingOrder.type = this.formHeaderMo.get('type')?.value;
-    this.marketingOrder.revisionPpc = this.formHeaderMo.get('revision')?.value;
-    this.marketingOrder.revisionMarketing = this.allData.revisionMarketing;
-    this.marketingOrder.month0 = new Date(this.formHeaderMo.get('month_0')?.value);
-    this.marketingOrder.month1 = new Date(this.formHeaderMo.get('month_1')?.value);
-    this.marketingOrder.month2 = new Date(this.formHeaderMo.get('month_2')?.value);
-    this.marketingOrder.statusFilled = this.allData.statusFilled;
-
-    //Set data save Header Mo
-    this.headerMarketingOrder = [];
-    for (let i = 0; i < 3; i++) {
-      let nwdValue = this.parseFormattedValue(this.formHeaderMo.get(`nwd_${i}`)?.value);
-      let nwtValue = this.parseFormattedValue(this.formHeaderMo.get(`nwt_${i}`)?.value);
-      let otWdTubeValue = this.parseFormattedValue(this.formHeaderMo.get(`ot_wt_${i}`)?.value);
-      let totalWdTube = this.parseFormattedValue(this.formHeaderMo.get(`total_wt_${i}`)?.value);
-
-      // Validate: if nwt is null or not filled, set it to nwd
-      if (nwtValue === null) {
-        nwtValue = nwdValue;
-        otWdTubeValue = 0;
-        totalWdTube = nwtValue + otWdTubeValue;
-      }
-
-      const tlField = type === 'FDR' ? `fdr_tl_m${i}` : `fed_tl_m${i}`;
-      const ttField = type === 'FDR' ? `fdr_tt_m${i}` : `fed_tt_m${i}`;
-
-      const tlFieldPercentage = type === 'FDR' ? `fdr_TL_percentage_m${i}` : `fed_TL_percentage_m${i}`;
-      const ttFieldPercentage = type === 'FDR' ? `fdr_TT_percentage_m${i}` : `fed_TT_percentage_m${i}`;
-
-      this.headerMarketingOrder.push({
-        moId: this.lastIdMo,
-        month: new Date(this.formHeaderMo.get(`month_${i}`)?.value),
-        wdNormalTire: this.parseFormattedValue(this.formHeaderMo.get(`nwd_${i}`)?.value),
-        wdNormalTube: nwtValue,
-        wdOtTube: otWdTubeValue,
-        wdOtTl: this.parseFormattedValue(this.formHeaderMo.get(`tl_ot_wd_${i}`)?.value),
-        wdOtTt: this.parseFormattedValue(this.formHeaderMo.get(`tt_ot_wd_${i}`)?.value),
-        totalWdTube: totalWdTube,
-        totalWdTl: this.parseFormattedValue(this.formHeaderMo.get(`total_tlwd_${i}`)?.value || ''),
-        totalWdTt: this.parseFormattedValue(this.formHeaderMo.get(`total_ttwd_${i}`)?.value || ''),
-        maxCapTube: this.parseFormattedValue(this.formHeaderMo.get(`max_tube_capa_${i}`)?.value || ''),
-        maxCapTl: this.parseFormattedValue(this.formHeaderMo.get(`max_capa_tl_${i}`)?.value || ''),
-        maxCapTt: this.parseFormattedValue(this.formHeaderMo.get(`max_capa_tt_${i}`)?.value || ''),
-        airbagMachine: this.parseFormattedValue(this.formHeaderMo.get(`machine_airbag_m${i}`)?.value || ''),
-        tl: this.parseFormattedValue(this.formHeaderMo.get(tlField)?.value || ''),
-        tt: this.parseFormattedValue(this.formHeaderMo.get(ttField)?.value || ''),
-        totalMo: this.parseFormattedValue(this.formHeaderMo.get(`total_mo_m${i}`)?.value || ''),
-        tlPercentage: this.parseFormattedValue(this.formHeaderMo.get(tlFieldPercentage)?.value || ''),
-        ttPercentage: this.parseFormattedValue(this.formHeaderMo.get(ttFieldPercentage)?.value || ''),
-        noteOrderTl: this.formHeaderMo.get(`note_tl_m${i}`)?.value,
-      });
-    }
-
-    //Set data save Detail Mo
-    this.detailMarketingOrder.forEach((item) => {
-      item.moId = this.lastIdMo;
-    });
-
+    console.log(this.dmoFdr.length);
     const saveMo = {
-      marketingOrder: this.marketingOrder,
-      headerMarketingOrder: this.headerMarketingOrder,
-      detailMarketingOrder: this.detailMarketingOrder,
+      moFed: this.moFed,
+      headerMarketingOrderFed: this.hmoFed,
+      detailMarketingOrderFed: this.dmoFed,
+
+      moFdr: this.moFdr,
+      headerMarketingOrderFdr: this.hmoFdr,
+      detailMarketingOrderFdr: this.dmoFdr,
     };
 
-    this.loading = true;
-    Swal.fire({
-      icon: 'info',
-      title: 'Processing...',
-      html: 'Please wait while save data marketing order.',
-      allowOutsideClick: false,
-      didOpen: () => {
-        Swal.showLoading();
-      },
-    });
-    this.moService.arRejectDefect(saveMo).subscribe(
-      (response) => {
-        Swal.close();
-        Swal.fire({
-          title: 'Success!',
-          text: 'Data Marketing Order successfully Revision.',
-          icon: 'success',
-          confirmButtonText: 'OK',
-        }).then((result) => {
-          if (result.isConfirmed) {
-            this.navigateToViewAddMp();
-          }
-        });
-        this.loading = false;
-      },
-      (err) => {
-        Swal.close();
-        Swal.fire('Error!', 'Error insert data Marketing Order.', 'error');
-        this.loading = false;
-      }
-    );
+    // this.loading = true;
+    // Swal.fire({
+    //   icon: 'info',
+    //   title: 'Processing...',
+    //   html: 'Please wait while save data marketing order.',
+    //   allowOutsideClick: false,
+    //   didOpen: () => {
+    //     Swal.showLoading();
+    //   },
+    // });
+    // this.moService.arRejectDefect(saveMo).subscribe(
+    //   (response) => {
+    //     Swal.close();
+    //     Swal.fire({
+    //       title: 'Success!',
+    //       text: 'Data Marketing Order successfully Revision.',
+    //       icon: 'success',
+    //       confirmButtonText: 'OK',
+    //     }).then((result) => {
+    //       if (result.isConfirmed) {
+    //         this.navigateToViewAddMp();
+    //       }
+    //     });
+    //     this.loading = false;
+    //   },
+    //   (err) => {
+    //     Swal.close();
+    //     Swal.fire('Error!', 'Error insert data Marketing Order.', 'error');
+    //     this.loading = false;
+    //   }
+    // );
   }
 
   parseFormattedValue(formattedValue: string | null): number | null {
@@ -627,9 +655,9 @@ export class AddArDefactRejectComponent implements OnInit {
   }
 
   updateMonthNames(hm: HeaderMarketingOrder[]): void {
-    this.monthNames[0] = this.getMonthName(new Date(this.headerMarketingOrder[1].month));
-    this.monthNames[1] = this.getMonthName(new Date(this.headerMarketingOrder[2].month));
-    this.monthNames[2] = this.getMonthName(new Date(this.headerMarketingOrder[0].month));
+    this.monthNames[0] = this.getMonthName(new Date(this.hmoFed[0].month));
+    this.monthNames[1] = this.getMonthName(new Date(this.hmoFed[1].month));
+    this.monthNames[2] = this.getMonthName(new Date(this.hmoFed[2].month));
   }
 
   getMonthName(monthValue: Date): string {
@@ -740,9 +768,9 @@ export class AddArDefactRejectComponent implements OnInit {
     worksheet.getCell('N2').font = { name: 'Calibri Body', size: 11, bold: true, italic: true };
     setBorder(worksheet.getCell('N2'));
 
-    worksheet.getCell('Q2').value = this.headerMarketingOrder[0].wdNormalTire; // "Month 1"
-    worksheet.getCell('R2').value = this.headerMarketingOrder[1].wdNormalTire; // "Month 2"
-    worksheet.getCell('S2').value = this.headerMarketingOrder[2].wdNormalTire; // "Month 3"
+    // worksheet.getCell('Q2').value = this.headerMarketingOrder[0].wdNormalTire; // "Month 1"
+    // worksheet.getCell('R2').value = this.headerMarketingOrder[1].wdNormalTire; // "Month 2"
+    // worksheet.getCell('S2').value = this.headerMarketingOrder[2].wdNormalTire; // "Month 3"
     worksheet.getCell('Q2').numFmt = '0.00';
     worksheet.getCell('R2').numFmt = '0.00';
     worksheet.getCell('S2').numFmt = '0.00';
@@ -753,9 +781,9 @@ export class AddArDefactRejectComponent implements OnInit {
     worksheet.getCell('N3').font = { name: 'Calibri Body', size: 11, bold: true, italic: true };
     setBorder(worksheet.getCell('N3'));
 
-    worksheet.getCell('Q3').value = this.headerMarketingOrder[0].wdNormalTube; // "Month 1"
-    worksheet.getCell('R3').value = this.headerMarketingOrder[1].wdNormalTube; // "Month 2"
-    worksheet.getCell('S3').value = this.headerMarketingOrder[2].wdNormalTube; // "Month 3"
+    // worksheet.getCell('Q3').value = this.headerMarketingOrder[0].wdNormalTube; // "Month 1"
+    // worksheet.getCell('R3').value = this.headerMarketingOrder[1].wdNormalTube; // "Month 2"
+    // worksheet.getCell('S3').value = this.headerMarketingOrder[2].wdNormalTube; // "Month 3"
     worksheet.getCell('Q3').numFmt = '0.00';
     worksheet.getCell('R3').numFmt = '0.00';
     worksheet.getCell('S3').numFmt = '0.00';
@@ -765,9 +793,9 @@ export class AddArDefactRejectComponent implements OnInit {
     worksheet.getCell('N4').alignment = { vertical: 'middle', horizontal: 'left' };
     worksheet.getCell('N4').font = { name: 'Calibri Body', size: 11, bold: true, italic: true };
     setBorder(worksheet.getCell('N4'));
-    worksheet.getCell('Q4').value = this.headerMarketingOrder[0].wdOtTube; // "Month 1"
-    worksheet.getCell('R4').value = this.headerMarketingOrder[1].wdOtTube; // "Month 2"
-    worksheet.getCell('S4').value = this.headerMarketingOrder[2].wdOtTube; // "Month 3"
+    // worksheet.getCell('Q4').value = this.headerMarketingOrder[0].wdOtTube; // "Month 1"
+    // worksheet.getCell('R4').value = this.headerMarketingOrder[1].wdOtTube; // "Month 2"
+    // worksheet.getCell('S4').value = this.headerMarketingOrder[2].wdOtTube; // "Month 3"
     worksheet.getCell('Q4').numFmt = '0.00';
     worksheet.getCell('R4').numFmt = '0.00';
     worksheet.getCell('S4').numFmt = '0.00';
@@ -777,9 +805,9 @@ export class AddArDefactRejectComponent implements OnInit {
     worksheet.getCell('N5').alignment = { vertical: 'middle', horizontal: 'left' };
     worksheet.getCell('N5').font = { name: 'Calibri Body', size: 11, bold: true, italic: true };
     setBorder(worksheet.getCell('N5'));
-    worksheet.getCell('Q5').value = this.headerMarketingOrder[0].wdOtTl; // "Month 1"
-    worksheet.getCell('R5').value = this.headerMarketingOrder[1].wdOtTl; // "Month 2"
-    worksheet.getCell('S5').value = this.headerMarketingOrder[2].wdOtTl; // "Month 3"
+    // worksheet.getCell('Q5').value = this.headerMarketingOrder[0].wdOtTl; // "Month 1"
+    // worksheet.getCell('R5').value = this.headerMarketingOrder[1].wdOtTl; // "Month 2"
+    // worksheet.getCell('S5').value = this.headerMarketingOrder[2].wdOtTl; // "Month 3"
     worksheet.getCell('Q5').numFmt = '0.00';
     worksheet.getCell('R5').numFmt = '0.00';
     worksheet.getCell('S5').numFmt = '0.00';
@@ -788,9 +816,9 @@ export class AddArDefactRejectComponent implements OnInit {
     worksheet.getCell('N6').value = 'Workday Overtime TT';
     worksheet.getCell('N6').alignment = { vertical: 'middle', horizontal: 'left' };
     setBorder(worksheet.getCell('N6'));
-    worksheet.getCell('Q6').value = this.headerMarketingOrder[0].wdOtTt; // "Month 1"
-    worksheet.getCell('R6').value = this.headerMarketingOrder[1].wdOtTt; // "Month 2"
-    worksheet.getCell('S6').value = this.headerMarketingOrder[2].wdOtTt; // "Month 3"
+    // worksheet.getCell('Q6').value = this.headerMarketingOrder[0].wdOtTt; // "Month 1"
+    // worksheet.getCell('R6').value = this.headerMarketingOrder[1].wdOtTt; // "Month 2"
+    // worksheet.getCell('S6').value = this.headerMarketingOrder[2].wdOtTt; // "Month 3"
     worksheet.getCell('Q6').numFmt = '0.00';
     worksheet.getCell('R6').numFmt = '0.00';
     worksheet.getCell('S6').numFmt = '0.00';
@@ -799,9 +827,9 @@ export class AddArDefactRejectComponent implements OnInit {
     worksheet.getCell('N7').value = 'Total Workday Tube';
     worksheet.getCell('N7').alignment = { vertical: 'middle', horizontal: 'left' };
     setBorder(worksheet.getCell('N7'));
-    worksheet.getCell('Q7').value = this.headerMarketingOrder[0].totalWdTube; // "Month 1"
-    worksheet.getCell('R7').value = this.headerMarketingOrder[1].totalWdTube; // "Month 2"
-    worksheet.getCell('S7').value = this.headerMarketingOrder[2].totalWdTube; // "Month 3"
+    // worksheet.getCell('Q7').value = this.headerMarketingOrder[0].totalWdTube; // "Month 1"
+    // worksheet.getCell('R7').value = this.headerMarketingOrder[1].totalWdTube; // "Month 2"
+    // worksheet.getCell('S7').value = this.headerMarketingOrder[2].totalWdTube; // "Month 3"
     worksheet.getCell('Q7').numFmt = '0.00';
     worksheet.getCell('R7').numFmt = '0.00';
     worksheet.getCell('S7').numFmt = '0.00';
@@ -810,9 +838,9 @@ export class AddArDefactRejectComponent implements OnInit {
     worksheet.getCell('N8').value = 'Total Workday Tire TL';
     worksheet.getCell('N8').alignment = { vertical: 'middle', horizontal: 'left' };
     setBorder(worksheet.getCell('N8'));
-    worksheet.getCell('Q8').value = this.headerMarketingOrder[0].totalWdTl; // "Month 1"
-    worksheet.getCell('R8').value = this.headerMarketingOrder[1].totalWdTl; // "Month 2"
-    worksheet.getCell('S8').value = this.headerMarketingOrder[2].totalWdTl; // "Month 3"
+    // worksheet.getCell('Q8').value = this.headerMarketingOrder[0].totalWdTl; // "Month 1"
+    // worksheet.getCell('R8').value = this.headerMarketingOrder[1].totalWdTl; // "Month 2"
+    // worksheet.getCell('S8').value = this.headerMarketingOrder[2].totalWdTl; // "Month 3"
     worksheet.getCell('Q8').numFmt = '0.00';
     worksheet.getCell('R8').numFmt = '0.00';
     worksheet.getCell('S8').numFmt = '0.00';
@@ -821,9 +849,9 @@ export class AddArDefactRejectComponent implements OnInit {
     worksheet.getCell('N9').value = 'Total Workday Tire TT';
     worksheet.getCell('N9').alignment = { vertical: 'middle', horizontal: 'left' };
     setBorder(worksheet.getCell('N9'));
-    worksheet.getCell('Q9').value = this.headerMarketingOrder[0].totalWdTt; // "Month 1"
-    worksheet.getCell('R9').value = this.headerMarketingOrder[1].totalWdTt; // "Month 2"
-    worksheet.getCell('S9').value = this.headerMarketingOrder[2].totalWdTt; // "Month 3"
+    // worksheet.getCell('Q9').value = this.headerMarketingOrder[0].totalWdTt; // "Month 1"
+    // worksheet.getCell('R9').value = this.headerMarketingOrder[1].totalWdTt; // "Month 2"
+    // worksheet.getCell('S9').value = this.headerMarketingOrder[2].totalWdTt; // "Month 3"
     worksheet.getCell('Q9').numFmt = '0.00';
     worksheet.getCell('R9').numFmt = '0.00';
     worksheet.getCell('S9').numFmt = '0.00';
@@ -832,9 +860,9 @@ export class AddArDefactRejectComponent implements OnInit {
     worksheet.getCell('N10').value = 'Max Capacity Tube';
     worksheet.getCell('N10').alignment = { vertical: 'middle', horizontal: 'left' };
     setBorder(worksheet.getCell('N10'));
-    worksheet.getCell('Q10').value = this.headerMarketingOrder[1].maxCapTube; // "Month 1"
-    worksheet.getCell('R10').value = this.headerMarketingOrder[2].maxCapTube; // "Month 2"
-    worksheet.getCell('S10').value = this.headerMarketingOrder[0].maxCapTube; // "Month 3"
+    // worksheet.getCell('Q10').value = this.headerMarketingOrder[1].maxCapTube; // "Month 1"
+    // worksheet.getCell('R10').value = this.headerMarketingOrder[2].maxCapTube; // "Month 2"
+    // worksheet.getCell('S10').value = this.headerMarketingOrder[0].maxCapTube; // "Month 3"
     worksheet.getCell('Q10').numFmt = '#,##0';
     worksheet.getCell('R10').numFmt = '#,##0';
     worksheet.getCell('S10').numFmt = '#,##0';
@@ -859,9 +887,9 @@ export class AddArDefactRejectComponent implements OnInit {
     worksheet.getCell('N11').value = 'Max Capacity Tire TL';
     worksheet.getCell('N11').alignment = { vertical: 'middle', horizontal: 'left' };
     setBorder(worksheet.getCell('N11'));
-    worksheet.getCell('Q11').value = this.headerMarketingOrder[0].maxCapTl; // "Month 1"
-    worksheet.getCell('R11').value = this.headerMarketingOrder[1].maxCapTl; // "Month 2"
-    worksheet.getCell('S11').value = this.headerMarketingOrder[2].maxCapTl; // "Month 3"
+    // worksheet.getCell('Q11').value = this.headerMarketingOrder[0].maxCapTl; // "Month 1"
+    // worksheet.getCell('R11').value = this.headerMarketingOrder[1].maxCapTl; // "Month 2"
+    // worksheet.getCell('S11').value = this.headerMarketingOrder[2].maxCapTl; // "Month 3"
     worksheet.getCell('Q11').numFmt = '#,##0';
     worksheet.getCell('R11').numFmt = '#,##0';
     worksheet.getCell('S11').numFmt = '#,##0';
@@ -885,9 +913,9 @@ export class AddArDefactRejectComponent implements OnInit {
     worksheet.getCell('N12').value = 'Max Capacity Tire TT';
     worksheet.getCell('N12').alignment = { vertical: 'middle', horizontal: 'left' };
     setBorder(worksheet.getCell('N12'));
-    worksheet.getCell('Q12').value = this.headerMarketingOrder[0].maxCapTt; // "Month 1"
-    worksheet.getCell('R12').value = this.headerMarketingOrder[1].maxCapTt; // "Month 2"
-    worksheet.getCell('S12').value = this.headerMarketingOrder[2].maxCapTt; // "Month 3"
+    // worksheet.getCell('Q12').value = this.headerMarketingOrder[0].maxCapTt; // "Month 1"
+    // worksheet.getCell('R12').value = this.headerMarketingOrder[1].maxCapTt; // "Month 2"
+    // worksheet.getCell('S12').value = this.headerMarketingOrder[2].maxCapTt; // "Month 3"
     worksheet.getCell('Q12').numFmt = '#,##0';
     worksheet.getCell('R12').numFmt = '#,##0';
     worksheet.getCell('S12').numFmt = '#,##0';
@@ -911,9 +939,9 @@ export class AddArDefactRejectComponent implements OnInit {
     worksheet.getCell('N13').value = 'Capacity Machine Airbag';
     worksheet.getCell('N13').alignment = { vertical: 'middle', horizontal: 'left' };
     setBorder(worksheet.getCell('N13'));
-    worksheet.getCell('Q13').value = this.headerMarketingOrder[0].airbagMachine; // "Month 1"
-    worksheet.getCell('R13').value = this.headerMarketingOrder[1].airbagMachine; // "Month 2"
-    worksheet.getCell('S13').value = this.headerMarketingOrder[2].airbagMachine; // "Month 3"
+    // worksheet.getCell('Q13').value = this.headerMarketingOrder[0].airbagMachine; // "Month 1"
+    // worksheet.getCell('R13').value = this.headerMarketingOrder[1].airbagMachine; // "Month 2"
+    // worksheet.getCell('S13').value = this.headerMarketingOrder[2].airbagMachine; // "Month 3"
     worksheet.getCell('Q13').numFmt = '#,##0';
     worksheet.getCell('R13').numFmt = '#,##0';
     worksheet.getCell('S13').numFmt = '#,##0';
@@ -925,9 +953,9 @@ export class AddArDefactRejectComponent implements OnInit {
     worksheet.getCell('N14').value = type === 'FED' ? 'FED TL' : 'FDR TL';
     worksheet.getCell('N14').alignment = { vertical: 'middle', horizontal: 'left' };
     setBorder(worksheet.getCell('N14'));
-    worksheet.getCell('Q14').value = this.headerMarketingOrder[0].tl; // "Month 1"
-    worksheet.getCell('R14').value = this.headerMarketingOrder[1].tl; // "Month 2"
-    worksheet.getCell('S14').value = this.headerMarketingOrder[2].tl; // "Month 3"
+    // worksheet.getCell('Q14').value = this.headerMarketingOrder[0].tl; // "Month 1"
+    // worksheet.getCell('R14').value = this.headerMarketingOrder[1].tl; // "Month 2"
+    // worksheet.getCell('S14').value = this.headerMarketingOrder[2].tl; // "Month 3"
     worksheet.getCell('Q14').numFmt = '#,##0';
     worksheet.getCell('R14').numFmt = '#,##0';
     worksheet.getCell('S14').numFmt = '#,##0';
@@ -939,9 +967,9 @@ export class AddArDefactRejectComponent implements OnInit {
     worksheet.getCell('N15').value = type === 'FED' ? 'FED TT' : 'FDR TT';
     worksheet.getCell('N15').alignment = { vertical: 'middle', horizontal: 'left' };
     setBorder(worksheet.getCell('N15'));
-    worksheet.getCell('Q15').value = this.headerMarketingOrder[0].tt; // "Month 1"
-    worksheet.getCell('R15').value = this.headerMarketingOrder[1].tt; // "Month 2"
-    worksheet.getCell('S15').value = this.headerMarketingOrder[2].tt; // "Month 3"
+    // worksheet.getCell('Q15').value = this.headerMarketingOrder[0].tt; // "Month 1"
+    // worksheet.getCell('R15').value = this.headerMarketingOrder[1].tt; // "Month 2"
+    // worksheet.getCell('S15').value = this.headerMarketingOrder[2].tt; // "Month 3"
     worksheet.getCell('Q15').numFmt = '#,##0';
     worksheet.getCell('R15').numFmt = '#,##0';
     worksheet.getCell('S15').numFmt = '#,##0';
@@ -953,9 +981,9 @@ export class AddArDefactRejectComponent implements OnInit {
     worksheet.getCell('N16').value = 'Total Marketing Order';
     worksheet.getCell('N16').alignment = { vertical: 'middle', horizontal: 'left' };
     setBorder(worksheet.getCell('N16'));
-    worksheet.getCell('Q16').value = this.headerMarketingOrder[0].totalMo; // "Month 1"
-    worksheet.getCell('R16').value = this.headerMarketingOrder[1].totalMo; // "Month 2"
-    worksheet.getCell('S16').value = this.headerMarketingOrder[2].totalMo; // "Month 3"
+    // worksheet.getCell('Q16').value = this.headerMarketingOrder[0].totalMo; // "Month 1"
+    // worksheet.getCell('R16').value = this.headerMarketingOrder[1].totalMo; // "Month 2"
+    // worksheet.getCell('S16').value = this.headerMarketingOrder[2].totalMo; // "Month 3"
     worksheet.getCell('Q16').numFmt = '#,##0';
     worksheet.getCell('R16').numFmt = '#,##0';
     worksheet.getCell('S16').numFmt = '#,##0';
@@ -967,9 +995,9 @@ export class AddArDefactRejectComponent implements OnInit {
     worksheet.getCell('N17').value = type === 'FED' ? '% FED TL' : '% FDR TL';
     worksheet.getCell('N17').alignment = { vertical: 'middle', horizontal: 'left' };
     setBorder(worksheet.getCell('N17'));
-    worksheet.getCell('Q17').value = this.headerMarketingOrder[0].tlPercentage; // "Month 1"
-    worksheet.getCell('R17').value = this.headerMarketingOrder[1].tlPercentage; // "Month 2"
-    worksheet.getCell('S17').value = this.headerMarketingOrder[2].tlPercentage; // "Month 3"
+    // worksheet.getCell('Q17').value = this.headerMarketingOrder[0].tlPercentage; // "Month 1"
+    // worksheet.getCell('R17').value = this.headerMarketingOrder[1].tlPercentage; // "Month 2"
+    // worksheet.getCell('S17').value = this.headerMarketingOrder[2].tlPercentage; // "Month 3"
     worksheet.getCell('Q17').numFmt = '0.00';
     worksheet.getCell('R17').numFmt = '0.00';
     worksheet.getCell('S17').numFmt = '0.00';
@@ -981,9 +1009,9 @@ export class AddArDefactRejectComponent implements OnInit {
     worksheet.getCell('N18').value = type === 'FED' ? '% FED TT' : '% FDR TT';
     worksheet.getCell('N18').alignment = { vertical: 'middle', horizontal: 'left' };
     setBorder(worksheet.getCell('N18'));
-    worksheet.getCell('Q18').value = this.headerMarketingOrder[0].tlPercentage; // "Month 1"
-    worksheet.getCell('R18').value = this.headerMarketingOrder[1].tlPercentage; // "Month 2"
-    worksheet.getCell('S18').value = this.headerMarketingOrder[2].tlPercentage; // "Month 3"
+    // worksheet.getCell('Q18').value = this.headerMarketingOrder[0].tlPercentage; // "Month 1"
+    // worksheet.getCell('R18').value = this.headerMarketingOrder[1].tlPercentage; // "Month 2"
+    // worksheet.getCell('S18').value = this.headerMarketingOrder[2].tlPercentage; // "Month 3"
     worksheet.getCell('Q18').numFmt = '0.00';
     worksheet.getCell('R18').numFmt = '0.00';
     worksheet.getCell('S18').numFmt = '0.00';
@@ -995,9 +1023,9 @@ export class AddArDefactRejectComponent implements OnInit {
     worksheet.getCell('N19').value = 'Note Order TL';
     worksheet.getCell('N19').alignment = { vertical: 'middle', horizontal: 'left' };
     setBorder(worksheet.getCell('N19'));
-    worksheet.getCell('Q19').value = this.headerMarketingOrder[0].noteOrderTl; // "Month 1"
-    worksheet.getCell('R19').value = this.headerMarketingOrder[1].noteOrderTl; // "Month 2"
-    worksheet.getCell('S19').value = this.headerMarketingOrder[2].noteOrderTl; // "Month 3"
+    // worksheet.getCell('Q19').value = this.headerMarketingOrder[0].noteOrderTl; // "Month 1"
+    // worksheet.getCell('R19').value = this.headerMarketingOrder[1].noteOrderTl; // "Month 2"
+    // worksheet.getCell('S19').value = this.headerMarketingOrder[2].noteOrderTl; // "Month 3"
     ['Q19', 'R19', 'S19'].forEach((cell) => {
       worksheet.getCell(cell).alignment = { vertical: 'middle', horizontal: 'center' };
     });

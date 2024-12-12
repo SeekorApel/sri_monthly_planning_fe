@@ -1239,7 +1239,7 @@ export class AddMoMarketingComponent implements OnInit {
           dmo.validationMessageM0 = 'MO must not be less than the minimum order.';
           hasInvalidInput = true;
         } else if (moMonth0 > dmo.maxCapMonth0) {
-          dmo.validationMessageM0 = 'MO cannot be more than the maximum order M1.';
+          dmo.validationMessageM0 = 'MO cannot be more than the maximum capacity M1.';
           hasInvalidInput = true;
         } else if (moMonth0 % dmo.qtyPerRak !== 0) {
           dmo.validationMessageM0 = `MO must be a multiple of ${dmo.qtyPerRak}.`;
@@ -1256,7 +1256,7 @@ export class AddMoMarketingComponent implements OnInit {
           dmo.validationMessageM1 = 'MO must not be less than the minimum order.';
           hasInvalidInput = true;
         } else if (moMonth1 > dmo.maxCapMonth1) {
-          dmo.validationMessageM1 = 'MO cannot be more than the maximum order M2.';
+          dmo.validationMessageM1 = 'MO cannot be more than the maximum capacity M2.';
           hasInvalidInput = true;
         } else if (moMonth1 % dmo.qtyPerRak !== 0) {
           dmo.validationMessageM1 = `MO must be a multiple of ${dmo.qtyPerRak}.`;
@@ -1273,7 +1273,7 @@ export class AddMoMarketingComponent implements OnInit {
           dmo.validationMessageM2 = 'MO must not be less than the minimum order.';
           hasInvalidInput = true;
         } else if (moMonth2 > dmo.maxCapMonth2) {
-          dmo.validationMessageM2 = 'MO cannot be more than the maximum order M3.';
+          dmo.validationMessageM2 = 'MO cannot be more than the maximum capacity M3.';
           hasInvalidInput = true;
         } else if (moMonth2 % dmo.qtyPerRak !== 0) {
           dmo.validationMessageM2 = `MO must be a multiple of ${dmo.qtyPerRak}.`;

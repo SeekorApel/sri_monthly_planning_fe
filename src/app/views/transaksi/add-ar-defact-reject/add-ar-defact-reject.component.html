@@ -1,5 +1,4 @@
 <div class="animated fadeIn">
-
   <!-- Marketing Order -->
   <div class="col-md-12">
     <div class="card">
@@ -70,7 +69,7 @@
       </div>
     </div>
   </div>
-   <!-- End Marketing Order -->
+  <!-- End Marketing Order -->
 
   <!-- Header Marketing Order -->
   <div class="col-md-12">
@@ -143,7 +142,7 @@
                     <label for="text-input">Maximum Capacity Tire TT</label>
                     <input type="text" [(ngModel)]="objVarFed.max_capa_tt_0" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
                   </div>
-              
+
                   <div class="col-md-4 min-height-form">
                     <label for="text-input">Capacity Machine Airbag</label>
                     <input type="text" [(ngModel)]="objVarFed.machine_airbag_m0" name="text-input" class="form-control" [readOnly]="isReadOnly" />
@@ -181,23 +180,498 @@
                 </div>
               </tab>
               <tab heading="Month 2">
-                
+                <div class="form-row align-items-center">
+                  <div class="col-md-4 min-height-form">
+                    <label>Month And Year</label>
+                    <input class="form-control input-month-year" [(ngModel)]="objVarFed.monthFedM1" type="month" [readOnly]="true" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">Normal Working Day</label>
+                    <input type="text" [(ngModel)]="objVarFed.nwt_1" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">Normal Working Day Tube</label>
+                    <input type="text" [(ngModel)]="objVarFed.nwd_1" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">Working Day Overtime Tube</label>
+                    <input type="text" [(ngModel)]="objVarFed.ot_wt_1" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">Working Day Overtime TL</label>
+                    <input type="text" [(ngModel)]="objVarFed.tl_ot_wd_1" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">Working Day Overtime TT</label>
+                    <input type="text" [(ngModel)]="objVarFed.tt_ot_wd_1" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">Total Working Day Tube</label>
+                    <input [(ngModel)]="objVarFed.total_wt_1" type="text" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">Total Working Day Tire TL</label>
+                    <input [(ngModel)]="objVarFed.total_tlwd_1" type="text" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">Total Working Day Tire TT</label>
+                    <input [(ngModel)]="objVarFed.total_ttwd_1" type="text" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">Maximum Capacity Tube</label>
+                    <input type="text" [(ngModel)]="objVarFed.max_tube_capa_1" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">Maximum Capacity Tire TL</label>
+                    <input type="text" [(ngModel)]="objVarFed.max_capa_tl_1" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">Maximum Capacity Tire TT</label>
+                    <input type="text" [(ngModel)]="objVarFed.max_capa_tt_1" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">Capacity Machine Airbag</label>
+                    <input type="text" [(ngModel)]="objVarFed.machine_airbag_m1" name="text-input" class="form-control" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">FED TL</label>
+                    <input type="text" [(ngModel)]="objVarFed.fed_tl_m1" name="text-input" class="form-control" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">FED TT</label>
+                    <input type="text" [(ngModel)]="objVarFed.fed_tt_m1" name="text-input" class="form-control" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">Total Marketing Order</label>
+                    <input type="text" [(ngModel)]="objVarFed.total_mo_m1" name="text-input" class="form-control" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">% FED TL</label>
+                    <input type="text" [(ngModel)]="objVarFed.fed_TL_percentage_m1" name="text-input" class="form-control" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">% FED TT</label>
+                    <input type="text" [(ngModel)]="objVarFed.fed_TT_percentage_m1" name="text-input" class="form-control" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">Note Order TL</label>
+                    <input type="text" [(ngModel)]="objVarFed.note_tl_m1" name="text-input" class="form-control" [readOnly]="isReadOnly" />
+                  </div>
+                </div>
               </tab>
               <tab heading="Month 3">
-                
+                <div class="form-row align-items-center">
+                  <div class="col-md-4 min-height-form">
+                    <label>Month And Year</label>
+                    <input class="form-control input-month-year" [(ngModel)]="objVarFed.monthFedM2" type="month" [readOnly]="true" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">Normal Working Day</label>
+                    <input type="text" [(ngModel)]="objVarFed.nwt_2" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">Normal Working Day Tube</label>
+                    <input type="text" [(ngModel)]="objVarFed.nwd_2" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">Working Day Overtime Tube</label>
+                    <input type="text" [(ngModel)]="objVarFed.ot_wt_2" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">Working Day Overtime TL</label>
+                    <input type="text" [(ngModel)]="objVarFed.tl_ot_wd_2" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">Working Day Overtime TT</label>
+                    <input type="text" [(ngModel)]="objVarFed.tt_ot_wd_2" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">Total Working Day Tube</label>
+                    <input [(ngModel)]="objVarFed.total_wt_2" type="text" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">Total Working Day Tire TL</label>
+                    <input [(ngModel)]="objVarFed.total_tlwd_2" type="text" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">Total Working Day Tire TT</label>
+                    <input [(ngModel)]="objVarFed.total_ttwd_2" type="text" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">Maximum Capacity Tube</label>
+                    <input type="text" [(ngModel)]="objVarFed.max_tube_capa_2" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">Maximum Capacity Tire TL</label>
+                    <input type="text" [(ngModel)]="objVarFed.max_capa_tl_2" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">Maximum Capacity Tire TT</label>
+                    <input type="text" [(ngModel)]="objVarFed.max_capa_tt_2" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">Capacity Machine Airbag</label>
+                    <input type="text" [(ngModel)]="objVarFed.machine_airbag_m2" name="text-input" class="form-control" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">FED TL</label>
+                    <input type="text" [(ngModel)]="objVarFed.fed_tl_m2" name="text-input" class="form-control" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">FED TT</label>
+                    <input type="text" [(ngModel)]="objVarFed.fed_tt_m2" name="text-input" class="form-control" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">Total Marketing Order</label>
+                    <input type="text" [(ngModel)]="objVarFed.total_mo_m2" name="text-input" class="form-control" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">% FED TL</label>
+                    <input type="text" [(ngModel)]="objVarFed.fed_TL_percentage_m2" name="text-input" class="form-control" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">% FED TT</label>
+                    <input type="text" [(ngModel)]="objVarFed.fed_TT_percentage_m2" name="text-input" class="form-control" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">Note Order TL</label>
+                    <input type="text" [(ngModel)]="objVarFed.note_tl_m2" name="text-input" class="form-control" [readOnly]="isReadOnly" />
+                  </div>
+                </div>
               </tab>
             </tabset>
           </tab>
           <tab heading="FDR">
             <tabset>
               <tab heading="Month 1">
+                <div class="form-row align-items-center">
+                  <div class="col-md-4 min-height-form">
+                    <label>Month And Year</label>
+                    <input class="form-control input-month-year" [(ngModel)]="objVarFdr.monthFdrM0" type="month" [readOnly]="true" />
+                  </div>
 
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">Normal Working Day</label>
+                    <input type="text" [(ngModel)]="objVarFdr.nwt_0" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">Normal Working Day Tube</label>
+                    <input type="text" [(ngModel)]="objVarFdr.nwd_0" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">Working Day Overtime Tube</label>
+                    <input type="text" [(ngModel)]="objVarFdr.ot_wt_0" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">Working Day Overtime TL</label>
+                    <input type="text" [(ngModel)]="objVarFdr.tl_ot_wd_0" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">Working Day Overtime TT</label>
+                    <input type="text" [(ngModel)]="objVarFdr.tt_ot_wd_0" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">Total Working Day Tube</label>
+                    <input [(ngModel)]="objVarFdr.total_wt_0" type="text" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">Total Working Day Tire TL</label>
+                    <input [(ngModel)]="objVarFdr.total_tlwd_0" type="text" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">Total Working Day Tire TT</label>
+                    <input [(ngModel)]="objVarFdr.total_ttwd_0" type="text" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">Maximum Capacity Tube</label>
+                    <input type="text" [(ngModel)]="objVarFdr.max_tube_capa_0" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">Maximum Capacity Tire TL</label>
+                    <input type="text" [(ngModel)]="objVarFdr.max_capa_tl_0" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">Maximum Capacity Tire TT</label>
+                    <input type="text" [(ngModel)]="objVarFdr.max_capa_tt_0" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">Capacity Machine Airbag</label>
+                    <input type="text" [(ngModel)]="objVarFdr.machine_airbag_m0" name="text-input" class="form-control" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">FDR TL</label>
+                    <input type="text" [(ngModel)]="objVarFdr.fdr_tl_m0" name="text-input" class="form-control" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">FDR TT</label>
+                    <input type="text" [(ngModel)]="objVarFdr.fdr_tt_m0" name="text-input" class="form-control" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">Total Marketing Order</label>
+                    <input type="text" [(ngModel)]="objVarFdr.total_mo_m0" name="text-input" class="form-control" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">% FDR TL</label>
+                    <input type="text" [(ngModel)]="objVarFdr.fdr_TL_percentage_m0" name="text-input" class="form-control" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">% FDR TT</label>
+                    <input type="text" [(ngModel)]="objVarFdr.fdr_TT_percentage_m0" name="text-input" class="form-control" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">Note Order TL</label>
+                    <input type="text" [(ngModel)]="objVarFdr.note_tl_m0" name="text-input" class="form-control" [readOnly]="isReadOnly" />
+                  </div>
+                </div>
               </tab>
               <tab heading="Month 2">
-                
+                <div class="form-row align-items-center">
+                  <div class="col-md-4 min-height-form">
+                    <label>Month And Year</label>
+                    <input class="form-control input-month-year" [(ngModel)]="objVarFdr.monthFdrM1" type="month" [readOnly]="true" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">Normal Working Day</label>
+                    <input type="text" [(ngModel)]="objVarFdr.nwt_1" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">Normal Working Day Tube</label>
+                    <input type="text" [(ngModel)]="objVarFdr.nwd_1" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">Working Day Overtime Tube</label>
+                    <input type="text" [(ngModel)]="objVarFdr.ot_wt_1" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">Working Day Overtime TL</label>
+                    <input type="text" [(ngModel)]="objVarFdr.tl_ot_wd_1" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">Working Day Overtime TT</label>
+                    <input type="text" [(ngModel)]="objVarFdr.tt_ot_wd_1" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">Total Working Day Tube</label>
+                    <input [(ngModel)]="objVarFdr.total_wt_1" type="text" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">Total Working Day Tire TL</label>
+                    <input [(ngModel)]="objVarFdr.total_tlwd_1" type="text" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">Total Working Day Tire TT</label>
+                    <input [(ngModel)]="objVarFdr.total_ttwd_1" type="text" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">Maximum Capacity Tube</label>
+                    <input type="text" [(ngModel)]="objVarFdr.max_tube_capa_1" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">Maximum Capacity Tire TL</label>
+                    <input type="text" [(ngModel)]="objVarFdr.max_capa_tl_1" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">Maximum Capacity Tire TT</label>
+                    <input type="text" [(ngModel)]="objVarFdr.max_capa_tt_1" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">Capacity Machine Airbag</label>
+                    <input type="text" [(ngModel)]="objVarFdr.machine_airbag_m1" name="text-input" class="form-control" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">FDR TL</label>
+                    <input type="text" [(ngModel)]="objVarFdr.fdr_tl_m1" name="text-input" class="form-control" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">FDR TT</label>
+                    <input type="text" [(ngModel)]="objVarFdr.fdr_tt_m1" name="text-input" class="form-control" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">Total Marketing Order</label>
+                    <input type="text" [(ngModel)]="objVarFdr.total_mo_m1" name="text-input" class="form-control" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">% FDR TL</label>
+                    <input type="text" [(ngModel)]="objVarFdr.fdr_TL_percentage_m1" name="text-input" class="form-control" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">% FDR TT</label>
+                    <input type="text" [(ngModel)]="objVarFdr.fdr_TT_percentage_m1" name="text-input" class="form-control" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">Note Order TL</label>
+                    <input type="text" [(ngModel)]="objVarFdr.note_tl_m1" name="text-input" class="form-control" [readOnly]="isReadOnly" />
+                  </div>
+                </div>
               </tab>
               <tab heading="Month 3">
-                
+                <div class="form-row align-items-center">
+                  <div class="col-md-4 min-height-form">
+                    <label>Month And Year</label>
+                    <input class="form-control input-month-year" [(ngModel)]="objVarFdr.monthFdrM2" type="month" [readOnly]="true" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">Normal Working Day</label>
+                    <input type="text" [(ngModel)]="objVarFdr.nwt_2" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">Normal Working Day Tube</label>
+                    <input type="text" [(ngModel)]="objVarFdr.nwd_2" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">Working Day Overtime Tube</label>
+                    <input type="text" [(ngModel)]="objVarFdr.ot_wt_2" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">Working Day Overtime TL</label>
+                    <input type="text" [(ngModel)]="objVarFdr.tl_ot_wd_2" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">Working Day Overtime TT</label>
+                    <input type="text" [(ngModel)]="objVarFdr.tt_ot_wd_2" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">Total Working Day Tube</label>
+                    <input [(ngModel)]="objVarFdr.total_wt_2" type="text" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">Total Working Day Tire TL</label>
+                    <input [(ngModel)]="objVarFdr.total_tlwd_2" type="text" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">Total Working Day Tire TT</label>
+                    <input [(ngModel)]="objVarFdr.total_ttwd_2" type="text" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">Maximum Capacity Tube</label>
+                    <input type="text" [(ngModel)]="objVarFdr.max_tube_capa_2" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">Maximum Capacity Tire TL</label>
+                    <input type="text" [(ngModel)]="objVarFdr.max_capa_tl_2" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">Maximum Capacity Tire TT</label>
+                    <input type="text" [(ngModel)]="objVarFdr.max_capa_tt_2" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">Capacity Machine Airbag</label>
+                    <input type="text" [(ngModel)]="objVarFdr.machine_airbag_m2" name="text-input" class="form-control" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">FDR TL</label>
+                    <input type="text" [(ngModel)]="objVarFdr.fdr_tl_m2" name="text-input" class="form-control" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">FDR TT</label>
+                    <input type="text" [(ngModel)]="objVarFdr.fdr_tt_m2" name="text-input" class="form-control" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">Total Marketing Order</label>
+                    <input type="text" [(ngModel)]="objVarFdr.total_mo_m2" name="text-input" class="form-control" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">% FDR TL</label>
+                    <input type="text" [(ngModel)]="objVarFdr.fdr_TL_percentage_m2" name="text-input" class="form-control" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">% FDR TT</label>
+                    <input type="text" [(ngModel)]="objVarFdr.fdr_TT_percentage_m2" name="text-input" class="form-control" [readOnly]="isReadOnly" />
+                  </div>
+
+                  <div class="col-md-4 min-height-form">
+                    <label for="text-input">Note Order TL</label>
+                    <input type="text" [(ngModel)]="objVarFdr.note_tl_m2" name="text-input" class="form-control" [readOnly]="isReadOnly" />
+                  </div>
+                </div>
               </tab>
             </tabset>
           </tab>
@@ -205,6 +679,7 @@
       </div>
     </div>
   </div>
+  <!-- End Header Marketing Order -->
 
   <!-- Detail Marketing Order -->
   <div class="col-md-12">
@@ -374,15 +849,7 @@
             <ng-container matColumnDef="ar">
               <th *matHeaderCellDef rowspan="2" mat-sort-header style="min-width: 100px">% AR</th>
               <td class="text-right" *matCellDef="let mo">
-                <input
-                type="text"
-                (ngModelChange)="onInputChangeAr(mo, $event)"
-                [ngModel]="mo.ar"
-                (keypress)="allowOnlyNumbers($event)"
-                (input)="restrictToMaxLength($event)"
-                class="text-right form-control"
-                maxlength="3"
-              />
+                <input type="text" (ngModelChange)="onInputChangeAr(mo, $event)" [ngModel]="mo.ar" (keypress)="allowOnlyNumbers($event)" (input)="restrictToMaxLength($event)" class="text-right form-control" maxlength="3" />
               </td>
             </ng-container>
 
@@ -390,15 +857,7 @@
             <ng-container matColumnDef="defect">
               <th *matHeaderCellDef rowspan="2" mat-sort-header style="min-width: 100px">% Defect</th>
               <td class="text-right" *matCellDef="let mo">
-              <input
-                type="text"
-                (ngModelChange)="onInputChangeDefect(mo, $event)"
-                [ngModel]="mo.defect"
-                (keypress)="allowOnlyNumbers($event)"
-                (input)="restrictToMaxLength($event)"
-                class="text-right form-control"
-                maxlength="3"
-              />
+                <input type="text" (ngModelChange)="onInputChangeDefect(mo, $event)" [ngModel]="mo.defect" (keypress)="allowOnlyNumbers($event)" (input)="restrictToMaxLength($event)" class="text-right form-control" maxlength="3" />
               </td>
             </ng-container>
 
@@ -406,22 +865,14 @@
             <ng-container matColumnDef="reject">
               <th *matHeaderCellDef rowspan="2" mat-sort-header style="min-width: 100px">% Reject</th>
               <td class="text-right" *matCellDef="let mo">
-              <input
-                type="text"
-                (ngModelChange)="onInputChangeDefect(mo, $event)"
-                [ngModel]="mo.reject"
-                (keypress)="allowOnlyNumbers($event)"
-                (input)="restrictToMaxLength($event)"
-                class="text-right form-control"
-                maxlength="3"
-              />
+                <input type="text" (ngModelChange)="onInputChangeDefect(mo, $event)" [ngModel]="mo.reject" (keypress)="allowOnlyNumbers($event)" (input)="restrictToMaxLength($event)" class="text-right form-control" maxlength="3" />
               </td>
             </ng-container>
 
             <!-- ItemCuring Column -->
             <ng-container matColumnDef="itemCuring">
               <th mat-sort-header rowspan="2" *matHeaderCellDef style="min-width: 80px">Item Curing</th>
-              <td mat-cell *matCellDef="let mo" class="text-center">{{mo.itemCuring}}</td>
+              <td mat-cell *matCellDef="let mo" class="text-center">{{ mo.itemCuring }}</td>
             </ng-container>
 
             <tr align="center" style="height: 30px" mat-header-row *matHeaderRowDef="headersColumnsDmo; sticky: true"></tr>
@@ -443,29 +894,29 @@
     </button>
   </div>
 
-    <!-- Modal for Upload Excel -->
-    <div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel" aria-hidden="true">
-      <div class="modal-dialog" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="uploadModalLabel">Upload Excel File</h5>
-            <button type="button" class="close" (click)="resetFileInput()" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <form id="uploadForm">
-              <!-- Manual File Input -->
-              <div class="form-group mt-3">
-                <input type="file" #fileInput class="form-control-file" id="manualFileInput" accept=".xls,.xlsx" (change)="onFileChange($event)" />
-              </div>
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-md btn-secondary" data-dismiss="modal" (click)="resetFileInput()">Close</button>
-            <button type="button" class="btn btn-md btn-primary" data-dismiss="modal" id="uploadButton" (click)="uploadFileExcel()">Upload</button>
-          </div>
+  <!-- Modal for Upload Excel -->
+  <div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="uploadModalLabel">Upload Excel File</h5>
+          <button type="button" class="close" (click)="resetFileInput()" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="uploadForm">
+            <!-- Manual File Input -->
+            <div class="form-group mt-3">
+              <input type="file" #fileInput class="form-control-file" id="manualFileInput" accept=".xls,.xlsx" (change)="onFileChange($event)" />
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-md btn-secondary" data-dismiss="modal" (click)="resetFileInput()">Close</button>
+          <button type="button" class="btn btn-md btn-primary" data-dismiss="modal" id="uploadButton" (click)="uploadFileExcel()">Upload</button>
         </div>
       </div>
     </div>
+  </div>
 </div>

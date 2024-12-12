@@ -45,9 +45,9 @@ export class EditMoMarketingComponent implements OnInit {
   headerMarketingOrder: any[] = [];
   detailMarketingOrder: DetailMarketingOrder[] = [];
 
-  headersColumns: string[] = ['no', 'category', 'partNumber', 'description', 'machineType', 'capacity', 'mouldMonthlyPlan', 'qtyPerRak', 'minOrder', 'maxCap', 'initialStock', 'salesForecast', 'marketingOrder'];
+  headersColumns: string[] = ['no', 'category', 'partNumber', 'description', 'machineType', 'capacity', 'mouldMonthlyPlan', 'qtyPerRak', 'minOrder', 'maxCap', 'initialStock', 'salesForecast', 'marketingOrder', 'itemCuring'];
   childHeadersColumns: string[] = ['maxCapMonth0', 'maxCapMonth1', 'maxCapMonth2', 'sfMonth0', 'sfMonth1', 'sfMonth2', 'moMonth0', 'moMonth1', 'moMonth2'];
-  rowData: string[] = ['no', 'category', 'partNumber', 'description', 'machineType', 'capacity', 'mouldMonthlyPlan', 'qtyPerRak', 'minOrder', 'maxCapMonth0', 'maxCapMonth1', 'maxCapMonth2', 'initialStock', 'sfMonth0', 'sfMonth1', 'sfMonth2', 'moMonth0', 'moMonth1', 'moMonth2'];
+  rowData: string[] = ['no', 'category', 'partNumber', 'description', 'machineType', 'capacity', 'mouldMonthlyPlan', 'qtyPerRak', 'minOrder', 'maxCapMonth0', 'maxCapMonth1', 'maxCapMonth2', 'initialStock', 'sfMonth0', 'sfMonth1', 'sfMonth2', 'moMonth0', 'moMonth1', 'moMonth2', 'itemCuring'];
   dataSource: MatTableDataSource<DetailMarketingOrder>;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -419,7 +419,7 @@ export class EditMoMarketingComponent implements OnInit {
           dmo.validationMessageM0 = 'MO must not be less than the minimum order.';
           hasInvalidInput = true;
         } else if (moMonth0 > dmo.maxCapMonth0) {
-          dmo.validationMessageM0 = 'MO cannot be more than the maximum order M1.';
+          dmo.validationMessageM0 = 'MO cannot be more than the maximum capacity M1.';
           hasInvalidInput = true;
         } else if (moMonth0 % dmo.qtyPerRak !== 0) {
           dmo.validationMessageM0 = `MO must be a multiple of ${dmo.qtyPerRak}.`;
@@ -436,7 +436,7 @@ export class EditMoMarketingComponent implements OnInit {
           dmo.validationMessageM1 = 'MO must not be less than the minimum order.';
           hasInvalidInput = true;
         } else if (moMonth1 > dmo.maxCapMonth1) {
-          dmo.validationMessageM1 = 'MO cannot be more than the maximum order M2.';
+          dmo.validationMessageM1 = 'MO cannot be more than the maximum capacity M2.';
           hasInvalidInput = true;
         } else if (moMonth1 % dmo.qtyPerRak !== 0) {
           dmo.validationMessageM1 = `MO must be a multiple of ${dmo.qtyPerRak}.`;
@@ -453,7 +453,7 @@ export class EditMoMarketingComponent implements OnInit {
           dmo.validationMessageM2 = 'MO must not be less than the minimum order.';
           hasInvalidInput = true;
         } else if (moMonth2 > dmo.maxCapMonth2) {
-          dmo.validationMessageM2 = 'MO cannot be more than the maximum order M3.';
+          dmo.validationMessageM2 = 'MO cannot be more than the maximum capacity M3.';
           hasInvalidInput = true;
         } else if (moMonth2 % dmo.qtyPerRak !== 0) {
           dmo.validationMessageM2 = `MO must be a multiple of ${dmo.qtyPerRak}.`;

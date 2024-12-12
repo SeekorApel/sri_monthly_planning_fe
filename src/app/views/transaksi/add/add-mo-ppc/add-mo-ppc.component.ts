@@ -444,8 +444,6 @@ export class AddMoPpcComponent implements OnInit {
       this.formHeaderMo.markAllAsTouched();
       return;
     }
-    console.log("init max cap setting : ", this.capacityDb)
-    console.log("init last id MO : ", this.lastIdMo)
     this.loadingShowData = true;
     this.fillTheTableMo();
     this.isTableVisible = true;
