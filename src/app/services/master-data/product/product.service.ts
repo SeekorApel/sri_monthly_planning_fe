@@ -12,6 +12,7 @@ import { map, catchError } from 'rxjs/operators';
 })
 export class ProductService {
   //Isi tokenya
+  token: String = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBdXJlbCIsImV4cCI6MTcyODQ2NDk4OX0.9gpWMtzc_mTuD8izjRbdtAO54sdnRh60W7WaulIQRSflJamyqlQWK7zkBbtwWciF4h110ZWsO7HBtU_X2UROJA';
   constructor(private http: HttpClient) {}
 
   // Method untuk menambahkan header Authorization dengan token
@@ -39,7 +40,7 @@ export class ProductService {
     return this.http.get<ApiResponse<Product[]>>(environment.apiUrlWebAdmin + '/getAllProduct', { headers: this.getHeaders() });
   }
 
-  //Method Update product
+  //Method Update plant
   updateProduct(product: Product): Observable<ApiResponse<Product>> {
     return this.http
       .post<ApiResponse<Product>>(
@@ -57,8 +58,8 @@ export class ProductService {
       );
   }
 
-  deleteProduct(product: Product): Observable<ApiResponse<Product>> {
-    return this.http.post<ApiResponse<Product>>(environment.apiUrlWebAdmin + '/deleteProduct', product, { headers: this.getHeaders() }).pipe(
+  deleteProduct(plant: Product): Observable<ApiResponse<Product>> {
+    return this.http.post<ApiResponse<Product>>(environment.apiUrlWebAdmin + '/deleteProduct', plant, { headers: this.getHeaders() }).pipe(
       map((response) => {
         return response;
       }),

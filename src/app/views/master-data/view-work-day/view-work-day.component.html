@@ -311,6 +311,8 @@
                       [(ngModel)]="perHourShift['shift' + getShiftIndex(i) + '_START_TIME']"
                       class="form-control"
                       (change)="updateTotalTime(i)"
+                      [min]="getMinTime(i, 'start')"
+                      [max]="getMaxTime(i, 'start')"
                     />
                   </label>
                   <label>
@@ -320,6 +322,8 @@
                       [(ngModel)]="perHourShift['shift' + getShiftIndex(i) + '_END_TIME']"
                       class="form-control"
                       (change)="updateTotalTime(i)"
+                      [min]="getMinTime(i, 'end')"
+                      [max]="getMaxTime(i, 'end')"
                     />
                   </label>
                   <label>

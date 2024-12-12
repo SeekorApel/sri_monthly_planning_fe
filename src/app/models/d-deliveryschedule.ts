@@ -2,7 +2,7 @@ export class DDeliverySchedule {
   detail_DS_ID: number;
   ds_ID: number;
   part_NUM: string;
-  date_DS: Date;
+  date_DS: string;
   total_DELIVERY: number;
   status: number;
   creation_DATE: string;

@@ -82,7 +82,7 @@ export class ViewPatternComponent implements OnInit {
         // this.onChangePage(this.patterns.slice(0, this.pageSize));
       },
       (error) => {
-        this.errorMessage = 'Failed to load patterns: ' + error.message;
+        this.errorMessage = 'Failed to load plants: ' + error.message;
       }
     );
   }
@@ -124,17 +124,17 @@ export class ViewPatternComponent implements OnInit {
 
   openModalEdit(idPattern: number): void {
     this.isEditMode = true;
-    this.getPatternByID(idPattern);
+    this.getPlantById(idPattern);
     $('#editModal').modal('show');
   }
 
-  getPatternByID(idPattern: number): void {
+  getPlantById(idPattern: number): void {
     this.patternService.getPatternById(idPattern).subscribe(
       (response: ApiResponse<Pattern>) => {
         this.edtPatternObject = response.data;
       },
       (error) => {
-        this.errorMessage = 'Failed to load patterns: ' + error.message;
+        this.errorMessage = 'Failed to load plants: ' + error.message;
       }
     );
   }
@@ -142,7 +142,7 @@ export class ViewPatternComponent implements OnInit {
   deleteData(pattern: Pattern): void {
     Swal.fire({
       title: 'Are you sure?',
-      text: 'This data pattern will be deleted!',
+      text: 'This data plant will be deleted!',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',

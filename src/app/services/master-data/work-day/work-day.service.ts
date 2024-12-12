@@ -25,6 +25,7 @@ export class WorkDayService {
   }
 
   getAllWorkDaysByDateRange(dateStart: string, dateEnd: string): Observable<ApiResponse<WorkDay[]>> {
+    console.log(environment.apiUrlWebAdmin + '/getAllWorkDaysByDateRange/' + dateStart + '/' + dateEnd);
     return this.http.get<ApiResponse<WorkDay[]>>(
       environment.apiUrlWebAdmin + '/getAllWorkDaysByDateRange/' + dateStart + '/' + dateEnd,
       { headers: this.getHeaders() }
@@ -39,15 +40,8 @@ export class WorkDayService {
     );
   }
 
-  
-  getWorkDayByDate(dateTarget: string): Observable<ApiResponse<WorkDay>> {
-    return this.http.get<ApiResponse<WorkDay>>(
-      environment.apiUrlWebAdmin + '/getWorkDayByDate/' + dateTarget,
-      { headers: this.getHeaders() }
-    );
-  }
-
   turnOnOvertime(dateTarget: string): Observable<ApiResponse<WorkDay>> {
+    console.log(dateTarget);
     return this.http.post<ApiResponse<WorkDay>>(
       environment.apiUrlWebAdmin + '/turnOnOvertime/' + dateTarget,
       { headers: this.getHeaders() }
@@ -142,14 +136,8 @@ export class WorkDayService {
     );
   }
 
-  updateShiftTimes(stime:string,etime:string,target:string,type: string,shift: number): Observable<ApiResponse<WDHoursSpecific>> {
-    return this.http.post<ApiResponse<WDHoursSpecific>>(
-      environment.apiUrlWebAdmin + '/updateShiftTimes/'+stime+'/'+etime+'/'+target+"/"+type+"/"+shift,
-      { headers: this.getHeaders() }
-    );
-  }
-
   saveDWorkDayHoursSpecific(wdhours: WDHoursSpecific): Observable<ApiResponse<WDHoursSpecific>> {
+    console.log(wdhours);
     return this.http.post<ApiResponse<WDHoursSpecific>>(
       environment.apiUrlWebAdmin + '/saveDWorkDayHoursSpecific',
       wdhours,
@@ -157,6 +145,7 @@ export class WorkDayService {
     );
   }  
   updateDWorkDayHoursSpecific(wdhours: WDHoursSpecific): Observable<ApiResponse<WDHoursSpecific>> {
+    console.log(wdhours);
     return this.http.post<ApiResponse<WDHoursSpecific>>(
       environment.apiUrlWebAdmin + '/updateDWorkDayHoursSpecific',
       wdhours,
