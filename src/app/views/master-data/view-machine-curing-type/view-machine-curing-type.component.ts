@@ -78,7 +78,7 @@ export class ViewMachineCuringTypeComponent implements OnInit {
 
         this.uomOptionData = this.settings.map((element) => ({
           id: element.setting_ID.toString(), // Ensure the ID is a string
-          text: element.setting_KEY, // Set the text to the name (or other property)
+          text: element.setting_VALUE, // Set the text to the name (or other property)
         }));
       },
       (error) => {
@@ -94,7 +94,7 @@ export class ViewMachineCuringTypeComponent implements OnInit {
           const setting = this.settings.find((setting) => setting.setting_ID === curingT.setting_ID);
           return {
             ...curingT,
-            setting_key: setting ? setting.setting_KEY : 'Unknown',
+            setting_value: setting ? setting.setting_VALUE : 'Unknown',
           };
         });
         this.dataSource = new MatTableDataSource(this.machineCuringTypes);

@@ -140,7 +140,7 @@ export class ViewBDistanceComponent implements OnInit {
         // SweetAlert setelah update berhasil
         Swal.fire({
           title: 'Success!',
-          text: 'Data quadrant distance successfully updated.',
+          text: 'Data building distance successfully updated.',
           icon: 'success',
           confirmButtonText: 'OK',
         }).then((result) => {
@@ -168,7 +168,7 @@ export class ViewBDistanceComponent implements OnInit {
         this.edtBDistanceObject = response.data;
       },
       (error) => {
-        this.errorMessage = 'Failed to load quadrant distances: ' + error.message;
+        this.errorMessage = 'Failed to load building distances: ' + error.message;
       }
     );
   }
@@ -273,7 +273,7 @@ export class ViewBDistanceComponent implements OnInit {
   activateData(qdistance: BDistance): void {
     Swal.fire({
       title: 'Are you sure?',
-      text: 'This data quadrant distance will be Activated!',
+      text: 'This data building distance will be Activated!',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -282,14 +282,14 @@ export class ViewBDistanceComponent implements OnInit {
       cancelButtonText: 'No',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.bdistanceService.activateQuadrantDistance(qdistance).subscribe(
+        this.bdistanceService.activateBuildingDistance(qdistance).subscribe(
           (response) => {
-            Swal.fire('Activated!', 'Data quadrant distance has been Activated', 'success').then(() => {
+            Swal.fire('Activated!', 'Data building distance has been Activated', 'success').then(() => {
               window.location.reload();
             });
           },
           (err) => {
-            Swal.fire('Error!', 'Failed to Activated the quadrant distance.', 'error');
+            Swal.fire('Error!', 'Failed to Activated the building distance.', 'error');
           }
         );
       }

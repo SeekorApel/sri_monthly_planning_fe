@@ -29,8 +29,8 @@
           </ng-container>
 
           <ng-container matColumnDef="quadrant_ID">
-            <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Quadrant ID</th>
-            <td class="angka" *matCellDef="let element">{{ element.quadrant_ID }}</td>
+            <th style="width: 120px;" class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Quadrant ID</th>
+            <td *matCellDef="let element">{{ element.quadrant_ID }}</td>
           </ng-container>
 
           <ng-container matColumnDef="building_NAME">
@@ -101,9 +101,12 @@
           </div>
           <div class="form-group">
             <label for="quadrantName">Quadrant Name</label>
-            <input [(ngModel)]="edtQuadrantObject.quadrant_NAME" type="text" class="form-control" id="quadrantName" formControlName="quadrantName" [ngClass]="{ 'is-invalid': editQuadrantForm.get('quadrantName').invalid && editQuadrantForm.get('quadrantName').touched }" />
+            <input [(ngModel)]="edtQuadrantObject.quadrant_NAME" maxlength="254" type="text" class="form-control" id="quadrantName" formControlName="quadrantName" [ngClass]="{ 'is-invalid': editQuadrantForm.get('quadrantName').invalid && editQuadrantForm.get('quadrantName').touched }" />
             <!-- Error message if plantName is empty -->
             <div *ngIf="editQuadrantForm.get('quadrantName').invalid && editQuadrantForm.get('quadrantName').touched" class="invalid-feedback">Quadrant name is required.</div>
+            <!-- <div *ngIf="editQuadrantForm.get('quadrantName').errors?.maxlength && editQuadrantForm.get('quadrantName').touched" class="invalid-feedback">
+              Quadrant name must not exceed 255 characters.
+            </div> -->
           </div>
         </form>
       </div>

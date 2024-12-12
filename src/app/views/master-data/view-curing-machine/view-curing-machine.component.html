@@ -30,7 +30,7 @@
 
           <ng-container matColumnDef="work_CENTER_TEXT">
             <th style="min-width: 300px;" *matHeaderCellDef mat-sort-header >Work Center Text</th>
-            <td class="huruf" *matCellDef="let element">{{ element.work_CENTER_TEXT }}</td>
+            <td *matCellDef="let element">{{ element.work_CENTER_TEXT }}</td>
           </ng-container>
 
           <ng-container matColumnDef="building_ID">
@@ -104,28 +104,37 @@
                 id="buildingID"
                 name = "buildingID"
                 [(ngModel)]="edtCuringMachineObject.building_ID"
-                [data]="uomOptions"
+                [data]="uomOptions[0]"
                 [options]="options"
                 [placeholder]="'Please Select'">
               </ng-select2>
             </div>
           </div>
-          
+
           <div class="form-group">
-            <label for="machinetype">Machine Type</label>
-            <input [(ngModel)]="edtCuringMachineObject.machine_TYPE" type="text" class="form-control" id="machinetype" formControlName="machinetype" [ngClass]="{ 'is-invalid': editCuringMachineForm.get('machinetype').invalid && editCuringMachineForm.get('machinetype').touched }" />
-            <div *ngIf="editCuringMachineForm.get('machinetype').invalid && editCuringMachineForm.get('machinetype').touched" class="invalid-feedback">Curing number is required.</div>
+            <label for="machine_TYPE" style="min-width: 150px;">Machine Type</label>
+            <div>
+              <ng-select2
+                formControlName="machine_TYPE" 
+                id="machine_TYPE"
+                name = "machine_TYPE"
+                [(ngModel)]="edtCuringMachineObject.machine_TYPE"
+                [data]="uomOptions[1]"
+                [options]="options"
+                [placeholder]="'Please Select'">
+              </ng-select2>
+            </div>
           </div>
 
           <div class="form-group">
             <label for="cavity">Cavity</label>
-            <input [(ngModel)]="edtCuringMachineObject.cavity" type="number" min="0" class="form-control" id="cavity" formControlName="cavity" [ngClass]="{ 'is-invalid': editCuringMachineForm.get('cavity').invalid && editCuringMachineForm.get('cavity').touched }" />
+            <input [(ngModel)]="edtCuringMachineObject.cavity" type="text" min="0" class="form-control" id="cavity" formControlName="cavity" (keypress)="allowOnlyNumbers($event)" [ngClass]="{ 'is-invalid': editCuringMachineForm.get('cavity').invalid && editCuringMachineForm.get('cavity').touched }" />
             <div *ngIf="editCuringMachineForm.get('cavity').invalid && editCuringMachineForm.get('cavity').touched" class="invalid-feedback">Cavity is required.</div>
           </div>
 
           <div class="form-group">
             <label for="statusUsage">Status Usage</label>
-            <input [(ngModel)]="edtCuringMachineObject.status_USAGE" type="number" min="0" class="form-control" id="statusUsage" formControlName="statusUsage" [ngClass]="{ 'is-invalid': editCuringMachineForm.get('statusUsage').invalid && editCuringMachineForm.get('statusUsage').touched }" />
+            <input [(ngModel)]="edtCuringMachineObject.status_USAGE" type="text" min="0" class="form-control" id="statusUsage" (keypress)="allowOnlyNumbers($event)" formControlName="statusUsage" [ngClass]="{ 'is-invalid': editCuringMachineForm.get('statusUsage').invalid && editCuringMachineForm.get('statusUsage').touched }" />
             <div *ngIf="editCuringMachineForm.get('statusUsage').invalid && editCuringMachineForm.get('statusUsage').touched" class="invalid-feedback">Status Usage is required.</div>
           </div>
         </form>

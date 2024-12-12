@@ -121,7 +121,7 @@
           </div>
           <div class="form-group">
             <label for="capacity">Capacity</label>
-            <input [(ngModel)]="edtTassSizeObject.capacity" type="text" class="form-control" id="capacity" formControlName="capacity" [ngClass]="{ 'is-invalid': editTassSizeForm.get('capacity').invalid && editTassSizeForm.get('capacity').touched }" />
+            <input [(ngModel)]="edtTassSizeObject.capacity" type="text" (keypress)="validateNumberInput($event)" maxlength="4" class="form-control" id="capacity" formControlName="capacity" [ngClass]="{ 'is-invalid': editTassSizeForm.get('capacity').invalid && editTassSizeForm.get('capacity').touched }" />
             <div *ngIf="editTassSizeForm.get('capacity').invalid && editTassSizeForm.get('capacity').touched" class="invalid-feedback">Capacity is required.</div>
           </div>
         </form>
