@@ -578,15 +578,14 @@ export class AddArDefactRejectComponent implements OnInit {
 
     const saveMo = {
       moFed: this.moFed,
-      headerMarketingOrderFed: this.hmoFed,
-      detailMarketingOrderFed: this.dmoFed,
-
+      headerMoFed: this.hmoFed,
+      detailMoFed: this.dmoFed,
       moFdr: this.moFdr,
-      headerMarketingOrderFdr: this.hmoFdr,
-      detailMarketingOrderFdr: this.dmoFdr,
+      headerMoFdr: this.hmoFdr,
+      detailMoFdr: this.dmoFdr,
     };
 
-    console.log(saveMo);
+    console.log(this.dmoFed[0])
 
     this.loading = true;
     Swal.fire({
