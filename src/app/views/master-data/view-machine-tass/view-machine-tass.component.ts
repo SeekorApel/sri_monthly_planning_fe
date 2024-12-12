@@ -60,7 +60,12 @@ export class ViewMachineTassComponent implements OnInit {
     this.loadBuilding();
     this.loadMachineTassType();
   }
+  
 
+  getBuildingName(buildingId: number): string {
+    const building = this.buildings.find(b => b.building_ID === buildingId);
+    return building ? building.building_NAME : 'Unknown';
+  }
   validateNumberInput(event: KeyboardEvent): void {
     const charCode = event.key.charCodeAt(0);
 
@@ -116,12 +121,12 @@ export class ViewMachineTassComponent implements OnInit {
     this.machineTassService.getAllMachineTass().subscribe(
       (response: ApiResponse<MachineTass[]>) => {
         // Add a new column (e.g., buildingName) to each machineTass
-        this.machineTasss = response.data.map((machine) => {
-          const building = this.buildings.find((b) => b.building_ID === machine.building_ID);
-          // const mtt = this.tassTypes.find((t) => t.machinetasstype_ID === machine.machinetasstype_ID);
+        this.machineTasss = response.data.map(machine => {
+          const building = this.buildings.find(
+            b => b.building_ID === machine.building_ID
+          );
           return {
             ...machine,
-            // tassType: mtt ? mtt.machinetasstype_ID : 'Unknown',
             building_Name: building ? building.building_NAME : 'Unknown',
           };
         });
