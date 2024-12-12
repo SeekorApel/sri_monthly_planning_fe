@@ -185,7 +185,6 @@ export class ViewWorkDayComponent implements OnInit {
       }
       await this.loadWorkday();
       await this.loadHours();
-      this.loadReason();
     } catch (error) {
       this.errorMessage = 'Failed to load work day: ' + error.message;
     }
@@ -350,9 +349,8 @@ export class ViewWorkDayComponent implements OnInit {
   }
   async loadHours() {
     try {
-      if (!this.overTimeSwitch) {
+      if (!this.overTimeSwitch && !this.weekend ) {
         const response = await this.workDayService.getDWorkDayHoursSpecificByDateDesc(this.getdateselected(), "WD_NORMAL").toPromise();
-  
         if (response?.data) {
           this.perHourShift = response.data;
         } else {
