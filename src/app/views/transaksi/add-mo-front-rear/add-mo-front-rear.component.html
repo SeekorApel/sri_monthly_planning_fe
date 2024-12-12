@@ -1,95 +1,4 @@
 <div class="animated fadeIn">
-  <!-- Table Marketing Order -->
-  <div class="col-md-12">
-    <div class="card">
-      <div class="card-header">
-        <strong>&nbsp;Marketing Order</strong>
-      </div>
-      <div class="card-body">
-        <div class="d-flex justify-content-between mb-3">
-          <div class="d-flex align-items-center">
-            <input type="text" class="form-control col-md-12 col-lg-12" [(ngModel)]="searchText"
-              (input)="onSearchChangeMo()" placeholder="Find here..." />
-            <button type="submit" class="btn btn-primary ml-2" (click)="resetSearchMo()">Reset</button>
-          </div>
-        </div>
-
-        <!-- Table -->
-        <div class="table-responsive">
-          <table mat-table matSort #sortMo="matSort" [dataSource]="dataSourceMo"
-            class="table table-bordered table-striped table-sm">
-            <!-- No Column -->
-            <ng-container matColumnDef="no">
-              <th *matHeaderCellDef style="min-width: 50px">No</th>
-              <td *matCellDef="let mo; let i = index">{{ i + 1 }}</td>
-            </ng-container>
-
-            <!-- Marketing Order ID Column -->
-            <ng-container matColumnDef="moId">
-              <th *matHeaderCellDef style="min-width: 150px" mat-sort-header>Marketing Order ID</th>
-              <td *matCellDef="let mo">{{ mo.moId }}</td>
-            </ng-container>
-
-            <!-- Type Column -->
-            <ng-container matColumnDef="type">
-              <th *matHeaderCellDef style="min-width: 80px" mat-sort-header>Type</th>
-              <td *matCellDef="let mo">{{ mo.type }}</td>
-            </ng-container>
-
-            <!-- Date Column -->
-            <ng-container matColumnDef="dateValid">
-              <th *matHeaderCellDef style="min-width: 150px" mat-sort-header>Date</th>
-              <td *matCellDef="let mo">{{ parseDate(mo.dateValid) }}</td>
-            </ng-container>
-
-            <!-- Revision PPC Column -->
-            <ng-container matColumnDef="revisionPpc">
-              <th *matHeaderCellDef style="min-width: 100px" mat-sort-header>Revision PPC</th>
-              <td *matCellDef="let mo">{{ mo.revisionPpc }}</td>
-            </ng-container>
-
-            <!-- Revision Marketing Column -->
-            <ng-container matColumnDef="revisionMarketing">
-              <th *matHeaderCellDef style="min-width: 100px" mat-sort-header>Revision Marketing</th>
-              <td *matCellDef="let mo">{{ mo.revisionMarketing }}</td>
-            </ng-container>
-
-            <!-- Month 1 Column -->
-            <ng-container matColumnDef="month0">
-              <th *matHeaderCellDef style="min-width: 150px" mat-sort-header>Month 1</th>
-              <td *matCellDef="let mo">{{ parseDate(mo.month0) }}</td>
-            </ng-container>
-
-            <!-- Month 1 Column -->
-            <ng-container matColumnDef="month1">
-              <th *matHeaderCellDef style="min-width: 150px" mat-sort-header>Month 1</th>
-              <td *matCellDef="let mo">{{ parseDate(mo.month1) }}</td>
-            </ng-container>
-
-            <!-- Month 1 Column -->
-            <ng-container matColumnDef="month2">
-              <th *matHeaderCellDef style="min-width: 150px" mat-sort-header>Month 2</th>
-              <td *matCellDef="let mo">{{ parseDate(mo.month2) }}</td>
-            </ng-container>
-
-            <!-- Action Column -->
-            <ng-container matColumnDef="action">
-              <th *matHeaderCellDef style="min-width: 150px">Action</th>
-              <td *matCellDef="let mo">
-                <button type="button" class="btn btn-md btn-secondary" (click)="showDataRevision(mo.moId)">Show</button>
-              </td>
-            </ng-container>
-
-            <tr align="center" style="height: 20px" mat-header-row *matHeaderRowDef="displayedColumnsMo"></tr>
-            <tr align="center" mat-row *matRowDef="let row; columns: displayedColumnsMo"></tr>
-          </table>
-        </div>
-        <!-- Pagination -->
-        <mat-paginator #paginatorMo [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
-      </div>
-    </div>
-  </div>
-
   <!-- Header Marketing Order -->
   <div class="col-md-12">
     <div class="card">
@@ -497,21 +406,28 @@
         <strong>Limits Presentage and Mould Change</strong>
       </div>
       <div class="card-body">
-        <form [formGroup]="formLimit" class="form form-horizontal">
+        <form [formGroup]="formHeaderMo" class="form form-horizontal">
+          <div class="form-group row">
+            <label class="col-md-3 col-form-label">Mould Change</label>
+            <div class="col-md-6">
+              <input class="form-control" type="number" formControlName="minLimit_gt_100000" placeholder="0" />
+            </div>
+          </div>
+
           <div class="form-group row">
             <label class="col-md-3 col-form-label"><strong>Range</strong></label>
-            <label class="col-md-3 col-form-label">Minimum Limit</label>
-            <label class="col-md-3 col-form-label">Maximum Limit</label>
+            <label class="col-md-3 col-form-label">Minimum Limit (%)</label>
+            <label class="col-md-3 col-form-label">Maximum Limit (%)</label>
           </div>
 
           <!-- Range 0 - 2000 -->
           <div class="form-group row">
             <label class="col-md-3 col-form-label">0 - 2000</label>
             <div class="col-md-3">
-              <input class="form-control" type="number" formControlName="minLimit_0_2000" placeholder="0.00" />
+              <input class="form-control" type="number" formControlName="minLimit_0_2000" placeholder="0" />
             </div>
             <div class="col-md-3">
-              <input class="form-control" type="number" formControlName="maxLimit_0_2000" placeholder="0.00" />
+              <input class="form-control" type="number" formControlName="maxLimit_0_2000" placeholder="0" />
             </div>
           </div>
 
@@ -519,10 +435,10 @@
           <div class="form-group row">
             <label class="col-md-3 col-form-label">2001 - 10.000</label>
             <div class="col-md-3">
-              <input class="form-control" type="number" formControlName="minLimit_2001_10000" placeholder="0.00" />
+              <input class="form-control" type="number" formControlName="minLimit_2001_10000" placeholder="0" />
             </div>
             <div class="col-md-3">
-              <input class="form-control" type="number" formControlName="maxLimit_2001_10000" placeholder="0.00" />
+              <input class="form-control" type="number" formControlName="maxLimit_2001_10000" placeholder="0" />
             </div>
           </div>
 
@@ -530,10 +446,10 @@
           <div class="form-group row">
             <label class="col-md-3 col-form-label">10.001 - 100.000</label>
             <div class="col-md-3">
-              <input class="form-control" type="number" formControlName="minLimit_10001_100000" placeholder="0.00" />
+              <input class="form-control" type="number" formControlName="minLimit_10001_100000" placeholder="0" />
             </div>
             <div class="col-md-3">
-              <input class="form-control" type="number" formControlName="maxLimit_10001_100000" placeholder="0.00" />
+              <input class="form-control" type="number" formControlName="maxLimit_10001_100000" placeholder="0" />
             </div>
           </div>
 
@@ -541,10 +457,10 @@
           <div class="form-group row">
             <label class="col-md-3 col-form-label">&gt; 100.000</label>
             <div class="col-md-3">
-              <input class="form-control" type="number" formControlName="minLimit_gt_100000" placeholder="0.00" />
+              <input class="form-control" type="number" formControlName="minLimit_gt_100000" placeholder="0" />
             </div>
             <div class="col-md-3">
-              <input class="form-control" type="number" formControlName="maxLimit_gt_100000" placeholder="0.00" />
+              <input class="form-control" type="number" formControlName="maxLimit_gt_100000" placeholder="0" />
             </div>
           </div>
         </form>
@@ -561,12 +477,14 @@
       </div>
       <div class="card-body">
         <div class="d-flex justify-content-between mb-3">
-          <div class="d-flex align-items-center">
+          <div class="d-flex align-items-center flex-nowrap">
             <input type="text" class="form-control col-md-12 col-lg-12" [(ngModel)]="searchText"
-              (input)="onSearchChangeMo()" placeholder="Find here..." />
+              (input)="onSearchChangeMo()" placeholder="Find here..." style="max-width: 300px;" />
             <button type="submit" class="btn btn-primary ml-2" (click)="resetSearchMo()">Reset</button>
+            <button type="button" class="btn btn-warning ml-2" style="white-space: nowrap;" (click)="addToSelectedList()"
+            ><i class="fa fa-plus fa-lg"></i> Add to list</button>
           </div>
-        </div>
+        </div>        
 
         <!-- Table -->
         <div class="table-responsive">
@@ -575,14 +493,19 @@
 
             <ng-container matColumnDef="select" sticky>
               <th *matHeaderCellDef
-                style="min-width: 100px; background-color: rgb(202, 196, 196); color: rgb(0, 0, 0); text-align: center; vertical-align: middle;"
-                rowspan="2">Front Rear</th>
-              <td mat-cell *matCellDef="let mo">
+                  style="min-width: 100px; background-color: rgb(255, 200, 81); color: rgb(0, 0, 0); text-align: center; vertical-align: middle;"
+                  rowspan="2">Front Rear</th>
+              <td mat-cell *matCellDef="let mo" 
+                  [ngStyle]="{ 
+                    'background-color': 'rgb(255, 247, 240)', 
+                    'color': 'rgb(0, 0, 0)', 
+                    'text-align': 'center', 
+                    'vertical-align': 'middle' 
+                  }">
                 <input type="checkbox" [(ngModel)]="mo.selected" />
               </td>
             </ng-container>
-
-
+            
             <ng-container matColumnDef="no" sticky>
               <th *matHeaderCellDef style="min-width: 50px" rowspan="2">No</th>
               <td mat-cell class="text-center" *matCellDef="let mo; let i = index">{{ i + 1 }}</td>
@@ -740,9 +663,11 @@
             <ng-container matColumnDef="action">
               <th *matHeaderCellDef style="min-width: 150px" rowspan="2" colspan="3">Detail</th>
               <td *matCellDef="let mo" style="display: flex; justify-content: center; align-items: center;">
-                <button type="button" class="btn btn-md btn-secondary ml-2" (click)="viewDetail()">Detail</button>
+                <button type="button" class="btn btn-md btn-secondary ml-2"
+                  (click)="viewDetail(mo.itemCuring, mo.partNumber)">Detail</button>
               </td>
             </ng-container>
+
             <tr align="center" style="height: 30px" mat-header-row *matHeaderRowDef="headersColumnsDmo; sticky: true">
             </tr>
             <tr align="center" style="height: 30px" mat-header-row
@@ -753,18 +678,48 @@
         <!-- Pagination -->
         <mat-paginator #paginatorDmo [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
       </div>
+      <div class="col-md-12" *ngIf="showFrontRear">
+        <div class="card">
+          <div class="card-header">
+            <strong>List Front Rear</strong>
+          </div>
+          <div class="card-body">
+            <form class="form form-horizontal">
+              <!-- Tabel untuk Menampilkan Data -->
+              <div class="table-responsive mt-3">
+                <table class="table table-bordered table-sm">
+                  <thead>
+                    <tr>
+                      <th>No</th>
+                      <th>Front Rear ID</th> 
+                      <th>Part Number</th>
+                      <th>Description</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let item of selectedList; let i = index">
+                      <td>{{ i + 1 }}</td>
+                      <td>{{ item.frontRear }}</td>
+                      <td>{{ item.partNumber }}</td>
+                      <td>{{ item.description }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
       <div class="col-md-12 pb-4">
         <button (click)="navigateToViewMo()" class="btn btn-primary justify-content-start mr-2">Back</button>
-        <button (click)="navigateToViewMo()" type="submit" class="btn btn-success">Submit</button>
-      </div>
+        <button (click)="saveAndUpdate()" type="submit" class="btn btn-success">Submit</button>
     </div>
   </div>
 </div>
 
 <!-- Modal Detail Mesin -->
-<div class="modal fade " id="dmpModal" tabindex="-1" role="dialog" aria-labelledby="Detail Daily Monthly Planning"
-  aria-hidden="true">
-  <div class="modal-dialog" role="document" style="max-width: 40%;">
+<div class="modal fade" id="dmpModal" tabindex="-1" role="dialog" aria-labelledby="Detail Machine" aria-hidden="true">
+  <div class="modal-dialog" role="document" style="max-width: 60%;">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="addModalLabel">Detail Machine</h5>
@@ -786,21 +741,27 @@
               <!-- Loop through machineEntries to create rows -->
               <tr *ngFor="let entry of machineEntries; let i = index">
                 <td>
-                  <select class="form-control" [(ngModel)]="entry.gedung" name="gedung{{i}}"
-                    (change)="onGedungSelect(i)">
+                  <select class="form-control" [(ngModel)]="entry.selectedGedung"
+                    (change)="onGedungSelect(entry, $event.target.value)">
                     <option value="">Select Gedung</option>
-                    <option *ngFor="let option of gedungOptions" [value]="option">{{ option }}</option>
+                    <option *ngFor="let gedung of gedungOptions" [value]="gedung">
+                      {{ gedung }}
+                    </option>
                   </select>
                 </td>
                 <td>
-                  <select id="mesinSelect" class="form-control" [(ngModel)]="entry.mesin" name="mesin{{i}}">
-                    <option value="">Select Mesin</option>
-                    <option *ngFor="let mesin of entry.filteredMesinOptions" [value]="mesin">{{ mesin }}</option>
+                  <select class="form-control" [(ngModel)]="entry.selectedMachine">
+                    <option value="">Select Machine</option>
+                    <option *ngFor="let mesin of entry.filteredMesinOptions" [value]="mesin">
+                      {{ mesin }}
+                    </option>
                   </select>
                 </td>
                 <td>
                   <button (click)="removeEntry(entry)" class="btn btn-danger"
-                    style="font-size: 12px; padding: 3px 6px;">Remove</button>
+                    style="font-size: 12px; padding: 3px 6px;">
+                    Remove
+                  </button>
                 </td>
               </tr>
             </tbody>
@@ -814,7 +775,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" id="saveMachineBtn">Simpan</button>
+        <button type="button" class="btn btn-primary" id="saveMachineBtn" (click)="saveEntries()">Simpan</button>
       </div>
     </div>
   </div>

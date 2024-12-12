@@ -49,3 +49,12 @@ input[type="checkbox"] {
   margin: 0;
   display: inline; /* Ensures the checkbox is inline with other content */
 }
+
+.invalid-checkbox {
+  border: 2px solid red;
+  border-radius: 4px;
+  width: 16px; /* Atur lebar */
+  height: 16px; /* Atur tinggi */
+}
+
+

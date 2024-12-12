@@ -10,6 +10,7 @@ import { map, catchError } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root',
 })
+
 export class BuildingService {
   //Isi tokenya
   token: String =

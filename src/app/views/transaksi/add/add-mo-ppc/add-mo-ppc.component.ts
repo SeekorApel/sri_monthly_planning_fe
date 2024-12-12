@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MarketingOrder } from 'src/app/models/MarketingOrder';
@@ -40,8 +40,8 @@ export class AddMoPpcComponent implements OnInit {
   errorMessage: string | null = null;
   workDay: any[];
   file: File | null = null;
-  loadingShowData:boolean = false;
-  loadingSaveData:boolean = false;
+  loadingShowData: boolean = false;
+  loadingSaveData: boolean = false;
 
   //Error Message
   errorMessagesMinOrder: string[] = [];
@@ -58,6 +58,7 @@ export class AddMoPpcComponent implements OnInit {
   dataSource: MatTableDataSource<DetailMarketingOrder>;
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild('fileInput') fileInput: ElementRef;
 
   constructor(private router: Router, private fb: FormBuilder, private moService: MarketingOrderService, private parsingNumberService: ParsingNumberService, private numberService: NumberFormatService) {
     this.formHeaderMo = this.fb.group({
@@ -107,6 +108,7 @@ export class AddMoPpcComponent implements OnInit {
     this.moService.getCapacity().subscribe(
       (response: ApiResponse<any>) => {
         this.capacityDb = response.data;
+        console.log("Response capacity: ", this.capacityDb)
       },
       (error) => {
         Swal.fire({
@@ -147,16 +149,21 @@ export class AddMoPpcComponent implements OnInit {
     this.subscribeToValueChanges('max_capa_tt_2');
   }
 
-  getLastIdMo(): void {
+  resetFileInput() {
+    this.fileInput.nativeElement.value = '';
+  }
+
+  getLastIdMo(): void{
     this.moService.getLastIdMo().subscribe(
       (response: ApiResponse<string>) => {
         this.lastIdMo = response.data;
+        console.log("Response lastId: ", this.lastIdMo)
       },
       (error) => {
         Swal.fire({
           icon: 'error',
           title: 'Error',
-          text: 'Failed to load data: ' + error.message,
+          text: 'Failed to load last IDMo: ' + error.message,
         });
       }
     );
@@ -558,12 +565,24 @@ export class AddMoPpcComponent implements OnInit {
         detailMarketingOrder: this.detailMarketingOrder,
       };
 
+      Swal.fire({
+        icon: 'info',
+        title: 'Processing...',
+        html: 'Please wait while save data marketing order.',
+        allowOutsideClick: false,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
+
       this.moService.saveMarketingOrderPPC(saveMo).subscribe(
         (response) => {
+          Swal.close();
           Swal.fire({
             title: 'Success!',
             text: 'Data Marketing Order successfully Added.',
             icon: 'success',
+            allowOutsideClick: false,
             confirmButtonText: 'OK',
           }).then((result) => {
             if (result.isConfirmed) {
@@ -573,6 +592,7 @@ export class AddMoPpcComponent implements OnInit {
           this.loadingSaveData = false;
         },
         (err) => {
+          Swal.close();
           Swal.fire('Error!', 'Error insert data Marketing Order.', 'error');
           this.loadingSaveData = false;
         }
@@ -650,7 +670,6 @@ export class AddMoPpcComponent implements OnInit {
   }
 
   downloadTemplate() {
-    console.log("sampe sini",this.headerMarketingOrder);
     const workbook = new ExcelJS.Workbook();
     const worksheet = workbook.addWorksheet('Form Input MO');
     const month0 = this.monthNames[0];
@@ -881,8 +900,8 @@ export class AddMoPpcComponent implements OnInit {
     worksheet.getCell('N17').alignment = { vertical: 'middle', horizontal: 'left' };
     setBorder(worksheet.getCell('N17'));
     worksheet.getCell('Q17').value = this.formHeaderMo.get('max_capa_tt_0')?.value; // "Month 1"
-    worksheet.getCell('R17').value = this.formHeaderMo.get('max_capa_tt_1')?.value;  // "Month 2"
-    worksheet.getCell('S17').value = this.formHeaderMo.get('max_capa_tt_2')?.value;  // "Month 3"
+    worksheet.getCell('R17').value = this.formHeaderMo.get('max_capa_tt_1')?.value; // "Month 2"
+    worksheet.getCell('S17').value = this.formHeaderMo.get('max_capa_tt_2')?.value; // "Month 3"
     worksheet.getCell('Q17').numFmt = '#,##0';
     worksheet.getCell('R17').numFmt = '#,##0';
     worksheet.getCell('S17').numFmt = '#,##0';
@@ -1427,7 +1446,6 @@ export class AddMoPpcComponent implements OnInit {
             const partNumber = Number(worksheet[`C${row + 1}`]?.v) || null; // Kolom C
             const machineType = String(worksheet[`E${row + 1}`]?.v) || null; // Kolom I
             const minOrder = Number(worksheet[`I${row + 1}`]?.v) || null; // Kolom E
-            console.log("sini",machineType);
 
             // Mencari dan memperbarui nilai dalam detailMarketingOrder
             const detail = this.detailMarketingOrder.find((item) => item.partNumber === partNumber);
@@ -1440,11 +1458,16 @@ export class AddMoPpcComponent implements OnInit {
             }
           }
         } else {
-          console.error('File tidak dapat dibaca sebagai ArrayBuffer');
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'File tidak dapat dibaca',
+          });
         }
       };
 
       reader.readAsArrayBuffer(this.file); // Membaca file sebagai ArrayBuffer
+      this.resetFileInput();
       $('#uploadModal').modal('hide');
     }
   }
