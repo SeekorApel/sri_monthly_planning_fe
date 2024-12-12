@@ -79,6 +79,22 @@ export class ViewCtKapaComponent implements OnInit {
       }
     );
   }
+  validateNumberInput(event: KeyboardEvent): void {
+    const charCode = event.key.charCodeAt(0);
+
+    // Kode ASCI 48 - 57 angka (0-9) yang bisa diketik
+    if (charCode < 48 || charCode > 57) {
+      event.preventDefault();
+    }
+  }
+  validateNumberInputTitik(event: KeyboardEvent): void {
+    const charCode = event.key.charCodeAt(0);
+
+    // Kode ASCI 48 - 57 angka (0-9) yang bisa diketik
+    if ((charCode < 48 || charCode > 57) && charCode !== 46) {
+      event.preventDefault();
+    }
+  }
   private loadCuringType(): void {
     this.CuringStypeService.getAllMCT().subscribe(
       (response: ApiResponse<MachineCuringType[]>) => {

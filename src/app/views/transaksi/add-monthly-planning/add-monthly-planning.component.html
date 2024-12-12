@@ -95,36 +95,6 @@
               <td *matCellDef="let mo; let i = index">{{ i + 1 }}</td>
             </ng-container>
 
-            <!-- Marketing Order ID Column -->
-            <ng-container matColumnDef="moId">
-              <th *matHeaderCellDef style="min-width: 150px" mat-sort-header>Marketing Order ID</th>
-              <td *matCellDef="let mo">{{ mo.moId }}</td>
-            </ng-container>
-
-            <!-- Type Column -->
-            <ng-container matColumnDef="type">
-              <th *matHeaderCellDef style="min-width: 80px" mat-sort-header>Type</th>
-              <td *matCellDef="let mo">{{ mo.type }}</td>
-            </ng-container>
-
-            <!-- Date Column -->
-            <ng-container matColumnDef="dateValid">
-              <th *matHeaderCellDef style="min-width: 150px" mat-sort-header>Date</th>
-              <td *matCellDef="let mo">{{ parseDate(mo.dateValid) }}</td>
-            </ng-container>
-
-            <!-- Revision PPC Column -->
-            <ng-container matColumnDef="revisionPpc">
-              <th *matHeaderCellDef style="min-width: 100px" mat-sort-header>Revision PPC</th>
-              <td *matCellDef="let mo">{{ mo.revisionPpc }}</td>
-            </ng-container>
-
-            <!-- Revision Marketing Column -->
-            <ng-container matColumnDef="revisionMarketing">
-              <th *matHeaderCellDef style="min-width: 100px" mat-sort-header>Revision Marketing</th>
-              <td *matCellDef="let mo">{{ mo.revisionMarketing }}</td>
-            </ng-container>
-
             <!-- Month 1 Column -->
             <ng-container matColumnDef="month0">
               <th *matHeaderCellDef style="min-width: 150px" mat-sort-header>Month 1</th>
@@ -148,7 +118,7 @@
               <th *matHeaderCellDef style="min-width: 340px">Action</th>
               <td *matCellDef="let mo">
                 <button type="button" class="btn btn-md btn-warning ml-2"
-                  (click)="navigateToAddArDefectReject(mo.moId)">Finalisasi MO</button>
+                  (click)="navigateToAddArDefectReject(mo.month0, mo.month1, mo.month2)">Finalisasi MO</button>
                 <button type="button" class="btn btn-md btn-primary ml-2"
                   (click)="navigateToDetailMo(mo.moId)">Mark Front Rear</button>
               </td>
@@ -479,5 +449,3 @@
     </div>
   </div>
 </div>
-
-

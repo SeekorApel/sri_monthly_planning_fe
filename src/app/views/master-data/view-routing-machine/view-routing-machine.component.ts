@@ -7,10 +7,16 @@ import Swal from 'sweetalert2';
 declare var $: any;
 import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
+import { Select2OptionData } from 'ng-select2';
+import { Options } from 'select2';
 
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
+import { Item_Assy } from 'src/app/models/Item_Assy';
+import { MachineTass } from 'src/app/models/machine-tass';
+import { ItemAssyService } from 'src/app/services/master-data/item-assy/itemAssy.service';
+import { MachineTassService } from 'src/app/services/master-data/machine-tass/machine-tass.service';
 
 @Component({
   selector: 'app-view-routing-machine',
@@ -43,7 +49,13 @@ export class ViewRoutingMachineComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  constructor(private RoutingMachineService: RoutingService, private fb: FormBuilder) { 
+  public uomOptions: Array<Array<Select2OptionData>>;
+  public options: Options = { width: '100%'};
+  uom: any;
+  itemAssy: Item_Assy[] =[];
+  machineTass: MachineTass[] =[];
+
+  constructor(private RoutingMachineService: RoutingService, private fb: FormBuilder, private itemAssyService: ItemAssyService, private machineTassService: MachineTassService) { 
     this.editRoutingMachineForm = this.fb.group({
       wip: ['', Validators.required],
       description: ['', Validators.required],
@@ -51,7 +63,7 @@ export class ViewRoutingMachineComponent implements OnInit {
       var_group_counter: ['', Validators.required],
       sequence: ['', Validators.required],
       wct: ['', Validators.required],
-      operation_short_text: ['', Validators.required],
+      operation_SHORT_TEXT: ['', Validators.required],
       operation_unit: ['', Validators.required],
       base_quantity: ['', Validators.required],
       standard_value_unit: ['', Validators.required],
@@ -82,10 +94,56 @@ export class ViewRoutingMachineComponent implements OnInit {
       waktu_total_CT_normal: ['', Validators.required],
       waktu_total_CT_jumat: ['', Validators.required]
     });
+
+    this.loadItemAssy();
+    this.loadMachineTass();
+  }
+
+  private loadItemAssy(): void {
+    this.itemAssyService.getAllItemAssy().subscribe(
+      (response: ApiResponse<Item_Assy[]>) => {
+        this.itemAssy = response.data;
+        if (!this.uomOptions) {
+          this.uomOptions = [];
+        }
+        this.uomOptions[0] = this.itemAssy.map((element) => ({
+          id: element.item_ASSY.toString(),
+          text: element.item_ASSY.toString()
+        }));
+      },
+      (error) => {
+        this.errorMessage = 'Failed to load item assy: ' + error.message;
+      }
+    );
+  }
+
+  private loadMachineTass(): void {
+    this.machineTassService.getAllMachineTass().subscribe(
+      (response: ApiResponse<MachineTass[]>) => {
+        this.machineTass = response.data;
+        if (!this.uomOptions) {
+          this.uomOptions = [];
+        }
+        this.uomOptions[1] = this.machineTass.map((element) => ({
+          id: element.work_CENTER_TEXT.toString(),
+          text: element.work_CENTER_TEXT.toString()
+        }));
+      },
+      (error) => {
+        this.errorMessage = 'Failed to load  machine tass : ' + error.message;
+      }
+    );
   }
 
   ngOnInit(): void {
     this.getAllCTAssy();
+  }
+
+  allowOnlyNumbers(event: KeyboardEvent) {
+    const charCode = event.which ? event.which : event.keyCode;
+    if (charCode < 48 || charCode > 57) {
+      event.preventDefault(); // Prevent non-numeric input
+    }
   }
 
   getAllCTAssy(): void {

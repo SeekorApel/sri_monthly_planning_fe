@@ -12,7 +12,6 @@ import { Options } from 'select2';
 import { Setting } from 'src/app/models/Setting';
 import { SettingService } from 'src/app/services/master-data/setting/setting.service';
 
-
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
@@ -38,28 +37,31 @@ export class ViewMachineCuringTypeComponent implements OnInit {
   };
   settings: Setting[];
 
-
   // Pagination
   pageOfItems: Array<any>;
   pageSize: number = 5;
   totalPages: number = 5;
-  displayedColumns: string[] = ['no', 'machinecuringtype_ID','setting_ID','description','cavity','status','action'];
+  displayedColumns: string[] = ['no', 'machinecuringtype_ID', 'setting_ID', 'description', 'cavity', 'status', 'action'];
   dataSource: MatTableDataSource<MachineCuringType>;
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  constructor(
-    private machineCuringTypeService: MachineCuringTypeService, 
-    private fb: FormBuilder,
-    private  settingService: SettingService,
-  ) {
+  constructor(private machineCuringTypeService: MachineCuringTypeService, private fb: FormBuilder, private settingService: SettingService) {
     this.editMCTForm = this.fb.group({
       description: ['', Validators.required],
       setting: ['', Validators.required],
       cavity: ['', Validators.required],
     });
     this.loadSetting();
+  }
+  validateNumberInput(event: KeyboardEvent): void {
+    const charCode = event.key.charCodeAt(0);
+
+    // Kode ASCI 48 - 57 angka (0-9) yang bisa diketik
+    if (charCode < 48 || charCode > 57) {
+      event.preventDefault();
+    }
   }
 
   ngOnInit(): void {
@@ -76,7 +78,7 @@ export class ViewMachineCuringTypeComponent implements OnInit {
 
         this.uomOptionData = this.settings.map((element) => ({
           id: element.setting_ID.toString(), // Ensure the ID is a string
-          text: element.setting_KEY, // Set the text to the name (or other property)
+          text: element.setting_VALUE, // Set the text to the name (or other property)
         }));
       },
       (error) => {
@@ -88,13 +90,13 @@ export class ViewMachineCuringTypeComponent implements OnInit {
   getAllMachineCuringType(): void {
     this.machineCuringTypeService.getAllMCT().subscribe(
       (response: ApiResponse<MachineCuringType[]>) => {
-        this.machineCuringTypes = response.data.map(curingT => {
-          const setting = this.settings.find(setting => setting.setting_ID === curingT.setting_ID);
+        this.machineCuringTypes = response.data.map((curingT) => {
+          const setting = this.settings.find((setting) => setting.setting_ID === curingT.setting_ID);
           return {
             ...curingT,
-            setting_key: setting ? setting.setting_KEY : 'Unknown',
-          }
-        })
+            setting_value: setting ? setting.setting_VALUE : 'Unknown',
+          };
+        });
         this.dataSource = new MatTableDataSource(this.machineCuringTypes);
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;

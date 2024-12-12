@@ -58,6 +58,13 @@ export class ViewSettingComponent implements OnInit {
     return value.replace('.', ',');
   }  
 
+  denormalizeDecimal(value: string | number): string {
+  if (typeof value === 'string') {
+    return value.replace(',', '.');
+  }
+    return value.toString();
+  }
+
   getAllSetting(): void {
     this.settingService.getAllSetting().subscribe(
       (response: ApiResponse<Setting[]>) => {
@@ -111,7 +118,7 @@ export class ViewSettingComponent implements OnInit {
         // SweetAlert setelah update berhasil
         Swal.fire({
           title: 'Success!',
-          text: 'Data plant successfully updated.',
+          text: 'Data setting successfully updated.',
           icon: 'success',
           confirmButtonText: 'OK',
         }).then((result) => {
@@ -147,7 +154,7 @@ export class ViewSettingComponent implements OnInit {
   deleteData(setting: Setting): void {
     Swal.fire({
       title: 'Are you sure?',
-      text: 'This data plant will be deleted!',
+      text: 'This data setting will be deleted!',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
@@ -158,12 +165,12 @@ export class ViewSettingComponent implements OnInit {
       if (result.isConfirmed) {
         this.settingService.deleteSetting(setting).subscribe(
           (response) => {
-            Swal.fire('Deleted!', 'Data plant has been deleted', 'success').then(() => {
+            Swal.fire('Deleted!', 'Data setting has been deleted', 'success').then(() => {
               window.location.reload();
             });
           },
           (err) => {
-            Swal.fire('Error!', 'Failed to delete the plant.', 'error');
+            Swal.fire('Error!', 'Failed to delete the setting.', 'error');
           }
         );
       }

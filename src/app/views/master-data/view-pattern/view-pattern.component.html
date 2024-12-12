@@ -51,7 +51,7 @@
 
           <!-- Action Column -->
           <ng-container matColumnDef="action">
-            <th *matHeaderCellDef style="min-width: 150px">Action</th>
+            <th *matHeaderCellDef style="min-width: 50px">Action</th>
             <td *matCellDef="let element" align="center">
               <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(element.pattern_ID)">Update</button>
               <button type="button" class="btn btn-md ml-3" [ngClass]="{ 'btn-danger': element.status === 1, 'btn-success': element.status !== 1 }" (click)="element.status === 1 ? deleteData(element) : activateData(element)">
@@ -83,7 +83,7 @@
               <form [formGroup]="editPatternForm">
                 <div class="form-group">
                   <h6 for="patternName">Pattern Name</h6>
-                  <input [(ngModel)]="edtPatternObject.pattern_NAME" type="text" class="form-control" id="patternName" formControlName="patternName" [ngClass]="{ 'is-invalid': editPatternForm.get('patternName').invalid && editPatternForm.get('patternName').touched }" />
+                  <input [(ngModel)]="edtPatternObject.pattern_NAME" maxlength="254" type="text" class="form-control" id="patternName" formControlName="patternName" [ngClass]="{ 'is-invalid': editPatternForm.get('patternName').invalid && editPatternForm.get('patternName').touched }" />
                   <!-- Error message if plantName is empty -->
                   <div *ngIf="editPatternForm.get('patternName').invalid && editPatternForm.get('patternName').touched" class="invalid-feedback">Pattern name is required.</div>
                 </div>
