@@ -55,11 +55,6 @@ export class ViewQDistanceComponent implements OnInit {
     this.loadQdistance();
   }
 
-  getQuadrantName(quadrantID: number): string {
-    const quadrant = this.quadrant.find((b) => b.quadrant_ID === quadrantID);
-    return quadrant ? quadrant.quadrant_NAME.toString() : 'Unknown';
-  }
-
   ngOnInit(): void {
     this.getAllQuadrantDistance();
   }
@@ -69,18 +64,20 @@ export class ViewQDistanceComponent implements OnInit {
   private loadQdistance(): void {
     this.quadrantService.getAllQuadrant().subscribe(
       (response: ApiResponse<Quadrant[]>) => {
+        console.log('Quadrant Response:', response);
         this.quadrant = response.data;
 
-        if (!this.uomOptionData) {
+        if (this.quadrant && this.quadrant.length > 0) {
+          this.uomOptionData = this.quadrant.map((element) => ({
+            id: element.quadrant_ID.toString(),
+            text: element.quadrant_NAME,
+          }));
+        } else {
           this.uomOptionData = [];
         }
-
-        this.uomOptionData = this.quadrant.map((element) => ({
-          id: element.quadrant_ID.toString(), // Ensure the ID is a string
-          text: element.quadrant_NAME, // Set the text to the name (or other property)
-        }));
       },
       (error) => {
+        console.error('Error loading quadrants:', error);
         this.errorMessage = 'Failed to load Quadrant: ' + error.message;
       }
     );
@@ -97,23 +94,22 @@ export class ViewQDistanceComponent implements OnInit {
   getAllQuadrantDistance(): void {
     this.qdistanceService.getAllQuadrantDistance().subscribe(
       (response: ApiResponse<QDistance[]>) => {
-        this.qdistances = response.data.map((qdistance) => {
-          const quadrant1 = this.quadrant.find((qd) => qd.quadrant_ID == qdistance.quadrant_ID_1);
-          const quadrant2 = this.quadrant.find((qd) => qd.quadrant_ID == qdistance.quadrant_ID_2);
-          return {
-            ...qdistance,
-            quadrant_1: quadrant1 ? quadrant1.quadrant_NAME : 'Unknown',
-            quadrant_2: quadrant2 ? quadrant2.quadrant_NAME : 'Unknown',
-          };
-        });
-        this.isDataEmpty = this.qdistances.length === 0; // Update status data kosong
+        const quadrantMap = new Map(this.quadrant.map((q) => [q.quadrant_ID, q.quadrant_NAME]));
+
+        this.qdistances = response.data.map((qdistance) => ({
+          ...qdistance,
+          quadrant_1: quadrantMap.get(qdistance.quadrant_ID_1) || 'Unknown',
+          quadrant_2: quadrantMap.get(qdistance.quadrant_ID_2) || 'Unknown',
+        }));
+
+        this.isDataEmpty = this.qdistances.length === 0;
         this.dataSource = new MatTableDataSource(this.qdistances);
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
-        // this.onChangePage(this.qdistances.slice(0, this.pageSize));
       },
       (error) => {
-        this.errorMessage = 'Failed to load quadrant distance: ' + error.message;
+        console.error('Error fetching quadrant distances:', error);
+        this.errorMessage = 'Failed to load quadrant distances: ' + error.message;
       }
     );
   }

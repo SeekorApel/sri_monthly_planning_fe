@@ -125,12 +125,12 @@ export class ViewMachineTassComponent implements OnInit {
           const building = this.buildings.find(
             b => b.building_ID === machine.building_ID
           );
-          const tassTypeData = this.tassTypes.find(
-            mtt => mtt.machinetasstype_ID == machine.machinetasstype_ID
-          );
+          // const tassTypeData = this.tassTypes.find(
+          //   mtt => mtt.machinetasstype_ID == machine.machinetasstype_ID
+          // );
           return {
             ...machine,
-            tassTypeID: tassTypeData ? tassTypeData.machinetasstype_ID : 'Unknown', 
+            // tassTypeID: tassTypeData ? tassTypeData.machinetasstype_ID : 'Unknown', 
             building_Name: building ? building.building_NAME : 'Unknown',
           };
         });

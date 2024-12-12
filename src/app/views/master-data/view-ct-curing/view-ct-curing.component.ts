@@ -1,8 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { CT_Curing } from 'src/app/models/CT_Curing';
-import { ApiResponse } from 'src/app/response/Response';
-import { CTCuringService } from 'src/app/services/master-data/ct-curing/ct-curing.service';
+import { CT_Curing } from '../../../models/CT_Curing';
+import { ApiResponse } from '../../../response/Response';
+import { CTCuringService } from '../../../services/master-data/ct-curing/ct-curing.service';
 import Swal from 'sweetalert2';
 declare var $: any;
 import * as XLSX from 'xlsx';
@@ -13,8 +13,9 @@ import { Options } from 'select2';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
-import { Product } from 'src/app/models/Product';
-import { ProductService } from 'src/app/services/master-data/product/product.service';
+
+import { ItemCuringService } from 'src/app/services/master-data/item-curing/item-curing.service';
+import { Item_Curing } from 'src/app/models/Item_Curing';
 
 @Component({
   selector: 'app-view-ct-curing',
@@ -30,7 +31,6 @@ export class ViewCtCuringComponent implements OnInit {
   isEditMode: boolean = false;
   file: File | null = null;
   editCTCuringForm: FormGroup;
-  products: Product[];
 
   // Pagination
   pageOfItems: Array<any>;
@@ -43,11 +43,12 @@ export class ViewCtCuringComponent implements OnInit {
     width: '100%',
     minimumResultsForSearch: 0,
   };
+  itemCurings: Item_Curing[];
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-  constructor(private ctcuringService: CTCuringService, private fb: FormBuilder, private productService: ProductService) {
+  constructor(private ctcuringService: CTCuringService, private fb: FormBuilder, private item_curingService: ItemCuringService) {
     this.editCTCuringForm = this.fb.group({
       wip: ['', Validators.required],
       groupcounter: ['', Validators.required],
@@ -85,6 +86,7 @@ export class ViewCtCuringComponent implements OnInit {
       waktutotalctnormal: ['', Validators.required],
       waktutotalctfriday: ['', Validators.required],
     });
+    this.loadItemCuring();
   }
 
   ngOnInit(): void {
@@ -95,7 +97,7 @@ export class ViewCtCuringComponent implements OnInit {
     const charCode = event.key.charCodeAt(0);
 
     // Kode ASCI 48 - 57 angka (0-9) yang bisa diketik
-    if ((charCode < 48 || charCode > 57)&& charCode !== 46) {
+    if ((charCode < 48 || charCode > 57) && charCode !== 46) {
       event.preventDefault();
     }
   }
@@ -103,7 +105,13 @@ export class ViewCtCuringComponent implements OnInit {
   getAllCTCuring(): void {
     this.ctcuringService.getAllCTCuring().subscribe(
       (response: ApiResponse<CT_Curing[]>) => {
-        this.ctcurings = response.data;
+        this.ctcurings = response.data.map((Element) => {
+          const wipCuring = this.itemCurings?.find((ic) => ic.item_CURING === Element.wip);
+          return {
+            ...Element,
+            wipCuring: wipCuring ? wipCuring.item_CURING : 'Unknown',
+          };
+        });
         this.dataSource = new MatTableDataSource(this.ctcurings);
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
@@ -111,6 +119,25 @@ export class ViewCtCuringComponent implements OnInit {
       },
       (error) => {
         this.errorMessage = 'Failed to load CT Curing: ' + error.message;
+      }
+    );
+  }
+  private loadItemCuring(): void {
+    this.item_curingService.getAllItemCuring().subscribe(
+      (response: ApiResponse<Item_Curing[]>) => {
+        this.itemCurings = response.data;
+
+        if (!this.uomOptionData) {
+          this.uomOptionData = [];
+        }
+
+        this.uomOptionData = this.itemCurings.map((element) => ({
+          id: element.item_CURING.toString(), // Ensure the ID is a string
+          text: element.item_CURING, // Set the text to the name (or other property)
+        }));
+      },
+      (error) => {
+        this.errorMessage = 'Failed to load Building: ' + error.message;
       }
     );
   }

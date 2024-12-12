@@ -56,7 +56,7 @@
           <!-- Type Column -->
           <ng-container matColumnDef="machinetasstype_ID">
             <th *matHeaderCellDef style="min-width: 100px" mat-sort-header>Type</th>
-            <td align="left" *matCellDef="let element">{{ element.tassTypeID }}</td>
+            <td align="left" *matCellDef="let element">{{ element.machine_TASS_TYPE_ID }}</td>
           </ng-container>
 
           <!-- Work Center Text Column -->
@@ -113,7 +113,7 @@
                 <div class="form-group">
                   <h6 for="tassType">Type</h6>
                   <div class="col-md-13">
-                    <ng-select2 id="tassType" name="tassType" formControlName="tassType" [(ngModel)]="editMachineTassObject.machinetasstype_ID" [data]="uomOptionData[1]" [options]="options"> </ng-select2>
+                    <ng-select2 id="tassType" name="tassType" formControlName="tassType" [(ngModel)]="editMachineTassObject.machine_TASS_TYPE_ID" [data]="uomOptionData[1]" [options]="options"> </ng-select2>
                   </div>
                 </div>
                 <div class="form-group">

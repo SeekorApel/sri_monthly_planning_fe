@@ -56,7 +56,7 @@ export class ViewBDistanceComponent implements OnInit {
     this.loadBuilding();
   }
   getBuildingName(buildingId: number): string {
-    const building = this.buildings.find(b => b.building_ID === buildingId);
+    const building = this.buildings.find((b) => b.building_ID === buildingId);
     return building ? building.building_NAME : 'Unknown';
   }
 
@@ -72,22 +72,18 @@ export class ViewBDistanceComponent implements OnInit {
       event.preventDefault();
     }
   }
-  
+
   getAllBuildingDistance(): void {
     this.bdistanceService.getAllBuildingDistance().subscribe(
       (response: ApiResponse<BDistance[]>) => {
-        this.bdistances = response.data.map(bdistance => {
-          const building1 = this.buildings.find(
-            bd => bd.building_ID === bdistance.building_ID_1
-          );
-          const building2 = this.buildings.find(
-            bd => bd.building_ID === bdistance.building_ID_2
-          );
+        this.bdistances = response.data.map((bdistance) => {
+          const building1 = this.buildings.find((bd) => bd.building_ID === bdistance.building_ID_1);
+          const building2 = this.buildings.find((bd) => bd.building_ID === bdistance.building_ID_2);
           return {
             ...bdistance,
             building_1: building1 ? building1.building_NAME : 'Unknown',
             building_2: building2 ? building2.building_NAME : 'Unknown',
-          }
+          };
         });
         this.isDataEmpty = this.bdistances.length === 0; // Update status data kosong
         this.dataSource = new MatTableDataSource(this.bdistances);
