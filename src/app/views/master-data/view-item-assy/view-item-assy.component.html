@@ -30,7 +30,7 @@
 
           <ng-container matColumnDef="item_ASSY">
             <th  *matHeaderCellDef mat-sort-header >Item Assy</th>
-            <td class="huruf" *matCellDef="let element">{{ element.item_ASSY }}</td>
+            <td *matCellDef="let element">{{ element.item_ASSY }}</td>
           </ng-container>
 
           <ng-container matColumnDef="status">

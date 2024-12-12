@@ -45,6 +45,7 @@ import { EditMoPpcComponent } from './views/transaksi/edit/edit-mo-ppc/edit-mo-p
 import { ViewCuringSizeComponent } from './views/master-data/view-curing-size/view-curing-size.component';
 import { EditMoMarketingComponent } from './views/transaksi/edit/edit-mo-marketing/edit-mo-marketing.component';
 import { ViewDetailRevisiPpcComponent } from './views/transaksi/detail-view-revisi/view-detail-revisi-ppc/view-detail-revisi-ppc.component';
+import { ViewPmStopMachineComponent } from './views/master-data/view-pm-stop-machine/view-pm-stop-machine.component';
 import { ViewWorkDayComponent } from './views/master-data/view-work-day/view-work-day.component';
 import { ViewDetailRevisiMarketingComponent } from './views/transaksi/detail-view-revisi/view-detail-revisi-marketing/view-detail-revisi-marketing.component';
 import { AddMoFrontRearComponent } from './views/transaksi/add-mo-front-rear/add-mo-front-rear.component';
@@ -242,6 +243,13 @@ export const routes: Routes = [
         component: ViewCtCuringComponent,
         data: {
           title: 'Master Data / View CT Curing',
+        },
+      },
+      {
+        path: 'master-data/view-pm-stop-machine',
+        component: ViewPmStopMachineComponent,
+        data: {
+          title: 'Master Data / View PM Stop Machine',
         },
       },
       {

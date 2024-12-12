@@ -165,8 +165,8 @@ export class ViewWorkDayComponent implements OnInit {
         } catch (error) {
           this.errorMessage = 'Failed to update work day specific: ' + error.message;
         }
-        const response = await this.workDayService.turnOnShift(ftargetDate, ot[shiftIndex]).toPromise();
-        this.work_days = response.data;
+        // const response = await this.workDayService.turnOnShift(ftargetDate, ot[shiftIndex]).toPromise();
+        // this.work_days = response.data;
       } else {
         try{
           const response = await this.workDayService.updateShiftTimes(
@@ -214,12 +214,13 @@ export class ViewWorkDayComponent implements OnInit {
             this.ttperHourSwitches.description,
             shiftIndex == 0 ? 3 : shiftIndex
           ).toPromise();
+          // console.log(response.data);
           this.ttperHourSwitches = response.data;
         } catch (error) {
           this.errorMessage = 'Failed to update work day specific: ' + error.message;
         }
-        const response = await this.workDayService.turnOnShift(ftargetDate, ot[shiftIndex]).toPromise();
-        this.work_days = response.data;
+        // const response = await this.workDayService.turnOnShift(ftargetDate, ot[shiftIndex]).toPromise();
+        // this.work_days = response.data;
       } else {
         try{
           const response = await this.workDayService.updateShiftTimes(
@@ -237,8 +238,8 @@ export class ViewWorkDayComponent implements OnInit {
         this.work_days = response.data;
       }
   
-      await this.loadWorkday();
-      await this.loadHours();
+      // await this.loadWorkday();
+      // await this.loadHours();
     } catch (error) {
       this.errorMessage = 'Failed to load work day: ' + error.message;
     }
@@ -428,11 +429,43 @@ export class ViewWorkDayComponent implements OnInit {
     const [hours, minutes] = time.split(':').map(Number);
     return hours * 60 + minutes;
   }
+  
+  changeStartTime(buffer: WDHoursSpecific, index: number): void {
+    const Times = [
+      { start: '23:30', end: '07:10' }, // Shift 3
+      { start: '07:00', end: '15:50' }, // Shift 1
+      { start: '15:50', end: '23:30' }, // Shift 2
+    ];
+  
+    const shiftKeyStart = `shift${index}_START_TIME`;
+    const shiftKeyEnd = `shift${index}_END_TIME`;
+    const startTime = this.convertTimeToMinutes(buffer[shiftKeyStart]);
+    const endTime = this.convertTimeToMinutes(buffer[shiftKeyEnd]);
+    const allowedStart = this.convertTimeToMinutes(Times[index].start);
+    const allowedEnd = this.convertTimeToMinutes(Times[index].end);
+  
+    // Adjust start time if it is earlier than the allowed start
+    if (startTime < allowedStart) {
+      buffer[shiftKeyStart] = Times[index].start;
+      console.warn(
+        `Start time adjusted to the minimum allowed value: ${Times[index].start}`
+      );
+    }
+  
+    // Adjust end time if it is earlier than the allowed end
+    if (endTime < allowedEnd) {
+      buffer[shiftKeyEnd] = Times[index].end;
+      console.warn(
+        `End time adjusted to the minimum allowed value: ${Times[index].end}`
+      );
+    }
+  }
+  
   updateTotalTime(index: number): void {
     const shiftIndex = this.getShiftIndex(index);
+    this.changeStartTime(this.perHourShift,shiftIndex);
     const startTime = this.perHourShift[`shift${shiftIndex}_START_TIME`];
     const endTime = this.perHourShift[`shift${shiftIndex}_END_TIME`];
-  
     if (startTime && endTime) {
       const start = this.convertTimeToMinutes(startTime);
       const end = this.convertTimeToMinutes(endTime);

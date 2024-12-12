@@ -30,7 +30,7 @@
 
           <ng-container matColumnDef="ct_ASSY_ID">
             <th style="min-width: 150px;" class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Cycle Time Assy ID</th>
-            <td class="angka" *matCellDef="let element">{{ element.ct_ASSY_ID }}</td>
+            <td *matCellDef="let element">{{ element.ct_ASSY_ID }}</td>
           </ng-container>
 
           <ng-container matColumnDef="wip">
@@ -109,7 +109,7 @@
           </ng-container>
 
           <ng-container matColumnDef="wh_SHIFT_FRIDAY">
-            <th style="min-width: 200px;" class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Work Hours Shift Jumat</th>
+            <th style="min-width: 200px;" class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Work Hours Shift Friday</th>
             <td class="angka" *matCellDef="let element">{{ element.wh_SHIFT_FRIDAY }}</td>
           </ng-container>
 
@@ -119,7 +119,7 @@
           </ng-container>
 
           <ng-container matColumnDef="wh_TOTAL_SHIFT_FRIDAY">
-            <th style="min-width: 230px;" class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Work Hours Total Shift Jumat</th>
+            <th style="min-width: 230px;" class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Work Hours Total Shift Friday</th>
             <td class="angka" *matCellDef="let element">{{ element.wh_TOTAL_SHIFT_FRIDAY }}</td>
           </ng-container>
 
@@ -159,7 +159,7 @@
           </ng-container>
 
           <ng-container matColumnDef="op_TIME_SHIFT_FRIDAY">
-            <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >OP Time Shift Jumat</th>
+            <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >OP Time Shift Friday</th>
             <td class="angka" *matCellDef="let element">{{ element.op_TIME_SHIFT_FRIDAY }}</td>
           </ng-container>
 
@@ -169,7 +169,7 @@
           </ng-container>
 
           <ng-container matColumnDef="op_TIME_TOTAL_SHIFT_FRIDAY">
-            <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >OP Time Total Shift Jumat</th>
+            <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >OP Time Total Shift Friday</th>
             <td class="angka" *matCellDef="let element">{{ element.op_TIME_TOTAL_SHIFT_FRIDAY }}</td>
           </ng-container>
 
@@ -189,7 +189,7 @@
           </ng-container>
 
           <ng-container matColumnDef="kaps_SHIFT_FRIDAY">
-            <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Kapasitas Shift Jumat</th>
+            <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Kapasitas Shift Friday</th>
             <td class="angka" *matCellDef="let element">{{ element.kaps_SHIFT_FRIDAY }}</td>
           </ng-container>
 
@@ -199,17 +199,17 @@
           </ng-container>
 
           <ng-container matColumnDef="kaps_TOTAL_SHIFT_FRIDAY">
-            <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Kapasitas Total Shift Jumat</th>
+            <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Kapasitas Total Shift Friday</th>
             <td class="angka" *matCellDef="let element">{{ element.kaps_TOTAL_SHIFT_FRIDAY }}</td>
           </ng-container>
 
           <ng-container matColumnDef="waktu_TOTAL_CT_NORMAL">
-            <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Waktu Total Cycle Time Normal</th>
+            <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Time Total Cycle Time Normal</th>
             <td class="angka" *matCellDef="let element">{{ element.waktu_TOTAL_CT_NORMAL }}</td>
           </ng-container>
 
           <ng-container matColumnDef="waktu_TOTAL_CT_FRIDAY">
-            <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Waktu Total Cycle Time Jumat</th>
+            <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Time Total Cycle Time Friday</th>
             <td class="angka" *matCellDef="let element">{{ element.waktu_TOTAL_CT_FRIDAY }}</td>
           </ng-container>
 
@@ -260,65 +260,81 @@
             <div class="mx-3">
               <div class="form-group">
                 <label for="wip">WIP</label>
-                <input [(ngModel)]="edtRoutingMachineObject.wip" type="text" class="form-control" id="wip" formControlName="wip" [ngClass]="{ 'is-invalid': editRoutingMachineForm.get('wip').invalid && editRoutingMachineForm.get('wip').touched }" />
-                <!-- Error message if plantName is empty -->
-                <div *ngIf="editRoutingMachineForm.get('wip').invalid && editRoutingMachineForm.get('wip').touched" class="invalid-feedback">Setting value is required.</div>
+                  <div>
+                    <ng-select2
+                      formControlName="wip" 
+                      id="wip"
+                      name = "wip"
+                      [(ngModel)]="edtRoutingMachineObject.wip"
+                      [data]="uomOptions[0]"
+                      [options]="options"
+                      [placeholder]="'Please Select'">
+                    </ng-select2>
+                  </div>
               </div>
   
               <div class="form-group">
                 <label for="description">Description</label>
                 <input [(ngModel)]="edtRoutingMachineObject.description" type="text" class="form-control" id="description" formControlName="description" [ngClass]="{ 'is-invalid': editRoutingMachineForm.get('description').invalid && editRoutingMachineForm.get('description').touched }" />
                 <!-- Error message if plantName is empty -->
-                <div *ngIf="editRoutingMachineForm.get('description').invalid && editRoutingMachineForm.get('description')touched" class="invalid-feedback">description value is required.</div>
+                <div *ngIf="editRoutingMachineForm.get('description').invalid && editRoutingMachineForm.get('description')touched" class="invalid-feedback">Description value is required.</div>
               </div>
               
               <div class="form-group">
                 <label for="group_counter">Group Counter</label>
                 <input [(ngModel)]="edtRoutingMachineObject.group_COUNTER" type="text" class="form-control" id="description" formControlName="group_counter" [ngClass]="{ 'is-invalid': editRoutingMachineForm.get('group_counter').invalid && editRoutingMachineForm.get('group_counter').touched }" />
                 <!-- Error message if plantName is empty -->
-                <div *ngIf="editRoutingMachineForm.get('group_counter').invalid && editRoutingMachineForm.get('group_counter')touched" class="invalid-feedback">group counter value is required.</div>
+                <div *ngIf="editRoutingMachineForm.get('group_counter').invalid && editRoutingMachineForm.get('group_counter')touched" class="invalid-feedback">Group counter value is required.</div>
               </div>
               
               <div class="form-group">
                 <label for="var_group_counter">Var Group Counter</label>
                 <input [(ngModel)]="edtRoutingMachineObject.var_GROUP_COUNTER" type="text" class="form-control" id="var_group_counter" formControlName="var_group_counter" [ngClass]="{ 'is-invalid': editRoutingMachineForm.get('var_group_counter').invalid && editRoutingMachineForm.get('var_group_counter').touched }" />
                 <!-- Error message if plantName is empty -->
-                <div *ngIf="editRoutingMachineForm.get('var_group_counter').invalid && editRoutingMachineForm.get('var_group_counter')touched" class="invalid-feedback">var group counter value is required.</div>
+                <div *ngIf="editRoutingMachineForm.get('var_group_counter').invalid && editRoutingMachineForm.get('var_group_counter')touched" class="invalid-feedback">Var group counter value is required.</div>
               </div>
               
               <div class="form-group">
                 <label for="sequence">Sequence</label>
-                <input [(ngModel)]="edtRoutingMachineObject.sequence" type="text" class="form-control" id="sequence" formControlName="sequence" [ngClass]="{ 'is-invalid': editRoutingMachineForm.get('sequence').invalid && editRoutingMachineForm.get('sequence').touched }" />
+                <input [(ngModel)]="edtRoutingMachineObject.sequence" type="text" class="form-control" id="sequence" formControlName="sequence" (keypress)="allowOnlyNumbers($event)" [ngClass]="{ 'is-invalid': editRoutingMachineForm.get('sequence').invalid && editRoutingMachineForm.get('sequence').touched }" />
                 <!-- Error message if plantName is empty -->
-                <div *ngIf="editRoutingMachineForm.get('sequence').invalid && editRoutingMachineForm.get('sequence')touched" class="invalid-feedback">sequence value is required.</div>
+                <div *ngIf="editRoutingMachineForm.get('sequence').invalid && editRoutingMachineForm.get('sequence')touched" class="invalid-feedback">Sequence value is required.</div>
               </div>
               
               <div class="form-group">
                 <label for="wct">WCT</label>
                 <input [(ngModel)]="edtRoutingMachineObject.wct" type="text" class="form-control" id="wct" formControlName="wct" [ngClass]="{ 'is-invalid': editRoutingMachineForm.get('wct').invalid && editRoutingMachineForm.get('wct').touched }" />
                 <!-- Error message if plantName is empty -->
-                <div *ngIf="editRoutingMachineForm.get('wct').invalid && editRoutingMachineForm.get('wct')touched" class="invalid-feedback">wct value is required.</div>
+                <div *ngIf="editRoutingMachineForm.get('wct').invalid && editRoutingMachineForm.get('wct')touched" class="invalid-feedback">WCT value is required.</div>
               </div>
               
               <div class="form-group">
-                <label for="operation_short_text">Operation Short Text</label>
-                <input [(ngModel)]="edtRoutingMachineObject.operation_SHORT_TEXT" type="text" class="form-control" id="operation_short_text" formControlName="operation_short_text" [ngClass]="{ 'is-invalid': editRoutingMachineForm.get('operation_short_text').invalid && editRoutingMachineForm.get('operation_short_text').touched }" />
-                <!-- Error message if plantName is empty -->
-                <div *ngIf="editRoutingMachineForm.get('operation_short_text').invalid && editRoutingMachineForm.get('operation_short_text')touched" class="invalid-feedback">operation short text value is required.</div>
+                <label for="operation_SHORT_TEXT">Operation Short Text</label>
+                  <div>
+                    <ng-select2
+                      formControlName="operation_SHORT_TEXT" 
+                      id="operation_SHORT_TEXT"
+                      name = "operation_SHORT_TEXT"
+                      [(ngModel)]="edtRoutingMachineObject.operation_SHORT_TEXT"
+                      [data]="uomOptions[1]"
+                      [options]="options"
+                      [placeholder]="'Please Select'">
+                    </ng-select2>
+                  </div>
               </div>
               
               <div class="form-group">
                 <label for="operation_unit">Operation Unit</label>
                 <input [(ngModel)]="edtRoutingMachineObject.operation_UNIT" type="text" class="form-control" id="operation_unit" formControlName="operation_unit" [ngClass]="{ 'is-invalid': editRoutingMachineForm.get('operation_unit').invalid && editRoutingMachineForm.get('operation_unit').touched }" />
                 <!-- Error message if plantName is empty -->
-                <div *ngIf="editRoutingMachineForm.get('operation_unit').invalid && editRoutingMachineForm.get('operation_unit')touched" class="invalid-feedback">operation unit value is required.</div>
+                <div *ngIf="editRoutingMachineForm.get('operation_unit').invalid && editRoutingMachineForm.get('operation_unit')touched" class="invalid-feedback">Operation unit value is required.</div>
               </div>
               
               <div class="form-group">
                 <label for="base_quantity">Base Quantity</label>
-                <input [(ngModel)]="edtRoutingMachineObject.base_QUANTITY" type="text" class="form-control" id="base_quantity" formControlName="base_quantity" [ngClass]="{ 'is-invalid': editRoutingMachineForm.get('base_quantity').invalid && editRoutingMachineForm.get('base_quantity').touched }" />
+                <input [(ngModel)]="edtRoutingMachineObject.base_QUANTITY" type="text" class="form-control" id="base_quantity" formControlName="base_quantity" (keypress)="allowOnlyNumbers($event)" [ngClass]="{ 'is-invalid': editRoutingMachineForm.get('base_quantity').invalid && editRoutingMachineForm.get('base_quantity').touched }" />
                 <!-- Error message if plantName is empty -->
-                <div *ngIf="editRoutingMachineForm.get('base_quantity').invalid && editRoutingMachineForm.get('base_quantity')touched" class="invalid-feedback">base quantity value is required.</div>
+                <div *ngIf="editRoutingMachineForm.get('base_quantity').invalid && editRoutingMachineForm.get('base_quantity')touched" class="invalid-feedback">Base quantity value is required.</div>
               </div>
             </div>
 
@@ -327,126 +343,126 @@
                 <label for="standard_value_unit">Standard Value Unit</label>
                 <input [(ngModel)]="edtRoutingMachineObject.standard_VALUE_UNIT" type="text" class="form-control" id="standard_value_unit" formControlName="standard_value_unit" [ngClass]="{ 'is-invalid': editRoutingMachineForm.get('standard_value_unit').invalid && editRoutingMachineForm.get('standard_value_unit').touched }" />
                 <!-- Error message if plantName is empty -->
-                <div *ngIf="editRoutingMachineForm.get('standard_value_unit').invalid && editRoutingMachineForm.get('standard_value_unit')touched" class="invalid-feedback">standard value unit value is required.</div>
+                <div *ngIf="editRoutingMachineForm.get('standard_value_unit').invalid && editRoutingMachineForm.get('standard_value_unit')touched" class="invalid-feedback">Standard value unit value is required.</div>
               </div>
               
               <div class="form-group">
                 <label for="CT_sec_1">CT sec 1</label>
-                <input [(ngModel)]="edtRoutingMachineObject.ct_SEC_1" type="text" class="form-control" id="CT_sec_1" formControlName="CT_sec_1" [ngClass]="{ 'is-invalid': editRoutingMachineForm.get('CT_sec_1').invalid && editRoutingMachineForm.get('CT_sec_1').touched }" />
+                <input [(ngModel)]="edtRoutingMachineObject.ct_SEC_1" type="text" class="form-control" id="CT_sec_1" formControlName="CT_sec_1" (keypress)="allowOnlyNumbers($event)" [ngClass]="{ 'is-invalid': editRoutingMachineForm.get('CT_sec_1').invalid && editRoutingMachineForm.get('CT_sec_1').touched }" />
                 <!-- Error message if plantName is empty -->
                 <div *ngIf="editRoutingMachineForm.get('CT_sec_1').invalid && editRoutingMachineForm.get('CT_sec_1')touched" class="invalid-feedback">CT sec 1 value is required.</div>
               </div>
               
               <div class="form-group">
                 <label for="CT_hr_1000">CT Hr 1000</label>
-                <input [(ngModel)]="edtRoutingMachineObject.ct_HR_1000" type="text" class="form-control" id="CT_hr_1000" formControlName="CT_hr_1000" [ngClass]="{ 'is-invalid': editRoutingMachineForm.get('CT_hr_1000').invalid && editRoutingMachineForm.get('CT_hr_1000').touched }" />
+                <input [(ngModel)]="edtRoutingMachineObject.ct_HR_1000" type="text" class="form-control" id="CT_hr_1000" formControlName="CT_hr_1000" (keypress)="allowOnlyNumbers($event)" [ngClass]="{ 'is-invalid': editRoutingMachineForm.get('CT_hr_1000').invalid && editRoutingMachineForm.get('CT_hr_1000').touched }" />
                 <!-- Error message if plantName is empty -->
                 <div *ngIf="editRoutingMachineForm.get('CT_hr_1000').invalid && editRoutingMachineForm.get('CT_hr_1000')touched" class="invalid-feedback">CT hr 1000 value is required.</div>
               </div>
 
               <div class="form-group">
                 <label for="WH_normal_shift_1">WH Normal Shift 1</label>
-                <input [(ngModel)]="edtRoutingMachineObject.wh_NORMAL_SHIFT_0" type="text" class="form-control" id="WH_normal_shift_1" formControlName="WH_normal_shift_1" [ngClass]="{ 'is-invalid': editRoutingMachineForm.get('WH_normal_shift_1').invalid && editRoutingMachineForm.get('WH_normal_shift_1').touched }" />
+                <input [(ngModel)]="edtRoutingMachineObject.wh_NORMAL_SHIFT_0" type="text" class="form-control" id="WH_normal_shift_1" formControlName="WH_normal_shift_1" (keypress)="allowOnlyNumbers($event)" [ngClass]="{ 'is-invalid': editRoutingMachineForm.get('WH_normal_shift_1').invalid && editRoutingMachineForm.get('WH_normal_shift_1').touched }" />
                 <!-- Error message if plantName is empty -->
                 <div *ngIf="editRoutingMachineForm.get('WH_normal_shift_1').invalid && editRoutingMachineForm.get('WH_normal_shift_1')touched" class="invalid-feedback">WH normal shift 1 value is required.</div>
               </div>
               
               <div class="form-group">
                 <label for="WH_normal_shift_2">WH Normal Shift 2</label>
-                <input [(ngModel)]="edtRoutingMachineObject.wh_NORMAL_SHIFT_1" type="text" class="form-control" id="WH_normal_shift_2" formControlName="WH_normal_shift_2" [ngClass]="{ 'is-invalid': editRoutingMachineForm.get('WH_normal_shift_2').invalid && editRoutingMachineForm.get('WH_normal_shift_2').touched }" />
+                <input [(ngModel)]="edtRoutingMachineObject.wh_NORMAL_SHIFT_1" type="text" class="form-control" id="WH_normal_shift_2" formControlName="WH_normal_shift_2" (keypress)="allowOnlyNumbers($event)" [ngClass]="{ 'is-invalid': editRoutingMachineForm.get('WH_normal_shift_2').invalid && editRoutingMachineForm.get('WH_normal_shift_2').touched }" />
                 <!-- Error message if plantName is empty -->
                 <div *ngIf="editRoutingMachineForm.get('WH_normal_shift_2').invalid && editRoutingMachineForm.get('WH_normal_shift_2')touched" class="invalid-feedback">WH normal shift 2 value is required.</div>
               </div>
               
               <div class="form-group">
                 <label for="WH_normal_shift_3">WH Normal Shift 3</label>
-                <input [(ngModel)]="edtRoutingMachineObject.wh_NORMAL_SHIFT_2" type="text" class="form-control" id="WH_normal_shift_3" formControlName="WH_normal_shift_3" [ngClass]="{ 'is-invalid': editRoutingMachineForm.get('WH_normal_shift_3').invalid && editRoutingMachineForm.get('WH_normal_shift_3').touched }" />
+                <input [(ngModel)]="edtRoutingMachineObject.wh_NORMAL_SHIFT_2" type="text" class="form-control" id="WH_normal_shift_3" formControlName="WH_normal_shift_3" (keypress)="allowOnlyNumbers($event)" [ngClass]="{ 'is-invalid': editRoutingMachineForm.get('WH_normal_shift_3').invalid && editRoutingMachineForm.get('WH_normal_shift_3').touched }" />
                 <!-- Error message if plantName is empty -->
                 <div *ngIf="editRoutingMachineForm.get('WH_normal_shift_3').invalid && editRoutingMachineForm.get('WH_normal_shift_3')touched" class="invalid-feedback">WH normal shift 3 value is required.</div>
               </div>
 
               <div class="form-group">
                 <label for="WH_shift_jumat">WH Shift Jumat</label>
-                <input [(ngModel)]="edtRoutingMachineObject.wh_SHIFT_FRIDAY" type="text" class="form-control" id="WH_shift_jumat" formControlName="WH_shift_jumat" [ngClass]="{ 'is-invalid': editRoutingMachineForm.get('WH_shift_jumat').invalid && editRoutingMachineForm.get('WH_shift_jumat').touched }" />
+                <input [(ngModel)]="edtRoutingMachineObject.wh_SHIFT_FRIDAY" type="text" class="form-control" id="WH_shift_jumat" formControlName="WH_shift_jumat" (keypress)="allowOnlyNumbers($event)" [ngClass]="{ 'is-invalid': editRoutingMachineForm.get('WH_shift_jumat').invalid && editRoutingMachineForm.get('WH_shift_jumat').touched }" />
                 <!-- Error message if plantName is empty -->
-                <div *ngIf="editRoutingMachineForm.get('WH_shift_jumat').invalid && editRoutingMachineForm.get('WH_shift_jumat')touched" class="invalid-feedback">WH shift jumat value is required.</div>
+                <div *ngIf="editRoutingMachineForm.get('WH_shift_jumat').invalid && editRoutingMachineForm.get('WH_shift_jumat')touched" class="invalid-feedback">WH shift friday value is required.</div>
               </div>
               
               <div class="form-group">
                 <label for="WH_total_normal_shift">WH Total Normal Shift</label>
-                <input [(ngModel)]="edtRoutingMachineObject.wh_TOTAL_NORMAL_SHIFT" type="text" class="form-control" id="WH_total_normal_shift" formControlName="WH_total_normal_shift" [ngClass]="{ 'is-invalid': editRoutingMachineForm.get('WH_total_normal_shift').invalid && editRoutingMachineForm.get('WH_total_normal_shift').touched }" />
+                <input [(ngModel)]="edtRoutingMachineObject.wh_TOTAL_NORMAL_SHIFT" type="text" class="form-control" id="WH_total_normal_shift" formControlName="WH_total_normal_shift" (keypress)="allowOnlyNumbers($event)" [ngClass]="{ 'is-invalid': editRoutingMachineForm.get('WH_total_normal_shift').invalid && editRoutingMachineForm.get('WH_total_normal_shift').touched }" />
                 <!-- Error message if plantName is empty -->
                 <div *ngIf="editRoutingMachineForm.get('WH_total_normal_shift').invalid && editRoutingMachineForm.get('WH_total_normal_shift')touched" class="invalid-feedback">WH total normal shift value is required.</div>
               </div>
             
               <div class="form-group">
                 <label for="WH_total_shift_jumat">WH Total Shift Jumat</label>
-                <input [(ngModel)]="edtRoutingMachineObject.wh_TOTAL_SHIFT_FRIDAY" type="text" class="form-control" id="WH_total_shift_jumat" formControlName="WH_total_shift_jumat" [ngClass]="{ 'is-invalid': editRoutingMachineForm.get('WH_total_shift_jumat').invalid && editRoutingMachineForm.get('WH_total_shift_jumat').touched }" />
+                <input [(ngModel)]="edtRoutingMachineObject.wh_TOTAL_SHIFT_FRIDAY" type="text" class="form-control" id="WH_total_shift_jumat" formControlName="WH_total_shift_jumat" (keypress)="allowOnlyNumbers($event)" [ngClass]="{ 'is-invalid': editRoutingMachineForm.get('WH_total_shift_jumat').invalid && editRoutingMachineForm.get('WH_total_shift_jumat').touched }" />
                 <!-- Error message if plantName is empty -->
-                <div *ngIf="editRoutingMachineForm.get('WH_total_shift_jumat').invalid && editRoutingMachineForm.get('WH_total_shift_jumat')touched" class="invalid-feedback">WH total shift jumat value is required.</div>
+                <div *ngIf="editRoutingMachineForm.get('WH_total_shift_jumat').invalid && editRoutingMachineForm.get('WH_total_shift_jumat')touched" class="invalid-feedback">WH total shift friday value is required.</div>
               </div>
             </div>
 
             <div class="mx-3">
               <div class="form-group">
                 <label for="allow_normal_shift_1">Allow Normal Shift 1</label>
-                <input [(ngModel)]="edtRoutingMachineObject.allow_NORMAL_SHIFT_0" type="text" class="form-control" id="allow_normal_shift_1" formControlName="allow_normal_shift_1" [ngClass]="{ 'is-invalid': editRoutingMachineForm.get('allow_normal_shift_1').invalid && editRoutingMachineForm.get('allow_normal_shift_1').touched }" />
+                <input [(ngModel)]="edtRoutingMachineObject.allow_NORMAL_SHIFT_0" type="text" class="form-control" id="allow_normal_shift_1" formControlName="allow_normal_shift_1" (keypress)="allowOnlyNumbers($event)" [ngClass]="{ 'is-invalid': editRoutingMachineForm.get('allow_normal_shift_1').invalid && editRoutingMachineForm.get('allow_normal_shift_1').touched }" />
                 <!-- Error message if plantName is empty -->
-                <div *ngIf="editRoutingMachineForm.get('allow_normal_shift_1').invalid && editRoutingMachineForm.get('allow_normal_shift_1')touched" class="invalid-feedback">allow normal shift 1 value is required.</div>
+                <div *ngIf="editRoutingMachineForm.get('allow_normal_shift_1').invalid && editRoutingMachineForm.get('allow_normal_shift_1')touched" class="invalid-feedback">Allow normal shift 1 value is required.</div>
               </div>
             
               <div class="form-group">
                 <label for="allow_normal_shift_2">Allow Normal Shift 2</label>
-                <input [(ngModel)]="edtRoutingMachineObject.allow_NORMAL_SHIFT_1" type="text" class="form-control" id="allow_normal_shift_2" formControlName="allow_normal_shift_2" [ngClass]="{ 'is-invalid': editRoutingMachineForm.get('allow_normal_shift_2').invalid && editRoutingMachineForm.get('allow_normal_shift_2').touched }" />
+                <input [(ngModel)]="edtRoutingMachineObject.allow_NORMAL_SHIFT_1" type="text" class="form-control" id="allow_normal_shift_2" formControlName="allow_normal_shift_2" (keypress)="allowOnlyNumbers($event)" [ngClass]="{ 'is-invalid': editRoutingMachineForm.get('allow_normal_shift_2').invalid && editRoutingMachineForm.get('allow_normal_shift_2').touched }" />
                 <!-- Error message if plantName is empty -->
-                <div *ngIf="editRoutingMachineForm.get('allow_normal_shift_2').invalid && editRoutingMachineForm.get('allow_normal_shift_2')touched" class="invalid-feedback">allow normal shift 2 value is required.</div>
+                <div *ngIf="editRoutingMachineForm.get('allow_normal_shift_2').invalid && editRoutingMachineForm.get('allow_normal_shift_2')touched" class="invalid-feedback">Allow normal shift 2 value is required.</div>
               </div>
             
               <div class="form-group">
                 <label for="allow_normal_shift_3">Allow Normal Shift 3</label>
-                <input [(ngModel)]="edtRoutingMachineObject.allow_NORMAL_SHIFT_2" type="text" class="form-control" id="allow_normal_shift_3" formControlName="allow_normal_shift_3" [ngClass]="{ 'is-invalid': editRoutingMachineForm.get('allow_normal_shift_3').invalid && editRoutingMachineForm.get('allow_normal_shift_3').touched }" />
+                <input [(ngModel)]="edtRoutingMachineObject.allow_NORMAL_SHIFT_2" type="text" class="form-control" id="allow_normal_shift_3" formControlName="allow_normal_shift_3" (keypress)="allowOnlyNumbers($event)" [ngClass]="{ 'is-invalid': editRoutingMachineForm.get('allow_normal_shift_3').invalid && editRoutingMachineForm.get('allow_normal_shift_3').touched }" />
                 <!-- Error message if plantName is empty -->
-                <div *ngIf="editRoutingMachineForm.get('allow_normal_shift_3').invalid && editRoutingMachineForm.get('allow_normal_shift_3')touched" class="invalid-feedback">allow normal shift 3 value is required.</div>
+                <div *ngIf="editRoutingMachineForm.get('allow_normal_shift_3').invalid && editRoutingMachineForm.get('allow_normal_shift_3')touched" class="invalid-feedback">Allow normal shift 3 value is required.</div>
               </div>
             
               <div class="form-group">
                 <label for="allow_total">Allow Total</label>
-                <input [(ngModel)]="edtRoutingMachineObject.allow_TOTAL" type="text" class="form-control" id="allow_total" formControlName="allow_total" [ngClass]="{ 'is-invalid': editRoutingMachineForm.get('allow_total').invalid && editRoutingMachineForm.get('allow_total').touched }" />
+                <input [(ngModel)]="edtRoutingMachineObject.allow_TOTAL" type="text" class="form-control" id="allow_total" formControlName="allow_total" (keypress)="allowOnlyNumbers($event)" [ngClass]="{ 'is-invalid': editRoutingMachineForm.get('allow_total').invalid && editRoutingMachineForm.get('allow_total').touched }" />
                 <!-- Error message if plantName is empty -->
-                <div *ngIf="editRoutingMachineForm.get('allow_total').invalid && editRoutingMachineForm.get('allow_total')touched" class="invalid-feedback">allow total value is required.</div>
+                <div *ngIf="editRoutingMachineForm.get('allow_total').invalid && editRoutingMachineForm.get('allow_total')touched" class="invalid-feedback">Allow total value is required.</div>
               </div>
             
               <div class="form-group">
                 <label for="OP_time_normal_shift_1">OP Time Normal Shift 1</label>
-                <input [(ngModel)]="edtRoutingMachineObject.op_TIME_NORMAL_SHIFT_0" type="text" class="form-control" id="OP_time_normal_shift_1" formControlName="OP_time_normal_shift_1" [ngClass]="{ 'is-invalid': editRoutingMachineForm.get('OP_time_normal_shift_1').invalid && editRoutingMachineForm.get('OP_time_normal_shift_1').touched }" />
+                <input [(ngModel)]="edtRoutingMachineObject.op_TIME_NORMAL_SHIFT_0" type="text" class="form-control" id="OP_time_normal_shift_1" formControlName="OP_time_normal_shift_1" (keypress)="allowOnlyNumbers($event)" [ngClass]="{ 'is-invalid': editRoutingMachineForm.get('OP_time_normal_shift_1').invalid && editRoutingMachineForm.get('OP_time_normal_shift_1').touched }" />
                 <!-- Error message if plantName is empty -->
                 <div *ngIf="editRoutingMachineForm.get('OP_time_normal_shift_1').invalid && editRoutingMachineForm.get('OP_time_normal_shift_1')touched" class="invalid-feedback">OP time normal shift 1 value is required.</div>
               </div>
             
               <div class="form-group">
                 <label for="OP_time_normal_shift_2">OP Time Normal Shift 2</label>
-                <input [(ngModel)]="edtRoutingMachineObject.op_TIME_NORMAL_SHIFT_1" type="text" class="form-control" id="OP_time_normal_shift_2" formControlName="OP_time_normal_shift_2" [ngClass]="{ 'is-invalid': editRoutingMachineForm.get('OP_time_normal_shift_2').invalid && editRoutingMachineForm.get('OP_time_normal_shift_2').touched }" />
+                <input [(ngModel)]="edtRoutingMachineObject.op_TIME_NORMAL_SHIFT_1" type="text" class="form-control" id="OP_time_normal_shift_2" formControlName="OP_time_normal_shift_2" (keypress)="allowOnlyNumbers($event)" [ngClass]="{ 'is-invalid': editRoutingMachineForm.get('OP_time_normal_shift_2').invalid && editRoutingMachineForm.get('OP_time_normal_shift_2').touched }" />
                 <!-- Error message if plantName is empty -->
                 <div *ngIf="editRoutingMachineForm.get('OP_time_normal_shift_2').invalid && editRoutingMachineForm.get('OP_time_normal_shift_2')touched" class="invalid-feedback">OP time normal shift 2 value is required.</div>
               </div>
               
               <div class="form-group">
                 <label for="OP_time_normal_shift_3">OP Time Normal Shift 3</label>
-                <input [(ngModel)]="edtRoutingMachineObject.op_TIME_NORMAL_SHIFT_2" type="text" class="form-control" id="OP_time_normal_shift_3" formControlName="OP_time_normal_shift_3" [ngClass]="{ 'is-invalid': editRoutingMachineForm.get('OP_time_normal_shift_3').invalid && editRoutingMachineForm.get('OP_time_normal_shift_3').touched }" />
+                <input [(ngModel)]="edtRoutingMachineObject.op_TIME_NORMAL_SHIFT_2" type="text" class="form-control" id="OP_time_normal_shift_3" formControlName="OP_time_normal_shift_3" (keypress)="allowOnlyNumbers($event)" [ngClass]="{ 'is-invalid': editRoutingMachineForm.get('OP_time_normal_shift_3').invalid && editRoutingMachineForm.get('OP_time_normal_shift_3').touched }" />
                 <!-- Error message if plantName is empty -->
                 <div *ngIf="editRoutingMachineForm.get('OP_time_normal_shift_3').invalid && editRoutingMachineForm.get('OP_time_normal_shift_3')touched" class="invalid-feedback">OP time normal shift 3 value is required.</div>
               </div>
             
               <div class="form-group">
                 <label for="OP_time_shift_jumat">OP Time Shift Jumat</label>
-                <input [(ngModel)]="edtRoutingMachineObject.op_TIME_SHIFT_FRIDAY" type="text" class="form-control" id="OP_time_shift_jumat" formControlName="OP_time_shift_jumat" [ngClass]="{ 'is-invalid': editRoutingMachineForm.get('OP_time_shift_jumat').invalid && editRoutingMachineForm.get('OP_time_shift_jumat').touched }" />
+                <input [(ngModel)]="edtRoutingMachineObject.op_TIME_SHIFT_FRIDAY" type="text" class="form-control" id="OP_time_shift_jumat" formControlName="OP_time_shift_jumat" (keypress)="allowOnlyNumbers($event)" [ngClass]="{ 'is-invalid': editRoutingMachineForm.get('OP_time_shift_jumat').invalid && editRoutingMachineForm.get('OP_time_shift_jumat').touched }" />
                 <!-- Error message if plantName is empty -->
-                <div *ngIf="editRoutingMachineForm.get('OP_time_shift_jumat').invalid && editRoutingMachineForm.get('OP_time_shift_jumat')touched" class="invalid-feedback">OP time shift jumat value is required.</div>
+                <div *ngIf="editRoutingMachineForm.get('OP_time_shift_jumat').invalid && editRoutingMachineForm.get('OP_time_shift_jumat')touched" class="invalid-feedback">OP time shift friday value is required.</div>
               </div>
             
               <div class="form-group">
                 <label for="OP_time_total_normal_shift"> OP Time Total Normal Shift</label>
-                <input [(ngModel)]="edtRoutingMachineObject.op_TIME_TOTAL_NORMAL_SHIFT" type="text" class="form-control" id="OP_time_total_normal_shift" formControlName="OP_time_total_normal_shift" [ngClass]="{ 'is-invalid': editRoutingMachineForm.get('OP_time_total_normal_shift').invalid && editRoutingMachineForm.get('OP_time_total_normal_shift').touched }" />
+                <input [(ngModel)]="edtRoutingMachineObject.op_TIME_TOTAL_NORMAL_SHIFT" type="text" class="form-control" id="OP_time_total_normal_shift" formControlName="OP_time_total_normal_shift" (keypress)="allowOnlyNumbers($event)" [ngClass]="{ 'is-invalid': editRoutingMachineForm.get('OP_time_total_normal_shift').invalid && editRoutingMachineForm.get('OP_time_total_normal_shift').touched }" />
                 <!-- Error message if plantName is empty -->
                 <div *ngIf="editRoutingMachineForm.get('OP_time_total_normal_shift').invalid && editRoutingMachineForm.get('OP_time_total_normal_shift')touched" class="invalid-feedback">OP time total normal shift value is required.</div>
               </div>
@@ -456,65 +472,65 @@
             
               <div class="form-group">
                 <label for="OP_time_total_shift_jumat">OP Time Total Shift Jumat</label>
-                <input [(ngModel)]="edtRoutingMachineObject.op_TIME_TOTAL_SHIFT_FRIDAY" type="text" class="form-control" id="OP_time_total_shift_jumat" formControlName="OP_time_total_shift_jumat" [ngClass]="{ 'is-invalid': editRoutingMachineForm.get('OP_time_total_shift_jumat').invalid && editRoutingMachineForm.get('OP_time_total_shift_jumat').touched }" />
+                <input [(ngModel)]="edtRoutingMachineObject.op_TIME_TOTAL_SHIFT_FRIDAY" type="text" class="form-control" id="OP_time_total_shift_jumat" formControlName="OP_time_total_shift_jumat" (keypress)="allowOnlyNumbers($event)" [ngClass]="{ 'is-invalid': editRoutingMachineForm.get('OP_time_total_shift_jumat').invalid && editRoutingMachineForm.get('OP_time_total_shift_jumat').touched }" />
                 <!-- Error message if plantName is empty -->
                 <div *ngIf="editRoutingMachineForm.get('OP_time_total_shift_jumat').invalid && editRoutingMachineForm.get('OP_time_total_shift_jumat')touched" class="invalid-feedback">OP time total shift jumat value is required.</div>
               </div>
             
               <div class="form-group">
                 <label for="kaps_normal_shift_1">Kaps Normal Shift 1</label>
-                <input [(ngModel)]="edtRoutingMachineObject.kaps_NORMAL_SHIFT_0" type="text" class="form-control" id="kaps_normal_shift_1" formControlName="kaps_normal_shift_1" [ngClass]="{ 'is-invalid': editRoutingMachineForm.get('kaps_normal_shift_1').invalid && editRoutingMachineForm.get('kaps_normal_shift_1').touched }" />
+                <input [(ngModel)]="edtRoutingMachineObject.kaps_NORMAL_SHIFT_0" type="text" class="form-control" id="kaps_normal_shift_1" formControlName="kaps_normal_shift_1" (keypress)="allowOnlyNumbers($event)" [ngClass]="{ 'is-invalid': editRoutingMachineForm.get('kaps_normal_shift_1').invalid && editRoutingMachineForm.get('kaps_normal_shift_1').touched }" />
                 <!-- Error message if plantName is empty -->
-                <div *ngIf="editRoutingMachineForm.get('kaps_normal_shift_1').invalid && editRoutingMachineForm.get('kaps_normal_shift_1')touched" class="invalid-feedback">kaps normal shift 1 value is required.</div>
+                <div *ngIf="editRoutingMachineForm.get('kaps_normal_shift_1').invalid && editRoutingMachineForm.get('kaps_normal_shift_1')touched" class="invalid-feedback">Kaps normal shift 1 value is required.</div>
               </div>
             
               <div class="form-group">
                 <label for="kaps_normal_shift_2">Kaps Normal Shift 2</label>
-                <input [(ngModel)]="edtRoutingMachineObject.kaps_NORMAL_SHIFT_1" type="text" class="form-control" id="kaps_normal_shift_2" formControlName="kaps_normal_shift_2" [ngClass]="{ 'is-invalid': editRoutingMachineForm.get('kaps_normal_shift_2').invalid && editRoutingMachineForm.get('kaps_normal_shift_2').touched }" />
+                <input [(ngModel)]="edtRoutingMachineObject.kaps_NORMAL_SHIFT_1" type="text" class="form-control" id="kaps_normal_shift_2" formControlName="kaps_normal_shift_2" (keypress)="allowOnlyNumbers($event)" [ngClass]="{ 'is-invalid': editRoutingMachineForm.get('kaps_normal_shift_2').invalid && editRoutingMachineForm.get('kaps_normal_shift_2').touched }" />
                 <!-- Error message if plantName is empty -->
-                <div *ngIf="editRoutingMachineForm.get('kaps_normal_shift_2').invalid && editRoutingMachineForm.get('kaps_normal_shift_2')touched" class="invalid-feedback">kaps normal shift 2 value is required.</div>
+                <div *ngIf="editRoutingMachineForm.get('kaps_normal_shift_2').invalid && editRoutingMachineForm.get('kaps_normal_shift_2')touched" class="invalid-feedback">Kaps normal shift 2 value is required.</div>
               </div>
             
               <div class="form-group">
                 <label for="kaps_normal_shift_3">Kaps Normal Shift 3</label>
-                <input [(ngModel)]="edtRoutingMachineObject.kaps_NORMAL_SHIFT_2" type="text" class="form-control" id="kaps_normal_shift_3" formControlName="kaps_normal_shift_3" [ngClass]="{ 'is-invalid': editRoutingMachineForm.get('kaps_normal_shift_3').invalid && editRoutingMachineForm.get('kaps_normal_shift_3').touched }" />
+                <input [(ngModel)]="edtRoutingMachineObject.kaps_NORMAL_SHIFT_2" type="text" class="form-control" id="kaps_normal_shift_3" formControlName="kaps_normal_shift_3" (keypress)="allowOnlyNumbers($event)" [ngClass]="{ 'is-invalid': editRoutingMachineForm.get('kaps_normal_shift_3').invalid && editRoutingMachineForm.get('kaps_normal_shift_3').touched }" />
                 <!-- Error message if plantName is empty -->
-                <div *ngIf="editRoutingMachineForm.get('kaps_normal_shift_3').invalid && editRoutingMachineForm.get('kaps_normal_shift_3')touched" class="invalid-feedback">kaps normal shift 3 value is required.</div>
+                <div *ngIf="editRoutingMachineForm.get('kaps_normal_shift_3').invalid && editRoutingMachineForm.get('kaps_normal_shift_3')touched" class="invalid-feedback">Kaps normal shift 3 value is required.</div>
               </div>
             
               <div class="form-group">
                 <label for="kaps_shift_jumat">Kaps Shift Jumat</label>
-                <input [(ngModel)]="edtRoutingMachineObject.kaps_SHIFT_FRIDAY" type="text" class="form-control" id="kaps_shift_jumat" formControlName="kaps_shift_jumat" [ngClass]="{ 'is-invalid': editRoutingMachineForm.get('kaps_shift_jumat').invalid && editRoutingMachineForm.get('kaps_shift_jumat').touched }" />
+                <input [(ngModel)]="edtRoutingMachineObject.kaps_SHIFT_FRIDAY" type="text" class="form-control" id="kaps_shift_jumat" formControlName="kaps_shift_jumat" (keypress)="allowOnlyNumbers($event)" [ngClass]="{ 'is-invalid': editRoutingMachineForm.get('kaps_shift_jumat').invalid && editRoutingMachineForm.get('kaps_shift_jumat').touched }" />
                 <!-- Error message if plantName is empty -->
-                <div *ngIf="editRoutingMachineForm.get('kaps_shift_jumat').invalid && editRoutingMachineForm.get('kaps_shift_jumat')touched" class="invalid-feedback">kaps shift jumat value is required.</div>
+                <div *ngIf="editRoutingMachineForm.get('kaps_shift_jumat').invalid && editRoutingMachineForm.get('kaps_shift_jumat')touched" class="invalid-feedback">Kaps shift friday value is required.</div>
               </div>
             
               <div class="form-group">
                 <label for="kaps_total_normal_shift">Kaps Total Normal Shift</label>
-                <input [(ngModel)]="edtRoutingMachineObject.kaps_TOTAL_NORMAL_SHIFT" type="text" class="form-control" id="kaps_total_normal_shift" formControlName="kaps_total_normal_shift" [ngClass]="{ 'is-invalid': editRoutingMachineForm.get('kaps_total_normal_shift').invalid && editRoutingMachineForm.get('kaps_total_normal_shift').touched }" />
+                <input [(ngModel)]="edtRoutingMachineObject.kaps_TOTAL_NORMAL_SHIFT" type="text" class="form-control" id="kaps_total_normal_shift" formControlName="kaps_total_normal_shift" (keypress)="allowOnlyNumbers($event)" [ngClass]="{ 'is-invalid': editRoutingMachineForm.get('kaps_total_normal_shift').invalid && editRoutingMachineForm.get('kaps_total_normal_shift').touched }" />
                 <!-- Error message if plantName is empty -->
-                <div *ngIf="editRoutingMachineForm.get('kaps_total_normal_shift').invalid && editRoutingMachineForm.get('kaps_total_normal_shift')touched" class="invalid-feedback">kaps total normal shift value is required.</div>
+                <div *ngIf="editRoutingMachineForm.get('kaps_total_normal_shift').invalid && editRoutingMachineForm.get('kaps_total_normal_shift')touched" class="invalid-feedback">Kaps total normal shift value is required.</div>
               </div>
             
               <div class="form-group">
                 <label for="kaps_total_shift_jumat">Kaps Total Shift Jumat</label>
-                <input [(ngModel)]="edtRoutingMachineObject.kaps_TOTAL_SHIFT_FRIDAY" type="text" class="form-control" id="kaps_total_shift_jumat" formControlName="kaps_total_shift_jumat" [ngClass]="{ 'is-invalid': editRoutingMachineForm.get('kaps_total_shift_jumat').invalid && editRoutingMachineForm.get('kaps_total_shift_jumat').touched }" />
+                <input [(ngModel)]="edtRoutingMachineObject.kaps_TOTAL_SHIFT_FRIDAY" type="text" class="form-control" id="kaps_total_shift_jumat" formControlName="kaps_total_shift_jumat" (keypress)="allowOnlyNumbers($event)" [ngClass]="{ 'is-invalid': editRoutingMachineForm.get('kaps_total_shift_jumat').invalid && editRoutingMachineForm.get('kaps_total_shift_jumat').touched }" />
                 <!-- Error message if plantName is empty -->
-                <div *ngIf="editRoutingMachineForm.get('kaps_total_shift_jumat').invalid && editRoutingMachineForm.get('kaps_total_shift_jumat')touched" class="invalid-feedback">kaps total shift jumat value is required.</div>
+                <div *ngIf="editRoutingMachineForm.get('kaps_total_shift_jumat').invalid && editRoutingMachineForm.get('kaps_total_shift_jumat')touched" class="invalid-feedback">Kaps total shift friday value is required.</div>
               </div>
             
               <div class="form-group">
                 <label for="waktu_total_CT_normal">Waktu Total CT Normal</label>
-                <input [(ngModel)]="edtRoutingMachineObject.waktu_TOTAL_CT_NORMAL" type="text" class="form-control" id="waktu_total_CT_normal" formControlName="waktu_total_CT_normal" [ngClass]="{ 'is-invalid': editRoutingMachineForm.get('waktu_total_CT_normal').invalid && editRoutingMachineForm.get('waktu_total_CT_normal').touched }" />
+                <input [(ngModel)]="edtRoutingMachineObject.waktu_TOTAL_CT_NORMAL" type="text" class="form-control" id="waktu_total_CT_normal" formControlName="waktu_total_CT_normal" (keypress)="allowOnlyNumbers($event)" [ngClass]="{ 'is-invalid': editRoutingMachineForm.get('waktu_total_CT_normal').invalid && editRoutingMachineForm.get('waktu_total_CT_normal').touched }" />
                 <!-- Error message if plantName is empty -->
-                <div *ngIf="editRoutingMachineForm.get('waktu_total_CT_normal').invalid && editRoutingMachineForm.get('waktu_total_CT_normal')touched" class="invalid-feedback">waktu total CT normal value is required.</div>
+                <div *ngIf="editRoutingMachineForm.get('waktu_total_CT_normal').invalid && editRoutingMachineForm.get('waktu_total_CT_normal')touched" class="invalid-feedback">Time total CT normal value is required.</div>
               </div>
             
               <div class="form-group">
                 <label for="waktu_total_CT_jumat">waktu Total CT Jumat</label>
-                <input [(ngModel)]="edtRoutingMachineObject.waktu_TOTAL_CT_FRIDAY" type="text" class="form-control" id="waktu_total_CT_jumat" formControlName="waktu_total_CT_jumat" [ngClass]="{ 'is-invalid': editRoutingMachineForm.get('waktu_total_CT_jumat').invalid && editRoutingMachineForm.get('waktu_total_CT_jumat').touched }" />
+                <input [(ngModel)]="edtRoutingMachineObject.waktu_TOTAL_CT_FRIDAY" type="text" class="form-control" id="waktu_total_CT_jumat" formControlName="waktu_total_CT_jumat" (keypress)="allowOnlyNumbers($event)" [ngClass]="{ 'is-invalid': editRoutingMachineForm.get('waktu_total_CT_jumat').invalid && editRoutingMachineForm.get('waktu_total_CT_jumat').touched }" />
                 <!-- Error message if plantName is empty -->
-                <div *ngIf="editRoutingMachineForm.get('waktu_total_CT_jumat').invalid && editRoutingMachineForm.get('waktu_total_CT_jumat')touched" class="invalid-feedback">waktu total CT jumat value is required.</div>
+                <div *ngIf="editRoutingMachineForm.get('waktu_total_CT_jumat').invalid && editRoutingMachineForm.get('waktu_total_CT_jumat')touched" class="invalid-feedback">Time total CT jumat value is required.</div>
               </div>
             </div>
           </div>
@@ -532,7 +548,7 @@
 <!-- Modal for Upload Excel -->
 <div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
-    <div class="modal-content">
+    <div class="modal-content" style="width: 500px; display: flex; transform: translateX(0px);">
       <div class="modal-header">
         <h5 class="modal-title" id="uploadModalLabel">Upload Excel File</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">

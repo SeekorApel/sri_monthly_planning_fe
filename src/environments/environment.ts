@@ -6,7 +6,7 @@ export const environment = {
   production: false,
   apiUrlWebAdmin: 'http://localhost:8080',
   apiUrlLocalAdmin: 'http://localhost:8080',
-  token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBdXJlbCIsImV4cCI6MTcyOTc2ODc1MH0.vWLNTV3XZk49oyDAbk0oKl9-3PgD4OTXDjaGDMDs1VfsVlnaWF2XWGL91RIo4s0g-N71YhhU7e-_IGvT6YcZ-g',
+  token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBdXJlbCIsImV4cCI6MTczMzU3ODI0M30.mCyOz4yd5_PLUjWQ9KsxJ-mHkBeMrmyUGToFHi7o0LyVfsoPQH4_y8tMFoVfxSErGKyMl7hA_Bb16w91LfdjjA',
   //apiUrlLocalAdmin: 'http://server-wlsdev:7002/local_admin',
   // apiUrl: 'http://server-wlsdev:7005'
 };

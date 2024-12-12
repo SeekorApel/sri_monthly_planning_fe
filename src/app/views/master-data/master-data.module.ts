@@ -34,55 +34,14 @@ import { ViewMachineAllowenceComponent } from './view-machine-allowence/view-mac
 import { ViewItemAssyComponent } from './view-item-assy/view-item-assy.component';
 import { ViewCuringSizeComponent } from './view-curing-size/view-curing-size.component';
 import { ViewWorkDayComponent } from './view-work-day/view-work-day.component';
-import {MatSortModule} from '@angular/material/sort';
-import {MatTableModule} from '@angular/material/table';
+import { MatSortModule } from '@angular/material/sort';
+import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { TabsModule } from 'ngx-bootstrap/tabs';
+import { ViewPmStopMachineComponent } from './view-pm-stop-machine/view-pm-stop-machine.component';
 
 @NgModule({
-  declarations: [
-    ViewPlantComponent,
-    ViewProductComponent,
-    ViewPatternComponent,
-    ViewMachineTassComponent,
-    ViewSettingComponent,
-    ViewQuadrantComponent,
-    ViewProductTypeComponent,
-    ViewSizeComponent,
-    ViewBuildingComponent,
-    ViewBDistanceComponent,
-    ViewQDistanceComponent,
-    ViewRoutingMachineComponent,
-    ViewDeliveryScheduleComponent,
-    ViewMachineCuringTypeComponent,
-    ViewMachineTassTypeComponent,
-    ViewCuringMachineComponent,
-    ViewMaxCapacityComponent,
-    ViewTassSizeComponent,
-    ViewItemCuringComponent,
-    ViewCtCuringComponent,
-    ViewCtKapaComponent,
-    ViewMachineExtrudingComponent,
-    ViewDDeliveryScheduleComponent,
-    ViewMachineAllowenceComponent,
-    ViewItemAssyComponent,
-    ViewCuringSizeComponent,
-    ViewWorkDayComponent,
-  ],
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    NgxSpinnerModule,
-    NgSelect2Module,
-    JwPaginationModule,
-    MasterDataRoutingModule,
-    ModalModule.forRoot(),
-    ToastrModule.forRoot(),
-    MatSortModule,
-    MatTableModule,
-    MatPaginatorModule,
-    TabsModule,
-  ],
+  declarations: [ViewPlantComponent, ViewProductComponent, ViewPatternComponent, ViewMachineTassComponent, ViewSettingComponent, ViewQuadrantComponent, ViewProductTypeComponent, ViewSizeComponent, ViewBuildingComponent, ViewBDistanceComponent, ViewQDistanceComponent, ViewRoutingMachineComponent, ViewDeliveryScheduleComponent, ViewMachineCuringTypeComponent, ViewMachineTassTypeComponent, ViewCuringMachineComponent, ViewMaxCapacityComponent, ViewTassSizeComponent, ViewItemCuringComponent, ViewCtCuringComponent, ViewCtKapaComponent, ViewMachineExtrudingComponent, ViewDDeliveryScheduleComponent, ViewMachineAllowenceComponent, ViewItemAssyComponent, ViewCuringSizeComponent, ViewWorkDayComponent, ViewPmStopMachineComponent],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, NgxSpinnerModule, NgSelect2Module, JwPaginationModule, MasterDataRoutingModule, ModalModule.forRoot(), ToastrModule.forRoot(), MatSortModule, MatTableModule, MatPaginatorModule, TabsModule],
 })
 export class MasterDataModule {}

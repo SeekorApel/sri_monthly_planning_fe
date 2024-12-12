@@ -137,37 +137,37 @@
                 </div>
                 <div class="form-group">
                   <h6 for="deskripsi">Description</h6>
-                  <input [(ngModel)]="editCtKapaObject.description" type="text" class="form-control" id="deskripsi" formControlName="deskripsi" [ngClass]="{ 'is-invalid': editCtKapaForm.get('deskripsi').invalid && editCtKapaForm.get('deskripsi').touched }" />
+                  <input [(ngModel)]="editCtKapaObject.description" type="text" maxlength="99" class="form-control" id="deskripsi" formControlName="deskripsi" [ngClass]="{ 'is-invalid': editCtKapaForm.get('deskripsi').invalid && editCtKapaForm.get('deskripsi').touched }" />
                   <!-- Error message if plantName is empty -->
                   <div *ngIf="editCtKapaForm.get('deskripsi').invalid && editCtKapaForm.get('deskripsi').touched" class="invalid-feedback">description name is required.</div>
                 </div>
                 <div class="form-group">
                   <h6 for="cycleTime">Cycle Time</h6>
-                  <input [(ngModel)]="editCtKapaObject.cycle_TIME" type="text" class="form-control" id="cycleTime" formControlName="cycleTime" [ngClass]="{ 'is-invalid': editCtKapaForm.get('cycleTime').invalid && editCtKapaForm.get('cycleTime').touched }" />
+                  <input [(ngModel)]="editCtKapaObject.cycle_TIME" type="text" (keypress)="validateNumberInputTitik($event)" maxlength="15" class="form-control" id="cycleTime" formControlName="cycleTime" [ngClass]="{ 'is-invalid': editCtKapaForm.get('cycleTime').invalid && editCtKapaForm.get('cycleTime').touched }" />
                   <!-- Error message if plantName is empty -->
                   <div *ngIf="editCtKapaForm.get('cycleTime').invalid && editCtKapaForm.get('cycleTime').touched" class="invalid-feedback">cycleTime is required.</div>
                 </div>
                 <div class="form-group">
                   <h6 for="shift">Shift</h6>
-                  <input [(ngModel)]="editCtKapaObject.shift" type="text" class="form-control" id="shift" formControlName="shift" [ngClass]="{ 'is-invalid': editCtKapaForm.get('shift').invalid && editCtKapaForm.get('shift').touched }" />
+                  <input [(ngModel)]="editCtKapaObject.shift" type="text" (keypress)="validateNumberInput($event)" maxlength="4" class="form-control" id="shift" formControlName="shift" [ngClass]="{ 'is-invalid': editCtKapaForm.get('shift').invalid && editCtKapaForm.get('shift').touched }" />
                   <!-- Error message if plantName is empty -->
                   <div *ngIf="editCtKapaForm.get('shift').invalid && editCtKapaForm.get('shift').touched" class="invalid-feedback">Shift is required.</div>
                 </div>
                 <div class="form-group">
                   <h6 for="kapaPershift">Kapa PerShift</h6>
-                  <input [(ngModel)]="editCtKapaObject.kapa_PERSHIFT" type="text" class="form-control" id="kapaPershift" formControlName="kapaPershift" [ngClass]="{ 'is-invalid': editCtKapaForm.get('kapaPershift').invalid && editCtKapaForm.get('kapaPershift').touched }" />
+                  <input [(ngModel)]="editCtKapaObject.kapa_PERSHIFT" (keypress)="validateNumberInput($event)" type="text" maxlength="4" class="form-control" id="kapaPershift" formControlName="kapaPershift" [ngClass]="{ 'is-invalid': editCtKapaForm.get('kapaPershift').invalid && editCtKapaForm.get('kapaPershift').touched }" />
                   <!-- Error message if plantName is empty -->
                   <div *ngIf="editCtKapaForm.get('kapaPershift').invalid && editCtKapaForm.get('kapaPershift').touched" class="invalid-feedback">Kapa Per Shift is required.</div>
                 </div>
                 <div class="form-group">
                   <h6 for="lastUpdateData">Last Update Data</h6>
-                  <input [(ngModel)]="editCtKapaObject.last_UPDATE_DATA" type="text" class="form-control" id="lastUpdateData" formControlName="lastUpdateData" [ngClass]="{ 'is-invalid': editCtKapaForm.get('lastUpdateData').invalid && editCtKapaForm.get('lastUpdateData').touched }" />
+                  <input [(ngModel)]="editCtKapaObject.last_UPDATE_DATA" (keypress)="validateNumberInput($event)" type="text" maxlength="9" class="form-control" id="lastUpdateData" formControlName="lastUpdateData" [ngClass]="{ 'is-invalid': editCtKapaForm.get('lastUpdateData').invalid && editCtKapaForm.get('lastUpdateData').touched }" />
                   <!-- Error message if plantName is empty -->
                   <div *ngIf="editCtKapaForm.get('lastUpdateData').invalid && editCtKapaForm.get('lastUpdateData').touched" class="invalid-feedback">CT Kapa name is required.</div>
                 </div>
                 <div class="form-group">
                   <h6 for="machine">Machine</h6>
-                  <input [(ngModel)]="editCtKapaObject.machine" type="text" class="form-control" id="machine" formControlName="machine" [ngClass]="{ 'is-invalid': editCtKapaForm.get('machine').invalid && editCtKapaForm.get('machine').touched }" />
+                  <input [(ngModel)]="editCtKapaObject.machine" type="text" maxlength="19" class="form-control" id="machine" formControlName="machine" [ngClass]="{ 'is-invalid': editCtKapaForm.get('machine').invalid && editCtKapaForm.get('machine').touched }" />
                   <!-- Error message if plantName is empty -->
                   <div *ngIf="editCtKapaForm.get('machine').invalid && editCtKapaForm.get('machine').touched" class="invalid-feedback">Machine name is required.</div>
                 </div>

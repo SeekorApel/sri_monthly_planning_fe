@@ -30,7 +30,7 @@
 
           <ng-container matColumnDef="setting_ID">
             <th class="centered-sorted-header" *matHeaderCellDef mat-sort-header >Setting ID</th>
-            <td class="angka" *matCellDef="let element">{{ element.setting_ID }}</td>
+            <td *matCellDef="let element">{{ element.setting_ID }}</td>
           </ng-container>
 
           <ng-container matColumnDef="setting_KEY">
@@ -93,19 +93,19 @@
         <form [formGroup]="editSettingForm">
           <div class="form-group">
             <label for="settingKEY">Setting KEY</label>
-            <input [(ngModel)]="edtSettingObject.setting_KEY" type="text" class="form-control" id="settingKEY" formControlName="settingKEY" [ngClass]="{ 'is-invalid': editSettingForm.get('settingKEY').invalid && editSettingForm.get('settingKEY').touched }" />
+            <input [(ngModel)]="edtSettingObject.setting_KEY" maxlength="254" type="text" class="form-control" id="settingKEY" formControlName="settingKEY" [ngClass]="{ 'is-invalid': editSettingForm.get('settingKEY').invalid && editSettingForm.get('settingKEY').touched }" />
             <!-- Error message if plantName is empty -->
             <div *ngIf="editSettingForm.get('settingKEY').invalid && editSettingForm.get('settingKEY').touched" class="invalid-feedback">Setting KEY is required.</div>
           </div>
           <div class="form-group">
             <label for="settingVALUE">Setting VALUE</label>
-            <input [(ngModel)]="edtSettingObject.setting_VALUE" type="text" class="form-control" id="settingID" formControlName="settingVALUE" [ngClass]="{ 'is-invalid': editSettingForm.get('settingVALUE').invalid && editSettingForm.get('settingVALUE').touched }" />
+            <input [(ngModel)]="edtSettingObject.setting_VALUE" maxlength="254" type="text" class="form-control" id="settingID" formControlName="settingVALUE" [ngClass]="{ 'is-invalid': editSettingForm.get('settingVALUE').invalid && editSettingForm.get('settingVALUE').touched }" />
             <!-- Error message if plantName is empty -->
             <div *ngIf="editSettingForm.get('settingVALUE').invalid && editSettingForm.get('settingVALUE').touched" class="invalid-feedback">Setting VALUE is required.</div>
           </div>
           <div class="form-group">
             <label for="description">Description</label>
-            <input [(ngModel)]="edtSettingObject.description" type="text" class="form-control" id="description" formControlName="description" [ngClass]="{ 'is-invalid': editSettingForm.get('description').invalid && editSettingForm.get('description').touched }" />
+            <input [(ngModel)]="edtSettingObject.description" maxlength="254" type="text" class="form-control" id="description" formControlName="description" [ngClass]="{ 'is-invalid': editSettingForm.get('description').invalid && editSettingForm.get('description').touched }" />
             <!-- Error message if plantName is empty -->
             <div *ngIf="editSettingForm.get('description').invalid && editSettingForm.get('description').touched" class="invalid-feedback">Description is required.</div>
           </div>
