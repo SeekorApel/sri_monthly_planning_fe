@@ -258,8 +258,14 @@ export class AddMonthlyPlanningComponent implements OnInit {
     console.log(data);
     const monthlyPlans = data.detailMonthlyPlanCuring || [];
     const dailyPlans = data.detailDailyMonthlyPlanCuring || [];
-    const sizePa = data.sizePa || [];
-    this.description = data.description || [];
+    const shift = data.shiftMonthlyPlan || [];
+    this.shiftMonthlyPlanningCuring = shift;
+    this.changeMould = data.changeMould;
+    this.productDetails = data.productDetails;
+    console.log(this.productDetails);
+
+    const sizePa = data.sizePa ?? null;
+    this.description = data.description ?? [];
 
     this.monly = dailyPlans;
 
@@ -270,15 +276,25 @@ export class AddMonthlyPlanningComponent implements OnInit {
 
     // Loop over each daily plan
     dailyPlans.forEach((daily, index) => {
-      const matchingMonthly = monthlyPlans.find((monthly) => monthly.detailIdCuring === daily.detailIdCuring);
+      const matchingMonthly = monthlyPlans.find(
+        (monthly) => monthly.detailIdCuring === daily.detailIdCuring
+      );
 
-      const matchingSizePa = sizePa.find((sizeEntry) => sizeEntry.partNumber === (matchingMonthly?.partNumber || daily.partNumber));
+      const matchingProduct = this.productDetails.find(
+        (product) => product.partNumber === (matchingMonthly?.partNumber || daily.partNumber)
+      );
+
+      console.log('Matching Product:', matchingProduct);
+
+      // const matchingSizePa = sizePa.find(
+      //   (sizeEntry) => sizeEntry.partNumber === (matchingMonthly?.partNumber || daily.partNumber)
+      // );
 
       const dailyData = {
         no: index + 1,
         partNumber: matchingMonthly?.partNumber || null,
-        size: matchingSizePa?.description || null, // Get size from sizePa
-        pattern: matchingSizePa?.patternName || null,
+        size: matchingProduct?.description || null, 
+        pattern: matchingProduct?.description || null, 
         total: matchingMonthly?.total || null,
         netFulfilment: matchingMonthly?.netFulfilment || null,
         grossReq: matchingMonthly?.grossReq || null,
@@ -294,9 +310,11 @@ export class AddMonthlyPlanningComponent implements OnInit {
         workDay: daily.workDay,
         totalPlan: daily.totalPlan,
       };
-      console.table('WFF' + dailyData);
+      console.table("WFF" + dailyData);
 
-      const existingEntry = mergedData.find((entry) => entry.partNumber === dailyData.partNumber && entry.detailIdCuring === dailyData.detailIdCuring);
+      const existingEntry = mergedData.find(
+        (entry) => entry.partNumber === dailyData.partNumber && entry.detailIdCuring === dailyData.detailIdCuring
+      );
 
       if (!existingEntry) {
         mergedData.push(dailyData);
@@ -315,55 +333,38 @@ export class AddMonthlyPlanningComponent implements OnInit {
 
   fillDataHeaderDate(dailyPlans: MonthlyDailyPlan[]): void {
     const uniqueDates = new Set(); // To track already used dates
-    this.dateHeadersTass = dailyPlans
-      .map((mp) => {
-        const date = new Date(mp.dateDailyMp);
-        const date2 = new Date(mp.dateDailyMp);
+    this.dateHeadersTass = dailyPlans.map(mp => {
+      const date = new Date(mp.dateDailyMp);
+      const date2 = new Date(mp.dateDailyMp);
 
-        // Format the date to dd-MM-yyyy
-        const formattedDate = `${('0' + date2.getDate()).slice(-2)}-${('0' + (date2.getMonth() + 1)).slice(-2)}-${date2.getFullYear()}`;
-        console.log('Formatted Date:', formattedDate);
+      // Format the date to dd-MM-yyyy
+      const formattedDate = `${('0' + (date2.getDate())).slice(-2)}-${('0' + (date2.getMonth() + 1)).slice(-2)}-${date2.getFullYear()}`;
+      console.log('Formatted Date:', formattedDate);
 
-        const matchingData = this.description.find((header) => this.formatDate(header.dateDailyMp) === formattedDate);
+      const matchingData = this.description.find(
+        (header) => this.formatDate(header.DATE_WD) === formattedDate
+      );
 
-        const i = 0;
-        // Check if the date has already been added
-        if (!uniqueDates.has(formattedDate)) {
-          uniqueDates.add(formattedDate); // Mark this date as used
+      const i = 0;
+      // Check if the date has already been added
+      if (!uniqueDates.has(formattedDate)) {
+        uniqueDates.add(formattedDate); // Mark this date as used
 
-          return {
-            date: formattedDate,
-            dateDisplay: date.getDate().toString(),
-            isOff: matchingData.description === 'OFF', // Off day logic
-            isOvertime: matchingData.description === 'OT_TT' || matchingData.description === 'OT_TL', // Overtime day logic
-            semiOff: matchingData.description === 'SEMI_OFF',
-            status: mp.workDay === 0 ? 'off' : mp.workDay > 8 ? 'overtime' : 'normal',
-            workingDay: mp.workDay,
-            totalPlan: mp.totalPlan,
-          };
-        }
+        return {
+          date: formattedDate,
+          dateDisplay: date.getDate().toString(),
+          isOff: matchingData.DESCRIPTION === 'OFF', // Off day logic
+          isOvertime: matchingData.DESCRIPTION === 'OT_TT' || matchingData.DESCRIPTION === 'OT_TL', // Overtime day logic
+          semiOff: matchingData.DESCRIPTION === 'SEMI_OFF',
+          status: mp.workDay === 0 ? 'off' : (mp.workDay > 8 ? 'overtime' : 'normal'),
+          workingDay:date.getDate().toString(),
+          totalPlan: mp.totalPlan
+        };
+      }
 
-        return null; // Return null for duplicate dates
-      })
-      .filter((header) => header !== null); // Filter out any null values
+      return null; // Return null for duplicate dates
+    }).filter(header => header !== null); // Filter out any null values
   }
-
-  getTotalPlan(idCuring: number, date: string): number | string {
-    // Cari data yang sesuai dengan idCuring dan tanggal
-    const matchingData = this.monly.find((header) => this.formatDate(header.dateDailyMp) === date && header.detailIdCuring === idCuring);
-    return matchingData ? matchingData.totalPlan : '-';
-  }
-
-  formatDate(date: string | Date): string {
-    if (!date) {
-      return '';
-    }
-    const dateObj = new Date(date);
-
-    const formattedDate = `${('0' + dateObj.getDate()).slice(-2)}-${('0' + (dateObj.getMonth() + 1)).slice(-2)}-${dateObj.getFullYear()}`;
-    return formattedDate;
-  }
-
   fillDataShift(detailShiftMonthlyPlanCuring: DetailShiftMonthlyPlanCuring[]): void {
     // Reset nilai
     this.workCenterText = [];
@@ -384,7 +385,6 @@ export class AddMonthlyPlanningComponent implements OnInit {
     });
   }
 
-  
   filteredChangeMould: any[] = [];  // Data yang sudah difilter
   filterType: string = 'changeDate';  // Default filter type
   searchTerm: string = '';  // Term pencarian
@@ -408,6 +408,21 @@ export class AddMonthlyPlanningComponent implements OnInit {
 
     // Update hasil filter
     this.filteredChangeMould = filteredData;
+  }
+  getTotalPlan(idCuring: number, date: string): number | string {
+    // Cari data yang sesuai dengan idCuring dan tanggal
+    const matchingData = this.monly.find((header) => this.formatDate(header.dateDailyMp) === date && header.detailIdCuring === idCuring);
+    return matchingData ? matchingData.totalPlan : '-';
+  }
+
+  formatDate(date: string | Date): string {
+    if (!date) {
+      return '';
+    }
+    const dateObj = new Date(date);
+
+    const formattedDate = `${('0' + dateObj.getDate()).slice(-2)}-${('0' + (dateObj.getMonth() + 1)).slice(-2)}-${dateObj.getFullYear()}`;
+    return formattedDate;
   }
 
   fillDataWorkDays(): void {}
