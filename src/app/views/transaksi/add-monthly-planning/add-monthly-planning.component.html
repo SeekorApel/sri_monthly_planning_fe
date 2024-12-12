@@ -77,6 +77,11 @@
             <button type="submit" class="btn btn-primary ml-2" (click)="resetSearch()">Reset</button>
           </div>
         </div>
+        <div class="d-flex justify-content-between mb-3">
+          <div class="d-flex align-items-center">
+          </div>
+          <button class="btn btn-success" (click)="viewDetail()" id="addButton">Change Mould Data</button>
+        </div>
         <div class="table-responsive">
           <table mat-table [dataSource]="dataSourceMO" matSort class="table table-bordered table-striped table-sm">
 
