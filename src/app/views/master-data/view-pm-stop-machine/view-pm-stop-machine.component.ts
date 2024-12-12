@@ -326,8 +326,10 @@ export class ViewPmStopMachineComponent implements OnInit {
         // Default nilai waktu ke null jika tidak ada
         const startTime = this.edtPmStopMachineObject.start_TIME || null;
         const endTime = this.edtPmStopMachineObject.end_TIME || null;
+        // const wct = this.edtPmStopMachineObject.work_CENTER_TEXT || "null";
 
         this.edtPmStopMachineFrom.patchValue({
+          // work_CENTER_TEXT: wct,
           start_DATE: formattedStartDate,
           end_DATE: formattedEndDate,
           start_TIME: startTime,

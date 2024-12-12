@@ -118,10 +118,10 @@ export class ViewMachineTassComponent implements OnInit {
         // Add a new column (e.g., buildingName) to each machineTass
         this.machineTasss = response.data.map((machine) => {
           const building = this.buildings.find((b) => b.building_ID === machine.building_ID);
-          const mtt = this.tassTypes.find((t) => t.machinetasstype_ID === machine.machinetasstype_ID);
+          // const mtt = this.tassTypes.find((t) => t.machinetasstype_ID === machine.machinetasstype_ID);
           return {
             ...machine,
-            tassType: mtt ? mtt.machinetasstype_ID : 'Unknown',
+            // tassType: mtt ? mtt.machinetasstype_ID : 'Unknown',
             building_Name: building ? building.building_NAME : 'Unknown',
           };
         });
