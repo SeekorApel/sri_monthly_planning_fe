@@ -367,6 +367,12 @@
               </td>
             </ng-container>
 
+            <!-- ItemCuring Column -->
+            <ng-container matColumnDef="itemCuring">
+              <th mat-sort-header rowspan="2" *matHeaderCellDef style="min-width: 80px">Item Curing</th>
+              <td mat-cell *matCellDef="let mo" class="text-center">{{ mo.itemCuring }}</td>
+            </ng-container>
+
             <tr align="center" style="height: 30px" mat-header-row *matHeaderRowDef="headersColumns; sticky: true"></tr>
             <tr align="center" style="height: 30px" mat-header-row *matHeaderRowDef="childHeadersColumns; sticky: true"></tr>
             <tr style="height: 30px" mat-row *matRowDef="let row; columns: rowData"></tr>
@@ -391,7 +397,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="uploadModalLabel">Upload Excel File</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <button type="button" class="close" (click)="resetFileInput()" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
         </div>
@@ -399,12 +405,12 @@
           <form id="uploadForm">
             <!-- Manual File Input -->
             <div class="form-group mt-3">
-              <input type="file" class="form-control-file" id="manualFileInput" accept=".xls,.xlsx" (change)="onFileChange($event)" />
+              <input type="file" #fileInput class="form-control-file" id="manualFileInput" accept=".xls,.xlsx" (change)="onFileChange($event)" />
             </div>
           </form>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-md btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-md btn-secondary" (click)="resetFileInput()" data-dismiss="modal">Close</button>
           <button type="button" class="btn btn-md btn-primary" data-dismiss="modal" id="uploadButton" (click)="uploadFileExcel()">Upload</button>
         </div>
       </div>
