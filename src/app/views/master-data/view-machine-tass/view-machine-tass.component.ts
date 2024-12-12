@@ -198,7 +198,7 @@ export class ViewMachineTassComponent implements OnInit {
   deleteData(mt: MachineTass): void {
     Swal.fire({
       title: 'Are you sure?',
-      text: 'This data plant will be deleted!',
+      text: 'This data machine tass will be deleted!',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
