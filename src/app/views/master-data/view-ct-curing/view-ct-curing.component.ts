@@ -15,7 +15,10 @@ import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 
 import { ItemCuringService } from 'src/app/services/master-data/item-curing/item-curing.service';
+import { CuringMachineService } from 'src/app/services/master-data/curing-machine/curing-machine.service';
 import { Item_Curing } from 'src/app/models/Item_Curing';
+import { Curing_Machine } from 'src/app/models/Curing_Machine';
+
 
 @Component({
   selector: 'app-view-ct-curing',
@@ -44,9 +47,12 @@ export class ViewCtCuringComponent implements OnInit {
     minimumResultsForSearch: 0,
   };
   itemCurings: Item_Curing[];
+  curingMachines: Curing_Machine[];
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
+
+
 
   constructor(private ctcuringService: CTCuringService, private fb: FormBuilder, private item_curingService: ItemCuringService) {
     this.editCTCuringForm = this.fb.group({

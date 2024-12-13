@@ -24,7 +24,6 @@ import { MachineTassService } from 'src/app/services/master-data/machine-tass/ma
   styleUrls: ['./view-routing-machine.component.scss'],
 })
 export class ViewRoutingMachineComponent implements OnInit {
-
   //Variable Declaration
   routingMachines: RoutingMachine[] = [];
   searchText: string = '';
@@ -39,23 +38,19 @@ export class ViewRoutingMachineComponent implements OnInit {
   pageSize: number = 5;
   totalPages: number = 5;
   sortBuffer: Array<any>;
-  displayedColumns: string[] = ['no', 'ct_ASSY_ID', 'wip','description', 'group_COUNTER', 'var_GROUP_COUNTER', 'sequence', 'wct', 'operation_SHORT_TEXT', 'operation_UNIT', 
-    'base_QUANTITY', 'standard_VALUE_UNIT', 'ct_SEC_1', 'ct_HR_1000', 'wh_NORMAL_SHIFT_0', 'wh_NORMAL_SHIFT_1', 'wh_NORMAL_SHIFT_2', 'wh_SHIFT_FRIDAY', 'wh_TOTAL_NORMAL_SHIFT',
-    'wh_TOTAL_SHIFT_FRIDAY', 'allow_NORMAL_SHIFT_0', 'allow_NORMAL_SHIFT_1', 'allow_NORMAL_SHIFT_2', 'allow_TOTAL', 'op_TIME_NORMAL_SHIFT_0', 'op_TIME_NORMAL_SHIFT_1', 'op_TIME_NORMAL_SHIFT_2',
-    'op_TIME_SHIFT_FRIDAY', 'op_TIME_TOTAL_NORMAL_SHIFT', 'op_TIME_TOTAL_SHIFT_FRIDAY', 'kaps_NORMAL_SHIFT_0', 'kaps_NORMAL_SHIFT_1', 'kaps_NORMAL_SHIFT_2', 'kaps_SHIFT_FRIDAY',
-    'kaps_TOTAL_NORMAL_SHIFT', 'kaps_TOTAL_SHIFT_FRIDAY', 'waktu_TOTAL_CT_NORMAL', 'waktu_TOTAL_CT_FRIDAY', 'status', 'action'];
+  displayedColumns: string[] = ['no', 'ct_ASSY_ID', 'wip', 'description', 'group_COUNTER', 'var_GROUP_COUNTER', 'sequence', 'wct', 'operation_SHORT_TEXT', 'operation_UNIT', 'base_QUANTITY', 'standard_VALUE_UNIT', 'ct_SEC_1', 'ct_HR_1000', 'wh_NORMAL_SHIFT_0', 'wh_NORMAL_SHIFT_1', 'wh_NORMAL_SHIFT_2', 'wh_SHIFT_FRIDAY', 'wh_TOTAL_NORMAL_SHIFT', 'wh_TOTAL_SHIFT_FRIDAY', 'allow_NORMAL_SHIFT_0', 'allow_NORMAL_SHIFT_1', 'allow_NORMAL_SHIFT_2', 'allow_TOTAL', 'op_TIME_NORMAL_SHIFT_0', 'op_TIME_NORMAL_SHIFT_1', 'op_TIME_NORMAL_SHIFT_2', 'op_TIME_SHIFT_FRIDAY', 'op_TIME_TOTAL_NORMAL_SHIFT', 'op_TIME_TOTAL_SHIFT_FRIDAY', 'kaps_NORMAL_SHIFT_0', 'kaps_NORMAL_SHIFT_1', 'kaps_NORMAL_SHIFT_2', 'kaps_SHIFT_FRIDAY', 'kaps_TOTAL_NORMAL_SHIFT', 'kaps_TOTAL_SHIFT_FRIDAY', 'waktu_TOTAL_CT_NORMAL', 'waktu_TOTAL_CT_FRIDAY', 'status', 'action'];
   dataSource: MatTableDataSource<RoutingMachine>;
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   public uomOptions: Array<Array<Select2OptionData>>;
-  public options: Options = { width: '100%'};
+  public options: Options = { width: '100%', minimumResultsForSearch: 0 };
   uom: any;
-  itemAssy: Item_Assy[] =[];
-  machineTass: MachineTass[] =[];
+  itemAssy: Item_Assy[] = [];
+  machineTass: MachineTass[] = [];
 
-  constructor(private RoutingMachineService: RoutingService, private fb: FormBuilder, private itemAssyService: ItemAssyService, private machineTassService: MachineTassService) { 
+  constructor(private RoutingMachineService: RoutingService, private fb: FormBuilder, private itemAssyService: ItemAssyService, private machineTassService: MachineTassService) {
     this.editRoutingMachineForm = this.fb.group({
       wip: ['', Validators.required],
       description: ['', Validators.required],
@@ -92,7 +87,7 @@ export class ViewRoutingMachineComponent implements OnInit {
       kaps_total_normal_shift: ['', Validators.required],
       kaps_total_shift_jumat: ['', Validators.required],
       waktu_total_CT_normal: ['', Validators.required],
-      waktu_total_CT_jumat: ['', Validators.required]
+      waktu_total_CT_jumat: ['', Validators.required],
     });
 
     this.loadItemAssy();
@@ -108,13 +103,13 @@ export class ViewRoutingMachineComponent implements OnInit {
         }
         this.uomOptions[0] = this.itemAssy.map((element) => ({
           id: element.item_ASSY.toString(),
-          text: element.item_ASSY.toString()
+          text: element.item_ASSY.toString(),
         }));
       },
       (error) => {
         this.errorMessage = 'Failed to load item assy: ' + error.message;
       }
-    );
+    );
   }
 
   private loadMachineTass(): void {
@@ -126,13 +121,13 @@ export class ViewRoutingMachineComponent implements OnInit {
         }
         this.uomOptions[1] = this.machineTass.map((element) => ({
           id: element.work_CENTER_TEXT.toString(),
-          text: element.work_CENTER_TEXT.toString()
+          text: element.work_CENTER_TEXT.toString(),
         }));
       },
       (error) => {
         this.errorMessage = 'Failed to load  machine tass : ' + error.message;
       }
-    );
+    );
   }
 
   ngOnInit(): void {
@@ -223,7 +218,6 @@ export class ViewRoutingMachineComponent implements OnInit {
   }
 
   updateCtAssy(): void {
-    
     this.RoutingMachineService.updateCTAssy(this.edtRoutingMachineObject).subscribe(
       (response) => {
         // SweetAlert setelah update berhasil
@@ -334,7 +328,7 @@ export class ViewRoutingMachineComponent implements OnInit {
       },
       error: (err) => {
         console.error('Download error:', err);
-      }
+      },
     });
   }
 
@@ -343,7 +337,7 @@ export class ViewRoutingMachineComponent implements OnInit {
     const data: Blob = new Blob([buffer], { type: EXCEL_TYPE });
     saveAs(data, `${fileName}_export_${new Date().getTime()}.xlsx`);
   }
-  
+
   onFileChange(event: Event) {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
@@ -366,7 +360,6 @@ export class ViewRoutingMachineComponent implements OnInit {
       }
     }
   }
-
 
   uploadFileExcel() {
     if (this.file) {
@@ -403,5 +396,5 @@ export class ViewRoutingMachineComponent implements OnInit {
         confirmButtonText: 'OK',
       });
     }
-  };
+  }
 }
