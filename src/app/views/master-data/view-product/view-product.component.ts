@@ -195,8 +195,17 @@ export class ViewProductComponent implements OnInit {
   }
 
   getAllProduct(): void {
+    Swal.fire({
+      title: 'Loading...',
+      html: 'Please wait while fetching data Product.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
     this.productService.getAllProduct().subscribe(
       (response: ApiResponse<Product[]>) => {
+        Swal.close();
         this.products = response.data.map((produk) => {
           const pattern2 = this.patterns.find((p) => p.pattern_ID == Number(produk.pattern_ID));
           const size_id = this.sizes.find((s) => Number(s.size_ID) === produk.size_ID);
@@ -211,9 +220,10 @@ export class ViewProductComponent implements OnInit {
         this.dataSource = new MatTableDataSource(this.products);
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
-        // this.onChangePage(this.products.slice(0, this.pageSize));
       },
       (error) => {
+        Swal.close();
+        Swal.fire('Error!', 'Failed to load product.', 'error');
         this.errorMessage = 'Failed to load product: ' + error.message;
       }
     );
@@ -333,12 +343,22 @@ export class ViewProductComponent implements OnInit {
   }
 
   uploadFileExcel() {
+    Swal.fire({
+      icon: 'info',
+      title: 'Processing...',
+      html: 'Please wait while saving Product Data.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
     if (this.file) {
       const formData = new FormData();
       formData.append('file', this.file);
       // unggah file Excel
       this.productService.uploadFileExcel(formData).subscribe(
         (response) => {
+          Swal.close();
           Swal.fire({
             icon: 'success',
             title: 'Success!',
@@ -350,6 +370,7 @@ export class ViewProductComponent implements OnInit {
           });
         },
         (error) => {
+          Swal.close();
           console.error('Error uploading file', error);
           Swal.fire({
             icon: 'error',
@@ -360,6 +381,7 @@ export class ViewProductComponent implements OnInit {
         }
       );
     } else {
+      Swal.close();
       Swal.fire({
         icon: 'warning',
         title: 'Warning!',
@@ -370,13 +392,25 @@ export class ViewProductComponent implements OnInit {
   }
 
   downloadExcel(): void {
+    Swal.fire({
+      icon: 'info',
+      title: 'Processing...',
+      html: 'Please wait while downloading Product Data.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
     this.productService.exportExcel().subscribe({
       next: (response) => {
+        Swal.close();
         // Menggunakan nama file yang sudah ditentukan di backend
         const filename = 'PRODUCT_DATA.xlsx'; // Nama file bisa dinamis jika diperlukan
         saveAs(response, filename); // Mengunduh file
       },
       error: (err) => {
+        Swal.close();
+        Swal.fire('Error!', 'Error downloading Data.', 'error');
         console.error('Download error:', err);
       },
     });

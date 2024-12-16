@@ -92,8 +92,17 @@ export class ViewQDistanceComponent implements OnInit {
   }
 
   getAllQuadrantDistance(): void {
+    Swal.fire({
+      title: 'Loading...',
+      html: 'Please wait while fetching data Quadrant Distance.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
     this.qdistanceService.getAllQuadrantDistance().subscribe(
       (response: ApiResponse<QDistance[]>) => {
+        Swal.close();
         const quadrantMap = new Map(this.quadrant.map((q) => [q.quadrant_ID, q.quadrant_NAME]));
 
         this.qdistances = response.data.map((qdistance) => ({
@@ -108,7 +117,8 @@ export class ViewQDistanceComponent implements OnInit {
         this.dataSource.paginator = this.paginator;
       },
       (error) => {
-        console.error('Error fetching quadrant distances:', error);
+        Swal.close();
+        Swal.fire('Error!', 'Failed to load quadrant distances.', 'error');
         this.errorMessage = 'Failed to load quadrant distances: ' + error.message;
       }
     );
@@ -228,12 +238,22 @@ export class ViewQDistanceComponent implements OnInit {
   }
 
   uploadFileExcel() {
+    Swal.fire({
+      icon: 'info',
+      title: 'Processing...',
+      html: 'Please wait while saving data quadrant distance.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
     if (this.file) {
       const formData = new FormData();
       formData.append('file', this.file);
       // unggah file Excel
       this.qdistanceService.uploadFileExcel(formData).subscribe(
         (response) => {
+          Swal.close();
           Swal.fire({
             icon: 'success',
             title: 'Success!',
@@ -245,6 +265,7 @@ export class ViewQDistanceComponent implements OnInit {
           });
         },
         (error) => {
+          Swal.close();
           console.error('Error uploading file', error);
           Swal.fire({
             icon: 'error',
@@ -255,6 +276,7 @@ export class ViewQDistanceComponent implements OnInit {
         }
       );
     } else {
+      Swal.close();
       Swal.fire({
         icon: 'warning',
         title: 'Warning!',
@@ -289,13 +311,25 @@ export class ViewQDistanceComponent implements OnInit {
     });
   }
   downloadExcel(): void {
+    Swal.fire({
+      icon: 'info',
+      title: 'Processing...',
+      html: 'Please wait while downloading Quadrant Distance data.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
     this.qdistanceService.exportQuadrantDistancesExcel().subscribe({
       next: (response) => {
+        Swal.close();
         // Menggunakan nama file yang sudah ditentukan di backend
         const filename = 'QUADRANT_DISTANCE_DATA.xlsx'; // Nama file bisa dinamis jika diperlukan
         saveAs(response, filename); // Mengunduh file
       },
       error: (err) => {
+        Swal.close();
+        Swal.fire('Error!', 'Error Downloading Data.', 'error');
         console.error('Download error:', err);
       },
     });

@@ -19,7 +19,6 @@ import { CuringMachineService } from 'src/app/services/master-data/curing-machin
 import { Item_Curing } from 'src/app/models/Item_Curing';
 import { Curing_Machine } from 'src/app/models/Curing_Machine';
 
-
 @Component({
   selector: 'app-view-ct-curing',
   templateUrl: './view-ct-curing.component.html',
@@ -41,7 +40,7 @@ export class ViewCtCuringComponent implements OnInit {
   totalPages: number = 5;
   displayedColumns: string[] = ['no', 'ct_CURING_ID', 'wip', 'group_COUNTER', 'var_GROUP_COUNTER', 'sequence', 'wct', 'operation_SHORT_TEXT', 'operation_UNIT', 'base_QUANTITY', 'standart_VALUE_UNIT', 'ct_SEC1', 'ct_HR1000', 'wh_NORMAL_SHIFT_1', 'wh_NORMAL_SHIFT_2', 'wh_NORMAL_SHIFT_3', 'wh_SHIFT_FRIDAY', 'wh_TOTAL_NORMAL_SHIFT', 'wh_TOTAL_SHIFT_FRIDAY', 'allow_NORMAL_SHIFT_1', 'allow_NORMAL_SHIFT_2', 'allow_NORMAL_SHIFT_3', 'allow_TOTAL', 'op_TIME_NORMAL_SHIFT_1', 'op_TIME_NORMAL_SHIFT_2', 'op_TIME_NORMAL_SHIFT_3', 'op_TIME_SHIFT_FRIDAY', 'op_TIME_NORMAL_SHIFT', 'op_TIME_TOTAL_SHIFT_FRIDAY', 'kaps_NORMAL_SHIFT_1', 'kaps_NORMAL_SHIFT_2', 'kaps_NORMAL_SHIFT_3', 'kaps_SHIFT_FRIDAY', 'kaps_TOTAL_NORMAL_SHIFT', 'kaps_TOTAL_SHIFT_FRIDAY', 'waktu_TOTAL_CT_NORMAL', 'waktu_TOTAL_CT_FRIDAY', 'status', 'action'];
   dataSource: MatTableDataSource<CT_Curing>;
-  public uomOptionData: Array<Select2OptionData>;
+  public uomOptionData: Array<Array<Select2OptionData>>;
   public options: Options = {
     width: '100%',
     minimumResultsForSearch: 0,
@@ -52,9 +51,7 @@ export class ViewCtCuringComponent implements OnInit {
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
-
-
-  constructor(private ctcuringService: CTCuringService, private fb: FormBuilder, private item_curingService: ItemCuringService) {
+  constructor(private ctcuringService: CTCuringService, private fb: FormBuilder, private item_curingService: ItemCuringService, private curing_machineService: CuringMachineService) {
     this.editCTCuringForm = this.fb.group({
       wip: ['', Validators.required],
       groupcounter: ['', Validators.required],
@@ -93,6 +90,7 @@ export class ViewCtCuringComponent implements OnInit {
       waktutotalctfriday: ['', Validators.required],
     });
     this.loadItemCuring();
+    this.loadMachineCuring();
   }
 
   ngOnInit(): void {
@@ -109,8 +107,17 @@ export class ViewCtCuringComponent implements OnInit {
   }
 
   getAllCTCuring(): void {
+    Swal.fire({
+      title: 'Loading...',
+      html: 'Please wait while fetching data CT Curing.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
     this.ctcuringService.getAllCTCuring().subscribe(
       (response: ApiResponse<CT_Curing[]>) => {
+        Swal.close();
         this.ctcurings = response.data.map((Element) => {
           const wipCuring = this.itemCurings?.find((ic) => ic.item_CURING === Element.wip);
           return {
@@ -124,6 +131,8 @@ export class ViewCtCuringComponent implements OnInit {
         // this.onChangePage(this.ctcurings.slice(0, this.pageSize));
       },
       (error) => {
+        Swal.close();
+        Swal.fire('Error!', 'Failed to load CT Curing.', 'error');
         this.errorMessage = 'Failed to load CT Curing: ' + error.message;
       }
     );
@@ -137,9 +146,28 @@ export class ViewCtCuringComponent implements OnInit {
           this.uomOptionData = [];
         }
 
-        this.uomOptionData = this.itemCurings.map((element) => ({
+        this.uomOptionData[0] = this.itemCurings.map((element) => ({
           id: element.item_CURING.toString(), // Ensure the ID is a string
           text: element.item_CURING, // Set the text to the name (or other property)
+        }));
+      },
+      (error) => {
+        this.errorMessage = 'Failed to load Building: ' + error.message;
+      }
+    );
+  }
+  private loadMachineCuring(): void {
+    this.curing_machineService.getAllMachineCuring().subscribe(
+      (response: ApiResponse<Curing_Machine[]>) => {
+        this.curingMachines = response.data;
+
+        if (!this.uomOptionData) {
+          this.uomOptionData = [];
+        }
+
+        this.uomOptionData[1] = this.curingMachines.map((element) => ({
+          id: element.work_CENTER_TEXT.toString(), // Ensure the ID is a string
+          text: element.work_CENTER_TEXT, // Set the text to the name (or other property)
         }));
       },
       (error) => {
@@ -288,12 +316,22 @@ export class ViewCtCuringComponent implements OnInit {
   }
 
   uploadFileExcel() {
+    Swal.fire({
+      icon: 'info',
+      title: 'Processing...',
+      html: 'Please wait while saving data CT Curing.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
     if (this.file) {
       const formData = new FormData();
       formData.append('file', this.file);
       // unggah file Excel
       this.ctcuringService.uploadFileExcel(formData).subscribe(
         (response) => {
+          Swal.close();
           Swal.fire({
             icon: 'success',
             title: 'Success!',
@@ -305,6 +343,7 @@ export class ViewCtCuringComponent implements OnInit {
           });
         },
         (error) => {
+          Swal.close();
           console.error('Error uploading file', error);
           Swal.fire({
             icon: 'error',
@@ -315,6 +354,7 @@ export class ViewCtCuringComponent implements OnInit {
         }
       );
     } else {
+      Swal.close();
       Swal.fire({
         icon: 'warning',
         title: 'Warning!',
@@ -324,13 +364,25 @@ export class ViewCtCuringComponent implements OnInit {
     }
   }
   downloadExcel(): void {
+    Swal.fire({
+      icon: 'info',
+      title: 'Processing...',
+      html: 'Please wait while Downloading CT Curing data.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
     this.ctcuringService.exportCTCuringsExcel().subscribe({
       next: (response) => {
+        Swal.close();
         // Menggunakan nama file yang sudah ditentukan di backend
         const filename = 'CT_CURING_DATA.xlsx'; // Nama file bisa dinamis jika diperlukan
         saveAs(response, filename); // Mengunduh file
       },
       error: (err) => {
+        Swal.close();
+        Swal.fire('Error!', 'Failed to download file.', 'error');
         console.error('Download error:', err);
       },
     });
