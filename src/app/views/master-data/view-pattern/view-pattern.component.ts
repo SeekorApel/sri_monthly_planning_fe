@@ -73,8 +73,17 @@ export class ViewPatternComponent implements OnInit {
   }
 
   getAllPattern(): void {
+    Swal.fire({
+      title: 'Loading...',
+      html: 'Please wait while fetching data Pattern.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
     this.patternService.getAllPattern().subscribe(
       (response: ApiResponse<Pattern[]>) => {
+        Swal.close();
         this.patterns = response.data;
         this.dataSource = new MatTableDataSource(this.patterns);
         this.dataSource.sort = this.sort;
@@ -82,6 +91,8 @@ export class ViewPatternComponent implements OnInit {
         // this.onChangePage(this.patterns.slice(0, this.pageSize));
       },
       (error) => {
+        Swal.close();
+        Swal.fire('Error!', 'Failed to load patterns.', 'error');
         this.errorMessage = 'Failed to load patterns: ' + error.message;
       }
     );
@@ -200,12 +211,22 @@ export class ViewPatternComponent implements OnInit {
   }
 
   uploadFileExcel() {
+    Swal.fire({
+      icon: 'info',
+      title: 'Processing...',
+      html: 'Please wait while saving data patterns.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
     if (this.file) {
       const formData = new FormData();
       formData.append('file', this.file);
       // unggah file Excel
       this.patternService.uploadFileExcel(formData).subscribe(
         (response) => {
+          Swal.close();
           Swal.fire({
             icon: 'success',
             title: 'Success!',
@@ -217,6 +238,7 @@ export class ViewPatternComponent implements OnInit {
           });
         },
         (error) => {
+          Swal.close();
           console.error('Error uploading file', error);
           Swal.fire({
             icon: 'error',
@@ -227,6 +249,7 @@ export class ViewPatternComponent implements OnInit {
         }
       );
     } else {
+      Swal.close();
       Swal.fire({
         icon: 'warning',
         title: 'Warning!',
@@ -236,13 +259,25 @@ export class ViewPatternComponent implements OnInit {
     }
   }
   downloadExcel(): void {
+    Swal.fire({
+      icon: 'info',
+      title: 'Processing...',
+      html: 'Please wait while downloading pattern data.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
     this.patternService.exportExcel().subscribe({
       next: (response) => {
+        Swal.close();
         // Menggunakan nama file yang sudah ditentukan di backend
         const filename = 'PATTERN_DATA.xlsx'; // Nama file bisa dinamis jika diperlukan
         saveAs(response, filename); // Mengunduh file
       },
       error: (err) => {
+        Swal.close();
+        Swal.fire('Error!', 'Error Downloading Data.', 'error');
         console.error('Download error:', err);
       },
     });
