@@ -223,14 +223,7 @@ export class ViewCtCuringComponent implements OnInit {
   openModalUpload(): void {
     $('#uploadModal').modal('show');
   }
-
-  downloadTemplate() {
-    const link = document.createElement('a');
-    link.href = 'assets/Template Excel/Layout_CT_Curing.xlsx';
-    link.download = 'Layout_CT_Curing.xlsx';
-    link.click();
-  }
-
+  
   onFileChange(event: Event) {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
@@ -295,6 +288,18 @@ export class ViewCtCuringComponent implements OnInit {
       next: (response) => {
         // Menggunakan nama file yang sudah ditentukan di backend
         const filename = 'CT_CURING_DATA.xlsx'; // Nama file bisa dinamis jika diperlukan
+        saveAs(response, filename); // Mengunduh file
+      },
+      error: (err) => {
+        console.error('Download error:', err);
+      },
+    });
+  }
+  tamplateExcel(): void {
+    this.ctcuringService.tamplateCTCuringsExcel().subscribe({
+      next: (response) => {
+        // Menggunakan nama file yang sudah ditentukan di backend
+        const filename = 'Layout_CT_CURING.xlsx'; // Nama file bisa dinamis jika diperlukan
         saveAs(response, filename); // Mengunduh file
       },
       error: (err) => {

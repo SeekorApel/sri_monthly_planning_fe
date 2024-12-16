@@ -156,6 +156,17 @@ export class ViewCtKapaComponent implements OnInit {
       },
     });
   }
+  tamplatrExcel(): void {
+    this.ctkapaService.tamplateCtKapaExcel().subscribe({
+      next: (response) => {
+        const filename = 'Layout_CT_KAPA.xlsx'; // Nama file bisa dinamis jika diperlukan
+        saveAs(response, filename); // Mengunduh file
+      },
+      error: (err) => {
+        console.error('Download error:', err);
+      },
+    });
+  }
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
@@ -263,13 +274,6 @@ export class ViewCtKapaComponent implements OnInit {
 
   openModalUpload(): void {
     $('#uploadModal').modal('show');
-  }
-
-  downloadTemplate() {
-    const link = document.createElement('a');
-    link.href = 'assets/Template Excel/Layout_CT_Kapa.xlsx';
-    link.download = 'Layout_Master_CT_KAPA.xlsx';
-    link.click();
   }
 
   onFileChange(event: Event) {

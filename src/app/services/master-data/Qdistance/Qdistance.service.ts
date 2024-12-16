@@ -12,8 +12,6 @@ import { map, catchError } from 'rxjs/operators';
 })
 export class QDistanceService {
   //Isi tokenya
-  token: String =
-    'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBdXJlbCIsImV4cCI6MTcyODA0MjAzNH0.j_HYWCIoDutMP1jk2VbfOJOlbMpUEKkpaP_S4uPOu4Ajds66XOpxxA7t0nFi7zgG7YgC0KVmKPhv2wpb4XQLPA';
 
   constructor(private http: HttpClient) {}
 

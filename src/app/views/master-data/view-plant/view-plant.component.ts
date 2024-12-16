@@ -169,13 +169,6 @@ export class ViewPlantComponent implements OnInit {
     $('#uploadModal').modal('show');
   }
 
-  downloadTemplate() {
-    const link = document.createElement('a');
-    link.href = 'assets/Template Excel/Layout_Plant.xlsx';
-    link.download = 'Layout_Plant.xlsx';
-    link.click();
-  }
-
   onFileChange(event: Event) {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
@@ -240,6 +233,18 @@ export class ViewPlantComponent implements OnInit {
       next: (response) => {
         // Menggunakan nama file yang sudah ditentukan di backend
         const filename = 'Plant_DATA.xlsx'; // Nama file bisa dinamis jika diperlukan
+        saveAs(response, filename); // Mengunduh file
+      },
+      error: (err) => {
+        console.error('Download error:', err);
+      },
+    });
+  }
+  downloadTamplate(): void {
+    this.PlantService.tamplateExcel().subscribe({
+      next: (response) => {
+        // Menggunakan nama file yang sudah ditentukan di backend
+        const filename = 'Layout_Plant.xlsx'; // Nama file bisa dinamis jika diperlukan
         saveAs(response, filename); // Mengunduh file
       },
       error: (err) => {

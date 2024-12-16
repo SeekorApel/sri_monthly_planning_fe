@@ -11,10 +11,6 @@ import { map, catchError } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class BDistanceService {
-  //Isi tokenya
-  token: String =
-    'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJBdXJlbCIsImV4cCI6MTcyODA0MjAzNH0.j_HYWCIoDutMP1jk2VbfOJOlbMpUEKkpaP_S4uPOu4Ajds66XOpxxA7t0nFi7zgG7YgC0KVmKPhv2wpb4XQLPA';
-
   constructor(private http: HttpClient) {}
 
   // Method untuk menambahkan header Authorization dengan token
@@ -103,6 +99,9 @@ export class BDistanceService {
 
   exportExcel(): Observable<Blob> {
     return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/exportBuildingDistancesExcel`, { responseType: 'blob' as 'json' });
+  }
+  tamplateExcel(): Observable<Blob> {
+    return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/layoutBuildingDistancesExcel`, { responseType: 'blob' as 'json' });
   }
 
 }
