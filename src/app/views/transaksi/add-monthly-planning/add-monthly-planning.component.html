@@ -80,7 +80,6 @@
         <div class="d-flex justify-content-between mb-3">
           <div class="d-flex align-items-center">
           </div>
-          <button class="btn btn-success" (click)="viewDetail()" id="addButton">Change Mould Data</button>
         </div>
         <div class="table-responsive">
           <table mat-table [dataSource]="dataSourceMO" matSort class="table table-bordered table-striped table-sm">
@@ -102,7 +101,7 @@
 
             <!-- Month 1 Column -->
             <ng-container matColumnDef="month0">
-              <th *matHeaderCellDef style="min-width: 150px" mat-sort-header>Month 1</th>
+              <th *matHeaderCellDef style="min-width: 150px" mat-sort-header>Month 0</th>
               <td *matCellDef="let mo">{{ parseDate(mo.month0) }}</td>
             </ng-container>
 
@@ -120,12 +119,12 @@
 
             <!-- Action Column -->
             <ng-container matColumnDef="action">
-              <th *matHeaderCellDef style="min-width: 340px">Action</th>
+              <th *matHeaderCellDef style="min-width: 200px">Action</th>
               <td *matCellDef="let mo">
                 <button type="button" class="btn btn-md btn-warning ml-2"
                   (click)="navigateToAddArDefectReject(mo.month0, mo.month1, mo.month2)">Finalisasi MO</button>
                 <button type="button" class="btn btn-md btn-primary ml-2"
-                  (click)="navigateToDetailMo(mo.moId)">Mark Front Rear</button>
+                  (click)="navigateToFrontRear(mo.month0, mo.month1, mo.month2)">Mark Front Rear</button>
               </td>
             </ng-container>
 
