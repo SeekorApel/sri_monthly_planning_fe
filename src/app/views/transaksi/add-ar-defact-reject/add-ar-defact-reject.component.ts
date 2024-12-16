@@ -11,7 +11,6 @@ import { ApiResponse } from 'src/app/response/Response';
 import { MarketingOrder } from 'src/app/models/MarketingOrder';
 import { HeaderMarketingOrder } from 'src/app/models/HeaderMarketingOrder';
 import { MatTableDataSource } from '@angular/material/table';
-import { ParsingDateService } from 'src/app/utils/parsing-date/parsing-date.service';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { ParsingNumberService } from 'src/app/utils/parsing-number/parsing-number.service';
@@ -191,9 +190,9 @@ export class AddArDefactRejectComponent implements OnInit {
   };
 
   // Pagination Detail Marketing Order
-  headersColumnsDmo: string[] = ['no', 'category', 'partNumber', 'description', 'machineType', 'capacity', 'qtyPerMould', 'spareMould', 'mouldMonthlyPlan', 'qtyPerRak', 'minOrder', 'maxCap', 'initialStock', 'salesForecast', 'marketingOrder', 'ar', 'defect', 'reject', 'itemCuring'];
+  headersColumnsDmo: string[] = ['no', 'category', 'partNumber', 'description', 'machineType', 'capacity', 'qtyPerMould', 'spareMould', 'mouldMonthlyPlan', 'qtyPerRak', 'minOrder', 'maxCap', 'initialStock', 'salesForecast', 'marketingOrder', 'totalAr', 'ar', 'defect', 'reject', 'itemCuring'];
   childHeadersColumnsDmo: string[] = ['maxCapMonth0', 'maxCapMonth1', 'maxCapMonth2', 'sfMonth0', 'sfMonth1', 'sfMonth2', 'moMonth0', 'moMonth1', 'moMonth2'];
-  rowDataDmo: string[] = ['no', 'category', 'partNumber', 'description', 'machineType', 'capacity', 'qtyPerMould', 'spareMould', 'mouldMonthlyPlan', 'qtyPerRak', 'minOrder', 'maxCapMonth0', 'maxCapMonth1', 'maxCapMonth2', 'initialStock', 'sfMonth0', 'sfMonth1', 'sfMonth2', 'moMonth0', 'moMonth1', 'moMonth2', 'ar', 'defect', 'reject', 'itemCuring'];
+  rowDataDmo: string[] = ['no', 'category', 'partNumber', 'description', 'machineType', 'capacity', 'qtyPerMould', 'spareMould', 'mouldMonthlyPlan', 'qtyPerRak', 'minOrder', 'maxCapMonth0', 'maxCapMonth1', 'maxCapMonth2', 'initialStock', 'sfMonth0', 'sfMonth1', 'sfMonth2', 'moMonth0', 'moMonth1', 'moMonth2', 'totalAr', 'ar', 'defect', 'reject', 'itemCuring'];
   dataSourceDmo: MatTableDataSource<DetailMarketingOrder>;
   @ViewChild('sortDmo') sortDmo = new MatSort();
   @ViewChild('paginatorDmo') paginatorDmo: MatPaginator;
@@ -551,7 +550,7 @@ export class AddArDefactRejectComponent implements OnInit {
       item.ar = 100;
       item.defect = 0;
       item.reject = 0;
-      item.moMonth0Original = item.moMonth0;
+      item.totalAr = item.moMonth0;
     });
 
     this.updateMonthNames(this.hmoFed);
@@ -628,24 +627,6 @@ export class AddArDefactRejectComponent implements OnInit {
     }
     return null;
   }
-
-  // formatNumber(value: number): string {
-  //   if (value !== null && value !== undefined) {
-  //     // Mengubah angka menjadi string
-  //     let strValue = value.toString();
-
-  //     // Memisahkan bagian desimal dan bagian bulat
-  //     const parts = strValue.split('.');
-  //     const integerPart = parts[0];
-  //     const decimalPart = parts[1] ? ',' + parts[1] : '';
-
-  //     // Menambahkan separator ribuan
-  //     const formattedInteger = integerPart.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
-
-  //     return formattedInteger + decimalPart;
-  //   }
-  //   return '';
-  // }
 
   formatDateToString(dateString) {
     const date = new Date(dateString);
@@ -1668,9 +1649,9 @@ export class AddArDefactRejectComponent implements OnInit {
     this.detailMarketingOrder.forEach((dmo) => {
       let arValue = dmo.ar / 100;
       // Hitung nilai ArMoM1
-      if (dmo.moMonth0Original !== 0) {
-        dmo.ArMoM1 = Math.round(dmo.moMonth0Original / (1 - (1 - arValue)));
-        dmo.moMonth0 = dmo.ArMoM1;
+      if (dmo.totalAr !== 0) {
+        dmo.ArMoM1 = Math.round(dmo.moMonth0 / (1 - (1 - arValue)));
+        dmo.totalAr = dmo.ArMoM1;
       } else {
         dmo.ArMoM1 = 0;
       }
@@ -1701,8 +1682,8 @@ export class AddArDefactRejectComponent implements OnInit {
       // Cek hanya item curing yang ada di percentageTotal dan kategori mengandung 'HGP'
       if (dmo.itemCuring && curingGroups50Percent[dmo.itemCuring] && dmo.category && dmo.category.includes('HGP')) {
         let percentageValue = curingGroups50Percent[dmo.itemCuring];
-        if (dmo.moMonth0Original < percentageValue) {
-          dmo.moMonth0 = percentageValue;
+        if (dmo.moMonth0 < percentageValue) {
+          dmo.totalAr = percentageValue;
         }
       }
     });
