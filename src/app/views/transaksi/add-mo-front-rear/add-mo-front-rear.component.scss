@@ -15,7 +15,13 @@
 .locked-background {
   background-color: red;
 }
+.table-responsive {
+  max-height: 1200px;
+}
 
+.table {
+  border-collapse: separate;
+}
 
 ::ng-deep .mat-sort-header-container {
   justify-content: center;
@@ -49,3 +55,12 @@ input[type="checkbox"] {
   margin: 0;
   display: inline; /* Ensures the checkbox is inline with other content */
 }
+
+.invalid-checkbox {
+  border: 2px solid red;
+  border-radius: 4px;
+  width: 16px; /* Atur lebar */
+  height: 16px; /* Atur tinggi */
+}
+
+

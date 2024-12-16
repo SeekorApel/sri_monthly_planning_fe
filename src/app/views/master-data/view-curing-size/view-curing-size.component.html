@@ -56,7 +56,7 @@
             </ng-container>
   
             <ng-container matColumnDef="action" >
-              <th *matHeaderCellDef style="min-width: 150px;">Action</th>
+              <th *matHeaderCellDef style="min-width: 170px;">Action</th>
               <td *matCellDef="let element">
                 <button type="button" class="btn btn-md btn-secondary" (click)="openModalEdit(element.curingsize_ID)">Update</button>
                 <button type="button" class="btn btn-md ml-2" [ngClass]="{ 'btn-danger': element.status === 1, 'btn-success': element.status !== 1 }" (click)="element.status === 1 ? deleteData(element) : activateData(element)">

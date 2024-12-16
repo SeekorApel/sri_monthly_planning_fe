@@ -139,9 +139,6 @@ export class ViewDetailRevisiMarketingComponent implements OnInit {
       fed_TT_percentage_m2: [null, []],
       fdr_TT_percentage_m2: [null, []],
       note_tl_m2: [null, []],
-      upload_file_m0: [null, []],
-      upload_file_m1: [null, []],
-      upload_file_m2: [null, []],
     });
     this.moService.getCapacity().subscribe(
       (response: ApiResponse<any>) => {
@@ -190,14 +187,24 @@ export class ViewDetailRevisiMarketingComponent implements OnInit {
     return this.parseDateService.convertDateToString(dateParse);
   }
 
-  exportExcelMo(id: string): void {
+  exportExcelMo(id: string, date: string, revision: string, type: string): void {
     this.loadingPrint[id] = true;
+
+    // Mengonversi string tanggal ke objek Date
+    const dateObj = new Date(date);
+
+    // Array untuk nama bulan dalam format singkatan
+    const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
+
+    // Mendapatkan bulan dari objek Date (0-based, jadi Januari adalah 0)
+    const monthFormatted = months[dateObj.getMonth()]; // Menyesuaikan bulan sesuai dengan format singkatan
+
     this.moService.downloadExcelMo(id).subscribe(
       (response: Blob) => {
         const url = window.URL.createObjectURL(response);
         const a = document.createElement('a');
         a.href = url;
-        a.download = `Marketing_Order_${id}.xlsx`; // Nama file yang diinginkan
+        a.download = `MO ${type} - ${monthFormatted} REV ${revision}.xlsx`;
         a.click();
         window.URL.revokeObjectURL(url);
         this.loadingPrint[id] = false;

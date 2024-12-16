@@ -32,6 +32,9 @@ export class DetailMarketingOrder {
   defect: number;
   reject: number;
   // Optional properties for tracking input state
+  moMonth0Original?: number = 0;
+  ArMoM1: number = 0;
+  RjMoM1: number = 0;
   isTouchedM0?: boolean = false;
   isTouchedM1?: boolean = false;
   isTouchedM2?: boolean = false;
@@ -40,4 +43,5 @@ export class DetailMarketingOrder {
   validationMessageM0: string = '';
   validationMessageM1: string = '';
   validationMessageM2: string = '';
+  selected?: boolean; 
 }

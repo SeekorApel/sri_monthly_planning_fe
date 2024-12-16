@@ -78,7 +78,7 @@
                   <span *ngIf="loadingShow[mo.moId]" class="spinner-border spinner-border-sm mr-1"></span>
                   Show
                 </button>
-                <button type="button" [disabled]="loadingPrint[mo.moId]" class="btn btn-md btn-success ml-2" (click)="exportExcelMo(mo.moId)">
+                <button type="button" [disabled]="loadingPrint[mo.moId]" class="btn btn-md btn-success ml-2" (click)="exportExcelMo(mo.moId, mo.month0, mo.revisionMarketing, mo.type)">
                   <span *ngIf="loadingPrint[mo.moId]" class="spinner-border spinner-border-sm mr-1"></span>
                   Print
                 </button>
@@ -219,7 +219,7 @@
                 </div>
                 <div class="col-md-4 min-height-form">
                   <label for="text-input">Note Order TL</label>
-                  <input type="text" formControlName="note_order_tl_0" name="text-input" class="form-control" [readOnly]="isReadOnly" />
+                  <input type="text" formControlName="note_tl_m0" name="text-input" class="form-control" [readOnly]="isReadOnly" />
                 </div>
               </div>
             </tab>
@@ -316,7 +316,7 @@
                 </div>
                 <div class="col-md-4 min-height-form">
                   <label for="text-input">Note Order TL</label>
-                  <input type="text" formControlName="note_order_tl_1" name="text-input" class="form-control" [readOnly]="isReadOnly" />
+                  <input type="text" formControlName="note_tl_m1" name="text-input" class="form-control" [readOnly]="isReadOnly" />
                 </div>
               </div>
             </tab>
@@ -413,7 +413,7 @@
                 </div>
                 <div class="col-md-4 min-height-form">
                   <label for="text-input">Note Order TL</label>
-                  <input type="text" formControlName="note_order_tl_2" name="text-input" class="form-control" [readOnly]="isReadOnly" />
+                  <input type="text" formControlName="note_tl_m2" name="text-input" class="form-control" [readOnly]="isReadOnly" />
                 </div>
               </div>
             </tab>
