@@ -104,30 +104,30 @@ export class ViewWorkDayComponent implements OnInit {
             Times[shiftIndex].start,
             Times[shiftIndex].end,
             this.getdateselected(),
-            this.perHourShift.description,
+            "WD_NORMAL",
             shiftIndex == 0 ? 3 : shiftIndex
           ).toPromise();
           this.perHourShift = response.data;
         } catch (error) {
           this.errorMessage = 'Failed to update work day specific: ' + error.message;
         }
-        const response = await this.workDayService.turnOnShift(ftargetDate, shift).toPromise();
-        this.work_days = response.data;
+        // const response = await this.workDayService.turnOnShift(ftargetDate, shift).toPromise();
+        // this.work_days = response.data;
       } else {
         try{
           const response = await this.workDayService.updateShiftTimes(
             "00:00",
             "00:00",
             this.getdateselected(),
-            this.perHourShift.description,
+            "WD_NORMAL",
             shiftIndex == 0 ? 3 : shiftIndex
           ).toPromise();
           this.perHourShift = response.data;
         } catch (error) {
           this.errorMessage = 'Failed to update work day specific: ' + error.message;
         }
-        const response = await this.workDayService.turnOffShift(ftargetDate, shift).toPromise();
-        this.work_days = response.data;
+        // const response = await this.workDayService.turnOffShift(ftargetDate, shift).toPromise();
+        // this.work_days = response.data;
       }
   
       await this.loadWorkday();
@@ -180,12 +180,11 @@ export class ViewWorkDayComponent implements OnInit {
         } catch (error) {
           this.errorMessage = 'Failed to update work day specific: ' + error.message;
         }
-        const response = await this.workDayService.turnOffShift(ftargetDate, ot[shiftIndex]).toPromise();
-        this.work_days = response.data;
+        // const response = await this.workDayService.turnOffShift(ftargetDate, ot[shiftIndex]).toPromise();
+        // this.work_days = response.data;
       }
       await this.loadWorkday();
       await this.loadHours();
-      this.loadReason();
     } catch (error) {
       this.errorMessage = 'Failed to load work day: ' + error.message;
     }
@@ -350,9 +349,8 @@ export class ViewWorkDayComponent implements OnInit {
   }
   async loadHours() {
     try {
-      if (!this.overTimeSwitch) {
+      if (!this.overTimeSwitch && !this.weekend ) {
         const response = await this.workDayService.getDWorkDayHoursSpecificByDateDesc(this.getdateselected(), "WD_NORMAL").toPromise();
-  
         if (response?.data) {
           this.perHourShift = response.data;
         } else {
@@ -799,7 +797,7 @@ export class ViewWorkDayComponent implements OnInit {
             "00:00",
             "00:00",
             this.getdateselected(),
-            this.perHourShift.description,
+            "WD_NORMAL",
             i
           ).toPromise();
           this.perHourShift = response.data;
@@ -836,7 +834,7 @@ export class ViewWorkDayComponent implements OnInit {
           Times[i].start,
           Times[i].end,
           this.getdateselected(),
-          this.perHourShift.description,
+          "WD_NORMAL",
           i === 0 ? 3 : i
         ).toPromise();
         this.perHourShift = response.data;

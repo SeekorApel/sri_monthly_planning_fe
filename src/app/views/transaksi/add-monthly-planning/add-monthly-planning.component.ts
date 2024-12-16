@@ -154,36 +154,43 @@ export class AddMonthlyPlanningComponent implements OnInit {
     this.getDailyMonthPlan(month, year, percentage, limitChange);
   }
 
-  navigateToDetailMo(m0: any, m1: any, m3: any, typeProduct: string) {
-    const formatDate = (date: any): string => {
-      const dateObj = date instanceof Date ? date : new Date(date);
+  // navigateToDetailMo(m0: any, m1: any, m3: any, typeProduct: string) {
+  //   const formatDate = (date: any): string => {
+  //     const dateObj = date instanceof Date ? date : new Date(date);
 
-      if (isNaN(dateObj.getTime())) {
-        throw new Error('Invalid date provided');
-      }
+  //     if (isNaN(dateObj.getTime())) {
+  //       throw new Error('Invalid date provided');
+  //     }
 
-      const day = String(dateObj.getDate()).padStart(2, '0');
-      const month = String(dateObj.getMonth() + 1).padStart(2, '0');
-      const year = dateObj.getFullYear();
+  //     const day = String(dateObj.getDate()).padStart(2, '0');
+  //     const month = String(dateObj.getMonth() + 1).padStart(2, '0');
+  //     const year = dateObj.getFullYear();
 
-      return `${day}-${month}-${year}`;
-    };
+  //     return `${day}-${month}-${year}`;
+  //   };
 
-    // Mengonversi ketiga tanggal
-    const month0 = formatDate(m0);
-    const month1 = formatDate(m1);
-    const month2 = formatDate(m3);
-    const type = typeProduct;
+  //   // Mengonversi ketiga tanggal
+  //   const month0 = formatDate(m0);
+  //   const month1 = formatDate(m1);
+  //   const month2 = formatDate(m3);
+  //   const type = typeProduct;
 
-    // Menggunakan string tanggal yang sudah dikonversi
-    this.router.navigate(['/transaksi/add-mo-front-rear/', month0, month1, month2, type]);
-  }
+  //   // Menggunakan string tanggal yang sudah dikonversi
+  //   this.router.navigate(['/transaksi/add-mo-front-rear/', month0, month1, month2, type]);
+  // }
 
   navigateToAddArDefectReject(month0: Date, month1: Date, month2: Date) {
     const formattedMonth0 = `${month0.getDate().toString().padStart(2, '0')}-${(month0.getMonth() + 1).toString().padStart(2, '0')}-${month0.getFullYear()}`;
     const formattedMonth1 = `${month1.getDate().toString().padStart(2, '0')}-${(month1.getMonth() + 1).toString().padStart(2, '0')}-${month1.getFullYear()}`;
     const formattedMonth2 = `${month2.getDate().toString().padStart(2, '0')}-${(month2.getMonth() + 1).toString().padStart(2, '0')}-${month2.getFullYear()}`;
     this.router.navigate(['/transaksi/add-mo-ar-defect-reject/', formattedMonth0, formattedMonth1, formattedMonth2]);
+  }
+
+  navigateToFrontRear(month0: Date, month1: Date, month2: Date) {
+    const formattedMonth0 = `${month0.getDate().toString().padStart(2, '0')}-${(month0.getMonth() + 1).toString().padStart(2, '0')}-${month0.getFullYear()}`;
+    const formattedMonth1 = `${month1.getDate().toString().padStart(2, '0')}-${(month1.getMonth() + 1).toString().padStart(2, '0')}-${month1.getFullYear()}`;
+    const formattedMonth2 = `${month2.getDate().toString().padStart(2, '0')}-${(month2.getMonth() + 1).toString().padStart(2, '0')}-${month2.getFullYear()}`;
+    this.router.navigate(['/transaksi/add-mo-front-rear/', formattedMonth0, formattedMonth1, formattedMonth2]);
   }
 
   getDailyMonthPlan(month: number, year: number, percentage: number, limitChange: number) {
@@ -217,41 +224,49 @@ export class AddMonthlyPlanningComponent implements OnInit {
     );
   }
 
-  getDetailShiftMonthlyPlan(detailDailyId: number, actualDate: string): void {
-    this.mpService.getDetailShiftMonthlyPlan(detailDailyId, actualDate).subscribe(
-      (response: ApiResponse<DetailShiftMonthlyPlanCuring[]>) => {
-        const data = response.data;
-
-        this.fillDataShift(data);
-        this.openDmpModal();
-      },
-      (error) => {
-        console.error('Error loading data:', error);
-        Swal.fire({
-          icon: 'error',
-          title: 'Error',
-          text: 'Failed to load data: ' + (error?.message || 'Unknown error'),
-          confirmButtonText: 'OK',
-        });
-      }
-    );
-  }
-
-  openDmpModal(): void {
-    $('#dmpModal').modal('show');
-  }
-
   viewDetail(): void {
     this.fillChangeMould(this.changeMould);
 
     $('#changeMould').modal('show');
   }
 
-  handleCellClick(detailDailyId: number, hDateTass: any): void {
-    console.log('Selected detail id:', detailDailyId);
-    console.log('Selected Date:', hDateTass);
+  handleCellClick(partNUmber: number, date: any): void {
 
-    this.getDetailShiftMonthlyPlan(detailDailyId, hDateTass);
+    console.log('Selected detail id:', partNUmber);
+    console.log('Selected Date:', date);
+
+    const formatDate = (dateObj: Date): string => {
+      const day = dateObj.getDate().toString().padStart(2, '0'); // Tambahkan leading zero
+      const month = (dateObj.getMonth() + 1).toString().padStart(2, '0'); // Bulan dimulai dari 0
+      const year = dateObj.getFullYear();
+      return `${day}-${month}-${year}`;
+    };
+
+    console.log("Data shift 1: ");
+    console.log(this.shiftMonthlyPlanningCuring);
+
+    // Proses filter data
+    const filteredData = this.shiftMonthlyPlanningCuring.filter((item) => {
+      const itemDate = new Date(item.date); // Konversi string ke Date
+      return (
+        partNUmber === item.part_NUMBER &&
+        formatDate(itemDate) === date // Bandingkan format dd-MM-yyyy
+      );
+    });
+
+    console.log("Data shift 2");
+    console.log(filteredData);
+
+    // Proses data shift dan buka modal
+    this.fillDataShift(filteredData);
+
+    // Tutup loading setelah selesai
+    Swal.close();
+    this.openDmpModal();
+  }
+
+  openDmpModal(): void {
+    $('#dmpModal').modal('show');
   }
 
   fillAllData(data: any) {
@@ -365,6 +380,7 @@ export class AddMonthlyPlanningComponent implements OnInit {
       return null; // Return null for duplicate dates
     }).filter(header => header !== null); // Filter out any null values
   }
+
   fillDataShift(detailShiftMonthlyPlanCuring: DetailShiftMonthlyPlanCuring[]): void {
     // Reset nilai
     this.workCenterText = [];
