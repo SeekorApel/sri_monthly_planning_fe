@@ -78,7 +78,7 @@
                   <span *ngIf="loadingShow[mo.moId]" class="spinner-border spinner-border-sm mr-1"></span>
                   Show
                 </button>
-                <button type="button" [disabled]="loadingPrint[mo.moId]" class="btn btn-md btn-success ml-2" (click)="exportExcelMo(mo.moId)">
+                <button type="button" [disabled]="loadingPrint[mo.moId]" class="btn btn-md btn-success ml-2" (click)="exportExcelMo(mo.moId, mo.month0, mo.revisionMarketing, mo.type)">
                   <span *ngIf="loadingPrint[mo.moId]" class="spinner-border spinner-border-sm mr-1"></span>
                   Print
                 </button>
