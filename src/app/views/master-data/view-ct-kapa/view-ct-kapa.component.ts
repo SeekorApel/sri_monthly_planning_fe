@@ -145,8 +145,18 @@ export class ViewCtKapaComponent implements OnInit {
     saveAs(data, `${fileName}_export_${new Date().getTime()}.xlsx`);
   }
   downloadExcel(): void {
+    Swal.fire({
+      icon: 'info',
+      title: 'Processing...',
+      html: 'Please wait while downloading CT Kapa data.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
     this.ctkapaService.exportCtKapaExcel().subscribe({
       next: (response) => {
+        Swal.close();
         // Menggunakan nama file yang sudah ditentukan di backend
         const filename = 'CTKAPA_DATA.xlsx'; // Nama file bisa dinamis jika diperlukan
         saveAs(response, filename); // Mengunduh file
@@ -164,8 +174,17 @@ export class ViewCtKapaComponent implements OnInit {
   }
 
   getAllCtKapa(): void {
+    Swal.fire({
+      title: 'Loading...',
+      html: 'Please wait while fetching data CT Kapa.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
     this.ctkapaService.getAllCtKapa().subscribe(
       (response: ApiResponse<CtKapa[]>) => {
+        Swal.close();
         this.ctkapas = response.data;
         this.dataSource = new MatTableDataSource(this.ctkapas);
         this.dataSource.sort = this.sort;
@@ -173,6 +192,8 @@ export class ViewCtKapaComponent implements OnInit {
         // this.onChangePage(this.ctkapas.slice(0, this.pageSize));
       },
       (error) => {
+        Swal.close();
+        Swal.fire('Error!', 'Failed to load Ct Kapa.', 'error');
         this.errorMessage = 'Failed to load Ct Kapa: ' + error.message;
       }
     );
@@ -296,12 +317,22 @@ export class ViewCtKapaComponent implements OnInit {
   }
 
   uploadFileExcel() {
+    Swal.fire({
+      icon: 'info',
+      title: 'Processing...',
+      html: 'Please wait while saving data CT Kapa.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
     if (this.file) {
       const formData = new FormData();
       formData.append('file', this.file);
       // unggah file Excel
       this.ctkapaService.uploadFileExcel(formData).subscribe(
         (response) => {
+          Swal.close();
           Swal.fire({
             icon: 'success',
             title: 'Success!',
@@ -313,6 +344,7 @@ export class ViewCtKapaComponent implements OnInit {
           });
         },
         (error) => {
+          Swal.close();
           console.error('Error uploading file', error);
           Swal.fire({
             icon: 'error',
@@ -323,6 +355,7 @@ export class ViewCtKapaComponent implements OnInit {
         }
       );
     } else {
+      Swal.close();
       Swal.fire({
         icon: 'warning',
         title: 'Warning!',
