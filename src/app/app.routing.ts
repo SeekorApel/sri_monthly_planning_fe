@@ -388,7 +388,7 @@ export const routes: Routes = [
         },
       },
       {
-        path: 'transaksi/add-mo-front-rear/:idMo',
+        path: 'transaksi/add-mo-front-rear/:month0/:month1/:month2',
         component: AddMoFrontRearComponent,
         data: {
           title: 'Transaksi / Add MO Front Rear',
