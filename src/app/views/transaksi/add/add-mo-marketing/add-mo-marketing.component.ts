@@ -47,7 +47,8 @@ export class AddMoMarketingComponent implements OnInit {
   totalMoMonth1TL: number = 0;
   totalMoMonth2TL: number = 0;
   totalMoMonth3TL: number = 0;
-  loading:boolean = false;
+  loading: boolean = false;
+  typeMO: string = '';
 
   //Pagination
   pageOfItems: Array<any>;
@@ -69,12 +70,7 @@ export class AddMoMarketingComponent implements OnInit {
   //Touch status
   touchStatus: { [key: number]: { isTouchedM0: boolean } } = {};
 
-  constructor(private router: Router,
-              private activeRoute: ActivatedRoute,
-              private moService: MarketingOrderService,
-              private fb: FormBuilder,
-              private parsingNumberService: ParsingNumberService,
-              private numberService: NumberFormatService) {
+  constructor(private router: Router, private activeRoute: ActivatedRoute, private moService: MarketingOrderService, private fb: FormBuilder, private parsingNumberService: ParsingNumberService, private numberService: NumberFormatService) {
     this.formHeaderMo = this.fb.group({
       date: [null, []],
       type: [null, []],
@@ -279,12 +275,11 @@ export class AddMoMarketingComponent implements OnInit {
     this.headerMarketingOrder = data.dataHeaderMo;
     this.detailMarketingOrder = data.dataDetailMo;
 
-    console.log(this.detailMarketingOrder);
-
     this.touchedRows = new Array(this.detailMarketingOrder.length).fill(false);
     this.dataSource = new MatTableDataSource(this.detailMarketingOrder);
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
+    this.typeMO = data.type;
 
     this.formHeaderMo.patchValue({
       date: new Date(data.dateValid).toISOString().split('T')[0],
@@ -1089,7 +1084,7 @@ export class AddMoMarketingComponent implements OnInit {
     const monthFn = indonesiaTime.toLocaleDateString('en-US', { month: 'long' });
     const year = indonesiaTime.getFullYear();
     const timestamp = indonesiaTime.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }).replace(':', '');
-    const fileName = `From_Marketing Order_${monthFn}_${year}_${timestamp}.xlsx`;
+    const fileName = `FROM_ADD_MO_${this.typeMO}_${monthFn}_${year}_${timestamp}.xlsx`;
     return fileName;
   }
 
@@ -1162,9 +1157,9 @@ export class AddMoMarketingComponent implements OnInit {
             const sfMonth0Value = Number(worksheet[`N${row + 1}`]?.v) || null; // Kolom N
             const sfMonth1Value = Number(worksheet[`O${row + 1}`]?.v) || null; // Kolom O
             const sfMonth2Value = Number(worksheet[`P${row + 1}`]?.v) || null; // Kolom P
-            const moMonth0Value = Number(worksheet[`Q${row + 1}`]?.v) || null; // Kolom Q
-            const moMonth1Value = Number(worksheet[`R${row + 1}`]?.v) || null; // Kolom R
-            const moMonth2Value = Number(worksheet[`S${row + 1}`]?.v) || null; // Kolom S
+            const moMonth0Value = Number(worksheet[`Q${row + 1}`]?.v) || 0; // Kolom Q
+            const moMonth1Value = Number(worksheet[`R${row + 1}`]?.v) || 0; // Kolom R
+            const moMonth2Value = Number(worksheet[`S${row + 1}`]?.v) || 0; // Kolom S
 
             // Mencari dan memperbarui nilai dalam detailMarketingOrder
             const detail = this.detailMarketingOrder.find((item) => item.partNumber === partNumber);
@@ -1235,7 +1230,7 @@ export class AddMoMarketingComponent implements OnInit {
         if (moMonth0 === null) {
           dmo.validationMessageM0 = 'This field is required';
           hasInvalidInput = true;
-        } else if (moMonth0 < dmo.minOrder) {
+        } else if (moMonth0 !== 0 && moMonth0 < dmo.minOrder) {
           dmo.validationMessageM0 = 'MO must not be less than the minimum order.';
           hasInvalidInput = true;
         } else if (moMonth0 > dmo.maxCapMonth0) {
@@ -1252,7 +1247,7 @@ export class AddMoMarketingComponent implements OnInit {
         if (moMonth1 === null) {
           dmo.validationMessageM1 = 'This field is required';
           hasInvalidInput = true;
-        } else if (moMonth1 < dmo.minOrder) {
+        } else if (moMonth1 !== 0 && moMonth1 < dmo.minOrder) {
           dmo.validationMessageM1 = 'MO must not be less than the minimum order.';
           hasInvalidInput = true;
         } else if (moMonth1 > dmo.maxCapMonth1) {
@@ -1269,7 +1264,7 @@ export class AddMoMarketingComponent implements OnInit {
         if (moMonth2 === null) {
           dmo.validationMessageM2 = 'This field is required';
           hasInvalidInput = true;
-        } else if (moMonth2 < dmo.minOrder) {
+        } else if (moMonth2 !== 0 && moMonth2 < dmo.minOrder) {
           dmo.validationMessageM2 = 'MO must not be less than the minimum order.';
           hasInvalidInput = true;
         } else if (moMonth2 > dmo.maxCapMonth2) {
@@ -1493,7 +1488,7 @@ export class AddMoMarketingComponent implements OnInit {
           text: 'Data Marketing Order Success added.',
           icon: 'success',
           allowOutsideClick: false,
-          confirmButtonText: 'OK'
+          confirmButtonText: 'OK',
         }).then((result) => {
           if (result.isConfirmed) {
             this.navigateToView();
