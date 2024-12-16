@@ -380,7 +380,7 @@ export class AddMonthlyPlanningComponent implements OnInit {
       return null; // Return null for duplicate dates
     }).filter(header => header !== null); // Filter out any null values
   }
-  
+
   fillDataShift(detailShiftMonthlyPlanCuring: DetailShiftMonthlyPlanCuring[]): void {
     // Reset nilai
     this.workCenterText = [];

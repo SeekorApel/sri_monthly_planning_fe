@@ -47,7 +47,8 @@ export class AddMoMarketingComponent implements OnInit {
   totalMoMonth1TL: number = 0;
   totalMoMonth2TL: number = 0;
   totalMoMonth3TL: number = 0;
-  loading:boolean = false;
+  loading: boolean = false;
+  typeMO: string = '';
 
   //Pagination
   pageOfItems: Array<any>;
@@ -69,12 +70,7 @@ export class AddMoMarketingComponent implements OnInit {
   //Touch status
   touchStatus: { [key: number]: { isTouchedM0: boolean } } = {};
 
-  constructor(private router: Router,
-              private activeRoute: ActivatedRoute,
-              private moService: MarketingOrderService,
-              private fb: FormBuilder,
-              private parsingNumberService: ParsingNumberService,
-              private numberService: NumberFormatService) {
+  constructor(private router: Router, private activeRoute: ActivatedRoute, private moService: MarketingOrderService, private fb: FormBuilder, private parsingNumberService: ParsingNumberService, private numberService: NumberFormatService) {
     this.formHeaderMo = this.fb.group({
       date: [null, []],
       type: [null, []],
@@ -279,12 +275,11 @@ export class AddMoMarketingComponent implements OnInit {
     this.headerMarketingOrder = data.dataHeaderMo;
     this.detailMarketingOrder = data.dataDetailMo;
 
-    console.log(this.detailMarketingOrder);
-
     this.touchedRows = new Array(this.detailMarketingOrder.length).fill(false);
     this.dataSource = new MatTableDataSource(this.detailMarketingOrder);
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
+    this.typeMO = data.type;
 
     this.formHeaderMo.patchValue({
       date: new Date(data.dateValid).toISOString().split('T')[0],
@@ -1089,7 +1084,7 @@ export class AddMoMarketingComponent implements OnInit {
     const monthFn = indonesiaTime.toLocaleDateString('en-US', { month: 'long' });
     const year = indonesiaTime.getFullYear();
     const timestamp = indonesiaTime.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }).replace(':', '');
-    const fileName = `From_Marketing Order_${monthFn}_${year}_${timestamp}.xlsx`;
+    const fileName = `FROM_ADD_MO_${this.typeMO}_${monthFn}_${year}_${timestamp}.xlsx`;
     return fileName;
   }
 
@@ -1162,9 +1157,9 @@ export class AddMoMarketingComponent implements OnInit {
             const sfMonth0Value = Number(worksheet[`N${row + 1}`]?.v) || null; // Kolom N
             const sfMonth1Value = Number(worksheet[`O${row + 1}`]?.v) || null; // Kolom O
             const sfMonth2Value = Number(worksheet[`P${row + 1}`]?.v) || null; // Kolom P
-            const moMonth0Value = Number(worksheet[`Q${row + 1}`]?.v) || null; // Kolom Q
-            const moMonth1Value = Number(worksheet[`R${row + 1}`]?.v) || null; // Kolom R
-            const moMonth2Value = Number(worksheet[`S${row + 1}`]?.v) || null; // Kolom S
+            const moMonth0Value = Number(worksheet[`Q${row + 1}`]?.v) || 0; // Kolom Q
+            const moMonth1Value = Number(worksheet[`R${row + 1}`]?.v) || 0; // Kolom R
+            const moMonth2Value = Number(worksheet[`S${row + 1}`]?.v) || 0; // Kolom S
 
             // Mencari dan memperbarui nilai dalam detailMarketingOrder
             const detail = this.detailMarketingOrder.find((item) => item.partNumber === partNumber);
@@ -1207,265 +1202,265 @@ export class AddMoMarketingComponent implements OnInit {
   }
 
   saveMo(): void {
-    // this.isSubmitted = true;
-    // let hasInvalidInput = false;
+    this.isSubmitted = true;
+    let hasInvalidInput = false;
 
-    // // Group by itemCuring and calculate total moMonth0 for each group
-    // const curingGroupsM0: { [key: string]: number } = {};
-    // const curingGroupsM1: { [key: string]: number } = {};
-    // const curingGroupsM2: { [key: string]: number } = {};
+    // Group by itemCuring and calculate total moMonth0 for each group
+    const curingGroupsM0: { [key: string]: number } = {};
+    const curingGroupsM1: { [key: string]: number } = {};
+    const curingGroupsM2: { [key: string]: number } = {};
 
-    // this.detailMarketingOrder.forEach((dmo) => {
-    //   const moMonth0 = dmo.moMonth0 ? parseFloat(dmo.moMonth0.toString().replace(/\./g, '')) : 0;
-    //   const moMonth1 = dmo.moMonth1 ? parseFloat(dmo.moMonth1.toString().replace(/\./g, '')) : 0;
-    //   const moMonth2 = dmo.moMonth2 ? parseFloat(dmo.moMonth2.toString().replace(/\./g, '')) : 0;
+    this.detailMarketingOrder.forEach((dmo) => {
+      const moMonth0 = dmo.moMonth0 ? parseFloat(dmo.moMonth0.toString().replace(/\./g, '')) : 0;
+      const moMonth1 = dmo.moMonth1 ? parseFloat(dmo.moMonth1.toString().replace(/\./g, '')) : 0;
+      const moMonth2 = dmo.moMonth2 ? parseFloat(dmo.moMonth2.toString().replace(/\./g, '')) : 0;
 
-    //   dmo.validationMessageM0 = '';
-    //   dmo.validationMessageM1 = '';
-    //   dmo.validationMessageM2 = '';
+      dmo.validationMessageM0 = '';
+      dmo.validationMessageM1 = '';
+      dmo.validationMessageM2 = '';
 
-    //   if (dmo.itemCuring) {
-    //     curingGroupsM0[dmo.itemCuring] = (curingGroupsM0[dmo.itemCuring] || 0) + moMonth0;
-    //     curingGroupsM1[dmo.itemCuring] = (curingGroupsM1[dmo.itemCuring] || 0) + moMonth1;
-    //     curingGroupsM2[dmo.itemCuring] = (curingGroupsM2[dmo.itemCuring] || 0) + moMonth2;
-    //   }
+      if (dmo.itemCuring) {
+        curingGroupsM0[dmo.itemCuring] = (curingGroupsM0[dmo.itemCuring] || 0) + moMonth0;
+        curingGroupsM1[dmo.itemCuring] = (curingGroupsM1[dmo.itemCuring] || 0) + moMonth1;
+        curingGroupsM2[dmo.itemCuring] = (curingGroupsM2[dmo.itemCuring] || 0) + moMonth2;
+      }
 
-    //   // Validate moMonth0 and update validation messages
-    //   if (dmo.lockStatusM0 !== 1) {
-    //     if (moMonth0 === null) {
-    //       dmo.validationMessageM0 = 'This field is required';
-    //       hasInvalidInput = true;
-    //     } else if (moMonth0 < dmo.minOrder) {
-    //       dmo.validationMessageM0 = 'MO must not be less than the minimum order.';
-    //       hasInvalidInput = true;
-    //     } else if (moMonth0 > dmo.maxCapMonth0) {
-    //       dmo.validationMessageM0 = 'MO cannot be more than the maximum capacity M1.';
-    //       hasInvalidInput = true;
-    //     } else if (moMonth0 % dmo.qtyPerRak !== 0) {
-    //       dmo.validationMessageM0 = `MO must be a multiple of ${dmo.qtyPerRak}.`;
-    //       hasInvalidInput = true;
-    //     }
-    //   }
+      // Validate moMonth0 and update validation messages
+      if (dmo.lockStatusM0 !== 1) {
+        if (moMonth0 === null) {
+          dmo.validationMessageM0 = 'This field is required';
+          hasInvalidInput = true;
+        } else if (moMonth0 !== 0 && moMonth0 < dmo.minOrder) {
+          dmo.validationMessageM0 = 'MO must not be less than the minimum order.';
+          hasInvalidInput = true;
+        } else if (moMonth0 > dmo.maxCapMonth0) {
+          dmo.validationMessageM0 = 'MO cannot be more than the maximum capacity M1.';
+          hasInvalidInput = true;
+        } else if (moMonth0 % dmo.qtyPerRak !== 0) {
+          dmo.validationMessageM0 = `MO must be a multiple of ${dmo.qtyPerRak}.`;
+          hasInvalidInput = true;
+        }
+      }
 
-    //   // Validate moMonth1 and update validation messages
-    //   if (dmo.lockStatusM1 !== 1) {
-    //     if (moMonth1 === null) {
-    //       dmo.validationMessageM1 = 'This field is required';
-    //       hasInvalidInput = true;
-    //     } else if (moMonth1 < dmo.minOrder) {
-    //       dmo.validationMessageM1 = 'MO must not be less than the minimum order.';
-    //       hasInvalidInput = true;
-    //     } else if (moMonth1 > dmo.maxCapMonth1) {
-    //       dmo.validationMessageM1 = 'MO cannot be more than the maximum capacity M2.';
-    //       hasInvalidInput = true;
-    //     } else if (moMonth1 % dmo.qtyPerRak !== 0) {
-    //       dmo.validationMessageM1 = `MO must be a multiple of ${dmo.qtyPerRak}.`;
-    //       hasInvalidInput = true;
-    //     }
-    //   }
+      // Validate moMonth1 and update validation messages
+      if (dmo.lockStatusM1 !== 1) {
+        if (moMonth1 === null) {
+          dmo.validationMessageM1 = 'This field is required';
+          hasInvalidInput = true;
+        } else if (moMonth1 !== 0 && moMonth1 < dmo.minOrder) {
+          dmo.validationMessageM1 = 'MO must not be less than the minimum order.';
+          hasInvalidInput = true;
+        } else if (moMonth1 > dmo.maxCapMonth1) {
+          dmo.validationMessageM1 = 'MO cannot be more than the maximum capacity M2.';
+          hasInvalidInput = true;
+        } else if (moMonth1 % dmo.qtyPerRak !== 0) {
+          dmo.validationMessageM1 = `MO must be a multiple of ${dmo.qtyPerRak}.`;
+          hasInvalidInput = true;
+        }
+      }
 
-    //   // Validate moMonth2 and update validation messages
-    //   if (dmo.lockStatusM2 !== 1) {
-    //     if (moMonth2 === null) {
-    //       dmo.validationMessageM2 = 'This field is required';
-    //       hasInvalidInput = true;
-    //     } else if (moMonth2 < dmo.minOrder) {
-    //       dmo.validationMessageM2 = 'MO must not be less than the minimum order.';
-    //       hasInvalidInput = true;
-    //     } else if (moMonth2 > dmo.maxCapMonth2) {
-    //       dmo.validationMessageM2 = 'MO cannot be more than the maximum capacity M3.';
-    //       hasInvalidInput = true;
-    //     } else if (moMonth2 % dmo.qtyPerRak !== 0) {
-    //       dmo.validationMessageM2 = `MO must be a multiple of ${dmo.qtyPerRak}.`;
-    //       hasInvalidInput = true;
-    //     }
-    //   }
-    // });
+      // Validate moMonth2 and update validation messages
+      if (dmo.lockStatusM2 !== 1) {
+        if (moMonth2 === null) {
+          dmo.validationMessageM2 = 'This field is required';
+          hasInvalidInput = true;
+        } else if (moMonth2 !== 0 && moMonth2 < dmo.minOrder) {
+          dmo.validationMessageM2 = 'MO must not be less than the minimum order.';
+          hasInvalidInput = true;
+        } else if (moMonth2 > dmo.maxCapMonth2) {
+          dmo.validationMessageM2 = 'MO cannot be more than the maximum capacity M3.';
+          hasInvalidInput = true;
+        } else if (moMonth2 % dmo.qtyPerRak !== 0) {
+          dmo.validationMessageM2 = `MO must be a multiple of ${dmo.qtyPerRak}.`;
+          hasInvalidInput = true;
+        }
+      }
+    });
 
-    // this.detailMarketingOrder.forEach((dmo) => {
-    //   if (dmo.itemCuring) {
-    //     if (curingGroupsM0[dmo.itemCuring] > dmo.maxCapMonth0) {
-    //       if (!dmo.validationMessageM0) {
-    //         dmo.validationMessageM0 = 'Maximal Capacity with the same curing item is overloaded';
-    //         hasInvalidInput = true;
-    //       }
-    //     }
-    //     if (curingGroupsM1[dmo.itemCuring] > dmo.maxCapMonth1) {
-    //       if (!dmo.validationMessageM1) {
-    //         dmo.validationMessageM1 = 'Maximal Capacity with the same curing item is overloaded';
-    //         hasInvalidInput = true;
-    //       }
-    //     }
-    //     if (curingGroupsM2[dmo.itemCuring] > dmo.maxCapMonth2) {
-    //       if (!dmo.validationMessageM2) {
-    //         dmo.validationMessageM2 = 'Maximal Capacity with the same curing item is overloaded';
-    //         hasInvalidInput = true;
-    //       }
-    //     }
-    //   }
-    // });
+    this.detailMarketingOrder.forEach((dmo) => {
+      if (dmo.itemCuring) {
+        if (curingGroupsM0[dmo.itemCuring] > dmo.maxCapMonth0) {
+          if (!dmo.validationMessageM0) {
+            dmo.validationMessageM0 = 'Maximal Capacity with the same curing item is overloaded';
+            hasInvalidInput = true;
+          }
+        }
+        if (curingGroupsM1[dmo.itemCuring] > dmo.maxCapMonth1) {
+          if (!dmo.validationMessageM1) {
+            dmo.validationMessageM1 = 'Maximal Capacity with the same curing item is overloaded';
+            hasInvalidInput = true;
+          }
+        }
+        if (curingGroupsM2[dmo.itemCuring] > dmo.maxCapMonth2) {
+          if (!dmo.validationMessageM2) {
+            dmo.validationMessageM2 = 'Maximal Capacity with the same curing item is overloaded';
+            hasInvalidInput = true;
+          }
+        }
+      }
+    });
 
-    // if (hasInvalidInput) {
-    //   Swal.fire({
-    //     title: 'Warning!',
-    //     text: 'There is an invalid input on the detail marketing order form.',
-    //     icon: 'warning',
-    //     confirmButtonText: 'OK',
-    //   });
-    //   return;
-    // }
+    if (hasInvalidInput) {
+      Swal.fire({
+        title: 'Warning!',
+        text: 'There is an invalid input on the detail marketing order form.',
+        icon: 'warning',
+        confirmButtonText: 'OK',
+      });
+      return;
+    }
 
-    // //Validasi Total
-    // const maxCapTubeM0 = this.headerMarketingOrder[0].maxCapTube;
-    // const maxCapTlM0 = this.headerMarketingOrder[0].maxCapTl;
-    // const maxCapTtM0 = this.headerMarketingOrder[0].maxCapTt;
+    //Validasi Total
+    const maxCapTubeM0 = this.headerMarketingOrder[0].maxCapTube;
+    const maxCapTlM0 = this.headerMarketingOrder[0].maxCapTl;
+    const maxCapTtM0 = this.headerMarketingOrder[0].maxCapTt;
 
-    // const maxCapTubeM1 = this.headerMarketingOrder[1].maxCapTube;
-    // const maxCapTlM1 = this.headerMarketingOrder[1].maxCapTl;
-    // const maxCapTtM1 = this.headerMarketingOrder[1].maxCapTt;
+    const maxCapTubeM1 = this.headerMarketingOrder[1].maxCapTube;
+    const maxCapTlM1 = this.headerMarketingOrder[1].maxCapTl;
+    const maxCapTtM1 = this.headerMarketingOrder[1].maxCapTt;
 
-    // const maxCapTubeM2 = this.headerMarketingOrder[2].maxCapTube;
-    // const maxCapTlM2 = this.headerMarketingOrder[2].maxCapTl;
-    // const maxCapTtM2 = this.headerMarketingOrder[2].maxCapTt;
+    const maxCapTubeM2 = this.headerMarketingOrder[2].maxCapTube;
+    const maxCapTlM2 = this.headerMarketingOrder[2].maxCapTl;
+    const maxCapTtM2 = this.headerMarketingOrder[2].maxCapTt;
 
-    // let totalMoTTubeMonth0 = 0;
-    // let totalMoTTMonth0 = 0;
-    // let totalMoTLMonth0 = 0;
+    let totalMoTTubeMonth0 = 0;
+    let totalMoTTMonth0 = 0;
+    let totalMoTLMonth0 = 0;
 
-    // let totalMoTTubeMonth1 = 0;
-    // let totalMoTTMonth1 = 0;
-    // let totalMoTLMonth1 = 0;
+    let totalMoTTubeMonth1 = 0;
+    let totalMoTTMonth1 = 0;
+    let totalMoTLMonth1 = 0;
 
-    // let totalMoTTubeMonth2 = 0;
-    // let totalMoTTMonth2 = 0;
-    // let totalMoTLMonth2 = 0;
+    let totalMoTTubeMonth2 = 0;
+    let totalMoTTMonth2 = 0;
+    let totalMoTLMonth2 = 0;
 
-    // this.detailMarketingOrder.forEach((dmo) => {
-    //   if (dmo.category.includes('TL')) {
-    //     totalMoTLMonth0 += dmo.moMonth0;
-    //     totalMoTLMonth1 += dmo.moMonth1;
-    //     totalMoTLMonth2 += dmo.moMonth2;
-    //   }
-    //   if (dmo.category.includes('TT')) {
-    //     totalMoTTMonth0 += dmo.moMonth0;
-    //     totalMoTTMonth1 += dmo.moMonth1;
-    //     totalMoTTMonth2 += dmo.moMonth2;
-    //   }
-    //   if (dmo.category.includes('TUBE')) {
-    //     totalMoTTubeMonth0 += dmo.moMonth0;
-    //     totalMoTTubeMonth1 += dmo.moMonth1;
-    //     totalMoTTubeMonth2 += dmo.moMonth2;
-    //   }
-    // });
+    this.detailMarketingOrder.forEach((dmo) => {
+      if (dmo.category.includes('TL')) {
+        totalMoTLMonth0 += dmo.moMonth0;
+        totalMoTLMonth1 += dmo.moMonth1;
+        totalMoTLMonth2 += dmo.moMonth2;
+      }
+      if (dmo.category.includes('TT')) {
+        totalMoTTMonth0 += dmo.moMonth0;
+        totalMoTTMonth1 += dmo.moMonth1;
+        totalMoTTMonth2 += dmo.moMonth2;
+      }
+      if (dmo.category.includes('TUBE')) {
+        totalMoTTubeMonth0 += dmo.moMonth0;
+        totalMoTTubeMonth1 += dmo.moMonth1;
+        totalMoTTubeMonth2 += dmo.moMonth2;
+      }
+    });
 
-    // //Validasi Total Mo TL
-    // if (totalMoTLMonth0 > maxCapTlM0) {
-    //   Swal.fire({
-    //     title: 'Warning!',
-    //     text: `Total Marketing Order TL must not exceed the total Maximum Capacity of TL ${this.formatSeparator(maxCapTlM0)} in month 1.`,
-    //     icon: 'warning',
-    //     confirmButtonText: 'OK',
-    //   });
-    //   return;
-    // }
+    //Validasi Total Mo TL
+    if (totalMoTLMonth0 > maxCapTlM0) {
+      Swal.fire({
+        title: 'Warning!',
+        text: `Total Marketing Order TL must not exceed the total Maximum Capacity of TL ${this.formatSeparator(maxCapTlM0)} in month 1.`,
+        icon: 'warning',
+        confirmButtonText: 'OK',
+      });
+      return;
+    }
 
-    // if (totalMoTLMonth1 > maxCapTlM1) {
-    //   Swal.fire({
-    //     title: 'Warning!',
-    //     text: `Total Marketing Order TL must not exceed the total Maximum Capacity of TL ${this.formatSeparator(maxCapTlM1)} in month 2.`,
-    //     icon: 'warning',
-    //     confirmButtonText: 'OK',
-    //   });
-    //   return;
-    // }
+    if (totalMoTLMonth1 > maxCapTlM1) {
+      Swal.fire({
+        title: 'Warning!',
+        text: `Total Marketing Order TL must not exceed the total Maximum Capacity of TL ${this.formatSeparator(maxCapTlM1)} in month 2.`,
+        icon: 'warning',
+        confirmButtonText: 'OK',
+      });
+      return;
+    }
 
-    // if (totalMoTLMonth2 > maxCapTlM2) {
-    //   Swal.fire({
-    //     title: 'Warning!',
-    //     text: `Total Marketing Order TL must not exceed the total Maximum Capacity of TL ${this.formatSeparator(maxCapTlM2)} in month 3.`,
-    //     icon: 'warning',
-    //     confirmButtonText: 'OK',
-    //   });
-    //   return;
-    // }
-    // //Validasi End Total Mo TL
+    if (totalMoTLMonth2 > maxCapTlM2) {
+      Swal.fire({
+        title: 'Warning!',
+        text: `Total Marketing Order TL must not exceed the total Maximum Capacity of TL ${this.formatSeparator(maxCapTlM2)} in month 3.`,
+        icon: 'warning',
+        confirmButtonText: 'OK',
+      });
+      return;
+    }
+    //Validasi End Total Mo TL
 
-    // //Validasi Total Mo TT
-    // if (totalMoTTMonth0 > maxCapTtM0) {
-    //   Swal.fire({
-    //     title: 'Warning!',
-    //     text: `Total Marketing Order TT must not exceed the total Maximum Capacity of TT ${this.formatSeparator(maxCapTtM0)} in month 1.`,
-    //     icon: 'warning',
-    //     confirmButtonText: 'OK',
-    //   });
-    //   return;
-    // }
+    //Validasi Total Mo TT
+    if (totalMoTTMonth0 > maxCapTtM0) {
+      Swal.fire({
+        title: 'Warning!',
+        text: `Total Marketing Order TT must not exceed the total Maximum Capacity of TT ${this.formatSeparator(maxCapTtM0)} in month 1.`,
+        icon: 'warning',
+        confirmButtonText: 'OK',
+      });
+      return;
+    }
 
-    // if (totalMoTTMonth1 > maxCapTtM1) {
-    //   Swal.fire({
-    //     title: 'Warning!',
-    //     text: `Total Marketing Order TT must not exceed the total Maximum Capacity of TT ${this.formatSeparator(maxCapTtM1)} in month 2.`,
-    //     icon: 'warning',
-    //     confirmButtonText: 'OK',
-    //   });
-    //   return;
-    // }
+    if (totalMoTTMonth1 > maxCapTtM1) {
+      Swal.fire({
+        title: 'Warning!',
+        text: `Total Marketing Order TT must not exceed the total Maximum Capacity of TT ${this.formatSeparator(maxCapTtM1)} in month 2.`,
+        icon: 'warning',
+        confirmButtonText: 'OK',
+      });
+      return;
+    }
 
-    // if (totalMoTTMonth2 > maxCapTtM2) {
-    //   Swal.fire({
-    //     title: 'Warning!',
-    //     text: `Total Marketing Order TT must not exceed the total Maximum Capacity of TT ${this.formatSeparator(maxCapTtM2)} in month 3.`,
-    //     icon: 'warning',
-    //     confirmButtonText: 'OK',
-    //   });
-    //   return;
-    // }
-    // //Validasi End Total Mo TT
+    if (totalMoTTMonth2 > maxCapTtM2) {
+      Swal.fire({
+        title: 'Warning!',
+        text: `Total Marketing Order TT must not exceed the total Maximum Capacity of TT ${this.formatSeparator(maxCapTtM2)} in month 3.`,
+        icon: 'warning',
+        confirmButtonText: 'OK',
+      });
+      return;
+    }
+    //Validasi End Total Mo TT
 
-    // //Validasi Total Mo Tube
-    // if (totalMoTTubeMonth0 > maxCapTubeM0) {
-    //   Swal.fire({
-    //     title: 'Warning!',
-    //     text: `Total Marketing Order Tube must not exceed the total Maximum Capacity of Tube ${this.formatSeparator(maxCapTubeM0)} in month 1.`,
-    //     icon: 'warning',
-    //     confirmButtonText: 'OK',
-    //   });
-    //   return;
-    // }
+    //Validasi Total Mo Tube
+    if (totalMoTTubeMonth0 > maxCapTubeM0) {
+      Swal.fire({
+        title: 'Warning!',
+        text: `Total Marketing Order Tube must not exceed the total Maximum Capacity of Tube ${this.formatSeparator(maxCapTubeM0)} in month 1.`,
+        icon: 'warning',
+        confirmButtonText: 'OK',
+      });
+      return;
+    }
 
-    // if (totalMoTTubeMonth1 > maxCapTubeM1) {
-    //   Swal.fire({
-    //     title: 'Warning!',
-    //     text: `Total Marketing Order Tube must not exceed the total Maximum Capacity of Tube ${this.formatSeparator(maxCapTubeM1)} in month 2.`,
-    //     icon: 'warning',
-    //     confirmButtonText: 'OK',
-    //   });
-    //   return;
-    // }
+    if (totalMoTTubeMonth1 > maxCapTubeM1) {
+      Swal.fire({
+        title: 'Warning!',
+        text: `Total Marketing Order Tube must not exceed the total Maximum Capacity of Tube ${this.formatSeparator(maxCapTubeM1)} in month 2.`,
+        icon: 'warning',
+        confirmButtonText: 'OK',
+      });
+      return;
+    }
 
-    // if (totalMoTTubeMonth2 > maxCapTubeM2) {
-    //   Swal.fire({
-    //     title: 'Warning!',
-    //     text: `Total Marketing Order Tube must not exceed the total Maximum Capacity of Tube ${this.formatSeparator(maxCapTubeM2)} in month 3.`,
-    //     icon: 'warning',
-    //     confirmButtonText: 'OK',
-    //   });
-    //   return;
-    // }
+    if (totalMoTTubeMonth2 > maxCapTubeM2) {
+      Swal.fire({
+        title: 'Warning!',
+        text: `Total Marketing Order Tube must not exceed the total Maximum Capacity of Tube ${this.formatSeparator(maxCapTubeM2)} in month 3.`,
+        icon: 'warning',
+        confirmButtonText: 'OK',
+      });
+      return;
+    }
     //Validasi End Total Mo Tube
 
     //End Validasi Total
 
     //Parsing data text to number
-    this.detailMarketingOrder.forEach((mo) => {
-      mo.initialStock = mo.initialStock !== null ? parseFloat(mo.initialStock.toString().replace(/\./g, '')) : 0;
-      mo.sfMonth0 = mo.sfMonth0 !== null ? parseFloat(mo.sfMonth0.toString().replace(/\./g, '')) : 0;
-      mo.sfMonth1 = mo.sfMonth1 !== null ? parseFloat(mo.sfMonth1.toString().replace(/\./g, '')) : 0;
-      mo.sfMonth2 = mo.sfMonth2 !== null ? parseFloat(mo.sfMonth2.toString().replace(/\./g, '')) : 0;
-      mo.moMonth0 = mo.moMonth0 !== null ? parseFloat(mo.moMonth0.toString().replace(/\./g, '')) : 0;
-      mo.moMonth1 = mo.moMonth1 !== null ? parseFloat(mo.moMonth1.toString().replace(/\./g, '')) : 0;
-      mo.moMonth2 = mo.moMonth2 !== null ? parseFloat(mo.moMonth2.toString().replace(/\./g, '')) : 0;
-    });
+    // this.detailMarketingOrder.forEach((mo) => {
+    //   mo.initialStock = mo.initialStock !== null ? parseFloat(mo.initialStock.toString().replace(/\./g, '')) : 0;
+    //   mo.sfMonth0 = mo.sfMonth0 !== null ? parseFloat(mo.sfMonth0.toString().replace(/\./g, '')) : 0;
+    //   mo.sfMonth1 = mo.sfMonth1 !== null ? parseFloat(mo.sfMonth1.toString().replace(/\./g, '')) : 0;
+    //   mo.sfMonth2 = mo.sfMonth2 !== null ? parseFloat(mo.sfMonth2.toString().replace(/\./g, '')) : 0;
+    //   mo.moMonth0 = mo.moMonth0 !== null ? parseFloat(mo.moMonth0.toString().replace(/\./g, '')) : 0;
+    //   mo.moMonth1 = mo.moMonth1 !== null ? parseFloat(mo.moMonth1.toString().replace(/\./g, '')) : 0;
+    //   mo.moMonth2 = mo.moMonth2 !== null ? parseFloat(mo.moMonth2.toString().replace(/\./g, '')) : 0;
+    // });
 
     const filteredData = this.detailMarketingOrder.map((item) => ({
       partNumber: item.partNumber,
@@ -1493,7 +1488,7 @@ export class AddMoMarketingComponent implements OnInit {
           text: 'Data Marketing Order Success added.',
           icon: 'success',
           allowOutsideClick: false,
-          confirmButtonText: 'OK'
+          confirmButtonText: 'OK',
         }).then((result) => {
           if (result.isConfirmed) {
             this.navigateToView();

@@ -1418,7 +1418,7 @@ export class AddMoPpcComponent implements OnInit {
     const monthFn = indonesiaTime.toLocaleDateString('en-US', { month: 'long' });
     const year = indonesiaTime.getFullYear();
     const timestamp = indonesiaTime.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }).replace(':', '');
-    const fileName = `From_Marketing Order_${monthFn}_${year}_${timestamp}.xlsx`;
+    const fileName = `FORM_MO_PPC_${monthFn}_${year}_${timestamp}.xlsx`;
     return fileName;
   }
 
