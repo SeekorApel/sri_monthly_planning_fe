@@ -258,6 +258,7 @@ export class ViewSizeComponent implements OnInit {
       });
     }
   }
+  
   downloadExcel(): void {
     Swal.fire({
       title: 'Loading...',
