@@ -142,9 +142,19 @@ export class ViewRoutingMachineComponent implements OnInit {
   }
 
   getAllCTAssy(): void {
+    Swal.fire({
+      title: 'Loading...',
+      html: 'Please wait while fetching data CT Assy.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
     this.RoutingMachineService.getAllCTAssy().subscribe(
       (response: ApiResponse<RoutingMachine[]>) => {
         this.routingMachines = response.data;
+        Swal.close();
+
         this.dataSource = new MatTableDataSource(this.routingMachines);
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
@@ -320,8 +330,17 @@ export class ViewRoutingMachineComponent implements OnInit {
   }
 
   downloadExcel(): void {
+    Swal.fire({
+      title: 'Loading...',
+      html: 'Please wait while fetching data CT Assy.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
     this.RoutingMachineService.exportRoutingMachineExcel().subscribe({
       next: (response) => {
+        Swal.close();
         // Menggunakan nama file yang sudah ditentukan di backend
         const filename = 'CT_ASSY_DATA.xlsx'; // Nama file bisa dinamis jika diperlukan
         saveAs(response, filename); // Mengunduh file
@@ -362,12 +381,21 @@ export class ViewRoutingMachineComponent implements OnInit {
   }
 
   uploadFileExcel() {
+    Swal.fire({
+          title: 'Loading...',
+          html: 'Please wait while fetching data CT Assy.',
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          },
+        });
     if (this.file) {
       const formData = new FormData();
       formData.append('file', this.file);
       // unggah file Excel
       this.RoutingMachineService.uploadFileExcel(formData).subscribe(
         (response) => {
+          Swal.close();
           Swal.fire({
             icon: 'success',
             title: 'Success!',
