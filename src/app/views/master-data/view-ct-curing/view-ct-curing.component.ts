@@ -284,7 +284,7 @@ export class ViewCtCuringComponent implements OnInit {
   openModalUpload(): void {
     $('#uploadModal').modal('show');
   }
-  
+
   onFileChange(event: Event) {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
@@ -375,19 +375,31 @@ export class ViewCtCuringComponent implements OnInit {
       },
       error: (err) => {
         Swal.close();
-        Swal.fire('Error!', 'Failed to download file.', 'error');
+        Swal.fire('Error!', 'Error Doenloading Data.', 'error');
         console.error('Download error:', err);
       },
     });
   }
   tamplateExcel(): void {
+    Swal.fire({
+      icon: 'info',
+      title: 'Processing...',
+      html: 'Please wait while Downloading CT Curing Layout.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
     this.ctcuringService.tamplateCTCuringsExcel().subscribe({
       next: (response) => {
+        Swal.close();
         // Menggunakan nama file yang sudah ditentukan di backend
         const filename = 'Layout_CT_CURING.xlsx'; // Nama file bisa dinamis jika diperlukan
         saveAs(response, filename); // Mengunduh file
       },
       error: (err) => {
+        Swal.close();
+        Swal.fire('Error!', 'Error Dwonloading Layout.', 'error');
         console.error('Download error:', err);
       },
     });

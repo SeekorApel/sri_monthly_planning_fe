@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 
 import { MachineTassService } from './machine-tass.service';
 
-describe('PatternService', () => {
+describe('MachineTassService', () => {
   let service: MachineTassService;
 
   beforeEach(() => {

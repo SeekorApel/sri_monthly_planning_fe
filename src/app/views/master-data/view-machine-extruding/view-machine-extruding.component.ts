@@ -174,12 +174,36 @@ export class ViewMachineExtrudingComponent implements OnInit {
       next: (response) => {
         Swal.close();
         // Menggunakan nama file yang sudah ditentukan di backend
-        const filename = 'MACHIE_EXTRUDING_DATA.xlsx'; // Nama file bisa dinamis jika diperlukan
+        const filename = 'MACHINE_EXTRUDING_DATA.xlsx'; // Nama file bisa dinamis jika diperlukan
         saveAs(response, filename); // Mengunduh file
       },
       error: (err) => {
         Swal.close();
         Swal.fire('Error', 'Error Downloading Data.', 'error');
+        console.error('Download error:', err);
+      },
+    });
+  }
+  tamplateExcel(): void {
+    Swal.fire({
+      icon: 'info',
+      title: 'Processing...',
+      html: 'Please wait while downloading Machine Extruding layout.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
+    this.MEService.exportMachineExtrudingExcel().subscribe({
+      next: (response) => {
+        Swal.close();
+        // Menggunakan nama file yang sudah ditentukan di backend
+        const filename = 'Layout_MACHINE_EXTRUDING.xlsx'; // Nama file bisa dinamis jika diperlukan
+        saveAs(response, filename); // Mengunduh file
+      },
+      error: (err) => {
+        Swal.close();
+        Swal.fire('Error', 'Error Downloading Layout.', 'error');
         console.error('Download error:', err);
       },
     });
@@ -238,13 +262,6 @@ export class ViewMachineExtrudingComponent implements OnInit {
 
   openModalUpload(): void {
     $('#uploadModal').modal('show');
-  }
-
-  downloadTemplate() {
-    const link = document.createElement('a');
-    link.href = 'assets/Template Excel/Layout_Machine_Extruding.xlsx';
-    link.download = 'Layout_Master_Machine_Extruding.xlsx';
-    link.click();
   }
 
   onFileChange(event: Event) {

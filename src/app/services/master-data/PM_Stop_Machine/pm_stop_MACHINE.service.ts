@@ -11,7 +11,6 @@ import { map, catchError } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class PMStopMachineService {
-
   constructor(private http: HttpClient) {}
 
   // Method untuk menambahkan header Authorization dengan token
@@ -98,6 +97,9 @@ export class PMStopMachineService {
   }
 
   exportExcel(): Observable<Blob> {
+    return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/exportStopMachinesExcel`, { responseType: 'blob' as 'json' });
+  }
+  tamplateExcel(): Observable<Blob> {
     return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/exportStopMachinesExcel`, { responseType: 'blob' as 'json' });
   }
 }

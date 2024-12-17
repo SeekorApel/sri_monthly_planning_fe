@@ -100,4 +100,7 @@ export class QDistanceService {
   exportQuadrantDistancesExcel(): Observable<Blob> {
     return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/exportQuadrantDistancesExcel`, { responseType: 'blob' as 'json' });
   }
+  tamplateQuadrantDistancesExcel(): Observable<Blob> {
+    return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/layoutQuadrantDistancesExcel`, { responseType: 'blob' as 'json' });
+  }
 }

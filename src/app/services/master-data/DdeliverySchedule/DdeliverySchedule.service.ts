@@ -59,6 +59,9 @@ export class DDeliveryScheduleService {
   exportDDeliveryScheduleExcel(): Observable<Blob> {
     return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/exportDDeliveryScheduleExcel`, { responseType: 'blob' as 'json' });
   }
+  tamplateDDeliveryScheduleExcel(): Observable<Blob> {
+    return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/exportDDeliveryScheduleExcel`, { responseType: 'blob' as 'json' });
+  }
 
   deleteDDeliverySchedule(dDeliverySchedule: DDeliverySchedule): Observable<ApiResponse<DDeliverySchedule>> {
     return this.http.post<ApiResponse<DDeliverySchedule>>(environment.apiUrlWebAdmin + '/deleteDDeliverySchedule', dDeliverySchedule, { headers: this.getHeaders() }).pipe(

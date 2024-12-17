@@ -85,6 +85,7 @@ export class ViewBDistanceComponent implements OnInit {
 
     this.bdistanceService.getAllBuildingDistance().subscribe(
       (response: ApiResponse<BDistance[]>) => {
+        Swal.close();
         this.bdistances = response.data.map(bdistance => {
           const building1 = this.buildings.find(
             bd => bd.building_ID === bdistance.building_ID_1
@@ -324,24 +325,38 @@ export class ViewBDistanceComponent implements OnInit {
     });
     this.bdistanceService.exportExcel().subscribe({
       next: (response) => {
+        Swal.close();
         // Menggunakan nama file yang sudah ditentukan di backend
         const filename = 'BUILDING_DISTANCE_DATA.xlsx'; // Nama file bisa dinamis jika diperlukan
-        Swal.close();
         saveAs(response, filename); // Mengunduh file
       },
       error: (err) => {
+        Swal.close();
+        Swal.fire('Error', 'Error Downloading Data.', 'error');
         console.error('Download error:', err);
       },
     });
   }
   tamplateExcel(): void {
+    Swal.fire({
+      icon: 'info',
+      title: 'Processing...',
+      html: 'Please wait while downloading Building distance layout.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
     this.bdistanceService.tamplateExcel().subscribe({
       next: (response) => {
+        Swal.close();
         // Menggunakan nama file yang sudah ditentukan di backend
         const filename = 'Layout_Building_Distance.xlsx'; // Nama file bisa dinamis jika diperlukan
         saveAs(response, filename); // Mengunduh file
       },
       error: (err) => {
+        Swal.close();
+        Swal.fire('Error!', 'Error Downloading Layout.', 'error');
         console.error('Download error:', err);
       },
     });
