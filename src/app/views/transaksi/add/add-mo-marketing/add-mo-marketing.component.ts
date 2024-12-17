@@ -49,6 +49,7 @@ export class AddMoMarketingComponent implements OnInit {
   totalMoMonth3TL: number = 0;
   loading: boolean = false;
   typeMO: string = '';
+  dateMo: string = '';
 
   //Pagination
   pageOfItems: Array<any>;
@@ -274,6 +275,8 @@ export class AddMoMarketingComponent implements OnInit {
   fillAllData(data: any): void {
     this.headerMarketingOrder = data.dataHeaderMo;
     this.detailMarketingOrder = data.dataDetailMo;
+    const monthFn = new Date(this.headerMarketingOrder[0].month).toLocaleDateString('en-US', { month: 'short' }).toUpperCase();
+    this.dateMo = monthFn;
 
     this.touchedRows = new Array(this.detailMarketingOrder.length).fill(false);
     this.dataSource = new MatTableDataSource(this.detailMarketingOrder);
@@ -1084,7 +1087,7 @@ export class AddMoMarketingComponent implements OnInit {
     const monthFn = indonesiaTime.toLocaleDateString('en-US', { month: 'long' });
     const year = indonesiaTime.getFullYear();
     const timestamp = indonesiaTime.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }).replace(':', '');
-    const fileName = `FROM_ADD_MO_${this.typeMO}_${monthFn}_${year}_${timestamp}.xlsx`;
+    const fileName = `FROM ADD MO Marketing ${this.typeMO} - ${this.dateMo} - ${year} - ${timestamp}.xlsx`;
     return fileName;
   }
 

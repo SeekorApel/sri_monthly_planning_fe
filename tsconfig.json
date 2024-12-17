@@ -20,7 +20,7 @@
     "lib": [
       "es2018",
       "dom"
-    ],
+    ]
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,
@@ -31,6 +31,6 @@
   "files": [],
   "references": [
     { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.spec.json" },
+    { "path": "./tsconfig.spec.json" }
   ]
 }

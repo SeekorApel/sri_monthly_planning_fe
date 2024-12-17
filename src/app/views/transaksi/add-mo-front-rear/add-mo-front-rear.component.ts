@@ -583,7 +583,7 @@ export class AddMoFrontRearComponent implements OnInit {
       item.ar = 100;
       item.defect = 0;
       item.reject = 0;
-      item.moMonth0Original = item.moMonth0;
+      item.totalAr = item.moMonth0;
     });
 
     this.updateMonthNames(this.hmoFed);
@@ -1700,9 +1700,9 @@ export class AddMoFrontRearComponent implements OnInit {
     this.detailMarketingOrder.forEach((dmo) => {
       let arValue = dmo.ar / 100;
       // Hitung nilai ArMoM1
-      if (dmo.moMonth0Original !== 0) {
-        dmo.ArMoM1 = Math.round(dmo.moMonth0Original / (1 - (1 - arValue)));
-        dmo.moMonth0 = dmo.ArMoM1;
+      if (dmo.totalAr !== 0) {
+        dmo.ArMoM1 = Math.round(dmo.moMonth0 / (1 - (1 - arValue)));
+        dmo.totalAr = dmo.ArMoM1;
       } else {
         dmo.ArMoM1 = 0;
       }
@@ -1733,8 +1733,8 @@ export class AddMoFrontRearComponent implements OnInit {
       // Cek hanya item curing yang ada di percentageTotal dan kategori mengandung 'HGP'
       if (dmo.itemCuring && curingGroups50Percent[dmo.itemCuring] && dmo.category && dmo.category.includes('HGP')) {
         let percentageValue = curingGroups50Percent[dmo.itemCuring];
-        if (dmo.moMonth0Original < percentageValue) {
-          dmo.moMonth0 = percentageValue;
+        if (dmo.moMonth0 < percentageValue) {
+          dmo.totalAr = percentageValue;
         }
       }
     });
