@@ -316,7 +316,7 @@ export class ViewMachineCuringTypeComponent implements OnInit {
         Swal.showLoading();
       },
     });
-    this.machineCuringTypeService.exportMctExcel().subscribe({
+    this.machineCuringTypeService.tamplateMctExcel().subscribe({
       next: (response) => {
         Swal.close();
         // Menggunakan nama file yang sudah ditentukan di backend
