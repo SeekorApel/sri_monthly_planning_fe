@@ -3,6 +3,25 @@
   color: white;
 }
 
+th.sticky-column {
+  position: sticky;
+  z-index: 10;
+}
+
+/* Sticky baris pertama */
+tr:first-child th {
+  top: 0;
+  z-index: 20; /* Lebih tinggi agar tidak tertutup baris kedua */
+}
+
+/* Sticky baris kedua */
+tr:nth-child(2) th {
+  top: 30px; /* Sesuaikan dengan tinggi baris pertama */
+  z-index: 10; /* Lebih rendah dari baris pertama */
+  background-color: #fff; /* Tambahkan background agar tidak transparan */
+
+}
+
 .overtime-header {
   background-color: yellow;
   color: black;
@@ -28,10 +47,9 @@
   left: 0;
   background: white;
   z-index: 2;
-  /* Lebih tinggi agar di atas elemen lainnya */
   box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.1);
-  /* Tambahkan efek bayangan */
 }
+
 ::ng-deep .mat-sort-header-container {
   justify-content: center;
 }

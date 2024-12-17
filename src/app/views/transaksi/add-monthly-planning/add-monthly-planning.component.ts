@@ -178,6 +178,15 @@ export class AddMonthlyPlanningComponent implements OnInit {
   }
 
   exportExcelMonthlyPlan() {
+    Swal.fire({
+      icon: 'info',
+      title: 'Processing...',
+      html: 'Please wait while we Download Excel the monthly plan. This might take a while.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading(); 
+      },
+    });
     const checkedMonths = this.dataSourceMO.data
       .filter(mo => mo.selected)
       .map(mo => mo.month0);
@@ -215,8 +224,12 @@ export class AddMonthlyPlanningComponent implements OnInit {
     this.router.navigate(['/transaksi/add-mo-front-rear/', formattedMonth0, formattedMonth1, formattedMonth2]);
   }
 
-  getDailyMonthPlan(month: number, year: number, limitChange: number, minA: number, maxA: number, minB: number,
-    maxB: number, minC: number, maxC: number, minD: number, maxD: number
+  getDailyMonthPlan(  month: number, year: number,
+    limitChange: number,
+    minA: number, maxA: number,
+    minB: number, maxB: number,
+    minC: number, maxC: number,
+    minD: number, maxD: number
   ) {
     // Menampilkan dialog loading
     Swal.fire({
@@ -256,17 +269,12 @@ export class AddMonthlyPlanningComponent implements OnInit {
   }
 
   exportExcelMP(
-    month: number,
-    year: number,
+    month: number, year: number,
     limitChange: number,
-    minA: number,
-    maxA: number,
-    minB: number,
-    maxB: number,
-    minC: number,
-    maxC: number,
-    minD: number,
-    maxD: number
+    minA: number, maxA: number,
+    minB: number, maxB: number,
+    minC: number, maxC: number,
+    minD: number, maxD: number
   ) {
     const monthNames = [
       'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
@@ -279,16 +287,6 @@ export class AddMonthlyPlanningComponent implements OnInit {
     const monthDescription = monthNames[this.monthNow - 1]; 
 
     const filename = `PREPARE PROD ${monthDescription.toUpperCase()} ${this.yearNow}.xlsx`;
-
-    Swal.fire({
-      icon: 'info',
-      title: 'Processing...',
-      html: 'Please wait while we Download Excel the monthly plan. This might take a while.',
-      allowOutsideClick: false,
-      didOpen: () => {
-        Swal.showLoading(); 
-      },
-    });
 
     this.mpService
       .ExportExcelMP(
@@ -382,8 +380,6 @@ export class AddMonthlyPlanningComponent implements OnInit {
         this.openDmpModal();
       }
     }, 1000); // Interval pengecekan setiap 1 detik
-
-
   }
 
   openDmpModal(): void {
