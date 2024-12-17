@@ -81,7 +81,7 @@ export class AddMonthlyPlanningComponent implements OnInit {
   monthlyPlanningsCurring: any[] = [];
   showMonthlyPlanning: boolean = false;
 
-  constructor(private router: Router, private moService: MarketingOrderService, private mpService: MonthlyPlanCuringService, private parseDateService: ParsingDateService) {}
+  constructor(private router: Router, private moService: MarketingOrderService, private mpService: MonthlyPlanCuringService, private parseDateService: ParsingDateService) { }
 
   ngOnInit(): void {
     //this.getAllMarketingOrder();
@@ -139,19 +139,45 @@ export class AddMonthlyPlanningComponent implements OnInit {
     );
   }
 
+  objVarLim = {
+    limitChange: null,
+    minA: null,
+    maxA: null,
+    minB: null,
+    maxB: null,
+    minC: null,
+    maxC: null,
+    minD: null,
+    maxD: null
+  };
+
+
   generateMonthlyPlanning() {
-    const data = {
-      month: 11,
-      year: 2024,
-      percentage: 5,
-      limitChange: 4
-    };
+    const checkedMonths = this.dataSourceMO.data
+        .filter(mo => mo.selected) // Filters the rows where 'selected' is true
+        .map(mo => mo.month0); // Maps to an array of month0 values, which are Date objects
 
-    this.fillBodyTableMp(data.month, data.year, data.percentage, data.limitChange);
+    console.log(checkedMonths);
 
-  }
-  fillBodyTableMp(month: number, year: number, percentage: number, limitChange: number): void {
-    this.getDailyMonthPlan(month, year, percentage, limitChange);
+    let month: number | null = null;
+    let year: number | null = null;
+
+    // If there's at least one selected month, extract the month and year from the first Date object
+    if (checkedMonths.length > 0) {
+        const firstMonthDate = checkedMonths[0]; // Get the first selected Date object
+        month = firstMonthDate.getMonth() + 1; // getMonth() returns 0-indexed months, so add 1
+        year = firstMonthDate.getFullYear(); // getFullYear() gives the full 4-digit year
+    }
+
+    console.log("Month: "+month+" Year: "+year);
+    console.log("Limit Change: "+this.objVarLim.limitChange);
+    console.log("min A: "+this.objVarLim.minA);
+    this.getDailyMonthPlan(month, year, this.objVarLim.limitChange, this.objVarLim.minA, this.objVarLim.maxA, this.objVarLim.minB,
+      this.objVarLim.maxB, this.objVarLim.minC, this.objVarLim.maxC, this.objVarLim.minD, this.objVarLim.maxD
+    );
+
+
+
   }
 
   // navigateToDetailMo(m0: any, m1: any, m3: any, typeProduct: string) {
@@ -193,7 +219,9 @@ export class AddMonthlyPlanningComponent implements OnInit {
     this.router.navigate(['/transaksi/add-mo-front-rear/', formattedMonth0, formattedMonth1, formattedMonth2]);
   }
 
-  getDailyMonthPlan(month: number, year: number, percentage: number, limitChange: number) {
+  getDailyMonthPlan(month: number, year: number, limitChange: number, minA: number, maxA: number, minB: number,
+    maxB: number, minC: number, maxC: number, minD: number, maxD: number
+  ) {
     // Menampilkan dialog loading
     Swal.fire({
       icon: 'info',
@@ -205,13 +233,27 @@ export class AddMonthlyPlanningComponent implements OnInit {
       },
     });
 
-    this.mpService.generateDetailMp(month, year, percentage, limitChange).subscribe(
-      (response: ApiResponse<any>) => {
-        Swal.close(); // Menutup dialog loading setelah sukses
-        this.showMonthlyPlanning = true;
-        this.allData = response.data;
-        this.fillAllData(this.allData);
-      },
+    this.monthNow = month;
+    this.yearNow = year;
+
+    this.mpService.generateDetailMp(
+      month,
+      year,
+      limitChange,
+      minA,
+      maxA,
+      minB,
+      maxB,
+      minC,
+      maxC,
+      minD,
+      maxD
+    ).subscribe((response: ApiResponse<any>) => {
+      Swal.close(); // Menutup dialog loading setelah sukses
+      this.showMonthlyPlanning = true;
+      this.allData = response.data;
+      this.fillAllData(this.allData);
+    },
       (error) => {
         Swal.close(); // Menutup dialog loading jika terjadi error
         Swal.fire({
@@ -269,6 +311,7 @@ export class AddMonthlyPlanningComponent implements OnInit {
     $('#dmpModal').modal('show');
   }
 
+
   fillAllData(data: any) {
     console.log(data);
     const monthlyPlans = data.detailMonthlyPlanCuring || [];
@@ -308,8 +351,8 @@ export class AddMonthlyPlanningComponent implements OnInit {
       const dailyData = {
         no: index + 1,
         partNumber: matchingMonthly?.partNumber || null,
-        size: matchingProduct?.description || null, 
-        pattern: matchingProduct?.description || null, 
+        size: matchingProduct?.description || null,
+        pattern: matchingProduct?.description || null,
         total: matchingMonthly?.total || null,
         netFulfilment: matchingMonthly?.netFulfilment || null,
         grossReq: matchingMonthly?.grossReq || null,
@@ -346,6 +389,9 @@ export class AddMonthlyPlanningComponent implements OnInit {
     this.dataSourceMP.paginator = this.paginator;
   }
 
+  monthNow : number;
+  yearNow : number;
+
   fillDataHeaderDate(dailyPlans: MonthlyDailyPlan[]): void {
     const uniqueDates = new Set(); // To track already used dates
     this.dateHeadersTass = dailyPlans.map(mp => {
@@ -372,7 +418,7 @@ export class AddMonthlyPlanningComponent implements OnInit {
           isOvertime: matchingData.DESCRIPTION === 'OT_TT' || matchingData.DESCRIPTION === 'OT_TL', // Overtime day logic
           semiOff: matchingData.DESCRIPTION === 'SEMI_OFF',
           status: mp.workDay === 0 ? 'off' : (mp.workDay > 8 ? 'overtime' : 'normal'),
-          workingDay:date.getDate().toString(),
+          workingDay: date.getDate().toString(),
           totalPlan: mp.totalPlan
         };
       }
@@ -441,7 +487,7 @@ export class AddMonthlyPlanningComponent implements OnInit {
     return formattedDate;
   }
 
-  fillDataWorkDays(): void {}
+  fillDataWorkDays(): void { }
 
   selectAll(event: any): void {
     const checked = event.target.checked;
