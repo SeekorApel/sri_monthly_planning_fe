@@ -84,6 +84,6 @@ export class CTCuringService {
     return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/exportCTCuringExcel`, { responseType: 'blob' as 'json' });
   }
   tamplateCTCuringsExcel(): Observable<Blob> {
-    return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/exportCTCuringExcel`, { responseType: 'blob' as 'json' });
+    return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/layoutCTCuringsExcel`, { responseType: 'blob' as 'json' });
   }
 }

@@ -100,6 +100,6 @@ export class PMStopMachineService {
     return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/exportStopMachinesExcel`, { responseType: 'blob' as 'json' });
   }
   tamplateExcel(): Observable<Blob> {
-    return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/exportStopMachinesExcel`, { responseType: 'blob' as 'json' });
+    return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/layoutStopMachinesExcel`, { responseType: 'blob' as 'json' });
   }
 }
