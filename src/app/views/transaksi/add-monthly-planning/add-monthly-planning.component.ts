@@ -292,17 +292,10 @@ export class AddMonthlyPlanningComponent implements OnInit {
 
     this.mpService
       .ExportExcelMP(
-        month,
-        year,
-        limitChange,
-        minA,
-        maxA,
-        minB,
-        maxB,
-        minC,
-        maxC,
-        minD,
-        maxD
+        month, year, limitChange,
+        minA, maxA, minB,
+        maxB, minC, maxC,
+        minD, maxD
       )
       .subscribe(
         (response) => {
