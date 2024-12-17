@@ -51,9 +51,19 @@ export class ViewItemAssyComponent implements OnInit {
   }
 
   getAllItemAssy(): void {
+    Swal.fire({
+      title: 'Loading...',
+      html: 'Please wait while fetching data Item Assy.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
     this.itemAssyService.getAllItemAssy().subscribe(
       (response: ApiResponse<Item_Assy[]>) => {
         this.itemAssys = response.data;
+        Swal.close();
+
         this.dataSource = new MatTableDataSource(this.itemAssys);
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
@@ -219,8 +229,17 @@ export class ViewItemAssyComponent implements OnInit {
   }
 
   downloadExcel(): void {
+    Swal.fire({
+      title: 'Loading...',
+      html: 'Please wait while fetching data Item Assy.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
     this.itemAssyService.exportItemAssyExcel().subscribe({
       next: (response) => {
+        Swal.close();
         // Menggunakan nama file yang sudah ditentukan di backend
         const filename = 'ITEM_ASSY_DATA.xlsx'; // Nama file bisa dinamis jika diperlukan
         saveAs(response, filename); // Mengunduh file
@@ -238,12 +257,21 @@ export class ViewItemAssyComponent implements OnInit {
   }
 
   uploadFileExcel() {
+    Swal.fire({
+          title: 'Loading...',
+          html: 'Please wait while fetching data Item Assy.',
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          },
+        });
     if (this.file) {
       const formData = new FormData();
       formData.append('file', this.file);
       // unggah file Excel
       this.itemAssyService.uploadFileExcel(formData).subscribe(
         (response) => {
+          Swal.close();
           Swal.fire({
             icon: 'success',
             title: 'Success!',

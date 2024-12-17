@@ -94,9 +94,18 @@ export class ViewQuadrantComponent implements OnInit {
   }
 
   getAllQuadrant(): void {
+    Swal.fire({
+      title: 'Loading...',
+      html: 'Please wait while fetching data Quadrant.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
     this.quadrantService.getAllQuadrant().subscribe(
       (response: ApiResponse<Quadrant[]>) => {
         this.quadrants = response.data;
+        Swal.close();
         
         this.quadrants = this.quadrants.map((quadrant) => {
           const matchedBuilding = this.building.find(
@@ -261,12 +270,21 @@ export class ViewQuadrantComponent implements OnInit {
   }
 
   uploadFileExcel() {
+    Swal.fire({
+          title: 'Loading...',
+          html: 'Please wait while fetching data Quadrant.',
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          },
+        });
     if (this.file) {
       const formData = new FormData();
       formData.append('file', this.file);
       // unggah file Excel
       this.quadrantService.uploadFileExcel(formData).subscribe(
         (response) => {
+          Swal.close();
           Swal.fire({
             icon: 'success',
             title: 'Success!',
@@ -298,8 +316,17 @@ export class ViewQuadrantComponent implements OnInit {
   }
 
   downloadExcel(): void {
+    Swal.fire({
+      title: 'Loading...',
+      html: 'Please wait while fetching data Quadrant.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
     this.quadrantService.exportQuadrantsExcel().subscribe({
       next: (response) => {
+        Swal.close();
         // Menggunakan nama file yang sudah ditentukan di backend
         const filename = 'QUADRANT_DATA.xlsx'; // Nama file bisa dinamis jika diperlukan
         saveAs(response, filename); // Mengunduh file

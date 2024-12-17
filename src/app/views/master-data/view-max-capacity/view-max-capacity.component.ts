@@ -112,9 +112,18 @@ export class ViewMaxCapacityComponent implements OnInit {
   }
 
   getAllMaxCapacity(): void {
+    Swal.fire({
+      title: 'Loading...',
+      html: 'Please wait while fetching data Max Capacity.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
     this.maxCapacityService.getAllMaxCapacity().subscribe(
       (response: ApiResponse<Max_Capacity[]>) => {
         this.maxCapacitys = response.data;
+        Swal.close();
         
         this.maxCapacitys = this.maxCapacitys.map((maxCapacity) => {
           const matchedProduct = this.product.find(
@@ -300,8 +309,17 @@ export class ViewMaxCapacityComponent implements OnInit {
   }
 
   downloadExcel(): void {
+    Swal.fire({
+      title: 'Loading...',
+      html: 'Please wait while fetching data Max Capacity.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
     this.maxCapacityService.exportMaxCapacitiesExcel().subscribe({
       next: (response) => {
+        Swal.close();
         // Menggunakan nama file yang sudah ditentukan di backend
         const filename = 'MAX_CAPACITY_DATA.xlsx'; // Nama file bisa dinamis jika diperlukan
         saveAs(response, filename); // Mengunduh file
@@ -319,12 +337,21 @@ export class ViewMaxCapacityComponent implements OnInit {
   }
 
   uploadFileExcel() {
+    Swal.fire({
+      title: 'Loading...',
+      html: 'Please wait while fetching data Max capacity.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
     if (this.file) {
       const formData = new FormData();
       formData.append('file', this.file);
       // unggah file Excel
       this.maxCapacityService.uploadFileExcel(formData).subscribe(
         (response) => {
+          Swal.close();
           Swal.fire({
             icon: 'success',
             title: 'Success!',
