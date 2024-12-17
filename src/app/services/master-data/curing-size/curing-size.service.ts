@@ -82,5 +82,8 @@ export class CuringSizeService {
   exportCuringSizeExcel(): Observable<Blob> {
     return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/exportCuringSizeexcel`, { responseType: 'blob' as 'json' });
   }
+  templateCuringSizeExcel(): Observable<Blob> {
+    return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/layoutCuringSizeexcel`, { responseType: 'blob' as 'json' });
+  }
 
 }

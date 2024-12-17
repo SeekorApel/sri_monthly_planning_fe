@@ -102,4 +102,7 @@ export class ItemCuringService {
   exportItemCuringsExcel(): Observable<Blob> {
     return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/exportItemCuringExcel`, { responseType: 'blob' as 'json' });
   }
+  templateItemCuringsExcel(): Observable<Blob> {
+    return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/layoutItemCuringExcel`, { responseType: 'blob' as 'json' });
+  }
 }
