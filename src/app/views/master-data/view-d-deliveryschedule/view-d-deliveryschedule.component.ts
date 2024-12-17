@@ -143,6 +143,30 @@ export class ViewDDeliveryScheduleComponent implements OnInit {
       },
     });
   }
+  tamplateExcel(): void {
+    Swal.fire({
+      icon: 'info',
+      title: 'Processing...',
+      html: 'Please wait while downloading Detail Delivery Schedule layout.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
+    this.ddeliveryschedule.exportDDeliveryScheduleExcel().subscribe({
+      next: (response) => {
+        Swal.close();
+        // Menggunakan nama file yang sudah ditentukan di backend
+        const filename = 'Layout_DETAIL_DELIVERY_SCHEDULE.xlsx'; // Nama file bisa dinamis jika diperlukan
+        saveAs(response, filename); // Mengunduh file
+      },
+      error: (err) => {
+        Swal.close();
+        Swal.fire('Error!', 'Error Downloading layout.', 'error');
+        console.error('Download error:', err);
+      },
+    });
+  }
   activateData(dDeliverySchedule: DDeliverySchedule): void {
     Swal.fire({
       title: 'Are you sure?',
@@ -265,13 +289,6 @@ export class ViewDDeliveryScheduleComponent implements OnInit {
 
   openModalUpload(): void {
     $('#uploadModal').modal('show');
-  }
-
-  downloadTemplate() {
-    const link = document.createElement('a');
-    link.href = 'assets/Template Excel/Layout_Detail_Delivery_Schedule.xlsx';
-    link.download = 'Layout_Master_Detail_Delivery_Schedule.xlsx';
-    link.click();
   }
 
   onFileChange(event: Event) {

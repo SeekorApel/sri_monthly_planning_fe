@@ -280,6 +280,28 @@ export class ViewSizeComponent implements OnInit {
       }
     });
   }
+
+  templateExcel(): void {
+    Swal.fire({
+      title: 'Loading...',
+      html: 'Please wait while fetching data Size.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
+    this.sizeService.templateSizesExcel().subscribe({
+      next: (response) => {
+        Swal.close();
+        // Menggunakan nama file yang sudah ditentukan di backend
+        const filename = 'LAYOUT_SIZE.xlsx'; // Nama file bisa dinamis jika diperlukan
+        saveAs(response, filename); // Mengunduh file
+      },
+      error: (err) => {
+        console.error('Download error:', err);
+      }
+    });
+  }
   // sortData(sort: Sort) {
   //   const data = this.pageOfItems.slice();
   //   if (!sort.active || sort.direction === '') {

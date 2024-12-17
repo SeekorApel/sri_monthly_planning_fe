@@ -82,4 +82,7 @@ export class ProductService {
   exportExcel(): Observable<Blob> {
     return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/exportProductsExcel`, { responseType: 'blob' as 'json' });
   }
+  tamplateExcel(): Observable<Blob> {
+    return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/layoutProductsExcel`, { responseType: 'blob' as 'json' });
+  }
 }

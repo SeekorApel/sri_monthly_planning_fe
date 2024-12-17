@@ -23,6 +23,9 @@ export class MachineTassTypeService {
   exportMachineTassTypeExcel(): Observable<Blob> {
     return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/exportMachineTassTypeExcel`, { responseType: 'blob' as 'json' });
   }
+  tamplateMachineTassTypeExcel(): Observable<Blob> {
+    return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/layoutMachineTassTypeExcel`, { responseType: 'blob' as 'json' });
+  }
   activateMachineTassType(mtt: MachineTassType): Observable<ApiResponse<MachineTassType>> {
     return this.http.post<ApiResponse<MachineTassType>>(environment.apiUrlWebAdmin + '/restoreMachineTassType', mtt, { headers: this.getHeaders() }).pipe(
       map((response) => {
