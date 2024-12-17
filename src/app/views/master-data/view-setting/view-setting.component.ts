@@ -66,6 +66,14 @@ export class ViewSettingComponent implements OnInit {
   }
 
   getAllSetting(): void {
+    Swal.fire({
+      title: 'Loading...',
+      html: 'Please wait while fetching data Setting.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
     this.settingService.getAllSetting().subscribe(
       (response: ApiResponse<Setting[]>) => {
         this.settings = response.data.map(setting => ({
@@ -73,6 +81,7 @@ export class ViewSettingComponent implements OnInit {
           // Asumsikan 'amount' adalah field yang berisi nilai desimal
           setting_VALUE: this.normalizeDecimal(setting.setting_VALUE)
         }));
+        Swal.close();
         this.dataSource = new MatTableDataSource(this.settings);
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
@@ -256,8 +265,17 @@ export class ViewSettingComponent implements OnInit {
   }
 
   downloadExcel(): void {
+    Swal.fire({
+      title: 'Loading...',
+      html: 'Please wait while fetching data Setting.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
     this.settingService.exportSettingsExcel().subscribe({
       next: (response) => {
+        Swal.close();
         // Menggunakan nama file yang sudah ditentukan di backend
         const filename = 'SETTING_DATA.xlsx'; // Nama file bisa dinamis jika diperlukan
         saveAs(response, filename); // Mengunduh file
@@ -275,12 +293,21 @@ export class ViewSettingComponent implements OnInit {
   }
 
   uploadFileExcel() {
+    Swal.fire({
+          title: 'Loading...',
+          html: 'Please wait while fetching data Setting.',
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          },
+        });
     if (this.file) {
       const formData = new FormData();
       formData.append('file', this.file);
       // unggah file Excel
       this.settingService.uploadFileExcel(formData).subscribe(
         (response) => {
+          Swal.close();
           Swal.fire({
             icon: 'success',
             title: 'Success!',
