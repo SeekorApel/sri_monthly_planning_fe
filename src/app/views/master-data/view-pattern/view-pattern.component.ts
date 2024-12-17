@@ -180,13 +180,6 @@ export class ViewPatternComponent implements OnInit {
     $('#uploadModal').modal('show');
   }
 
-  downloadTemplate() {
-    const link = document.createElement('a');
-    link.href = 'assets/Template Excel/Layout_Pattern.xlsx';
-    link.download = 'Layout_Pattern.xlsx';
-    link.click();
-  }
-
   onFileChange(event: Event) {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
@@ -278,6 +271,29 @@ export class ViewPatternComponent implements OnInit {
       error: (err) => {
         Swal.close();
         Swal.fire('Error!', 'Error Downloading Data.', 'error');
+        console.error('Download error:', err);
+      },
+    });
+  }
+  tamplateExcel(): void {
+    Swal.fire({
+      icon: 'info',
+      title: 'Processing...',
+      html: 'Please wait while downloading pattern layout.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
+    this.patternService.tamplateExcel().subscribe({
+      next: (response) => {
+        Swal.close();
+        const filename = 'Layout_PATTERN.xlsx'; // Nama file bisa dinamis jika diperlukan
+        saveAs(response, filename); // Mengunduh file
+      },
+      error: (err) => {
+        Swal.close();
+        Swal.fire('Error!', 'Error Downloading layout.', 'error');
         console.error('Download error:', err);
       },
     });

@@ -33,6 +33,9 @@ export class MachineExtrudingService {
   exportMachineExtrudingExcel(): Observable<Blob> {
     return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/exportMachineExtrudingExcel`, { responseType: 'blob' as 'json' });
   }
+  tamplateMachineExtrudingExcel(): Observable<Blob> {
+    return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/layoutMachineExtrudingExcel`, { responseType: 'blob' as 'json' });
+  }
 
   getMachineExtrudingByID(idMachineExtruding: number): Observable<ApiResponse<MachineExtruding>> {
     return this.http.get<ApiResponse<MachineExtruding>>(environment.apiUrlWebAdmin + '/getMachineExtrudingById/' + idMachineExtruding, { headers: this.getHeaders() });

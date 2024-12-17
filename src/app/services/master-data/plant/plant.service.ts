@@ -59,7 +59,6 @@ export class PlantService {
     );
   }
 
-
   uploadFileExcel(file: FormData): Observable<ApiResponse<Plant>> {
     return this.http.post<ApiResponse<Plant>>(environment.apiUrlWebAdmin + '/savePlantsExcel', file).pipe(
       map((response) => {
@@ -75,5 +74,9 @@ export class PlantService {
 
   exportExcel(): Observable<Blob> {
     return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/exportPlantsExcel`, { responseType: 'blob' as 'json' });
+  }
+
+  tamplateExcel(): Observable<Blob> {
+    return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/layoutPlantsExcel`, { responseType: 'blob' as 'json' });
   }
 }
