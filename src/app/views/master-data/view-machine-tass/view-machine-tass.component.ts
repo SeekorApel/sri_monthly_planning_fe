@@ -234,12 +234,6 @@ export class ViewMachineTassComponent implements OnInit {
     $('#uploadModal').modal('show');
   }
 
-  downloadTemplate() {
-    const link = document.createElement('a');
-    link.href = 'assets/Template Excel/Layout_Machine_Tass.xlsx';
-    link.download = 'Layout_Master_Machine_Tass.xlsx';
-    link.click();
-  }
   downloadExcel(): void {
     Swal.fire({
       icon: 'info',
@@ -260,6 +254,30 @@ export class ViewMachineTassComponent implements OnInit {
       error: (err) => {
         Swal.close();
         Swal.fire('Error!', 'Failed to download the data.', 'error');
+        console.error('Download error:', err);
+      },
+    });
+  }
+  tamplateExcel(): void {
+    Swal.fire({
+      icon: 'info',
+      title: 'Processing...',
+      html: 'Please wait while downloading Machine Tass layout.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
+    this.machineTassService.tamplateMachineTassExcel().subscribe({
+      next: (response) => {
+        Swal.close();
+        // Menggunakan nama file yang sudah ditentukan di backend
+        const filename = 'Layout_MACHINETASS.xlsx'; // Nama file bisa dinamis jika diperlukan
+        saveAs(response, filename); // Mengunduh file
+      },
+      error: (err) => {
+        Swal.close();
+        Swal.fire('Error!', 'Failed to download the layout.', 'error');
         console.error('Download error:', err);
       },
     });

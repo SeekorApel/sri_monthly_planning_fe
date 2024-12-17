@@ -77,4 +77,7 @@ export class PatternService {
   exportExcel(): Observable<Blob> {
     return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/exportPatternExcel`, { responseType: 'blob' as 'json' });
   }
+  tamplateExcel(): Observable<Blob> {
+    return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/layoutPatternExcel`, { responseType: 'blob' as 'json' });
+  }
 }

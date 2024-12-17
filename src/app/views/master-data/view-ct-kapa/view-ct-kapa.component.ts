@@ -162,6 +162,31 @@ export class ViewCtKapaComponent implements OnInit {
         saveAs(response, filename); // Mengunduh file
       },
       error: (err) => {
+        Swal.close();
+        Swal.fire('Error!', 'Error Downloading Data.', 'error');
+        console.error('Download error:', err);
+      },
+    });
+  }
+  tamplateExcel(): void {
+    Swal.fire({
+      icon: 'info',
+      title: 'Processing...',
+      html: 'Please wait while downloading CT Kapa Layout.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
+    this.ctkapaService.tamplateCtKapaExcel().subscribe({
+      next: (response) => {
+        Swal.close();
+        const filename = 'Layout_CT_KAPA.xlsx'; // Nama file bisa dinamis jika diperlukan
+        saveAs(response, filename); // Mengunduh file
+      },
+      error: (err) => {
+        Swal.close();
+        Swal.fire('Error!', 'Error Downloading Layout.', 'error');
         console.error('Download error:', err);
       },
     });
@@ -189,7 +214,6 @@ export class ViewCtKapaComponent implements OnInit {
         this.dataSource = new MatTableDataSource(this.ctkapas);
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
-        // this.onChangePage(this.ctkapas.slice(0, this.pageSize));
       },
       (error) => {
         Swal.close();
@@ -284,13 +308,6 @@ export class ViewCtKapaComponent implements OnInit {
 
   openModalUpload(): void {
     $('#uploadModal').modal('show');
-  }
-
-  downloadTemplate() {
-    const link = document.createElement('a');
-    link.href = 'assets/Template Excel/Layout_CT_Kapa.xlsx';
-    link.download = 'Layout_Master_CT_KAPA.xlsx';
-    link.click();
   }
 
   onFileChange(event: Event) {

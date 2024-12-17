@@ -17,7 +17,7 @@ export class MonthlyPlanCuringService {
 
   constructor(private http: HttpClient) { }
 
-  //get all data mp 
+  //get all data mp
   getAllMonthlyPlanning(): Observable<ApiResponse<MonthlyPlanning[]>> {
     return this.http.get<ApiResponse<[]>>(environment.apiUrlWebAdmin + '/getAllMonthlyPlanning');
   }
@@ -30,18 +30,70 @@ export class MonthlyPlanCuringService {
     return this.http.get<ApiResponse<any>>(
       `${environment.apiUrlWebAdmin}/getDetailMonthlyPlanById/` + docNum,
     );
-  } 
-  
-  generateDetailMp(month: number, year: number, percentage: number, limitChange: number): Observable<ApiResponse<any>> {
+  }
+
+  generateDetailMp(
+    month: number,
+    year: number,
+    limitChange: number,
+    minA: number,
+    maxA: number,
+    minB: number,
+    maxB: number,
+    minC: number,
+    maxC: number,
+    minD: number,
+    maxD: number
+  ): Observable<ApiResponse<any>> {
     const params = new HttpParams()
-      .set('month', month)
-      .set('year', year)
-      .set('percentage', percentage)
-      .set('limitChange', limitChange);
-  
+      .set('month', month.toString())  // Convert month to string
+      .set('year', year.toString())    // Convert year to string
+      .set('limitChange', limitChange != null ? limitChange.toString() : 0)
+      .set('minA', minA != null ? minA.toString() : 0)  // If minA is not null, convert to string, otherwise set to null
+      .set('maxA', maxA != null ? maxA.toString() : 0)
+      .set('minB', minB != null ? minB.toString() : 0)
+      .set('maxB', maxB != null ? maxB.toString() : 0)
+      .set('minC', minC != null ? minC.toString() : 0)
+      .set('maxC', maxC != null ? maxC.toString() : 0)
+      .set('minD', minD != null ? minD.toString() : 0)
+      .set('maxD', maxD != null ? maxD.toString() : 0);
+
+
     return this.http.get<ApiResponse<any>>(
       `${environment.apiUrlWebAdmin}/generateDetailMp`,
       { params }
+    );
+  }
+
+  ExportExcelMP(
+    month: number,
+    year: number,
+    limitChange: number,
+    minA: number,
+    maxA: number,
+    minB: number,
+    maxB: number,
+    minC: number,
+    maxC: number,
+    minD: number,
+    maxD: number
+  ): Observable<Blob> {
+    const params = new HttpParams()
+      .set('month', month.toString())  // Convert month to string
+      .set('year', year.toString())    // Convert year to string
+      .set('limitChange', limitChange != null ? limitChange.toString() : 0)
+      .set('minA', minA != null ? minA.toString() : 0)  // If minA is not null, convert to string, otherwise set to null
+      .set('maxA', maxA != null ? maxA.toString() : 0)
+      .set('minB', minB != null ? minB.toString() : 0)
+      .set('maxB', maxB != null ? maxB.toString() : 0)
+      .set('minC', minC != null ? minC.toString() : 0)
+      .set('maxC', maxC != null ? maxC.toString() : 0)
+      .set('minD', minD != null ? minD.toString() : 0)
+      .set('maxD', maxD != null ? maxD.toString() : 0);
+
+    return this.http.get<Blob>(
+      `${environment.apiUrlWebAdmin}/exportMPExcel`,
+      { params, responseType: 'blob' as 'json'}
     );
   }
 
@@ -60,6 +112,4 @@ export class MonthlyPlanCuringService {
   getAllMachineByItemCuring(mesin: string): Observable<ApiResponse<any>> {
     return this.http.get<ApiResponse<any>>(`${environment.apiUrlWebAdmin}/getMachineByItemCuring?itemCuring=${mesin}`);
   }
-
-
 }

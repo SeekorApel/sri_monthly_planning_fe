@@ -15,6 +15,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ParsingDateService } from 'src/app/utils/parsing-date/parsing-date.service';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
+import { saveAs } from 'file-saver';
 
 declare var $: any;
 
@@ -81,7 +82,7 @@ export class AddMonthlyPlanningComponent implements OnInit {
   monthlyPlanningsCurring: any[] = [];
   showMonthlyPlanning: boolean = false;
 
-  constructor(private router: Router, private moService: MarketingOrderService, private mpService: MonthlyPlanCuringService, private parseDateService: ParsingDateService) {}
+  constructor(private router: Router, private moService: MarketingOrderService, private mpService: MonthlyPlanCuringService, private parseDateService: ParsingDateService) { }
 
   ngOnInit(): void {
     //this.getAllMarketingOrder();
@@ -139,45 +140,66 @@ export class AddMonthlyPlanningComponent implements OnInit {
     );
   }
 
+  objVarLim = {
+    limitChange: null,
+    minA: null,
+    maxA: null,
+    minB: null,
+    maxB: null,
+    minC: null,
+    maxC: null,
+    minD: null,
+    maxD: null
+  };
+
+
   generateMonthlyPlanning() {
-    const data = {
-      month: 11,
-      year: 2024,
-      percentage: 5,
-      limitChange: 4
-    };
+    const checkedMonths = this.dataSourceMO.data
+      .filter(mo => mo.selected)
+      .map(mo => mo.month0);
 
-    this.fillBodyTableMp(data.month, data.year, data.percentage, data.limitChange);
+    console.log(checkedMonths);
 
+    let month: number | null = null;
+    let year: number | null = null;
+
+    if (checkedMonths.length > 0) {
+      const firstMonthDate = checkedMonths[0];
+      month = firstMonthDate.getMonth() + 1;
+      year = firstMonthDate.getFullYear();
+    }
+
+    console.log("Month: " + month + " Year: " + year);
+    console.log("Limit Change: " + this.objVarLim.limitChange);
+    console.log("min A: " + this.objVarLim.minA);
+    this.getDailyMonthPlan(month, year, this.objVarLim.limitChange, this.objVarLim.minA, this.objVarLim.maxA, this.objVarLim.minB,
+      this.objVarLim.maxB, this.objVarLim.minC, this.objVarLim.maxC, this.objVarLim.minD, this.objVarLim.maxD
+    );
   }
-  fillBodyTableMp(month: number, year: number, percentage: number, limitChange: number): void {
-    this.getDailyMonthPlan(month, year, percentage, limitChange);
+
+  exportExcelMonthlyPlan() {
+    const checkedMonths = this.dataSourceMO.data
+      .filter(mo => mo.selected)
+      .map(mo => mo.month0);
+
+    console.log(checkedMonths);
+
+    let month: number | null = null;
+    let year: number | null = null;
+
+    if (checkedMonths.length > 0) {
+      const firstMonthDate = checkedMonths[0];
+      month = firstMonthDate.getMonth() + 1;
+      year = firstMonthDate.getFullYear();
+    }
+
+    console.log("Month: " + month + " Year: " + year);
+    console.log("Limit Change: " + this.objVarLim.limitChange);
+    console.log("min A: " + this.objVarLim.minA);
+    this.exportExcelMP(month, year, this.objVarLim.limitChange, this.objVarLim.minA, this.objVarLim.maxA, this.objVarLim.minB,
+      this.objVarLim.maxB, this.objVarLim.minC, this.objVarLim.maxC, this.objVarLim.minD, this.objVarLim.maxD
+    );
   }
-
-  // navigateToDetailMo(m0: any, m1: any, m3: any, typeProduct: string) {
-  //   const formatDate = (date: any): string => {
-  //     const dateObj = date instanceof Date ? date : new Date(date);
-
-  //     if (isNaN(dateObj.getTime())) {
-  //       throw new Error('Invalid date provided');
-  //     }
-
-  //     const day = String(dateObj.getDate()).padStart(2, '0');
-  //     const month = String(dateObj.getMonth() + 1).padStart(2, '0');
-  //     const year = dateObj.getFullYear();
-
-  //     return `${day}-${month}-${year}`;
-  //   };
-
-  //   // Mengonversi ketiga tanggal
-  //   const month0 = formatDate(m0);
-  //   const month1 = formatDate(m1);
-  //   const month2 = formatDate(m3);
-  //   const type = typeProduct;
-
-  //   // Menggunakan string tanggal yang sudah dikonversi
-  //   this.router.navigate(['/transaksi/add-mo-front-rear/', month0, month1, month2, type]);
-  // }
 
   navigateToAddArDefectReject(month0: Date, month1: Date, month2: Date) {
     const formattedMonth0 = `${month0.getDate().toString().padStart(2, '0')}-${(month0.getMonth() + 1).toString().padStart(2, '0')}-${month0.getFullYear()}`;
@@ -193,7 +215,9 @@ export class AddMonthlyPlanningComponent implements OnInit {
     this.router.navigate(['/transaksi/add-mo-front-rear/', formattedMonth0, formattedMonth1, formattedMonth2]);
   }
 
-  getDailyMonthPlan(month: number, year: number, percentage: number, limitChange: number) {
+  getDailyMonthPlan(month: number, year: number, limitChange: number, minA: number, maxA: number, minB: number,
+    maxB: number, minC: number, maxC: number, minD: number, maxD: number
+  ) {
     // Menampilkan dialog loading
     Swal.fire({
       icon: 'info',
@@ -205,13 +229,20 @@ export class AddMonthlyPlanningComponent implements OnInit {
       },
     });
 
-    this.mpService.generateDetailMp(month, year, percentage, limitChange).subscribe(
-      (response: ApiResponse<any>) => {
-        Swal.close(); // Menutup dialog loading setelah sukses
-        this.showMonthlyPlanning = true;
-        this.allData = response.data;
-        this.fillAllData(this.allData);
-      },
+    this.monthNow = month;
+    this.yearNow = year;
+
+    this.mpService.generateDetailMp(
+      month, year, limitChange,
+      minA, maxA, minB,
+      maxB, minC, maxC,
+      minD, maxD
+    ).subscribe((response: ApiResponse<any>) => {
+      Swal.close(); // Menutup dialog loading setelah sukses
+      this.showMonthlyPlanning = true;
+      this.allData = response.data;
+      this.fillAllData(this.allData);
+    },
       (error) => {
         Swal.close(); // Menutup dialog loading jika terjadi error
         Swal.fire({
@@ -222,6 +253,74 @@ export class AddMonthlyPlanningComponent implements OnInit {
         });
       }
     );
+  }
+
+  exportExcelMP(
+    month: number,
+    year: number,
+    limitChange: number,
+    minA: number,
+    maxA: number,
+    minB: number,
+    maxB: number,
+    minC: number,
+    maxC: number,
+    minD: number,
+    maxD: number
+  ) {
+    const monthNames = [
+      'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+      'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+    ];
+
+    this.monthNow = month;
+    this.yearNow = year;
+
+    const monthDescription = monthNames[this.monthNow - 1]; 
+
+    const filename = `PREPARE PROD ${monthDescription.toUpperCase()} ${this.yearNow}.xlsx`;
+
+    Swal.fire({
+      icon: 'info',
+      title: 'Processing...',
+      html: 'Please wait while we Download Excel the monthly plan. This might take a while.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading(); 
+      },
+    });
+
+    this.mpService
+      .ExportExcelMP(
+        month, year, limitChange,
+        minA, maxA, minB,
+        maxB, minC, maxC,
+        minD, maxD
+      )
+      .subscribe(
+        (response) => {
+          Swal.close(); 
+
+          saveAs(response, filename);
+
+          Swal.fire({
+            icon: 'success',
+            title: 'Success!',
+            text: `Monthly plan Excel file (${filename}) has been downloaded successfully.`,
+            confirmButtonText: 'OK',
+          });
+        },
+        (error) => {
+          Swal.close(); 
+
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Failed to download monthly plan Excel file: ' + error.message,
+            confirmButtonText: 'OK',
+          });
+        }
+      );
   }
 
   viewDetail(): void {
@@ -257,20 +356,44 @@ export class AddMonthlyPlanningComponent implements OnInit {
     console.log("Data shift 2");
     console.log(filteredData);
 
-    // Proses data shift dan buka modal
-    this.fillDataShift(filteredData);
+    let pki = this.fillDataShift(filteredData);
 
-    // Tutup loading setelah selesai
-    Swal.close();
-    this.openDmpModal();
+    // Tampilkan loading terlebih dahulu
+    Swal.fire({
+      icon: 'info',
+      title: 'Processing...',
+      html: 'Please wait while saving data marketing order.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
+
+    // Cek secara berkala jika pki sudah menjadi 1
+    const interval = setInterval(() => {
+      pki = this.fillDataShift(filteredData);
+
+      if (pki !== 0) {
+        // Tutup loading setelah nilai pki berubah menjadi 1
+        Swal.close();
+        clearInterval(interval); // Hentikan interval
+
+        // Tampilkan modal
+        this.openDmpModal();
+      }
+    }, 1000); // Interval pengecekan setiap 1 detik
+
+
   }
 
   openDmpModal(): void {
     $('#dmpModal').modal('show');
   }
 
+
   fillAllData(data: any) {
     console.log(data);
+
     const monthlyPlans = data.detailMonthlyPlanCuring || [];
     const dailyPlans = data.detailDailyMonthlyPlanCuring || [];
     const shift = data.shiftMonthlyPlan || [];
@@ -308,8 +431,8 @@ export class AddMonthlyPlanningComponent implements OnInit {
       const dailyData = {
         no: index + 1,
         partNumber: matchingMonthly?.partNumber || null,
-        size: matchingProduct?.description || null, 
-        pattern: matchingProduct?.description || null, 
+        size: matchingProduct?.description || null,
+        pattern: matchingProduct?.description || null,
         total: matchingMonthly?.total || null,
         netFulfilment: matchingMonthly?.netFulfilment || null,
         grossReq: matchingMonthly?.grossReq || null,
@@ -346,6 +469,9 @@ export class AddMonthlyPlanningComponent implements OnInit {
     this.dataSourceMP.paginator = this.paginator;
   }
 
+  monthNow: number;
+  yearNow: number;
+
   fillDataHeaderDate(dailyPlans: MonthlyDailyPlan[]): void {
     const uniqueDates = new Set(); // To track already used dates
     this.dateHeadersTass = dailyPlans.map(mp => {
@@ -372,7 +498,7 @@ export class AddMonthlyPlanningComponent implements OnInit {
           isOvertime: matchingData.DESCRIPTION === 'OT_TT' || matchingData.DESCRIPTION === 'OT_TL', // Overtime day logic
           semiOff: matchingData.DESCRIPTION === 'SEMI_OFF',
           status: mp.workDay === 0 ? 'off' : (mp.workDay > 8 ? 'overtime' : 'normal'),
-          workingDay:date.getDate().toString(),
+          workingDay: date.getDate().toString(),
           totalPlan: mp.totalPlan
         };
       }
@@ -381,7 +507,7 @@ export class AddMonthlyPlanningComponent implements OnInit {
     }).filter(header => header !== null); // Filter out any null values
   }
 
-  fillDataShift(detailShiftMonthlyPlanCuring: DetailShiftMonthlyPlanCuring[]): void {
+  fillDataShift(detailShiftMonthlyPlanCuring: DetailShiftMonthlyPlanCuring[]): number {
     // Reset nilai
     this.workCenterText = [];
     this.kapaShift1 = 0;
@@ -399,7 +525,10 @@ export class AddMonthlyPlanningComponent implements OnInit {
       this.kapaShift3 += item.kapa_SHIFT_3 || 0;
       this.totalKapa += item.total_KAPA || 0;
     });
+
+    return 1;
   }
+
 
   filteredChangeMould: any[] = [];  // Data yang sudah difilter
   filterType: string = 'changeDate';  // Default filter type
@@ -441,7 +570,7 @@ export class AddMonthlyPlanningComponent implements OnInit {
     return formattedDate;
   }
 
-  fillDataWorkDays(): void {}
+  fillDataWorkDays(): void { }
 
   selectAll(event: any): void {
     const checked = event.target.checked;

@@ -42,6 +42,8 @@ export class AddMoPpcComponent implements OnInit {
   file: File | null = null;
   loadingShowData: boolean = false;
   loadingSaveData: boolean = false;
+  typeMo: string = '';
+  dateMo: string = '';
 
   //Error Message
   errorMessagesMinOrder: string[] = [];
@@ -108,7 +110,7 @@ export class AddMoPpcComponent implements OnInit {
     this.moService.getCapacity().subscribe(
       (response: ApiResponse<any>) => {
         this.capacityDb = response.data;
-        console.log("Response capacity: ", this.capacityDb)
+        console.log('Response capacity: ', this.capacityDb);
       },
       (error) => {
         Swal.fire({
@@ -153,11 +155,11 @@ export class AddMoPpcComponent implements OnInit {
     this.fileInput.nativeElement.value = '';
   }
 
-  getLastIdMo(): void{
+  getLastIdMo(): void {
     this.moService.getLastIdMo().subscribe(
       (response: ApiResponse<string>) => {
         this.lastIdMo = response.data;
-        console.log("Response lastId: ", this.lastIdMo)
+        console.log('Response lastId: ', this.lastIdMo);
       },
       (error) => {
         Swal.fire({
@@ -453,6 +455,9 @@ export class AddMoPpcComponent implements OnInit {
     let month0full = this.formHeaderMo.get('month_0').value;
     let month1full = this.formHeaderMo.get('month_1').value;
     let month2full = this.formHeaderMo.get('month_2').value;
+    this.typeMo = this.formHeaderMo.get('type').value;
+    const monthFn = new Date(this.formHeaderMo.get('month_0').value).toLocaleDateString('en-US', { month: 'short' }).toUpperCase();
+    this.dateMo = monthFn;
 
     function formatToMMYYYY(dateString) {
       const [year, month] = dateString.split('-');
@@ -1418,7 +1423,7 @@ export class AddMoPpcComponent implements OnInit {
     const monthFn = indonesiaTime.toLocaleDateString('en-US', { month: 'long' });
     const year = indonesiaTime.getFullYear();
     const timestamp = indonesiaTime.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }).replace(':', '');
-    const fileName = `FORM_MO_PPC_${monthFn}_${year}_${timestamp}.xlsx`;
+    const fileName = `FORM ADD MO PPC - ${this.typeMo} ${this.dateMo} - ${year} - ${timestamp}.xlsx`;
     return fileName;
   }
 
@@ -1445,7 +1450,7 @@ export class AddMoPpcComponent implements OnInit {
           for (let row = startRow - 1; row <= endRow; row++) {
             const partNumber = Number(worksheet[`C${row + 1}`]?.v) || null; // Kolom C
             const machineType = String(worksheet[`E${row + 1}`]?.v) || null; // Kolom I
-            const minOrder = Number(worksheet[`I${row + 1}`]?.v) || null; // Kolom E
+            const minOrder = Number(worksheet[`I${row + 1}`]?.v) || 0; // Kolom E
 
             // Mencari dan memperbarui nilai dalam detailMarketingOrder
             const detail = this.detailMarketingOrder.find((item) => item.partNumber === partNumber);

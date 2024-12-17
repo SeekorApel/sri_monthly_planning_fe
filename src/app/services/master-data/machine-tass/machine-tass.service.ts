@@ -81,4 +81,7 @@ export class MachineTassService {
   exportMachineTassExcel(): Observable<Blob> {
     return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/exportMachineTassExcel`, { responseType: 'blob' as 'json' });
   }
+  tamplateMachineTassExcel(): Observable<Blob> {
+    return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/layoutMachineTassExcel`, { responseType: 'blob' as 'json' });
+  }
 }
