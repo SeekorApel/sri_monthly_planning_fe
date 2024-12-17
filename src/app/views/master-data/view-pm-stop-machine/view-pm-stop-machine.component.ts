@@ -465,7 +465,7 @@ export class ViewPmStopMachineComponent implements OnInit {
         Swal.showLoading();
       },
     });
-    this.pmStopService.exportExcel().subscribe({
+    this.pmStopService.tamplateExcel().subscribe({
       next: (response) => {
         Swal.close();
         // Menggunakan nama file yang sudah ditentukan di backend

@@ -83,7 +83,7 @@
               <form [formGroup]="editPlantForm">
                 <div class="form-group">
                   <h6 for="plant_name">Plant Name</h6>
-                  <input [(ngModel)]="edtPlantObject.plant_NAME" type="text" class="form-control" id="plant_name" formControlName="plant_name" [ngClass]="{ 'is-invalid': editPlantForm.get('plant_name').invalid && editPlantForm.get('plant_name').touched }" />
+                  <input [(ngModel)]="edtPlantObject.plant_NAME" type="text" class="form-control" id="plant_name" maxlength="254" formControlName="plant_name" [ngClass]="{ 'is-invalid': editPlantForm.get('plant_name').invalid && editPlantForm.get('plant_name').touched }" />
                   <!-- Error message if plant_name is empty -->
                   <div *ngIf="editPlantForm.get('plant_name').invalid && editPlantForm.get('plant_name').touched" class="invalid-feedback">Plant name is required.</div>
                 </div>

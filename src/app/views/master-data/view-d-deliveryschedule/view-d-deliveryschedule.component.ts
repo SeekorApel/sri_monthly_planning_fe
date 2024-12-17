@@ -153,7 +153,7 @@ export class ViewDDeliveryScheduleComponent implements OnInit {
         Swal.showLoading();
       },
     });
-    this.ddeliveryschedule.exportDDeliveryScheduleExcel().subscribe({
+    this.ddeliveryschedule.tamplateDDeliveryScheduleExcel().subscribe({
       next: (response) => {
         Swal.close();
         // Menggunakan nama file yang sudah ditentukan di backend

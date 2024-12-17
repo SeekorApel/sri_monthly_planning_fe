@@ -194,7 +194,7 @@ export class ViewMachineExtrudingComponent implements OnInit {
         Swal.showLoading();
       },
     });
-    this.MEService.exportMachineExtrudingExcel().subscribe({
+    this.MEService.tamplateMachineExtrudingExcel().subscribe({
       next: (response) => {
         Swal.close();
         // Menggunakan nama file yang sudah ditentukan di backend
