@@ -78,12 +78,19 @@ export class ViewMachineExtrudingComponent implements OnInit {
   }
 
   getAllMachineExtruding(): void {
+    Swal.fire({
+      title: 'Loading...',
+      html: 'Please wait while fetching data Machine Extruding.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
     this.MEService.getAllMachineExtruding().subscribe(
       (response: ApiResponse<MachineExtruding[]>) => {
-        this.machineExtudings = response.data.map(machineEx => {
-          const building = this.buildings.find(
-            b => b.building_ID === machineEx.building_ID
-          );
+        Swal.close();
+        this.machineExtudings = response.data.map((machineEx) => {
+          const building = this.buildings.find((b) => b.building_ID === machineEx.building_ID);
           return {
             ...machineEx,
             building_Name: building ? building.building_NAME : 'Unknown',
@@ -95,6 +102,8 @@ export class ViewMachineExtrudingComponent implements OnInit {
         // this.onChangePage(this.machineExtudings.slice(0, this.pageSize));
       },
       (error) => {
+        Swal.close();
+        Swal.fire('Error!', 'Failed to load Machine Extruding.', 'error');
         this.errorMessage = 'Failed to load machine extruding: ' + error.message;
       }
     );
@@ -152,13 +161,25 @@ export class ViewMachineExtrudingComponent implements OnInit {
     );
   }
   downloadExcel(): void {
+    Swal.fire({
+      icon: 'info',
+      title: 'Processing...',
+      html: 'Please wait while downloading Machine Extruding data.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
     this.MEService.exportMachineExtrudingExcel().subscribe({
       next: (response) => {
+        Swal.close();
         // Menggunakan nama file yang sudah ditentukan di backend
         const filename = 'MACHIE_EXTRUDING_DATA.xlsx'; // Nama file bisa dinamis jika diperlukan
         saveAs(response, filename); // Mengunduh file
       },
       error: (err) => {
+        Swal.close();
+        Swal.fire('Error', 'Error Downloading Data.', 'error');
         console.error('Download error:', err);
       },
     });
@@ -250,12 +271,22 @@ export class ViewMachineExtrudingComponent implements OnInit {
   }
 
   uploadFileExcel() {
+    Swal.fire({
+      icon: 'info',
+      title: 'Processing...',
+      html: 'Please wait while Saving Data Machine Extruding.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
     if (this.file) {
       const formData = new FormData();
       formData.append('file', this.file);
       // unggah file Excel
       this.MEService.uploadFileExcel(formData).subscribe(
         (response) => {
+          Swal.close();
           Swal.fire({
             icon: 'success',
             title: 'Success!',
@@ -267,6 +298,7 @@ export class ViewMachineExtrudingComponent implements OnInit {
           });
         },
         (error) => {
+          Swal.close();
           console.error('Error uploading file', error);
           Swal.fire({
             icon: 'error',
@@ -277,6 +309,7 @@ export class ViewMachineExtrudingComponent implements OnInit {
         }
       );
     } else {
+      Swal.close();
       Swal.fire({
         icon: 'warning',
         title: 'Warning!',

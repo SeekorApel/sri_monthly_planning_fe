@@ -123,7 +123,7 @@ export class ViewTassSizeComponent implements OnInit {
         Swal.close();
         
         this.tass_sizes = this.tass_sizes.map((tassSize) => {
-          const matchedMachineTassType = this.machineTassType.find(
+          const matchedMachineTassType = this.machineTassType?.find(
             (b) => b.machinetasstype_ID === (tassSize.machinetasstype_ID)
           );
           const matchedSize = this.size.find(

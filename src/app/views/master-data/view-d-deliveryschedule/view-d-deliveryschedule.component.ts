@@ -22,7 +22,6 @@ import { MatPaginator } from '@angular/material/paginator';
   templateUrl: './view-d-deliveryschedule.component.html',
   styleUrls: ['./view-d-deliveryschedule.component.scss'],
 })
-
 export class ViewDDeliveryScheduleComponent implements OnInit {
   //Variable Declaration
   ddeliveryScedules: DDeliverySchedule[] = [];
@@ -68,17 +67,25 @@ export class ViewDDeliveryScheduleComponent implements OnInit {
   ngOnInit(): void {
     this.getAllDDeliverySchedule();
   }
-  
 
   getAllDDeliverySchedule(): void {
+    Swal.fire({
+      title: 'Loading...',
+      html: 'Please wait while fetching data Detail Delivery Schedule.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
     this.ddeliveryschedule.getAllDDeliverySchedule().subscribe(
       (response: ApiResponse<DDeliverySchedule[]>) => {
-        this.ddeliveryScedules = response.data.map(element => {
+        Swal.close();
+        this.ddeliveryScedules = response.data.map((element) => {
           // Create a new object with the formatted date
           return {
             ...element, // Keep all other properties
             formattedDate: new Date(element.date_DS).toLocaleDateString('id-ID', { day: '2-digit', month: '2-digit', year: 'numeric' }).replace(/\//g, '-'),
-            formatTotalDelivery: element.total_DELIVERY.toLocaleString('id-ID')
+            formatTotalDelivery: element.total_DELIVERY.toLocaleString('id-ID'),
           };
         });
         this.dataSource = new MatTableDataSource(this.ddeliveryScedules);
@@ -86,11 +93,13 @@ export class ViewDDeliveryScheduleComponent implements OnInit {
         this.dataSource.paginator = this.paginator;
       },
       (error) => {
+        Swal.close();
+        Swal.fire('Error!', 'Failed to load Detail Delivery Schedule.', 'error');
         this.errorMessage = 'Failed to load Detail Delivery Schedule: ' + error.message;
       }
     );
   }
-  
+
   private loadDeliverySchedule(): void {
     this.DeliveryScheduleService.getAllDeliverySchedule().subscribe(
       (response: ApiResponse<DeliverySchedule[]>) => {
@@ -111,13 +120,25 @@ export class ViewDDeliveryScheduleComponent implements OnInit {
     );
   }
   downloadExcel(): void {
+    Swal.fire({
+      icon: 'info',
+      title: 'Processing...',
+      html: 'Please wait while downloading Detail Delivery Schedule data.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
     this.ddeliveryschedule.exportDDeliveryScheduleExcel().subscribe({
       next: (response) => {
+        Swal.close();
         // Menggunakan nama file yang sudah ditentukan di backend
         const filename = 'DETAIL_DELIVERY_SCHEDULE.xlsx'; // Nama file bisa dinamis jika diperlukan
         saveAs(response, filename); // Mengunduh file
       },
       error: (err) => {
+        Swal.close();
+        Swal.fire('Error!', 'Error Downloading Data.', 'error');
         console.error('Download error:', err);
       },
     });
@@ -188,9 +209,8 @@ export class ViewDDeliveryScheduleComponent implements OnInit {
     this.getDDeliveryScheduleByID(idDetail);
     $('#editModal').modal('show');
   }
-  formatedate(date: Date):string{
-    const formattedDate = new Date(date)
-    .toLocaleDateString('en-CA');
+  formatedate(date: Date): string {
+    const formattedDate = new Date(date).toLocaleDateString('en-CA');
     return formattedDate;
   }
 
@@ -200,14 +220,13 @@ export class ViewDDeliveryScheduleComponent implements OnInit {
         this.editDDeliveryScheduleTypeObject = response.data;
         const formattedDate = this.formatedate(this.editDDeliveryScheduleTypeObject.date_DS);
         this.editDDeliveryScheduleTypeForm.patchValue({
-            date: formattedDate
-        })
+          date: formattedDate,
+        });
       },
       (error) => {
         this.errorMessage = 'Failed to load Detail Delivery Schedule: ' + error.message;
       }
     );
-    
   }
   validateNumberInput(event: KeyboardEvent): void {
     const charCode = event.key.charCodeAt(0);
@@ -279,12 +298,22 @@ export class ViewDDeliveryScheduleComponent implements OnInit {
   }
 
   uploadFileExcel() {
+    Swal.fire({
+      icon: 'info',
+      title: 'Processing...',
+      html: 'Please wait while Saving Data Detail Delivery Schedule.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
     if (this.file) {
       const formData = new FormData();
       formData.append('file', this.file);
       // unggah file Excel
       this.ddeliveryschedule.uploadFileExcel(formData).subscribe(
         (response) => {
+          Swal.close();
           Swal.fire({
             icon: 'success',
             title: 'Success!',
@@ -296,6 +325,7 @@ export class ViewDDeliveryScheduleComponent implements OnInit {
           });
         },
         (error) => {
+          Swal.close();
           console.error('Error uploading file', error);
           Swal.fire({
             icon: 'error',
@@ -306,6 +336,7 @@ export class ViewDDeliveryScheduleComponent implements OnInit {
         }
       );
     } else {
+      Swal.close();
       Swal.fire({
         icon: 'warning',
         title: 'Warning!',
