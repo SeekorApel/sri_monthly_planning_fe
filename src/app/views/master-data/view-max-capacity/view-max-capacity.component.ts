@@ -24,7 +24,6 @@ import { MachineCuringType } from 'src/app/models/machine-curing-type';
   styleUrls: ['./view-max-capacity.component.scss'],
 })
 export class ViewMaxCapacityComponent implements OnInit {
-
   //Variable Declaration
   maxCapacitys: Max_Capacity[] = [];
   searchText: string = '';
@@ -39,28 +38,28 @@ export class ViewMaxCapacityComponent implements OnInit {
   pageSize: number = 5;
   totalPages: number = 5;
   sortBuffer: Array<any>;
-  displayedColumns: string[] = ['no', 'max_CAP_ID', 'part_NUMBER','machine_curing_TYPE_ID', 'cycle_TIME', 'capacity_SHIFT_1', 'capacity_SHIFT_2', 'capacity_SHIFT_3', 'status', 'action'];
+  displayedColumns: string[] = ['no', 'max_CAP_ID', 'part_NUMBER', 'machine_curing_TYPE_ID', 'cycle_TIME', 'capacity_SHIFT_1', 'capacity_SHIFT_2', 'capacity_SHIFT_3', 'status', 'action'];
   dataSource: MatTableDataSource<Max_Capacity>;
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   public uomOptions: Array<Array<Select2OptionData>>;
-  public options: Options = { width: '100%'};
+  public options: Options = { width: '100%' };
   uom: any;
-  product: Product[] =[];
-  machineCuringType: MachineCuringType[] =[];
+  product: Product[] = [];
+  machineCuringType: MachineCuringType[] = [];
 
-  constructor(private maxCapacityService: MaxCapacityService, private fb: FormBuilder, private productService: ProductService, private machineCuringTypeService: MachineCuringTypeService) { 
+  constructor(private maxCapacityService: MaxCapacityService, private fb: FormBuilder, private productService: ProductService, private machineCuringTypeService: MachineCuringTypeService) {
     this.editMaxCapacityForm = this.fb.group({
       product_ID: ['', Validators.required],
       machinecuringtype_ID: ['', Validators.required],
       cycle_TIME: ['', Validators.required],
       capacity_SHIFT_1: ['', Validators.required],
       capacity_SHIFT_2: ['', Validators.required],
-      capacity_SHIFT_3: ['', Validators.required]
+      capacity_SHIFT_3: ['', Validators.required],
     });
-    
+
     this.loadProduct();
     this.loadMachineCuringType();
   }
@@ -74,31 +73,31 @@ export class ViewMaxCapacityComponent implements OnInit {
         }
         this.uomOptions[0] = this.product.map((element) => ({
           id: element.part_NUMBER.toString(), // Ensure the ID is a string
-          text: element.part_NUMBER.toString() // Set the text to the plant name
+          text: element.part_NUMBER.toString(), // Set the text to the plant name
         }));
       },
       (error) => {
         this.errorMessage = 'Failed to load product: ' + error.message;
       }
-    );
+    );
   }
-      private loadMachineCuringType(): void {
-        this.machineCuringTypeService.getAllMCT().subscribe(
-          (response: ApiResponse<MachineCuringType[]>) => {
-            this.machineCuringType = response.data;
-            if (!this.uomOptions) {
-              this.uomOptions = [];
-            }
-            this.uomOptions[1] = this.machineCuringType.map((element) => ({
-              id: element.machinecuringtype_ID.toString(), // Ensure the ID is a string
-              text: element.machinecuringtype_ID.toString() // Set the text to the plant name
-            }));
-          },
-          (error) => {
-            this.errorMessage = 'Failed to load machine Curing type: ' + error.message;
-          }
-        );
+  private loadMachineCuringType(): void {
+    this.machineCuringTypeService.getAllMCT().subscribe(
+      (response: ApiResponse<MachineCuringType[]>) => {
+        this.machineCuringType = response.data;
+        if (!this.uomOptions) {
+          this.uomOptions = [];
+        }
+        this.uomOptions[1] = this.machineCuringType?.map((element) => ({
+          id: element.machinecuringtype_ID.toString(), // Ensure the ID is a string
+          text: element.machinecuringtype_ID.toString(), // Set the text to the plant name
+        }));
+      },
+      (error) => {
+        this.errorMessage = 'Failed to load machine Curing type: ' + error.message;
       }
+    );
+  }
 
   ngOnInit(): void {
     this.getAllMaxCapacity();
@@ -112,22 +111,26 @@ export class ViewMaxCapacityComponent implements OnInit {
   }
 
   getAllMaxCapacity(): void {
+    Swal.fire({
+      title: 'Loading...',
+      html: 'Please wait while fetching data Max Capacity.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
     this.maxCapacityService.getAllMaxCapacity().subscribe(
       (response: ApiResponse<Max_Capacity[]>) => {
         this.maxCapacitys = response.data;
-        
+        Swal.close();
         this.maxCapacitys = this.maxCapacitys.map((maxCapacity) => {
-          const matchedProduct = this.product.find(
-            (b) => b.part_NUMBER === (maxCapacity.product_ID)
-          );
-          const matchedCuringType = this.machineCuringType.find(
-            (c) => c.machinecuringtype_ID === (maxCapacity.machinecuringtype_ID)
-          );
-  
+          const matchedProduct = this.product.find((b) => b.part_NUMBER === maxCapacity.product_ID);
+          const matchedCuringType = this.machineCuringType.find((c) => c.machinecuringtype_ID === maxCapacity.machinecuringtype_ID);
+
           return {
             ...maxCapacity, // Salin semua properti quadrant
             part_NUMBER: matchedProduct ? matchedProduct.part_NUMBER : null, // Tambahkan building_NAME jika ada kecocokan
-            machine_curing_TYPE_ID: matchedCuringType ? matchedCuringType.machinecuringtype_ID : null // Tambahkan building_NAME jika ada kecocokan
+            machine_curing_TYPE_ID: matchedCuringType ? matchedCuringType.machinecuringtype_ID : null, // Tambahkan building_NAME jika ada kecocokan
           };
         });
 
@@ -173,7 +176,6 @@ export class ViewMaxCapacityComponent implements OnInit {
   }
 
   updateMaxCapacity(): void {
-    
     this.maxCapacityService.updateMaxCapacity(this.edtMaxCapacityObject).subscribe(
       (response) => {
         // SweetAlert setelah update berhasil
@@ -275,7 +277,6 @@ export class ViewMaxCapacityComponent implements OnInit {
     link.click();
   }
 
-
   onFileChange(event: Event) {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
@@ -300,15 +301,24 @@ export class ViewMaxCapacityComponent implements OnInit {
   }
 
   downloadExcel(): void {
+    Swal.fire({
+      title: 'Loading...',
+      html: 'Please wait while fetching data Max Capacity.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
     this.maxCapacityService.exportMaxCapacitiesExcel().subscribe({
       next: (response) => {
+        Swal.close();
         // Menggunakan nama file yang sudah ditentukan di backend
         const filename = 'MAX_CAPACITY_DATA.xlsx'; // Nama file bisa dinamis jika diperlukan
         saveAs(response, filename); // Mengunduh file
       },
       error: (err) => {
         console.error('Download error:', err);
-      }
+      },
     });
   }
 
@@ -319,12 +329,21 @@ export class ViewMaxCapacityComponent implements OnInit {
   }
 
   uploadFileExcel() {
+    Swal.fire({
+      title: 'Loading...',
+      html: 'Please wait while fetching data Max capacity.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
     if (this.file) {
       const formData = new FormData();
       formData.append('file', this.file);
       // unggah file Excel
       this.maxCapacityService.uploadFileExcel(formData).subscribe(
         (response) => {
+          Swal.close();
           Swal.fire({
             icon: 'success',
             title: 'Success!',
@@ -353,5 +372,5 @@ export class ViewMaxCapacityComponent implements OnInit {
         confirmButtonText: 'OK',
       });
     }
-  };
+  }
 }

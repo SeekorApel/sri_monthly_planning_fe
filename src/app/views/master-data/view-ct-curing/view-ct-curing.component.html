@@ -287,7 +287,9 @@
                   <div class="mx-3">
                     <div class="form-group">
                       <h6 for="wip">WIP</h6>
-                      <input [(ngModel)]="edtCTCuringObject.wip" type="text" maxlength="9" class="form-control" id="wip" formControlName="wip" [ngClass]="{ 'is-invalid': editCTCuringForm.get('wip').invalid && editCTCuringForm.get('wip').touched }" />
+                      <div class="col-md-13">
+                        <ng-select2 id="wip" name="wip" formControlName="wip" [(ngModel)]="edtCTCuringObject.wip" [data]="uomOptionData[0]" [options]="options"> </ng-select2>
+                      </div>
                       <div *ngIf="editCTCuringForm.get('wip').invalid && editCTCuringForm.get('wip').touched" class="invalid-feedback">WIP is required.</div>
                     </div>
                     <div class="form-group">
@@ -312,7 +314,9 @@
                     </div>
                     <div class="form-group">
                       <h6 for="operationshorttext">Operation Short Text</h6>
-                      <input [(ngModel)]="edtCTCuringObject.operation_SHORT_TEXT" maxlength="199" type="text" class="form-control" id="operationshorttext" formControlName="operationshorttext" [ngClass]="{ 'is-invalid': editCTCuringForm.get('operationshorttext').invalid && editCTCuringForm.get('operationshorttext').touched }" />
+                      <div class="col-md-13">
+                        <ng-select2 id="operationshorttext" name="operationshorttext" formControlName="operationshorttext" [(ngModel)]="edtCTCuringObject.operation_SHORT_TEXT" [data]="uomOptionData[1]" [options]="options"> </ng-select2>
+                      </div>
                       <div *ngIf="editCTCuringForm.get('operationshorttext').invalid && editCTCuringForm.get('operationshorttext').touched" class="invalid-feedback">Operation Short Text is required.</div>
                     </div>
                     <div class="form-group">

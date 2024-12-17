@@ -845,6 +845,12 @@
               <td mat-cell *matCellDef="let mo" class="text-right">{{ formatSeparatorView(mo.moMonth2) }}</td>
             </ng-container>
 
+            <!-- Total AR Column -->
+            <ng-container matColumnDef="totalAr">
+              <th *matHeaderCellDef rowspan="2" mat-sort-header style="min-width: 100px">Total AR</th>
+              <td mat-cell *matCellDef="let mo" class="text-right">{{ formatSeparatorView(mo.totalAr) }}</td>
+            </ng-container>
+
             <!-- AR Column -->
             <ng-container matColumnDef="ar">
               <th *matHeaderCellDef rowspan="2" mat-sort-header style="min-width: 100px">% AR</th>

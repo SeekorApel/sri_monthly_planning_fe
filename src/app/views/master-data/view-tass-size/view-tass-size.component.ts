@@ -109,12 +109,21 @@ export class ViewTassSizeComponent implements OnInit {
   }
 
   getAllTassSize(): void {
+    Swal.fire({
+      title: 'Loading...',
+      html: 'Please wait while fetching data Tass Size.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
     this.tass_sizeService.getAllTassSize().subscribe(
       (response: ApiResponse<Tass_Size[]>) => {
         this.tass_sizes = response.data;
+        Swal.close();
         
         this.tass_sizes = this.tass_sizes.map((tassSize) => {
-          const matchedMachineTassType = this.machineTassType.find(
+          const matchedMachineTassType = this.machineTassType?.find(
             (b) => b.machinetasstype_ID === (tassSize.machinetasstype_ID)
           );
           const matchedSize = this.size.find(
@@ -300,12 +309,21 @@ export class ViewTassSizeComponent implements OnInit {
 
 
   uploadFileExcel() {
+    Swal.fire({
+          title: 'Loading...',
+          html: 'Please wait while fetching data Tass Size.',
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          },
+        });
     if (this.file) {
       const formData = new FormData();
       formData.append('file', this.file);
       // unggah file Excel
       this.tass_sizeService.uploadFileExcel(formData).subscribe(
         (response) => {
+          Swal.close();
           Swal.fire({
             icon: 'success',
             title: 'Success!',
@@ -336,8 +354,17 @@ export class ViewTassSizeComponent implements OnInit {
     }
   }
   downloadExcel(): void {
+    Swal.fire({
+      title: 'Loading...',
+      html: 'Please wait while fetching data Tass Size.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
     this.tass_sizeService.exportTassSizesExcel().subscribe({
       next: (response) => {
+        Swal.close();
         // Menggunakan nama file yang sudah ditentukan di backend
         const filename = 'TASS_SIZE_DATA.xlsx'; // Nama file bisa dinamis jika diperlukan
         saveAs(response, filename); // Mengunduh file
