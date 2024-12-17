@@ -235,30 +235,42 @@ export class ViewProductTypeComponent implements OnInit {
   }
 
   uploadFileExcel() {
-    Swal.fire({
-          title: 'Loading...',
-          html: 'Please wait while fetching data Product Type.',
-          allowOutsideClick: false,
-          didOpen: () => {
-            Swal.showLoading();
-          },
-        });
     if (this.file) {
+      Swal.fire({
+            title: 'Loading...',
+            html: 'Please wait while fetching data Product Type.',
+            allowOutsideClick: false,
+            didOpen: () => {
+              Swal.showLoading();
+            },
+          });
       const formData = new FormData();
       formData.append('file', this.file);
       // unggah file Excel
       this.productTypeService.uploadFileExcel(formData).subscribe(
         (response) => {
           Swal.close();
-          Swal.fire({
-            icon: 'success',
-            title: 'Success!',
-            text: 'Excel file uploaded successfully.',
-            confirmButtonText: 'OK',
-          }).then(() => {
-            $('#editModal').modal('hide');
-            window.location.reload();
-          });
+          if(response.status === 200) {
+            Swal.fire({
+              icon: 'success',
+              title: 'Success!',
+              text: 'Excel file uploaded successfully.',
+              confirmButtonText: 'OK',
+            }).then(() => {
+              $('#editModal').modal('hide');
+              window.location.reload();
+            });
+          }else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error!',
+              text: response.message,
+              confirmButtonText: 'OK',
+            }).then(() => {
+              $('#editModal').modal('hide');
+              window.location.reload();
+            });
+          }
         },
         (error) => {
           console.error('Error uploading file', error);
@@ -271,6 +283,7 @@ export class ViewProductTypeComponent implements OnInit {
         }
       );
     } else {
+      Swal.close();
       Swal.fire({
         icon: 'warning',
         title: 'Warning!',

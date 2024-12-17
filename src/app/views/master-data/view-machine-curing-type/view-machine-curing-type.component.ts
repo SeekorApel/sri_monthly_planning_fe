@@ -223,31 +223,43 @@ export class ViewMachineCuringTypeComponent implements OnInit {
   }
 
   uploadFileExcel() {
-    Swal.fire({
-      icon: 'info',
-      title: 'Processing...',
-      html: 'Please wait while Saving Machine Curing Type data.',
-      allowOutsideClick: false,
-      didOpen: () => {
-        Swal.showLoading();
-      },
-    });
     if (this.file) {
+      Swal.fire({
+        icon: 'info',
+        title: 'Processing...',
+        html: 'Please wait while Saving Machine Curing Type data.',
+        allowOutsideClick: false,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
       const formData = new FormData();
       formData.append('file', this.file);
       // unggah file Excel
       this.machineCuringTypeService.uploadFileExcel(formData).subscribe(
         (response) => {
           Swal.close();
-          Swal.fire({
-            icon: 'success',
-            title: 'Success!',
-            text: 'Excel file uploaded successfully.',
-            confirmButtonText: 'OK',
-          }).then(() => {
-            $('#editModal').modal('hide');
-            window.location.reload();
-          });
+          if(response.status === 200) {
+            Swal.fire({
+              icon: 'success',
+              title: 'Success!',
+              text: 'Excel file uploaded successfully.',
+              confirmButtonText: 'OK',
+            }).then(() => {
+              $('#editModal').modal('hide');
+              window.location.reload();
+            });
+          }else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error!',
+              text: response.message,
+              confirmButtonText: 'OK',
+            }).then(() => {
+              $('#editModal').modal('hide');
+              window.location.reload();
+            });
+          }
         },
         (error) => {
           Swal.close();

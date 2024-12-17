@@ -401,38 +401,38 @@ export const routes: Routes = [
           title: 'Transaksi / Add MO AR, Defect, Reject',
         },
       },
-      {
-        path: 'base',
-        loadChildren: () => import('./views/base/base.module').then((m) => m.BaseModule),
-      },
-      {
-        path: 'buttons',
-        loadChildren: () => import('./views/buttons/buttons.module').then((m) => m.ButtonsModule),
-      },
-      {
-        path: 'charts',
-        loadChildren: () => import('./views/chartjs/chartjs.module').then((m) => m.ChartJSModule),
-      },
+      // {
+      //   path: 'base',
+      //   loadChildren: () => import('./views/base/base.module').then((m) => m.BaseModule),
+      // },
+      // {
+      //   path: 'buttons',
+      //   loadChildren: () => import('./views/buttons/buttons.module').then((m) => m.ButtonsModule),
+      // },
+      // {
+      //   path: 'charts',
+      //   loadChildren: () => import('./views/chartjs/chartjs.module').then((m) => m.ChartJSModule),
+      // },
       {
         path: 'dashboard',
         loadChildren: () => import('./views/dashboard/dashboard.module').then((m) => m.DashboardModule),
       },
-      {
-        path: 'icons',
-        loadChildren: () => import('./views/icons/icons.module').then((m) => m.IconsModule),
-      },
-      {
-        path: 'notifications',
-        loadChildren: () => import('./views/notifications/notifications.module').then((m) => m.NotificationsModule),
-      },
-      {
-        path: 'theme',
-        loadChildren: () => import('./views/theme/theme.module').then((m) => m.ThemeModule),
-      },
-      {
-        path: 'widgets',
-        loadChildren: () => import('./views/widgets/widgets.module').then((m) => m.WidgetsModule),
-      },
+      // {
+      //   path: 'icons',
+      //   loadChildren: () => import('./views/icons/icons.module').then((m) => m.IconsModule),
+      // },
+      // {
+      //   path: 'notifications',
+      //   loadChildren: () => import('./views/notifications/notifications.module').then((m) => m.NotificationsModule),
+      // },
+      // {
+      //   path: 'theme',
+      //   loadChildren: () => import('./views/theme/theme.module').then((m) => m.ThemeModule),
+      // },
+      // {
+      //   path: 'widgets',
+      //   loadChildren: () => import('./views/widgets/widgets.module').then((m) => m.WidgetsModule),
+      // },
       {
         path: 'master-data',
         loadChildren: () => import('./views/master-data/master-data.module').then((m) => m.MasterDataModule),
