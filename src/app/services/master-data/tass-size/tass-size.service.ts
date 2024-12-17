@@ -104,4 +104,7 @@ export class TassSizeService {
   exportTassSizesExcel(): Observable<Blob> {
     return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/exportTassSizeexcel`, { responseType: 'blob' as 'json' });
   }
+  templateTassSizesExcel(): Observable<Blob> {
+    return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/layoutTassSizesExcel`, { responseType: 'blob' as 'json' });
+  }
 }

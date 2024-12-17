@@ -82,5 +82,8 @@ export class MachineAllowenceService {
   exportMachineAllowenceExcel(): Observable<Blob> {
     return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/exportMachineAllowenceExcel`, { responseType: 'blob' as 'json' });
   }
-
+  
+  templateMachineAllowenceExcel(): Observable<Blob> {
+    return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/layoutMachineAllowencesExcel`, { responseType: 'blob' as 'json' });
+  }
 }

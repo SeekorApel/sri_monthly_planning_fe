@@ -339,4 +339,25 @@ export class ViewBuildingComponent implements OnInit {
       }
     });
   }
+  templateExcel(): void {
+    Swal.fire({
+          title: 'Loading...',
+          html: 'Please wait while fetching data Building.',
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          },
+        });
+    this.buildingService.templateExcel().subscribe({
+      next: (response) => {
+        Swal.close();
+        // Menggunakan nama file yang sudah ditentukan di backend
+        const filename = 'LAYOUT_BUILDING.xlsx'; // Nama file bisa dinamis jika diperlukan
+        saveAs(response, filename); // Mengunduh file
+      },
+      error: (err) => {
+        console.error('Download error:', err);
+      }
+    });
+  }
 }

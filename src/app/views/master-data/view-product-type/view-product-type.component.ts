@@ -302,6 +302,28 @@ export class ViewProductTypeComponent implements OnInit {
     });
   }
 
+  templateExcel(): void {
+    Swal.fire({
+      title: 'Loading...',
+      html: 'Please wait while fetching data Product Type.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
+    this.productTypeService.templateProductTypeExcel().subscribe({
+      next: (response) => {
+        Swal.close();
+        // Menggunakan nama file yang sudah ditentukan di backend
+        const filename = 'LAYOUT_PRODUCT_TYPE.xlsx'; // Nama file bisa dinamis jika diperlukan
+        saveAs(response, filename); // Mengunduh file
+      },
+      error: (err) => {
+        console.error('Download error:', err);
+      }
+    });
+  }
+
   saveAsExcelFile(buffer: any, fileName: string): void {
     const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
     const data: Blob = new Blob([buffer], { type: EXCEL_TYPE });

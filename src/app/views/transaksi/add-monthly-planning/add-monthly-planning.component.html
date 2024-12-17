@@ -31,18 +31,6 @@
             </div>
           </div>
           <div class="form-group row">
-            <label class="col-md-3 col-form-label" for="text-input">Workday</label>
-            <div class="col-md-9">
-              <input type="number" id="workday" name="text-input" class="form-control" placeholder="1,2,3..." />
-            </div>
-          </div>
-          <div class="form-group row">
-            <label class="col-md-3 col-form-label" for="text-input">Overtime</label>
-            <div class="col-md-9">
-              <input type="number" id="overtime" name="text-input" class="form-control" placeholder="1,2,3..." />
-            </div>
-          </div>
-          <div class="form-group row">
             <label class="col-md-3 col-form-label">Month of</label>
             <div class="col-md-9">
               <input class="form-control" id="month-of" type="month" placeholder="month" />
@@ -233,10 +221,10 @@
                   <tr align="center">
                     <th rowspan="2" class="align-middle" sticky>No</th>
                     <th rowspan="2" style="min-width: 150px" class="align-middle" sticky>Partnumber</th>
-                    <th rowspan="2" style="min-width: 250px" class="align-middle">Size</th>
-                    <th rowspan="2" style="min-width: 250px" class="align-middle">Pattern</th>
+                    <th rowspan="2" style="min-width: 250px" class="align-middle" sticky>Size</th>
+                    <th rowspan="2" style="min-width: 250px" class="align-middle" sticky>Pattern</th>
 
-                    <th *ngFor="let hDateTass of dateHeadersTass" style="min-width: 70px"
+                    <th *ngFor="let hDateTass of dateHeadersTass" style="min-width: 70px" class="sticky-column"
                       [ngClass]="{ 'off-header': hDateTass.isOff,'semi-off': hDateTass.semiOff, 'overtime-header': hDateTass.isOvertime }"
                       (click)="handleCellClick(partNumber, hDateTass)">
                       {{ hDateTass.dateDisplay }}
@@ -252,21 +240,21 @@
 
                   <!-- Baris kedua -->
                   <tr align="center">
-                    <th style="min-width: 70px" *ngFor="let cHeaderWo of dateHeadersTass">
+                    <th style="min-width: 70px" *ngFor="let cHeaderWo of dateHeadersTass" class="sticky-column">
                       {{ cHeaderWo.workingDay }}
                     </th>
-                    <th class="align-middle">AHM/OEM</th>
-                    <th class="align-middle">AHM/REM</th>
-                    <th class="align-middle">AHM/FDR</th>
-                    <th class="align-middle">OFS</th>
+                    <th class="align-middle sticky-column">AHM/OEM</th>
+                    <th class="align-middle sticky-column">AHM/REM</th>
+                    <th class="align-middle sticky-column">AHM/FDR</th>
+                    <th class="align-middle sticky-column">OFS</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr *ngFor="let mp of monthlyDailyPlan; let i = index" align="center">
                     <td  sticky>{{ i + 1 }}</td>
                     <td  sticky>{{ mp.partNumber }}</td>
-                    <td>{{ mp.size }}</td>
-                    <td>{{ mp.pattern }}</td>
+                    <td  sticky>{{ mp.size }}</td>
+                    <td  sticky>{{ mp.pattern }}</td>
 
                     <!-- Dynamically bind the dates -->
                     <td *ngFor="let hDateTass of dateHeadersTass" class="hoverable"

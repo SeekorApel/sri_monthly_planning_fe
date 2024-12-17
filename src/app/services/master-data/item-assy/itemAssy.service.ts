@@ -82,5 +82,8 @@ export class ItemAssyService {
   exportItemAssyExcel(): Observable<Blob> {
     return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/exportItemAssyExcel`, { responseType: 'blob' as 'json' });
   }
+  templateItemAssyExcel(): Observable<Blob> {
+    return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/layoutItemAssyExcel`, { responseType: 'blob' as 'json' });
+  }
 
 }
