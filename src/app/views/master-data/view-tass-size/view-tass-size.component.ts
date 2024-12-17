@@ -124,10 +124,10 @@ export class ViewTassSizeComponent implements OnInit {
         
         this.tass_sizes = this.tass_sizes.map((tassSize) => {
           const matchedMachineTassType = this.machineTassType?.find(
-            (b) => b.machinetasstype_ID === (tassSize.machinetasstype_ID)
+            (b) => b.machinetasstype_ID == (tassSize.machinetasstype_ID)
           );
           const matchedSize = this.size.find(
-            (c) => c.size_ID === (tassSize.size_ID)
+            (c) => c.size_ID == (tassSize.size_ID)
           );
   
           return {
@@ -199,7 +199,7 @@ export class ViewTassSizeComponent implements OnInit {
   }
 
   getDescSize(size_ID: string): string {
-    const size = this.size.find(b => b.size_ID === size_ID);
+    const size = this.size.find(b => b.size_ID == size_ID);
     return size ? size.description : 'Unknown';
   }
 
