@@ -214,8 +214,17 @@ export class ViewPmStopMachineComponent implements OnInit {
   }
 
   getAllPmStopMachine(): void {
+    Swal.fire({
+      title: 'Loading...',
+      html: 'Please wait while fetching data PM Stop Machine.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
     this.pmStopService.getAllPMStopMachine().subscribe(
       (response: ApiResponse<PMStopMachine[]>) => {
+        Swal.close();
         this.pmStopMachines = response.data.map((Element) => {
           return {
             ...Element,
@@ -228,6 +237,8 @@ export class ViewPmStopMachineComponent implements OnInit {
         this.dataSource.paginator = this.paginator;
       },
       (error) => {
+        Swal.close();
+        Swal.fire('Error!', 'Failed to load PM Stop Machine.', 'error');
         this.errorMessage = 'Failed to load PM Stop Machine: ' + error.message;
       }
     );
@@ -372,13 +383,6 @@ export class ViewPmStopMachineComponent implements OnInit {
     $('#uploadModal').modal('show');
   }
 
-  downloadTemplate() {
-    const link = document.createElement('a');
-    link.href = 'assets/Template Excel/Layout_PM_Stop_Machine.xlsx';
-    link.download = 'Layout_Master_PM_STOP_MACHINE.xlsx';
-    link.click();
-  }
-
   onFileChange(event: Event) {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
@@ -404,23 +408,45 @@ export class ViewPmStopMachineComponent implements OnInit {
 
   uploadFileExcel() {
     if (this.file) {
+      Swal.fire({
+        icon: 'info',
+        title: 'Processing...',
+        html: 'Please wait while saving PM Stop Machine Data.',
+        allowOutsideClick: false,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
       const formData = new FormData();
       formData.append('file', this.file);
       // unggah file Excel
       this.pmStopService.uploadFileExcel(formData).subscribe(
         (response) => {
-          Swal.fire({
-            icon: 'success',
-            title: 'Success!',
-            text: 'Excel file uploaded successfully.',
-            confirmButtonText: 'OK',
-          }).then(() => {
-            $('#editModal').modal('hide');
-            window.location.reload();
-            this.getAllPmStopMachine();
-          });
+          Swal.close();
+          if(response.status === 200) {
+            Swal.fire({
+              icon: 'success',
+              title: 'Success!',
+              text: 'Excel file uploaded successfully.',
+              confirmButtonText: 'OK',
+            }).then(() => {
+              $('#editModal').modal('hide');
+              window.location.reload();
+            });
+          }else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error!',
+              text: response.message,
+              confirmButtonText: 'OK',
+            }).then(() => {
+              $('#editModal').modal('hide');
+              window.location.reload();
+            });
+          }
         },
         (error) => {
+          Swal.close();
           console.error('Error uploading file', error);
           Swal.fire({
             icon: 'error',
@@ -431,6 +457,7 @@ export class ViewPmStopMachineComponent implements OnInit {
         }
       );
     } else {
+      Swal.close();
       Swal.fire({
         icon: 'warning',
         title: 'Warning!',
@@ -440,13 +467,49 @@ export class ViewPmStopMachineComponent implements OnInit {
     }
   }
   downloadExcel(): void {
-    this.pmStopService.exportExcel().subscribe({
+    Swal.fire({
+      icon: 'info',
+      title: 'Processing...',
+      html: 'Please wait while downloading PM Stop Machine Data.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
+    this.pmStopService.tamplateExcel().subscribe({
       next: (response) => {
+        Swal.close();
         // Menggunakan nama file yang sudah ditentukan di backend
         const filename = 'PMSTOPMACHINE_DATA.xlsx'; // Nama file bisa dinamis jika diperlukan
         saveAs(response, filename); // Mengunduh file
       },
       error: (err) => {
+        Swal.close();
+        Swal.fire('Error!', 'Error Downloading Data.', 'error');
+        console.error('Download error:', err);
+      },
+    });
+  }
+  tamplateExcel(): void {
+    Swal.fire({
+      icon: 'info',
+      title: 'Processing...',
+      html: 'Please wait while downloading PM Stop Machine layout.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
+    this.pmStopService.tamplateExcel().subscribe({
+      next: (response) => {
+        Swal.close();
+        // Menggunakan nama file yang sudah ditentukan di backend
+        const filename = 'Layout_PMSTOPMACHINE.xlsx'; // Nama file bisa dinamis jika diperlukan
+        saveAs(response, filename); // Mengunduh file
+      },
+      error: (err) => {
+        Swal.close();
+        Swal.fire('Error!', 'Error Downloading layout.', 'error');
         console.error('Download error:', err);
       },
     });

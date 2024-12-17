@@ -82,4 +82,7 @@ export class SettingService {
   exportSettingsExcel(): Observable<Blob> {
     return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/exportSettingsExcel`, { responseType: 'blob' as 'json' });
   }
+  templateSettingsExcel(): Observable<Blob> {
+    return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/layoutSettingsExcel`, { responseType: 'blob' as 'json' });
+  }
 }

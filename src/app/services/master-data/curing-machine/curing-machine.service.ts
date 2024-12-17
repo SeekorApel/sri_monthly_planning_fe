@@ -101,4 +101,7 @@ getMachineCuringById(idMachineCuring: string): Observable<ApiResponse<Curing_Mac
   exportMachineCuringsExcel(): Observable<Blob> {
     return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/exportMachineCuringExcel`, { responseType: 'blob' as 'json' });
   }
+  templateMachineCuringsExcel(): Observable<Blob> {
+    return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/layoutMachineCuringExcel`, { responseType: 'blob' as 'json' });
+  }
 }

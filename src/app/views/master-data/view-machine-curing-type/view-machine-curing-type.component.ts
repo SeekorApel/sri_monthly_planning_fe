@@ -88,8 +88,17 @@ export class ViewMachineCuringTypeComponent implements OnInit {
   }
 
   getAllMachineCuringType(): void {
+    Swal.fire({
+      title: 'Loading...',
+      html: 'Please wait while fetching data Machine Curing Type.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
     this.machineCuringTypeService.getAllMCT().subscribe(
       (response: ApiResponse<MachineCuringType[]>) => {
+        Swal.close();
         this.machineCuringTypes = response.data.map((curingT) => {
           const setting = this.settings.find((setting) => setting.setting_ID === curingT.setting_ID);
           return {
@@ -100,9 +109,9 @@ export class ViewMachineCuringTypeComponent implements OnInit {
         this.dataSource = new MatTableDataSource(this.machineCuringTypes);
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
-        // this.onChangePage(this.machineCuringTypes.slice(0, this.pageSize));
       },
       (error) => {
+        Swal.fire('Error!', 'Failed to load Machine Curing Type.', 'error');
         this.errorMessage = 'Failed to load Machine Curing Type: ' + error.message;
       }
     );
@@ -190,13 +199,6 @@ export class ViewMachineCuringTypeComponent implements OnInit {
     $('#uploadModal').modal('show');
   }
 
-  downloadTemplate() {
-    const link = document.createElement('a');
-    link.href = 'assets/Template Excel/Layout_Machine_Curing_Type.xlsx';
-    link.download = 'Layout_Master_Machine_Curing_Type.xlsx';
-    link.click();
-  }
-
   onFileChange(event: Event) {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
@@ -222,22 +224,45 @@ export class ViewMachineCuringTypeComponent implements OnInit {
 
   uploadFileExcel() {
     if (this.file) {
+      Swal.fire({
+        icon: 'info',
+        title: 'Processing...',
+        html: 'Please wait while Saving Machine Curing Type data.',
+        allowOutsideClick: false,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
       const formData = new FormData();
       formData.append('file', this.file);
       // unggah file Excel
       this.machineCuringTypeService.uploadFileExcel(formData).subscribe(
         (response) => {
-          Swal.fire({
-            icon: 'success',
-            title: 'Success!',
-            text: 'Excel file uploaded successfully.',
-            confirmButtonText: 'OK',
-          }).then(() => {
-            $('#editModal').modal('hide');
-            window.location.reload();
-          });
+          Swal.close();
+          if(response.status === 200) {
+            Swal.fire({
+              icon: 'success',
+              title: 'Success!',
+              text: 'Excel file uploaded successfully.',
+              confirmButtonText: 'OK',
+            }).then(() => {
+              $('#editModal').modal('hide');
+              window.location.reload();
+            });
+          }else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error!',
+              text: response.message,
+              confirmButtonText: 'OK',
+            }).then(() => {
+              $('#editModal').modal('hide');
+              window.location.reload();
+            });
+          }
         },
         (error) => {
+          Swal.close();
           console.error('Error uploading file', error);
           Swal.fire({
             icon: 'error',
@@ -248,6 +273,7 @@ export class ViewMachineCuringTypeComponent implements OnInit {
         }
       );
     } else {
+      Swal.close();
       Swal.fire({
         icon: 'warning',
         title: 'Warning!',
@@ -257,13 +283,49 @@ export class ViewMachineCuringTypeComponent implements OnInit {
     }
   }
   downloadExcel(): void {
+    Swal.fire({
+      icon: 'info',
+      title: 'Processing...',
+      html: 'Please wait while downloading Machine Curing Type data.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
     this.machineCuringTypeService.exportMctExcel().subscribe({
       next: (response) => {
+        Swal.close();
         // Menggunakan nama file yang sudah ditentukan di backend
         const filename = 'MACHIECURINGTYPE_DATA.xlsx'; // Nama file bisa dinamis jika diperlukan
         saveAs(response, filename); // Mengunduh file
       },
       error: (err) => {
+        Swal.close();
+        Swal.fire('Error!', 'Error Downloading Data.', 'error');
+        console.error('Download error:', err);
+      },
+    });
+  }
+  tamplateExcel(): void {
+    Swal.fire({
+      icon: 'info',
+      title: 'Processing...',
+      html: 'Please wait while downloading Machine Curing Type layout.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
+    this.machineCuringTypeService.tamplateMctExcel().subscribe({
+      next: (response) => {
+        Swal.close();
+        // Menggunakan nama file yang sudah ditentukan di backend
+        const filename = 'Layout_MACHIECURINGTYPEt.xlsx'; // Nama file bisa dinamis jika diperlukan
+        saveAs(response, filename); // Mengunduh file
+      },
+      error: (err) => {
+        Swal.close();
+        Swal.fire('Error!', 'Error Downloading layout.', 'error');
         console.error('Download error:', err);
       },
     });

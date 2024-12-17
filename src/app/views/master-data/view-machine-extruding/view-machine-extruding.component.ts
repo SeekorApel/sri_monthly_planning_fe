@@ -78,12 +78,19 @@ export class ViewMachineExtrudingComponent implements OnInit {
   }
 
   getAllMachineExtruding(): void {
+    Swal.fire({
+      title: 'Loading...',
+      html: 'Please wait while fetching data Machine Extruding.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
     this.MEService.getAllMachineExtruding().subscribe(
       (response: ApiResponse<MachineExtruding[]>) => {
-        this.machineExtudings = response.data.map(machineEx => {
-          const building = this.buildings.find(
-            b => b.building_ID === machineEx.building_ID
-          );
+        Swal.close();
+        this.machineExtudings = response.data.map((machineEx) => {
+          const building = this.buildings.find((b) => b.building_ID === machineEx.building_ID);
           return {
             ...machineEx,
             building_Name: building ? building.building_NAME : 'Unknown',
@@ -95,6 +102,8 @@ export class ViewMachineExtrudingComponent implements OnInit {
         // this.onChangePage(this.machineExtudings.slice(0, this.pageSize));
       },
       (error) => {
+        Swal.close();
+        Swal.fire('Error!', 'Failed to load Machine Extruding.', 'error');
         this.errorMessage = 'Failed to load machine extruding: ' + error.message;
       }
     );
@@ -152,13 +161,49 @@ export class ViewMachineExtrudingComponent implements OnInit {
     );
   }
   downloadExcel(): void {
+    Swal.fire({
+      icon: 'info',
+      title: 'Processing...',
+      html: 'Please wait while downloading Machine Extruding data.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
     this.MEService.exportMachineExtrudingExcel().subscribe({
       next: (response) => {
+        Swal.close();
         // Menggunakan nama file yang sudah ditentukan di backend
-        const filename = 'MACHIE_EXTRUDING_DATA.xlsx'; // Nama file bisa dinamis jika diperlukan
+        const filename = 'MACHINE_EXTRUDING_DATA.xlsx'; // Nama file bisa dinamis jika diperlukan
         saveAs(response, filename); // Mengunduh file
       },
       error: (err) => {
+        Swal.close();
+        Swal.fire('Error', 'Error Downloading Data.', 'error');
+        console.error('Download error:', err);
+      },
+    });
+  }
+  tamplateExcel(): void {
+    Swal.fire({
+      icon: 'info',
+      title: 'Processing...',
+      html: 'Please wait while downloading Machine Extruding layout.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
+    this.MEService.tamplateMachineExtrudingExcel().subscribe({
+      next: (response) => {
+        Swal.close();
+        // Menggunakan nama file yang sudah ditentukan di backend
+        const filename = 'Layout_MACHINE_EXTRUDING.xlsx'; // Nama file bisa dinamis jika diperlukan
+        saveAs(response, filename); // Mengunduh file
+      },
+      error: (err) => {
+        Swal.close();
+        Swal.fire('Error', 'Error Downloading Layout.', 'error');
         console.error('Download error:', err);
       },
     });
@@ -219,13 +264,6 @@ export class ViewMachineExtrudingComponent implements OnInit {
     $('#uploadModal').modal('show');
   }
 
-  downloadTemplate() {
-    const link = document.createElement('a');
-    link.href = 'assets/Template Excel/Layout_Machine_Extruding.xlsx';
-    link.download = 'Layout_Master_Machine_Extruding.xlsx';
-    link.click();
-  }
-
   onFileChange(event: Event) {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
@@ -251,22 +289,45 @@ export class ViewMachineExtrudingComponent implements OnInit {
 
   uploadFileExcel() {
     if (this.file) {
+      Swal.fire({
+        icon: 'info',
+        title: 'Processing...',
+        html: 'Please wait while Saving Data Machine Extruding.',
+        allowOutsideClick: false,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
       const formData = new FormData();
       formData.append('file', this.file);
       // unggah file Excel
       this.MEService.uploadFileExcel(formData).subscribe(
         (response) => {
-          Swal.fire({
-            icon: 'success',
-            title: 'Success!',
-            text: 'Excel file uploaded successfully.',
-            confirmButtonText: 'OK',
-          }).then(() => {
-            $('#editModal').modal('hide');
-            window.location.reload();
-          });
+          Swal.close();
+          if(response.status === 200) {
+            Swal.fire({
+              icon: 'success',
+              title: 'Success!',
+              text: 'Excel file uploaded successfully.',
+              confirmButtonText: 'OK',
+            }).then(() => {
+              $('#editModal').modal('hide');
+              window.location.reload();
+            });
+          }else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error!',
+              text: response.message,
+              confirmButtonText: 'OK',
+            }).then(() => {
+              $('#editModal').modal('hide');
+              window.location.reload();
+            });
+          }
         },
         (error) => {
+          Swal.close();
           console.error('Error uploading file', error);
           Swal.fire({
             icon: 'error',
@@ -277,6 +338,7 @@ export class ViewMachineExtrudingComponent implements OnInit {
         }
       );
     } else {
+      Swal.close();
       Swal.fire({
         icon: 'warning',
         title: 'Warning!',

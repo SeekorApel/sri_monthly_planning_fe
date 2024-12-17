@@ -60,10 +60,9 @@ export class ViewMachineTassComponent implements OnInit {
     this.loadBuilding();
     this.loadMachineTassType();
   }
-  
 
   getBuildingName(buildingId: number): string {
-    const building = this.buildings.find(b => b.building_ID === buildingId);
+    const building = this.buildings.find((b) => b.building_ID === buildingId);
     return building ? building.building_NAME : 'Unknown';
   }
   validateNumberInput(event: KeyboardEvent): void {
@@ -118,13 +117,20 @@ export class ViewMachineTassComponent implements OnInit {
     );
   }
   getAllMachineTass(): void {
+    Swal.fire({
+      title: 'Loading...',
+      html: 'Please wait while fetching data Machine Tass.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
     this.machineTassService.getAllMachineTass().subscribe(
       (response: ApiResponse<MachineTass[]>) => {
-        // Add a new column (e.g., buildingName) to each machineTass
-        this.machineTasss = response.data.map(machine => {
-          const building = this.buildings.find(
-            b => b.building_ID === machine.building_ID
-          );
+
+          Swal.close();
+          this.machineTasss = response.data.map((machine) => {
+          const building = this.buildings.find((b) => b.building_ID === machine.building_ID);
           return {
             ...machine,
             building_Name: building ? building.building_NAME : 'Unknown',
@@ -137,6 +143,8 @@ export class ViewMachineTassComponent implements OnInit {
         this.dataSource.paginator = this.paginator;
       },
       (error) => {
+        Swal.close();
+        Swal.fire('Error!', 'Failed to load machine Tass.', 'error');
         this.errorMessage = 'Failed to load machine Tass: ' + error.message;
       }
     );
@@ -226,20 +234,50 @@ export class ViewMachineTassComponent implements OnInit {
     $('#uploadModal').modal('show');
   }
 
-  downloadTemplate() {
-    const link = document.createElement('a');
-    link.href = 'assets/Template Excel/Layout_Machine_Tass.xlsx';
-    link.download = 'Layout_Master_Machine_Tass.xlsx';
-    link.click();
-  }
   downloadExcel(): void {
+    Swal.fire({
+      icon: 'info',
+      title: 'Processing...',
+      html: 'Please wait while downloading Machine Tass data.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
     this.machineTassService.exportMachineTassExcel().subscribe({
       next: (response) => {
+        Swal.close();
         // Menggunakan nama file yang sudah ditentukan di backend
         const filename = 'MACHINETASS_DATA.xlsx'; // Nama file bisa dinamis jika diperlukan
         saveAs(response, filename); // Mengunduh file
       },
       error: (err) => {
+        Swal.close();
+        Swal.fire('Error!', 'Failed to download the data.', 'error');
+        console.error('Download error:', err);
+      },
+    });
+  }
+  tamplateExcel(): void {
+    Swal.fire({
+      icon: 'info',
+      title: 'Processing...',
+      html: 'Please wait while downloading Machine Tass layout.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
+    this.machineTassService.tamplateMachineTassExcel().subscribe({
+      next: (response) => {
+        Swal.close();
+        // Menggunakan nama file yang sudah ditentukan di backend
+        const filename = 'Layout_MACHINETASS.xlsx'; // Nama file bisa dinamis jika diperlukan
+        saveAs(response, filename); // Mengunduh file
+      },
+      error: (err) => {
+        Swal.close();
+        Swal.fire('Error!', 'Failed to download the layout.', 'error');
         console.error('Download error:', err);
       },
     });
@@ -269,6 +307,15 @@ export class ViewMachineTassComponent implements OnInit {
   }
 
   uploadFileExcel() {
+    Swal.fire({
+      icon: 'info',
+      title: 'Processing...',
+      html: 'Please wait while saving data Machine Tass.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
     if (this.file) {
       const formData = new FormData();
       formData.append('file', this.file);
@@ -276,18 +323,32 @@ export class ViewMachineTassComponent implements OnInit {
       // unggah file Excel
       this.machineTassService.uploadFileExcel(formData).subscribe(
         (response) => {
-          Swal.fire({
-            icon: 'success',
-            title: 'Success!',
-            text: 'Excel file uploaded successfully.',
-            confirmButtonText: 'OK',
-          }).then(() => {
-            $('#editModal').modal('hide');
-            window.location.reload();
-          });
+          Swal.close();
+          if(response.status === 200) {
+            Swal.fire({
+              icon: 'success',
+              title: 'Success!',
+              text: 'Excel file uploaded successfully.',
+              confirmButtonText: 'OK',
+            }).then(() => {
+              $('#editModal').modal('hide');
+              window.location.reload();
+            });
+          }else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error!',
+              text: response.message,
+              confirmButtonText: 'OK',
+            }).then(() => {
+              $('#editModal').modal('hide');
+              window.location.reload();
+            });
+          }
         },
         (error) => {
           console.error('Error uploading file', error);
+          Swal.close();
           Swal.fire({
             icon: 'error',
             title: 'Failed!',
@@ -297,6 +358,7 @@ export class ViewMachineTassComponent implements OnInit {
         }
       );
     } else {
+      Swal.close();
       Swal.fire({
         icon: 'warning',
         title: 'Warning!',

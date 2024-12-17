@@ -14,7 +14,7 @@
 
         <!-- Right side: Download Template and Export Excel buttons -->
         <div>
-          <button type="button" class="btn btn-primary ml-2" (click)="downloadTemplate()"><i class="fa fa-download fa-lg"></i> Download Template</button>
+          <button type="button" class="btn btn-primary ml-2" (click)="tamplateExcel()"><i class="fa fa-download fa-lg"></i> Download Template</button>
           <button type="button" class="btn btn-primary ml-2" (click)="downloadExcel()"><i class="fa fa-download fa-lg"></i> Export Excel</button>
           <button type="button" class="btn btn-success ml-2" data-toggle="modal" data-target="#uploadModal"><i class="fa fa-file-excel-o fa-lg"></i> Upload Excel</button>
         </div>
@@ -38,7 +38,7 @@
           <!-- Building ID Column -->
           <ng-container matColumnDef="building_ID">
             <th *matHeaderCellDef style="min-width: 130px" mat-sort-header>Building</th>
-            <td align="left" *matCellDef="let element">{{element.building_Name }}</td>
+            <td align="left" *matCellDef="let element">{{ element.building_Name }}</td>
           </ng-container>
 
           <!-- Floor Column -->
@@ -56,7 +56,7 @@
           <!-- Type Column -->
           <ng-container matColumnDef="machinetasstype_ID">
             <th *matHeaderCellDef style="min-width: 100px" mat-sort-header>Type</th>
-            <td align="left" *matCellDef="let element">{{ element.tassType }}</td>
+            <td align="left" *matCellDef="let element">{{ element.machine_TASS_TYPE_ID }}</td>
           </ng-container>
 
           <!-- Work Center Text Column -->
@@ -113,7 +113,7 @@
                 <div class="form-group">
                   <h6 for="tassType">Type</h6>
                   <div class="col-md-13">
-                    <ng-select2 id="tassType" name="tassType" formControlName="tassType" [(ngModel)]="editMachineTassObject.machinetasstype_ID" [data]="uomOptionData[1]" [options]="options"> </ng-select2>
+                    <ng-select2 id="tassType" name="tassType" formControlName="tassType" [(ngModel)]="editMachineTassObject.machine_TASS_TYPE_ID" [data]="uomOptionData[1]" [options]="options"> </ng-select2>
                   </div>
                 </div>
                 <div class="form-group">

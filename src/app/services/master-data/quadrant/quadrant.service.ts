@@ -82,5 +82,8 @@ export class QuadrantService {
   exportQuadrantsExcel(): Observable<Blob> {
     return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/exportQuadrantsExcel`, { responseType: 'blob' as 'json' });
   }
+  templateQuadrantsExcel(): Observable<Blob> {
+    return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/layoutQuadrantsExcel`, { responseType: 'blob' as 'json' });
+  }
 
 }

@@ -73,8 +73,18 @@ export class ViewPlantComponent implements OnInit {
   }
 
   getAllPlant(): void {
+    Swal.fire({
+      title: 'Loading...',
+      html: 'Please wait while fetching data plant.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
+
     this.PlantService.getAllPlant().subscribe(
       (response: ApiResponse<Plant[]>) => {
+        Swal.close();
         this.Plants = response.data;
         this.dataSource = new MatTableDataSource(this.Plants);
         this.dataSource.sort = this.sort;
@@ -82,6 +92,8 @@ export class ViewPlantComponent implements OnInit {
         // this.onChangePage(this.Plants.slice(0, this.pageSize));
       },
       (error) => {
+        Swal.close();
+        Swal.fire('Error!', 'Failed to load plants: ', 'error');
         this.errorMessage = 'Failed to load plants: ' + error.message;
       }
     );
@@ -169,13 +181,6 @@ export class ViewPlantComponent implements OnInit {
     $('#uploadModal').modal('show');
   }
 
-  downloadTemplate() {
-    const link = document.createElement('a');
-    link.href = 'assets/Template Excel/Layout_Plant.xlsx';
-    link.download = 'Layout_Plant.xlsx';
-    link.click();
-  }
-
   onFileChange(event: Event) {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
@@ -201,32 +206,56 @@ export class ViewPlantComponent implements OnInit {
 
   uploadFileExcel() {
     if (this.file) {
+      Swal.fire({
+        icon: 'info',
+        title: 'Processing...',
+        html: 'Please wait while saving data Plant.',
+        allowOutsideClick: false,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
       const formData = new FormData();
       formData.append('file', this.file);
       // unggah file Excel
       this.PlantService.uploadFileExcel(formData).subscribe(
         (response) => {
-          Swal.fire({
-            icon: 'success',
-            title: 'Success!',
-            text: 'Excel file uploaded successfully.',
-            confirmButtonText: 'OK',
-          }).then(() => {
-            $('#editModal').modal('hide');
-            window.location.reload();
-          });
+          Swal.close();
+          if(response.status === 200) {
+            Swal.fire({
+              icon: 'success',
+              title: 'Success!',
+              text: 'Excel file uploaded successfully.',
+              confirmButtonText: 'OK',
+            }).then(() => {
+              $('#editModal').modal('hide');
+              window.location.reload();
+            });
+          }else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error!',
+              text: response.message,
+              confirmButtonText: 'OK',
+            }).then(() => {
+              $('#editModal').modal('hide');
+              window.location.reload();
+            });
+          }
         },
         (error) => {
+          Swal.close();
           console.error('Error uploading file', error);
           Swal.fire({
             icon: 'error',
             title: 'Failed!',
-            text: 'An error occurred while uploading the file.',
+            text: error.message,
             confirmButtonText: 'OK',
           });
         }
       );
     } else {
+      Swal.close();
       Swal.fire({
         icon: 'warning',
         title: 'Warning!',
@@ -236,13 +265,49 @@ export class ViewPlantComponent implements OnInit {
     }
   }
   downloadExcel(): void {
+    Swal.fire({
+      icon: 'info',
+      title: 'Processing...',
+      html: 'Please wait while downloading Plant data.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
     this.PlantService.exportExcel().subscribe({
       next: (response) => {
+        Swal.close();
         // Menggunakan nama file yang sudah ditentukan di backend
         const filename = 'Plant_DATA.xlsx'; // Nama file bisa dinamis jika diperlukan
         saveAs(response, filename); // Mengunduh file
       },
       error: (err) => {
+        Swal.close();
+        Swal.fire('Error!', 'Error Downloading data.', 'error');
+        console.error('Download error:', err);
+      },
+    });
+  }
+  downloadTamplate(): void {
+    Swal.fire({
+      icon: 'info',
+      title: 'Processing...',
+      html: 'Please wait while downloading Plant Layout.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
+    this.PlantService.tamplateExcel().subscribe({
+      next: (response) => {
+        Swal.close();
+        // Menggunakan nama file yang sudah ditentukan di backend
+        const filename = 'Layout_Plant.xlsx'; // Nama file bisa dinamis jika diperlukan
+        saveAs(response, filename); // Mengunduh file
+      },
+      error: (err) => {
+        Swal.close();
+        Swal.fire('Error!', 'Error Downloading Layout.', 'error');
         console.error('Download error:', err);
       },
     });

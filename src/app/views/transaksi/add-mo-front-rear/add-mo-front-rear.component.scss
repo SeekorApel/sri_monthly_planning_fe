@@ -15,7 +15,13 @@
 .locked-background {
   background-color: red;
 }
+.table-responsive {
+  max-height: 1200px;
+}
 
+.table {
+  border-collapse: separate;
+}
 
 ::ng-deep .mat-sort-header-container {
   justify-content: center;

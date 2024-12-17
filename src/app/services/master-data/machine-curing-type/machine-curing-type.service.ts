@@ -33,6 +33,9 @@ export class MachineCuringTypeService {
   exportMctExcel(): Observable<Blob> {
     return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/exportMachineCuringTypeexcel`, { responseType: 'blob' as 'json' });
   }
+  tamplateMctExcel(): Observable<Blob> {
+    return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/layoutMachineCuringTypeexcel`, { responseType: 'blob' as 'json' });
+  }
 
   getMctById(idMct: number): Observable<ApiResponse<MachineCuringType>> {
     return this.http.get<ApiResponse<MachineCuringType>>(environment.apiUrlWebAdmin + '/getMachineCuringTypeById/' + idMct, { headers: this.getHeaders() });

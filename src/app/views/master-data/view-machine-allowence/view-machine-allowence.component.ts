@@ -116,9 +116,18 @@ export class ViewMachineAllowenceComponent implements OnInit {
   }
 
   getAllMachineAllowence(): void {
+    Swal.fire({
+      title: 'Loading...',
+      html: 'Please wait while fetching data Machine Allowance.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
     this.machineAllowenceService.getAllMachineAllowence().subscribe(
       (response: ApiResponse<machineAllowence[]>) => {
         this.machineAllowences = response.data;
+        Swal.close();
         this.dataSource = new MatTableDataSource(this.machineAllowences);
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
@@ -290,20 +299,41 @@ export class ViewMachineAllowenceComponent implements OnInit {
   }
   uploadFileExcel() {
     if (this.file) {
+      Swal.fire({
+            title: 'Loading...',
+            html: 'Please wait while fetching data Machine Allowance.',
+            allowOutsideClick: false,
+            didOpen: () => {
+              Swal.showLoading();
+            },
+          });
       const formData = new FormData();
       formData.append('file', this.file);
       // unggah file Excel
       this.machineAllowenceService.uploadFileExcel(formData).subscribe(
         (response) => {
-          Swal.fire({
-            icon: 'success',
-            title: 'Success!',
-            text: 'Excel file uploaded successfully.',
-            confirmButtonText: 'OK',
-          }).then(() => {
-            $('#editModal').modal('hide');
-            window.location.reload();
-          });
+          Swal.close();
+          if(response.status === 200) {
+            Swal.fire({
+              icon: 'success',
+              title: 'Success!',
+              text: 'Excel file uploaded successfully.',
+              confirmButtonText: 'OK',
+            }).then(() => {
+              $('#editModal').modal('hide');
+              window.location.reload();
+            });
+          }else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error!',
+              text: response.message,
+              confirmButtonText: 'OK',
+            }).then(() => {
+              $('#editModal').modal('hide');
+              window.location.reload();
+            });
+          }
         },
         (error) => {
           console.error('Error uploading file', error);
@@ -316,6 +346,7 @@ export class ViewMachineAllowenceComponent implements OnInit {
         }
       );
     } else {
+      Swal.close();
       Swal.fire({
         icon: 'warning',
         title: 'Warning!',
@@ -326,10 +357,40 @@ export class ViewMachineAllowenceComponent implements OnInit {
   }
 
   downloadExcel(): void {
+    Swal.fire({
+      title: 'Loading...',
+      html: 'Please wait while fetching data Machine Allowance.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
     this.machineAllowenceService.exportMachineAllowenceExcel().subscribe({
       next: (response) => {
+        Swal.close();
         // Menggunakan nama file yang sudah ditentukan di backend
         const filename = 'MACHINE_ALLOWENCE_DATA.xlsx'; // Nama file bisa dinamis jika diperlukan
+        saveAs(response, filename); // Mengunduh file
+      },
+      error: (err) => {
+        console.error('Download error:', err);
+      }
+    });
+  }
+  templateExcel(): void {
+    Swal.fire({
+      title: 'Loading...',
+      html: 'Please wait while fetching data Machine Allowance.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
+    this.machineAllowenceService.templateMachineAllowenceExcel().subscribe({
+      next: (response) => {
+        Swal.close();
+        // Menggunakan nama file yang sudah ditentukan di backend
+        const filename = 'LAYOUT_MACHINE_ALLOWENCE.xlsx'; // Nama file bisa dinamis jika diperlukan
         saveAs(response, filename); // Mengunduh file
       },
       error: (err) => {

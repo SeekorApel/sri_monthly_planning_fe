@@ -14,7 +14,7 @@
 
         <!-- Right side: Download Template and Export Excel buttons -->
         <div>
-          <button type="button" class="btn btn-primary ml-2" (click)="downloadTemplate()"><i class="fa fa-download fa-lg"></i> Download Template</button>
+          <button type="button" class="btn btn-primary ml-2" (click)="downloadTamplate()"><i class="fa fa-download fa-lg"></i> Download Template</button>
           <button type="button" class="btn btn-primary ml-2" (click)="downloadExcel()"><i class="fa fa-download fa-lg"></i> Export Excel</button>
           <button type="button" class="btn btn-success ml-2" data-toggle="modal" data-target="#uploadModal"><i class="fa fa-file-excel-o fa-lg"></i> Upload Excel</button>
         </div>
@@ -83,7 +83,7 @@
               <form [formGroup]="editPlantForm">
                 <div class="form-group">
                   <h6 for="plant_name">Plant Name</h6>
-                  <input [(ngModel)]="edtPlantObject.plant_NAME" type="text" class="form-control" id="plant_name" formControlName="plant_name" [ngClass]="{ 'is-invalid': editPlantForm.get('plant_name').invalid && editPlantForm.get('plant_name').touched }" />
+                  <input [(ngModel)]="edtPlantObject.plant_NAME" type="text" class="form-control" id="plant_name" maxlength="254" formControlName="plant_name" [ngClass]="{ 'is-invalid': editPlantForm.get('plant_name').invalid && editPlantForm.get('plant_name').touched }" />
                   <!-- Error message if plant_name is empty -->
                   <div *ngIf="editPlantForm.get('plant_name').invalid && editPlantForm.get('plant_name').touched" class="invalid-feedback">Plant name is required.</div>
                 </div>

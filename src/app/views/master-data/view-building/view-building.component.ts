@@ -87,10 +87,19 @@ export class ViewBuildingComponent implements OnInit {
   }
 
   getAllBuilding(): void {
+    Swal.fire({
+      title: 'Loading...',
+      html: 'Please wait while fetching data Building.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
     this.buildingService.getAllBuilding().subscribe(
       (response: ApiResponse<Building[]>) => {
         if (response && response.data) {
           this.buildings = response.data;
+          Swal.close();
         
           this.buildings = this.buildings.map((plant) => {
             const matchedPlant = this.plant.find(
@@ -265,20 +274,41 @@ export class ViewBuildingComponent implements OnInit {
 
   uploadFileExcel() {
     if (this.file) {
+      Swal.fire({
+            title: 'Loading...',
+            html: 'Please wait while fetching data Building.',
+            allowOutsideClick: false,
+            didOpen: () => {
+              Swal.showLoading();
+            },
+          });
       const formData = new FormData();
       formData.append('file', this.file);
       // unggah file Excel
       this.buildingService.uploadFileExcel(formData).subscribe(
         (response) => {
-          Swal.fire({
-            icon: 'success',
-            title: 'Success!',
-            text: 'Excel file uploaded successfully.',
-            confirmButtonText: 'OK',
-          }).then(() => {
-            $('#editModal').modal('hide');
-            window.location.reload();
-          });
+          Swal.close();
+          if(response.status === 200) {
+            Swal.fire({
+              icon: 'success',
+              title: 'Success!',
+              text: 'Excel file uploaded successfully.',
+              confirmButtonText: 'OK',
+            }).then(() => {
+              $('#editModal').modal('hide');
+              window.location.reload();
+            });
+          }else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error!',
+              text: response.message,
+              confirmButtonText: 'OK',
+            }).then(() => {
+              $('#editModal').modal('hide');
+              window.location.reload();
+            });
+          }
         },
         (error) => {
           console.error('Error uploading file', error);
@@ -291,6 +321,7 @@ export class ViewBuildingComponent implements OnInit {
         }
       );
     } else {
+      Swal.close();
       Swal.fire({
         icon: 'warning',
         title: 'Warning!',
@@ -301,10 +332,40 @@ export class ViewBuildingComponent implements OnInit {
   }
 
   downloadExcel(): void {
+    Swal.fire({
+          title: 'Loading...',
+          html: 'Please wait while fetching data Building.',
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          },
+        });
     this.buildingService.exportExcel().subscribe({
       next: (response) => {
+        Swal.close();
         // Menggunakan nama file yang sudah ditentukan di backend
         const filename = 'BUILDING_DATA.xlsx'; // Nama file bisa dinamis jika diperlukan
+        saveAs(response, filename); // Mengunduh file
+      },
+      error: (err) => {
+        console.error('Download error:', err);
+      }
+    });
+  }
+  templateExcel(): void {
+    Swal.fire({
+          title: 'Loading...',
+          html: 'Please wait while fetching data Building.',
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          },
+        });
+    this.buildingService.templateExcel().subscribe({
+      next: (response) => {
+        Swal.close();
+        // Menggunakan nama file yang sudah ditentukan di backend
+        const filename = 'LAYOUT_BUILDING.xlsx'; // Nama file bisa dinamis jika diperlukan
         saveAs(response, filename); // Mengunduh file
       },
       error: (err) => {

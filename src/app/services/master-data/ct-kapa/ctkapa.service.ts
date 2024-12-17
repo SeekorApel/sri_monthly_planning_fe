@@ -27,6 +27,9 @@ export class CtKapaService {
   exportCtKapaExcel(): Observable<Blob> {
     return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/exportCtKapaExcel`, { responseType: 'blob' as 'json' });
   }
+  tamplateCtKapaExcel(): Observable<Blob> {
+    return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/layoutCtKapaExcel`, { responseType: 'blob' as 'json' });
+  }
   activateCtKapa(ctkapa: CtKapa): Observable<ApiResponse<CtKapa>> {
     return this.http.post<ApiResponse<CtKapa>>(environment.apiUrlWebAdmin + '/restoreCtKapa', ctkapa, { headers: this.getHeaders() }).pipe(
       map((response) => {

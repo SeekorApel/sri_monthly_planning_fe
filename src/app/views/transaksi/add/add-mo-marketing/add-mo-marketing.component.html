@@ -261,7 +261,7 @@
             <!-- Mould Plan Column -->
             <ng-container matColumnDef="mouldMonthlyPlan">
               <th *matHeaderCellDef rowspan="2" style="min-width: 50px" mat-sort-header>Mould Plan</th>
-              <td class="text-right" *matCellDef="let mo">{{ mo.mouldMonthlyPlan }}</td>
+              <td class="text-right" *matCellDef="let mo">{{ mo.mouldMonthlyPlan ?? 0 }}</td>
             </ng-container>
 
             <!-- Qty PerRak Column -->

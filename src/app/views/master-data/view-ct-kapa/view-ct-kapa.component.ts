@@ -145,13 +145,48 @@ export class ViewCtKapaComponent implements OnInit {
     saveAs(data, `${fileName}_export_${new Date().getTime()}.xlsx`);
   }
   downloadExcel(): void {
+    Swal.fire({
+      icon: 'info',
+      title: 'Processing...',
+      html: 'Please wait while downloading CT Kapa data.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
     this.ctkapaService.exportCtKapaExcel().subscribe({
       next: (response) => {
+        Swal.close();
         // Menggunakan nama file yang sudah ditentukan di backend
         const filename = 'CTKAPA_DATA.xlsx'; // Nama file bisa dinamis jika diperlukan
         saveAs(response, filename); // Mengunduh file
       },
       error: (err) => {
+        Swal.close();
+        Swal.fire('Error!', 'Error Downloading Data.', 'error');
+        console.error('Download error:', err);
+      },
+    });
+  }
+  tamplateExcel(): void {
+    Swal.fire({
+      icon: 'info',
+      title: 'Processing...',
+      html: 'Please wait while downloading CT Kapa Layout.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
+    this.ctkapaService.tamplateCtKapaExcel().subscribe({
+      next: (response) => {
+        Swal.close();
+        const filename = 'Layout_CT_KAPA.xlsx'; // Nama file bisa dinamis jika diperlukan
+        saveAs(response, filename); // Mengunduh file
+      },
+      error: (err) => {
+        Swal.close();
+        Swal.fire('Error!', 'Error Downloading Layout.', 'error');
         console.error('Download error:', err);
       },
     });
@@ -164,15 +199,25 @@ export class ViewCtKapaComponent implements OnInit {
   }
 
   getAllCtKapa(): void {
+    Swal.fire({
+      title: 'Loading...',
+      html: 'Please wait while fetching data CT Kapa.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
     this.ctkapaService.getAllCtKapa().subscribe(
       (response: ApiResponse<CtKapa[]>) => {
+        Swal.close();
         this.ctkapas = response.data;
         this.dataSource = new MatTableDataSource(this.ctkapas);
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
-        // this.onChangePage(this.ctkapas.slice(0, this.pageSize));
       },
       (error) => {
+        Swal.close();
+        Swal.fire('Error!', 'Failed to load Ct Kapa.', 'error');
         this.errorMessage = 'Failed to load Ct Kapa: ' + error.message;
       }
     );
@@ -265,13 +310,6 @@ export class ViewCtKapaComponent implements OnInit {
     $('#uploadModal').modal('show');
   }
 
-  downloadTemplate() {
-    const link = document.createElement('a');
-    link.href = 'assets/Template Excel/Layout_CT_Kapa.xlsx';
-    link.download = 'Layout_Master_CT_KAPA.xlsx';
-    link.click();
-  }
-
   onFileChange(event: Event) {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
@@ -297,22 +335,45 @@ export class ViewCtKapaComponent implements OnInit {
 
   uploadFileExcel() {
     if (this.file) {
+      Swal.fire({
+        icon: 'info',
+        title: 'Processing...',
+        html: 'Please wait while saving data CT Kapa.',
+        allowOutsideClick: false,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
       const formData = new FormData();
       formData.append('file', this.file);
       // unggah file Excel
       this.ctkapaService.uploadFileExcel(formData).subscribe(
         (response) => {
-          Swal.fire({
-            icon: 'success',
-            title: 'Success!',
-            text: 'Excel file uploaded successfully.',
-            confirmButtonText: 'OK',
-          }).then(() => {
-            $('#editModal').modal('hide');
-            window.location.reload();
-          });
+          Swal.close();
+          if(response.status === 200) {
+            Swal.fire({
+              icon: 'success',
+              title: 'Success!',
+              text: 'Excel file uploaded successfully.',
+              confirmButtonText: 'OK',
+            }).then(() => {
+              $('#editModal').modal('hide');
+              window.location.reload();
+            });
+          }else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error!',
+              text: response.message,
+              confirmButtonText: 'OK',
+            }).then(() => {
+              $('#editModal').modal('hide');
+              window.location.reload();
+            });
+          }
         },
         (error) => {
+          Swal.close();
           console.error('Error uploading file', error);
           Swal.fire({
             icon: 'error',
@@ -323,6 +384,7 @@ export class ViewCtKapaComponent implements OnInit {
         }
       );
     } else {
+      Swal.close();
       Swal.fire({
         icon: 'warning',
         title: 'Warning!',

@@ -31,18 +31,6 @@
             </div>
           </div>
           <div class="form-group row">
-            <label class="col-md-3 col-form-label" for="text-input">Workday</label>
-            <div class="col-md-9">
-              <input type="number" id="workday" name="text-input" class="form-control" placeholder="1,2,3..." />
-            </div>
-          </div>
-          <div class="form-group row">
-            <label class="col-md-3 col-form-label" for="text-input">Overtime</label>
-            <div class="col-md-9">
-              <input type="number" id="overtime" name="text-input" class="form-control" placeholder="1,2,3..." />
-            </div>
-          </div>
-          <div class="form-group row">
             <label class="col-md-3 col-form-label">Month of</label>
             <div class="col-md-9">
               <input class="form-control" id="month-of" type="month" placeholder="month" />
@@ -64,6 +52,72 @@
       </div>
     </div>
 
+    <div class="card">
+      <div class="card-header">
+        <strong>Limits Presentage and Mould Change</strong>
+      </div>
+      <div class="card-body">
+        <form class="form form-horizontal">
+          <div class="form-group row">
+            <label class="col-md-3 col-form-label">Mould Change</label>
+            <div class="col-md-6">
+              <input class="form-control" [(ngModel)]="objVarLim.limitChange" type="number"  name="mould_change" placeholder="0" />
+            </div>
+          </div>
+  
+          <div class="form-group row">
+            <label class="col-md-3 col-form-label"><strong>Range</strong></label>
+            <label class="col-md-3 col-form-label">Minimum Limit (%)</label>
+            <label class="col-md-3 col-form-label">Maximum Limit (%)</label>
+          </div>
+  
+          <!-- Range 0 - 2000 -->
+          <div class="form-group row">
+            <label class="col-md-3 col-form-label">0 - 2000</label>
+            <div class="col-md-3">
+              <input class="form-control" type="number"  [(ngModel)]="objVarLim.minA" name="minLimit_0_2000" placeholder="0" />
+            </div>
+            <div class="col-md-3">
+              <input class="form-control" type="number"  [(ngModel)]="objVarLim.maxA" name="maxLimit_0_2000" placeholder="0" />
+            </div>
+          </div>
+  
+          <!-- Range 2001 - 10.000 -->
+          <div class="form-group row">
+            <label class="col-md-3 col-form-label">2001 - 10.000</label>
+            <div class="col-md-3">
+              <input class="form-control" type="number"   [(ngModel)]="objVarLim.minB" name="minLimit_2001_10000" placeholder="0" />
+            </div>
+            <div class="col-md-3">
+              <input class="form-control" type="number"  [(ngModel)]="objVarLim.maxB" name="maxLimit_2001_10000" placeholder="0" />
+            </div>
+          </div>
+  
+          <!-- Range 10.001 - 100.000 -->
+          <div class="form-group row">
+            <label class="col-md-3 col-form-label">10.001 - 100.000</label>
+            <div class="col-md-3">
+              <input class="form-control" type="number"   [(ngModel)]="objVarLim.minC" name="minLimit_10001_100000" placeholder="0" />
+            </div>
+            <div class="col-md-3">
+              <input class="form-control" type="number"   [(ngModel)]="objVarLim.maxC" name="maxLimit_10001_100000" placeholder="0" />
+            </div>
+          </div>
+  
+          <!-- Range > 100.000 -->
+          <div class="form-group row">
+            <label class="col-md-3 col-form-label">&gt; 100.000</label>
+            <div class="col-md-3">
+              <input class="form-control" type="number"  [(ngModel)]="objVarLim.minD" name="minLimit_gt_100000" placeholder="0" />
+            </div>
+            <div class="col-md-3">
+              <input class="form-control" type="number"  [(ngModel)]="objVarLim.maxD" name="maxLimit_gt_100000" placeholder="0" />
+            </div>
+          </div>
+          </form>
+      </div>
+    </div>
+
     <!-- Table Marketing Order -->
     <div class="card">
       <div class="card-header">
@@ -80,7 +134,6 @@
         <div class="d-flex justify-content-between mb-3">
           <div class="d-flex align-items-center">
           </div>
-          <button class="btn btn-success" (click)="viewDetail()" id="addButton">Change Mould Data</button>
         </div>
         <div class="table-responsive">
           <table mat-table [dataSource]="dataSourceMO" matSort class="table table-bordered table-striped table-sm">
@@ -102,7 +155,7 @@
 
             <!-- Month 1 Column -->
             <ng-container matColumnDef="month0">
-              <th *matHeaderCellDef style="min-width: 150px" mat-sort-header>Month 1</th>
+              <th *matHeaderCellDef style="min-width: 150px" mat-sort-header>Month 0</th>
               <td *matCellDef="let mo">{{ parseDate(mo.month0) }}</td>
             </ng-container>
 
@@ -120,12 +173,12 @@
 
             <!-- Action Column -->
             <ng-container matColumnDef="action">
-              <th *matHeaderCellDef style="min-width: 340px">Action</th>
+              <th *matHeaderCellDef style="min-width: 200px">Action</th>
               <td *matCellDef="let mo">
                 <button type="button" class="btn btn-md btn-warning ml-2"
                   (click)="navigateToAddArDefectReject(mo.month0, mo.month1, mo.month2)">Finalisasi MO</button>
                 <button type="button" class="btn btn-md btn-primary ml-2"
-                  (click)="navigateToDetailMo(mo.moId)">Mark Front Rear</button>
+                  (click)="navigateToFrontRear(mo.month0, mo.month1, mo.month2)">Mark Front Rear</button>
               </td>
             </ng-container>
 
@@ -151,15 +204,13 @@
       <div class="card-body">
         <div class="d-flex justify-content-between mb-3">
           <div class="d-flex align-items-center">
-            <input type="text" class="form-control col-md-12 col-lg-12" [(ngModel)]="searchText"
-              (input)="onSearchChange()" placeholder="Find here..." />
+            <input type="text" class="form-control col-md-12 col-lg-12" [(ngModel)]="searchText" (input)="onSearchChange()" placeholder="Find here..." />
             <button type="submit" class="btn btn-primary ml-2" (click)="resetSearch()">Reset</button>
           </div>
-        </div>
-        <div class="d-flex justify-content-between mb-3">
-          <div class="d-flex align-items-center">
+          <div>
+            <button type="button" class="btn btn-primary ml-2"  (click)="viewDetail()" id="addButton"> Change Mould Data</button>
+            <button type="button" class="btn btn-primary ml-2" (click)="exportExcelMonthlyPlan()"><i class="fa fa-download fa-lg"></i> Export Excel</button>
           </div>
-          <button class="btn btn-success" (click)="viewDetail()" id="addButton">Change Mould Data</button>
         </div>
 
         <tabset>
@@ -170,10 +221,10 @@
                   <tr align="center">
                     <th rowspan="2" class="align-middle" sticky>No</th>
                     <th rowspan="2" style="min-width: 150px" class="align-middle" sticky>Partnumber</th>
-                    <th rowspan="2" style="min-width: 250px" class="align-middle">Size</th>
-                    <th rowspan="2" style="min-width: 250px" class="align-middle">Pattern</th>
+                    <th rowspan="2" style="min-width: 250px" class="align-middle" sticky>Size</th>
+                    <th rowspan="2" style="min-width: 250px" class="align-middle" sticky>Pattern</th>
 
-                    <th *ngFor="let hDateTass of dateHeadersTass" style="min-width: 70px"
+                    <th *ngFor="let hDateTass of dateHeadersTass" style="min-width: 70px" class="sticky-column"
                       [ngClass]="{ 'off-header': hDateTass.isOff,'semi-off': hDateTass.semiOff, 'overtime-header': hDateTass.isOvertime }"
                       (click)="handleCellClick(partNumber, hDateTass)">
                       {{ hDateTass.dateDisplay }}
@@ -189,21 +240,21 @@
 
                   <!-- Baris kedua -->
                   <tr align="center">
-                    <th style="min-width: 70px" *ngFor="let cHeaderWo of dateHeadersTass">
+                    <th style="min-width: 70px" *ngFor="let cHeaderWo of dateHeadersTass" class="sticky-column">
                       {{ cHeaderWo.workingDay }}
                     </th>
-                    <th class="align-middle">AHM/OEM</th>
-                    <th class="align-middle">AHM/REM</th>
-                    <th class="align-middle">AHM/FDR</th>
-                    <th class="align-middle">OFS</th>
+                    <th class="align-middle sticky-column">AHM/OEM</th>
+                    <th class="align-middle sticky-column">AHM/REM</th>
+                    <th class="align-middle sticky-column">AHM/FDR</th>
+                    <th class="align-middle sticky-column">OFS</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr *ngFor="let mp of monthlyDailyPlan; let i = index" align="center">
                     <td  sticky>{{ i + 1 }}</td>
                     <td  sticky>{{ mp.partNumber }}</td>
-                    <td>{{ mp.size }}</td>
-                    <td>{{ mp.pattern }}</td>
+                    <td  sticky>{{ mp.size }}</td>
+                    <td  sticky>{{ mp.pattern }}</td>
 
                     <!-- Dynamically bind the dates -->
                     <td *ngFor="let hDateTass of dateHeadersTass" class="hoverable"

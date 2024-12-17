@@ -47,10 +47,19 @@ export class ViewSizeComponent implements OnInit {
     this.getAllSize();
   }
 
-  getAllSize(): void {
+  getAllSize(): void {Swal.fire({
+    title: 'Loading...',
+    html: 'Please wait while fetching data Size.',
+    allowOutsideClick: false,
+    didOpen: () => {
+      Swal.showLoading();
+    },
+  });
     this.sizeService.getAllSize().subscribe(
       (response: ApiResponse<Size[]>) => {
         this.sizes = response.data;
+        Swal.close();
+
         this.dataSource = new MatTableDataSource(this.sizes);
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
@@ -204,23 +213,43 @@ export class ViewSizeComponent implements OnInit {
     }
   }
 
-
   uploadFileExcel() {
     if (this.file) {
+      Swal.fire({
+            title: 'Loading...',
+            html: 'Please wait while fetching data Size.',
+            allowOutsideClick: false,
+            didOpen: () => {
+              Swal.showLoading();
+            },
+          });
       const formData = new FormData();
       formData.append('file', this.file);
       // unggah file Excel
       this.sizeService.uploadFileExcel(formData).subscribe(
         (response) => {
-          Swal.fire({
-            icon: 'success',
-            title: 'Success!',
-            text: 'Excel file uploaded successfully.',
-            confirmButtonText: 'OK',
-          }).then(() => {
-            $('#editModal').modal('hide');
-            window.location.reload();
-          });
+          Swal.close();
+          if(response.status === 200) {
+            Swal.fire({
+              icon: 'success',
+              title: 'Success!',
+              text: 'Excel file uploaded successfully.',
+              confirmButtonText: 'OK',
+            }).then(() => {
+              $('#editModal').modal('hide');
+              window.location.reload();
+            });
+          }else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error!',
+              text: response.message,
+              confirmButtonText: 'OK',
+            }).then(() => {
+              $('#editModal').modal('hide');
+              window.location.reload();
+            });
+          }
         },
         (error) => {
           console.error('Error uploading file', error);
@@ -233,6 +262,7 @@ export class ViewSizeComponent implements OnInit {
         }
       );
     } else {
+      Swal.close();
       Swal.fire({
         icon: 'warning',
         title: 'Warning!',
@@ -241,11 +271,43 @@ export class ViewSizeComponent implements OnInit {
       });
     }
   }
+  
   downloadExcel(): void {
+    Swal.fire({
+      title: 'Loading...',
+      html: 'Please wait while fetching data Size.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
     this.sizeService.exportSizesExcel().subscribe({
       next: (response) => {
+        Swal.close();
         // Menggunakan nama file yang sudah ditentukan di backend
         const filename = 'SIZE_DATA.xlsx'; // Nama file bisa dinamis jika diperlukan
+        saveAs(response, filename); // Mengunduh file
+      },
+      error: (err) => {
+        console.error('Download error:', err);
+      }
+    });
+  }
+
+  templateExcel(): void {
+    Swal.fire({
+      title: 'Loading...',
+      html: 'Please wait while fetching data Size.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
+    this.sizeService.templateSizesExcel().subscribe({
+      next: (response) => {
+        Swal.close();
+        // Menggunakan nama file yang sudah ditentukan di backend
+        const filename = 'LAYOUT_SIZE.xlsx'; // Nama file bisa dinamis jika diperlukan
         saveAs(response, filename); // Mengunduh file
       },
       error: (err) => {

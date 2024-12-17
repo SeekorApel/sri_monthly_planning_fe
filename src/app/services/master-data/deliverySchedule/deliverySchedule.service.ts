@@ -83,5 +83,8 @@ export class DeliveryScheduleService {
   exportDeliveryScheduleExcel(): Observable<Blob> {
     return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/exportDeliveryScheduleExcel`, { responseType: 'blob' as 'json' });
   }
+  templateDeliveryScheduleExcel(): Observable<Blob> {
+    return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/layoutDeliveryScheduleExcel`, { responseType: 'blob' as 'json' });
+  }
 
 }
