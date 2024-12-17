@@ -108,10 +108,19 @@ export class ViewCuringSizeComponent implements OnInit {
   }
   
   getAllCuringSize(): void {
+    Swal.fire({
+      title: 'Loading...',
+      html: 'Please wait while fetching data Curing Size.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
     this.curingSizeService.getAllCuringSize().subscribe(
       (response: ApiResponse<Curing_Size[]>) => {
         this.curingSizes = response.data;
-        
+        Swal.close();
+
         this.curingSizes = this.curingSizes.map((curingSize) => {
           const matchedSize = this.size.find(
             (b) => b.size_ID === (curingSize.size_ID)
@@ -282,12 +291,21 @@ export class ViewCuringSizeComponent implements OnInit {
   }
 
   uploadFileExcel() {
+    Swal.fire({
+          title: 'Loading...',
+          html: 'Please wait while fetching data Curing Size.',
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          },
+        });
     if (this.file) {
       const formData = new FormData();
       formData.append('file', this.file);
       // unggah file Excel
       this.curingSizeService.uploadFileExcel(formData).subscribe(
         (response) => {
+          Swal.close();
           Swal.fire({
             icon: 'success',
             title: 'Success!',
@@ -319,8 +337,17 @@ export class ViewCuringSizeComponent implements OnInit {
   }
 
   downloadExcel(): void {
+    Swal.fire({
+      title: 'Loading...',
+      html: 'Please wait while fetching data Curing Size.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
     this.curingSizeService.exportCuringSizeExcel().subscribe({
       next: (response) => {
+        Swal.close();
         // Menggunakan nama file yang sudah ditentukan di backend
         const filename = 'CURING_SIZE_DATA.xlsx'; // Nama file bisa dinamis jika diperlukan
         saveAs(response, filename); // Mengunduh file

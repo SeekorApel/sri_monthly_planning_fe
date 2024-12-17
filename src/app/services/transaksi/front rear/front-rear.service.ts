@@ -35,7 +35,7 @@ export class FrontRearService {
   }
 
   saveTempMachineProduct(temp: TempMachineProduct[]): Observable<ApiResponse<TempMachineProduct[]>> {
-    return this.http.post<ApiResponse<TempMachineProduct[]>>(environment.apiUrlWebAdmin + '/saveTempMachineProduct', temp).pipe(
+    return this.http.post<ApiResponse<TempMachineProduct[]>>(environment.apiUrlWebAdmin + '/saveMachineProduct', temp).pipe(
       map((response) => {
         return response;
       }),

@@ -61,9 +61,18 @@ export class ViewItemCuringComponent implements OnInit {
   }
   
   getAllItemCuring(): void {
+    Swal.fire({
+      title: 'Loading...',
+      html: 'Please wait while fetching data Item Curing.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
     this.itemcuringService.getAllItemCuring().subscribe(
       (response: ApiResponse<Item_Curing[]>) => {
         this.itemcurings = response.data;
+        Swal.close();
         this.dataSource = new MatTableDataSource(this.itemcurings);
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
@@ -230,12 +239,21 @@ export class ViewItemCuringComponent implements OnInit {
 
 
   uploadFileExcel() {
+    Swal.fire({
+          title: 'Loading...',
+          html: 'Please wait while fetching data Item Curing.',
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          },
+        });
     if (this.file) {
       const formData = new FormData();
       formData.append('file', this.file);
       // unggah file Excel
       this.itemcuringService.uploadFileExcel(formData).subscribe(
         (response) => {
+          Swal.close();
           Swal.fire({
             icon: 'success',
             title: 'Success!',
@@ -266,8 +284,17 @@ export class ViewItemCuringComponent implements OnInit {
     }
   }
   downloadExcel(): void {
+    Swal.fire({
+      title: 'Loading...',
+      html: 'Please wait while fetching data Item Curing.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
     this.itemcuringService.exportItemCuringsExcel().subscribe({
       next: (response) => {
+        Swal.close();
         // Menggunakan nama file yang sudah ditentukan di backend
         const filename = 'ITEM_CURING_DATA.xlsx'; // Nama file bisa dinamis jika diperlukan
         saveAs(response, filename); // Mengunduh file

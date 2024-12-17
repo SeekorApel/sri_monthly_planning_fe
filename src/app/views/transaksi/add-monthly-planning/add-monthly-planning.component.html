@@ -64,6 +64,72 @@
       </div>
     </div>
 
+    <div class="card">
+      <div class="card-header">
+        <strong>Limits Presentage and Mould Change</strong>
+      </div>
+      <div class="card-body">
+        <form class="form form-horizontal">
+          <div class="form-group row">
+            <label class="col-md-3 col-form-label">Mould Change</label>
+            <div class="col-md-6">
+              <input class="form-control" [(ngModel)]="objVarLim.limitChange" type="number"  name="mould_change" placeholder="0" />
+            </div>
+          </div>
+  
+          <div class="form-group row">
+            <label class="col-md-3 col-form-label"><strong>Range</strong></label>
+            <label class="col-md-3 col-form-label">Minimum Limit (%)</label>
+            <label class="col-md-3 col-form-label">Maximum Limit (%)</label>
+          </div>
+  
+          <!-- Range 0 - 2000 -->
+          <div class="form-group row">
+            <label class="col-md-3 col-form-label">0 - 2000</label>
+            <div class="col-md-3">
+              <input class="form-control" type="number"  [(ngModel)]="objVarLim.minA" name="minLimit_0_2000" placeholder="0" />
+            </div>
+            <div class="col-md-3">
+              <input class="form-control" type="number"  [(ngModel)]="objVarLim.maxA" name="maxLimit_0_2000" placeholder="0" />
+            </div>
+          </div>
+  
+          <!-- Range 2001 - 10.000 -->
+          <div class="form-group row">
+            <label class="col-md-3 col-form-label">2001 - 10.000</label>
+            <div class="col-md-3">
+              <input class="form-control" type="number"   [(ngModel)]="objVarLim.minB" name="minLimit_2001_10000" placeholder="0" />
+            </div>
+            <div class="col-md-3">
+              <input class="form-control" type="number"  [(ngModel)]="objVarLim.maxB" name="maxLimit_2001_10000" placeholder="0" />
+            </div>
+          </div>
+  
+          <!-- Range 10.001 - 100.000 -->
+          <div class="form-group row">
+            <label class="col-md-3 col-form-label">10.001 - 100.000</label>
+            <div class="col-md-3">
+              <input class="form-control" type="number"   [(ngModel)]="objVarLim.minC" name="minLimit_10001_100000" placeholder="0" />
+            </div>
+            <div class="col-md-3">
+              <input class="form-control" type="number"   [(ngModel)]="objVarLim.maxC" name="maxLimit_10001_100000" placeholder="0" />
+            </div>
+          </div>
+  
+          <!-- Range > 100.000 -->
+          <div class="form-group row">
+            <label class="col-md-3 col-form-label">&gt; 100.000</label>
+            <div class="col-md-3">
+              <input class="form-control" type="number"  [(ngModel)]="objVarLim.minD" name="minLimit_gt_100000" placeholder="0" />
+            </div>
+            <div class="col-md-3">
+              <input class="form-control" type="number"  [(ngModel)]="objVarLim.maxD" name="maxLimit_gt_100000" placeholder="0" />
+            </div>
+          </div>
+          </form>
+      </div>
+    </div>
+
     <!-- Table Marketing Order -->
     <div class="card">
       <div class="card-header">
@@ -150,15 +216,13 @@
       <div class="card-body">
         <div class="d-flex justify-content-between mb-3">
           <div class="d-flex align-items-center">
-            <input type="text" class="form-control col-md-12 col-lg-12" [(ngModel)]="searchText"
-              (input)="onSearchChange()" placeholder="Find here..." />
+            <input type="text" class="form-control col-md-12 col-lg-12" [(ngModel)]="searchText" (input)="onSearchChange()" placeholder="Find here..." />
             <button type="submit" class="btn btn-primary ml-2" (click)="resetSearch()">Reset</button>
           </div>
-        </div>
-        <div class="d-flex justify-content-between mb-3">
-          <div class="d-flex align-items-center">
+          <div>
+            <button type="button" class="btn btn-primary ml-2"  (click)="viewDetail()" id="addButton"> Change Mould Data</button>
+            <button type="button" class="btn btn-primary ml-2" (click)="exportExcelMonthlyPlan()"><i class="fa fa-download fa-lg"></i> Export Excel</button>
           </div>
-          <button class="btn btn-success" (click)="viewDetail()" id="addButton">Change Mould Data</button>
         </div>
 
         <tabset>

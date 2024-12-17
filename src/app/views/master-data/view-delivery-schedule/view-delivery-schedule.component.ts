@@ -51,6 +51,14 @@ export class ViewDeliveryScheduleComponent implements OnInit {
   }
 
   getAllDeliverySchedule(): void {
+    Swal.fire({
+      title: 'Loading...',
+      html: 'Please wait while fetching data Delivery Schedule.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
     this.deliveryScheduleService.getAllDeliverySchedule().subscribe(
       (response: ApiResponse<DeliverySchedule[]>) => {
         this.deliverySchedules = response.data.map(element => {
@@ -60,6 +68,7 @@ export class ViewDeliveryScheduleComponent implements OnInit {
             formattedDateIssued: new Date(element.date_ISSUED).toLocaleDateString('en-US', { day: '2-digit', month: 'long', year: 'numeric' })
           }
         });
+        Swal.close();
         this.dataSource = new MatTableDataSource(this.deliverySchedules);
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
@@ -230,12 +239,21 @@ export class ViewDeliveryScheduleComponent implements OnInit {
   }
 
   uploadFileExcel() {
+    Swal.fire({
+          title: 'Loading...',
+          html: 'Please wait while fetching data Delivery Schedule.',
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          },
+        });
     if (this.file) {
       const formData = new FormData();
       formData.append('file', this.file);
       // unggah file Excel
       this.deliveryScheduleService.uploadFileExcel(formData).subscribe(
         (response) => {
+          Swal.close();
           Swal.fire({
             icon: 'success',
             title: 'Success!',
@@ -267,8 +285,17 @@ export class ViewDeliveryScheduleComponent implements OnInit {
   }
 
   downloadExcel(): void {
+    Swal.fire({
+      title: 'Loading...',
+      html: 'Please wait while fetching data Delivery Schedule.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
     this.deliveryScheduleService.exportDeliveryScheduleExcel().subscribe({
       next: (response) => {
+        Swal.close();
         // Menggunakan nama file yang sudah ditentukan di backend
         const filename = 'DELIVERY_SCHEDULE_DATA.xlsx'; // Nama file bisa dinamis jika diperlukan
         saveAs(response, filename); // Mengunduh file

@@ -116,9 +116,18 @@ export class ViewMachineAllowenceComponent implements OnInit {
   }
 
   getAllMachineAllowence(): void {
+    Swal.fire({
+      title: 'Loading...',
+      html: 'Please wait while fetching data Machine Allowance.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
     this.machineAllowenceService.getAllMachineAllowence().subscribe(
       (response: ApiResponse<machineAllowence[]>) => {
         this.machineAllowences = response.data;
+        Swal.close();
         this.dataSource = new MatTableDataSource(this.machineAllowences);
         this.dataSource.sort = this.sort;
         this.dataSource.paginator = this.paginator;
@@ -289,6 +298,14 @@ export class ViewMachineAllowenceComponent implements OnInit {
     }
   }
   uploadFileExcel() {
+    Swal.fire({
+          title: 'Loading...',
+          html: 'Please wait while fetching data Machine Allowance.',
+          allowOutsideClick: false,
+          didOpen: () => {
+            Swal.showLoading();
+          },
+        });
     if (this.file) {
       const formData = new FormData();
       formData.append('file', this.file);
@@ -326,8 +343,17 @@ export class ViewMachineAllowenceComponent implements OnInit {
   }
 
   downloadExcel(): void {
+    Swal.fire({
+      title: 'Loading...',
+      html: 'Please wait while fetching data Machine Allowance.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
     this.machineAllowenceService.exportMachineAllowenceExcel().subscribe({
       next: (response) => {
+        Swal.close();
         // Menggunakan nama file yang sudah ditentukan di backend
         const filename = 'MACHINE_ALLOWENCE_DATA.xlsx'; // Nama file bisa dinamis jika diperlukan
         saveAs(response, filename); // Mengunduh file

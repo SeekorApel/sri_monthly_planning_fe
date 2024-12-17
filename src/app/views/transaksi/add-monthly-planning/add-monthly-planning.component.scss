@@ -16,6 +16,10 @@
   cursor: pointer; /* Mengubah kursor menjadi pointer */
 }
 
+.table-responsive {
+  max-height: 1200px;
+}
+
 .hoverable:hover {
   background-color: #f0f0f0; /* Mengubah warna latar belakang saat hover */
 }

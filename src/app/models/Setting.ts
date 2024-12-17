@@ -1,4 +1,3 @@
-
 export class Setting {
   setting_ID: number;        
   setting_KEY: string;
