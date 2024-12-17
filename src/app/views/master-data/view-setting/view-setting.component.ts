@@ -285,6 +285,27 @@ export class ViewSettingComponent implements OnInit {
       }
     });
   }
+  templateExcel(): void {
+    Swal.fire({
+      title: 'Loading...',
+      html: 'Please wait while fetching data Setting.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
+    this.settingService.templateSettingsExcel().subscribe({
+      next: (response) => {
+        Swal.close();
+        // Menggunakan nama file yang sudah ditentukan di backend
+        const filename = 'LAYOUT_SETTING.xlsx'; // Nama file bisa dinamis jika diperlukan
+        saveAs(response, filename); // Mengunduh file
+      },
+      error: (err) => {
+        console.error('Download error:', err);
+      }
+    });
+  }
 
   saveAsExcelFile(buffer: any, fileName: string): void {
     const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';

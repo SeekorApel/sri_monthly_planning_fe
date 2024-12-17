@@ -104,4 +104,7 @@ export class BuildingService {
   exportExcel(): Observable<Blob> {
     return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/exportBuildingsExcel`, { responseType: 'blob' as 'json' });
   }
+  templateExcel(): Observable<Blob> {
+    return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/layoutBuildingsExcel`, { responseType: 'blob' as 'json' });
+  }
 }

@@ -304,4 +304,25 @@ export class ViewItemCuringComponent implements OnInit {
       }
     });
   }
+  templateExcel(): void {
+    Swal.fire({
+      title: 'Loading...',
+      html: 'Please wait while fetching data Item Curing.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
+    this.itemcuringService.templateItemCuringsExcel().subscribe({
+      next: (response) => {
+        Swal.close();
+        // Menggunakan nama file yang sudah ditentukan di backend
+        const filename = 'LAYOUT_ITEM_CURING.xlsx'; // Nama file bisa dinamis jika diperlukan
+        saveAs(response, filename); // Mengunduh file
+      },
+      error: (err) => {
+        console.error('Download error:', err);
+      }
+    });
+  }
 }

@@ -374,4 +374,25 @@ export class ViewTassSizeComponent implements OnInit {
       }
     });
   }
+  templateExcel(): void {
+    Swal.fire({
+      title: 'Loading...',
+      html: 'Please wait while fetching data Tass Size.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
+    this.tass_sizeService.templateTassSizesExcel().subscribe({
+      next: (response) => {
+        Swal.close();
+        // Menggunakan nama file yang sudah ditentukan di backend
+        const filename = 'LAYOUT_TASS_SIZE.xlsx'; // Nama file bisa dinamis jika diperlukan
+        saveAs(response, filename); // Mengunduh file
+      },
+      error: (err) => {
+        console.error('Download error:', err);
+      }
+    });
+  }
 }

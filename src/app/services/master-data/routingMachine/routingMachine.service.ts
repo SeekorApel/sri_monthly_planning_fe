@@ -82,4 +82,7 @@ export class RoutingService {
   exportRoutingMachineExcel(): Observable<Blob> {
     return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/exportCTAssyExcel`, { responseType: 'blob' as 'json' });
   }
+  templateRoutingMachineExcel(): Observable<Blob> {
+    return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/layoutCTAssysExcel`, { responseType: 'blob' as 'json' });
+  }
 }

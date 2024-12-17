@@ -102,5 +102,8 @@ export class SizeService {
   exportSizesExcel(): Observable<Blob> {
     return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/exportSizeexcel`, { responseType: 'blob' as 'json' });
   }
+  templateSizesExcel(): Observable<Blob> {
+    return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/layoutSizeexcel`, { responseType: 'blob' as 'json' });
+  }
 
 }

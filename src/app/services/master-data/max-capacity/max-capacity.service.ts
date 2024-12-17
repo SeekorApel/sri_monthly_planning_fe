@@ -83,4 +83,8 @@ export class MaxCapacityService {
     return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/exportMaxCapacityExcel`, { responseType: 'blob' as 'json' });
   }
 
+  templateMaxCapacitiesExcel(): Observable<Blob> {
+    return this.http.get<Blob>(`${environment.apiUrlWebAdmin}/layoutMaxCapacityExcel`, { responseType: 'blob' as 'json' });
+  }
+
 }
