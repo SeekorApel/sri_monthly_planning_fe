@@ -221,15 +221,27 @@ export class ViewPlantComponent implements OnInit {
       this.PlantService.uploadFileExcel(formData).subscribe(
         (response) => {
           Swal.close();
-          Swal.fire({
-            icon: 'success',
-            title: 'Success!',
-            text: 'Excel file uploaded successfully.',
-            confirmButtonText: 'OK',
-          }).then(() => {
-            $('#editModal').modal('hide');
-            window.location.reload();
-          });
+          if(response.status === 200) {
+            Swal.fire({
+              icon: 'success',
+              title: 'Success!',
+              text: 'Excel file uploaded successfully.',
+              confirmButtonText: 'OK',
+            }).then(() => {
+              $('#editModal').modal('hide');
+              window.location.reload();
+            });
+          }else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error!',
+              text: response.message,
+              confirmButtonText: 'OK',
+            }).then(() => {
+              $('#editModal').modal('hide');
+              window.location.reload();
+            });
+          }
         },
         (error) => {
           Swal.close();
@@ -237,7 +249,7 @@ export class ViewPlantComponent implements OnInit {
           Swal.fire({
             icon: 'error',
             title: 'Failed!',
-            text: 'An error occurred while uploading the file.',
+            text: error.message,
             confirmButtonText: 'OK',
           });
         }

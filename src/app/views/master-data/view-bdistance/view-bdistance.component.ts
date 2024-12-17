@@ -255,15 +255,27 @@ export class ViewBDistanceComponent implements OnInit {
       this.bdistanceService.uploadFileExcel(formData).subscribe(
         (response) => {
           Swal.close();
-          Swal.fire({
-            icon: 'success',
-            title: 'Success!',
-            text: 'Excel file uploaded successfully.',
-            confirmButtonText: 'OK',
-          }).then(() => {
-            $('#editModal').modal('hide');
-            window.location.reload();
-          });
+          if(response.status === 200) {
+            Swal.fire({
+              icon: 'success',
+              title: 'Success!',
+              text: 'Excel file uploaded successfully.',
+              confirmButtonText: 'OK',
+            }).then(() => {
+              $('#editModal').modal('hide');
+              window.location.reload();
+            });
+          }else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error!',
+              text: response.message,
+              confirmButtonText: 'OK',
+            }).then(() => {
+              $('#editModal').modal('hide');
+              window.location.reload();
+            });
+          }
         },
         (error) => {
           Swal.close();
