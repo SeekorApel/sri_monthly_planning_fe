@@ -75,7 +75,7 @@ export class MachineExtrudingService {
   }
 
   uploadFileExcel(file: FormData): Observable<ApiResponse<MachineExtruding>> {
-    return this.http.post<ApiResponse<MachineExtruding>>(environment.apiUrlWebAdmin + '/saveMachineExtrudingsExcel', file, { headers: this.getHeaders() }).pipe(
+    return this.http.post<ApiResponse<MachineExtruding>>(environment.apiUrlWebAdmin + '/saveMachineExtrudingsExcel', file).pipe(
       map((response) => {
         return response;
       }),

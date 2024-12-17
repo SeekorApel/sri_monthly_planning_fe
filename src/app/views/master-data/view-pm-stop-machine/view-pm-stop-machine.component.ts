@@ -407,16 +407,16 @@ export class ViewPmStopMachineComponent implements OnInit {
   }
 
   uploadFileExcel() {
-    Swal.fire({
-      icon: 'info',
-      title: 'Processing...',
-      html: 'Please wait while saving PM Stop Machine Data.',
-      allowOutsideClick: false,
-      didOpen: () => {
-        Swal.showLoading();
-      },
-    });
     if (this.file) {
+      Swal.fire({
+        icon: 'info',
+        title: 'Processing...',
+        html: 'Please wait while saving PM Stop Machine Data.',
+        allowOutsideClick: false,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
       const formData = new FormData();
       formData.append('file', this.file);
       // unggah file Excel
@@ -465,7 +465,7 @@ export class ViewPmStopMachineComponent implements OnInit {
         Swal.showLoading();
       },
     });
-    this.pmStopService.tamplateExcel().subscribe({
+    this.pmStopService.exportExcel().subscribe({
       next: (response) => {
         Swal.close();
         // Menggunakan nama file yang sudah ditentukan di backend

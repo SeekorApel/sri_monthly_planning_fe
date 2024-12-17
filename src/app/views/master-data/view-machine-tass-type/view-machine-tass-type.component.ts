@@ -240,16 +240,16 @@ export class ViewMachineTassTypeComponent implements OnInit {
   }
 
   uploadFileExcel() {
-    Swal.fire({
-      icon: 'info',
-      title: 'Processing...',
-      html: 'Please wait while Saving data Machine Tass Type.',
-      allowOutsideClick: false,
-      didOpen: () => {
-        Swal.showLoading();
-      },
-    });
     if (this.file) {
+      Swal.fire({
+        icon: 'info',
+        title: 'Processing...',
+        html: 'Please wait while Saving data Machine Tass Type.',
+        allowOutsideClick: false,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
       const formData = new FormData();
       formData.append('file', this.file);
       // unggah file Excel

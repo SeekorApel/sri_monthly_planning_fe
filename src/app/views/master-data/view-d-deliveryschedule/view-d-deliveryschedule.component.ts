@@ -315,16 +315,16 @@ export class ViewDDeliveryScheduleComponent implements OnInit {
   }
 
   uploadFileExcel() {
-    Swal.fire({
-      icon: 'info',
-      title: 'Processing...',
-      html: 'Please wait while Saving Data Detail Delivery Schedule.',
-      allowOutsideClick: false,
-      didOpen: () => {
-        Swal.showLoading();
-      },
-    });
     if (this.file) {
+      Swal.fire({
+        icon: 'info',
+        title: 'Processing...',
+        html: 'Please wait while Saving Data Detail Delivery Schedule.',
+        allowOutsideClick: false,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
       const formData = new FormData();
       formData.append('file', this.file);
       // unggah file Excel

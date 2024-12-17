@@ -336,16 +336,16 @@ export class ViewProductComponent implements OnInit {
   }
 
   uploadFileExcel() {
-    Swal.fire({
-      icon: 'info',
-      title: 'Processing...',
-      html: 'Please wait while saving Product Data.',
-      allowOutsideClick: false,
-      didOpen: () => {
-        Swal.showLoading();
-      },
-    });
     if (this.file) {
+      Swal.fire({
+        icon: 'info',
+        title: 'Processing...',
+        html: 'Please wait while saving Product Data.',
+        allowOutsideClick: false,
+        didOpen: () => {
+          Swal.showLoading();
+        },
+      });
       const formData = new FormData();
       formData.append('file', this.file);
       // unggah file Excel
