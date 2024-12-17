@@ -66,6 +66,80 @@ export class MonthlyPlanCuringService {
   }
 
 
+exportExcelMP(
+    month: number,
+    year: number,
+    limitChange: number,
+    minA: number,
+    maxA: number,
+    minB: number,
+    maxB: number,
+    minC: number,
+    maxC: number,
+    minD: number,
+    maxD: number
+  ) {
+    const monthNames = [
+      'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+      'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+    ];
+
+    this.monthNow = month;
+    this.yearNow = year;
+
+    const monthDescription = monthNames[this.monthNow - 1]; 
+
+    const filename = `PREPARE PROD ${monthDescription.toUpperCase()} ${this.yearNow}.xlsx`;
+
+    Swal.fire({
+      icon: 'info',
+      title: 'Processing...',
+      html: 'Please wait while we Download Excel the monthly plan. This might take a while.',
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading(); 
+      },
+    });
+
+    this.mpService
+      .ExportExcelMP(
+        month,
+        year,
+        limitChange,
+        minA,
+        maxA,
+        minB,
+        maxB,
+        minC,
+        maxC,
+        minD,
+        maxD
+      )
+      .subscribe(
+        (response) => {
+          Swal.close(); 
+
+          saveAs(response, filename);
+
+          Swal.fire({
+            icon: 'success',
+            title: 'Success!',
+            text: `Monthly plan Excel file (${filename}) has been downloaded successfully.`,
+            confirmButtonText: 'OK',
+          });
+        },
+        (error) => {
+          Swal.close(); 
+
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Failed to download monthly plan Excel file: ' + error.message,
+            confirmButtonText: 'OK',
+          });
+        }
+      );
+  }
   //get detail shift
   getDetailShiftMonthlyPlan(detailDailyId: number, actualDate: string): Observable<ApiResponse<DetailShiftMonthlyPlanCuring[]>> {
     const params = new HttpParams()
