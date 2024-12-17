@@ -130,7 +130,7 @@ export class ViewMachineTassComponent implements OnInit {
 
           Swal.close();
           this.machineTasss = response.data.map((machine) => {
-          const tasstype = this.tassTypes.find((t) => t.machinetasstype_ID === machine.machinetasstype_ID);
+          const tasstype = this.tassTypes.find((t) => t.machinetasstype_ID === machine.machine_TASS_TYPE_ID);
           const building = this.buildings.find((b) => b.building_ID === machine.building_ID);
           return {
             ...machine,
