@@ -200,7 +200,7 @@ export class ViewTassSizeComponent implements OnInit {
   }
 
   getDescSize(size_ID: string): string {
-    const size = this.size.find(b => b.size_ID === size_ID);
+    const size = this.size.find(b => b.size_ID == size_ID);
     return size ? size.description : 'Unknown';
   }
 
