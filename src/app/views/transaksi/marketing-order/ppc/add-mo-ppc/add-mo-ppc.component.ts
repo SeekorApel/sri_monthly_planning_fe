@@ -110,7 +110,6 @@ export class AddMoPpcComponent implements OnInit {
     this.moService.getCapacity().subscribe(
       (response: ApiResponse<any>) => {
         this.capacityDb = response.data;
-        console.log('Response capacity: ', this.capacityDb);
       },
       (error) => {
         Swal.fire({
