@@ -24,9 +24,22 @@
           <div class="form-group row">
             <label class="col-md-3 col-form-label">Revision</label>
             <div class="col-md-9">
-              <input class="form-control" type="text" formControlName="revision" placeholder="1,2,3...." [readOnly]="isReadOnly" />
+              <input
+                class="form-control"
+                [ngClass]="{ 'is-invalid': revisionControl?.invalid && revisionControl?.touched }"
+                type="text"
+                formControlName="revision"
+                placeholder="1,2,3...."
+                (keypress)="allowOnlyNumbers($event)"
+                (paste)="blockNonNumbers($event)"
+              />
+              <!-- Pesan error jika revision kosong atau hanya berisi spasi -->
+              <div *ngIf="revisionControl?.hasError('required') && revisionControl?.touched" class="invalid-feedback">
+                This field is required
+              </div>
             </div>
           </div>
+
 
           <!-- Tabset -->
           <tabset>
@@ -42,11 +55,11 @@
                 </div>
                 <div class="col-md-4 min-height-form">
                   <label for="text-input">Normal Working Day Tube</label>
-                  <input type="text" formControlName="nwt_0" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  <input type="text" formControlName="nwt_0" name="text-input" class="form-control" placeholder="0,00" (input)="onInputChange($event, 'nwt_0')" (input)="calculateTotalTube('nwt_0')" />
                 </div>
                 <div class="col-md-4 min-height-form">
                   <label for="text-input">Working Day Overtime Tube</label>
-                  <input type="text" formControlName="ot_wt_0" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  <input type="text" formControlName="ot_wt_0" name="text-input" class="form-control" placeholder="0,00" (input)="onInputChange($event, 'ot_wt_0')" (input)="calculateTotalTube('ot_wt_0')" />
                 </div>
                 <div class="col-md-4 min-height-form">
                   <label for="text-input">Working Day Overtime TL</label>
@@ -70,15 +83,18 @@
                 </div>
                 <div class="col-md-4 min-height-form">
                   <label for="text-input">Maximum Capacity Tube</label>
-                  <input type="text" formControlName="max_tube_capa_0" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  <input type="text" (input)="onInputChange($event, 'max_tube_capa_0')" [ngClass]="{ 'is-invalid': formHeaderMo.get('max_tube_capa_0')?.invalid && formHeaderMo.get('max_tube_capa_0')?.touched }" formControlName="max_tube_capa_0" name="text-input" class="form-control" placeholder="0,00" />
+                  <div *ngIf="formHeaderMo.get('max_tube_capa_0')?.invalid && formHeaderMo.get('max_tube_capa_0')?.touched" class="invalid-feedback">Maximum Tube Capacity is required.</div>
                 </div>
                 <div class="col-md-4 min-height-form">
                   <label for="text-input">Maximum Capacity Tire TL</label>
-                  <input type="text" formControlName="max_capa_tl_0" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  <input type="text" (input)="onInputChange($event, 'max_capa_tl_0')" [ngClass]="{ 'is-invalid': formHeaderMo.get('max_capa_tl_0')?.invalid && formHeaderMo.get('max_capa_tl_0')?.touched }" formControlName="max_capa_tl_0" name="text-input" class="form-control" placeholder="0,00" />
+                  <div *ngIf="formHeaderMo.get('max_capa_tl_0')?.invalid && formHeaderMo.get('max_capa_tl_0')?.touched" class="invalid-feedback">Maximum Capacity Tire TL is required.</div>
                 </div>
                 <div class="col-md-4 min-height-form">
                   <label for="text-input">Maximum Capacity Tire TT</label>
-                  <input type="text" formControlName="max_capa_tt_0" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  <input type="text" (input)="onInputChange($event, 'max_capa_tt_0')" [ngClass]="{ 'is-invalid': formHeaderMo.get('max_capa_tt_0')?.invalid && formHeaderMo.get('max_capa_tt_0')?.touched }" formControlName="max_capa_tt_0" name="text-input" class="form-control" placeholder="0,00" />
+                  <div *ngIf="formHeaderMo.get('max_capa_tt_0')?.invalid && formHeaderMo.get('max_capa_tt_0')?.touched" class="invalid-feedback">Maximum Capacity Tire TT is required.</div>
                 </div>
                 <div class="col-md-4 min-height-form">
                   <label for="text-input">Capacity Machine Airbag</label>
@@ -122,7 +138,7 @@
                 </div>
                 <div class="col-md-4 min-height-form">
                   <label for="text-input">Note Order TL</label>
-                  <input type="text" formControlName="note_tl_m0" name="text-input" class="form-control" [readOnly]="isReadOnly" />
+                  <input type="text" formControlName="note_tl_m0" name="text-input" class="form-control" />
                 </div>
               </div>
             </tab>
@@ -138,11 +154,11 @@
                 </div>
                 <div class="col-md-4 min-height-form">
                   <label for="text-input">Normal Working Day Tube</label>
-                  <input type="text" formControlName="nwt_1" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  <input type="text" formControlName="nwt_1" name="text-input" class="form-control" placeholder="0,00" (input)="onInputChange($event, 'nwt_1')" (input)="calculateTotalTube('nwt_1')" />
                 </div>
                 <div class="col-md-4 min-height-form">
                   <label for="text-input">Working Day Overtime Tube</label>
-                  <input type="text" formControlName="ot_wt_1" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  <input type="text" formControlName="ot_wt_1" name="text-input" class="form-control" placeholder="0,00" (input)="onInputChange($event, 'ot_wt_1')" (input)="calculateTotalTube('ot_wt_1')" />
                 </div>
                 <div class="col-md-4 min-height-form">
                   <label for="text-input">Working Day Overtime TL</label>
@@ -166,15 +182,18 @@
                 </div>
                 <div class="col-md-4 min-height-form">
                   <label for="text-input">Maximum Capacity Tube</label>
-                  <input type="text" formControlName="max_tube_capa_1" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  <input type="text" (input)="onInputChange($event, 'max_tube_capa_1')" [ngClass]="{ 'is-invalid': formHeaderMo.get('max_tube_capa_1')?.invalid && formHeaderMo.get('max_tube_capa_1')?.touched }" formControlName="max_tube_capa_1" name="text-input" class="form-control" placeholder="0,00" />
+                  <div *ngIf="formHeaderMo.get('max_tube_capa_1')?.invalid && formHeaderMo.get('max_tube_capa_1')?.touched" class="invalid-feedback">Maximum Tube Capacity is required.</div>
                 </div>
                 <div class="col-md-4 min-height-form">
                   <label for="text-input">Maximum Capacity Tire TL</label>
-                  <input type="text" formControlName="max_capa_tl_1" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  <input type="text" (input)="onInputChange($event, 'max_capa_tl_1')" [ngClass]="{ 'is-invalid': formHeaderMo.get('max_capa_tl_1')?.invalid && formHeaderMo.get('max_capa_tl_1')?.touched }" formControlName="max_capa_tl_1" name="text-input" class="form-control" placeholder="0,00" />
+                  <div *ngIf="formHeaderMo.get('max_capa_tl_1')?.invalid && formHeaderMo.get('max_capa_tl_1')?.touched" class="invalid-feedback">Maximum Capacity Tire TL is required.</div>
                 </div>
                 <div class="col-md-4 min-height-form">
                   <label for="text-input">Maximum Capacity Tire TT</label>
-                  <input type="text" formControlName="max_capa_tt_1" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  <input type="text" (input)="onInputChange($event, 'max_capa_tt_1')" [ngClass]="{ 'is-invalid': formHeaderMo.get('max_capa_tt_1')?.invalid && formHeaderMo.get('max_capa_tt_1')?.touched }" formControlName="max_capa_tt_1" name="text-input" class="form-control" placeholder="0,00" />
+                  <div *ngIf="formHeaderMo.get('max_capa_tt_1')?.invalid && formHeaderMo.get('max_capa_tt_1')?.touched" class="invalid-feedback">Maximum Capacity Tire TT is required.</div>
                 </div>
                 <div class="col-md-4 min-height-form">
                   <label for="text-input">Capacity Machine Airbag</label>
@@ -218,7 +237,7 @@
                 </div>
                 <div class="col-md-4 min-height-form">
                   <label for="text-input">Note Order TL</label>
-                  <input type="text" formControlName="note_tl_m1" name="text-input" class="form-control" [readOnly]="isReadOnly" />
+                  <input type="text" formControlName="note_tl_m1" name="text-input" class="form-control" />
                 </div>
               </div>
             </tab>
@@ -234,11 +253,11 @@
                 </div>
                 <div class="col-md-4 min-height-form">
                   <label for="text-input">Normal Working Day Tube</label>
-                  <input type="text" formControlName="nwt_2" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  <input type="text" formControlName="nwt_2" name="text-input" class="form-control" placeholder="0,00" (input)="onInputChange($event, 'nwt_2')" (input)="calculateTotalTube('nwt_2')" />
                 </div>
                 <div class="col-md-4 min-height-form">
                   <label for="text-input">Working Day Overtime Tube</label>
-                  <input type="text" formControlName="ot_wt_2" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  <input type="text" formControlName="ot_wt_2" name="text-input" class="form-control" placeholder="0,00" (input)="onInputChange($event, 'ot_wt_2')" (input)="calculateTotalTube('ot_wt_2')" />
                 </div>
                 <div class="col-md-4 min-height-form">
                   <label for="text-input">Working Day Overtime TL</label>
@@ -262,15 +281,18 @@
                 </div>
                 <div class="col-md-4 min-height-form">
                   <label for="text-input">Maximum Capacity Tube</label>
-                  <input type="text" formControlName="max_tube_capa_2" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  <input type="text" (input)="onInputChange($event, 'max_tube_capa_2')" [ngClass]="{ 'is-invalid': formHeaderMo.get('max_tube_capa_2')?.invalid && formHeaderMo.get('max_tube_capa_2')?.touched }" formControlName="max_tube_capa_2" name="text-input" class="form-control" placeholder="0,00" />
+                  <div *ngIf="formHeaderMo.get('max_tube_capa_2')?.invalid && formHeaderMo.get('max_tube_capa_2')?.touched" class="invalid-feedback">Maximum Tube Capacity is required.</div>
                 </div>
                 <div class="col-md-4 min-height-form">
                   <label for="text-input">Maximum Capacity Tire TL</label>
-                  <input type="text" formControlName="max_capa_tl_2" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  <input type="text" (input)="onInputChange($event, 'max_capa_tl_2')" [ngClass]="{ 'is-invalid': formHeaderMo.get('max_capa_tl_2')?.invalid && formHeaderMo.get('max_capa_tl_2')?.touched }" formControlName="max_capa_tl_2" name="text-input" class="form-control" placeholder="0,00" />
+                  <div *ngIf="formHeaderMo.get('max_capa_tl_2')?.invalid && formHeaderMo.get('max_capa_tl_2')?.touched" class="invalid-feedback">Maximum Capacity Tire TL is required.</div>
                 </div>
                 <div class="col-md-4 min-height-form">
                   <label for="text-input">Maximum Capacity Tire TT</label>
-                  <input type="text" formControlName="max_capa_tt_2" name="text-input" class="form-control" placeholder="0,00" [readOnly]="isReadOnly" />
+                  <input type="text" (input)="onInputChange($event, 'max_capa_tt_2')" [ngClass]="{ 'is-invalid': formHeaderMo.get('max_capa_tt_2')?.invalid && formHeaderMo.get('max_capa_tt_2')?.touched }" formControlName="max_capa_tt_2" name="text-input" class="form-control" placeholder="0,00" />
+                  <div *ngIf="formHeaderMo.get('max_capa_tt_2')?.invalid && formHeaderMo.get('max_capa_tt_2')?.touched" class="invalid-feedback">Maximum Capacity Tire TT is required.</div>
                 </div>
                 <div class="col-md-4 min-height-form">
                   <label for="text-input">Capacity Machine Airbag</label>
@@ -314,7 +336,7 @@
                 </div>
                 <div class="col-md-4 min-height-form">
                   <label for="text-input">Note Order TL</label>
-                  <input type="text" formControlName="note_tl_m2" name="text-input" class="form-control" [readOnly]="isReadOnly" />
+                  <input type="text" formControlName="note_tl_m2" name="text-input" class="form-control" />
                 </div>
               </div>
             </tab>
@@ -332,26 +354,14 @@
       </div>
       <div class="card-body">
         <div class="d-flex justify-content-between mb-3">
-          <!-- Bagian kiri: Pencarian dan Reset -->
           <div class="d-flex align-items-center">
-            <input type="text" class="form-control col-md-12 col-lg-12" [(ngModel)]="searchTextDmo" (input)="onSearchChange()" placeholder="Find here..." />
-            <button type="submit" class="btn btn-primary ml-2" (click)="resetSearch()">Reset</button>
-          </div>
-          <!-- Bagian kanan: Download dan Upload -->
-          <div class="d-flex">
-            <button type="button" (click)="downloadTemplate()" class="btn btn-primary ml-2"><i class="fa fa-download fa-lg"></i> Download Template</button>
-            <button type="button" class="btn btn-success ml-2" data-toggle="modal" data-target="#uploadModal"><i class="fa fa-file-excel-o fa-lg"></i> Upload Excel</button>
+            <input type="text" class="form-control col-md-12 col-lg-12" [(ngModel)]="searchTextDmo" (input)="onSearchChangeDmo()" placeholder="Find here..." />
+            <button type="submit" class="btn btn-primary ml-2" (click)="resetSearchDmo()">Reset</button>
           </div>
         </div>
-
-        <!-- Table -->
-
         <!-- Table -->
         <div class="table-responsive">
-          <table mat-table [dataSource]="dataSource" matSort class="table table-bordered table-sm">
-            <!-- Header Column -->
-
-            <!-- No column -->
+          <table mat-table matSort #sortDmo="matSort" [dataSource]="dataSourceDmo" class="table table-bordered table-sm">
             <ng-container matColumnDef="no" sticky>
               <th *matHeaderCellDef style="min-width: 50px" rowspan="2">No</th>
               <td mat-cell class="text-center" *matCellDef="let mo; let i = index">{{ i + 1 }}</td>
@@ -378,7 +388,13 @@
             <!-- Machine Type Column -->
             <ng-container matColumnDef="machineType">
               <th *matHeaderCellDef rowspan="2" style="min-width: 100px" mat-sort-header>Machine Type</th>
-              <td class="text-center" *matCellDef="let mo">{{ mo.machineType }}</td>
+              <td class="text-center" *matCellDef="let mo">
+                <select [(ngModel)]="mo.machineType" class="form-control">
+                  <option [ngValue]="null" disabled></option>
+                  <option value="A/B">A/B</option>
+                  <option value="BOM">BOM</option>
+                </select>
+              </td>
             </ng-container>
 
             <!-- Capacity 99,5% Column -->
@@ -387,10 +403,22 @@
               <td class="text-right" *matCellDef="let mo">{{ formatSeparatorView(mo.capacity) }}</td>
             </ng-container>
 
+            <!-- Quantity mould Column -->
+            <ng-container matColumnDef="qtyPerMould">
+              <th *matHeaderCellDef rowspan="2" style="min-width: 50px" mat-sort-header>Qty Mould</th>
+              <td class="text-right" *matCellDef="let mo">{{ formatSeparatorView(mo.qtyPerMould) }}</td>
+            </ng-container>
+
+            <!-- Mould Spare Column -->
+            <ng-container matColumnDef="spareMould">
+              <th *matHeaderCellDef rowspan="2" style="min-width: 50px" mat-sort-header>Mould Spare</th>
+              <td class="text-right" *matCellDef="let mo">{{ formatSeparatorView(mo.spareMould) }}</td>
+            </ng-container>
+
             <!-- Mould Plan Column -->
             <ng-container matColumnDef="mouldMonthlyPlan">
               <th *matHeaderCellDef rowspan="2" style="min-width: 50px" mat-sort-header>Mould Plan</th>
-              <td class="text-right" *matCellDef="let mo">{{ mo.mouldMonthlyPlan ?? 0 }}</td>
+              <td class="text-right" *matCellDef="let mo">{{ formatSeparatorView(mo.mouldMonthlyPlan) }}</td>
             </ng-container>
 
             <!-- Qty PerRak Column -->
@@ -401,8 +429,10 @@
 
             <!-- Minimum Order Column -->
             <ng-container matColumnDef="minOrder">
-              <th *matHeaderCellDef rowspan="2" style="min-width: 50px" mat-sort-header>Minimum Order</th>
-              <td class="text-right" *matCellDef="let mo">{{ formatSeparatorView(mo.minOrder) }}</td>
+              <th *matHeaderCellDef rowspan="2" mat-sort-header style="min-width: 150px">Minimum Order</th>
+              <td class="text-right" *matCellDef="let mo">
+                <input type="text" [ngModel]="formatSeparatorView(mo.minOrder)" class="text-right form-control" (input)="onInputChangeMinimumOrder($event, mo, 'minOrder', i)" />
+              </td>
             </ng-container>
 
             <!-- Maximum Capacity Column -->
@@ -413,9 +443,7 @@
             <!-- Initial Stock Column -->
             <ng-container matColumnDef="initialStock">
               <th mat-sort-header style="min-width: 150px" rowspan="2" *matHeaderCellDef>Initial Stock</th>
-              <td *matCellDef="let mo; let i = index">
-                <input type="text" [ngModel]="formatSeparatorView(mo.initialStock)" (ngModelChange)="onInputChange($event, mo, 'initialStock')" (input)="onInputFormat($event)" class="text-right form-control" />
-              </td>
+              <td class="text-right" *matCellDef="let mo">{{ formatSeparatorView(mo.initialStock) }}</td>
             </ng-container>
 
             <!-- Sales Forecast Column -->
@@ -426,6 +454,11 @@
             <!-- Marketing Order Column -->
             <ng-container matColumnDef="marketingOrder">
               <th mat-sort-header style="min-width: 350px" *matHeaderCellDef colspan="3" class="sticky-column">Marketing Order</th>
+            </ng-container>
+
+            <!-- Status Column -->
+            <ng-container matColumnDef="status">
+              <th *matHeaderCellDef colspan="3" style="min-width: 350px" mat-sort-header class="sticky-column">Status</th>
             </ng-container>
 
             <!-- Child header Column -->
@@ -451,98 +484,85 @@
             <!-- sfMonth0 Column -->
             <ng-container matColumnDef="sfMonth0">
               <th mat-sort-header *matHeaderCellDef style="min-width: 80px">{{ monthNames[0] || 'Month 1' }}</th>
-              <td mat-cell *matCellDef="let mo">
-                <input type="text" (keypress)="allowOnlyNumbers($event)" [ngModel]="formatNumber(mo.sfMonth0)" (ngModelChange)="onInputChange($event, mo, 'sfMonth0')" (input)="onInputFormat($event)" class="text-right form-control" />
-              </td>
+              <td mat-cell *matCellDef="let mo" class="text-right">{{ formatSeparatorView(mo.sfMonth0) }}</td>
             </ng-container>
 
             <!-- sfMonth1 Column -->
             <ng-container matColumnDef="sfMonth1">
               <th mat-sort-header *matHeaderCellDef style="min-width: 80px">{{ monthNames[1] || 'Month 1' }}</th>
-              <td mat-cell *matCellDef="let mo">
-                <input type="text" (keypress)="allowOnlyNumbers($event)" [ngModel]="formatNumber(mo.sfMonth1)" (ngModelChange)="onInputChange($event, mo, 'sfMonth1')" (input)="onInputFormat($event)" class="text-right form-control" />
-              </td>
+              <td mat-cell *matCellDef="let mo" class="text-right">{{ formatSeparatorView(mo.sfMonth1) }}</td>
             </ng-container>
 
             <!-- sfMonth2 Column -->
             <ng-container matColumnDef="sfMonth2">
               <th mat-sort-header *matHeaderCellDef style="min-width: 80px">{{ monthNames[2] || 'Month 1' }}</th>
-              <td mat-cell *matCellDef="let mo">
-                <input type="text" (keypress)="allowOnlyNumbers($event)" [ngModel]="formatNumber(mo.sfMonth2)" (ngModelChange)="onInputChange($event, mo, 'sfMonth2')" (input)="onInputFormat($event)" class="text-right form-control" />
-              </td>
+              <td mat-cell *matCellDef="let mo" class="text-right">{{ formatSeparatorView(mo.sfMonth2) }}</td>
             </ng-container>
 
             <!-- moMonth0 Column -->
             <ng-container matColumnDef="moMonth0">
               <th mat-sort-header *matHeaderCellDef style="min-width: 80px" class="child-column">{{ monthNames[0] || 'Month 1' }}</th>
-              <td mat-cell *matCellDef="let mo; let i = index" class="text-right" [ngClass]="{ 'locked-background': mo.lockStatusM0 === 1 }">
-                <input *ngIf="mo.lockStatusM0 !== 1" type="text" (keypress)="allowOnlyNumbers($event)" [ngModel]="formatNumber(mo.moMonth0)" (ngModelChange)="onInputChangeM0(mo, $event)" [ngClass]="{ 'is-invalid': isSubmitted && mo.validationMessageM0 }" [matTooltip]="isSubmitted && mo.validationMessageM0 ? mo.validationMessageM0 : ''" matTooltipPosition="right" class="text-right form-control" />
-              </td>
+              <td mat-cell *matCellDef="let mo" class="text-right">{{ formatSeparatorView(mo.moMonth0) }}</td>
             </ng-container>
 
             <!-- moMonth1 Column -->
             <ng-container matColumnDef="moMonth1">
               <th mat-sort-header *matHeaderCellDef style="min-width: 80px" class="child-column">{{ monthNames[1] || 'Month 1' }}</th>
-              <td mat-cell *matCellDef="let mo; let i = index" class="text-right" [ngClass]="{ 'locked-background': mo.lockStatusM1 === 1 }">
-                <input *ngIf="mo.lockStatusM1 !== 1" type="text" (keypress)="allowOnlyNumbers($event)" [ngModel]="formatNumber(mo.moMonth1)" (ngModelChange)="onInputChangeM1(mo, $event)" [ngClass]="{ 'is-invalid': isSubmitted && mo.validationMessageM1 }" [matTooltip]="isSubmitted && mo.validationMessageM1 ? mo.validationMessageM1 : ''" matTooltipPosition="right" class="text-right form-control" />
-              </td>
+              <td mat-cell *matCellDef="let mo" class="text-right">{{ formatSeparatorView(mo.moMonth1) }}</td>
             </ng-container>
 
             <!-- moMonth2 Column -->
             <ng-container matColumnDef="moMonth2">
               <th mat-sort-header *matHeaderCellDef style="min-width: 80px" class="child-column">{{ monthNames[2] || 'Month 2' }}</th>
-              <td mat-cell *matCellDef="let mo; let i = index" class="text-right" [ngClass]="{ 'locked-background': mo.lockStatusM2 === 1 }">
-                <input *ngIf="mo.lockStatusM2 !== 1" type="text" (keypress)="allowOnlyNumbers($event)" [ngModel]="formatNumber(mo.moMonth2)" (ngModelChange)="onInputChangeM2(mo, $event)" [ngClass]="{ 'is-invalid': isSubmitted && mo.validationMessageM2 }" [matTooltip]="isSubmitted && mo.validationMessageM2 ? mo.validationMessageM2 : ''" matTooltipPosition="right" class="text-right form-control" />
+              <td mat-cell *matCellDef="let mo" class="text-right">{{ formatSeparatorView(mo.moMonth2) }}</td>
+            </ng-container>
+
+            <!-- lockStatusM0 Column -->
+            <ng-container matColumnDef="lockStatusM0">
+              <th mat-sort-header *matHeaderCellDef style="min-width: 80px">{{ monthNames[0] || 'Month 1' }}</th>
+              <td align="center" mat-cell *matCellDef="let mo">
+                <button type="button" class="btn btn-md" [ngClass]="mo.lockStatusM0 === 1 ? 'btn-warning' : 'btn-danger'" (click)="lockUpdate(mo.partNumber, 'lockStatusM0')">
+                  {{ mo.lockStatusM0 === 1 ? 'Unlock' : 'Lock' }}
+                </button>
               </td>
             </ng-container>
 
-            <!-- ItemCuring Column -->
-            <ng-container matColumnDef="itemCuring">
-              <th mat-sort-header rowspan="2" *matHeaderCellDef style="min-width: 80px">Item Curing</th>
-              <td mat-cell *matCellDef="let mo" class="text-center">{{ mo.itemCuring }}</td>
+            <!-- lockStatusM1 Column -->
+            <ng-container matColumnDef="lockStatusM1">
+              <th mat-sort-header *matHeaderCellDef style="min-width: 80px">{{ monthNames[1] || 'Month 2' }}</th>
+              <td align="center" mat-cell *matCellDef="let mo">
+                <button type="button" class="btn btn-md" [ngClass]="mo.lockStatusM1 === 1 ? 'btn-warning' : 'btn-danger'" (click)="lockUpdate(mo.partNumber, 'lockStatusM1')">
+                  {{ mo.lockStatusM1 === 1 ? 'Unlock' : 'Lock' }}
+                </button>
+              </td>
             </ng-container>
 
-            <tr align="center" style="height: 30px" mat-header-row *matHeaderRowDef="headersColumns; sticky: true"></tr>
-            <tr align="center" style="height: 30px" mat-header-row *matHeaderRowDef="childHeadersColumns; sticky: true"></tr>
-            <tr style="height: 30px" mat-row *matRowDef="let row; columns: rowData"></tr>
+            <!-- lockStatusM2 Column -->
+            <ng-container matColumnDef="lockStatusM2">
+              <th mat-sort-header *matHeaderCellDef style="min-width: 80px">{{ monthNames[2] || 'Month 3' }}</th>
+              <td align="center" mat-cell *matCellDef="let mo">
+                <button type="button" class="btn btn-md" [ngClass]="mo.lockStatusM2 === 1 ? 'btn-warning' : 'btn-danger'" (click)="lockUpdate(mo.partNumber, 'lockStatusM2')">
+                  {{ mo.lockStatusM2 === 1 ? 'Unlock' : 'Lock' }}
+                </button>
+              </td>
+            </ng-container>
+
+            <tr align="center" style="height: 30px" mat-header-row *matHeaderRowDef="headersColumnsDmo; sticky: true"></tr>
+            <tr align="center" style="height: 30px" mat-header-row *matHeaderRowDef="childHeadersColumnsDmo; sticky: true"></tr>
+            <tr style="height: 30px" mat-row *matRowDef="let row; columns: rowDataDmo"></tr>
           </table>
         </div>
         <!-- Pagination -->
-        <mat-paginator [pageSizeOptions]="[20, 100, 200]" showFirstLastButtons></mat-paginator>
-      </div>
-      <div class="col-md-12 pb-4">
-        <button (click)="navigateToViewMo()" class="btn btn-primary justify-content-start mr-2">Back</button>
-        <button (click)="editMo()" [disabled]="loading" type="submit" class="btn btn-success">
-          <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
-          Edit
-        </button>
+        <mat-paginator #paginatorDmo [pageSizeOptions]="[20, 100, 200]" showFirstLastButtons></mat-paginator>
       </div>
     </div>
   </div>
 
-  <!-- Modal for Upload Excel -->
-  <div class="modal fade" id="uploadModal" tabindex="-1" role="dialog" aria-labelledby="uploadModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="uploadModalLabel">Upload Excel File</h5>
-          <button type="button" class="close" (click)="resetFileInput()" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <form id="uploadForm">
-            <!-- Manual File Input -->
-            <div class="form-group mt-3">
-              <input type="file" #fileInput class="form-control-file" id="manualFileInput" accept=".xls,.xlsx" (change)="onFileChange($event)" />
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-md btn-secondary" (click)="resetFileInput()" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-md btn-primary" data-dismiss="modal" id="uploadButton" (click)="uploadFileExcel()">Upload</button>
-        </div>
-      </div>
-    </div>
+  <div class="col-md-12 pb-4">
+    <button (click)="navigateToViewMo()" class="btn btn-primary justify-content-start mr-2">Back</button>
+    <button (click)="editMo()" [disabled]="loading" type="submit" class="btn btn-success">
+      <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
+      Edit
+    </button>
   </div>
 </div>

@@ -23,7 +23,7 @@ import { ParsingNumberService } from 'src/app/utils/parsing-number/parsing-numbe
 })
 export class EditMoPpcComponent implements OnInit {
   //Variable Declaration
-  idMo: String;
+  idMo: string = '';
   capacityDb: string = '';
   formHeaderMo: FormGroup;
   isReadOnly: boolean = true;
@@ -49,7 +49,7 @@ export class EditMoPpcComponent implements OnInit {
     this.formHeaderMo = this.fb.group({
       date: [null, []],
       type: [null, []],
-      revision: [null, []],
+      revision: [null, [Validators.required, Validators.pattern(/^[0-9]*$/)]],
       month_0: [null, []],
       month_1: [null, []],
       month_2: [null, []],
@@ -143,6 +143,26 @@ export class EditMoPpcComponent implements OnInit {
     this.idMo = this.activeRoute.snapshot.paramMap.get('idMo');
     this.getAllData(this.idMo);
     this.getLastIdMo();
+  }
+
+  get revisionControl() {
+    return this.formHeaderMo.get('revision');
+  }
+
+  // Mencegah input non-angka saat mengetik
+  allowOnlyNumbers(event: KeyboardEvent): void {
+    const charCode = event.key.charCodeAt(0);
+    if (!/[0-9]/.test(event.key)) {
+      event.preventDefault();
+    }
+  }
+
+  // Mencegah menempelkan teks non-angka
+  blockNonNumbers(event: ClipboardEvent): void {
+    const clipboardData = event.clipboardData?.getData('text') || '';
+    if (!/^[0-9]*$/.test(clipboardData)) {
+      event.preventDefault();
+    }
   }
 
   lockUpdate(partNumber: number, lockStatusField: string) {
@@ -388,6 +408,17 @@ export class EditMoPpcComponent implements OnInit {
 
   editMo(): void {
     const type = this.formHeaderMo.get('type')?.value;
+    let revPpc = this.formHeaderMo.get('revision').value;
+
+    if (revPpc === null || revPpc === '') {
+      Swal.fire({
+        title: 'Warning!',
+        text: 'Please fill the revision version.',
+        icon: 'warning',
+        confirmButtonText: 'OK',
+      });
+      return;
+    }
 
     //Set data Save MO
     this.marketingOrder.moId = this.lastIdMo;
