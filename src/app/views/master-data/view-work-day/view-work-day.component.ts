@@ -111,8 +111,6 @@ export class ViewWorkDayComponent implements OnInit {
         } catch (error) {
           this.errorMessage = 'Failed to update work day specific: ' + error.message;
         }
-        // const response = await this.workDayService.turnOnShift(ftargetDate, shift).toPromise();
-        // this.work_days = response.data;
       } else {
         try{
           const response = await this.workDayService.updateShiftTimes(
@@ -126,8 +124,6 @@ export class ViewWorkDayComponent implements OnInit {
         } catch (error) {
           this.errorMessage = 'Failed to update work day specific: ' + error.message;
         }
-        // const response = await this.workDayService.turnOffShift(ftargetDate, shift).toPromise();
-        // this.work_days = response.data;
       }
   
       await this.loadWorkday();
@@ -165,8 +161,6 @@ export class ViewWorkDayComponent implements OnInit {
         } catch (error) {
           this.errorMessage = 'Failed to update work day specific: ' + error.message;
         }
-        // const response = await this.workDayService.turnOnShift(ftargetDate, ot[shiftIndex]).toPromise();
-        // this.work_days = response.data;
       } else {
         try{
           const response = await this.workDayService.updateShiftTimes(
@@ -180,8 +174,6 @@ export class ViewWorkDayComponent implements OnInit {
         } catch (error) {
           this.errorMessage = 'Failed to update work day specific: ' + error.message;
         }
-        // const response = await this.workDayService.turnOffShift(ftargetDate, ot[shiftIndex]).toPromise();
-        // this.work_days = response.data;
       }
       await this.loadWorkday();
       await this.loadHours();
@@ -218,8 +210,6 @@ export class ViewWorkDayComponent implements OnInit {
         } catch (error) {
           this.errorMessage = 'Failed to update work day specific: ' + error.message;
         }
-        // const response = await this.workDayService.turnOnShift(ftargetDate, ot[shiftIndex]).toPromise();
-        // this.work_days = response.data;
       } else {
         try{
           const response = await this.workDayService.updateShiftTimes(
@@ -233,8 +223,6 @@ export class ViewWorkDayComponent implements OnInit {
         } catch (error) {
           this.errorMessage = 'Failed to update work day specific: ' + error.message;
         }
-        const response = await this.workDayService.turnOffShift(ftargetDate, ot[shiftIndex]).toPromise();
-        this.work_days = response.data;
       }
   
       // await this.loadWorkday();
@@ -281,7 +269,7 @@ export class ViewWorkDayComponent implements OnInit {
       ].join('-');
   
       const fEndDate = [
-        String(endDate.getDate()).padStart(2, '0'), // dd
+        String(endDate.getDate()+1).padStart(2, '0'), // dd
         String(endDate.getMonth() + 1).padStart(2, '0'), // MM
         endDate.getFullYear() // yyyy
       ].join('-');
@@ -290,6 +278,7 @@ export class ViewWorkDayComponent implements OnInit {
       const response = await this.workDayService.getAllWorkDaysByDateRange(fStartDate, fEndDate).toPromise();
   
       if (response?.data) {
+        console.log(response.data);
         this.work_days = response.data;
         let index = 0;
   
@@ -354,7 +343,8 @@ export class ViewWorkDayComponent implements OnInit {
         if (response?.data) {
           this.perHourShift = response.data;
         } else {
-          this.createHours("WD_NORMAL");
+          console.log("ini create normal")
+          // this.createHours("WD_NORMAL");
         }
       } else {
         const otTTResponse = await this.workDayService.getDWorkDayHoursSpecificByDateDesc(this.getdateselected(), "OT_TT").toPromise();
@@ -362,14 +352,16 @@ export class ViewWorkDayComponent implements OnInit {
         if (otTTResponse?.data) {
           this.ttperHourSwitches = otTTResponse.data;
         } else {
-          this.createHours("OT_TT");
+          console.log("ini create ot tt")
+          // this.createHours("OT_TT");
         }
         const otTLResponse = await this.workDayService.getDWorkDayHoursSpecificByDateDesc(this.getdateselected(), "OT_TL").toPromise();
   
         if (otTLResponse?.data) {
           this.tlperHourSwitches = otTLResponse.data;
         } else {
-          this.createHours("OT_TL");
+          console.log("ini create to tl")
+          // this.createHours("OT_TL");
         }
       }
     } catch (error: any) {
