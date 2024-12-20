@@ -516,7 +516,7 @@ export class AddMoPpcComponent implements OnInit {
   saveAllMo() {
     this.isSubmitted = true;
 
-    const hasInvalidMinOrderOrMachineType = this.detailMarketingOrder.some((item) => item.minOrder === null || item.machineType === null);
+    const hasInvalidMinOrderOrMachineType = this.detailMarketingOrder.some((item) => item.minOrder === null || item.minOrder === 0 || item.machineType === null);
 
     if (hasInvalidMinOrderOrMachineType) {
       Swal.fire({
@@ -669,7 +669,7 @@ export class AddMoPpcComponent implements OnInit {
     // Set data save Detail Mo
     this.detailMarketingOrder.forEach((item) => {
       item.moId = this.lastIdMo;
-      item.minOrder = Number(item.minOrder.toString().replace('.', ''));
+      item.minOrder = item.minOrder ? Number(item.minOrder.toString().replace('.', '')) : 0;
     });
   }
 
@@ -1449,7 +1449,7 @@ export class AddMoPpcComponent implements OnInit {
           for (let row = startRow - 1; row <= endRow; row++) {
             const partNumber = Number(worksheet[`C${row + 1}`]?.v) || null; // Kolom C
             const machineType = String(worksheet[`E${row + 1}`]?.v) || null; // Kolom I
-            const minOrder = Number(worksheet[`I${row + 1}`]?.v) || 0; // Kolom E
+            const minOrder = Number(worksheet[`I${row + 1}`]?.v) || null; // Kolom E
 
             // Mencari dan memperbarui nilai dalam detailMarketingOrder
             const detail = this.detailMarketingOrder.find((item) => item.partNumber === partNumber);
