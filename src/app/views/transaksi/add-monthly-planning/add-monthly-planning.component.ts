@@ -87,6 +87,7 @@ export class AddMonthlyPlanningComponent implements OnInit {
   ngOnInit(): void {
     //this.getAllMarketingOrder();
     this.getAllMoOnlyMonth();
+    this.showMonthlyPlanning = true;
   }
 
   parseDate(dateParse: string): string {
@@ -252,7 +253,6 @@ export class AddMonthlyPlanningComponent implements OnInit {
       minD, maxD
     ).subscribe((response: ApiResponse<any>) => {
       Swal.close(); // Menutup dialog loading setelah sukses
-      this.showMonthlyPlanning = true;
       this.allData = response.data;
       this.fillAllData(this.allData);
     },
@@ -550,6 +550,7 @@ export class AddMonthlyPlanningComponent implements OnInit {
     // Update hasil filter
     this.filteredChangeMould = filteredData;
   }
+  
   getTotalPlan(idCuring: number, date: string): number | string {
     // Cari data yang sesuai dengan idCuring dan tanggal
     const matchingData = this.monly.find((header) => this.formatDate(header.dateDailyMp) === date && header.detailIdCuring === idCuring);

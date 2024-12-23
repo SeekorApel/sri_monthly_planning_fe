@@ -2009,84 +2009,15 @@ export class AddMoFrontRearComponent implements OnInit {
     return;
   }
 
-  // objVarLim = {
-  //   mould_change: 0,
-  //   minLimit_0_2000: 0,
-  //   maxLimit_0_2000: 0,
-  //   minLimit_2001_10000: 0,
-  //   maxLimit_2001_10000: 0,
-  //   minLimit_10001_100000: 0,
-  //   maxLimit_10001_100000: 0,
-  //   minLimit_gt_100000: 0,
-  //   maxLimit_gt_100000: 0
-  // };
-
-  // updateLimitHeaderMO() {
-  //   console.log('Mengirim data header MO dengan tipe objek.');
-
-  //   // Array untuk menyimpan semua data HeaderMarketingOrder
-  //   const headerMarketingOrders: HeaderMarketingOrder[] = [];
-
-  //   // Data diambil dari objVarFed dan objVarFdr untuk setiap bulan
-  //   for (let i = 0; i < 3; i++) {
-  //     const fedKey = `monthFedM${i}`;
-  //     const fdrKey = `monthFdrM${i}`;
-
-  //     const headerMarketingOrder: HeaderMarketingOrder = {
-  //       headerId: 0, // Sesuaikan jika perlu
-  //       moId: this.idMo,
-  //       month: this.objVar[fedKey] || this.objVar[fdrKey], // Ambil bulan dari salah satu objek
-  //       wdNormalTire: Number(this.objVarFed[`nwt_${i}`] || 0),
-  //       wdOtTl: Number(this.objVarFed[`ot_wt_${i}`] || 0),
-  //       wdOtTt: Number(this.objVarFdr[`ot_wt_${i}`] || 0),
-  //       wdNormalTube: Number(this.objVarFed[`nwd_${i}`] || 0),
-  //       wdOtTube: Number(this.objVarFed[`ot_wt_${i}`] || 0),
-  //       totalWdTl: Number(this.objVarFed[`total_wt_${i}`] || 0),
-  //       totalWdTt: Number(this.objVarFdr[`total_wt_${i}`] || 0),
-  //       totalWdTube: Number(this.objVarFed[`total_wt_${i}`] || 0),
-  //       maxCapTube: Number(this.objVarFed[`max_tube_capa_${i}`] || 0),
-  //       maxCapTl: Number(this.objVarFed[`max_capa_tl_${i}`] || 0),
-  //       maxCapTt: Number(this.objVarFed[`max_capa_tt_${i}`] || 0),
-  //       airbagMachine: Number(this.objVarFed[`machine_airbag_m${i}`] || 0),
-  //       tl: Number(this.objVarFed[`fed_tl_m${i}`] || 0),
-  //       tt: Number(this.objVarFed[`fed_tt_m${i}`] || 0),
-  //       totalMo: Number(this.objVarFed[`total_mo_m${i}`] || 0),
-  //       tlPercentage: Number(this.objVarFed[`fed_TL_percentage_m${i}`] || 0),
-  //       ttPercentage: Number(this.objVarFed[`fed_TT_percentage_m${i}`] || 0),
-  //       noteOrderTl: this.objVarFed[`note_tl_m${i}`] || '',
-  //       minLimit0: Number(this.objVarLim[`minLimit_0_2000`] || 0), // Logika jika ada
-  //       maxLimit0: Number(this.objVarLim[`maxLimit_0_2000`] || 0), // Logika jika ada
-  //       minLimit1: Number(this.objVarLim[`minLimit_2001_10000`] || 0), // Logika jika ada
-  //       maxLimit1: Number(this.objVarLim[`maxLimit_2001_10000`] || 0), // Logika jika ada
-  //       minLimit2: Number(this.objVarLim[`minLimit_10001_100000`] || 0), // Logika jika ada
-  //       maxLimit2: Number(this.objVarLim[`maxLimit_10001_100000`] || 0), // Logika jika ada
-  //       minLimit3: Number(this.objVarLim[`minLimit_gt_100000`] || 0), // Logika jika ada
-  //       maxLimit3: Number(this.objVarLim[`maxLimit_gt_100000`] || 0), // Logika jika ada
-  //       mouldChange: Number(this.objVarLim[`mould_change`] || 0), // Logika jika ada
-  //       looping: 0, // Atur logika jika diperlukan
-  //       status: 1 // Sesuaikan kebutuhan
-  //     };
-
-  //     headerMarketingOrders.push(headerMarketingOrder);
-  //   }
-
-  //   // Kirim data ke service
-  //   return this.moService.updateLimitHeaderMO(headerMarketingOrders);
-  // }
-
 
   navigateToViewMo() {
     this.router.navigate(['/transaksi/add-monthly-planning']);
   }
 
-  saveAndUpdate() {
+  saveAll() {
+    this.saveTempMachineProduct();
     const saveFrontRear$ = this.saveDataFrontRear();
     // const updateHeaderMo$ = this.updateLimitHeaderMO();
-
-    if (!saveFrontRear$) {
-      return; // Handle if either operation is invalid
-    }
-
     // Execute both operations and show a combined response
     saveFrontRear$.subscribe(
       () => {
@@ -2106,4 +2037,6 @@ export class AddMoFrontRearComponent implements OnInit {
       }
     );
   }
+
+  
 }

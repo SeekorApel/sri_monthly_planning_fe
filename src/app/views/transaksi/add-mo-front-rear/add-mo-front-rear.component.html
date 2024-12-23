@@ -820,12 +820,12 @@
           </div>
 
           <!-- Bagian kanan: Download dan Upload -->
-          <div class="d-flex">
+          <!-- <div class="d-flex">
             <button type="button" (click)="downloadTemplate()" class="btn btn-primary ml-2"><i
                 class="fa fa-download fa-lg"></i> Download Template</button>
             <button type="button" class="btn btn-success ml-2" data-toggle="modal" data-target="#uploadModal"><i
                 class="fa fa-file-excel-o fa-lg"></i> Upload Excel</button>
-          </div>
+          </div> -->
         </div>
         <!-- Table -->
         <div class="table-responsive">
@@ -1079,7 +1079,7 @@
 
   <div class="col-md-12 pb-4">
     <button (click)="navigateToViewAddMp()" class="btn btn-primary justify-content-start mr-2">Back</button>
-    <button (click)="saveTempMachineProduct()" [disabled]="loading" type="submit" class="btn btn-success">
+    <button (click)="saveAll()" [disabled]="loading" type="submit" class="btn btn-success">
       <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
       Submit
     </button>
