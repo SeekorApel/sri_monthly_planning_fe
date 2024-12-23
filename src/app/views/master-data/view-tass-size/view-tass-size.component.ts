@@ -57,10 +57,7 @@ export class ViewTassSizeComponent implements OnInit {
       machinetasstype_ID: ['', Validators.required],
       sizeid: ['', Validators.required],
       capacity: ['', Validators.required],
-    });
-    
-    this.loadMachineTassType();
-    this.loadSize();
+    });    
   }
   validateNumberInput(event: KeyboardEvent): void {
     const charCode = event.key.charCodeAt(0);
@@ -70,41 +67,45 @@ export class ViewTassSizeComponent implements OnInit {
       event.preventDefault();
     }
   }
-  private loadMachineTassType(): void {
-    this.machineTassTypeService.getAllMachineTassType().subscribe(
-      (response: ApiResponse<MachineTassType[]>) => {
-        this.machineTassType = response.data;
-        if (!this.uomOptions) {
-          this.uomOptions = [];
-        }
-        this.uomOptions[0] = this.machineTassType.map((element) => ({
-          id: element.machinetasstype_ID, // Ensure the ID is a string
-          text: element.machinetasstype_ID // Set the text to the plant name
-        }));
-      },
-      (error) => {
-        this.errorMessage = 'Failed to load Machine Tass Type: ' + error.message;
+  private async loadMachineTassType(): Promise<void> {
+    try {
+      const response: ApiResponse<MachineTassType[]> = await this.machineTassTypeService
+        .getAllMachineTassType()
+        .toPromise(); // Convert Observable to Promise
+      this.machineTassType = response.data;
+      if (!this.uomOptions) {
+        this.uomOptions = [];
       }
-    );
+      this.uomOptions[0] = this.machineTassType.map((element) => ({
+        id: element.machinetasstype_ID, // Ensure the ID is a string
+        text: element.machinetasstype_ID, // Set the text to the plant name
+      }));
+    } catch (error) {
+      this.errorMessage = 'Failed to load Machine Tass Type: ' + error.message;
+    }
   }
-  private loadSize(): void {
-    this.sizeService.getAllSize().subscribe(
-      (response: ApiResponse<Size[]>) => {
-        this.size = response.data;
-        if (!this.uomOptions) {
-          this.uomOptions = [];
-        }
-        this.uomOptions[1] = this.size.map((element) => ({
-          id: element.size_ID, // Ensure the ID is a string
-          text: element.size_ID, // Set the text to the name (or other property)
-        }));
-      },
-      (error) => {
-        this.errorMessage = 'Failed to load size: ' + error.message;
+  
+  private async loadSize(): Promise<void> {
+    try {
+      const response: ApiResponse<Size[]> = await this.sizeService
+        .getAllSize()
+        .toPromise(); // Convert Observable to Promise
+      this.size = response.data;
+      if (!this.uomOptions) {
+        this.uomOptions = [];
       }
-    );
+      this.uomOptions[1] = this.size.map((element) => ({
+        id: element.size_ID, // Ensure the ID is a string
+        text: element.size_ID, // Set the text to the name (or other property)
+      }));
+    } catch (error) {
+      this.errorMessage = 'Failed to load size: ' + error.message;
+    }
   }
-  ngOnInit(): void {
+  
+  async ngOnInit() {
+    await this.loadMachineTassType();
+    await this.loadSize();
     this.getAllTassSize();
   }
 
@@ -124,10 +125,10 @@ export class ViewTassSizeComponent implements OnInit {
         
         this.tass_sizes = this.tass_sizes.map((tassSize) => {
           const matchedMachineTassType = this.machineTassType?.find(
-            (b) => b.machinetasstype_ID === (tassSize.machinetasstype_ID)
+            (b) => b.machinetasstype_ID == (tassSize.machinetasstype_ID)
           );
           const matchedSize = this.size.find(
-            (c) => c.size_ID === (tassSize.size_ID)
+            (c) => c.size_ID == (tassSize.size_ID)
           );
   
           return {
@@ -199,7 +200,7 @@ export class ViewTassSizeComponent implements OnInit {
   }
 
   getDescSize(size_ID: string): string {
-    const size = this.size.find(b => b.size_ID === size_ID);
+    const size = this.size.find(b => b.size_ID == size_ID);
     return size ? size.description : 'Unknown';
   }
 
@@ -324,15 +325,27 @@ export class ViewTassSizeComponent implements OnInit {
       this.tass_sizeService.uploadFileExcel(formData).subscribe(
         (response) => {
           Swal.close();
-          Swal.fire({
-            icon: 'success',
-            title: 'Success!',
-            text: 'Excel file uploaded successfully.',
-            confirmButtonText: 'OK',
-          }).then(() => {
-            $('#editModal').modal('hide');
-            window.location.reload();
-          });
+          if(response.status === 200) {
+            Swal.fire({
+              icon: 'success',
+              title: 'Success!',
+              text: 'Excel file uploaded successfully.',
+              confirmButtonText: 'OK',
+            }).then(() => {
+              $('#editModal').modal('hide');
+              window.location.reload();
+            });
+          }else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error!',
+              text: response.message,
+              confirmButtonText: 'OK',
+            }).then(() => {
+              $('#editModal').modal('hide');
+              window.location.reload();
+            });
+          }
         },
         (error) => {
           console.error('Error uploading file', error);
@@ -345,6 +358,7 @@ export class ViewTassSizeComponent implements OnInit {
         }
       );
     } else {
+      Swal.close();
       Swal.fire({
         icon: 'warning',
         title: 'Warning!',
