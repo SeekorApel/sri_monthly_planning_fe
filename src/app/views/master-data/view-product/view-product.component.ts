@@ -107,6 +107,7 @@ export class ViewProductComponent implements OnInit {
       }
     );
   }
+
   private loadSize(): void {
     this.size.getAllSize().subscribe(
       (response: ApiResponse<Size[]>) => {
@@ -124,6 +125,7 @@ export class ViewProductComponent implements OnInit {
       }
     );
   }
+  
   private loadProductType(): void {
     this.productType.getAllProductType().subscribe(
       (response: ApiResponse<ProductType[]>) => {
