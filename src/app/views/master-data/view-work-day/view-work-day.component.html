@@ -79,10 +79,11 @@
                 'background-color': 
                   (day.detail.off === 1  && day.weekend && day.detail.off === 1 && day.detail.iwd_SHIFT_1 === 0 && day.detail.iwd_SHIFT_2 === 0 && day.detail.iwd_SHIFT_3 === 0 && day.detail.iot_TL_1 === 0 && day.detail.iot_TL_2 === 0 && day.detail.iot_TL_3 === 0 && day.detail.iot_TT_1 === 0 && day.detail.iot_TT_2 === 0 && day.detail.iot_TT_3 === 0) ? 'red' : 
                   (day.detail.off === 1 || day.detail.semi_OFF === 1) && (day.detail.iot_TL_1 === 1 || day.detail.iot_TL_2 === 1 || day.detail.iot_TL_3 === 1 || day.detail.iot_TT_1 === 1 || day.detail.iot_TT_2 === 1 || day.detail.iot_TT_3 === 1)  ? '#00ff73' : 
-                  (day.detail.off === 1 && day.detail.semi_OFF === 0 && day.detail.iwd_SHIFT_1 === 0 && day.detail.iwd_SHIFT_2 === 0 && day.detail.iwd_SHIFT_3 === 0 && day.detail.iot_TL_1 === 0 && day.detail.iot_TL_2 === 0 && day.detail.iot_TL_3 === 0 && day.detail.iot_TT_1 === 0 && day.detail.iot_TT_2 === 0 && day.detail.iot_TT_3 === 0)  ? 'red' : 
+                  (day.detail.off === 1)  ? 'red' : 
                   day.detail.semi_OFF === 1 ? 'yellow' : 'inherit', 
-                'color': 
-                (day.detail.off === 1  && day.weekend && day.detail.off === 1 && day.detail.iwd_SHIFT_1 === 0 && day.detail.iwd_SHIFT_2 === 0 && day.detail.iwd_SHIFT_3 === 0 && day.detail.iot_TL_1 === 0 && day.detail.iot_TL_2 === 0 && day.detail.iot_TL_3 === 0 && day.detail.iot_TT_1 === 0 && day.detail.iot_TT_2 === 0 && day.detail.iot_TT_3 === 0) || (day.detail.off === 1 && day.detail.semi_OFF === 0 && day.detail.iwd_SHIFT_1 === 0 && day.detail.iwd_SHIFT_2 === 0 && day.detail.iwd_SHIFT_3 === 0 && day.detail.iot_TL_1 === 0 && day.detail.iot_TL_2 === 0 && day.detail.iot_TL_3 === 0 && day.detail.iot_TT_1 === 0 && day.detail.iot_TT_2 === 0 && day.detail.iot_TT_3 === 0)   ? 'white':  'inherit'
+                  'color': 
+                  (day.detail.off === 1  && day.weekend && day.detail.off === 1 && day.detail.iwd_SHIFT_1 === 0 && day.detail.iwd_SHIFT_2 === 0 && day.detail.iwd_SHIFT_3 === 0 && day.detail.iot_TL_1 === 0 && day.detail.iot_TL_2 === 0 && day.detail.iot_TL_3 === 0 && day.detail.iot_TT_1 === 0 && day.detail.iot_TT_2 === 0 && day.detail.iot_TT_3 === 0) || (day.detail.off === 1 && day.detail.semi_OFF === 0 && day.detail.iwd_SHIFT_1 === 0 && day.detail.iwd_SHIFT_2 === 0 && day.detail.iwd_SHIFT_3 === 0 && day.detail.iot_TL_1 === 0 && day.detail.iot_TL_2 === 0 && day.detail.iot_TL_3 === 0 && day.detail.iot_TT_1 === 0 && day.detail.iot_TT_2 === 0 && day.detail.iot_TT_3 === 0)   ? 'white':  
+                  (day.detail.off === 1 && !(day.detail.iot_TL_1 === 1 || day.detail.iot_TL_2 === 1 || day.detail.iot_TL_3 === 1 || day.detail.iot_TT_1 === 1 || day.detail.iot_TT_2 === 1 || day.detail.iot_TT_3 === 1) )  ? 'white' : 'inherit'
               }" 
               [ngClass]="{ 'selected': day.days === selectedDay.days && day.month=== selectedDay.month  }" 
               (click)="selectDay(day)" >
@@ -119,7 +120,7 @@
       
             <!-- Tab 1: Summary -->
             <tab heading="Summary">
-              <div *ngIf="!weekend && !overTimeSwitch">
+              <div *ngIf="(!isSaturday&& !weekend) ||(weekend && isSaturday) ">
                 <h4>Reason of deactive shift</h4>
                 <ul>
                   <li>Shift 3: {{ shift1Reasons[0] ? shift1Reasons[0].description : '-' }}</li>
@@ -127,14 +128,14 @@
                   <li>Shift 2: {{ shift1Reasons[2] ? shift1Reasons[2].description : '-' }}</li>
                 </ul>
               </div>
-              <div *ngIf="weekend || overTimeSwitch">
-                <h4>Reason of deactive shift of TT</h4>
+              <div *ngIf="overTimeSwitch">
+                <h4>Reason of deactive shift of overtime TT</h4>
                 <ul>
                   <li>Shift 3: {{ ttReasons[0] ? ttReasons[0].description : '-' }}</li>
                   <li>Shift 1: {{ ttReasons[1] ? ttReasons[1].description : '-' }}</li>
                   <li>Shift 2: {{ ttReasons[2] ? ttReasons[2].description : '-' }}</li>
                 </ul>                
-                <h4>Reason of deactive shift of TL</h4>
+                <h4>Reason of deactive shift of overtime TL</h4>
                 <ul>
                   <li>Shift 3: {{ tlReasons[0] ? tlReasons[0].description : '-' }}</li>
                   <li>Shift 1: {{ tlReasons[1] ? tlReasons[1].description : '-' }}</li>
@@ -161,11 +162,11 @@
                 
 
                 <!-- Shift 3 -->
-                <div class="form-group" *ngIf="!weekend">
+                <div class="form-group" *ngIf="(!isSaturday&& !weekend) ||(weekend && isSaturday) ">
                   <div class="per-hour-wrapper">
                     <h4 style="min-width: 70px;">Shift 3</h4>
                     <label class="switch switch-label switch-primary">
-                      <input type="checkbox" class="switch-input" [(ngModel)]="shift1Switches[0]" (ngModelChange)="handleShiftChange(0,'SHIFT 3')" [disabled]="overTimeSwitch">
+                      <input type="checkbox" class="switch-input" [(ngModel)]="shift1Switches[0]" (ngModelChange)="handleShiftChange(0,'SHIFT 3')" >
                       <span class="switch-slider" data-checked="On" data-unchecked="Off"></span>
                     </label>
                     <div *ngIf="isReasonRequired(shift1Switches[0]) && !overTimeSwitch">
@@ -179,7 +180,7 @@
                   <div class="per-hour-wrapper">
                     <h4 style="min-width: 70px;">Shift 1</h4>
                     <label class="switch switch-label switch-primary">
-                      <input type="checkbox" class="switch-input" [(ngModel)]="shift1Switches[1]" (ngModelChange)="handleShiftChange(1,'SHIFT 1')" [disabled]="overTimeSwitch">
+                      <input type="checkbox" class="switch-input" [(ngModel)]="shift1Switches[1]" (ngModelChange)="handleShiftChange(1,'SHIFT 1')">
                       <span class="switch-slider" data-checked="On" data-unchecked="Off"></span>
                     </label>
                     <div *ngIf="isReasonRequired(shift1Switches[1]) && !overTimeSwitch">
@@ -193,7 +194,7 @@
                   <div class="per-hour-wrapper">
                     <h4 style="min-width: 70px;">Shift 2</h4>
                     <label class="switch switch-label switch-primary">
-                      <input type="checkbox" class="switch-input" [(ngModel)]="shift1Switches[2]" (ngModelChange)="handleShiftChange(2, 'SHIFT 2')" [disabled]="overTimeSwitch">
+                      <input type="checkbox" class="switch-input" [(ngModel)]="shift1Switches[2]" (ngModelChange)="handleShiftChange(2, 'SHIFT 2')" >
                       <span class="switch-slider" data-checked="On" data-unchecked="Off"></span>
                     </label>
                     <div *ngIf="isReasonRequired(shift1Switches[2]) && !overTimeSwitch">
@@ -299,52 +300,60 @@
               </tabset>              
             </tab>                
             <!-- Tab 3: Per Hour -->
-            <tab heading="Per Hour" *ngIf="!overTimeSwitch && !weekend && selectedDay.detail.off === 0 ">
+            <tab heading="Per Hour Normal" *ngIf="(!isSaturday && !weekend) || (weekend && isSaturday)">
               <div class="form-group per-hour-wrapper">
-                <div *ngFor="let shift of shifts; let i = index" class="hour-group">
-                  <h5>{{ shift }}</h5>
-                  
-                  <label>
-                    Start Time:
-                    <input
-                      type="time"
-                      [(ngModel)]="perHourShift['shift' + getShiftIndex(i) + '_START_TIME']"
-                      class="form-control"
-                      (change)="updateTotalTime(i)"
-                    />
-                  </label>
-                  <label>
-                    End Time:
-                    <input
-                      type="time"
-                      [(ngModel)]="perHourShift['shift' + getShiftIndex(i) + '_END_TIME']"
-                      class="form-control"
-                      (change)="updateTotalTime(i)"
-                    />
-                  </label>
-                  <label>
-                    Total Time:
-                    <input
-                      type="number"
-                      [(ngModel)]="perHourShift['shift' + getShiftIndex(i) + '_TOTAL_TIME']"
-                      class="form-control"
-                      disabled
-                    />
-                  </label>
-                  <button type="button" class="btn btn-warning" (click)="resetShiftTime('perHourShift', i)">Reset Time</button>
-                  <div *ngIf="perHourShift['shift' +  getShiftIndex(i) + '_END_TIME'] === '00:00' && perHourShift['shift' + getShiftIndex(i) + '_START_TIME']" class="reason-input">
-                    <input #reasonInput type="text" placeholder="Reason" class="form-control" 
-                           [(ngModel)]="perHourReasons[i].description" 
-                           (keydown.enter)="handleReasonSaveUpdateDelete(perHourReasons[i], reasonInput)" 
-                           required>
+                <ng-container *ngFor="let shift of shifts; let i = index">
+                  <div class="hour-group" *ngIf="!isSaturday || (isSaturday && i === 0)">
+                    <h5>{{ shift }}</h5>
+                    
+                    <label>
+                      Start Time:
+                      <input
+                        type="time"
+                        [(ngModel)]="perHourShift['shift' + getShiftIndex(i) + '_START_TIME']"
+                        class="form-control"
+                        (change)="updateTotalTime(i)"
+                      />
+                    </label>
+                    <label>
+                      End Time:
+                      <input
+                        type="time"
+                        [(ngModel)]="perHourShift['shift' + getShiftIndex(i) + '_END_TIME']"
+                        class="form-control"
+                        (change)="updateTotalTime(i)"
+                      />
+                    </label>
+                    <label>
+                      Total Time:
+                      <input
+                        type="number"
+                        [(ngModel)]="perHourShift['shift' + getShiftIndex(i) + '_TOTAL_TIME']"
+                        class="form-control"
+                        disabled
+                      />
+                    </label>
+                    <button type="button" class="btn btn-warning" (click)="resetShiftTime('perHourShift', i)">Reset Time</button>
+                    <div *ngIf="perHourShift['shift' + getShiftIndex(i) + '_END_TIME'] === '00:00' && perHourShift['shift' + getShiftIndex(i) + '_START_TIME']" class="reason-input">
+                      <input 
+                        #reasonInput 
+                        type="text" 
+                        placeholder="Reason" 
+                        class="form-control"
+                        [(ngModel)]="perHourReasons[i].description" 
+                        (keydown.enter)="handleReasonSaveUpdateDelete(perHourReasons[i], reasonInput)" 
+                        required
+                      />
+                    </div>
                   </div>
-                </div>
+                </ng-container>
               </div>
               <div class="mx-3">
                 <button type="button" (click)="saveHour(perHourShift)" class="btn btn-primary">Save</button>
               </div>
             </tab>
-            <tab heading="Per Hour TT"*ngIf="overTimeSwitch">
+            
+            <tab heading="Per Hour Overtime TT"*ngIf="overTimeSwitch">
               <div class="form-group per-hour-wrapper">
                 <div *ngFor="let shift of shifts; let i = index" class="hour-group">
                   <h5>{{ shift }}</h5>
@@ -389,7 +398,7 @@
                 <button type="button" (click)="saveHour(ttperHourSwitches)" class="btn btn-primary">Save</button>
               </div>
             </tab>   
-            <tab heading="Per Hour TL"*ngIf="overTimeSwitch">
+            <tab heading="Per Hour Overtime TL"*ngIf="overTimeSwitch">
               <div class="form-group per-hour-wrapper">
                 <div *ngFor="let shift of shifts; let i = index" class="hour-group">
                   <h5>{{ shift }}</h5>

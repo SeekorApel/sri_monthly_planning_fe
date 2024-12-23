@@ -54,20 +54,6 @@ export class WorkDayService {
     );
   }
 
-  turnOffShift(dateTarget: string, shift: string): Observable<ApiResponse<WorkDay[]>> {
-    return this.http.post<ApiResponse<WorkDay[]>>(
-      environment.apiUrlWebAdmin + '/turnOffShift/' + dateTarget + '/' + shift,
-      { headers: this.getHeaders() }
-    );
-  }
-
-  turnOnShift(dateTarget: string, shift: string): Observable<ApiResponse<WorkDay[]>> {
-    return this.http.post<ApiResponse<WorkDay[]>>(
-      environment.apiUrlWebAdmin + '/turnOnShift/' + dateTarget + '/' + shift,
-      { headers: this.getHeaders() }
-    );
-  }
-
   // getDWorkDayHoursByDateDesc(dateTarget: string, targetdesc: string): Observable<ApiResponse<WDHours>> {
   //   return this.http.get<ApiResponse<WDHours>>(
   //     environment.apiUrlWebAdmin + '/getDWorkDayHoursByDateDesc/' + dateTarget+"/"+targetdesc,
