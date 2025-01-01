@@ -113,7 +113,7 @@ export class ViewMoPpcComponent implements OnInit {
     const type = typeProduct;
 
     // Menggunakan string tanggal yang sudah dikonversi
-    this.router.navigate(['/transaksi/view-revisi-mo-ppc/', month0, month1, month2, type]);
+    this.router.navigate(['/transaksi/view-detail-mo-ppc/', month0, month1, month2, type]);
   }
 
   navigateToEdit(idMo: String) {
