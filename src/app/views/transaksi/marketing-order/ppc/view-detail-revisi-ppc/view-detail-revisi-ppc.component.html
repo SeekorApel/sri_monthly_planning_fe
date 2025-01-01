@@ -44,8 +44,8 @@
             <ng-container matColumnDef="action">
               <th *matHeaderCellDef style="min-width: 90px">Action</th>
               <td *matCellDef="let mo">
-                <button type="button" [disabled]="loadingPrint[mo.moId]" class="btn btn-md btn-success ml-2" (click)="exportExcelMo(mo.moId)">
-                  <span *ngIf="loadingPrint[mo.moId]" class="spinner-border spinner-border-sm mr-1"></span>
+                <button type="button" class="btn btn-md btn-success ml-2" (click)="exportSummaryExcelMo(mo.month0, mo.month1, mo.month2)">
+                  <!-- <span *ngIf="" class="spinner-border spinner-border-sm mr-1"></span> -->
                   Print
                 </button>
               </td>

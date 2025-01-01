@@ -39,6 +39,15 @@ export class MarketingOrderService {
     return this.http.get<ApiResponse<[]>>(environment.apiUrlWebAdmin + '/getAllMarketingOrderLatest');
   }
 
+  // Print Summary Marketing Order
+  downloadSummaryExcelMo(moMonth0: string, moMonth1: string, moMonth2: string) {
+    return this.http.get(
+      `${environment.apiUrlWebAdmin}/exportResumeMO/${moMonth0}/${moMonth1}/${moMonth2}`,
+      { responseType: 'blob' }
+    );
+  }
+
+
   //Get All DistinctMarketingOrder
   getDistinctMarketingOrder(): Observable<ApiResponse<any>> {
     return this.http.post<ApiResponse<any>>(environment.apiUrlWebAdmin + '/getDistinctMonthMo', {}).pipe(

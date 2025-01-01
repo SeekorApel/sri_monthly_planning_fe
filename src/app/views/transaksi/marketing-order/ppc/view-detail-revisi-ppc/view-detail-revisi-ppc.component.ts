@@ -13,6 +13,7 @@ import { ParsingDateService } from 'src/app/utils/parsing-date/parsing-date.serv
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { DistinctMarketingOrder } from 'src/app/models/DistinctMarketingOrder';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-view-detail-revisi-ppc',
@@ -66,7 +67,7 @@ export class ViewDetailRevisiPpcComponent implements OnInit {
   @ViewChild('sortDmo') sortDmo = new MatSort();
   @ViewChild('paginatorDmo') paginatorDmo: MatPaginator;
 
-  constructor(private router: Router, private moService: MarketingOrderService, private activeRoute: ActivatedRoute, private fb: FormBuilder, private parseDateService: ParsingDateService) {
+  constructor(private router: Router, private moService: MarketingOrderService, private activeRoute: ActivatedRoute, private fb: FormBuilder, private parseDateService: ParsingDateService, private datePipe: DatePipe) {
     this.dateUtil = ParsingDate;
     this.formHeaderMo = this.fb.group({
       date: [null, []],
@@ -222,6 +223,29 @@ export class ViewDetailRevisiPpcComponent implements OnInit {
           text: 'Failed to load marketing orders: ' + error.message,
           timer: 3000,
           showConfirmButton: false,
+        });
+      }
+    );
+  }
+
+  exportSummaryExcelMo(moMonth0: Date, moMonth1: Date, moMonth2: Date): void {
+    let convertmoMonth0 = this.datePipe.transform(moMonth0, 'dd-MM-yyyy');
+    let convertmoMonth1 = this.datePipe.transform(moMonth1, 'dd-MM-yyyy');
+    let convertmoMonth2 = this.datePipe.transform(moMonth2, 'dd-MM-yyyy');
+    this.moService.downloadSummaryExcelMo(convertmoMonth0, convertmoMonth1, convertmoMonth2).subscribe(
+      (response: Blob) => {
+        const url = window.URL.createObjectURL(response);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `Summary_Marketing_Order.xlsx`;
+        a.click();
+        window.URL.revokeObjectURL(url);
+      },
+      (error) => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Gagal mendownload file. Silakan coba lagi!',
         });
       }
     );
