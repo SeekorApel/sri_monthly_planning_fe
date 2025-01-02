@@ -13,7 +13,7 @@ import { catchError, map } from 'rxjs/operators';
   providedIn: 'root',
 })
 export class MarketingOrderService {
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   getAvaiableMonth(data: any): Observable<ApiResponse<any>> {
     return this.http.post<ApiResponse<any>>(environment.apiUrlWebAdmin + '/getMonthAvailable', data).pipe(
@@ -37,6 +37,27 @@ export class MarketingOrderService {
   //Get All Mo PPC
   getAllMarketingOrder(): Observable<ApiResponse<MarketingOrder[]>> {
     return this.http.get<ApiResponse<[]>>(environment.apiUrlWebAdmin + '/getAllMarketingOrderLatest');
+  }
+
+  // Print Summary Marketing Order
+  downloadSummaryExcelMo(moMonth0: string, moMonth1: string, moMonth2: string) {
+    return this.http.get(
+      `${environment.apiUrlWebAdmin}/exportResumeMO/${moMonth0}/${moMonth1}/${moMonth2}`,
+      { responseType: 'blob' }
+    );
+  }
+
+
+  //Get All DistinctMarketingOrder
+  getDistinctMarketingOrder(): Observable<ApiResponse<any>> {
+    return this.http.post<ApiResponse<any>>(environment.apiUrlWebAdmin + '/getDistinctMonthMo', {}).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((err) => {
+        return throwError(err);
+      })
+    );
   }
 
   //Get All Mo Marketing By role
@@ -170,7 +191,7 @@ export class MarketingOrderService {
       })
     );
   }
-  
+
   getDetailMarketingOrder(data: any): Observable<ApiResponse<DetailMarketingOrder[]>> {
     return this.http.post<ApiResponse<DetailMarketingOrder[]>>(environment.apiUrlWebAdmin + '/getDetailMarketingOrders', data).pipe(
       map((response) => {

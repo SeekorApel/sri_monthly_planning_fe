@@ -1,4 +1,67 @@
 <div class="animated fadeIn">
+  <!-- Table Summary All Marketing Order -->
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-header">
+        <strong>&nbsp;Summary all Marketing Order</strong>
+      </div>
+      <div class="card-body">
+        <div class="d-flex justify-content-between mb-3">
+          <div class="d-flex align-items-center">
+            <input type="text" class="form-control col-md-12 col-lg-12" [(ngModel)]="searchTextMo" (input)="onSearchChangeMo()" placeholder="Find here..." />
+            <button type="submit" class="btn btn-primary ml-2" (click)="resetSearchMo()">Reset</button>
+          </div>
+        </div>
+
+        <!-- Table -->
+        <div class="table-responsive">
+          <table mat-table matSort #sortSumMo="matSort" [dataSource]="dataSourceSumMo" class="table table-bordered table-striped table-sm">
+            <!-- No Column -->
+            <ng-container matColumnDef="no">
+              <th *matHeaderCellDef style="min-width: 50px">No</th>
+              <td *matCellDef="let mo; let i = index">{{ i + 1 }}</td>
+            </ng-container>
+
+            <!-- Mo Month 0 -->
+            <ng-container matColumnDef="month0">
+              <th *matHeaderCellDef style="min-width: 150px" mat-sort-header>Marketing Order ID</th>
+              <td *matCellDef="let mo">{{ parseDate(mo.month0) }}</td>
+            </ng-container>
+
+            <!-- Mo Month 1 -->
+            <ng-container matColumnDef="month1">
+              <th *matHeaderCellDef style="min-width: 80px" mat-sort-header>Type</th>
+              <td *matCellDef="let mo">{{ parseDate(mo.month1) }}</td>
+            </ng-container>
+
+            <!-- Mo Month 2 -->
+            <ng-container matColumnDef="month2">
+              <th *matHeaderCellDef style="min-width: 150px" mat-sort-header>Date</th>
+              <td *matCellDef="let mo">{{ parseDate(mo.month2) }}</td>
+            </ng-container>
+
+            <!-- Action Column -->
+            <ng-container matColumnDef="action">
+              <th *matHeaderCellDef style="min-width: 90px">Action</th>
+              <td *matCellDef="let mo">
+                <button type="button" class="btn btn-md btn-success ml-2" (click)="exportSummaryExcelMo(mo.month0, mo.month1, mo.month2)">
+                  <!-- <span *ngIf="" class="spinner-border spinner-border-sm mr-1"></span> -->
+                  Print
+                </button>
+              </td>
+            </ng-container>
+
+            <tr align="center" style="height: 20px" mat-header-row *matHeaderRowDef="displayedColumnsSumMo"></tr>
+            <tr align="center" mat-row *matRowDef="let row; columns: displayedColumnsSumMo"></tr>
+          </table>
+        </div>
+        <!-- Pagination -->
+        <mat-paginator #paginatorMo [pageSizeOptions]="[20, 100, 200]" showFirstLastButtons></mat-paginator>
+      </div>
+    </div>
+  </div>
+  <!-- End Summary -->
+
   <!-- Table Marketing Order -->
   <div class="col-md-12">
     <div class="card">

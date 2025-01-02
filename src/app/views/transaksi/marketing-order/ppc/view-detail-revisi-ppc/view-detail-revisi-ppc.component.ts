@@ -12,6 +12,8 @@ import { MatTableDataSource } from '@angular/material/table';
 import { ParsingDateService } from 'src/app/utils/parsing-date/parsing-date.service';
 import { MatSort } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
+import { DistinctMarketingOrder } from 'src/app/models/DistinctMarketingOrder';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-view-detail-revisi-ppc',
@@ -37,12 +39,19 @@ export class ViewDetailRevisiPpcComponent implements OnInit {
   type: string;
   allData: any;
   marketingOrders: MarketingOrder[] = [];
+  distinctMarketingOrders: DistinctMarketingOrder[] = [];
   headerMarketingOrder: HeaderMarketingOrder[];
   detailMarketingOrder: DetailMarketingOrder[];
   headerRevision: string;
   detailMoRevision: string;
   loadingShow: { [key: string]: boolean } = {};
   loadingPrint: { [key: string]: boolean } = {};
+
+  //Pagination Summary All Marketing Order
+  displayedColumnsSumMo: string[] = ['no', 'month0', 'month1', 'month2', 'action'];
+  dataSourceSumMo: MatTableDataSource<DistinctMarketingOrder>;
+  @ViewChild('sortSumMo') sortSumMo = new MatSort();
+  @ViewChild('paginatorSumMo') paginatorSumMo: MatPaginator;
 
   // Pagination Marketing Order
   displayedColumnsMo: string[] = ['no', 'moId', 'type', 'dateValid', 'revisionPpc', 'revisionMarketing', 'month0', 'month1', 'month2', 'action'];
@@ -58,7 +67,7 @@ export class ViewDetailRevisiPpcComponent implements OnInit {
   @ViewChild('sortDmo') sortDmo = new MatSort();
   @ViewChild('paginatorDmo') paginatorDmo: MatPaginator;
 
-  constructor(private router: Router, private moService: MarketingOrderService, private activeRoute: ActivatedRoute, private fb: FormBuilder, private parseDateService: ParsingDateService) {
+  constructor(private router: Router, private moService: MarketingOrderService, private activeRoute: ActivatedRoute, private fb: FormBuilder, private parseDateService: ParsingDateService, private datePipe: DatePipe) {
     this.dateUtil = ParsingDate;
     this.formHeaderMo = this.fb.group({
       date: [null, []],
@@ -164,6 +173,7 @@ export class ViewDetailRevisiPpcComponent implements OnInit {
     this.getAllDetailRevision(this.month0, this.month1, this.month2, this.type);
     this.headerRevision = 'Header Marketing Order';
     this.detailMoRevision = 'Detail Marketing Order';
+    this.getDistinctMarketingOrder();
   }
 
   onSearchChangeDmo(): void {
@@ -186,6 +196,59 @@ export class ViewDetailRevisiPpcComponent implements OnInit {
 
   parseDate(dateParse: string): string {
     return this.parseDateService.convertDateToString(dateParse);
+  }
+
+  getDistinctMarketingOrder(): void {
+    this.moService.getDistinctMarketingOrder().subscribe(
+      (response: ApiResponse<any[]>) => {
+        this.distinctMarketingOrders = response.data;
+        if (this.distinctMarketingOrders.length === 0) {
+          Swal.fire({
+            icon: 'info',
+            title: 'No Data',
+            text: 'No marketing orders found.',
+            timer: 3000,
+            showConfirmButton: false,
+          });
+        } else {
+          this.dataSourceSumMo = new MatTableDataSource(this.distinctMarketingOrders);
+          this.dataSourceSumMo.sort = this.sortSumMo;
+          this.dataSourceSumMo.paginator = this.paginatorSumMo;
+        }
+      },
+      (error) => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Error',
+          text: 'Failed to load marketing orders: ' + error.message,
+          timer: 3000,
+          showConfirmButton: false,
+        });
+      }
+    );
+  }
+
+  exportSummaryExcelMo(moMonth0: Date, moMonth1: Date, moMonth2: Date): void {
+    let convertmoMonth0 = this.datePipe.transform(moMonth0, 'dd-MM-yyyy');
+    let convertmoMonth1 = this.datePipe.transform(moMonth1, 'dd-MM-yyyy');
+    let convertmoMonth2 = this.datePipe.transform(moMonth2, 'dd-MM-yyyy');
+    this.moService.downloadSummaryExcelMo(convertmoMonth0, convertmoMonth1, convertmoMonth2).subscribe(
+      (response: Blob) => {
+        const url = window.URL.createObjectURL(response);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `Summary_Marketing_Order.xlsx`;
+        a.click();
+        window.URL.revokeObjectURL(url);
+      },
+      (error) => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Oops...',
+          text: 'Gagal mendownload file. Silakan coba lagi!',
+        });
+      }
+    );
   }
 
   getAllDetailRevision(month0: string, month1: string, month2: string, type: string): void {
